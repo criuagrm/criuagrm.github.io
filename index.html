@@ -1,0 +1,585 @@
+<html><head><base href=""><title>CRICPCS - Centro Regional de Investigación en Ciencia Política y Ciencias Sociales</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e74c3c;
+        --background-color: #ecf0f1;
+        --text-color: #34495e;
+    }
+    body {
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--background-color);
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    header {
+        background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+        background-size: cover;
+        color: white;
+        padding: 150px 0;
+        text-align: center;
+    }
+    h1, h2, h3 {
+        color: var(--primary-color);
+    }
+    .section {
+        margin-bottom: 50px;
+        padding: 40px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+    .interactive-graph {
+        width: 100%;
+        height: 500px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+    footer {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+    }
+    .btn-primary {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+    .navbar {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .nav-link {
+        color: var(--primary-color) !important;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+        color: var(--secondary-color) !important;
+    }
+    #word-cloud {
+        width: 100%;
+        height: 400px;
+    }
+    .icon-box {
+        text-align: center;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    .icon-box:hover {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+    .icon-box i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+    .icon-box:hover i {
+        color: white;
+    }
+    .contact-info {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+    .contact-info h3 {
+        color: white;
+        margin-bottom: 20px;
+    }
+    .contact-info p {
+        margin-bottom: 10px;
+    }
+    .service-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    @media (max-width: 768px) {
+        header {
+            padding: 100px 0;
+        }
+        .section {
+            padding: 20px;
+        }
+        .interactive-graph {
+            height: 300px;
+        }
+    }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">CRICPCS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#inicio">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#areas-trabajo">Áreas de Trabajo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#conceptos">Conceptos Clave</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#investigacion">Investigación</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicios">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#impacto">Impacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="container">
+            <h1 class="display-4">CRICPCS</h1>
+            <p class="lead">Centro Regional de Investigación en Ciencia Política y Ciencias Sociales</p>
+            <a href="#areas-trabajo" class="btn btn-primary btn-lg mt-3">Descubre Nuestro Trabajo</a>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <section id="inicio" class="section">
+            <h2>Bienvenidos al CRICPCS</h2>
+            <p>El Centro Regional de Investigación en Ciencia Política y Ciencias Sociales (CRICPCS) es una plataforma académica dedicada al análisis crítico y al desarrollo de conocimiento en el ámbito de las ciencias políticas y sociales. Nuestro enfoque interdisciplinario abarca investigaciones rigurosas sobre los desafíos contemporáneos de Bolivia y la región. Además, promovemos la colaboración entre académicos, estudiantes y expertos, contribuyendo al fortalecimiento de las instituciones democráticas y al desarrollo social.</p>
+        </section>
+
+        <section id="areas-trabajo" class="section">
+            <h2>Áreas de Trabajo</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Democracia y Gobernanza</h3>
+                        <p>Análisis de sistemas democráticos y procesos de gobernanza.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fas fa-users"></i>
+                        <h3>Participación Ciudadana</h3>
+                        <p>Estudio de mecanismos de participación y empoderamiento ciudadano.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="icon-box">
+                        <i class="fas fa-landmark"></i>
+                        <h3>Políticas Públicas</h3>
+                        <p>Investigación y evaluación de políticas públicas y su impacto social.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="conceptos" class="section">
+            <h2>Conceptos Clave y Relaciones</h2>
+            <div id="concept-graph" class="interactive-graph"></div>
+            <h3 class="mt-4">Nube de Palabras Interactiva</h3>
+            <div id="word-cloud" class="interactive-graph"></div>
+        </section>
+
+        <section id="investigacion" class="section">
+            <h2>Investigación y Publicaciones</h2>
+            <div id="research-areas-chart" class="interactive-graph"></div>
+            <div class="table-responsive mt-4">
+                <table class="table table-striped" id="publications-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>Tema</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Datos de publicaciones se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="servicios" class="section">
+            <h2>Oferta de Servicios</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <h3>Consultoría en Políticas Públicas</h3>
+                        <p>Ofrecemos asesoramiento experto en el diseño, implementación y evaluación de políticas públicas para gobiernos y organizaciones.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <h3>Investigación Personalizada</h3>
+                        <p>Realizamos investigaciones a medida sobre temas específicos de ciencias políticas y sociales para instituciones académicas y organizaciones.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <h3>Capacitación y Talleres</h3>
+                        <p>Desarrollamos programas de formación y talleres especializados en metodologías de investigación social y análisis político.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <h3>Análisis de Datos Sociales</h3>
+                        <p>Ofrecemos servicios de análisis avanzado de datos sociales y políticos utilizando metodologías cuantitativas y cualitativas.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <h3>Evaluación de Impacto</h3>
+                        <p>Realizamos evaluaciones rigurosas del impacto de programas y políticas sociales para mejorar su efectividad.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <h3>Asesoría en Participación Ciudadana</h3>
+                        <p>Brindamos asesoramiento en el diseño e implementación de mecanismos de participación ciudadana y gobernanza colaborativa.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#contacto" class="btn btn-primary btn-lg">Contáctanos</a>
+            </div>
+        </section>
+
+        <section id="impacto" class="section">
+            <h2>Métricas de Impacto</h2>
+            <div id="impact-chart" class="interactive-graph"></div>
+        </section>
+
+        <section id="contacto" class="section">
+            <h2>Contacto</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="contact-info">
+                        <h3>Información de Contacto</h3>
+                        <p><i class="fas fa-envelope me-2"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+                        <p><i class="fas fa-phone me-2"></i> +591 67381294</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> Dirección del Centro (por definir)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 CRICPCS. Todos los derechos reservados.</p>
+            <p>Desarrollado por: Ricardo Alonzo Fernandez Salguero</p>
+            <p>Contacto: <a href="mailto:rialofesalp@gmail.com">rialofesalp@gmail.com</a> | <a href="tel:+59162189544">+591 62189544</a></p>
+            <div class="mt-3">
+                <a href="https://github.com/RAFS20" class="btn btn-outline-light me-2" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-outline-light me-2" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="https://rafs20.github.io/" class="btn btn-outline-light" target="_blank"><i class="fas fa-globe"></i> Website</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Datos simulados para las áreas de investigación
+        const researchAreasData = [
+            { area: 'Democracia', count: 45 },
+            { area: 'Participación Ciudadana', count: 38 },
+            { area: 'Desarrollo Institucional', count: 32 },
+            { area: 'Políticas Públicas', count: 28 },
+            { area: 'Derechos Humanos', count: 22 }
+        ];
+
+        // Gráfico de áreas de investigación
+        const researchAreasOptions = {
+            series: [{
+                data: researchAreasData.map(item => item.count)
+            }],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: researchAreasData.map(item => item.area),
+            },
+            title: {
+                text: 'Publicaciones por Área de Investigación',
+                align: 'center'
+            }
+        };
+
+        const researchAreasChart = new ApexCharts(document.querySelector("#research-areas-chart"), researchAreasOptions);
+        researchAreasChart.render();
+
+        // Datos simulados para el grafo de conceptos
+        const nodes = [
+            { id: 1, label: "Democracia", group: 1 },
+            { id: 2, label: "Participación Ciudadana", group: 1 },
+            { id: 3, label: "Gobernanza", group: 2 },
+            { id: 4, label: "Políticas Públicas", group: 2 },
+            { id: 5, label: "Derechos Humanos", group: 3 },
+            { id: 6, label: "Desarrollo Social", group: 3 },
+            { id: 7, label: "Instituciones", group: 4 },
+            { id: 8, label: "Movimientos Sociales", group: 4 },
+            { id: 9, label: "Inclusión", group: 5 },
+            { id: 10, label: "Justicia Social", group: 5 }
+        ];
+
+        const links = [
+            { source: 1, target: 2 },
+            { source: 1, target: 3 },
+            { source: 2, target: 4 },
+            { source: 2, target: 8 },
+            { source: 3, target: 4 },
+            { source: 3, target: 7 },
+            { source: 4, target: 6 },
+            { source: 5, target: 6 },
+            { source: 5, target: 9 },
+            { source: 6, target: 10 },
+            { source: 7, target: 8 },
+            { source: 8, target: 9 },
+            { source: 9, target: 10 }
+        ];
+
+        // Crear gráfico de conceptos interactivo
+        const width = document.getElementById('concept-graph').clientWidth;
+        const height = 500;
+
+        const svg = d3.select("#concept-graph")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        const link = svg.append("g")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("stroke", "#999")
+            .attr("stroke-opacity", 0.6)
+            .attr("stroke-width", d => Math.sqrt(d.value));
+
+        const node = svg.append("g")
+            .selectAll("g")
+            .data(nodes)
+            .enter().append("g")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        const circles = node.append("circle")
+            .attr("r", 5)
+            .attr("fill", d => d3.schemeCategory10[d.group]);
+
+        const labels = node.append("text")
+            .text(d => d.label)
+            .attr('x', 6)
+            .attr('y', 3);
+
+        node.append("title")
+            .text(d => d.label);
+
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Nube de palabras interactiva mejorada
+        const words = [
+            {text: "Democracia", size: 60},
+            {text: "Participación", size: 55},
+            {text: "Gobernanza", size: 50},
+            {text: "Derechos", size: 45},
+            {text: "Inclusión", size: 40},
+            {text: "Justicia", size: 40},
+            {text: "Desarrollo", size: 35},
+            {text: "Política", size: 35},
+            {text: "Ciudadanía", size: 30},
+            {text: "Instituciones", size: 30},
+            {text: "Movimientos", size: 25},
+            {text: "Social", size: 25},
+            {text: "Equidad", size: 20},
+            {text: "Transparencia", size: 20},
+            {text: "Educación", size: 15},
+            {text: "Cultura", size: 15},
+            {text: "Economía", size: 15},
+            {text: "Medioambiente", size: 15},
+            {text: "Tecnología", size: 10},
+            {text: "Innovación", size: 10}
+        ];
+
+        const fontFamilies = ['Arial', 'Helvetica', 'Times New Roman', 'Courier', 'Verdana', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'];
+
+        const layout = d3.layout.cloud()
+            .size([width, 400])
+            .words(words)
+            .padding(5)
+            .rotate(() => Math.random() * 90 - 45)
+            .font(() => fontFamilies[Math.floor(Math.random() * fontFamilies.length)])
+            .fontSize(d => d.size)
+            .on("end", draw);
+
+        layout.start();
+
+        function draw(words) {
+            d3.select("#word-cloud").append("svg")
+                .attr("width", layout.size()[0])
+                .attr("height", layout.size()[1])
+                .append("g")
+                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", d => d.size + "px")
+                .style("font-family", d => d.font)
+                .style("fill", (d, i) => d3.schemeCategory10[i % 10])
+                .attr("text-anchor", "middle")
+                .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+                .text(d => d.text)
+                .on("mouseover", function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(300)
+                        .style("font-size", d => (d.size + 5) + "px")
+                        .style("font-weight", "bold");
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(300)
+                        .style("font-size", d => d.size + "px")
+                        .style("font-weight", "normal");
+                });
+        }
+
+        // Datos simulados para publicaciones
+        const publications = [
+            { title: "Desafíos de la Democracia en Bolivia", author: "María González", topic: "Democracia", date: "2024-03-15" },
+            { title: "Participación Ciudadana en Tiempos de Crisis", author: "Juan Pérez", topic: "Participación Ciudadana", date: "2024-02-28" },
+            { title: "Fortalecimiento Institucional y Gobernanza", author: "Ana Rodríguez", topic: "Desarrollo Institucional", date: "2024-01-20" },
+            { title: "Políticas Públicas para la Inclusión Social", author: "Carlos Mendoza", topic: "Políticas Públicas", date: "2023-12-10" },
+            { title: "Derechos Humanos en la Era Digital", author: "Laura Sánchez", topic: "Derechos Humanos", date: "2023-11-05" }
+        ];
+
+        // Cargar tabla de publicaciones
+        const publicationsTable = document.getElementById('publications-table').getElementsByTagName('tbody')[0];
+        publications.forEach(pub => {
+            let row = publicationsTable.insertRow();
+            row.insertCell(0).innerHTML = pub.title;
+            row.insertCell(1).innerHTML = pub.author;
+            row.insertCell(2).innerHTML = pub.topic;
+            row.insertCell(3).innerHTML = pub.date;
+        });
+
+        // Datos simulados para métricas de impacto
+        const impactData = [
+            { name: 'Citas Académicas', data: [30, 40, 45, 50, 49, 60] },
+            { name: 'Menciones en Medios', data: [12, 19, 25, 32, 30, 35] },
+            { name: 'Colaboraciones Internacionales', data: [5, 7, 10, 15, 20, 25] }
+        ];
+
+        // Gráfico de métricas de impacto
+        const impactOptions = {
+            series: impactData,
+            chart: {
+                height: 350,
+                type: 'radar',
+            },
+            title: {
+                text: 'Impacto de Investigaciones'
+            },
+            xaxis: {
+                categories: ['2019', '2020', '2021', '2022', '2023', '2024']
+            }
+        };
+
+        const impactChart = new ApexCharts(document.querySelector("#impact-chart"), impactOptions);
+        impactChart.render();
+    </script>
+</body></html>
