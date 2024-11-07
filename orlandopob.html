@@ -1,4 +1,4 @@
-       <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -11,73 +11,89 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f8;
             color: #333;
-            margin-left: 220px; /* Space for sidebar */
         }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 220px;
-            height: 100%;
+        /* Navbar */
+        .navbar-custom {
             background-color: #003366;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-        }
-        .sidebar a {
             color: #ffffff;
-            padding: 15px 20px;
-            text-decoration: none;
-            font-size: 1.1rem;
         }
-        .sidebar a:hover {
-            background-color: #C8102E;
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+            color: #ffffff;
         }
+        .navbar-custom .nav-link:hover {
+            color: #C8102E;
+        }
+        /* Hero Section */
         .hero-section {
             background-color: #003366;
             color: #ffffff;
-            padding: 60px;
-            border-bottom: 5px solid #C8102E;
+            padding: 100px 20px;
             text-align: center;
         }
+        .hero-section h1 {
+            font-size: 3rem;
+            color: #ffffff;
+        }
+        .hero-section h2 {
+            font-size: 1.5rem;
+            color: #C8102E;
+        }
+        /* Section Headings */
         .section-heading {
             color: #003366;
             font-weight: bold;
-            border-bottom: 3px solid #C8102E;
+            border-bottom: 2px solid #C8102E;
             padding-bottom: 10px;
             margin-top: 40px;
             margin-bottom: 30px;
         }
-        .progress-bar {
-            background-color: #C8102E;
-        }
-        .card {
+        /* Cards */
+        .card-custom {
             border: none;
-            background-color: #f8f9fa;
+            background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #003366;
-            margin-bottom: 20px;
+            border-left: 4px solid #003366;
         }
+        .card-custom .btn-outline-primary {
+            color: #003366;
+            border-color: #003366;
+        }
+        .card-custom .btn-outline-primary:hover {
+            background-color: #003366;
+            color: #ffffff;
+        }
+        /* Footer */
         footer {
             background-color: #003366;
             color: #ffffff;
             text-align: center;
             padding: 20px 0;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h3 class="text-center">Orlando Peralta Beltrán</h3>
-        <p class="text-center">Analista Político e Investigador</p>
-        <a href="#presentacion">Inicio</a>
-        <a href="#habilidades">Habilidades</a>
-        <a href="#proyectos">Proyectos</a>
-        <a href="#cv">CV</a>
-        <a href="#contacto">Contacto</a>
-    </div>
 
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="#">Orlando Peralta Beltrán</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#presentacion">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#habilidades">Habilidades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cv">CV</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
     <section id="presentacion" class="hero-section">
         <h1>Orlando Peralta Beltrán</h1>
         <h2>Analista Político e Investigador</h2>
@@ -85,50 +101,62 @@
         <a href="#contacto" class="btn btn-light btn-lg mt-4">Conéctate conmigo</a>
     </section>
 
+    <!-- Main Content -->
     <main class="container mt-5">
+        <!-- Habilidades -->
         <section id="habilidades" class="mb-5">
             <h2 class="section-heading">Habilidades</h2>
             <div class="row">
                 <div class="col-md-6">
                     <h4>Análisis Político</h4>
                     <div class="progress mb-3">
-                        <div class="progress-bar" role="progressbar" style="width: 90%;">90%</div>
+                        <div class="progress-bar" role="progressbar" style="width: 90%; background-color: #C8102E;">90%</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <h4>Interpretación de Datos</h4>
                     <div class="progress mb-3">
-                        <div class="progress-bar" role="progressbar" style="width: 85%;">85%</div>
+                        <div class="progress-bar" role="progressbar" style="width: 85%; background-color: #C8102E;">85%</div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Proyectos -->
         <section id="proyectos" class="mb-5">
             <h2 class="section-heading">Proyectos Destacados</h2>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Análisis del Proceso Político-Electoral en Bolivia 2019-2020</h3>
-                    <p>Publicación del ensayo "Rebelión y Pandemia", que examina los eventos políticos y electorales en Bolivia durante dicho período.</p>
-                    <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="btn btn-outline-primary">Ver detalles</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-custom mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Análisis del Proceso Político-Electoral en Bolivia 2019-2020</h3>
+                            <p class="card-text">Publicación del ensayo "Rebelión y Pandemia", que examina los eventos políticos y electorales en Bolivia durante dicho período.</p>
+                            <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="btn btn-outline-primary">Ver detalles</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Centro de Investigación en Ciencias Políticas - UAGRM</h3>
-                    <p>Miembro activo del Centro de Investigación Política de la Facultad de Derecho en la UAGRM, contribuyendo a investigaciones en temas de gobernabilidad, democracia y análisis electoral en Bolivia.</p>
-                    <a href="#" class="btn btn-outline-primary">Ver detalles</a>
+                <div class="col-md-6">
+                    <div class="card card-custom mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Centro de Investigación en Ciencias Políticas - UAGRM</h3>
+                            <p class="card-text">Miembro activo del Centro de Investigación Política de la Facultad de Derecho en la UAGRM, contribuyendo a investigaciones en temas de gobernabilidad, democracia y análisis electoral en Bolivia.</p>
+                            <a href="#" class="btn btn-outline-primary">Ver detalles</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Estudios sobre Conflictos Sociales en Bolivia</h3>
-                    <p>Investigación continua sobre los conflictos sociales en Bolivia, analizando su impacto en la estabilidad política y en la percepción pública sobre el gobierno y las instituciones.</p>
-                    <a href="#" class="btn btn-outline-primary">Ver detalles</a>
+                <div class="col-md-6">
+                    <div class="card card-custom mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Estudios sobre Conflictos Sociales en Bolivia</h3>
+                            <p class="card-text">Investigación continua sobre los conflictos sociales en Bolivia, analizando su impacto en la estabilidad política y en la percepción pública sobre el gobierno y las instituciones.</p>
+                            <a href="#" class="btn btn-outline-primary">Ver detalles</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- CV -->
         <section id="cv" class="mb-5">
             <h2 class="section-heading">Resumen del CV</h2>
             <table class="table table-striped">
@@ -180,6 +208,7 @@
             <a href="#" class="btn btn-primary">Ver CV Completo</a>
         </section>
 
+        <!-- Contacto -->
         <section id="contacto" class="mb-5">
             <h2 class="section-heading">Contáctame</h2>
             <div class="row">
@@ -193,6 +222,7 @@
         </section>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <p>&copy; 2024 Orlando Peralta Beltrán | Analista Político e Investigador</p>
@@ -202,3 +232,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
