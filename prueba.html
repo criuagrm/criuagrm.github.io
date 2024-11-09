@@ -33,22 +33,37 @@
         .navbar-brand {
             font-weight: 600;
         }
+        .card-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
         .investigador {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.3s;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 25px;
+            transition: box-shadow 0.3s;
+            width: 100%;
+            max-width: 350px;
+            box-sizing: border-box;
+            text-align: center;
         }
         .investigador:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
         }
-        .asociado { background-color: var(--asociado-color); }
-        .principal { background-color: var(--principal-color); }
-        .senior { background-color: var(--senior-color); }
-        .investigador h2 { color: var(--primary-color); }
+        .profile-picture img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        .investigador h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
         .badge {
             font-size: 0.9rem;
             font-weight: 600;
@@ -77,57 +92,46 @@
     <!-- Main Content -->
     <div class="container my-5">
         <h1 class="text-center mb-5">Investigadores del Centro de Investigación en Ciencia Política y Ciencias Sociales</h1>
-
-        <!-- Investigadores Senior -->
-        <div class="investigador senior">
-            <h2>Nelson Alberto Jordan Bazán <span class="badge">Investigador Senior (Emérito)</span></h2>
-            <p><strong>Correo Electrónico:</strong> nelsonjordanb@gmail.com</p>
-            <p><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
-        </div>
-
-        <div class="investigador senior">
-            <h2>Juan Carlos Álvarez Soria <span class="badge">Investigador Senior</span></h2>
-            <p><strong>Correo Electrónico:</strong> juan.alvarez@uagrm.edu.bo</p>
-            <p><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
-            <p><strong>Años de Experiencia:</strong> Más de 10 años</p>
-        </div>
-
-        <!-- Investigadores Principal -->
-        <div class="investigador principal">
-            <h2>Ricardo Alonso Fernández Salguero <span class="badge">Investigador Principal</span></h2>
-            <p><strong>Correo Electrónico:</strong> rialofesalp@gmail.com</p>
-            <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
-            <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-link"><i class="fas fa-id-card"></i> Perfil de ORCID</a>
-            <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
-        </div>
-
-        <div class="investigador principal">
-            <h2>José Luis García Ramos <span class="badge">Investigador Principal</span></h2>
-            <p><strong>Correo Electrónico:</strong> jose.garcia@uagrm.edu.bo</p>
-            <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
-        </div>
-
-        <!-- Investigadores Asociado -->
-        <div class="investigador asociado">
-            <h2>María Angélica Suárez <span class="badge">Investigador Asociado</span></h2>
-            <p><strong>Correo Electrónico:</strong> angelicasuarez@uagrm.edu.bo</p>
-            <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
-            <a href="https://www.linkedin.com/in/ma-angelica-suarez-5561b629b/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
-        </div>
-
-        <div class="investigador asociado">
-            <h2>Carlos JR <span class="badge">Investigador Asociado</span></h2>
-            <p><strong>Correo Electrónico:</strong> carlosjr19.ev@gmail.com</p>
-            <p><strong>Nivel de Formación Académica:</strong> Egresado</p>
-            <p><strong>Años de Experiencia:</strong> Menos de 1 año</p>
-        </div>
         
-        <!-- Continúa con los investigadores asociados restantes en el mismo formato -->
+        <div class="card-columns">
+            <!-- Investigador 1 -->
+            <div class="investigador senior">
+                <div class="profile-picture">
+                    <img src="https://i.imgur.com/ejemplo1.jpg" alt="Nelson Alberto Jordan Bazán">
+                </div>
+                <h2>Nelson Alberto Jordan Bazán</h2>
+                <span class="badge">Investigador Senior (Emérito)</span>
+                <p><strong>Correo Electrónico:</strong> nelsonjordanb@gmail.com</p>
+                <p><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
+                <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+            </div>
 
+            <!-- Investigador 2 -->
+            <div class="investigador principal">
+                <div class="profile-picture">
+                    <img src="https://i.imgur.com/ejemplo2.jpg" alt="Ricardo Alonso Fernández Salguero">
+                </div>
+                <h2>Ricardo Alonso Fernández Salguero</h2>
+                <span class="badge">Investigador Principal</span>
+                <p><strong>Correo Electrónico:</strong> rialofesalp@gmail.com</p>
+                <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
+                <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+                <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-link"><i class="fas fa-id-card"></i> Perfil de ORCID</a>
+                <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
+            </div>
+
+            <!-- Investigador 3 -->
+            <div class="investigador asociado">
+                <div class="profile-picture">
+                    <img src="https://i.imgur.com/ejemplo3.jpg" alt="Carlos JR">
+                </div>
+                <h2>Carlos JR</h2>
+                <span class="badge">Investigador Asociado</span>
+                <p><strong>Correo Electrónico:</strong> carlosjr19.ev@gmail.com</p>
+                <p><strong>Nivel de Formación Académica:</strong> Egresado</p>
+                <p><strong>Años de Experiencia:</strong> Menos de 1 año</p>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -150,3 +154,4 @@
     </footer>
 </body>
 </html>
+
