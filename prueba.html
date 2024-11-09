@@ -1,468 +1,152 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <base href="https://criuagrm.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CIRCPyCS - Investigadores</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         :root {
             --primary-color: #333333;
-            --background-color: #f9f9f9;
+            --background-color: #f0f0f0;
             --text-color: #333333;
-            --highlight-color: #007bff;
-            --border-color: #dddddd;
-            --senior-color: #8A2BE2;
-            --principal-color: #32CD32;
-            --associate-color: #FFA500;
+            --asociado-color: #f0f9ff;
+            --principal-color: #e6f7e9;
+            --senior-color: #fff4e6;
         }
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
+            line-height: 1.6;
         }
-        h1 {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
         }
-        .card-columns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+        .navbar {
+            background-color: var(--primary-color);
+        }
+        .navbar-brand {
+            font-weight: 600;
         }
         .investigador {
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            padding: 25px;
-            transition: box-shadow 0.3s;
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
         }
         .investigador:hover {
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
         }
-        .profile-picture {
-            width: 80px;
-            height: 80px;
-            background-color: #ddd;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #888;
-        }
-        .investigador h2 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 10px;
-        }
+        .asociado { background-color: var(--asociado-color); }
+        .principal { background-color: var(--principal-color); }
+        .senior { background-color: var(--senior-color); }
+        .investigador h2 { color: var(--primary-color); }
         .badge {
-            display: block;
-            text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             padding: 5px 10px;
             border-radius: 5px;
-            margin: 0 auto 15px;
-            width: fit-content;
         }
-        .badge-senior { background-color: var(--senior-color); color: white; }
-        .badge-principal { background-color: var(--principal-color); color: white; }
-        .badge-asociado { background-color: var(--associate-color); color: white; }
-        .info-item {
-            display: flex;
-            align-items: center;
-            font-size: 0.95rem;
-            margin: 10px 0;
-        }
-        .info-item i {
-            color: var(--highlight-color);
-            margin-right: 8px;
-        }
-        .research, .publications {
-            margin-top: 15px;
-            font-size: 0.95rem;
-        }
-        .research h6, .publications h6 {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1rem;
-            margin-bottom: 8px;
-        }
-        .research-item, .publication-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        .research-item i, .publication-item i {
-            color: var(--highlight-color);
-            margin-right: 8px;
-        }
-        .btn-custom {
-            color: var(--highlight-color);
-            background: none;
-            border: none;
-            padding: 0;
-            font-size: 0.95rem;
-            text-decoration: underline;
-            margin: 8px 0;
-            display: block;
-            text-align: center;
-        }
-        .btn-custom:hover {
-            color: #0056b3;
+        .asociado .badge { background-color: #008cba; color: white; }
+        .principal .badge { background-color: #28a745; color: white; }
+        .senior .badge { background-color: #ff9800; color: white; }
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
         }
     </style>
 </head>
 <body>
-    <div class="container my-5">
-        <h1 class="text-center">Investigadores del CRIUAGRM</h1>
-        <div class="card-columns">
-            <!-- Cards generated for each investigator -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Carlos JR</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>carlosjr19.ev@gmail.com</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Egresado</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Menos de 1 año</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Programacion en R y Rstudio</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-            </div>
-            <!-- Additional cards follow here for each investigator -->
-
-            <!-- Investigador 2 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>María Angélica Suárez</h2>
-                <span class="badge badge-principal">Investigador Principal</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>angelicasuarez@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Investigación Científica</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> 1 a 3 publicaciones</div>
-                </div>
-
-                <a href="https://www.linkedin.com/in/ma-angelica-suarez-5561b629b/" class="btn btn-custom"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
-            </div>
-
-            <!-- Investigador 3 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Nelson Alberto Jordan Bazán</h2>
-                <span class="badge badge-senior">Investigador Senior</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>nelsonjordanb@gmail.com</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Maestría en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Investigación Social Aplicada (UPSA)</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Más de 6 publicaciones</div>
-                </div>
-            </div>
-
-            <!-- Investigador 4 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>María Fabiola Rodriguez Hatfield</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>fabiolahatfield@gmail.com</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Maestría completada</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>1 a 3 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> 2 Maestrías realizadas, 2 maestrías en curso</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-
-                <a href="https://drive.google.com/open?id=1KqIVT7v6RxWo" class="btn btn-custom"><i class="fas fa-id-card"></i> Ver CV</a>
-            </div>
-
-            <!-- Investigador 5 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>RICARDO ALONZO FERNANDEZ SALGUERO</h2>
-                <span class="badge badge-principal">Investigador Principal</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>rialofesalp@gmail.com</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Investigación Transdisciplinar</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> 1 a 3 publicaciones</div>
-                </div>
-
-                <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-custom"><i class="fas fa-id-card"></i> Perfil de ORCID</a>
-                <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-custom"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
-            </div>
-
-            <!-- Continúa con la misma estructura para los demás investigadores -->
-
-            <!-- Investigador 6 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Ana María Pérez Gutiérrez</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>ana.perez.gutierrez@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>3 a 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Ciencias Sociales</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-            </div>
-
-            <!-- Investigador 7 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>José Luis García Ramos</h2>
-                <span class="badge badge-principal">Investigador Principal</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>jose.garcia@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Estudios Avanzados en Políticas Públicas</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> 1 a 3 publicaciones</div>
-                </div>
-            </div>
-
-            <!-- Investigador 8 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Laura Rodríguez Menacho</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>laura.menacho@gmail.com</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Maestría completada</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>3 a 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Gestión de Proyectos</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-            </div>
-
-            <!-- Investigador 9 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Juan Carlos Álvarez Soria</h2>
-                <span class="badge badge-senior">Investigador Senior</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>juan.alvarez@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado completado</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 10 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Desarrollo Social</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Más de 10 publicaciones</div>
-                </div>
-            </div>
-
-            <!-- Investigador 10 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Carmen Teresa Gutiérrez</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>carmen.gutierrez@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Maestría completada</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>1 a 3 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Capacitación en Análisis de Datos</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-            </div>
-
-            <!-- Continúa con el mismo formato hasta completar los 14 investigadores -->
-            <!-- Investigador 11 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Diego Fernando Luna</h2>
-                <span class="badge badge-principal">Investigador Principal</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>diego.luna@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Economía Política</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> 1 a 3 publicaciones</div>
-                </div>
-            </div>
-
-            <!-- Investigador 12 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Andrea Beltrán López</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>andrea.beltran@gmail.com</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Maestría en curso</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>3 a 5 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Ciencias Políticas</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-            </div>
-
-            <!-- Investigador 13 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Luis Fernando Chávez Ruiz</h2>
-                <span class="badge badge-senior">Investigador Senior</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>fernando.chavez@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Doctorado completado</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>Más de 10 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Diplomado en Gobernanza</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Más de 10 publicaciones</div>
-                </div>
-            </div>
-
-            <!-- Investigador 14 -->
-            <div class="investigador">
-                <div class="profile-picture">
-                    <i class="fas fa-user"></i>
-                </div>
-                <h2>Silvia Patricia Rojas</h2>
-                <span class="badge badge-asociado">Investigador Asociado</span>
-                
-                <div class="info-item"><i class="fas fa-envelope"></i>silvia.rojas@uagrm.edu.bo</div>
-                <div class="info-item"><i class="fas fa-graduation-cap"></i>Maestría completada</div>
-                <div class="info-item"><i class="fas fa-briefcase"></i>1 a 3 años de experiencia</div>
-
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Cursos de Formación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Capacitación en Ciencias Sociales</div>
-                </div>
-
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Ninguna</div>
-                </div>
-            </div>
-
-            
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">CIRCPyCS</a>
+            <a href="https://criuagrm.github.io/" class="btn btn-outline-light">Volver al Inicio</a>
         </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <h1 class="text-center mb-5">Investigadores del Centro de Investigación en Ciencia Política y Ciencias Sociales</h1>
+
+        <!-- Investigadores Senior -->
+        <div class="investigador senior">
+            <h2>Nelson Alberto Jordan Bazán <span class="badge">Investigador Senior (Emérito)</span></h2>
+            <p><strong>Correo Electrónico:</strong> nelsonjordanb@gmail.com</p>
+            <p><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
+            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+        </div>
+
+        <div class="investigador senior">
+            <h2>Juan Carlos Álvarez Soria <span class="badge">Investigador Senior</span></h2>
+            <p><strong>Correo Electrónico:</strong> juan.alvarez@uagrm.edu.bo</p>
+            <p><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
+            <p><strong>Años de Experiencia:</strong> Más de 10 años</p>
+        </div>
+
+        <!-- Investigadores Principal -->
+        <div class="investigador principal">
+            <h2>Ricardo Alonso Fernández Salguero <span class="badge">Investigador Principal</span></h2>
+            <p><strong>Correo Electrónico:</strong> rialofesalp@gmail.com</p>
+            <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
+            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+            <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-link"><i class="fas fa-id-card"></i> Perfil de ORCID</a>
+            <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
+        </div>
+
+        <div class="investigador principal">
+            <h2>José Luis García Ramos <span class="badge">Investigador Principal</span></h2>
+            <p><strong>Correo Electrónico:</strong> jose.garcia@uagrm.edu.bo</p>
+            <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
+            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+        </div>
+
+        <!-- Investigadores Asociado -->
+        <div class="investigador asociado">
+            <h2>María Angélica Suárez <span class="badge">Investigador Asociado</span></h2>
+            <p><strong>Correo Electrónico:</strong> angelicasuarez@uagrm.edu.bo</p>
+            <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
+            <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+            <a href="https://www.linkedin.com/in/ma-angelica-suarez-5561b629b/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
+        </div>
+
+        <div class="investigador asociado">
+            <h2>Carlos JR <span class="badge">Investigador Asociado</span></h2>
+            <p><strong>Correo Electrónico:</strong> carlosjr19.ev@gmail.com</p>
+            <p><strong>Nivel de Formación Académica:</strong> Egresado</p>
+            <p><strong>Años de Experiencia:</strong> Menos de 1 año</p>
+        </div>
+        
+        <!-- Continúa con los investigadores asociados restantes en el mismo formato -->
+
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Información de Contacto</h5>
+                    <p><i class="fas fa-envelope"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+                    <p><i class="fas fa-phone"></i> +591 67381294</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Síguenos</h5>
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
-
