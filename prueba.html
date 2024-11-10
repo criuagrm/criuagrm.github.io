@@ -76,7 +76,7 @@
 <!-- Agrega más investigadores aquí según sea necesario -->
 
 
-    <script>
+      <script>
         async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -85,13 +85,15 @@
             doc.setFillColor(255, 255, 255);
             doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-            // Marca de agua del logo en el fondo con mayor opacidad
+            // Marca de agua del logo en el fondo con opacidad reducida
             const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-            doc.addImage(logoMarcaAgua, "PNG", 25, 80, 160, 160, '', 'NONE', 90);
+            doc.setGState(new doc.GState({ opacity: 0.5 })); // Opacidad al 50%
+            doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
+            doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
-            // Logo en la esquina superior derecha, extendido horizontalmente
+            // Logo en la esquina superior derecha, extendido en ambas dimensiones
             const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-            doc.addImage(logoSuperiorDerecho, "PNG", 160, 10, 40, 20);
+            doc.addImage(logoSuperiorDerecho, "PNG", 140, 10, 60, 30);
 
             // Encabezado de la universidad y facultad
             doc.setFont("helvetica", "bold");
