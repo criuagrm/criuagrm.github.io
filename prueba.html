@@ -84,15 +84,15 @@
         doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-        // Marca de agua del logo en el fondo con opacidad al 50%
+        // Marca de agua del logo en el fondo con opacidad al 20%
         const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.5 })); // Opacidad al 50%
-        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
+        doc.setGState(new doc.GState({ opacity: 0.2 }));
+        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150); // Imagen del centro más transparente
         doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
         // Logo en la esquina superior derecha, ajustado en tamaño
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 90, 5, 120, 30); // Disminuido verticalmente en un 40%
+        doc.addImage(logoSuperiorDerecho, "PNG", 70, 5, 140, 25); // Posicionado más arriba
 
         // Encabezado de la universidad, facultad, carrera y centro con colores y menor interlineado
         doc.setFont("helvetica", "bold");
@@ -110,28 +110,15 @@
         doc.setFontSize(20);
         doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-        // Cuerpo del certificado con formato de trabajo, interlineado ajustado y texto justificado
+        // Cuerpo del certificado con texto justificado
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0); // Negro
-        doc.text(`Por medio del presente, certificamos que ${nombreInvestigador},`, 105, 90, { align: "center" });
         doc.text(
-            `con el cargo de ${tipoInvestigador}, ha desarrollado sus labores en el Centro de Investigación en`,
-            105,
-            100,
-            { align: "justify", maxWidth: 180 }
-        );
-        doc.text(
-            "Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno.",
-            105,
-            110,
-            { align: "justify" }
-        );
-        doc.text(
-            "Durante su permanencia, ha contribuido activamente en las siguientes líneas de investigación:",
-            105,
-            120,
-            { align: "justify" }
+            `Por medio del presente, certificamos que ${nombreInvestigador}, con el cargo de ${tipoInvestigador}, 
+            ha desarrollado sus labores en el Centro de Investigación en Ciencia Política y Ciencias Sociales (CIRCPyCS) 
+            de la Universidad Autónoma Gabriel René Moreno. Durante su permanencia, ha contribuido activamente en las siguientes 
+            líneas de investigación:`, 105, 90, { align: "center", maxWidth: 180, lineHeightFactor: 2 }
         );
 
         // Líneas de investigación
@@ -148,19 +135,19 @@
             "Agradecemos profundamente su dedicación y compromiso en la generación de conocimiento,",
             105,
             yPosition + 15,
-            { align: "justify", lineHeightFactor: 2, maxWidth: 180 }
+            { align: "center", maxWidth: 180 }
         );
         doc.text(
             "su esfuerzo y profesionalismo han sido fundamentales para el avance de las ciencias políticas y",
             105,
             yPosition + 25,
-            { align: "justify" }
+            { align: "center" }
         );
         doc.text(
             "sociales en nuestra institución.",
             105,
             yPosition + 35,
-            { align: "justify" }
+            { align: "center" }
         );
 
         // Fecha de emisión
@@ -184,13 +171,14 @@
         doc.text("Directora", 145, yPosition + 95, { align: "center" });
         doc.text("CIRCPyCs", 145, yPosition + 100, { align: "center" });
 
-        // Línea roja para el pie de página y la información de contacto
+        // Pie de página con íconos y línea divisoria
         doc.setDrawColor(178, 34, 34); // Rojo
         doc.setLineWidth(0.5);
         doc.line(10, 285, 200, 285); // Línea roja horizontal
 
         doc.setFontSize(10);
-        doc.text("Contacto: cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ubicación: Santa Cruz, UAGRM, Módulo 284, Planta Baja", 105, 293, { align: "center" });
+        doc.textWithLink("📧 cri.cspoliticas.fcjpsri@uagrm.edu.bo", 105, 292, { align: "center" });
+        doc.textWithLink("📍 Santa Cruz, UAGRM, Módulo 284, Planta Baja", 105, 297, { align: "center" });
 
         // Guardar el PDF
         doc.save(`Certificado_${nombreInvestigador}.pdf`);
@@ -207,7 +195,6 @@
         });
     }
 </script>
-
 
 
 </body>
