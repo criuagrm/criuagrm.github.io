@@ -90,9 +90,9 @@
         doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150); // Imagen del centro más transparente
         doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
-        // Logo en la esquina superior derecha, ajustado en tamaño y posición más a la derecha
+        // Logo en la esquina superior derecha, centrado horizontalmente
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 72, 1, 100, 20); // Movido más a la derecha
+        doc.addImage(logoSuperiorDerecho, "PNG", 55, 1, 100, 20); // Imagen centrada horizontalmente
 
         // Encabezado de la universidad, facultad, carrera y centro con colores y menor interlineado
         doc.setFont("helvetica", "bold");
@@ -126,34 +126,34 @@
             yPosition += 8;
         });
 
-        // Texto adicional sobre desempeño y agradecimiento, ajustado para alinearse correctamente y subir un espacio
+        // Texto adicional sobre desempeño y agradecimiento, subido un espacio
         const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
         const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
 
         doc.setFontSize(12);
-        doc.text(textoAgradecimiento, 25, yPosition + 18, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-        doc.text(textoSolicitud, 25, yPosition + 38, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+        doc.text(textoAgradecimiento, 25, yPosition + 17, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+        doc.text(textoSolicitud, 25, yPosition + 35, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
         // Fecha de emisión
         doc.setFontSize(10);
-        doc.text("Ciudad Universitaria, " + new Date().toLocaleDateString(), 105, yPosition + 58, { align: "center" });
+        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
 
         // Firmas
         const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
         const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
 
-        doc.addImage(imgDirector, "PNG", 45, yPosition + 68, 40, 20);
-        doc.addImage(imgDirectora, "PNG", 125, yPosition + 68, 40, 20);
+        doc.addImage(imgDirector, "PNG", 45, yPosition + 65, 40, 20);
+        doc.addImage(imgDirectora, "PNG", 125, yPosition + 65, 40, 20);
 
         // Bloque de texto para las firmas con negrilla
         doc.setFont("helvetica", "bold");
-        doc.text("Francisco Méndez Eguez", 65, yPosition + 91, { align: "center" });
-        doc.text("Director", 65, yPosition + 96, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Adm. Pública", 65, yPosition + 101, { align: "center" });
+        doc.text("Francisco Méndez Eguez", 65, yPosition + 88, { align: "center" });
+        doc.text("Director", 65, yPosition + 93, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Adm. Pública", 65, yPosition + 98, { align: "center" });
 
-        doc.text("María Angélica Suárez Ribera", 145, yPosition + 91, { align: "center" });
-        doc.text("Directora", 145, yPosition + 96, { align: "center" });
-        doc.text("CIRCPyCs", 145, yPosition + 101, { align: "center" });
+        doc.text("María Angélica Suárez Ribera", 145, yPosition + 88, { align: "center" });
+        doc.text("Directora", 145, yPosition + 93, { align: "center" });
+        doc.text("CIRCPyCS", 145, yPosition + 98, { align: "center" });
 
         // Pie de página con línea divisoria y datos de contacto, sin negrilla
         doc.setDrawColor(178, 34, 34); // Rojo
