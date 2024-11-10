@@ -90,18 +90,19 @@
         doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
         doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
-        // Logo en la esquina superior derecha, extendido solo horizontalmente y llevado más arriba
+        // Logo en la esquina superior derecha, alargado horizontalmente al doble
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 140, 5, 65, 25);
+        doc.addImage(logoSuperiorDerecho, "PNG", 120, 5, 85, 25); // Extendiendo el ancho del logo
 
-        // Encabezado de la universidad y facultad
+        // Encabezado de la universidad y facultad con colores y menor interlineado
         doc.setFont("helvetica", "bold");
         doc.setFontSize(14);
-        doc.setTextColor("#003366"); // Azul UAGRM
+        doc.setTextColor("#B22222"); // Rojo para "UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO"
         doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
+        doc.setTextColor("#003366"); // Azul para los siguientes textos
         doc.setFontSize(12);
-        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 40, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 50, { align: "center" });
+        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 38, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 46, { align: "center" });
 
         // Título del certificado
         doc.setFont("helvetica", "bold");
@@ -154,13 +155,18 @@
         const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
         const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
 
-        doc.addImage(imgDirector, "PNG", 50, yPosition + 65, 40, 20);
-        doc.addImage(imgDirectora, "PNG", 120, yPosition + 65, 40, 20);
+        doc.addImage(imgDirector, "PNG", 45, yPosition + 65, 40, 20);
+        doc.addImage(imgDirectora, "PNG", 125, yPosition + 65, 40, 20);
 
-        // Títulos de las firmas
+        // Bloque de texto para las firmas
         doc.setFontSize(10);
-        doc.text("Director de Carrera de Ciencia Política", 70, yPosition + 85, { align: "center" });
-        doc.text("Directora del Centro de Investigación", 140, yPosition + 85, { align: "center" });
+        doc.text("Francisco Méndez Eguez", 65, yPosition + 90, { align: "center" });
+        doc.text("Director", 65, yPosition + 95, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Administración Pública", 65, yPosition + 100, { align: "center" });
+
+        doc.text("María Angélica Suárez Ribera", 145, yPosition + 90, { align: "center" });
+        doc.text("Directora", 145, yPosition + 95, { align: "center" });
+        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 145, yPosition + 100, { align: "center" });
 
         // Guardar el PDF
         doc.save(`Certificado_${nombreInvestigador}.pdf`);
@@ -177,6 +183,7 @@
         });
     }
 </script>
+
 
 </body>
 </html>
