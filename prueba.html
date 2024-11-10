@@ -75,108 +75,108 @@
 
 <!-- Agrega más investigadores aquí según sea necesario -->
 
+<script>
+    async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-      <script>
-        async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+        // Fondo blanco
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-            // Fondo blanco
-            doc.setFillColor(255, 255, 255);
-            doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
+        // Marca de agua del logo en el fondo con opacidad al 70%
+        const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
+        doc.setGState(new doc.GState({ opacity: 0.7 })); // Opacidad al 70%
+        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
+        doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
-            // Marca de agua del logo en el fondo con opacidad reducida
-            const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-            doc.setGState(new doc.GState({ opacity: 0.5 })); // Opacidad al 50%
-            doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
-            doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
+        // Logo en la esquina superior derecha, extendido solo horizontalmente y llevado más arriba
+        const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
+        doc.addImage(logoSuperiorDerecho, "PNG", 140, 5, 65, 25);
 
-            // Logo en la esquina superior derecha, extendido en ambas dimensiones
-            const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-            doc.addImage(logoSuperiorDerecho, "PNG", 140, 10, 60, 30);
+        // Encabezado de la universidad y facultad
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);
+        doc.setTextColor("#003366"); // Azul UAGRM
+        doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
+        doc.setFontSize(12);
+        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 40, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 50, { align: "center" });
 
-            // Encabezado de la universidad y facultad
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(14);
-            doc.setTextColor("#003366"); // Azul UAGRM
-            doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
-            doc.setFontSize(12);
-            doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 40, { align: "center" });
-            doc.text("Carrera de Ciencia Política y Administración Pública", 105, 50, { align: "center" });
+        // Título del certificado
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(20);
+        doc.text("Certificado de Investigador", 105, 70, { align: "center" });
 
-            // Título del certificado
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(20);
-            doc.text("Certificado de Investigador", 105, 70, { align: "center" });
+        // Cuerpo del certificado con formato de trabajo, interlineado ajustado y texto centrado
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0); // Negro
+        doc.text(`Por medio del presente, certificamos que ${nombreInvestigador},`, 105, 95, { align: "center" });
+        doc.text(`con el cargo de ${tipoInvestigador}, ha desarrollado sus labores en el Centro de Investigación en`, 105, 105, { align: "center", lineHeightFactor: 2 });
+        doc.text("Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno.", 105, 115, { align: "center" });
+        doc.text("Durante su permanencia, ha contribuido activamente en las siguientes líneas de investigación:", 105, 125, { align: "center" });
 
-            // Cuerpo del certificado con formato de trabajo, interlineado ajustado y texto centrado
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0); // Negro
-            doc.text(`Por medio del presente, certificamos que ${nombreInvestigador},`, 105, 95, { align: "center" });
-            doc.text(`con el cargo de ${tipoInvestigador}, ha desarrollado sus labores en el Centro de Investigación en`, 105, 105, { align: "center", lineHeightFactor: 2 });
-            doc.text("Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno.", 105, 115, { align: "center" });
-            doc.text("Durante su permanencia, ha contribuido activamente en las siguientes líneas de investigación:", 105, 125, { align: "center" });
+        // Líneas de investigación
+        doc.setFontSize(11);
+        let yPosition = 140;
+        lineasInvestigacion.forEach((linea) => {
+            doc.text(`• ${linea}`, 105, yPosition, { align: "center" });
+            yPosition += 10;
+        });
 
-            // Líneas de investigación
-            doc.setFontSize(11);
-            let yPosition = 140;
-            lineasInvestigacion.forEach((linea) => {
-                doc.text(`• ${linea}`, 105, yPosition, { align: "center" });
-                yPosition += 10;
-            });
+        // Mensaje final
+        doc.setFontSize(12);
+        doc.text(
+            "Agradecemos profundamente su dedicación y compromiso en la generación de conocimiento,",
+            105, 
+            yPosition + 15, 
+            { align: "center", lineHeightFactor: 2 }
+        );
+        doc.text(
+            "su esfuerzo y profesionalismo han sido fundamentales para el avance de las ciencias políticas y",
+            105,
+            yPosition + 25,
+            { align: "center" }
+        );
+        doc.text(
+            "sociales en nuestra institución.",
+            105,
+            yPosition + 35,
+            { align: "center" }
+        );
 
-            // Mensaje final
-            doc.setFontSize(12);
-            doc.text(
-                "Agradecemos profundamente su dedicación y compromiso en la generación de conocimiento,",
-                105, 
-                yPosition + 15, 
-                { align: "center", lineHeightFactor: 2 }
-            );
-            doc.text(
-                "su esfuerzo y profesionalismo han sido fundamentales para el avance de las ciencias políticas y",
-                105,
-                yPosition + 25,
-                { align: "center" }
-            );
-            doc.text(
-                "sociales en nuestra institución.",
-                105,
-                yPosition + 35,
-                { align: "center" }
-            );
+        // Fecha de emisión
+        doc.setFontSize(10);
+        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
 
-            // Fecha de emisión
-            doc.setFontSize(10);
-            doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
+        // Firmas
+        const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
+        const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
 
-            // Firmas
-            const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-            const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
+        doc.addImage(imgDirector, "PNG", 50, yPosition + 65, 40, 20);
+        doc.addImage(imgDirectora, "PNG", 120, yPosition + 65, 40, 20);
 
-            doc.addImage(imgDirector, "PNG", 50, yPosition + 65, 40, 20);
-            doc.addImage(imgDirectora, "PNG", 120, yPosition + 65, 40, 20);
+        // Títulos de las firmas
+        doc.setFontSize(10);
+        doc.text("Director de Carrera de Ciencia Política", 70, yPosition + 85, { align: "center" });
+        doc.text("Directora del Centro de Investigación", 140, yPosition + 85, { align: "center" });
 
-            // Títulos de las firmas
-            doc.setFontSize(10);
-            doc.text("Director de Carrera de Ciencia Política", 70, yPosition + 85, { align: "center" });
-            doc.text("Directora del Centro de Investigación", 140, yPosition + 85, { align: "center" });
+        // Guardar el PDF
+        doc.save(`Certificado_${nombreInvestigador}.pdf`);
+    }
 
-            // Guardar el PDF
-            doc.save(`Certificado_${nombreInvestigador}.pdf`);
-        }
+    // Función para cargar imágenes desde URLs
+    async function cargarImagen(url) {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        return new Promise((resolve, reject) => {
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
+</script>
 
-        // Función para cargar imágenes desde URLs
-        async function cargarImagen(url) {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            return new Promise((resolve, reject) => {
-                img.onload = () => resolve(img);
-                img.onerror = reject;
-                img.src = url;
-            });
-        }
-    </script>
 </body>
 </html>
