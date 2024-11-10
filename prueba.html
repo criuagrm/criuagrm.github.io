@@ -137,6 +137,8 @@
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Análisis del Sistema Político en Bolivia" (2022)</div>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Estudios Comparados de Gobernanza" (2021)</div>
+                    <button onclick="generarCertificado('Nombre del Investigador')" class="generate-pdf-btn">Generar Certificado</button>
+
                 </div>
             </div>
 
@@ -167,6 +169,7 @@
                 <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-link"><i class="fas fa-id-card"></i> Perfil de ORCID</a>
                 <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
             </div>
+<button onclick="generarCertificado('Nombre del Investigador')" class="generate-pdf-btn">Generar Certificado</button>
 
             <!-- Investigador 3 -->
             <div class="investigador asociado">
@@ -293,3 +296,61 @@
     </footer>
 </body>
 </html>
+
+
+
+<script>
+async function generarCertificado(nombreInvestigador) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Configura el borde y el estilo del certificado
+    doc.setDrawColor(0, 0, 0); // color negro para el borde
+    doc.setLineWidth(1);
+    doc.rect(10, 10, 190, 277); // borde alrededor de la página
+
+    // Título del certificado
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("Centro de Investigación Regional", 105, 40, { align: "center" });
+    doc.text("Certificado de Investigador", 105, 60, { align: "center" });
+
+    // Texto del certificado
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(14);
+    doc.text(`Este certificado acredita que ${nombreInvestigador}`, 105, 100, { align: "center" });
+    doc.text("es miembro activo del Centro de Investigación en Ciencia Política y Ciencias Sociales,", 105, 115, { align: "center" });
+    doc.text("contribuyendo con su labor en el ámbito de la investigación y desarrollo académico.", 105, 130, { align: "center" });
+
+    // Fecha
+    doc.setFontSize(12);
+    doc.text("Fecha de emisión: " + new Date().toLocaleDateString(), 105, 160, { align: "center" });
+
+    // Carga las firmas y las inserta en el PDF
+    const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
+    const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
+    
+    doc.addImage(imgDirector, "PNG", 50, 180, 40, 20); // Firma del Director de Carrera
+    doc.addImage(imgDirectora, "PNG", 120, 180, 40, 20); // Firma de la Directora del Centro
+
+    // Títulos de las firmas
+    doc.setFontSize(10);
+    doc.text("Director de Carrera de Ciencia Política", 70, 205, { align: "center" });
+    doc.text("Directora del Centro de Investigación", 140, 205, { align: "center" });
+
+    // Guardar PDF
+    doc.save(`Certificado_${nombreInvestigador}.pdf`);
+}
+
+// Función para cargar imágenes desde URLs
+async function cargarImagen(url) {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    return new Promise((resolve, reject) => {
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = url;
+    });
+}
+</script>
+
