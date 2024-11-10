@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
     <style>
         :root {
             --primary-color: #333333;
@@ -324,20 +326,26 @@ async function generarCertificado(nombreInvestigador) {
     doc.setFontSize(12);
     doc.text("Fecha de emisión: " + new Date().toLocaleDateString(), 105, 160, { align: "center" });
 
-    // Carga las firmas y las inserta en el PDF
-    const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-    const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-    
-    doc.addImage(imgDirector, "PNG", 50, 180, 40, 20); // Firma del Director de Carrera
-    doc.addImage(imgDirectora, "PNG", 120, 180, 40, 20); // Firma de la Directora del Centro
+    try {
+        // Cargar imágenes de firmas
+        const imgDirector = await cargarImagen("URL_DE_FIRMA_DIRECTOR");
+        const imgDirectora = await cargarImagen("URL_DE_FIRMA_DIRECTORA");
 
-    // Títulos de las firmas
-    doc.setFontSize(10);
-    doc.text("Director de Carrera de Ciencia Política", 70, 205, { align: "center" });
-    doc.text("Directora del Centro de Investigación", 140, 205, { align: "center" });
+        // Insertar las firmas en el PDF
+        doc.addImage(imgDirector, "PNG", 50, 180, 40, 20); // Firma del Director de Carrera
+        doc.addImage(imgDirectora, "PNG", 120, 180, 40, 20); // Firma de la Directora del Centro
 
-    // Guardar PDF
-    doc.save(`Certificado_${nombreInvestigador}.pdf`);
+        // Títulos de las firmas
+        doc.setFontSize(10);
+        doc.text("Director de Carrera de Ciencia Política", 70, 205, { align: "center" });
+        doc.text("Directora del Centro de Investigación", 140, 205, { align: "center" });
+
+        // Guardar PDF
+        doc.save(`Certificado_${nombreInvestigador}.pdf`);
+    } catch (error) {
+        console.error("Error al cargar las firmas:", error);
+        alert("Hubo un problema al generar el certificado. Verifica las URLs de las firmas.");
+    }
 }
 
 // Función para cargar imágenes desde URLs
