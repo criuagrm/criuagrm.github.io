@@ -84,15 +84,15 @@
         doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-        // Marca de agua del logo en el fondo con opacidad al 20%
+        // Marca de agua del logo en el fondo con opacidad al 15%
         const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.2 }));
+        doc.setGState(new doc.GState({ opacity: 0.15 }));
         doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150); // Imagen del centro más transparente
         doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
         // Logo en la esquina superior derecha, ajustado en posición
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 68, 3, 140, 25); // Posición ajustada más a la izquierda y arriba
+        doc.addImage(logoSuperiorDerecho, "PNG", 48, 1, 150, 20); // Ajuste en la posición hacia la izquierda y arriba
 
         // Encabezado de la universidad, facultad, carrera y centro con colores y menor interlineado
         doc.setFont("helvetica", "bold");
@@ -110,31 +110,31 @@
         doc.setFontSize(20);
         doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-        // Cuerpo del certificado con texto justificado
+        // Cuerpo del certificado con texto justificado y ancho de línea ajustado
         const textoCertificacion = `Por medio del presente, certificamos que el Sr. ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0); // Negro
-        doc.text(textoCertificacion, 105, 90, { align: "center", maxWidth: 180, lineHeightFactor: 2 });
+        doc.text(textoCertificacion, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
         // Líneas de investigación
         doc.setFontSize(11);
-        let yPosition = 135;
+        let yPosition = 130;
         lineasInvestigacion.forEach((linea) => {
-            doc.text(`• ${linea}`, 105, yPosition, { align: "center" });
-            yPosition += 10;
+            doc.text(`• ${linea}`, 25, yPosition, { align: "left" });
+            yPosition += 8;
         });
 
-        // Texto adicional sobre desempeño
+        // Texto adicional sobre desempeño y agradecimiento
         const textoDesempeno = `El Sr. ${nombreInvestigador} ha demostrado un alto nivel de compromiso y profesionalismo en la generación de conocimiento, participando en proyectos de investigación que han resultado en publicaciones y presentaciones en conferencias nacionales e internacionales. Su participación ha sido esencial para el desarrollo y fortalecimiento de las capacidades investigativas del CIRCPyCS.`;
         const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
         const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
 
         doc.setFontSize(12);
-        doc.text(textoDesempeno, 105, yPosition + 15, { align: "center", maxWidth: 180 });
-        doc.text(textoAgradecimiento, 105, yPosition + 35, { align: "center", maxWidth: 180 });
-        doc.text(textoSolicitud, 105, yPosition + 55, { align: "center", maxWidth: 180 });
+        doc.text(textoDesempeno, 25, yPosition + 15, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+        doc.text(textoAgradecimiento, 25, yPosition + 35, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+        doc.text(textoSolicitud, 25, yPosition + 55, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
         // Fecha de emisión
         doc.setFontSize(10);
@@ -180,6 +180,7 @@
         });
     }
 </script>
+
 
 </body>
 </html>
