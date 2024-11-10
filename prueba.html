@@ -84,15 +84,15 @@
         doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-        // Marca de agua del logo en el fondo con opacidad al 90%
+        // Marca de agua del logo en el fondo con opacidad al 50%
         const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.9 })); // Opacidad al 90%
+        doc.setGState(new doc.GState({ opacity: 0.5 })); // Opacidad al 50%
         doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
         doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
-        // Logo en la esquina superior derecha, alargado horizontal y verticalmente
+        // Logo en la esquina superior derecha, ajustado en tamaño
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 90, 5, 120, 50); // Tamaño aumentado
+        doc.addImage(logoSuperiorDerecho, "PNG", 90, 5, 120, 30); // Disminuido verticalmente en un 40%
 
         // Encabezado de la universidad, facultad, carrera y centro con colores y menor interlineado
         doc.setFont("helvetica", "bold");
@@ -119,7 +119,7 @@
             `con el cargo de ${tipoInvestigador}, ha desarrollado sus labores en el Centro de Investigación en`,
             105,
             100,
-            { align: "justify", lineHeightFactor: 2 }
+            { align: "justify", maxWidth: 180 }
         );
         doc.text(
             "Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno.",
@@ -148,7 +148,7 @@
             "Agradecemos profundamente su dedicación y compromiso en la generación de conocimiento,",
             105,
             yPosition + 15,
-            { align: "justify", lineHeightFactor: 2 }
+            { align: "justify", lineHeightFactor: 2, maxWidth: 180 }
         );
         doc.text(
             "su esfuerzo y profesionalismo han sido fundamentales para el avance de las ciencias políticas y",
@@ -184,6 +184,14 @@
         doc.text("Directora", 145, yPosition + 95, { align: "center" });
         doc.text("CIRCPyCs", 145, yPosition + 100, { align: "center" });
 
+        // Línea roja para el pie de página y la información de contacto
+        doc.setDrawColor(178, 34, 34); // Rojo
+        doc.setLineWidth(0.5);
+        doc.line(10, 285, 200, 285); // Línea roja horizontal
+
+        doc.setFontSize(10);
+        doc.text("Contacto: cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ubicación: Santa Cruz, UAGRM, Módulo 284, Planta Baja", 105, 293, { align: "center" });
+
         // Guardar el PDF
         doc.save(`Certificado_${nombreInvestigador}.pdf`);
     }
@@ -199,6 +207,7 @@
         });
     }
 </script>
+
 
 
 </body>
