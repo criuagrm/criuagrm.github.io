@@ -559,33 +559,33 @@ México y Bolivia (2018-2023)".</div>
             </div>
         </div>
     </footer>
-
-    <script>
+<script>
     async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({
-        format: "letter" // tamaño carta
-    });
-         // Fondo blanco en tamaño carta
-    doc.setFillColor(255, 255, 255);
-    doc.rect(0, 0, 216, 279, 'F'); // Tamaño carta en mm (216 x 279)
+            format: "letter" // tamaño carta
+        });
+
+        // Fondo blanco en tamaño carta
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, 216, 279, 'F'); // Tamaño carta en mm (216 x 279)
 
         // Marca de agua del logo en el fondo con opacidad al 15%
         const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.15 }));
-        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150); // Imagen del centro más transparente
-        doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
+        doc.setGState(new doc.GState({ opacity: 0.1 }));
+        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
+        doc.setGState(new doc.GState({ opacity: 1 }));
 
-        // Logo en la esquina superior derecha, centrado horizontalmente
+        // Logo en la esquina superior derecha
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 55, 1, 100, 20); // Imagen centrada horizontalmente
+        doc.addImage(logoSuperiorDerecho, "PNG", 60, 1, 90, 20);
 
-        // Encabezado de la universidad, facultad, carrera y centro con colores 
+        // Encabezado de la universidad
         doc.setFont("helvetica", "bold");
         doc.setFontSize(14);
-        doc.setTextColor("#B22222"); // Rojo para "UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO"
+        doc.setTextColor("#B22222"); 
         doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
-        doc.setTextColor("#003366"); // Azul para los siguientes textos
+        doc.setTextColor("#003366");
         doc.setFontSize(12);
         doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
         doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
@@ -596,12 +596,12 @@ México y Bolivia (2018-2023)".</div>
         doc.setFontSize(20);
         doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-        // Cuerpo del certificado con texto justificado y ancho de línea ajustado
+        // Cuerpo del certificado
         const textoCertificacion = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0); // Negro
+        doc.setTextColor(0, 0, 0);
         doc.text(textoCertificacion, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
         // Líneas de investigación
@@ -612,7 +612,7 @@ México y Bolivia (2018-2023)".</div>
             yPosition += 8;
         });
 
-        // Texto adicional sobre desempeño y agradecimiento
+        // Texto de agradecimiento y cierre
         const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
         const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
 
@@ -622,7 +622,7 @@ México y Bolivia (2018-2023)".</div>
 
         // Fecha de emisión
         doc.setFontSize(10);
-        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
+        doc.text("Ciudad Universitaria, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
 
         // Firmas
         const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
@@ -631,7 +631,6 @@ México y Bolivia (2018-2023)".</div>
         doc.addImage(imgDirector, "PNG", 45, yPosition + 65, 40, 20);
         doc.addImage(imgDirectora, "PNG", 125, yPosition + 65, 40, 20);
 
-        // Bloque de texto para las firmas con negrilla
         doc.setFont("helvetica", "bold");
         doc.text("Francisco Méndez Eguez", 65, yPosition + 88, { align: "center" });
         doc.text("Director", 65, yPosition + 93, { align: "center" });
@@ -641,14 +640,14 @@ México y Bolivia (2018-2023)".</div>
         doc.text("Directora", 145, yPosition + 93, { align: "center" });
         doc.text("CIRCPyCS", 145, yPosition + 98, { align: "center" });
 
-        // Pie de página con línea divisoria y datos de contacto, sin negrilla
-        doc.setDrawColor(178, 34, 34); // Rojo
+        // Pie de página
+        doc.setDrawColor(178, 34, 34);
         doc.setLineWidth(0.5);
-        doc.line(10, 285, 200, 285); // Línea roja horizontal
+        doc.line(10, 265, 200, 265);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
-        doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 105, 292, { align: "center" });
+        doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 105, 272, { align: "center" });
 
         // Guardar el PDF
         doc.save(`Certificado_${nombreInvestigador}.pdf`);
@@ -665,6 +664,7 @@ México y Bolivia (2018-2023)".</div>
         });
     }
 </script>
+
 
 </body>
 </html>
