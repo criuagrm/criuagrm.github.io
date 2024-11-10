@@ -84,43 +84,59 @@
         doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-        // Marca de agua del logo en el fondo con opacidad al 70%
+        // Marca de agua del logo en el fondo con opacidad al 90%
         const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.7 })); // Opacidad al 70%
+        doc.setGState(new doc.GState({ opacity: 0.9 })); // Opacidad al 90%
         doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
         doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
 
-        // Logo en la esquina superior derecha, alargado horizontalmente al doble
+        // Logo en la esquina superior derecha, alargado horizontal y verticalmente
         const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 120, 5, 85, 25); // Extendiendo el ancho del logo
+        doc.addImage(logoSuperiorDerecho, "PNG", 90, 5, 120, 50); // Tamaño aumentado
 
-        // Encabezado de la universidad y facultad con colores y menor interlineado
+        // Encabezado de la universidad, facultad, carrera y centro con colores y menor interlineado
         doc.setFont("helvetica", "bold");
         doc.setFontSize(14);
         doc.setTextColor("#B22222"); // Rojo para "UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO"
         doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
         doc.setTextColor("#003366"); // Azul para los siguientes textos
         doc.setFontSize(12);
-        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 38, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 46, { align: "center" });
+        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
+        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
 
         // Título del certificado
         doc.setFont("helvetica", "bold");
         doc.setFontSize(20);
-        doc.text("Certificado de Investigador", 105, 70, { align: "center" });
+        doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-        // Cuerpo del certificado con formato de trabajo, interlineado ajustado y texto centrado
+        // Cuerpo del certificado con formato de trabajo, interlineado ajustado y texto justificado
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0); // Negro
-        doc.text(`Por medio del presente, certificamos que ${nombreInvestigador},`, 105, 95, { align: "center" });
-        doc.text(`con el cargo de ${tipoInvestigador}, ha desarrollado sus labores en el Centro de Investigación en`, 105, 105, { align: "center", lineHeightFactor: 2 });
-        doc.text("Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno.", 105, 115, { align: "center" });
-        doc.text("Durante su permanencia, ha contribuido activamente en las siguientes líneas de investigación:", 105, 125, { align: "center" });
+        doc.text(`Por medio del presente, certificamos que ${nombreInvestigador},`, 105, 90, { align: "center" });
+        doc.text(
+            `con el cargo de ${tipoInvestigador}, ha desarrollado sus labores en el Centro de Investigación en`,
+            105,
+            100,
+            { align: "justify", lineHeightFactor: 2 }
+        );
+        doc.text(
+            "Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno.",
+            105,
+            110,
+            { align: "justify" }
+        );
+        doc.text(
+            "Durante su permanencia, ha contribuido activamente en las siguientes líneas de investigación:",
+            105,
+            120,
+            { align: "justify" }
+        );
 
         // Líneas de investigación
         doc.setFontSize(11);
-        let yPosition = 140;
+        let yPosition = 135;
         lineasInvestigacion.forEach((linea) => {
             doc.text(`• ${linea}`, 105, yPosition, { align: "center" });
             yPosition += 10;
@@ -130,21 +146,21 @@
         doc.setFontSize(12);
         doc.text(
             "Agradecemos profundamente su dedicación y compromiso en la generación de conocimiento,",
-            105, 
-            yPosition + 15, 
-            { align: "center", lineHeightFactor: 2 }
+            105,
+            yPosition + 15,
+            { align: "justify", lineHeightFactor: 2 }
         );
         doc.text(
             "su esfuerzo y profesionalismo han sido fundamentales para el avance de las ciencias políticas y",
             105,
             yPosition + 25,
-            { align: "center" }
+            { align: "justify" }
         );
         doc.text(
             "sociales en nuestra institución.",
             105,
             yPosition + 35,
-            { align: "center" }
+            { align: "justify" }
         );
 
         // Fecha de emisión
@@ -162,11 +178,11 @@
         doc.setFontSize(10);
         doc.text("Francisco Méndez Eguez", 65, yPosition + 90, { align: "center" });
         doc.text("Director", 65, yPosition + 95, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Administración Pública", 65, yPosition + 100, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Adm. Pública", 65, yPosition + 100, { align: "center" });
 
         doc.text("María Angélica Suárez Ribera", 145, yPosition + 90, { align: "center" });
         doc.text("Directora", 145, yPosition + 95, { align: "center" });
-        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 145, yPosition + 100, { align: "center" });
+        doc.text("CIRCPyCs", 145, yPosition + 100, { align: "center" });
 
         // Guardar el PDF
         doc.save(`Certificado_${nombreInvestigador}.pdf`);
