@@ -1,304 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <base href="https://criuagrm.github.io/">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CIRCPyCS - Investigadores</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIRCPyCS - Certificados de Investigadores</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #333333;
-            --background-color: #f0f0f0;
-            --text-color: #333333;
-            --asociado-color: #f0f9ff;
-            --principal-color: #e6f7e9;
-            --senior-color: #fff4e6;
-        }
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f3f5;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        h1, h2 {
-            font-family: 'Playfair Display', serif;
-        }
-        .navbar {
-            background-color: var(--primary-color);
-        }
-        .navbar-brand {
-            font-weight: 600;
-        }
-        .card-columns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .investigador {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            padding: 25px;
-            transition: box-shadow 0.3s;
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
+        h1 {
+            color: #2c3e50;
             text-align: center;
         }
-        .investigador:hover {
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        .project {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
         }
-        .profile-picture img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 15px;
+        .project:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         }
-        .investigador h2 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        .badge {
-            font-size: 0.9rem;
-            font-weight: 600;
-            padding: 5px 10px;
+        .generate-pdf-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
             border-radius: 5px;
-        }
-        .asociado .badge { background-color: #008cba; color: white; }
-        .principal .badge { background-color: #28a745; color: white; }
-        .senior .badge { background-color: #ff9800; color: white; }
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 3rem 0;
-        }
-        .research, .publications {
-            margin-top: 15px;
-            font-size: 0.95rem;
-            text-align: left;
-        }
-        .research h6, .publications h6 {
+            text-decoration: none;
             font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1rem;
-            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .research-item, .publication-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        .research-item i, .publication-item i {
-            color: var(--primary-color);
-            margin-right: 8px;
+        .generate-pdf-btn:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#">CIRCPyCS</a>
-            <a href="https://criuagrm.github.io/" class="btn btn-outline-light">Volver al Inicio</a>
-        </div>
-    </nav>
 
-    <!-- Main Content -->
-    <div class="container my-5">
-        <h1 class="text-center mb-5">Investigadores del Centro de Investigación en Ciencia Política y Ciencias Sociales</h1>
-        
-        <div class="card-columns">
-            <!-- Investigador 1 -->
-            <div class="investigador senior">
-                <div class="profile-picture">
-                    <img src="https://i.imgur.com/ejemplo1.jpg" alt="Nelson Alberto Jordan Bazán">
-                </div>
-                <h2>Nelson Alberto Jordan Bazán</h2>
-                <span class="badge">Investigador Senior (Emérito)</span>
-                <p><strong>Correo Electrónico:</strong> nelsonjordanb@gmail.com</p>
-                <p><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-                <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+<h1>Certificados de Investigadores del CIRCPyCS</h1>
 
-                <!-- Líneas de Investigación -->
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Gobernanza y Políticas Públicas</div>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Sistemas Democráticos</div>
-                </div>
-
-                <!-- Publicaciones -->
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Análisis del Sistema Político en Bolivia" (2022)</div>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Estudios Comparados de Gobernanza" (2021)</div>
-                    <button onclick="generarCertificado('Nelson Jordan Bazán')" class="generate-pdf-btn">Generar Certificado</button>
+<!-- Investigador 1 -->
+<div class="project">
+    <h3>Investigador: Nelson Jordan</h3>
+    <p>Investigador principal en el área de Ciencias Políticas.</p>
+    <button onclick="generarCertificado('Nelson Jordan')" class="generate-pdf-btn">Generar Certificado</button>
 </div>
 
-                </div>
-            </div>
+<!-- Investigador 2 -->
+<div class="project">
+    <h3>Investigador: María Suárez</h3>
+    <p>Investigadora asociada en el área de Relaciones Internacionales.</p>
+    <button onclick="generarCertificado('María Suárez')" class="generate-pdf-btn">Generar Certificado</button>
+</div>
 
-            <!-- Investigador 2 -->
-            <div class="investigador principal">
-                <div class="profile-picture">
-                    <img src="https://i.imgur.com/ejemplo2.jpg" alt="Ricardo Alonso Fernández Salguero">
-                </div>
-                <h2>Ricardo Alonso Fernández Salguero</h2>
-                <span class="badge">Investigador Principal</span>
-                <p><strong>Correo Electrónico:</strong> rialofesalp@gmail.com</p>
-                <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-                <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
+<!-- Más investigadores -->
+<div class="project">
+    <h3>Investigador: Ricardo Alonzo</h3>
+    <p>Especialista en Derecho Constitucional y Relaciones Internacionales.</p>
+    <button onclick="generarCertificado('Ricardo Alonzo')" class="generate-pdf-btn">Generar Certificado</button>
+</div>
 
-                <!-- Líneas de Investigación -->
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Justicia y Derecho Constitucional</div>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Relaciones Internacionales</div>
-                </div>
-
-                <!-- Publicaciones -->
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Derecho Constitucional en Latinoamérica" (2020)</div>
-                </div>
-
-                <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-link"><i class="fas fa-id-card"></i> Perfil de ORCID</a>
-                <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
-            </div>
-            <!-- Investigador 3 -->
-            <div class="investigador asociado">
-                <div class="profile-picture">
-                    <img src="https://i.imgur.com/ejemplo3.jpg" alt="Carlos JR">
-                </div>
-                <h2>Carlos JR</h2>
-                <span class="badge">Investigador Asociado</span>
-                <p><strong>Correo Electrónico:</strong> carlosjr19.ev@gmail.com</p>
-                <p><strong>Nivel de Formación Académica:</strong> Egresado</p>
-                <p><strong>Años de Experiencia:</strong> Menos de 1 año</p>
-
-                <!-- Líneas de Investigación -->
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Análisis de Datos en Ciencias Sociales</div>
-                </div>
-
-                <!-- Publicaciones -->
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa
-                    <i class="fas fa-file-alt"></i> "Introducción al Análisis de Datos Sociales" (2023)</div>
-                </div>
-            </div>
-
-            <!-- Investigador 4 -->
-            <div class="investigador asociado">
-                <div class="profile-picture">
-                    <img src="https://i.imgur.com/ejemplo4.jpg" alt="María Angélica Suárez">
-                </div>
-                <h2>María Angélica Suárez</h2>
-                <span class="badge">Investigador Asociado</span>
-                <p><strong>Correo Electrónico:</strong> angelicasuarez@uagrm.edu.bo</p>
-                <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-                <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
-
-                <!-- Líneas de Investigación -->
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Políticas Públicas y Gobernanza</div>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Participación Ciudadana</div>
-                </div>
-
-                <!-- Publicaciones -->
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Desarrollo de Políticas Públicas en Bolivia" (2021)</div>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Estudios de Participación Ciudadana" (2019)</div>
-                </div>
-
-                <a href="https://www.linkedin.com/in/ma-angelica-suarez-5561b629b/" class="btn btn-link"><i class="fab fa-linkedin"></i> Perfil de LinkedIn</a>
-            </div>
-
-            <!-- Investigador 5 -->
-            <div class="investigador asociado">
-                <div class="profile-picture">
-                    <img src="https://i.imgur.com/ejemplo5.jpg" alt="Andrea Beltrán López">
-                </div>
-                <h2>Andrea Beltrán López</h2>
-                <span class="badge">Investigador Asociado</span>
-                <p><strong>Correo Electrónico:</strong> andrea.beltran@gmail.com</p>
-                <p><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-                <p><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-
-                <!-- Líneas de Investigación -->
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Ciencias Políticas</div>
-                </div>
-
-                <!-- Publicaciones -->
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Investigación en Ciencia Política" (2022)</div>
-                </div>
-            </div>
-
-            <!-- Investigador 6 -->
-            <div class="investigador senior">
-                <div class="profile-picture">
-                    <img src="https://i.imgur.com/ejemplo6.jpg" alt="Juan Carlos Álvarez Soria">
-                </div>
-                <h2>Juan Carlos Álvarez Soria</h2>
-                <span class="badge">Investigador Senior</span>
-                <p><strong>Correo Electrónico:</strong> juan.alvarez@uagrm.edu.bo</p>
-                <p><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
-                <p><strong>Años de Experiencia:</strong> Más de 10 años</p>
-
-                <!-- Líneas de Investigación -->
-                <div class="research">
-                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-                    <div class="research-item"><i class="fas fa-check-circle"></i> Desarrollo Social</div>
-                </div>
-
-                <!-- Publicaciones -->
-                <div class="publications">
-                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Transformación en Desarrollo Social" (2018)</div>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Políticas de Desarrollo en Bolivia" (2020)</div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Información de Contacto</h5>
-                    <p><i class="fas fa-envelope"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
-                    <p><i class="fas fa-phone"></i> +591 67381294</p>
-                </div>
-                <div class="col-md-6">
-                    <h5>Síguenos</h5>
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
-
-
+<!-- Agrega más investigadores aquí según sea necesario -->
 
 <script>
 async function generarCertificado(nombreInvestigador) {
@@ -361,4 +136,5 @@ async function cargarImagen(url) {
 }
 </script>
 
-
+</body>
+</html>
