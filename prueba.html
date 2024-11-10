@@ -75,50 +75,83 @@
 
 <!-- Agrega más investigadores aquí según sea necesario -->
 
-<script>
-        async function generarCertificado(nombreInvestigador) {
+
+    <script>
+        async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Configuración del borde y estilo del certificado
-            doc.setDrawColor(0, 0, 0);
-            doc.setLineWidth(1);
-            doc.rect(10, 10, 190, 277); // Borde del certificado
+            // Configuración del fondo blanco
+            doc.setFillColor(255, 255, 255);
+            doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
 
-            // Logo del centro
-            const logoCentro = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-            doc.addImage(logoCentro, "PNG", 15, 15, 30, 30);
+            // Logo como marca de agua en el fondo
+            const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
+            doc.addImage(logoMarcaAgua, "PNG", 40, 100, 130, 130, '', 'NONE', 45); // Marca de agua centrada
+
+            // Logo en la esquina superior derecha
+            const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
+            doc.addImage(logoSuperiorDerecho, "PNG", 165, 15, 30, 30); // Logo superior derecha
 
             // Título del certificado
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(20);
+            doc.setFontSize(22);
             doc.setTextColor("#003366"); // Azul UAGRM
-            doc.text("Centro de Investigación Regional", 105, 50, { align: "center" });
-            doc.text("Certificado de Investigador", 105, 70, { align: "center" });
+            doc.text("Centro de Investigación Regional", 105, 40, { align: "center" });
+            doc.text("Certificado de Investigador", 105, 60, { align: "center" });
 
             // Cuerpo del certificado
             doc.setFont("helvetica", "normal");
             doc.setFontSize(14);
             doc.setTextColor(0, 0, 0); // Negro
-            doc.text(`Este certificado acredita que ${nombreInvestigador}`, 105, 100, { align: "center" });
-            doc.text("es miembro activo del Centro de Investigación en Ciencia Política y Ciencias Sociales,", 105, 115, { align: "center" });
-            doc.text("contribuyendo con su labor en el ámbito de la investigación y desarrollo académico.", 105, 130, { align: "center" });
+            doc.text(`Este certificado acredita que ${nombreInvestigador},`, 105, 90, { align: "center" });
+            doc.text(`quien ostenta el cargo de ${tipoInvestigador} en el Centro de Investigación en`, 105, 105, { align: "center" });
+            doc.text("Ciencia Política y Ciencias Sociales (CIRCPyCS),", 105, 120, { align: "center" });
+            doc.text("ha realizado contribuciones significativas en el ámbito de:", 105, 135, { align: "center" });
+
+            // Líneas de investigación
+            doc.setFontSize(12);
+            doc.text("Líneas de Investigación:", 20, 150);
+            lineasInvestigacion.forEach((linea, index) => {
+                doc.text(`- ${linea}`, 30, 160 + index * 10);
+            });
+
+            // Mensaje de agradecimiento
+            doc.setFontSize(12);
+            doc.text(
+                "Se extiende este certificado en reconocimiento a su dedicación y esfuerzo, que han permitido", 
+                105, 
+                200, 
+                { align: "center" }
+            );
+            doc.text(
+                "el avance en el conocimiento de ciencias políticas y sociales, promoviendo", 
+                105, 
+                215, 
+                { align: "center" }
+            );
+            doc.text(
+                "una investigación crítica e interdisciplinaria al servicio de nuestra comunidad académica.", 
+                105, 
+                230, 
+                { align: "center" }
+            );
 
             // Fecha de emisión
             doc.setFontSize(12);
-            doc.text("Fecha de emisión: " + new Date().toLocaleDateString(), 105, 160, { align: "center" });
+            doc.text("Fecha de emisión: " + new Date().toLocaleDateString(), 105, 250, { align: "center" });
 
             // Firmas
             const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
             const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
 
-            doc.addImage(imgDirector, "PNG", 50, 180, 40, 20);
-            doc.addImage(imgDirectora, "PNG", 120, 180, 40, 20);
+            doc.addImage(imgDirector, "PNG", 50, 260, 40, 20);
+            doc.addImage(imgDirectora, "PNG", 120, 260, 40, 20);
 
             // Títulos de las firmas
             doc.setFontSize(10);
-            doc.text("Director de Carrera de Ciencia Política", 70, 205, { align: "center" });
-            doc.text("Directora del Centro de Investigación", 140, 205, { align: "center" });
+            doc.text("Director de Carrera de Ciencia Política", 70, 285, { align: "center" });
+            doc.text("Directora del Centro de Investigación", 140, 285, { align: "center" });
 
             // Guardar el PDF
             doc.save(`Certificado_${nombreInvestigador}.pdf`);
