@@ -111,15 +111,12 @@
         doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
         // Cuerpo del certificado con texto justificado
+        const textoCertificacion = `Por medio del presente, certificamos que el Sr. ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
+
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0); // Negro
-        doc.text(
-            `Por medio del presente, certificamos que ${nombreInvestigador}, con el cargo de ${tipoInvestigador}, 
-            ha desarrollado sus labores en el Centro de Investigación en Ciencia Política y Ciencias Sociales (CIRCPyCS) 
-            de la Universidad Autónoma Gabriel René Moreno. Durante su permanencia, ha contribuido activamente en las siguientes 
-            líneas de investigación:`, 105, 90, { align: "center", maxWidth: 180, lineHeightFactor: 2 }
-        );
+        doc.text(textoCertificacion, 105, 90, { align: "center", maxWidth: 180, lineHeightFactor: 2 });
 
         // Líneas de investigación
         doc.setFontSize(11);
@@ -129,47 +126,36 @@
             yPosition += 10;
         });
 
-        // Mensaje final
+        // Texto adicional sobre desempeño
+        const textoDesempeno = `El Sr. ${nombreInvestigador} ha demostrado un alto nivel de compromiso y profesionalismo en la generación de conocimiento, participando en proyectos de investigación que han resultado en publicaciones y presentaciones en conferencias nacionales e internacionales. Su participación ha sido esencial para el desarrollo y fortalecimiento de las capacidades investigativas del CIRCPyCS.`;
+        const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
+        const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
+
         doc.setFontSize(12);
-        doc.text(
-            "Agradecemos profundamente su dedicación y compromiso en la generación de conocimiento,",
-            105,
-            yPosition + 15,
-            { align: "center", maxWidth: 180 }
-        );
-        doc.text(
-            "su esfuerzo y profesionalismo han sido fundamentales para el avance de las ciencias políticas y",
-            105,
-            yPosition + 25,
-            { align: "center" }
-        );
-        doc.text(
-            "sociales en nuestra institución.",
-            105,
-            yPosition + 35,
-            { align: "center" }
-        );
+        doc.text(textoDesempeno, 105, yPosition + 15, { align: "center", maxWidth: 180 });
+        doc.text(textoAgradecimiento, 105, yPosition + 35, { align: "center", maxWidth: 180 });
+        doc.text(textoSolicitud, 105, yPosition + 55, { align: "center", maxWidth: 180 });
 
         // Fecha de emisión
         doc.setFontSize(10);
-        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
+        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 75, { align: "center" });
 
         // Firmas
         const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
         const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
 
-        doc.addImage(imgDirector, "PNG", 45, yPosition + 65, 40, 20);
-        doc.addImage(imgDirectora, "PNG", 125, yPosition + 65, 40, 20);
+        doc.addImage(imgDirector, "PNG", 45, yPosition + 85, 40, 20);
+        doc.addImage(imgDirectora, "PNG", 125, yPosition + 85, 40, 20);
 
         // Bloque de texto para las firmas
         doc.setFontSize(10);
-        doc.text("Francisco Méndez Eguez", 65, yPosition + 90, { align: "center" });
-        doc.text("Director", 65, yPosition + 95, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Adm. Pública", 65, yPosition + 100, { align: "center" });
+        doc.text("Francisco Méndez Eguez", 65, yPosition + 110, { align: "center" });
+        doc.text("Director", 65, yPosition + 115, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Adm. Pública", 65, yPosition + 120, { align: "center" });
 
-        doc.text("María Angélica Suárez Ribera", 145, yPosition + 90, { align: "center" });
-        doc.text("Directora", 145, yPosition + 95, { align: "center" });
-        doc.text("CIRCPyCs", 145, yPosition + 100, { align: "center" });
+        doc.text("María Angélica Suárez Ribera", 145, yPosition + 110, { align: "center" });
+        doc.text("Directora", 145, yPosition + 115, { align: "center" });
+        doc.text("CIRCPyCs", 145, yPosition + 120, { align: "center" });
 
         // Pie de página con línea divisoria y datos de contacto
         doc.setDrawColor(178, 34, 34); // Rojo
