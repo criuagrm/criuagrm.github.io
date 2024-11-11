@@ -5,71 +5,143 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repositorio de Prácticum</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #003366; color: white; }
-        .button { background-color: #4CAF50; color: white; padding: 8px 16px; border: none; cursor: pointer; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #003366;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input {
+            padding: 10px;
+            width: 80%;
+            max-width: 600px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .book-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .book-card h3 {
+            color: #003366;
+            font-size: 18px;
+            margin: 10px 0 5px;
+        }
+        .book-card p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .book-card a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
+
+<div class="container">
     <h1>Repositorio de Prácticum</h1>
-    <p>Consulta y visualización de trabajos de Prácticum disponibles.</p>
+    <div class="search-bar">
+        <input type="text" id="searchInput" onkeyup="searchPracticum()" placeholder="Buscar por título, estudiante o año...">
+    </div>
 
-    <table id="practicumTable">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Estudiante</th>
-                <th>Año</th>
-                <th>Visualizar</th>
-                <th>Solicitud</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Aquí se insertarán las filas dinámicamente -->
-        </tbody>
-    </table>
+    <div class="book-grid" id="bookGrid">
+        <!-- Aquí se insertarán las tarjetas dinámicamente -->
+    </div>
+</div>
 
-    <script>
-        // Lista simulada de trabajos de Prácticum
-        const practicumList = [
-            { titulo: "Análisis del sistema electoral en Bolivia", estudiante: "Juan Pérez", año: "2022", link: "https://drive.google.com/ejemplo1" },
-            { titulo: "Estudio sobre políticas públicas de salud", estudiante: "Ana García", año: "2021", link: "https://drive.google.com/ejemplo2" },
-            { titulo: "Impacto de la economía informal en Santa Cruz", estudiante: "Carlos López", año: "2023", link: "https://drive.google.com/ejemplo3" },
-            { titulo: "La influencia de redes sociales en elecciones", estudiante: "Lucía Fernández", año: "2022", link: "https://drive.google.com/ejemplo4" },
-            { titulo: "Análisis del cambio climático y su impacto local", estudiante: "José Rivas", año: "2020", link: "https://drive.google.com/ejemplo5" },
-            { titulo: "Desigualdad de género en la política", estudiante: "María Soto", año: "2021", link: "https://drive.google.com/ejemplo6" },
-            { titulo: "Migración y construcción de identidades", estudiante: "Laura Herrera", año: "2023", link: "https://drive.google.com/ejemplo7" },
-            { titulo: "Estudio sobre la violencia intrafamiliar", estudiante: "Pedro Núñez", año: "2022", link: "https://drive.google.com/ejemplo8" },
-            { titulo: "Gobernanza y desarrollo en áreas rurales", estudiante: "Sara Lima", año: "2021", link: "https://drive.google.com/ejemplo9" },
-            { titulo: "El rol de la educación en la cohesión social", estudiante: "Luis Gómez", año: "2023", link: "https://drive.google.com/ejemplo10" }
-        ];
+<script>
+    // Lista simulada de trabajos de Prácticum
+    const practicumList = [
+        { titulo: "Análisis del sistema electoral en Bolivia", estudiante: "Juan Pérez", año: "2022", link: "https://drive.google.com/ejemplo1" },
+        { titulo: "Estudio sobre políticas públicas de salud", estudiante: "Ana García", año: "2021", link: "https://drive.google.com/ejemplo2" },
+        { titulo: "Impacto de la economía informal en Santa Cruz", estudiante: "Carlos López", año: "2023", link: "https://drive.google.com/ejemplo3" },
+        { titulo: "La influencia de redes sociales en elecciones", estudiante: "Lucía Fernández", año: "2022", link: "https://drive.google.com/ejemplo4" },
+        { titulo: "Análisis del cambio climático y su impacto local", estudiante: "José Rivas", año: "2020", link: "https://drive.google.com/ejemplo5" },
+        { titulo: "Desigualdad de género en la política", estudiante: "María Soto", año: "2021", link: "https://drive.google.com/ejemplo6" },
+        { titulo: "Migración y construcción de identidades", estudiante: "Laura Herrera", año: "2023", link: "https://drive.google.com/ejemplo7" },
+        { titulo: "Estudio sobre la violencia intrafamiliar", estudiante: "Pedro Núñez", año: "2022", link: "https://drive.google.com/ejemplo8" },
+        { titulo: "Gobernanza y desarrollo en áreas rurales", estudiante: "Sara Lima", año: "2021", link: "https://drive.google.com/ejemplo9" },
+        { titulo: "El rol de la educación en la cohesión social", estudiante: "Luis Gómez", año: "2023", link: "https://drive.google.com/ejemplo10" }
+    ];
 
-        // Función para cargar la tabla
-        function loadPracticumTable() {
-            const tableBody = document.querySelector("#practicumTable tbody");
-            practicumList.forEach(item => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${item.titulo}</td>
-                    <td>${item.estudiante}</td>
-                    <td>${item.año}</td>
-                    <td><a href="${item.link}" target="_blank">Ver en Drive</a></td>
-                    <td><button class="button" onclick="requestPracticum('${item.titulo}')">Solicitar en Oficina</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
+    // Función para cargar las tarjetas de libros
+    function loadPracticumGrid() {
+        const bookGrid = document.getElementById("bookGrid");
+        practicumList.forEach(item => {
+            const card = document.createElement("div");
+            card.classList.add("book-card");
+            card.innerHTML = `
+                <h3>${item.titulo}</h3>
+                <p><strong>Estudiante:</strong> ${item.estudiante}</p>
+                <p><strong>Año:</strong> ${item.año}</p>
+                <a href="${item.link}" target="_blank">Ver en Drive</a>
+                <button class="button" onclick="requestPracticum('${item.titulo}')">Solicitar en Oficina</button>
+            `;
+            bookGrid.appendChild(card);
+        });
+    }
 
-        // Función para manejar la solicitud
-        function requestPracticum(titulo) {
-            alert(`Has solicitado ver el Prácticum: ${titulo} en la oficina.`);
-        }
+    // Función para manejar la solicitud
+    function requestPracticum(titulo) {
+        alert(`Has solicitado ver el Prácticum: ${titulo} en la oficina.`);
+    }
 
-        // Cargar la tabla al abrir la página
-        window.onload = loadPracticumTable;
-    </script>
+    // Función de búsqueda
+    function searchPracticum() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const cards = document.getElementsByClassName("book-card");
+        practicumList.forEach((item, index) => {
+            const isVisible = item.titulo.toLowerCase().includes(input) ||
+                              item.estudiante.toLowerCase().includes(input) ||
+                              item.año.includes(input);
+            cards[index].style.display = isVisible ? "flex" : "none";
+        });
+    }
+
+    // Cargar la cuadrícula al abrir la página
+    window.onload = loadPracticumGrid;
+</script>
+
 </body>
 </html>
 
