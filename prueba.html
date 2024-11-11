@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca - Catálogo de Libros</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -93,19 +94,17 @@
 </div>
 
 <script>
-    // Lista simulada de libros de la biblioteca
-    const bookList = [
-        { titulo: "Introducción a la Ciencia Política", autor: "Juan Pérez", año: "2018", link: "https://drive.google.com/libro1" },
-        { titulo: "Teoría de las Relaciones Internacionales", autor: "Ana García", año: "2020", link: "https://drive.google.com/libro2" },
-        { titulo: "Metodología de la Investigación Social", autor: "Carlos López", año: "2019", link: "https://drive.google.com/libro3" },
-        { titulo: "Análisis Político Comparado", autor: "Lucía Fernández", año: "2021", link: "https://drive.google.com/libro4" },
-        { titulo: "Cambio Climático y Políticas Públicas", autor: "José Rivas", año: "2017", link: "https://drive.google.com/libro5" },
-        { titulo: "Género y Democracia", autor: "María Soto", año: "2020", link: "https://drive.google.com/libro6" },
-        { titulo: "Globalización y Soberanía Nacional", autor: "Laura Herrera", año: "2022", link: "https://drive.google.com/libro7" },
-        { titulo: "Violencia y Sociedad", autor: "Pedro Núñez", año: "2019", link: "https://drive.google.com/libro8" },
-        { titulo: "Desarrollo Sustentable y Economía Verde", autor: "Sara Lima", año: "2021", link: "https://drive.google.com/libro9" },
-        { titulo: "Educación y Cohesión Social", autor: "Luis Gómez", año: "2023", link: "https://drive.google.com/libro10" }
-    ];
+    let bookList = [];
+
+    // Cargar el archivo CSV usando PapaParse
+    Papa.parse("ruta_a_tu_archivo.csv", {
+        download: true,
+        header: true,
+        complete: function(results) {
+            bookList = results.data;
+            console.log(bookList); // Verificar datos cargados en la consola
+        }
+    });
 
     // Función de búsqueda
     function searchBooks() {
