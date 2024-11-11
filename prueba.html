@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repositorio de Prácticum</title>
+    <title>Biblioteca - Catálogo de Libros</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,22 +12,20 @@
             padding: 0;
         }
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            text-align: center;
         }
         h1 {
-            text-align: center;
             color: #003366;
         }
         .search-bar {
             margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
         }
         .search-bar input {
             padding: 10px;
-            width: 80%;
+            width: 100%;
             max-width: 600px;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -37,15 +35,13 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
+            display: none; /* Oculto inicialmente */
         }
         .book-card {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             text-align: center;
         }
         .book-card h3 {
@@ -74,72 +70,79 @@
             border-radius: 5px;
             margin-top: 10px;
         }
+        .no-results {
+            display: none;
+            color: #666;
+            font-size: 16px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Repositorio de Prácticum</h1>
+    <h1>Catálogo de Libros - Biblioteca</h1>
     <div class="search-bar">
-        <input type="text" id="searchInput" onkeyup="searchPracticum()" placeholder="Buscar por título, estudiante o año...">
+        <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Buscar por título, autor o año...">
     </div>
 
     <div class="book-grid" id="bookGrid">
         <!-- Aquí se insertarán las tarjetas dinámicamente -->
     </div>
+    <div class="no-results" id="noResults">No se encontraron resultados para la búsqueda.</div>
 </div>
 
 <script>
-    // Lista simulada de trabajos de Prácticum
-    const practicumList = [
-        { titulo: "Análisis del sistema electoral en Bolivia", estudiante: "Juan Pérez", año: "2022", link: "https://drive.google.com/ejemplo1" },
-        { titulo: "Estudio sobre políticas públicas de salud", estudiante: "Ana García", año: "2021", link: "https://drive.google.com/ejemplo2" },
-        { titulo: "Impacto de la economía informal en Santa Cruz", estudiante: "Carlos López", año: "2023", link: "https://drive.google.com/ejemplo3" },
-        { titulo: "La influencia de redes sociales en elecciones", estudiante: "Lucía Fernández", año: "2022", link: "https://drive.google.com/ejemplo4" },
-        { titulo: "Análisis del cambio climático y su impacto local", estudiante: "José Rivas", año: "2020", link: "https://drive.google.com/ejemplo5" },
-        { titulo: "Desigualdad de género en la política", estudiante: "María Soto", año: "2021", link: "https://drive.google.com/ejemplo6" },
-        { titulo: "Migración y construcción de identidades", estudiante: "Laura Herrera", año: "2023", link: "https://drive.google.com/ejemplo7" },
-        { titulo: "Estudio sobre la violencia intrafamiliar", estudiante: "Pedro Núñez", año: "2022", link: "https://drive.google.com/ejemplo8" },
-        { titulo: "Gobernanza y desarrollo en áreas rurales", estudiante: "Sara Lima", año: "2021", link: "https://drive.google.com/ejemplo9" },
-        { titulo: "El rol de la educación en la cohesión social", estudiante: "Luis Gómez", año: "2023", link: "https://drive.google.com/ejemplo10" }
+    // Lista simulada de libros de la biblioteca
+    const bookList = [
+        { titulo: "Introducción a la Ciencia Política", autor: "Juan Pérez", año: "2018", link: "https://drive.google.com/libro1" },
+        { titulo: "Teoría de las Relaciones Internacionales", autor: "Ana García", año: "2020", link: "https://drive.google.com/libro2" },
+        { titulo: "Metodología de la Investigación Social", autor: "Carlos López", año: "2019", link: "https://drive.google.com/libro3" },
+        { titulo: "Análisis Político Comparado", autor: "Lucía Fernández", año: "2021", link: "https://drive.google.com/libro4" },
+        { titulo: "Cambio Climático y Políticas Públicas", autor: "José Rivas", año: "2017", link: "https://drive.google.com/libro5" },
+        { titulo: "Género y Democracia", autor: "María Soto", año: "2020", link: "https://drive.google.com/libro6" },
+        { titulo: "Globalización y Soberanía Nacional", autor: "Laura Herrera", año: "2022", link: "https://drive.google.com/libro7" },
+        { titulo: "Violencia y Sociedad", autor: "Pedro Núñez", año: "2019", link: "https://drive.google.com/libro8" },
+        { titulo: "Desarrollo Sustentable y Economía Verde", autor: "Sara Lima", año: "2021", link: "https://drive.google.com/libro9" },
+        { titulo: "Educación y Cohesión Social", autor: "Luis Gómez", año: "2023", link: "https://drive.google.com/libro10" }
     ];
 
-    // Función para cargar las tarjetas de libros
-    function loadPracticumGrid() {
+    // Función de búsqueda
+    function searchBooks() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
         const bookGrid = document.getElementById("bookGrid");
-        practicumList.forEach(item => {
-            const card = document.createElement("div");
-            card.classList.add("book-card");
-            card.innerHTML = `
-                <h3>${item.titulo}</h3>
-                <p><strong>Estudiante:</strong> ${item.estudiante}</p>
-                <p><strong>Año:</strong> ${item.año}</p>
-                <a href="${item.link}" target="_blank">Ver en Drive</a>
-                <button class="button" onclick="requestPracticum('${item.titulo}')">Solicitar en Oficina</button>
-            `;
-            bookGrid.appendChild(card);
+        const noResults = document.getElementById("noResults");
+        bookGrid.innerHTML = ""; // Limpiar resultados anteriores
+        let resultsCount = 0;
+
+        bookList.forEach(item => {
+            if (item.titulo.toLowerCase().includes(input) ||
+                item.autor.toLowerCase().includes(input) ||
+                item.año.includes(input)) {
+
+                const card = document.createElement("div");
+                card.classList.add("book-card");
+                card.innerHTML = `
+                    <h3>${item.titulo}</h3>
+                    <p><strong>Autor:</strong> ${item.autor}</p>
+                    <p><strong>Año:</strong> ${item.año}</p>
+                    <a href="${item.link}" target="_blank">Ver en Drive</a>
+                    <button class="button" onclick="requestBook('${item.titulo}')">Solicitar en Biblioteca</button>
+                `;
+                bookGrid.appendChild(card);
+                resultsCount++;
+            }
         });
+
+        // Mostrar u ocultar la cuadrícula de resultados
+        bookGrid.style.display = resultsCount > 0 ? "grid" : "none";
+        noResults.style.display = resultsCount === 0 ? "block" : "none";
     }
 
     // Función para manejar la solicitud
-    function requestPracticum(titulo) {
-        alert(`Has solicitado ver el Prácticum: ${titulo} en la oficina.`);
+    function requestBook(titulo) {
+        alert(`Has solicitado ver el libro: ${titulo} en la biblioteca.`);
     }
-
-    // Función de búsqueda
-    function searchPracticum() {
-        const input = document.getElementById("searchInput").value.toLowerCase();
-        const cards = document.getElementsByClassName("book-card");
-        practicumList.forEach((item, index) => {
-            const isVisible = item.titulo.toLowerCase().includes(input) ||
-                              item.estudiante.toLowerCase().includes(input) ||
-                              item.año.includes(input);
-            cards[index].style.display = isVisible ? "flex" : "none";
-        });
-    }
-
-    // Cargar la cuadrícula al abrir la página
-    window.onload = loadPracticumGrid;
 </script>
 
 </body>
