@@ -36,7 +36,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            display: none; /* Oculto inicialmente */
         }
         .book-card {
             background-color: white;
@@ -55,22 +54,6 @@
             font-size: 14px;
             margin: 5px 0;
         }
-        .book-card a {
-            text-decoration: none;
-            color: #4CAF50;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
         .no-results {
             display: none;
             color: #666;
@@ -84,7 +67,7 @@
 <div class="container">
     <h1>Catálogo de Libros - Biblioteca</h1>
     <div class="search-bar">
-        <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Buscar por título, autor o año...">
+        <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Buscar por título o autor...">
     </div>
 
     <div class="book-grid" id="bookGrid">
@@ -100,11 +83,31 @@
     Papa.parse("https://github.com/criuagrm/criuagrm.github.io/raw/refs/heads/main/CATALOGO.csv", {
         download: true,
         header: true,
+        encoding: "latin1",
         complete: function(results) {
             bookList = results.data;
-            console.log(bookList); // Verificar datos cargados en la consola
+            displayRandomBooks();
         }
     });
+
+    // Mostrar 6 libros aleatorios al cargar la página
+    function displayRandomBooks() {
+        const bookGrid = document.getElementById("bookGrid");
+        bookGrid.innerHTML = ""; // Limpiar contenido previo
+        let randomBooks = bookList.sort(() => 0.5 - Math.random()).slice(0, 6);
+
+        randomBooks.forEach(item => {
+            const card = document.createElement("div");
+            card.classList.add("book-card");
+            card.innerHTML = `
+                <h3>${item['TÍTULO']}</h3>
+                <p><strong>Autor:</strong> ${item['AUTOR']}</p>
+                <p><strong>Código:</strong> ${item['CÓDIGO']}</p>
+                <p><strong>Ejemplares:</strong> ${item['EJEM.']}</p>
+            `;
+            bookGrid.appendChild(card);
+        });
+    }
 
     // Función de búsqueda
     function searchBooks() {
@@ -115,18 +118,16 @@
         let resultsCount = 0;
 
         bookList.forEach(item => {
-            if (item.titulo.toLowerCase().includes(input) ||
-                item.autor.toLowerCase().includes(input) ||
-                item.año.includes(input)) {
+            if (item['TÍTULO'].toLowerCase().includes(input) ||
+                item['AUTOR'].toLowerCase().includes(input)) {
 
                 const card = document.createElement("div");
                 card.classList.add("book-card");
                 card.innerHTML = `
-                    <h3>${item.titulo}</h3>
-                    <p><strong>Autor:</strong> ${item.autor}</p>
-                    <p><strong>Año:</strong> ${item.año}</p>
-                    <a href="${item.link}" target="_blank">Ver en Drive</a>
-                    <button class="button" onclick="requestBook('${item.titulo}')">Solicitar en Biblioteca</button>
+                    <h3>${item['TÍTULO']}</h3>
+                    <p><strong>Autor:</strong> ${item['AUTOR']}</p>
+                    <p><strong>Código:</strong> ${item['CÓDIGO']}</p>
+                    <p><strong>Ejemplares:</strong> ${item['EJEM.']}</p>
                 `;
                 bookGrid.appendChild(card);
                 resultsCount++;
@@ -137,13 +138,7 @@
         bookGrid.style.display = resultsCount > 0 ? "grid" : "none";
         noResults.style.display = resultsCount === 0 ? "block" : "none";
     }
-
-    // Función para manejar la solicitud
-    function requestBook(titulo) {
-        alert(`Has solicitado ver el libro: ${titulo} en la biblioteca.`);
-    }
 </script>
 
 </body>
 </html>
-
