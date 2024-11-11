@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca - Catálogo de Libros</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -79,16 +78,14 @@
 <script>
     let bookList = [];
 
-    // Cargar el archivo CSV usando PapaParse
-    Papa.parse("https://raw.githubusercontent.com/criuagrm/criuagrm.github.io/refs/heads/main/CATALOGO.json", {
-              download: true,
-        header: true,
-        encoding: "latin1",
-        complete: function(results) {
-            bookList = results.data;
+    // Cargar el archivo JSON usando fetch
+    fetch("https://raw.githubusercontent.com/criuagrm/criuagrm.github.io/main/CATALOGO.json")
+        .then(response => response.json())
+        .then(data => {
+            bookList = data;
             displayRandomBooks();
-        }
-    });
+        })
+        .catch(error => console.error("Error al cargar el archivo JSON:", error));
 
     // Mostrar 6 libros aleatorios al cargar la página
     function displayRandomBooks() {
@@ -142,3 +139,4 @@
 
 </body>
 </html>
+
