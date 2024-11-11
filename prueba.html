@@ -3,200 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIRCPyCS - Certificados de Investigadores</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Repositorio de Prácticum</title>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f3f5;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        .project {
-            background-color: #fff;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: center;
-        }
-        .project:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        .generate-pdf-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: #fff;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .generate-pdf-btn:hover {
-            background-color: #2980b9;
-        }
-
-        /* Estilo para el botón minimalista */
-    .minimal-button {
-        background-color: #007bff; /* Azul */
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 6px 12px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        font-family: Arial, sans-serif;
-    }
-
-    .minimal-button:hover {
-        background-color: #0056b3; /* Azul más oscuro para hover */
-    }
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #003366; color: white; }
+        .button { background-color: #4CAF50; color: white; padding: 8px 16px; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
+    <h1>Repositorio de Prácticum</h1>
+    <p>Consulta y visualización de trabajos de Prácticum disponibles.</p>
 
-<h1>Certificados de Investigadores del CIRCPyCS</h1>
+    <table id="practicumTable">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Estudiante</th>
+                <th>Año</th>
+                <th>Visualizar</th>
+                <th>Solicitud</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se insertarán las filas dinámicamente -->
+        </tbody>
+    </table>
 
-<!-- Investigador 1 -->
-<div class="project">
-    <h3>Investigador: Nelson Jordan</h3>
-    <p>Investigador principal en el área de Ciencias Políticas.</p>
-     <button class="minimal-button" onclick="generarCertificado('Nelson Jordan Bazán', 'Investigador Principal', ['Cambio Climático y Recursos Naturales', 'Sistemas Políticos e Instituciones Públicas'])">Certificado</button>
+    <script>
+        // Lista simulada de trabajos de Prácticum
+        const practicumList = [
+            { titulo: "Análisis del sistema electoral en Bolivia", estudiante: "Juan Pérez", año: "2022", link: "https://drive.google.com/ejemplo1" },
+            { titulo: "Estudio sobre políticas públicas de salud", estudiante: "Ana García", año: "2021", link: "https://drive.google.com/ejemplo2" },
+            { titulo: "Impacto de la economía informal en Santa Cruz", estudiante: "Carlos López", año: "2023", link: "https://drive.google.com/ejemplo3" },
+            { titulo: "La influencia de redes sociales en elecciones", estudiante: "Lucía Fernández", año: "2022", link: "https://drive.google.com/ejemplo4" },
+            { titulo: "Análisis del cambio climático y su impacto local", estudiante: "José Rivas", año: "2020", link: "https://drive.google.com/ejemplo5" },
+            { titulo: "Desigualdad de género en la política", estudiante: "María Soto", año: "2021", link: "https://drive.google.com/ejemplo6" },
+            { titulo: "Migración y construcción de identidades", estudiante: "Laura Herrera", año: "2023", link: "https://drive.google.com/ejemplo7" },
+            { titulo: "Estudio sobre la violencia intrafamiliar", estudiante: "Pedro Núñez", año: "2022", link: "https://drive.google.com/ejemplo8" },
+            { titulo: "Gobernanza y desarrollo en áreas rurales", estudiante: "Sara Lima", año: "2021", link: "https://drive.google.com/ejemplo9" },
+            { titulo: "El rol de la educación en la cohesión social", estudiante: "Luis Gómez", año: "2023", link: "https://drive.google.com/ejemplo10" }
+        ];
 
-</div>
-
-<!-- Investigador 2 -->
-<div class="project">
-    <h3>Investigador: María Suárez</h3>
-    <p>Investigadora asociada en el área de Relaciones Internacionales.</p>
-    <button onclick="generarCertificado('Nombre del Investigador', 'Investigador Principal', ['Línea de Investigación 1', 'Línea de Investigación 2'])">Generar Certificado</button>
-</div>
-
-<!-- Más investigadores -->
-<div class="project">
-    <h3>Investigador: Ricardo Alonzo</h3>
-    <p>Especialista en Derecho Constitucional y Relaciones Internacionales.</p>
-     <button onclick="generarCertificado('Nombre del Investigador', 'Investigador Principal', ['Línea de Investigación 1', 'Línea de Investigación 2'])">Generar Certificado</button>
-</div>
-
-<!-- Agrega más investigadores aquí según sea necesario -->
-
-<script>
-    async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Fondo blanco
-        doc.setFillColor(255, 255, 255);
-        doc.rect(0, 0, 210, 297, 'F'); // A4 en mm
-
-        // Marca de agua del logo en el fondo con opacidad al 15%
-        const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.15 }));
-        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150); // Imagen del centro más transparente
-        doc.setGState(new doc.GState({ opacity: 1 })); // Restablecer opacidad
-
-        // Logo en la esquina superior derecha, centrado horizontalmente
-        const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 55, 1, 100, 20); // Imagen centrada horizontalmente
-
-        // Encabezado de la universidad, facultad, carrera y centro con colores y menor interlineado
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(14);
-        doc.setTextColor("#B22222"); // Rojo para "UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO"
-        doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
-        doc.setTextColor("#003366"); // Azul para los siguientes textos
-        doc.setFontSize(12);
-        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
-        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
-
-        // Título del certificado
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(20);
-        doc.text("Certificado de Investigador", 105, 65, { align: "center" });
-
-        // Cuerpo del certificado con texto justificado y ancho de línea ajustado
-        const textoCertificacion = `Por medio del presente, certificamos que el Sr. ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0); // Negro
-        doc.text(textoCertificacion, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-
-        // Líneas de investigación
-        doc.setFontSize(11);
-        let yPosition = 130;
-        lineasInvestigacion.forEach((linea) => {
-            doc.text(`• ${linea}`, 25, yPosition, { align: "left" });
-            yPosition += 8;
-        });
-
-        // Texto adicional sobre desempeño y agradecimiento, subido un espacio
-        const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
-        const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
-
-        doc.setFontSize(12);
-        doc.text(textoAgradecimiento, 25, yPosition + 17, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-        doc.text(textoSolicitud, 25, yPosition + 35, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-
-        // Fecha de emisión
-        doc.setFontSize(10);
-        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
-
-        // Firmas
-        const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-        const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-
-        doc.addImage(imgDirector, "PNG", 45, yPosition + 65, 40, 20);
-        doc.addImage(imgDirectora, "PNG", 125, yPosition + 65, 40, 20);
-
-        // Bloque de texto para las firmas con negrilla
-        doc.setFont("helvetica", "bold");
-        doc.text("Francisco Méndez Eguez", 65, yPosition + 88, { align: "center" });
-        doc.text("Director", 65, yPosition + 93, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Adm. Pública", 65, yPosition + 98, { align: "center" });
-
-        doc.text("María Angélica Suárez Ribera", 145, yPosition + 88, { align: "center" });
-        doc.text("Directora", 145, yPosition + 93, { align: "center" });
-        doc.text("CIRCPyCS", 145, yPosition + 98, { align: "center" });
-
-        // Pie de página con línea divisoria y datos de contacto, sin negrilla
-        doc.setDrawColor(178, 34, 34); // Rojo
-        doc.setLineWidth(0.5);
-        doc.line(10, 285, 200, 285); // Línea roja horizontal
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 105, 292, { align: "center" });
-
-        // Guardar el PDF
-        doc.save(`Certificado_${nombreInvestigador}.pdf`);
-    }
-
-    // Función para cargar imágenes desde URLs
-    async function cargarImagen(url) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        return new Promise((resolve, reject) => {
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = url;
-        });
-    }
-</script>
+        // Función para cargar la tabla
+        function loadPracticumTable() {
+            const tableBody = document.querySelector("#practicumTable tbody");
+            practicumList.forEach(item => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${item.titulo}</td>
+                    <td>${item.estudiante}</td>
+                    <td>${item.año}</td>
+                    <td><a href="${item.link}" target="_blank">Ver en Drive</a></td>
+                    <td><button class="button" onclick="requestPracticum('${item.titulo}')">Solicitar en Oficina</button></td>
+                `;
+                tableBody.appendChild(row);
+  
 
 
 </body>
