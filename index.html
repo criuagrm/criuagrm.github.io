@@ -176,16 +176,16 @@
                         <a class="nav-link" href="#inicio">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#areas-trabajo">Áreas de Trabajo</a>
+                        <a class="nav-link" href="#areas-trabajo">Líneas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#conceptos">Conceptos Clave</a>
+                        <a class="nav-link" href="https://criuagrm.github.io/organizacion">Organización</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#investigacion">Investigaciones</a>
+                        <a class="nav-link" href="#investigacion">Producción</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="https://criuagrm.github.io/researchers" target="_blank">Miembros</a>
+                    <a class="nav-link" href="https://criuagrm.github.io/researchers" target="_blank">Investigadores</a>
                 </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#servicios">Servicios</a>
@@ -363,14 +363,6 @@
         </div>
     </div>
 </section>
-
-
-        <section id="conceptos" class="section">
-            <h2>Conceptos Clave y Relaciones</h2>
-            <div id="concept-graph" class="interactive-graph"></div>
-            <h3 class="mt-4">Nube de Palabras Interactiva</h3>
-            <div id="word-cloud" class="interactive-graph"></div>
-        </section>
 
         <section id="investigacion" class="section">
     <h2>Investigación y Publicaciones</h2>
@@ -659,74 +651,6 @@
             if (!event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
-        }
-
-        // Nube de palabras interactiva mejorada
-        const words = [
-            {text: "Democracia", size: 60},
-            {text: "Participación", size: 55},
-            {text: "Gobernanza", size: 50},
-            {text: "Derechos", size: 45},
-            {text: "Inclusión", size: 40},
-            {text: "Justicia", size: 40},
-            {text: "Desarrollo", size: 35},
-            {text: "Política", size: 35},
-            {text: "Ciudadanía", size: 30},
-            {text: "Instituciones", size: 30},
-            {text: "Movimientos", size: 25},
-            {text: "Social", size: 25},
-            {text: "Equidad", size: 20},
-            {text: "Transparencia", size: 20},
-            {text: "Educación", size: 15},
-            {text: "Cultura", size: 15},
-            {text: "Economía", size: 15},
-            {text: "Medioambiente", size: 15},
-            {text: "Tecnología", size: 10},
-            {text: "Innovación", size: 10}
-        ];
-
-        const fontFamilies = ['Arial', 'Helvetica', 'Times New Roman', 'Courier', 'Verdana', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'];
-
-        const layout = d3.layout.cloud()
-            .size([width, 400])
-            .words(words)
-            .padding(5)
-            .rotate(() => Math.random() * 90 - 45)
-            .font(() => fontFamilies[Math.floor(Math.random() * fontFamilies.length)])
-            .fontSize(d => d.size)
-            .on("end", draw);
-
-        layout.start();
-
-        function draw(words) {
-            d3.select("#word-cloud").append("svg")
-                .attr("width", layout.size()[0])
-                .attr("height", layout.size()[1])
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter().append("text")
-                .style("font-size", d => d.size + "px")
-                .style("font-family", d => d.font)
-                .style("fill", (d, i) => d3.schemeCategory10[i % 10])
-                .attr("text-anchor", "middle")
-                .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
-                .text(d => d.text)
-                .on("mouseover", function() {
-                    d3.select(this)
-                        .transition()
-                        .duration(300)
-                        .style("font-size", d => (d.size + 5) + "px")
-                        .style("font-weight", "bold");
-                })
-                .on("mouseout", function() {
-                    d3.select(this)
-                        .transition()
-                        .duration(300)
-                        .style("font-size", d => d.size + "px")
-                        .style("font-weight", "normal");
-                });
         }
 
         // Datos simulados para publicaciones
