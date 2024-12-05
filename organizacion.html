@@ -68,7 +68,9 @@
         .minimal-button:hover {
             background-color: var(--secondary-color);
         }
-    .org-chart {
+
+/* Estilos del organigrama */
+.org-chart {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,6 +95,16 @@
     font-size: 1rem;
     font-weight: bold;
     color: #003366;
+    margin: 10px 0;
+}
+
+/* Estilo para la foto */
+.node .photo img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #003366;
+    margin-bottom: 10px;
 }
 
 /* Estilo de las líneas */
@@ -113,17 +125,7 @@
     border-left: 2px solid #003366;
 }
 
-.child-container > .node:before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    width: 0;
-    height: 20px;
-    border-left: 2px solid #003366;
-}
-
-.child-container > .node:not(:first-child):after {
+.child-container > .node:not(:last-child):after {
     content: '';
     position: absolute;
     top: -20px;
@@ -246,18 +248,40 @@
         <h2>Organigrama del EAC</h2>
         <div class="org-chart">
             <div class="node">
+                <div class="photo">
+                    <img src="https://i.imgur.com/UIsvDSC.jpeg" alt="Directora del EAC">
+                </div>
                 <span class="title">Directora del EAC</span>
+                <p>Vilma Paredes Villalba</p>
                 <div class="child-container">
                     <div class="node">
+                        <div class="photo">
+                            <img src="https://i.imgur.com/9dZXWQG.jpeg" alt="Subdirector del EAC">
+                        </div>
                         <span class="title">Subdirector del EAC</span>
+                        <p>Elizabeth Galarza de Eid</p>
                         <div class="child-container">
-                            <div class="node"><span class="title">Jefe de Área Política</span></div>
-                            <div class="node"><span class="title">Jefe de Área Economía</span></div>
-                            <div class="node"><span class="title">Jefe de Área Sociedad</span></div>
-                            <div class="node"><span class="title">Jefe de Área Relaciones Internacionales</span></div>
-                            <div class="node"><span class="title">Jefe de Área Medios y Comunicación</span></div>
-                            <div class="node"><span class="title">Jefe de Área Jurídica y Constitucional</span></div>
-                            <div class="node"><span class="title">Jefe de Medio Ambiente, Agua y Cambio Climático</span></div>
+                            <div class="node">
+                                <div class="photo">
+                                    <img src="https://i.imgur.com/MjeCkKC.png" alt="Jefe de Área Política">
+                                </div>
+                                <span class="title">Jefe de Área Política</span>
+                                <p>Marcial Trigo Valverde</p>
+                            </div>
+                            <div class="node">
+                                <div class="photo">
+                                    <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Jefe de Área Economía">
+                                </div>
+                                <span class="title">Jefe de Área Economía</span>
+                                <p>Javier Hernández Serrano</p>
+                            </div>
+                            <div class="node">
+                                <div class="photo">
+                                    <img src="https://i.imgur.com/9XaJf5l.jpeg" alt="Jefe de Área Sociedad">
+                                </div>
+                                <span class="title">Jefe de Área Sociedad</span>
+                                <p>Jenny Montaño Mariscal</p>
+                            </div>
                         </div>
                     </div>
                 </div>
