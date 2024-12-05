@@ -7,10 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #003366;
-            --secondary-color: #0056b3;
-            --background-color: #f8f9fa;
-            --text-color: #333;
+            --primary-color: #333333; /* Negro */
+            --secondary-color: #666666; /* Plomo oscuro */
+            --background-color: #f5f5f5; /* Gris claro */
+            --text-color: #222222; /* Negro suave */
         }
         body {
             font-family: 'Poppins', sans-serif;
@@ -37,28 +37,24 @@
             text-align: center;
             margin-bottom: 1rem;
         }
-        .authorities-grid, .card-columns {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-        .authority-card, .investigador {
-            background: white;
+        .authority-card, .team-card, .investigador {
+            background: #ffffff; /* Blanco */
+            border: 1px solid #cccccc; /* Gris suave */
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 1rem;
             text-align: center;
-            width: 220px;
+            width: 200px;
         }
-        .authority-card img, .profile-picture img {
-            width: 80px;
-            height: 80px;
+        .authority-card img, .team-card img, .profile-picture img {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
+            object-fit: cover;
             margin-bottom: 0.5rem;
         }
         .minimal-button {
-            background-color: var(--secondary-color);
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 5px;
@@ -68,78 +64,53 @@
             transition: background-color 0.3s ease;
         }
         .minimal-button:hover {
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
         }
-
-    .org-chart {
-        text-align: center;
-        font-family: Arial, sans-serif;
-    }
-
-    .org-chart ul {
-        padding: 0;
-        list-style: none;
-        position: relative;
-    }
-
-    .org-chart ul ul {
-        margin-top: 20px;
-    }
-
-    .org-chart li {
-        display: inline-block;
-        text-align: center;
-        position: relative;
-        padding: 20px 5px 0 5px;
-    }
-
-    .org-chart li::before, .org-chart li::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 50%;
-        border-top: 2px solid #003366;
-        width: 50%;
-        height: 20px;
-    }
-
-    .org-chart li::after {
-        right: auto;
-        left: 50%;
-        border-left: 2px solid #003366;
-    }
-
-    .org-chart li:only-child::before, .org-chart li:only-child::after {
-        display: none;
-    }
-
-    .org-chart li:only-child {
-        padding-top: 0;
-    }
-
-    .org-chart li:first-child::before, .org-chart li:last-child::after {
-        border: 0;
-    }
-
-    .org-chart li:last-child::before {
-        border-right: 2px solid #003366;
-        border-radius: 0 0 0 5px;
-    }
-
-    .org-chart li:first-child::after {
-        border-radius: 0 0 5px 0;
-    }
-
-    .node {
-        display: inline-block;
-        padding: 10px 15px;
-        background-color: #e6f7e9;
-        border: 2px solid #003366;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        color: #003366;
-        font-weight: bold;
-    }
+        .org-chart {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .org-chart ul {
+            padding: 0;
+            list-style: none;
+            position: relative;
+        }
+        .org-chart ul ul {
+            margin-top: 20px;
+        }
+        .org-chart li {
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            padding: 20px 5px 0 5px;
+        }
+        .org-chart li::before, .org-chart li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid var(--secondary-color);
+            width: 50%;
+            height: 20px;
+        }
+        .org-chart li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid var(--secondary-color);
+        }
+        .org-chart li:only-child::before, .org-chart li:only-child::after {
+            display: none;
+        }
+        .node {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: var(--background-color);
+            border: 2px solid var(--secondary-color);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: bold;
+        }
         .footer {
             background-color: var(--primary-color);
             color: white;
@@ -168,126 +139,102 @@
     </nav>
 
     <!-- Banner -->
-    <header class="text-center py-5 bg-primary text-white">
+    <header class="text-center py-5 bg-dark text-white">
         <h1>Organización del CRI UAGRM</h1>
         <p>Conoce cómo estamos estructurados para liderar la investigación en Ciencias Políticas y Sociales.</p>
     </header>
 
     <!-- Sección Autoridades -->
-<section id="autoridades" class="section bg-light py-5">
-    <h2 class="text-center mb-4" style="color: #003366; font-family: 'Playfair Display', serif;">Autoridades</h2>
-    <div class="container d-flex justify-content-center align-items-center gap-4 flex-wrap">
-        <div class="authority-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/0wFGVzw.jpeg" alt="Rector" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Dr. Vicente Cuéllar</h5>
-            <p style="font-size: 0.9rem; color: #666;">Rector</p>
+    <section id="autoridades" class="section bg-light py-5">
+        <h2>Autoridades</h2>
+        <div class="container d-flex justify-content-center align-items-center gap-4 flex-wrap">
+            <div class="authority-card">
+                <img src="https://i.imgur.com/0wFGVzw.jpeg" alt="Rector">
+                <h5>Dr. Vicente Cuéllar</h5>
+                <p>Rector</p>
+            </div>
+            <div class="authority-card">
+                <img src="https://i.imgur.com/nKvJms9.jpeg" alt="Vicerrector">
+                <h5>Dr. Reinerio Vargas</h5>
+                <p>Vicerrector</p>
+            </div>
+            <div class="authority-card">
+                <img src="https://i.imgur.com/YKuyiDE.jpeg" alt="Decano">
+                <h5>Dr. Alfonso Coca E.</h5>
+                <p>Decano</p>
+            </div>
+            <div class="authority-card">
+                <img src="https://i.imgur.com/bDNReAS.jpeg" alt="Vicedecana">
+                <h5>Dra. Rosario Caballero V.</h5>
+                <p>Vicedecana</p>
+            </div>
+            <div class="authority-card">
+                <img src="https://i.imgur.com/7mlNXEy.png" alt="Director">
+                <h5>Lic. Francisco Méndez E.</h5>
+                <p>Director de Carrera</p>
+            </div>
         </div>
-        <div class="authority-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/nKvJms9.jpeg" alt="Vicerrector" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Dr. Reinerio Vargas</h5>
-            <p style="font-size: 0.9rem; color: #666;">Vicerrector</p>
-        </div>
-        <div class="authority-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/YKuyiDE.jpeg" alt="Decano" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Dr. Alfonso Coca E.</h5>
-            <p style="font-size: 0.9rem; color: #666;">Decano</p>
-        </div>
-        <div class="authority-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/bDNReAS.jpeg" alt="Vicedecana" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Dra. Rosario Caballero V.</h5>
-            <p style="font-size: 0.9rem; color: #666;">Vicedecana</p>
-        </div>
-        <div class="authority-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/7mlNXEy.png" alt="Director" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Lic. Francisco Méndez E.</h5>
-            <p style="font-size: 0.9rem; color: #666;">Director de Carrera</p>
-        </div>
-    </div>
-</section>
+    </section>
 
+    <!-- Sección Equipo -->
+    <section id="equipo" class="section bg-light py-5">
+        <h2>Equipo</h2>
+        <div class="container d-flex justify-content-center flex-wrap gap-4">
+            <div class="team-card">
+                <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="Directora">
+                <h5>María Angélica Suárez Ribera</h5>
+                <p>Directora del CRI</p>
+            </div>
+            <div class="team-card">
+                <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="Responsable de Programas">
+                <h5>MSc. Orlando Peralta Beltrán</h5>
+                <p>Responsable de Programas de Investigación</p>
+            </div>
+            <div class="team-card">
+                <img src="https://i.imgur.com/pcBiXh2.png" alt="Responsable de Análisis Político">
+                <h5>MSc. Daniel Hurtado Justiniano</h5>
+                <p>Responsable de Análisis Político</p>
+            </div>
+            <div class="team-card">
+                <img src="https://i.imgur.com/QNuYClh.jpeg" alt="Coordinador Internacional">
+                <h5>Tte. Cab. James M. Campos Cuéllar</h5>
+                <p>Coordinador Internacional</p>
+            </div>
+            <div class="team-card">
+                <img src="https://via.placeholder.com/100" alt="Secretaria">
+                <h5>Sra. Sara Cristodulo</h5>
+                <p>Secretaria</p>
+            </div>
+        </div>
+    </section>
 
-   <!-- Sección Equipo -->
-<section id="equipo" class="section bg-light py-5">
-    <h2 class="text-center mb-4" style="color: #003366; font-family: 'Playfair Display', serif;">Equipo</h2>
-    <div class="container d-flex justify-content-center flex-wrap gap-4">
-        <!-- Directora -->
-        <div class="team-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="Directora" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">María Angélica Suárez Ribera</h5>
-            <p style="font-size: 0.9rem; color: #666;">Directora del CRI</p>
+    <!-- Sección Organigrama del EAC -->
+    <section id="eac" class="section">
+        <h2>Organigrama del EAC</h2>
+        <div class="container d-flex justify-content-center">
+            <div class="org-chart">
+                <ul>
+                    <li>
+                        <div class="node">Directora del EAC</div>
+                        <ul>
+                            <li>
+                                <div class="node">Subdirector del EAC</div>
+                                <ul>
+                                    <li><div class="node">Jefe de Área Política</div></li>
+                                    <li><div class="node">Jefe de Área Economía</div></li>
+                                    <li><div class="node">Jefe de Área Sociedad</div></li>
+                                    <li><div class="node">Jefe de Área Relaciones Internacionales</div></li>
+                                    <li><div class="node">Jefe de Área Medios y Comunicación</div></li>
+                                    <li><div class="node">Jefe de Área Jurídica y Constitucional</div></li>
+                                    <li><div class="node">Jefe de Medio Ambiente, Agua y Cambio Climático</div></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <!-- Responsable de Programas -->
-        <div class="team-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="Responsable de Programas" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">MSc. Orlando Peralta Beltrán</h5>
-            <p style="font-size: 0.9rem; color: #666;">Responsable de Programas de Investigación</p>
-        </div>
-        <!-- Responsable de Análisis Político -->
-        <div class="team-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/pcBiXh2.png" alt="Responsable de Análisis Político" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">MSc. Daniel Hurtado Justiniano</h5>
-            <p style="font-size: 0.9rem; color: #666;">Responsable de Análisis Político</p>
-        </div>
-        <!-- Coordinador Internacional -->
-        <div class="team-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://i.imgur.com/QNuYClh.jpeg" alt="Coordinador Internacional" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Tte. Cab. James M. Campos Cuéllar</h5>
-            <p style="font-size: 0.9rem; color: #666;">Coordinador Internacional</p>
-        </div>
-        <!-- Secretaria -->
-        <div class="team-card text-center p-3" style="background: #fdfdfd; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 200px;">
-            <img src="https://via.placeholder.com/100" alt="Secretaria" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-            <h5 class="mt-3" style="color: #003366; font-weight: bold;">Sra. Sara Cristodulo</h5>
-            <p style="font-size: 0.9rem; color: #666;">Secretaria</p>
-        </div>
-    </div>
-</section>
-
-
- <!-- Sección del Organigrama del EAC -->
-<section id="eac" class="section">
-    <h2 class="text-center mb-4" style="color: #003366;">Organigrama del EAC</h2>
-    <div class="container d-flex justify-content-center">
-        <div class="org-chart">
-            <ul>
-                <!-- Directora del EAC -->
-                <li>
-                    <div class="node">Directora del EAC</div>
-                    <ul>
-                        <!-- Subdirector del EAC -->
-                        <li>
-                            <div class="node">Subdirector del EAC</div>
-                            <ul>
-                                <!-- Áreas -->
-                                <li>
-                                    <div class="node">Jefe de Área Política</div>
-                                </li>
-                                <li>
-                                    <div class="node">Jefe de Área Economía</div>
-                                </li>
-                                <li>
-                                    <div class="node">Jefe de Área Sociedad</div>
-                                </li>
-                                <li>
-                                    <div class="node">Jefe de Área Relaciones Internacionales</div>
-                                </li>
-                                <li>
-                                    <div class="node">Jefe de Área Medios y Comunicación</div>
-                                </li>
-                                <li>
-                                    <div class="node">Jefe de Área Jurídica y Constitucional</div>
-                                </li>
-                                <li>
-                                    <div class="node">Jefe de Medio Ambiente, Agua y Cambio Climático</div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</section>
+    </section>
 
     <!-- Sección Investigadores -->
     <section id="investigadores" class="section">
