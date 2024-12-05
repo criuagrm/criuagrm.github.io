@@ -68,51 +68,79 @@
         .minimal-button:hover {
             background-color: var(--secondary-color);
         }
-        .org-chart {
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        .org-chart ul {
-            padding: 0;
-            list-style: none;
-            position: relative;
-        }
-        .org-chart ul ul {
-            margin-top: 20px;
-        }
-        .org-chart li {
-            display: inline-block;
-            text-align: center;
-            position: relative;
-            padding: 20px 5px 0 5px;
-        }
-        .org-chart li::before, .org-chart li::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 50%;
-            border-top: 2px solid var(--secondary-color);
-            width: 50%;
-            height: 20px;
-        }
-        .org-chart li::after {
-            right: auto;
-            left: 50%;
-            border-left: 2px solid var(--secondary-color);
-        }
-        .org-chart li:only-child::before, .org-chart li:only-child::after {
-            display: none;
-        }
-        .node {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: var(--background-color);
-            border: 2px solid var(--secondary-color);
-            border-radius: 5px;
-            font-size: 0.9rem;
-            color: var(--text-color);
-            font-weight: bold;
-        }
+    .org-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #fff;
+    border: 2px solid #003366;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 150px;
+}
+
+.node .title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #003366;
+}
+
+/* Estilo de las líneas */
+.child-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative;
+}
+
+.child-container:before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    width: 0;
+    height: 20px;
+    border-left: 2px solid #003366;
+}
+
+.child-container > .node:before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    width: 0;
+    height: 20px;
+    border-left: 2px solid #003366;
+}
+
+.child-container > .node:not(:first-child):after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-top: 2px solid #003366;
+}
+
+.child-container > .node:not(:last-child):before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: 50%;
+    width: 50%;
+    border-top: 2px solid #003366;
+}
         .footer {
             background-color: var(--primary-color);
             color: white;
@@ -212,33 +240,32 @@
         </div>
     </section>
 
-    <!-- Sección Organigrama del EAC -->
-    <section id="eac" class="section">
+<!-- Sección Organigrama del EAC -->
+<section id="eac" class="section">
+    <div class="container text-center">
         <h2>Organigrama del EAC</h2>
-        <div class="container d-flex justify-content-center">
-            <div class="org-chart">
-                <ul>
-                    <li>
-                        <div class="node">Directora del EAC</div>
-                        <ul>
-                            <li>
-                                <div class="node">Subdirector del EAC</div>
-                                <ul>
-                                    <li><div class="node">Jefe de Área Política</div></li>
-                                    <li><div class="node">Jefe de Área Economía</div></li>
-                                    <li><div class="node">Jefe de Área Sociedad</div></li>
-                                    <li><div class="node">Jefe de Área Relaciones Internacionales</div></li>
-                                    <li><div class="node">Jefe de Área Medios y Comunicación</div></li>
-                                    <li><div class="node">Jefe de Área Jurídica y Constitucional</div></li>
-                                    <li><div class="node">Jefe de Medio Ambiente, Agua y Cambio Climático</div></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+        <div class="org-chart">
+            <div class="node">
+                <span class="title">Directora del EAC</span>
+                <div class="child-container">
+                    <div class="node">
+                        <span class="title">Subdirector del EAC</span>
+                        <div class="child-container">
+                            <div class="node"><span class="title">Jefe de Área Política</span></div>
+                            <div class="node"><span class="title">Jefe de Área Economía</span></div>
+                            <div class="node"><span class="title">Jefe de Área Sociedad</span></div>
+                            <div class="node"><span class="title">Jefe de Área Relaciones Internacionales</span></div>
+                            <div class="node"><span class="title">Jefe de Área Medios y Comunicación</span></div>
+                            <div class="node"><span class="title">Jefe de Área Jurídica y Constitucional</span></div>
+                            <div class="node"><span class="title">Jefe de Medio Ambiente, Agua y Cambio Climático</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
  <!-- Sección Investigadores -->
 <section id="investigadores" class="section">
