@@ -57,6 +57,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
         }
         .node {
             display: flex;
@@ -86,6 +87,38 @@
             height: 80px;
             border-radius: 50%;
             border: 2px solid #003366;
+        }
+        .child-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+        }
+        .child-container:before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            width: 0;
+            height: 20px;
+            border-left: 2px solid #003366;
+        }
+        .child-container > .node:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-top: 2px solid #003366;
+        }
+        .child-container > .node:not(:last-child):before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: 50%;
+            width: 50%;
+            border-top: 2px solid #003366;
         }
         .footer {
             background-color: var(--primary-color);
@@ -152,35 +185,65 @@
                     </div>
                     <span class="title">Directora del EAC</span>
                     <p>María Angélica Suárez Ribera</p>
-                </div>
-                <div class="node">
-                    <div class="photo">
-                        <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Subdirector del EAC">
-                    </div>
-                    <span class="title">Subdirector</span>
-                    <p>Luis Andia</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Boletines -->
-    <section id="boletines" class="section bg-light">
-        <div class="container">
-            <h2>Boletines</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card-download">
-                        <h5>Riesgos Hidrogeológicos</h5>
-                        <p>Análisis de riesgos en la Llanura Cruceña.</p>
-                        <a href="#" class="btn btn-primary mt-2">Leer más</a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card-download">
-                        <h5>Apoderamiento de Tierras</h5>
-                        <p>Conflictos territoriales en Bolivia.</p>
-                        <a href="#" class="btn btn-primary mt-2">Leer más</a>
+                    <div class="child-container">
+                        <div class="node">
+                            <div class="photo">
+                                <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Subdirector del EAC">
+                            </div>
+                            <span class="title">Subdirector del EAC</span>
+                            <p>Luis Andia</p>
+                            <div class="child-container">
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="Jefe de Área Política">
+                                    </div>
+                                    <span class="title">Jefe de Área Política</span>
+                                    <p>Orlando Peralta Beltrán</p>
+                                </div>
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Jefe de Área Economía">
+                                    </div>
+                                    <span class="title">Jefe de Área Economía</span>
+                                    <p>Javier Hernández Serrano</p>
+                                </div>
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/MjeCkKC.png" alt="Jefe de Área Sociedad">
+                                    </div>
+                                    <span class="title">Jefe de Área Sociedad</span>
+                                    <p>Marcial Trigo Valverde</p>
+                                </div>
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/448ZaAc.jpeg" alt="Jefa de Área Relaciones Internacionales">
+                                    </div>
+                                    <span class="title">Jefa de Área Relaciones Internacionales</span>
+                                    <p>Carmen Sandoval</p>
+                                </div>
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/GWijiNJ.jpeg" alt="Jefe de Medios y Comunicación">
+                                    </div>
+                                    <span class="title">Jefe de Medios y Comunicación</span>
+                                    <p>Marco Torrez Valverde</p>
+                                </div>
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/GHEtQho.png" alt="Jefe de Área Jurídica">
+                                    </div>
+                                    <span class="title">Jefe de Área Jurídica</span>
+                                    <p>Roy Céspedes</p>
+                                </div>
+                                <div class="node">
+                                    <div class="photo">
+                                        <img src="https://i.imgur.com/9EzDO9D.jpeg" alt="Jefa de Medio Ambiente">
+                                    </div>
+                                    <span class="title">Jefa de Medio Ambiente</span>
+                                    <p>Paola Parra Rojas</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -194,20 +257,20 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="project-card">
-                        <h5>Proyecto 1: Digitalización de Archivos</h5>
-                        <p>Creación de una plataforma de datos históricos para análisis político.</p>
+                        <h5>Digitalización de Archivos</h5>
+                        <p>Creación de una base de datos histórica para análisis político en Bolivia.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="project-card">
-                        <h5>Proyecto 2: Análisis de Género</h5>
-                        <p>Impacto de políticas públicas en la inclusión de mujeres en la política boliviana.</p>
+                        <h5>Inclusión de Género</h5>
+                        <p>Estudio sobre participación femenina en política boliviana.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="project-card">
-                        <h5>Proyecto 3: Ciudades Inteligentes</h5>
-                        <p>Evaluación de la implementación de tecnologías en gestión municipal.</p>
+                        <h5>Ciudades Inteligentes</h5>
+                        <p>Evaluación del uso de tecnología en la gestión municipal.</p>
                     </div>
                 </div>
             </div>
