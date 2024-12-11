@@ -48,22 +48,6 @@
             text-decoration: underline;
         }
 
-        .banner {
-            background: url('https://via.placeholder.com/1200x400') center/cover;
-            color: white;
-            text-align: center;
-            padding: 5em 2em;
-        }
-
-        .banner h1 {
-            font-size: 3em;
-        }
-
-        .banner p {
-            font-size: 1.5em;
-            margin-top: 0.5em;
-        }
-
         section {
             padding: 3em 2em;
             text-align: center;
@@ -74,38 +58,41 @@
             margin-bottom: 1em;
         }
 
-        ul {
-            list-style: none;
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2em;
+            padding: 2em;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: left;
-            margin: auto;
-            width: 60%;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-            width: 50%;
-            margin: auto;
+        .card h3 {
+            margin-bottom: 1em;
+            color: #003366;
         }
 
-        form label {
-            font-weight: bold;
+        .card p {
+            margin-bottom: 1em;
         }
 
-        form input, form textarea, form button {
-            padding: 0.5em;
-            font-size: 1em;
-        }
-
-        form button {
+        .card button {
             background: #003366;
             color: white;
             border: none;
+            padding: 0.5em 1em;
             cursor: pointer;
+            border-radius: 4px;
         }
 
-        form button:hover {
+        .card button:hover {
             background: #0055a5;
         }
 
@@ -126,18 +113,10 @@
     <nav>
         <ul>
             <li><a href="#acerca">Acerca de</a></li>
-            <li><a href="#comite">Comité Editorial</a></li>
-            <li><a href="#publicaciones">Publicaciones</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="#volumenes">Volúmenes</a></li>
         </ul>
     </nav>
 </header>
-
-<!-- Banner Principal -->
-<section class="banner">
-    <h1>Revista Conocimiento i Política</h1>
-    <p>Análisis, Investigación y Propuestas en Ciencia Política y Ciencias Sociales</p>
-</section>
 
 <!-- Sección Acerca de -->
 <section id="acerca">
@@ -145,45 +124,46 @@
     <p>Promovemos la investigación y la difusión del conocimiento en ciencia política y ciencias sociales, buscando ser un referente académico en la región y a nivel internacional.</p>
 </section>
 
-<!-- Sección Comité Editorial -->
-<section id="comite">
-    <h2>Comité Editorial</h2>
-    <ul>
-        <li><strong>Director/a:</strong> Gaspar Pozuelo Quintana - zvalle@boada.net</li>
-        <li><strong>Editor/a en Jefe:</strong> Pepito Sosimo Alfaro Vilalta - encarna45@hotmail.com</li>
-        <li><strong>Revisor/a Externo/a:</strong> Fabián del Font - saritaguerrero@gmail.com</li>
-        <li><strong>Consejero/a Editorial:</strong> Nydia Salgado Cervera - pazosheriberto@hotmail.com</li>
-        <li><strong>Revisor/a Técnico/a:</strong> Prudencio Belmonte Esteve - belloeufemia@bonet.es</li>
-    </ul>
-</section>
+<!-- Sección Volúmenes -->
+<section id="volumenes">
+    <h2>Volúmenes Publicados</h2>
+    <div class="card-container">
+        <div class="card">
+            <h3>Volumen 1</h3>
+            <p>Análisis sobre política comparada y sistemas electorales en América Latina.</p>
+            <button>Leer Más</button>
+        </div>
 
-<!-- Sección Publicaciones -->
-<section id="publicaciones">
-    <h2>Publicaciones</h2>
-    <ul>
-        <li><strong>Título:</strong> Suscipit quidem.<br><strong>Autor/es:</strong> Gaspar Pozuelo Quintana<br><strong>Fecha de Publicación:</strong> 2022-11-12<br><strong>Enlace:</strong> <a href="#">Leer más</a></li>
-        <li><strong>Título:</strong> Minus suscipit.<br><strong>Autor/es:</strong> Pepito Sosimo Alfaro Vilalta<br><strong>Fecha de Publicación:</strong> 2023-05-18<br><strong>Enlace:</strong> <a href="#">Leer más</a></li>
-    </ul>
-</section>
+        <div class="card">
+            <h3>Volumen 2</h3>
+            <p>Estudios sobre desarrollo económico y políticas públicas en contextos emergentes.</p>
+            <button>Leer Más</button>
+        </div>
 
-<!-- Sección Contacto -->
-<section id="contacto">
-    <h2>Contáctanos</h2>
-    <form>
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" required>
+        <div class="card">
+            <h3>Volumen 3</h3>
+            <p>Debates sobre gobernanza global y relaciones internacionales contemporáneas.</p>
+            <button>Leer Más</button>
+        </div>
 
-        <label for="email">Correo Electrónico</label>
-        <input type="email" id="email" required>
+        <div class="card">
+            <h3>Volumen 4</h3>
+            <p>Impacto de la tecnología en la administración pública y la gestión gubernamental.</p>
+            <button>Leer Más</button>
+        </div>
 
-        <label for="asunto">Asunto</label>
-        <input type="text" id="asunto" required>
+        <div class="card">
+            <h3>Volumen 5</h3>
+            <p>Investigaciones sobre movimientos sociales y cambio político en el siglo XXI.</p>
+            <button>Leer Más</button>
+        </div>
 
-        <label for="mensaje">Mensaje</label>
-        <textarea id="mensaje" rows="5" required></textarea>
-
-        <button type="submit">Enviar</button>
-    </form>
+        <div class="card">
+            <h3>Volumen 6</h3>
+            <p>Estudios de políticas de género y derechos humanos en contextos multiculturales.</p>
+            <button>Leer Más</button>
+        </div>
+    </div>
 </section>
 
 <!-- Pie de Página -->
