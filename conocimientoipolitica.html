@@ -3,217 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revista Conocimiento i Política</title>
+    <title>Conocimiento i Política</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-
         header {
-            background: #003366;
+            background-color: #003366;
             color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1em 2em;
+            padding: 20px 0;
+            text-align: center;
         }
-
-        header .logo {
-            font-size: 1.5em;
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #00509e;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
             font-weight: bold;
         }
-
-        header nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2em;
-        }
-
-        header nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1em;
-        }
-
-        header nav ul li a:hover {
+        nav a:hover {
             text-decoration: underline;
         }
-
-        section {
-            padding: 3em 2em;
-            text-align: center;
+        .main-content {
+            padding: 20px;
         }
-
-        h2 {
-            color: #003366;
-            margin-bottom: 1em;
+        .article {
+            background-color: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .dropdown {
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-width: 180px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px 0;
+    z-index: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+.dropdown-content a {
+    color: #003366;
+    text-decoration: none;
+    display: block;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+.dropdown-content a:hover {
+    background-color: #f9f9f9;
+    color: #00509e;
+}
 
-       .card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1em;
-            padding: 2em;
-        }
-
-        .card {
-            background: white;
-            padding: 0.6em;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 0.5em;
-        }
-
-        .card h3 {
-            color: #003366;
-            margin-bottom: 0.5em;
-            font-size: 0.9em;
-        }
 
         footer {
-            background: #003366;
+            background-color: #003366;
             color: white;
-            padding: 2em;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             text-align: center;
-        }
-
-        
-        .footer-container {
-            margin-bottom: 1.5em;
-        }
-
-        .footer-container ul {
-            list-style: none;
-            padding: 0;
-            color: white;
-        }
-
-        .footer-container ul li {
-            margin-bottom: 0.5em;
-        }
-
-        .contact-info {
-            margin-bottom: 1.5em;
-            text-align: center;
-            color: white;
-        }
-
-        .contact-info p {
-            margin: 0.5em 0;
-        }
-
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5em;
-            align-items: center;
-            color: white;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.2em;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-        }
-
-        .social-links a:hover {
-            color: #f0c040;
-        }
-
-        .icon {
-            font-size: 1.8em;
-            color: white;
+            padding: 10px 0;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">Conocimiento i Política</div>
-    <nav>
-        <ul>
-            <li><a href="#acerca">Acerca de</a></li>
-            <li><a href="#volumenes">Volúmenes</a></li>
-            <li><a href="#comite">Comité Editorial</a></li>
-            <li><a href="#boletines">Boletines</a></li>
-        </ul>
-    </nav>
+    <h2>Revista Científica</h2>
+    <h1>Conocimiento i Política</h1>
+    <p>Explorando ideas, compartiendo conocimiento</p>
+    <button onclick="window.location.href='https://docs.google.com/document/d/1_bsn0ymXxlZNrIjKh9_L608hYjq1KaBZQf65kL9AbuA/edit?usp=sharing';" style="margin-top: 10px; padding: 10px 20px; background-color: #00509e; color: white; border: none; border-radius: 5px; cursor: pointer;">Instrucciones para Autores</button>
 </header>
 
-<section id="acerca">
-    <h2>Acerca de la Revista</h2>
-    <p>Promovemos la investigación y la difusión del conocimiento en ciencia política y ciencias sociales, buscando ser un referente académico en la región y a nivel internacional.</p>
-</section>
+<nav>
+    <a href="#articulos">Artículos</a>
+    <a href="#ediciones">Ediciones Anteriores</a>
+    <div class="dropdown">
+    <a href="#nosotros">Acerca de</a>
+    <div class="dropdown-content">
+        <a href="https://criuagrm.github.io/aboutcip">Sobre la Revista</a>
+        <a href="#equipo-editorial">Equipo Editorial</a>
+        <a href="#privacidad">Declaración de Privacidad</a>
+        <a href="#contacto">Contacto</a>
+    </div>
+</div>
 
-<section id="comite">
-    <h2>Comité Editorial</h2>
-    <div class="card-container">
-        <div class="card">
-            <img src="https://via.placeholder.com/150" alt="Editor en Jefe">
-            <h3>Pepito Alfaro</h3>
-            <p>Editor en Jefe</p>
+    <a href="#contacto">Contacto</a>
+</nav>
+
+<main class="main-content">
+    <section id="articulos">
+        <h2>Artículos Destacados</h2>
+        <div class="article">
+            <h3>Título del Artículo 1</h3>
+            <p>Resumen breve del artículo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <a href="#">Leer más</a>
         </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/150" alt="Directora">
-            <h3>Gaspar Quintana</h3>
-            <p>Directora</p>
+        <div class="article">
+            <h3>Título del Artículo 2</h3>
+            <p>Resumen breve del artículo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <a href="#">Leer más</a>
         </div>
-    </div>
-    <h2>Miembros del Comité</h2>
-    <div class="card-container">
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 1"><h3>Miembro 1</h3><p>Investigador</p></div>
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 2"><h3>Miembro 2</h3><p>Investigador</p></div>
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 3"><h3>Miembro 3</h3><p>Investigador</p></div>
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 4"><h3>Miembro 4</h3><p>Investigador</p></div>
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 5"><h3>Miembro 5</h3><p>Investigador</p></div>
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 6"><h3>Miembro 6</h3><p>Investigador</p></div>
-        <div class="card"><img src="https://via.placeholder.com/150" alt="Miembro 7"><h3>Miembro 7</h3><p>Investigador</p></div>
-    </div>
-</section>
-<footer>
-    <div class="contact-info">
-        <p><strong>Correo:</strong> contacto@revista.com</p>
-        <p><strong>Teléfono:</strong> +591 123456789</p>
-        <p><strong>Dirección:</strong> Calle Principal 123, Ciudad, País</p>
-    </div>
-    <div class="footer-container">
+    </section>
+
+    <section id="ediciones">
+        <h2>Ediciones Anteriores</h2>
         <ul>
-            <li><a href="#">Política de Cookies</a></li>
-            <li><a href="#">Política de Privacidad</a></li>
-            <li><a href="#">Aviso Legal</a></li>
+            <li><a href="#">Volumen 1, Número 1</a></li>
+            <li><a href="#">Volumen 1, Número 2</a></li>
+            <li><a href="#">Volumen 2, Número 1</a></li>
         </ul>
-    </div>
-    <div class="social-links">
-        <a href="#"><span class="icon">&#x1F4F1;</span> LinkedIn</a>
-        <a href="#"><span class="icon">&#x1F4F7;</span> Facebook</a>
-        <a href="#"><span class="icon">&#x1F426;</span> Twitter</a>
-    </div>
+    </section>
+
+    <section id="nosotros">
+        <h2>Acerca de la Revista</h2>
+        <p>"Conocimiento i Política" es una revista científica dedicada a la difusión de investigaciones en ciencia política y administración pública.</p>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Conocimiento i Política. Todos los derechos reservados.</p>
 </footer>
+
 </body>
 </html>
