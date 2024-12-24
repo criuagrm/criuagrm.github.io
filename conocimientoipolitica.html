@@ -33,8 +33,50 @@
         nav a:hover {
             text-decoration: underline;
         }
-        .main-content {
+
+        /* Contenedor principal para el contenido + sidebar */
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
+        }
+
+        .content {
+            flex: 3;
+            margin-right: 20px;
+        }
+
+        .sidebar {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            color: #00509e;
+            margin-top: 0;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+        .sidebar a {
+            text-decoration: none;
+            color: #00509e;
+        }
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            padding: 20px; /* Mantén esta clase si la necesitas para otros estilos */
         }
         .article {
             background-color: white;
@@ -43,46 +85,46 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .dropdown {
-    position: relative;
-    display: inline-block;
-    font-size: 16px;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    min-width: 180px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 5px 0;
-    z-index: 1;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    opacity: 0;
-    transform: translateY(-10px);
-}
-.dropdown:hover .dropdown-content {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-.dropdown-content a {
-    color: #003366;
-    text-decoration: none;
-    display: block;
-    padding: 8px 15px;
-    font-size: 14px;
-    border-bottom: 1px solid #f0f0f0;
-}
-.dropdown-content a:last-child {
-    border-bottom: none;
-}
-.dropdown-content a:hover {
-    background-color: #f9f9f9;
-    color: #00509e;
-}
 
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-width: 180px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 5px 0;
+            z-index: 1;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .dropdown-content a {
+            color: #003366;
+            text-decoration: none;
+            display: block;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #f9f9f9;
+            color: #00509e;
+        }
 
         footer {
             background-color: #003366;
@@ -99,50 +141,70 @@
     <h2>Revista Científica</h2>
     <h1>Conocimiento i Política</h1>
     <p>Explorando ideas, compartiendo conocimiento</p>
-    <button onclick="window.location.href='https://docs.google.com/document/d/1_bsn0ymXxlZNrIjKh9_L608hYjq1KaBZQf65kL9AbuA/edit?usp=sharing';" style="margin-top: 10px; padding: 10px 20px; background-color: #00509e; color: white; border: none; border-radius: 5px; cursor: pointer;">Instrucciones para Autores</button>
+    <button onclick="window.location.href='https://docs.google.com/document/d/1_bsn0ymXxlZNrIjKh9_L608hYjq1KaBZQf65kL9AbuA/edit?usp=sharing';"
+            style="margin-top: 10px; padding: 10px 20px; background-color: #00509e; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Instrucciones para Autores
+    </button>
 </header>
 
 <nav>
     <a href="#articulos">Actual</a>
     <a href="#ediciones">Ediciones Anteriores</a>
     <div class="dropdown">
-    <a href="#nosotros">Acerca de</a>
-    <div class="dropdown-content">
-        <a href="https://criuagrm.github.io/aboutcip">Sobre la Revista</a>
-        <a href="https://criuagrm.github.io/editeamcip">Equipo Editorial</a>
-        <a href="#privacidad">Declaración de Privacidad</a>
-        <a href="https://criuagrm.github.io/contacip">Contacto</a>
+        <a href="#nosotros">Acerca de</a>
+        <div class="dropdown-content">
+            <a href="https://criuagrm.github.io/aboutcip">Sobre la Revista</a>
+            <a href="https://criuagrm.github.io/editeamcip">Equipo Editorial</a>
+            <a href="#privacidad">Declaración de Privacidad</a>
+            <a href="https://criuagrm.github.io/contacip">Contacto</a>
+        </div>
     </div>
-</div>
-
     <a href="https://criuagrm.github.io/newscip">Avisos</a>
 </nav>
 
-<main class="main-content">
-   <section id="articulos">
-    <h2>Edición Actual</h2>
-    <div style="background-color: #ffffff; 
-                margin: 20px auto; 
-                padding: 20px; 
-                border-radius: 5px; 
-                box-shadow: 0 0 10px rgba(0,0,0,0.1); 
-                max-width: 700px; 
-                text-align: center;">
-        <h3 style="margin-top: 0;">Próximo Número: Edición #5</h3>
-        <!-- Ajusta la ruta de la imagen o usa un <img> con la URL completa -->
-        <img src="ruta/a/tu/imagen.jpg" alt="Convocatoria" style="max-width: 100%; height: auto; border-radius: 5px;">
-        <p style="margin-top: 15px;">
-            ¡Estamos preparando la 5ta edición de la revista <strong>Conocimiento i Política</strong>! 
-            Será presentada en <strong>junio de 2025</strong>. Mantente al tanto para conocer 
-            todas las novedades, artículos y aportes más recientes sobre nuestra temática central.
-        </p>
-        <button 
-            onclick="window.location.href='https://drive.google.com/file/d/1nKSD6Cvc50Q36SktJx-p8OMhoJZMxYsg/view?usp=sharing';"
-            style="padding: 10px 20px; background-color: #00509e; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
-            Ver Convocatoria
-        </button>
+<!-- Contenedor principal para el contenido y el sidebar -->
+<main class="main-container">
+
+    <!-- Contenido principal -->
+    <div class="content">
+        <!-- Sección de artículos / Edición actual -->
+        <section id="articulos">
+            <h2>Edición Actual</h2>
+            <div style="background-color: #ffffff; 
+                        margin: 20px auto; 
+                        padding: 20px; 
+                        border-radius: 5px; 
+                        box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+                        max-width: 700px; 
+                        text-align: center;">
+                <h3 style="margin-top: 0;">Próximo Número: Edición #5</h3>
+                <!-- Ajusta la ruta de la imagen o usa un <img> con la URL completa -->
+                <img src="ruta/a/tu/imagen.jpg" alt="Convocatoria" 
+                     style="max-width: 100%; height: auto; border-radius: 5px;">
+                <p style="margin-top: 15px;">
+                    ¡Estamos preparando la 5ta edición de la revista 
+                    <strong>Conocimiento i Política</strong>! 
+                    Será presentada en <strong>junio de 2025</strong>. Mantente al tanto para conocer 
+                    todas las novedades, artículos y aportes más recientes sobre nuestra temática central.
+                </p>
+                <button 
+                    onclick="window.location.href='https://drive.google.com/file/d/1nKSD6Cvc50Q36SktJx-p8OMhoJZMxYsg/view?usp=sharing';"
+                    style="padding: 10px 20px; background-color: #00509e; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
+                    Ver Convocatoria
+                </button>
+            </div>
+        </section>
     </div>
-</section>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Información</h2>
+        <ul>
+            <li><a href="https://criuagrm.github.io/aboutcip">Información para Lectores</a></li>
+            <li><a href="https://criuagrm.github.io/editeamcip">Información para Autores</a></li>
+            <li><a href="https://criuagrm.github.io/contacip">Información para Bibliotecarios</a></li>
+        </ul>
+    </div>
 
 </main>
 
