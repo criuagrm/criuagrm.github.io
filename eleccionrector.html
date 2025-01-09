@@ -1,128 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <base href="https://criuagrm.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados de Encuesta - Centro de Investigación Regional</title>
+    <title>CIRCPyCS - Resultados Encuesta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        /* Estilo general */
+        :root {
+            --primary-color: #333333;
+            --secondary-color: #666666;
+            --accent-color: #999999;
+            --background-color: #f0f0f0;
+            --text-color: #333333;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
-        header {
-            background-color: #003366; /* Azul oscuro */
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.5em;
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .btn-header {
-            background-color: #ffffff;
-            color: #003366;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
         }
 
-        .btn-header:hover {
-            background-color: #00509e;
-            color: #fff;
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 20px auto;
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .ficha-tecnica {
+            background: white;
+            border-left: 5px solid var(--primary-color);
             padding: 20px;
-            background: #fff;
-            border-radius: 8px;
+            border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
-            color: #003366;
-            margin-top: 20px;
-            text-align: center;
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: all 0.3s ease;
         }
 
-        .buttons {
-            text-align: center;
-            margin: 20px 0;
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background-color: #003366;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+        .iframe-container {
+            margin-top: 2rem;
         }
 
-        .btn:hover {
-            background-color: #00509e;
-        }
-
-        iframe {
+        .iframe-container iframe {
             width: 100%;
-            height: 600px;
+            height: 500px;
             border: none;
-            display: none;
         }
 
-        iframe.active {
-            display: block;
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Centro de Investigación Regional</h1>
-        <a href="https://criuagrm.github.io/" class="btn-header">Volver a Inicio</a>
-    </header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">CIRCPyCS</a>
+            <a href="https://criuagrm.github.io/" class="btn btn-outline-light">Volver al Inicio</a>
+        </div>
+    </nav>
 
-    <div class="container">
-        <h2>Resultados de la Encuesta</h2>
-        <div class="buttons">
-            <a href="#" class="btn" onclick="mostrarGrafica('estudiantes')">Gráfica de Estudiantes</a>
-            <a href="#" class="btn" onclick="mostrarGrafica('docentes')">Gráfica de Docentes</a>
+    <section class="hero">
+        <div class="container text-center">
+            <h1>Resultados de la Encuesta</h1>
+            <p>Análisis de percepción sobre preferencias</p>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-5">Ficha Técnica</h2>
+        <div class="ficha-tecnica">
+            <ul>
+                <li><strong>Metodología:</strong> Estudio de encuesta de percepción por el sistema de aplicación de cuestionario.</li>
+                <li><strong>Características de la muestra:</strong> Aleatoria y estratificada por Facultades y Carreras de la UAGRM.</li>
+                <li><strong>Aplicación de la Encuesta:</strong> 27 de noviembre de 2024.</li>
+                <li><strong>Universo poblacional:</strong> 1,700 Docentes / 100,000 Estudiantes.</li>
+                <li><strong>Muestra representativa:</strong> 330 Docentes / 400 Estudiantes.</li>
+                <li><strong>Coeficiente de fiabilidad:</strong> 95%.</li>
+                <li><strong>Error de muestreo:</strong> &plusmn;5%.</li>
+                <li><strong>Institución ejecutora:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales.</li>
+                <li><strong>Coordinación:</strong> Dirección de Carrera de Ciencia Política y Administración Pública de la UAGRM.</li>
+            </ul>
         </div>
 
-        <!-- Gráfica de Estudiantes -->
-        <iframe id="grafica-estudiantes" src="grafica_estudiantes.html"></iframe>
-
-        <!-- Gráfica de Docentes -->
-        <iframe id="grafica-docentes" src="grafica_docentes.html"></iframe>
+        <div class="iframe-container text-center">
+            <h2 class="my-4">Visualizaciones Interactivas</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarIframe('grafica_estudiantes.html')">Gráfica de Estudiantes</button>
+            <button class="btn btn-primary mb-3" onclick="mostrarIframe('grafica_docentes.html')">Gráfica de Docentes</button>
+            <iframe id="iframe-visual" src="grafica_estudiantes.html"></iframe>
+        </div>
     </div>
 
-    <script>
-        function mostrarGrafica(tipo) {
-            // Ocultar todas las gráficas
-            document.getElementById('grafica-estudiantes').classList.remove('active');
-            document.getElementById('grafica-docentes').classList.remove('active');
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2024 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM</p>
+            <a href="https://criuagrm.github.io/">Volver al Inicio</a>
+        </div>
+    </footer>
 
-            // Mostrar la gráfica seleccionada
-            if (tipo === 'estudiantes') {
-                document.getElementById('grafica-estudiantes').classList.add('active');
-            } else if (tipo === 'docentes') {
-                document.getElementById('grafica-docentes').classList.add('active');
-            }
+    <script>
+        function mostrarIframe(url) {
+            document.getElementById('iframe-visual').src = url;
         }
     </script>
 </body>
