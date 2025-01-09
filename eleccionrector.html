@@ -85,6 +85,10 @@
             border: none;
         }
 
+        .iframe-container iframe.hidden {
+            display: none;
+        }
+
         .footer {
             background-color: var(--primary-color);
             color: white;
@@ -136,7 +140,7 @@
             <h2 class="my-4">Visualizaciones Interactivas</h2>
             <button class="btn btn-primary mb-3" onclick="mostrarIframe('grafica_estudiantes.html')">Gráfica de Estudiantes</button>
             <button class="btn btn-primary mb-3" onclick="mostrarIframe('grafica_docentes.html')">Gráfica de Docentes</button>
-            <iframe id="iframe-visual" src="grafica_estudiantes.html"></iframe>
+            <iframe id="iframe-visual" class="hidden"></iframe>
         </div>
     </div>
 
@@ -148,7 +152,9 @@
 
     <script>
         function mostrarIframe(url) {
-            document.getElementById('iframe-visual').src = url;
+            const iframe = document.getElementById('iframe-visual');
+            iframe.src = url;
+            iframe.classList.remove('hidden');
         }
     </script>
 </body>
