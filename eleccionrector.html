@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centro de Investigación Regional</title>
+    <title>Resultados de Encuesta - Centro de Investigación Regional</title>
     <style>
         /* Estilo general */
         body {
@@ -12,19 +12,36 @@
             padding: 0;
             background-color: #f4f4f9;
             color: #333;
-            line-height: 1.6;
         }
 
         header {
             background-color: #003366; /* Azul oscuro */
             color: #fff;
-            padding: 20px 0;
-            text-align: center;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5em;
+            font-size: 1.5em;
+        }
+
+        .btn-header {
+            background-color: #ffffff;
+            color: #003366;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-header:hover {
+            background-color: #00509e;
+            color: #fff;
         }
 
         .container {
@@ -39,30 +56,18 @@
         h2 {
             color: #003366;
             margin-top: 20px;
+            text-align: center;
         }
 
-        .ficha-tecnica {
-            background-color: #eaf2f8;
-            padding: 15px 20px;
-            border-left: 5px solid #003366;
-            border-radius: 5px;
+        .buttons {
+            text-align: center;
             margin: 20px 0;
-            font-size: 1em;
-            line-height: 1.5;
-        }
-
-        .ficha-tecnica ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .ficha-tecnica ul li {
-            margin-bottom: 10px;
         }
 
         .btn {
             display: inline-block;
             padding: 10px 20px;
+            margin: 5px;
             background-color: #003366;
             color: #fff;
             text-decoration: none;
@@ -73,31 +78,52 @@
         .btn:hover {
             background-color: #00509e;
         }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: none;
+        }
+
+        iframe.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Centro de Investigación Regional</h1>
+        <a href="https://criuagrm.github.io/" class="btn-header">Volver a Inicio</a>
     </header>
 
     <div class="container">
-        <h2>Ficha Técnica</h2>
-        <div class="ficha-tecnica">
-            <ul>
-                <li><strong>Metodología:</strong> Estudio de encuesta de percepción por el sistema aplicación de cuestionario.</li>
-                <li><strong>Características de la muestra:</strong> Aleatoria y estratificada por Facultades y Carreras de la UAGRM.</li>
-                <li><strong>Aplicación de la Encuesta:</strong> 27 de noviembre de 2024.</li>
-                <li><strong>Universo poblacional:</strong> 1.700 Docentes / 100.000 Estudiantes.</li>
-                <li><strong>Muestra representativa:</strong> 330 Docentes / 400 Estudiantes.</li>
-                <li><strong>Coeficiente de fiabilidad:</strong> 95%.</li>
-                <li><strong>Error de muestreo:</strong> ±5%.</li>
-                <li><strong>Institución ejecutora:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales.</li>
-                <li><strong>Coordinación:</strong> Dirección de Carrera de Ciencia Política y Administración Pública de la UAGRM.</li>
-            </ul>
+        <h2>Resultados de la Encuesta</h2>
+        <div class="buttons">
+            <a href="#" class="btn" onclick="mostrarGrafica('estudiantes')">Gráfica de Estudiantes</a>
+            <a href="#" class="btn" onclick="mostrarGrafica('docentes')">Gráfica de Docentes</a>
         </div>
 
-        <a href="grafica_estudiantes.html" class="btn">Ver Gráfica de Estudiantes</a>
-        <a href="grafica_docentes.html" class="btn">Ver Gráfica de Docentes</a>
+        <!-- Gráfica de Estudiantes -->
+        <iframe id="grafica-estudiantes" src="grafica_estudiantes.html"></iframe>
+
+        <!-- Gráfica de Docentes -->
+        <iframe id="grafica-docentes" src="grafica_docentes.html"></iframe>
     </div>
+
+    <script>
+        function mostrarGrafica(tipo) {
+            // Ocultar todas las gráficas
+            document.getElementById('grafica-estudiantes').classList.remove('active');
+            document.getElementById('grafica-docentes').classList.remove('active');
+
+            // Mostrar la gráfica seleccionada
+            if (tipo === 'estudiantes') {
+                document.getElementById('grafica-estudiantes').classList.add('active');
+            } else if (tipo === 'docentes') {
+                document.getElementById('grafica-docentes').classList.add('active');
+            }
+        }
+    </script>
 </body>
 </html>
