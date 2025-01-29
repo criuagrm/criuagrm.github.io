@@ -313,22 +313,24 @@
       maxWidth: 160,
       lineHeightFactor: 1.5
     });
-    // Texto de cierre
-    const textoCierre ='Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.';
-    doc.text(textoCierre, 25, 130, {
-      align: 'justify',
-      maxWidth: 160,
-      lineHeightFactor: 1.5
-    });
+// Calcular la nueva posición para el texto de cierre
+const yTextoCierre = yCuerpo + splitTexto.length * (12 * lineHeightFactor) + 10;
 
-    // Fecha
-    doc.setFontSize(10);
-    doc.text(
-      'Santa Cruz de la Sierra, ' + new Date().toLocaleDateString(),
-      105, 150,
-      { align: 'center' }
-    );
+// Añadir un espacio extra antes del texto de cierre
+const espacioExtra = 10; // Puedes ajustar este valor según necesites
+const nuevaPosicionY = yTextoCierre + espacioExtra;
 
+// Texto de cierre
+const textoCierre =
+  'Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.';
+
+doc.text(textoCierre, 25, nuevaPosicionY, {
+  align: 'justify',
+  maxWidth: maxWidth,
+  lineHeightFactor: lineHeightFactor
+});
+
+    
     // Firmas
     const imgDirector   = await cargarImagen('https://i.imgur.com/o9tccxV.png');
     const imgDecano     = await cargarImagen('https://i.imgur.com/BCsBBUp.png');
