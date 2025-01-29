@@ -1,186 +1,375 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipo Editorial - Conocimiento i Política</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header {
-            background-color: #003366;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        main {
-            display: flex;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            flex-grow: 1;
-        }
-        .content {
-            flex: 3;
-            padding-right: 20px;
-        }
-        .sidebar {
-            flex: 1;
-            border-left: 1px solid #ccc;
-            padding-left: 20px;
-        }
-        h1 {
-            color: white;
-            text-align: center;
-            font-size: 1.8em;
-        }
-        h2 {
-            color: #00509e;
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-        ul {
-            list-style-type: square;
-            padding-left: 20px;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-        p {
-            text-align: justify;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-        .button-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .button-container a {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #00509e;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-        .button-container a:hover {
-            background-color: #003366;
-        }
-        .sidebar h2 {
-            font-size: 1em;
-            color: #003366;
-        }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar li {
-            margin-bottom: 10px;
-        }
-        .sidebar a {
-            text-decoration: none;
-            color: #00509e;
-            font-size: 0.9em;
-        }
-        .sidebar a:hover {
-            text-decoration: underline;
-        }
-        footer {
-            background-color: #003366;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: auto;
-        }
-    </style>
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Equipo Editorial - Conocimiento i Política</title>
 
-<header style="background-color: #003366; color: white; text-align: center;">
-    <div>
-        <h1 style="margin: 2; font-size: 24px;">Revista Boliviana Internacional</h1>
-        <h1 style="margin: 2; font-size: 32px;">Conocimiento i Política</h1>
-        <h1 style="margin: 3; font-size: 24px;">Equipo Editorial</h1>
-    </div>
+  <!-- Bootstrap Bundle (opcional si deseas usar funciones de Bootstrap) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Librería jsPDF desde CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    main {
+      display: flex;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      flex-grow: 1;
+    }
+    .content {
+      flex: 3;
+      padding-right: 20px;
+    }
+    .sidebar {
+      flex: 1;
+      border-left: 1px solid #ccc;
+      padding-left: 20px;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      font-size: 1.8em;
+      margin: 0.2em;
+    }
+    h2 {
+      color: #00509e;
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    ul {
+      list-style-type: square;
+      padding-left: 20px;
+      font-size: 0.9em;
+      line-height: 1.5;
+    }
+    p {
+      text-align: justify;
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .button-container a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #00509e;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .button-container a:hover {
+      background-color: #003366;
+    }
+    .sidebar h2 {
+      font-size: 1em;
+      color: #003366;
+    }
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+    .sidebar a {
+      text-decoration: none;
+      color: #00509e;
+      font-size: 0.9em;
+    }
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: auto;
+    }
+    /* Estilo para el ícono de descarga */
+    .cert-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      vertical-align: middle;
+    }
+    .cert-link {
+      margin-left: 8px;
+      color: #00509e;
+      text-decoration: none;
+    }
+    .cert-link:hover {
+      color: #003366;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div>
+    <h1>Revista Boliviana Internacional</h1>
+    <h1 style="font-size: 32px;">Conocimiento i Política</h1>
+    <h1>Equipo Editorial</h1>
+  </div>
 </header>
 
 <main>
-    <div class="content">
-        <section class="editorial-section">
-            <h2>Directora de la Revista</h2>
-            <p>María Angélica Suárez Ribera</p>
-        </section>
+  <div class="content">
+    <!-- Secciones de la revista -->
+    <section class="editorial-section">
+      <h2>Directora de la Revista</h2>
+      <p>María Angélica Suárez Ribera</p>
+    </section>
 
-        <section class="editorial-section">
-            <h2>Editora en Jefa</h2>
-            <p>Elizabeth Galarza de Eid</p>
-        </section>
+    <section class="editorial-section">
+      <h2>Editora en Jefa</h2>
+      <p>Elizabeth Galarza de Eid</p>
+    </section>
 
-        <section class="editorial-section">
-            <h2>Editor Técnico</h2>
-            <p>Daniel Hurtado Justiniano</p>
-        </section>
+    <section class="editorial-section">
+      <h2>Editor Técnico</h2>
+      <p>Daniel Hurtado Justiniano</p>
+    </section>
 
-        <section class="editorial-section">
-            <h2>Editor Académico</h2>
-            <p>José Orlando Peralta Beltrán</p>
-        </section>
+    <section class="editorial-section">
+      <h2>Editor Académico</h2>
+      <p>José Orlando Peralta Beltrán</p>
+    </section>
 
-        <section class="editorial-section">
-            <h2>Consejo de Redacción</h2>
-            <ul>
-                <li>Jenny Montaño Mariscal - UAGRM Bolivia</li>
-                <li>Cesar Rosso - Bolivia</li>
-                <li>María Jesús Villanueva Achá - UAGRM Bolivia</li>
-            </ul>
-        </section>
+    <section class="editorial-section">
+      <h2>Consejo de Redacción</h2>
+      <ul>
+        <li>Jenny Montaño Mariscal - UAGRM Bolivia</li>
+        <li>Cesar Rosso - Bolivia</li>
+        <li>María Jesús Villanueva Achá - UAGRM Bolivia</li>
+      </ul>
+    </section>
 
-        <section class="editorial-section">
-            <h2>Consejo Editorial</h2>
-            <ul>
-                <li>Paula Peña Hasbún  (Museo de Historia UAGRM - Bolivia)</li>
-                <li>Loreto Correa Vera (ANEPE - Chile)</li>
-                <li>Guillermo Bretel (Julius-Maximilians-Universität Würzburg - Alemania)</li>
-                <li>Natalia Perez (Universidad Autónoma de Madrid - España)</li>
-                <li>Por designar</li>
-                <li>Por designar</li>
-                <li>Por designar</li>
-                <li>Por designar</li>
-                <li>Por designar</li>
-                <li>Por designar</li>
-            </ul>
-        </section>
+    <!-- Consejo Editorial con ícono para generar certificado en los primeros 4 miembros -->
+    <section class="editorial-section">
+      <h2>Consejo Editorial</h2>
+      <ul>
+        <li>
+          Paula Peña Hasbún (Museo de Historia UAGRM - Bolivia)
+          <a class="cert-link" href="javascript:void(0)"
+             onclick="generarCertificado('Paula Peña Hasbún')" 
+             title="Descargar Certificado">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
+              <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+          </a>
+        </li>
+        <li>
+          Loreto Correa Vera (ANEPE - Chile)
+          <a class="cert-link" href="javascript:void(0)"
+             onclick="generarCertificado('Loreto Correa Vera')" 
+             title="Descargar Certificado">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
+              <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+          </a>
+        </li>
+        <li>
+          Guillermo Bretel (Julius-Maximilians-Universität Würzburg - Alemania)
+          <a class="cert-link" href="javascript:void(0)"
+             onclick="generarCertificado('Guillermo Bretel Maia')" 
+             title="Descargar Certificado">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
+              <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+          </a>
+        </li>
+        <li>
+          Natalia Perez (Universidad Autónoma de Madrid - España)
+          <a class="cert-link" href="javascript:void(0)"
+             onclick="generarCertificado('Natalia Peres Martins')" 
+             title="Descargar Certificado">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
+              <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+          </a>
+        </li>
+        <!-- Miembros restantes sin botón de certificado -->
+        <li>Por designar</li>
+        <li>Por designar</li>
+        <li>Por designar</li>
+        <li>Por designar</li>
+        <li>Por designar</li>
+        <li>Por designar</li>
+      </ul>
+    </section>
 
-        <div class="button-container">
-            <a href="https://criuagrm.github.io/conocimientoipolitica">Volver al Inicio</a>
-        </div>
+    <div class="button-container">
+      <!-- Botón para volver al inicio de la revista -->
+      <a href="https://criuagrm.github.io/conocimientoipolitica">Volver al Inicio</a>
     </div>
+  </div>
 
-    <div class="sidebar">
-        <h2>Información</h2>
-        <ul>
-            <li><a href="https://criuagrm.github.io/readercip">para Lectores</a></li>
-            <li><a href="https://criuagrm.github.io/authorcip">para Autores</a></li>
-            <li><a href="#">para Bibliotecarios</a></li>
-        </ul>
-    </div>
+  <div class="sidebar">
+    <h2>Información</h2>
+    <ul>
+      <li><a href="https://criuagrm.github.io/readercip">para Lectores</a></li>
+      <li><a href="https://criuagrm.github.io/authorcip">para Autores</a></li>
+      <li><a href="#">para Bibliotecarios</a></li>
+    </ul>
+  </div>
 </main>
 
 <footer>
-    <p>&copy; 2025 Conocimiento i Política. Todos los derechos reservados.</p>
+  <p>&copy; 2025 Conocimiento i Política. Todos los derechos reservados.</p>
 </footer>
 
+<!-- Script para generar PDF -->
+<script>
+  // Función para cargar imágenes desde URLs y usarlas en el PDF
+  async function cargarImagen(url) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    return new Promise((resolve, reject) => {
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  // Función para generar el PDF con la certificación de miembro
+  async function generarCertificado(nombreMiembro) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ format: 'letter' });
+
+    // Fondo blanco en tamaño carta
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, 216, 279, 'F'); // 216 x 279 mm (Carta)
+
+    // Logo de agua con opacidad
+    const logoMarcaAgua = await cargarImagen('https://i.imgur.com/OjAw4PH.png');
+    doc.setGState(new doc.GState({ opacity: 0.1 }));
+    doc.addImage(logoMarcaAgua, 'PNG', 30, 90, 150, 150);
+    doc.setGState(new doc.GState({ opacity: 1 }));
+
+    // Logo Superior (en la parte de arriba)
+    const logoSuperiorDerecho = await cargarImagen('https://i.imgur.com/R952Ljv.png');
+    doc.addImage(logoSuperiorDerecho, 'PNG', 60, 1, 90, 20);
+
+    // Encabezado
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor('#B22222');
+    doc.text('UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO', 105, 30, { align: 'center' });
+    
+    doc.setTextColor('#003366');
+    doc.setFontSize(12);
+    doc.text('Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales', 105, 35, { align: 'center' });
+    doc.text('Carrera de Ciencia Política y Administración Pública', 105, 40, { align: 'center' });
+    doc.text('Centro de Investigación Regional en Ciencia Política y Ciencias Sociales', 105, 45, { align: 'center' });
+
+    // Título
+    doc.setFontSize(20);
+    doc.text('Certificado de Miembro del Consejo Editorial', 105, 65, { align: 'center' });
+
+    // Cuerpo del certificado
+    const textoCertificacion =
+      `Por medio del presente, certificamos que ${nombreMiembro} ` +
+      `se desempeña actualmente como miembro del Consejo Editorial de la revista ` +
+      `“Conocimiento y Política”, publicada semestralmente por el Centro de Investigación Regional en Ciencia Política ` +
+      `y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. ` +
+      `Su contribución es fundamental en la revisión, evaluación y mejora de los artículos ` +
+      `académicos, garantizando la calidad científica de nuestras publicaciones.`;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(textoCertificacion, 25, 90, {
+      align: 'justify',
+      maxWidth: 160,
+      lineHeightFactor: 1.5
+    });
+
+    // Texto de cierre
+    const textoCierre = 'Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.';
+    doc.text(textoCierre, 25, 130, {
+      align: 'justify',
+      maxWidth: 160,
+      lineHeightFactor: 1.5
+    });
+
+    // Fecha
+    doc.setFontSize(10);
+    doc.text(
+      'Santa Cruz de la Sierra, ' + new Date().toLocaleDateString(),
+      105, 150,
+      { align: 'center' }
+    );
+
+    // Firmas
+    const imgDirector   = await cargarImagen('https://i.imgur.com/o9tccxV.png');
+    const imgDecano     = await cargarImagen('https://i.imgur.com/BCsBBUp.png');
+    const imgDirectora  = await cargarImagen('https://i.imgur.com/vvpbKq7.png');
+
+    doc.addImage(imgDirector,  'PNG', 35, 160, 40, 20); // Firma Director
+    doc.addImage(imgDecano,    'PNG', 90, 160, 40, 20); // Firma Decano
+    doc.addImage(imgDirectora, 'PNG',145,160, 40, 20);  // Firma Directora
+
+    // Nombres y títulos bajo las firmas
+    doc.setFont('helvetica', 'bold');
+    doc.text('Francisco Méndez Égüez', 55, 183, { align: 'center' });
+    doc.text('Director', 55, 188, { align: 'center' });
+    doc.text('Carrera de Ciencia Política y Adm. Pública', 55, 193, { align: 'center' });
+
+    doc.text('Alfonso Coca', 110, 183, { align: 'center' });
+    doc.text('Decano', 110, 188, { align: 'center' });
+    doc.text('FCJPSRRII', 110, 193, { align: 'center' });
+
+    doc.text('María Angélica Suárez Ribera', 165, 183, { align: 'center' });
+    doc.text('Directora', 165, 188, { align: 'center' });
+    doc.text('CIRCPyCS', 165, 193, { align: 'center' });
+
+    // Pie de página
+    doc.setDrawColor(178, 34, 34);
+    doc.setLineWidth(0.5);
+    doc.line(10, 265, 200, 265);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(
+      'cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja',
+      105,
+      272,
+      { align: 'center' }
+    );
+
+    // Guardar el PDF
+    doc.save(`Certificado_${nombreMiembro}.pdf`);
+  }
+</script>
 </body>
 </html>
