@@ -4,8 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Equipo Editorial - Conocimiento i Política</title>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+  <!-- Bootstrap Bundle (opcional si deseas usar funciones de Bootstrap) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Librería jsPDF desde CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -125,7 +130,6 @@
 </head>
 
 <body>
-
 <header>
   <div>
     <h1>Revista Boliviana Internacional</h1>
@@ -166,7 +170,7 @@
       </ul>
     </section>
 
-    <!-- Consejo Editorial con botones de certificado en los primeros 4 miembros -->
+    <!-- Consejo Editorial con ícono para generar certificado en los primeros 4 miembros -->
     <section class="editorial-section">
       <h2>Consejo Editorial</h2>
       <ul>
@@ -175,8 +179,7 @@
           <a class="cert-link" href="javascript:void(0)"
              onclick="generarCertificado('Paula Peña Hasbún')" 
              title="Descargar Certificado">
-            <svg class="cert-icon" viewBox="0 0 16 16"
-                 xmlns="http://www.w3.org/2000/svg">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
               <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
               <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
             </svg>
@@ -187,8 +190,7 @@
           <a class="cert-link" href="javascript:void(0)"
              onclick="generarCertificado('Loreto Correa Vera')" 
              title="Descargar Certificado">
-            <svg class="cert-icon" viewBox="0 0 16 16"
-                 xmlns="http://www.w3.org/2000/svg">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
               <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
               <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
             </svg>
@@ -199,8 +201,7 @@
           <a class="cert-link" href="javascript:void(0)"
              onclick="generarCertificado('Guillermo Bretel')" 
              title="Descargar Certificado">
-            <svg class="cert-icon" viewBox="0 0 16 16"
-                 xmlns="http://www.w3.org/2000/svg">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
               <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
               <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
             </svg>
@@ -211,8 +212,7 @@
           <a class="cert-link" href="javascript:void(0)"
              onclick="generarCertificado('Natalia Perez')" 
              title="Descargar Certificado">
-            <svg class="cert-icon" viewBox="0 0 16 16"
-                 xmlns="http://www.w3.org/2000/svg">
+            <svg class="cert-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
               <path d="M.5 9.9a.5.5 0 0 1 .5-.4h4.4V1a1 1 0 0 1 2 0v8.5h4.4a.5.5 0 0 1 .4.8l-5 5a.5.5 0 0 1-.8 0l-5-5z"/>
               <path d="M.5 15.5a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z"/>
             </svg>
@@ -248,14 +248,7 @@
   <p>&copy; 2025 Conocimiento i Política. Todos los derechos reservados.</p>
 </footer>
 
-<!-- Carga la librería jsPDF desde CDN -->
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-  integrity="sha512-2FIfx9kN7BqGEvoKid6uPFH47Xb+/VzCX/HYZdvoNH6onNXcQ5GjCgfTagZ+D+r1Sewk2k/tU2K/qKygR3LmXQ=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer">
-</script>
-
+<!-- Script para generar PDF -->
 <script>
   // Función para cargar imágenes desde URLs y usarlas en el PDF
   async function cargarImagen(url) {
@@ -273,9 +266,9 @@
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ format: 'letter' });
 
-    // Fondo blanco
+    // Fondo blanco en tamaño carta
     doc.setFillColor(255, 255, 255);
-    doc.rect(0, 0, 216, 279, 'F'); // Tamaño carta en mm
+    doc.rect(0, 0, 216, 279, 'F'); // 216 x 279 mm (Carta)
 
     // Logo de agua con opacidad
     const logoMarcaAgua = await cargarImagen('https://i.imgur.com/OjAw4PH.png');
@@ -283,23 +276,23 @@
     doc.addImage(logoMarcaAgua, 'PNG', 30, 90, 150, 150);
     doc.setGState(new doc.GState({ opacity: 1 }));
 
-    // Logo Superior
+    // Logo Superior (en la parte de arriba)
     const logoSuperiorDerecho = await cargarImagen('https://i.imgur.com/R952Ljv.png');
     doc.addImage(logoSuperiorDerecho, 'PNG', 60, 1, 90, 20);
 
-    // Encabezado de la universidad
+    // Encabezado
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(14);
     doc.setTextColor('#B22222');
     doc.text('UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO', 105, 30, { align: 'center' });
-
+    
     doc.setTextColor('#003366');
     doc.setFontSize(12);
     doc.text('Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales', 105, 35, { align: 'center' });
     doc.text('Carrera de Ciencia Política y Administración Pública', 105, 40, { align: 'center' });
     doc.text('Centro de Investigación Regional en Ciencia Política y Ciencias Sociales', 105, 45, { align: 'center' });
 
-    // Título del certificado
+    // Título
     doc.setFontSize(20);
     doc.text('Certificado de Miembro del Consejo Editorial', 105, 65, { align: 'center' });
 
@@ -318,32 +311,33 @@
     doc.text(textoCertificacion, 25, 90, {
       align: 'justify',
       maxWidth: 160,
-      lineHeightFactor: 1.5,
+      lineHeightFactor: 1.5
     });
 
     // Texto de cierre
-    const textoCierre =
-      'Se expide el presente certificado a solicitud del interesado, ' +
-      'para los fines que estime convenientes.';
+    const textoCierre = 'Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.';
     doc.text(textoCierre, 25, 130, {
       align: 'justify',
       maxWidth: 160,
-      lineHeightFactor: 1.5,
+      lineHeightFactor: 1.5
     });
 
-    // Fecha de emisión
+    // Fecha
     doc.setFontSize(10);
-    doc.text('Santa Cruz de la Sierra, ' + new Date().toLocaleDateString(), 105, 150, { align: 'center' });
+    doc.text(
+      'Santa Cruz de la Sierra, ' + new Date().toLocaleDateString(),
+      105, 150,
+      { align: 'center' }
+    );
 
     // Firmas
-    // (Si no tienes las imágenes, puedes omitir o cambiar las URLs)
-    const imgDirector = await cargarImagen('https://i.imgur.com/o9tccxV.png');
-    const imgDecano = await cargarImagen('https://i.imgur.com/BCsBBUp.png');
-    const imgDirectora = await cargarImagen('https://i.imgur.com/vvpbKq7.png');
+    const imgDirector   = await cargarImagen('https://i.imgur.com/o9tccxV.png');
+    const imgDecano     = await cargarImagen('https://i.imgur.com/BCsBBUp.png');
+    const imgDirectora  = await cargarImagen('https://i.imgur.com/vvpbKq7.png');
 
-    doc.addImage(imgDirector, 'PNG', 35, 160, 40, 20);   // Firma Director
-    doc.addImage(imgDecano, 'PNG', 90, 160, 40, 20);    // Firma Decano
-    doc.addImage(imgDirectora, 'PNG', 145, 160, 40, 20);// Firma Directora
+    doc.addImage(imgDirector,  'PNG', 35, 160, 40, 20); // Firma Director
+    doc.addImage(imgDecano,    'PNG', 90, 160, 40, 20); // Firma Decano
+    doc.addImage(imgDirectora, 'PNG',145,160, 40, 20);  // Firma Directora
 
     // Nombres y títulos bajo las firmas
     doc.setFont('helvetica', 'bold');
@@ -379,3 +373,4 @@
 </script>
 </body>
 </html>
+
