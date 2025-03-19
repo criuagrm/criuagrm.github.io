@@ -106,11 +106,29 @@
         </ul>
     </div>
 
-    <footer class="footer text-center">
-        <div class="container">
+
+        <div class="iframe-container text-center">
+            <h2 class="my-4">Visualizaciones Interactivas</h2>
+            <button class="btn btn-primary mb-3" onclick="mostrarIframe('grafica_estudiantes.html')">Gráfica de Estudiantes</button>
+            <button class="btn btn-primary mb-3" onclick="mostrarIframe('grafica_docentes.html')">Gráfica de Docentes</button>
+            <iframe id="iframe-visual" class="hidden"></iframe>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
             <p>&copy; 2024 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM</p>
         </div>
     </footer>
+
+    <script>
+        function mostrarIframe(url) {
+            const iframe = document.getElementById('iframe-visual');
+            iframe.src = url;
+            iframe.classList.remove('hidden');
+        }
+    </script>
+
 </body>
 </html>
 
