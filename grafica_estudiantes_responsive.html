@@ -13,6 +13,17 @@
 </style>
 <meta charset="utf-8" /></head>
 <body>
+    <script>
+        function toggleLegend() {
+            var graphs = document.getElementsByClassName("js-plotly-plot");
+            for (var i = 0; i < graphs.length; i++) {
+                var currentState = graphs[i].layout.showlegend || false;
+                Plotly.relayout(graphs[i], {"showlegend": !currentState});
+            }
+        }
+    </script>
+    <button onclick="toggleLegend()">Mostrar/Ocultar Leyenda</button>
+    
     <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
         <script type="text/javascript">/**
 * plotly.js v2.4.1
