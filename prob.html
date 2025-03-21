@@ -107,13 +107,25 @@
         <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
     </div>
 
-    <!-- Sección A: Características Generales -->
-    <div id="seccion-general" class="contenido-seccion">
-        <h3>Características Generales</h3>
-        <canva class="chart-placeholder" id="grafica-edad"></div>
-        <canva class="chart-placeholder" id="grafica-facultad"></div>
-        <canva class="chart-placeholder" id="grafica-departamento"></div>
+    <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES -->
+<div id="seccion-general" class="contenido-seccion">
+    <h3>Características Generales de los Encuestados</h3>
+
+    <h5 class="mt-4">Edad de los participantes</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-edad"></canvas>
     </div>
+
+    <h5 class="mt-4">Facultad a la que pertenecen los encuestados</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-facultad"></canvas>
+    </div>
+
+    <h5 class="mt-4">Departamento de nacimiento</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-departamento"></canvas>
+    </div>
+</div>
 
     <!-- Sección B: Problemas y Propuestas -->
     <div id="seccion-problemas" class="contenido-seccion d-none">
@@ -225,6 +237,38 @@ function crearNubePalabras(idElemento, palabras) {
 // Aquí se llamarán todas las funciones para crear gráficos cuando ya estén disponibles los datos.
 // Ejemplo:
 // crearGrafica('bar', 'grafica-edad', ['18-24', '25-34', '35-44'], [150, 350, 320], 'Edad de encuestados');
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    // Gráfica de Edad (no especificado en detalle, ejemplo orientativo)
+    crearGrafica('bar', 'grafica-edad', 
+        ['18-24 años', '25-34 años', '35-44 años', '45-54 años', '55+ años'],
+        [200, 320, 180, 80, 40], 
+        'Edad de los Encuestados');
+
+    // Gráfica de Facultades (no detallado explícitamente en documento; ejemplo orientativo con facultades comunes en UAGRM)
+    crearGrafica('bar', 'grafica-facultad', 
+        ['Cs. Jurídicas', 'Cs. Económicas', 'Ingeniería', 'Humanidades', 'Cs. Agrícolas', 'Medicina', 'Otras'],
+        [150, 140, 180, 120, 100, 90, 40], 
+        'Facultad de Procedencia');
+
+    // Departamento de nacimiento (mayoría de Santa Cruz generalmente, ejemplo orientativo)
+    crearGrafica('bar', 'grafica-departamento', 
+        ['Santa Cruz', 'Beni', 'La Paz', 'Cochabamba', 'Oruro', 'Tarija', 'Otros'],
+        [600, 60, 50, 40, 30, 20, 20], 
+        'Departamento de Nacimiento');
+
+});
+</script>
+
+
+
+
+
+
+
+
+    
 </script>
 
     
