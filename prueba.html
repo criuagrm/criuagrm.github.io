@@ -97,7 +97,7 @@
     <div class="container">
         <a class="navbar-brand" href="#">CIRCPyCS</a>
         <div class="d-flex">
-            <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
+            <a href="https://criuagrm.github.io" class="btn btn-outline-light">Anterior Encuesta</a>
         </div>
     </div>
 </nav>
@@ -273,54 +273,11 @@ function mostrarSeccion(id) {
 
 /*
    Mapa global de colores. 
-   Se cambia el fallback color a #c0ca33 (verde lima) en lugar de gris, 
+   Se cambia el fallback color a #c0ca33 (verde lima) en lugar de gris,
    para no usar paleta gris.
 */
-const colorMap = {
-    // Personas
-    "Reinerio Vargas": "#FFD700",  // Amarillo
-    "Vicente Cuéllar": "#228B22",  // Verde
-    "Juana Borja":     "#FF69B4",  // Rosa
-    "Oscar Nogales":   "#6495ED",  // Azul claro
-    "Orlando Pedraza": "#8A2BE2",  // Violeta
-    "Alfonso Coca":    "#FFA500",  // Naranja
-    "Osvaldo Ulloa":   "#A52A2A",  // Marrón
-    "Rogelio Espinoza":"#009999",  // Verde azulado
-    "Rolando López":   "#800000",  // Granate
-    "Otros":           "#BA55D3",  // Un lila distinto
-
-    // Facultades
-    "Facultad de Ciencias Jurídicas, Políticas y Sociales": "#003f5c",
-    "Facultad de Ciencias Económicas y Empresariales": "#2f4b7c",
-    "Facultad de Contaduría Pública": "#665191",
-    "Facultad de Ciencias de la Salud": "#a05195",
-    "Facultad Integral del Chaco": "#d45087",
-    "Facultad de Bioquímica y Farmacia": "#f95d6a",
-    "Facultad de Tecnología": "#ff7c43",
-    "Facultad de Ciencias Agrícolas": "#ffa600",
-    "Facultad Tecnológica": "#d36135",
-    "Facultad de Informática y Redes": "#b71c1c",
-    "Facultad de Humanidades": "#0d47a1",
-    "Facultad de Ciencias del Hábitat": "#00695c",
-    "Facultad Integral del Noreste": "#4a148c",
-    "Facultad Politécnica": "#33691e",
-
-    // Departamentos
-    "Santa Cruz":  "#008000",
-    "La Paz":      "#0000ff",
-    "Sucre":       "#ff00ff",
-    "Cochabamba":  "#ff0000",
-    "Potosí":      "#00ffff",
-
-    // Edades
-    "18-26": "#b59ed9",
-    "27-58": "#d69ed9",
-    "59+":   "#af65aa"
-};
-
-/* Damos un color fallback (verde lima) a todo lo que no esté en colorMap */
 function getColors(labels) {
-    return labels.map(label => colorMap[label] || "#c0ca33");
+    return labels.map(() => "#c0ca33");
 }
 
 /* 
@@ -330,7 +287,8 @@ function getColors(labels) {
 Chart.register(ChartDataLabels);
 
 /*
-   Función para crear gráficas de barras horizontales con dataLabels y colores asignados.
+   Función para crear gráficas de barras horizontales 
+   con dataLabels y un color único (verde lima) en gradación no requerida.
 */
 function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
     const ctx = document.getElementById(idCanvas).getContext('2d');
@@ -362,9 +320,7 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
                 }
             },
             scales: {
-                x: {
-                    beginAtZero: true
-                }
+                x: { beginAtZero: true }
             }
         }
     });
