@@ -317,15 +317,50 @@ document.addEventListener('DOMContentLoaded', function(){
 
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const ctx = document.getElementById('grafica-edad').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                ['Entre', '18 a 26'], // texto en dos líneas
+                ['Entre', '27 a 58'],
+                ['59 años', 'en adelante']
+            ],
+            datasets: [{
+                label: 'Edad de los Encuestados (%)',
+                data: [57.1, 26.9, 16.0],  // Datos exactos
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'], // colores sobrios y profesionales
+                borderColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y', // gráfica horizontal
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false},
+                tooltip: {enabled: true}
+            },
+            scales: {
+                x: { 
+                    beginAtZero: true,
+                    max: 100,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Rangos de Edad' }
+                }
+            }
+        }
+    });
+});
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-
-    // Gráfica de Problemas (datos exactos)
-    crearGrafica('bar', 'grafica-problemas', 
-        ['Sin presupuesto', 'Formación académica deficiente', 'Corrupción', 'Falta tecnología e innovación'],
-        [39.4, 38, 32, 21], 
-        'Principales problemas (%)');
 
     // Gráfica de Propuestas de mejora (datos exactos)
     crearGrafica('bar', 'grafica-propuestas', 
