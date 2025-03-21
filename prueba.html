@@ -192,21 +192,21 @@
 </div>
 
 
-    <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
-    <div id="seccion-voto" class="contenido-seccion d-none">
-        <h3>Intención de Voto para Rector y Vicerrector</h3>
+  <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
+<div id="seccion-voto" class="contenido-seccion d-none">
+    <h3>Intención de Voto para Rector y Vicerrector</h3>
 
-        <h5 class="mt-4">Intención de voto actual para Rector (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-voto-rector"></canvas>
-        </div>
+    <h5 class="mt-4">Intención de voto actual para Rector (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-voto-rector"></canvas>
+    </div>
 
-        <h5 class="mt-4">Preferencia para acompañante (Vicerrector) de Reinerio Vargas (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-voto-vicerrector"></canvas>
-        </div>
+    <h5 class="mt-4">Preferencia para acompañante (Vicerrector) de Reinerio Vargas (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-voto-vicerrector"></canvas>
     </div>
 </div>
+
 
 <!-- Footer -->
 <footer class="footer text-center py-3">
@@ -505,8 +505,55 @@ document.addEventListener('DOMContentLoaded', function(){
 
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
 
+    // Gráfica: Intención de voto actual para Rector
+    new Chart(document.getElementById('grafica-voto-rector'), {
+        type: 'bar',
+        data: {
+            labels: ['Reinerio Vargas', 'Juana Borja', 'Oscar Nogales', 'Vicente Cuéllar', 'Osvaldo Ulloa', 'Alfonso Coca', 'Rogelio Espinoza', 'Orlando Pedraza', 'Rolando López', 'Otros'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [51.9, 10.3, 7.7, 7.1, 3.2, 3.8, 2.2, 1.9, 1.9, 10.0],
+                backgroundColor: '#457b9d',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, max: 60 } }
+        }
+    });
 
+    // Gráfica: Preferencia para acompañante (Vicerrector) de Reinerio Vargas
+    new Chart(document.getElementById('grafica-voto-vicerrector'), {
+        type: 'bar',
+        data: {
+            labels: ['Juana Borja', 'Orlando Pedraza', 'Oscar Nogales', 'Vicente Cuéllar', 'Rolando López', 'Otros'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [28.2, 15.7, 11.2, 7.4, 4.2, 33.3],
+                backgroundColor: '#1d3557',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, max: 35 } }
+        }
+    });
+
+});
+</script>
     
 </body>
 </html>
