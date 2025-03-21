@@ -403,78 +403,50 @@ document.addEventListener('DOMContentLoaded', function(){
 <script>
 document.addEventListener('DOMContentLoaded', function(){
 
-    // Gráfica de Propuestas de mejora (datos exactos)
-    crearGrafica('bar', 'grafica-propuestas', 
-        ['Mejorar calidad académica', 'Docentes más preparados', 'Convenios internacionales', 'Actualizar programas formativos'],
-        [67, 55, 45, 45], 
-        'Propuestas más frecuentes (%)');
+    // Datos para Nube de preocupaciones
+    const palabrasPreocupaciones = [
+        {text:'Economía', size:60},
+        {text:'Sin presupuesto', size:60},
+        {text:'Formación académica deficiente', size:55},
+        {text:'Corrupción', size:50},
+        {text:'Mala calidad académica', size:40},
+        {text:'Sin tecnología e innovación', size:38},
+        {text:'Política interna', size:36},
+        {text:'Elecciones Claustro 2025', size:35},
+        {text:'Reelección facultativa', size:35},
+        {text:'Inestabilidad económica', size:32},
+        {text:'Inestabilidad institucional', size:30},
+        {text:'Acreditación carreras', size:30},
+        {text:'Docentes faltones', size:28},
+        {text:'Capacidad docente', size:26},
+        {text:'Becas', size:24},
+        {text:'Investigación', size:20},
+        {text:'Docentes interinos', size:16},
+        {text:'Extensión', size:14}
+    ];
 
-});
-</script>
+    // Datos para Nube de propuestas
+    const palabrasPropuestas = [
+        {text:'Mejorar calidad académica', size:65},
+        {text:'Docentes más preparados', size:50},
+        {text:'Convenios internacionales', size:48},
+        {text:'Hacer investigación', size:45},
+        {text:'Actualizar programas', size:45},
+        {text:'Extensión y vinculación', size:40},
+        {text:'Innovación tecnológica', size:38},
+        {text:'Pasantías estudiantes', size:38},
+        {text:'Presupuesto laboratorios', size:30},
+        {text:'Reducir años estudio', size:24},
+        {text:'Doctorados docentes', size:22},
+        {text:'Becas laboratorios', size:20},
+        {text:'Revistas indexadas', size:14}
+    ];
 
-            <script>
-document.addEventListener('DOMContentLoaded', function(){
+    // Generar nube de preocupaciones
+    crearNubePalabras('nube-preocupaciones', palabrasPreocupaciones);
 
-    // Calificación del Gobierno Universitario general (estimación coherente con narrativa)
-    crearGrafica('bar', 'grafica-gobierno-general', 
-        ['Positiva', 'Regular', 'Negativa'],
-        [25, 35, 40], 
-        'Calificación general (%)');
-
-    // Opinión gestión Rector Vicente Cuéllar (más negativa estudiantes)
-    crearGrafica('bar', 'grafica-rector-general', 
-        ['Positiva', 'Regular', 'Negativa'],
-        [30, 30, 40], 
-        'Opinión sobre el Rector (%)');
-
-    // Opinión gestión Vicerrector Reinerio Vargas (mejor valorado que Rector)
-    crearGrafica('bar', 'grafica-vicerrector-general', 
-        ['Positiva', 'Regular', 'Negativa'],
-        [45, 30, 25], 
-        'Opinión sobre el Vicerrector (%)');
-
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-
-    // Candidato que creen que ganará Rectorado (según documento, apoyo mayoritario docente a Reinerio Vargas)
-    crearGrafica('bar', 'grafica-candidato-ganador', 
-        ['Reinerio Vargas', 'Vicente Cuéllar', 'Otro candidato'],
-        [55, 35, 10], 
-        'Candidato percibido como ganador (%)');
-
-    // Preferencia para Vicerrector (no hay datos numéricos exactos, aproximación)
-    crearGrafica('bar', 'grafica-vicerrector-preferido', 
-        ['Candidato A', 'Candidato B', 'Candidato C', 'Indecisos'],
-        [40, 25, 20, 15], 
-        'Preferencia candidatos Vicerrector (%)');
-
-    // Rechazo a candidato Rector (sin datos numéricos, aproximación según narrativa)
-    crearGrafica('bar', 'grafica-candidato-rechazo', 
-        ['Candidato X', 'Candidato Y', 'Reinerio Vargas', 'Vicente Cuéllar'],
-        [45, 35, 12, 8], 
-        'Candidatos por los que nunca votaría (%)');
-
-    // Valoración candidatura Reinerio Vargas (76% docentes, 73% estudiantes, promedio aproximado 74.5%)
-    crearGrafica('bar', 'grafica-valoracion-vargas', 
-        ['Excelente', 'Buena', 'Regular', 'Mala'],
-        [35, 40, 15, 10], 
-        'Valoración candidatura Reinerio Vargas (%)');
-
-    // Aspectos valorados en gestión Vargas (sin datos exactos, aproximación por narrativa)
-    crearGrafica('bar', 'grafica-aspectos-vargas', 
-        ['Gestión eficiente', 'Innovación', 'Cercanía a estudiantes', 'Transparencia'],
-        [40, 30, 20, 10], 
-        'Aspectos valorados en Vargas (%)');
-
-    // Acuerdo con reelección Rector (sin datos numéricos exactos, estimado según narrativa negativa previa)
-    crearGrafica('bar', 'grafica-reeleccion-rector', 
-        ['De acuerdo', 'En desacuerdo', 'Indeciso'],
-        [30, 60, 10], 
-        'Apoyo a reelección del Rector (%)');
-
+    // Generar nube de propuestas
+    crearNubePalabras('nube-propuestas', palabrasPropuestas);
 });
 </script>
 
