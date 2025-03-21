@@ -156,35 +156,41 @@
     </div>
 </div>
 
-    <!-- SECCIÓN D: PERCEPCIÓN CANDIDATOS -->
-    <div id="seccion-candidatos" class="contenido-seccion d-none">
-        <h3>Percepción sobre los candidatos al Claustro Universitario</h3>
+   <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
+<div id="seccion-candidatos" class="contenido-seccion d-none">
+    <h3>Percepción sobre los candidatos al Claustro Universitario</h3>
 
-        <h5 class="mt-4">Candidato que cree que ganará la elección a Rector (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-candidato-ganador"></canvas>
-        </div>
-
-        <h5 class="mt-4">Candidato preferido a Vicerrector (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-vicerrector-preferido"></canvas>
-        </div>
-
-        <h5 class="mt-4">Candidato a Rector por el que nunca votaría (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-candidato-rechazo"></canvas>
-        </div>
-
-        <h5 class="mt-4">Valoración de la candidatura del Vicerrector Reinerio Vargas (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-valoracion-vargas"></canvas>
-        </div>
-
-        <h5 class="mt-4">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar? (general)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-reeleccion-rector"></canvas>
-        </div>
+    <h5 class="mt-4">Candidato que cree que ganará la elección a Rector (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-candidato-ganador"></canvas>
     </div>
+
+    <h5 class="mt-4">Candidato preferido para Vicerrector (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-vicerrector-preferido"></canvas>
+    </div>
+
+    <h5 class="mt-4">Candidato a Rector por el que nunca votaría (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-candidato-rechazo"></canvas>
+    </div>
+
+    <h5 class="mt-4">Valoración de la candidatura del Vicerrector Reinerio Vargas (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-valoracion-vargas"></canvas>
+    </div>
+
+    <h5 class="mt-4">Aspectos valorados en gestión de Reinerio Vargas (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-aspectos-vargas"></canvas>
+    </div>
+
+    <h5 class="mt-4">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar? (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-reeleccion-rector"></canvas>
+    </div>
+</div>
+
 
     <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
     <div id="seccion-voto" class="contenido-seccion d-none">
@@ -398,5 +404,109 @@ document.addEventListener('DOMContentLoaded', function(){
 
 });
 </script>
+
+document.addEventListener('DOMContentLoaded', function(){
+
+    // 1. Gráfica: Candidato que cree que ganará a Rector
+    new Chart(document.getElementById('grafica-candidato-ganador'), {
+        type: 'bar',
+        data: {
+            labels: ['Reinerio Vargas', 'Vicente Cuéllar', 'Juana Borja', 'Oscar Nogales', 'Alfonso Coca', 'Orlando Pedraza', 'Otros'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [50.3, 11.2, 9.0, 6.7, 3.8, 3.2, 15.8],
+                backgroundColor: '#2a9d8f',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:60}}}
+    });
+
+    // 2. Gráfica: Candidato preferido para Vicerrector
+    new Chart(document.getElementById('grafica-vicerrector-preferido'), {
+        type: 'bar',
+        data: {
+            labels: ['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [28.2,15.7,11.2,9.6,7.4,27.9],
+                backgroundColor: '#e9c46a',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:30}}}
+    });
+
+    // 3. Gráfica: Candidato a Rector por el que nunca votaría
+    new Chart(document.getElementById('grafica-candidato-rechazo'), {
+        type: 'bar',
+        data: {
+            labels: ['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [17.9,17.6,15.4,8.5,9.6,31.0],
+                backgroundColor: '#e76f51',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:20}}}
+    });
+
+    // 4. Valoración de candidatura de Reinerio Vargas
+    new Chart(document.getElementById('grafica-valoracion-vargas'), {
+        type: 'bar',
+        data: {
+            labels: ['Bien','Excelente','No estoy de acuerdo','Muy Bien','Muy mal'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [32.1,29.8,17.0,15.1,6.1],
+                backgroundColor: '#264653',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:35}}}
+    });
+
+    // 5. Aspectos valorados de gestión de Vargas
+    new Chart(document.getElementById('grafica-aspectos-vargas'), {
+        type: 'bar',
+        data: {
+            labels: ['Defensa democracia','Acreditación carreras','Defensa región','Disminución carga horaria','Declaratoria carga horaria cero'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [33.3,22.1,21.2,11.9,11.5],
+                backgroundColor: '#f4a261',
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:35}}}
+    });
+
+    // 6. ¿Está de acuerdo con la reelección del Rector Vicente Cuéllar?
+    new Chart(document.getElementById('grafica-reeleccion-rector'), {
+        type: 'bar',
+        data: {
+            labels: ['No', 'Sí'],
+            datasets: [{
+                label: 'Porcentaje (%)',
+                data: [71.5,28.5],
+                backgroundColor: ['#d62828','#2a9d8f'],
+                borderColor: '#333',
+                borderWidth: 1
+            }]
+        },
+        options: {responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:80}}}
+    });
+
+});
+
+
+
+    
 </body>
 </html>
