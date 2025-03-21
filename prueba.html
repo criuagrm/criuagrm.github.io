@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
-    <!-- Estilos personalizables -->
+    <!-- Estilos personalizados -->
     <style>
         :root {
             --primary-color: #333333;
@@ -93,11 +93,11 @@
 <!-- Secciones Principales -->
 <div class="container section">
     <h2 class="mb-4">Resultados Detallados</h2>
-    
+
     <!-- Botones de navegación -->
     <div class="text-center mb-5">
         <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
-        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
+        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-propuestas')">Propuestas</button>
         <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
         <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
         <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
@@ -106,6 +106,7 @@
     <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES -->
     <div id="seccion-general" class="contenido-seccion">
         <h3>Características Generales de los Encuestados</h3>
+
         <h5 class="mt-4">Edad de los participantes</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-edad"></canvas>
@@ -122,18 +123,13 @@
         </div>
     </div>
 
-    <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS -->
-    <div id="seccion-problemas" class="contenido-seccion d-none">
-        <h3>Problemas y Propuestas de mejora en la UAGRM</h3>
-        
-        <h5 class="mt-4">Principales problemas identificados por los encuestados</h5>
-        <div class="chart-placeholder">
-            <div id="nube-preocupaciones"></div>
-        </div>
+    <!-- SECCIÓN B: PROPUESTAS -->
+    <div id="seccion-propuestas" class="contenido-seccion d-none">
+        <h3>Propuestas de mejora en la UAGRM</h3>
 
         <h5 class="mt-4">Propuestas más mencionadas por los encuestados</h5>
-        <div class="chart-placeholder">
-            <div id="nube-propuestas"></div>
+        <div class="chart-placeholder text-center">
+            <img src="https://via.placeholder.com/800x400?text=Nube+de+Palabras+Propuestas" alt="Nube de palabras - Propuestas" class="img-fluid">
         </div>
     </div>
 
@@ -157,7 +153,7 @@
         </div>
     </div>
 
-    <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
+    <!-- SECCIÓN D: PERCEPCIÓN CANDIDATOS -->
     <div id="seccion-candidatos" class="contenido-seccion d-none">
         <h3>Percepción sobre los candidatos al Claustro Universitario</h3>
 
@@ -190,7 +186,7 @@
     <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
     <div id="seccion-voto" class="contenido-seccion d-none">
         <h3>Intención de Voto para Rector y Vicerrector</h3>
-        
+
         <h5 class="mt-4">Intención de voto actual para Rector (general)</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-voto-rector"></canvas>
@@ -210,18 +206,10 @@
     </div>
 </footer>
 
-<!-- Librerías JS esenciales -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Chart.js para gráficas -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- D3 y d3-cloud para nubes de palabras -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
-
 <script>
-/* 
-    Función para mostrar la sección correspondiente (oculta las demás).
-*/
 function mostrarSeccion(id) {
     document.querySelectorAll('.contenido-seccion').forEach((el) => {
         el.classList.add('d-none');
@@ -229,24 +217,16 @@ function mostrarSeccion(id) {
     document.getElementById(id).classList.remove('d-none');
 }
 
-/*
-    Función genérica para crear gráficas con Chart.js.
-    @param {string} tipo - Tipo de gráfica (bar, line, etc.).
-    @param {string} idCanvas - ID del elemento <canvas> en el HTML.
-    @param {Array} etiquetas - Etiquetas (categories) para la gráfica.
-    @param {Array} datos - Datos numéricos.
-    @param {string} titulo - Título del dataset.
-*/
-function crearGrafica(tipo, idCanvas, etiquetas, datos, titulo) {
-    const ctx = document.getElementById(idCanvas).getContext('2d');
-    new Chart(ctx, {
-        type: tipo,
+// Cargar gráficas al iniciar
+document.addEventListener('DOMContentLoaded', function() {
+    new Chart(document.getElementById('grafica-edad'), {
+        type: 'bar',
         data: {
-            labels: etiquetas,
+            labels: ['18 a 26 años', '27 a 58 años', '59 años o más'],
             datasets: [{
-                label: titulo,
-                data: datos,
-                backgroundColor: '#666666',
+                label: 'Edad (%)',
+                data: [57.1, 26.9, 16.0],
+                backgroundColor: ['#264653', '#2a9d8f', '#e9c46a'],
                 borderColor: '#333333',
                 borderWidth: 1
             }]
@@ -254,212 +234,58 @@ function crearGrafica(tipo, idCanvas, etiquetas, datos, titulo) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true }
-            },
-            plugins: {
-                legend: { display: false }
-            }
-        }
-    });
-}
-
-/*
-    Función para crear nubes de palabras con d3-cloud.
-    Se ajusta tamaño y padding para evitar cuelgues.
-*/
-function crearNubePalabras(idElemento, palabras) {
-    // Ajustar dimensiones:
-    const cont = document.getElementById(idElemento);
-    const ancho = cont.offsetWidth;
-    const alto = 300; // Más bajo para reducir carga en el navegador
-
-    // Configurar layout
-    const layout = d3.layout.cloud()
-        .size([ancho, alto])
-        .words(palabras.map(d => Object.create(d)))
-        .padding(2)
-        .rotate(0)
-        .font('Impact')
-        .fontSize(d => d.size)
-        .on('end', dibujar);
-
-    layout.start();
-
-    function dibujar(words) {
-        // Limpiar contenido previo y luego crear el SVG
-        d3.select('#' + idElemento).html('');
-        d3.select('#' + idElemento)
-          .append('svg')
-          .attr('width', ancho)
-          .attr('height', alto)
-          .append('g')
-          .attr('transform', 'translate(' + (ancho / 2) + ',' + (alto / 2) + ')')
-          .selectAll('text')
-          .data(words)
-          .enter().append('text')
-          .style('font-family', 'Impact')
-          .style('fill', '#333')
-          .style('font-size', d => d.size + 'px')
-          .attr('text-anchor', 'middle')
-          .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
-          .text(d => d.text);
-    }
-}
-
-/*
-    Apenas cargue el DOM, generamos las gráficas y las nubes de palabras.
-*/
-document.addEventListener('DOMContentLoaded', function() {
-    // =========================
-    // GRÁFICAS DE CARACTERÍSTICAS GENERALES
-    // =========================
-
-    // 1) Gráfica de Edades
-    new Chart(document.getElementById('grafica-edad'), {
-        type: 'bar',
-        data: {
-            labels: [
-                ['Entre','18 a 26'],
-                ['Entre','27 a 58'],
-                ['59 años','en adelante']
-            ],
-            datasets: [{
-                label: 'Edad de los Encuestados (%)',
-                data: [57.1, 26.9, 16.0],
-                backgroundColor: ['#264653', '#2a9d8f', '#e9c46a'],
-                borderColor: ['#1d3557', '#21867a', '#d4a341'],
-                borderWidth: 1
-            }]
-        },
-        options: {
             indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {display: false}
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: {
-                    title: { display: true, text: 'Rangos de Edad' }
-                }
-            }
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true } }
         }
     });
 
-    // 2) Gráfica de Facultades
     new Chart(document.getElementById('grafica-facultad'), {
         type: 'bar',
         data: {
             labels: [
-                'Facultad de Ciencias Jurídicas, Políticas y Sociales',
-                'Facultad de Ciencias Económicas y Empresariales',
-                'Facultad de Contaduría Pública',
-                'Facultad de Ciencias de la Salud',
-                'Facultad Integral del Chaco',
-                'Facultad de Bioquímica y Farmacia',
-                'Facultad de Tecnología',
-                'Facultad de Ciencias Agrícolas',
-                'Facultad Tecnológica',
-                'Facultad de Informática y Redes',
-                'Facultad de Humanidades',
-                'Facultad de Ciencias del Hábitat',
-                'Facultad Integral del Noreste',
-                'Facultad Politécnica'
+                'Jurídicas y Sociales', 'Económicas', 'Contaduría', 'Salud',
+                'Chaco', 'Bioquímica', 'Tecnología', 'Agrícolas', 'Tecnológica',
+                'Informática', 'Humanidades', 'Hábitat', 'Noreste', 'Politécnica'
             ],
             datasets: [{
-                label: 'Facultades participantes (%)',
+                label: 'Facultades (%)',
                 data: [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
-                backgroundColor: [
-                    '#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a',
-                    '#ff7c43','#ffa600','#5f9ea0','#20b2aa','#3cb371','#6b8e23',
-                    '#4682b4','#708090'
-                ],
+                backgroundColor: '#6a4c93',
+                borderColor: '#333333',
                 borderWidth: 1
             }]
         },
         options: {
-            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {display: false}
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: {
-                    title: { display: true, text: 'Facultades' }
-                }
-            }
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true } }
         }
     });
 
-    // 3) Gráfica de Departamento
     new Chart(document.getElementById('grafica-departamento'), {
         type: 'bar',
         data: {
-            labels: ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
+            labels: ['Santa Cruz', 'La Paz', 'Sucre', 'Cochabamba', 'Potosí'],
             datasets: [{
                 label: 'Departamento de Nacimiento (%)',
                 data: [83.0, 4.5, 3.2, 3.2, 2.2],
-                backgroundColor: ['#2b5876','#4e4376','#6a3093','#a044ff','#8e54e9'],
+                backgroundColor: '#00b4d8',
+                borderColor: '#333333',
                 borderWidth: 1
             }]
         },
         options: {
-            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {display: false}
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: {
-                    title: { display: true, text: 'Departamentos' }
-                }
-            }
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true } }
         }
     });
-
-
-    // =========================
-    // NUBES DE PALABRAS (Problemas y Propuestas)
-    // =========================
-
-    // Palabras principales de "problemas"
-    // =========================
-    // OTRAS GRÁFICAS (Intención de Voto)
-    // =========================
-
-    // Intención de voto para Rector
-    crearGrafica('bar','grafica-voto-rector',
-        ['Reinerio Vargas','Vicente Cuéllar','Otros','Indecisos'],
-        [52,28,10,10],
-        'Intención de voto Rector (%)'
-    );
-
-    // Preferencia de Vicerrector acompañante
-    crearGrafica('bar','grafica-voto-vicerrector',
-        ['Candidato A','Candidato B','Candidato C','Indecisos'],
-        [40,30,15,15],
-        'Preferencia Vicerrector (%)'
-    );
-
-    // Aquí podrías agregar más gráficas si lo deseas (candidato-ganador, rechazo, etc.).
 });
 </script>
-
 </body>
 </html>
