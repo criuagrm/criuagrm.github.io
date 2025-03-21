@@ -298,17 +298,16 @@ function crearNubePalabras(idElemento, palabras) {
 <script>
 document.addEventListener('DOMContentLoaded', function(){
 
-    // Gráfica de Edad actualizada con datos reales
-    const ctxEdad = document.getElementById('grafica-edad').getContext('2d');
-    new Chart(ctxEdad, {
+    // Gráfica Edad
+    new Chart(document.getElementById('grafica-edad'), {
         type: 'bar',
         data: {
             labels: [['Entre', '18 a 26'], ['Entre', '27 a 58'], ['59 años', 'en adelante']],
             datasets: [{
                 label: 'Edad de los Encuestados (%)',
                 data: [57.1, 26.9, 16.0],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                borderColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                backgroundColor: ['#264653', '#2a9d8f', '#e9c46a'],
+                borderColor: ['#1d3557', '#21867a', '#d4a341'],
                 borderWidth: 1
             }]
         },
@@ -317,8 +316,7 @@ document.addEventListener('DOMContentLoaded', function(){
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {display: false},
-                tooltip: {enabled: true}
+                legend: {display: false}
             },
             scales: {
                 x: { beginAtZero: true, max: 100, title: { display: true, text: 'Porcentaje (%)' }},
@@ -327,32 +325,34 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    // Gráfica de Facultades actualizada con datos reales
-    const ctxFacultad = document.getElementById('grafica-facultad').getContext('2d');
-    new Chart(ctxFacultad, {
+    // Gráfica Facultades
+    new Chart(document.getElementById('grafica-facultad'), {
         type: 'bar',
         data: {
             labels: [
-                ['Cs. Jurídicas, Políticas', 'y Sociales (19.2%)'],
-                ['Cs. Económicas', '(19.2%)'],
-                ['Contaduría Pública', '(12.3%)'],
-                ['Cs. de la Salud', '(8.5%)'],
-                ['Integral del Chaco', '(7.7%)'],
-                ['Bioquímica y Farmacia', '(6.9%)'],
-                ['Tecnología', '(5.4%)'],
-                ['Cs. Agrícolas', '(4.6%)'],
-                ['Tecnológica', '(3.1%)'],
-                ['Informática y Redes', '(2.3%)'],
-                ['Humanidades', '(2.3%)'],
-                ['Cs. del Hábitat', '(2.3%)'],
-                ['Integral del Noreste', '(1.5%)'],
-                ['Politécnica', '(0.8%)']
+                'Facultad de Ciencias Jurídicas, Políticas y Sociales',
+                'Facultad de Ciencias Económicas y Empresariales',
+                'Facultad de Contaduría Pública',
+                'Facultad de Ciencias de la Salud',
+                'Facultad Integral del Chaco',
+                'Facultad de Bioquímica y Farmacia',
+                'Facultad de Tecnología',
+                'Facultad de Ciencias Agrícolas',
+                'Facultad Tecnológica',
+                'Facultad de Informática y Redes',
+                'Facultad de Humanidades',
+                'Facultad de Ciencias del Hábitat',
+                'Facultad Integral del Noreste',
+                'Facultad Politécnica'
             ],
             datasets: [{
                 label: 'Facultades participantes (%)',
                 data: [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
-                backgroundColor: '#5a9bd4',
-                borderColor: '#41719c',
+                backgroundColor: [
+                    '#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a',
+                    '#ff7c43','#ffa600','#5f9ea0','#20b2aa','#3cb371','#6b8e23',
+                    '#4682b4','#708090'
+                ],
                 borderWidth: 1
             }]
         },
@@ -361,8 +361,7 @@ document.addEventListener('DOMContentLoaded', function(){
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {display: false},
-                tooltip: {enabled: true}
+                legend: {display: false}
             },
             scales: {
                 x: { beginAtZero: true, title: { display: true, text: 'Porcentaje (%)' }},
@@ -371,17 +370,15 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    // Gráfica Departamento actualizada con datos reales
-    const ctxDepto = document.getElementById('grafica-departamento').getContext('2d');
-    new Chart(ctxDepto, {
+    // Gráfica Departamento
+    new Chart(document.getElementById('grafica-departamento'), {
         type: 'bar',
         data: {
-            labels: ['Santa Cruz (83%)', 'La Paz (4.5%)', 'Sucre (3.2%)', 'Cochabamba (3.2%)', 'Potosí (2.2%)'],
+            labels: ['Santa Cruz', 'La Paz', 'Sucre', 'Cochabamba', 'Potosí'],
             datasets: [{
                 label: 'Departamento de Nacimiento (%)',
                 data: [83.0, 4.5, 3.2, 3.2, 2.2],
-                backgroundColor: '#4e73df',
-                borderColor: '#2e59d9',
+                backgroundColor: ['#2b5876','#4e4376','#6a3093','#a044ff','#8e54e9'],
                 borderWidth: 1
             }]
         },
@@ -390,8 +387,7 @@ document.addEventListener('DOMContentLoaded', function(){
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {display: false},
-                tooltip: {enabled: true}
+                legend: {display: false}
             },
             scales: {
                 x: { beginAtZero: true, title: { display: true, text: 'Porcentaje (%)' }},
