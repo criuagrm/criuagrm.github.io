@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
-    <!-- Plugin para mostrar etiquetas de datos en Chart.js -->
+    <!-- Librerías de Chart.js y plugin para DataLabels -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-    
+
     <style>
         :root {
             --primary-color: #333333;
@@ -23,19 +23,23 @@
             --background-color: #f0f0f0;
             --text-color: #333333;
         }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
         }
+
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
         }
+
         .navbar, .footer {
             background-color: var(--primary-color);
             color: white;
         }
+
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -43,17 +47,23 @@
             text-align: center;
             margin-bottom: 2rem;
         }
+
         .section {
             padding: 3rem 0;
         }
+
+        /* Ajuste para que las gráficas se vean completas en móviles */
         .chart-placeholder {
-            height: 450px;
+            min-height: 350px;    /* altura mínima para móviles */
+            max-height: 650px;    /* altura máxima en pantallas grandes */
             background-color: #ffffff;
             border-radius: 5px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
             padding: 1rem;
+            overflow-x: auto;     /* scroll horizontal si las etiquetas son muy largas */
         }
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -62,6 +72,7 @@
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
         }
+
         /* Caja blanca para la ficha técnica */
         .card-ficha {
             background-color: #ffffff;
@@ -69,7 +80,8 @@
             padding: 2rem;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
-        /* Centrado de textos sobre gráficas */
+
+        /* Centrado de títulos de gráficas */
         .chart-title {
             text-align: center;
             margin-top: 1.5rem;
@@ -80,33 +92,12 @@
 </head>
 <body>
 
-<!-- Navbar con menú desplegable -->
+<!-- Navbar simple con el botón de “Anterior Encuesta” -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="#">CIRCPyCS</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav me-auto">
-                <!-- Menú desplegable con las secciones -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Secciones
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" onclick="mostrarSeccion('seccion-general')">Características Generales</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="d-flex">
-                <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
-            </div>
+        <div class="d-flex">
+            <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
         </div>
     </div>
 </nav>
@@ -119,7 +110,7 @@
     </div>
 </section>
 
-<!-- Ficha Técnica dentro de caja blanca -->
+<!-- Ficha Técnica (caja blanca) -->
 <div class="container my-5">
     <div class="card-ficha">
         <h2 class="text-center mb-5">Ficha Técnica</h2>
@@ -134,6 +125,17 @@
             <li><strong>Error de muestreo:</strong> &plusmn;4.1%.</li>
             <li><strong>Institución ejecutora:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales.</li>
         </ul>
+    </div>
+</div>
+
+<!-- Botones de secciones (debajo de la ficha técnica) -->
+<div class="container text-center">
+    <div class="btn-group mb-5" role="group" aria-label="Secciones Resultados">
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
     </div>
 </div>
 
@@ -258,7 +260,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* Mostrar/ocultar secciones */
+/* 
+   Función para mostrar/ocultar secciones.
+   Se basa en id, oculta todas y muestra la que se pide.
+*/
 function mostrarSeccion(id) {
     document.querySelectorAll('.contenido-seccion').forEach((sec) => {
         sec.classList.add('d-none');
@@ -266,21 +271,25 @@ function mostrarSeccion(id) {
     document.getElementById(id).classList.remove('d-none');
 }
 
-/* Mapa global de colores por nombre (personas, facultades, etc.) */
+/*
+   Mapa global de colores. 
+   Se cambia el fallback color a #c0ca33 (verde lima) en lugar de gris, 
+   para no usar paleta gris.
+*/
 const colorMap = {
     // Personas
-    "Reinerio Vargas": "#FFD700",   // Amarillo
-    "Vicente Cuéllar": "#228B22",   // Verde
-    "Juana Borja":     "#FF69B4",   // Rosa
-    "Oscar Nogales":   "#6495ED",   // Azul claro
-    "Orlando Pedraza": "#8A2BE2",   // Violeta
-    "Alfonso Coca":    "#FFA500",   // Naranja
-    "Osvaldo Ulloa":   "#A52A2A",   // Marrón
-    "Rogelio Espinoza":"#009999",   // Verde azulado
-    "Rolando López":   "#800000",   // Granate
-    "Otros":           "#708090",   // Gris pizarra
+    "Reinerio Vargas": "#FFD700",  // Amarillo
+    "Vicente Cuéllar": "#228B22",  // Verde
+    "Juana Borja":     "#FF69B4",  // Rosa
+    "Oscar Nogales":   "#6495ED",  // Azul claro
+    "Orlando Pedraza": "#8A2BE2",  // Violeta
+    "Alfonso Coca":    "#FFA500",  // Naranja
+    "Osvaldo Ulloa":   "#A52A2A",  // Marrón
+    "Rogelio Espinoza":"#009999",  // Verde azulado
+    "Rolando López":   "#800000",  // Granate
+    "Otros":           "#BA55D3",  // Un lila distinto
 
-    // Facultades (14 en total, cada una color distinto)
+    // Facultades
     "Facultad de Ciencias Jurídicas, Políticas y Sociales": "#003f5c",
     "Facultad de Ciencias Económicas y Empresariales": "#2f4b7c",
     "Facultad de Contaduría Pública": "#665191",
@@ -309,21 +318,19 @@ const colorMap = {
     "59+":   "#af65aa"
 };
 
-/* Función para obtener los colores de cada etiqueta de un array de labels */
+/* Damos un color fallback (verde lima) a todo lo que no esté en colorMap */
 function getColors(labels) {
-    return labels.map(label => colorMap[label] || "#999999");
+    return labels.map(label => colorMap[label] || "#c0ca33");
 }
 
-/*
-   Configuramos Chart.js para usar DataLabels (para mostrar etiquetas de datos en las barras).
-   Anclamos las etiquetas al final de cada barra, mostrando el valor + '%'.
+/* 
+   Registramos el plugin de DataLabels para mostrar el valor 
+   (%) al final de cada barra horizontal.
 */
 Chart.register(ChartDataLabels);
 
-/* 
-   Función para crear un gráfico de barras horizontal con 
-   - etiquetas de datos 
-   - colores definidos en colorMap
+/*
+   Función para crear gráficas de barras horizontales con dataLabels y colores asignados.
 */
 function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
     const ctx = document.getElementById(idCanvas).getContext('2d');
@@ -356,18 +363,15 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
             },
             scales: {
                 x: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 10 }
+                    beginAtZero: true
                 }
             }
         }
     });
 }
 
-/* Iniciamos la generación de todas las gráficas al cargar la página */
 document.addEventListener('DOMContentLoaded', function() {
-
-    // A) Sección CARACTERÍSTICAS GENERALES
+    /* Sección A: Características Generales */
     crearGraficaBarras(
         'grafica-edad',
         ['18-26', '27-58', '59+'],
@@ -402,7 +406,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'Departamento de Nacimiento (%)'
     );
 
-    // C) Sección EVALUACIÓN DE LA GESTIÓN
+    /* Sección C: Evaluación de la Gestión */
     crearGraficaBarras(
         'grafica-gobierno-general',
         ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
@@ -422,7 +426,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'Opinión sobre Vicerrector Vargas (%)'
     );
 
-    // D) Sección PERCEPCIÓN CANDIDATOS
+    /* Sección D: Percepción Candidatos */
     crearGraficaBarras(
         'grafica-candidato-ganador',
         ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
@@ -460,7 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '¿De acuerdo con reelección Cuéllar? (%)'
     );
 
-    // E) Sección INTENCIÓN DE VOTO
+    /* Sección E: Intención de Voto */
     crearGraficaBarras(
         'grafica-voto-rector',
         [
