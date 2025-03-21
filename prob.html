@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRCPyCS - Resultados Encuesta UAGRM 2025</title>
+
+    <!-- Librerías CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Estilos Personalizados -->
     <style>
         :root {
             --primary-color: #333333;
@@ -57,14 +61,12 @@
         }
     </style>
 
-    <!-- Chart.js para gráficas -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Librería para nubes de palabras -->
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
-
+    <!-- Librerías JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
 </head>
+
 <body>
 
 <!-- Navbar -->
@@ -133,12 +135,12 @@
     <h3>Problemas y Propuestas de mejora en la UAGRM</h3>
 
     <h5 class="mt-4">Principales problemas identificados por los encuestados</h5>
-  <!-- Nubes de palabras (preocupaciones) -->
+ <!-- Nube de preocupaciones -->
 <div class="chart-placeholder">
     <div id="nube-preocupaciones"></div>
 </div>
 
-<!-- Nubes de palabras (propuestas) -->
+<!-- Nube de propuestas -->
 <div class="chart-placeholder">
     <div id="nube-propuestas"></div>
 </div>
@@ -263,13 +265,16 @@ function crearGrafica(tipo, idCanvas, etiquetas, datos, titulo){
     });
 }
 
-// Función para crear nube de palabras con d3-cloud
+<script>
 function crearNubePalabras(idElemento, palabras) {
+    const ancho = document.getElementById(idElemento).offsetWidth;
+    const alto = 400;
+
     const layout = d3.layout.cloud()
-        .size([document.getElementById(idElemento).offsetWidth, 400])
-        .words(palabras.map(d => ({text: d.text, size: d.size})))
+        .size([ancho, alto])
+        .words(palabras)
         .padding(5)
-        .rotate(() => (~~(Math.random() * 2) * 90))
+        .rotate(0)
         .fontSize(d => d.size)
         .on("end", dibujar);
 
@@ -277,21 +282,10 @@ function crearNubePalabras(idElemento, palabras) {
 
     function dibujar(words) {
         d3.select("#" + idElemento).html('').append("svg")
-            .attr("width", layout.size()[0])
-            .attr("height", layout.size()[1])
-            .append("g")
-            .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-            .selectAll("text")
-            .data(words)
-            .enter().append("text")
-            .style("font-size", d => d.size + "px")
-            .style("font-family", "Poppins")
-            .style("fill", "#333333")
-            .attr("text-anchor", "middle")
-            .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
-            .text(d => d.text);
-    }
-}
+            .attr("width", ancho)
+            .attr("height", alto)
+            .
+
 
         // Aquí se llamarán todas las funciones para crear gráficos cuando ya estén disponibles los datos.
         // Ejemplo:
