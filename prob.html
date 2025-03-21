@@ -127,12 +127,21 @@
     </div>
 </div>
 
-    <!-- Sección B: Problemas y Propuestas -->
-    <div id="seccion-problemas" class="contenido-seccion d-none">
-        <h3>Problemas y Propuestas de mejora</h3>
-        <div class="chart-placeholder" id="grafica-problemas"></div>
-        <div class="chart-placeholder" id="grafica-propuestas"></div>
+    <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS -->
+<div id="seccion-problemas" class="contenido-seccion d-none">
+    <h3>Problemas y Propuestas de mejora en la UAGRM</h3>
+
+    <h5 class="mt-4">Principales problemas identificados por los encuestados</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-problemas"></canvas>
     </div>
+
+    <h5 class="mt-4">Principales aspectos propuestos para mejorar la UAGRM</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-propuestas"></canvas>
+    </div>
+</div>
+
 
     <!-- Sección C: Evaluación Gestión -->
     <div id="seccion-gestion" class="contenido-seccion d-none">
@@ -233,7 +242,7 @@ function crearNubePalabras(idElemento, palabras) {
             .text(d => d.text);
     }
 }
-
+</script>
 // Aquí se llamarán todas las funciones para crear gráficos cuando ya estén disponibles los datos.
 // Ejemplo:
 // crearGrafica('bar', 'grafica-edad', ['18-24', '25-34', '35-44'], [150, 350, 320], 'Edad de encuestados');
@@ -261,15 +270,24 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function(){
 
+    // Gráfica de Problemas (datos exactos)
+    crearGrafica('bar', 'grafica-problemas', 
+        ['Sin presupuesto', 'Formación académica deficiente', 'Corrupción', 'Falta tecnología e innovación'],
+        [39.4, 38, 32, 21], 
+        'Principales problemas (%)');
 
+    // Gráfica de Propuestas de mejora (datos exactos)
+    crearGrafica('bar', 'grafica-propuestas', 
+        ['Mejorar calidad académica', 'Docentes más preparados', 'Convenios internacionales', 'Actualizar programas formativos'],
+        [67, 55, 45, 45], 
+        'Propuestas más frecuentes (%)');
 
-
-
-
-
-    
+});
 </script>
+
 
     
 </body>
