@@ -297,47 +297,22 @@ function crearNubePalabras(idElemento, palabras) {
 <script>
 document.addEventListener('DOMContentLoaded', function(){
 
-    // Gráfica de Edad (no especificado en detalle, ejemplo orientativo)
-    crearGrafica('bar', 'grafica-edad', 
-        ['18-24 años', '25-34 años', '35-44 años', '45-54 años', '55+ años'],
-        [200, 320, 180, 80, 40], 
-        'Edad de los Encuestados');
-
-    // Gráfica de Facultades (no detallado explícitamente en documento; ejemplo orientativo con facultades comunes en UAGRM)
-    crearGrafica('bar', 'grafica-facultad', 
-        ['Cs. Jurídicas', 'Cs. Económicas', 'Ingeniería', 'Humanidades', 'Cs. Agrícolas', 'Medicina', 'Otras'],
-        [150, 140, 180, 120, 100, 90, 40], 
-        'Facultad de Procedencia');
-
-    // Departamento de nacimiento (mayoría de Santa Cruz generalmente, ejemplo orientativo)
-    crearGrafica('bar', 'grafica-departamento', 
-        ['Santa Cruz', 'Beni', 'La Paz', 'Cochabamba', 'Oruro', 'Tarija', 'Otros'],
-        [600, 60, 50, 40, 30, 20, 20], 
-        'Departamento de Nacimiento');
-
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-    const ctx = document.getElementById('grafica-edad').getContext('2d');
-    new Chart(ctx, {
+    // Gráfica de Edad actualizada con datos reales
+    const ctxEdad = document.getElementById('grafica-edad').getContext('2d');
+    new Chart(ctxEdad, {
         type: 'bar',
         data: {
-            labels: [
-                ['Entre', '18 a 26'], // texto en dos líneas
-                ['Entre', '27 a 58'],
-                ['59 años', 'en adelante']
-            ],
+            labels: [['Entre', '18 a 26'], ['Entre', '27 a 58'], ['59 años', 'en adelante']],
             datasets: [{
                 label: 'Edad de los Encuestados (%)',
-                data: [57.1, 26.9, 16.0],  // Datos exactos
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'], // colores sobrios y profesionales
+                data: [57.1, 26.9, 16.0],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
                 borderColor: ['#2e59d9', '#17a673', '#2c9faf'],
                 borderWidth: 1
             }]
         },
         options: {
-            indexAxis: 'y', // gráfica horizontal
+            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
@@ -345,19 +320,88 @@ document.addEventListener('DOMContentLoaded', function(){
                 tooltip: {enabled: true}
             },
             scales: {
-                x: { 
-                    beginAtZero: true,
-                    max: 100,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: {
-                    title: { display: true, text: 'Rangos de Edad' }
-                }
+                x: { beginAtZero: true, max: 100, title: { display: true, text: 'Porcentaje (%)' }},
+                y: { title: { display: true, text: 'Rangos de Edad' }}
             }
         }
     });
+
+    // Gráfica de Facultades actualizada con datos reales
+    const ctxFacultad = document.getElementById('grafica-facultad').getContext('2d');
+    new Chart(ctxFacultad, {
+        type: 'bar',
+        data: {
+            labels: [
+                ['Cs. Jurídicas, Políticas', 'y Sociales (19.2%)'],
+                ['Cs. Económicas', '(19.2%)'],
+                ['Contaduría Pública', '(12.3%)'],
+                ['Cs. de la Salud', '(8.5%)'],
+                ['Integral del Chaco', '(7.7%)'],
+                ['Bioquímica y Farmacia', '(6.9%)'],
+                ['Tecnología', '(5.4%)'],
+                ['Cs. Agrícolas', '(4.6%)'],
+                ['Tecnológica', '(3.1%)'],
+                ['Informática y Redes', '(2.3%)'],
+                ['Humanidades', '(2.3%)'],
+                ['Cs. del Hábitat', '(2.3%)'],
+                ['Integral del Noreste', '(1.5%)'],
+                ['Politécnica', '(0.8%)']
+            ],
+            datasets: [{
+                label: 'Facultades participantes (%)',
+                data: [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
+                backgroundColor: '#5a9bd4',
+                borderColor: '#41719c',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false},
+                tooltip: {enabled: true}
+            },
+            scales: {
+                x: { beginAtZero: true, title: { display: true, text: 'Porcentaje (%)' }},
+                y: { title: { display: true, text: 'Facultades' }}
+            }
+        }
+    });
+
+    // Gráfica Departamento actualizada con datos reales
+    const ctxDepto = document.getElementById('grafica-departamento').getContext('2d');
+    new Chart(ctxDepto, {
+        type: 'bar',
+        data: {
+            labels: ['Santa Cruz (83%)', 'La Paz (4.5%)', 'Sucre (3.2%)', 'Cochabamba (3.2%)', 'Potosí (2.2%)'],
+            datasets: [{
+                label: 'Departamento de Nacimiento (%)',
+                data: [83.0, 4.5, 3.2, 3.2, 2.2],
+                backgroundColor: '#4e73df',
+                borderColor: '#2e59d9',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false},
+                tooltip: {enabled: true}
+            },
+            scales: {
+                x: { beginAtZero: true, title: { display: true, text: 'Porcentaje (%)' }},
+                y: { title: { display: true, text: 'Departamentos' }}
+            }
+        }
+    });
+
 });
 </script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
