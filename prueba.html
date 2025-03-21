@@ -133,25 +133,28 @@
         </div>
     </div>
 
-    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
-    <div id="seccion-gestion" class="contenido-seccion d-none">
-        <h3>Evaluación de la Gestión Actual</h3>
+  <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
+<div id="seccion-gestion" class="contenido-seccion d-none">
+    <h3>Evaluación de la Gestión Actual</h3>
 
-        <h5 class="mt-4">Calificación general del Gobierno Universitario (todos)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-gobierno-general"></canvas>
-        </div>
-
-        <h5 class="mt-4">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-rector-general"></canvas>
-        </div>
-
-        <h5 class="mt-4">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-vicerrector-general"></canvas>
-        </div>
+    <!-- Calificación general del Gobierno Universitario -->
+    <h5 class="mt-4">Calificación general del Gobierno Universitario (todos)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-gobierno-general"></canvas>
     </div>
+
+    <!-- Opinión sobre la gestión del Rector Vicente Cuéllar -->
+    <h5 class="mt-4">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-rector-general"></canvas>
+    </div>
+
+    <!-- Opinión sobre la gestión del Vicerrector Reinerio Vargas -->
+    <h5 class="mt-4">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-vicerrector-general"></canvas>
+    </div>
+</div>
 
     <!-- SECCIÓN D: PERCEPCIÓN CANDIDATOS -->
     <div id="seccion-candidatos" class="contenido-seccion d-none">
@@ -285,6 +288,114 @@ document.addEventListener('DOMContentLoaded', function() {
             scales: { x: { beginAtZero: true } }
         }
     });
+});
+</script>
+
+
+
+    <!-- Script para generar gráficas usando Chart.js -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    // Calificación general del Gobierno Universitario
+    new Chart(document.getElementById('grafica-gobierno-general'), {
+        type: 'bar',
+        data: {
+            labels: ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
+            datasets: [{
+                label: 'Calificación (%)',
+                data: [43.6, 26.3, 12.8, 12.2, 5.1],
+                backgroundColor: ['#2a9d8f', '#e9c46a', '#f4a261', '#e76f51', '#264653'],
+                borderColor: '#333333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {display: false}
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 50,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Calificación' }
+                }
+            }
+        }
+    });
+
+    // Opinión sobre la gestión del Rector Vicente Cuéllar
+    new Chart(document.getElementById('grafica-rector-general'), {
+        type: 'bar',
+        data: {
+            labels: ['Poco de acuerdo', 'De acuerdo', 'Nada de acuerdo', 'Total desacuerdo', 'Completamente de acuerdo'],
+            datasets: [{
+                label: 'Opinión (%)',
+                data: [43.3, 27.9, 13.8, 9.0, 6.1],
+                backgroundColor: ['#f4a261', '#2a9d8f', '#e76f51', '#d62828', '#264653'],
+                borderColor: '#333333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {display: false}
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 50,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Opinión sobre Rector' }
+                }
+            }
+        }
+    });
+
+    // Opinión sobre la gestión del Vicerrector Reinerio Vargas
+    new Chart(document.getElementById('grafica-vicerrector-general'), {
+        type: 'bar',
+        data: {
+            labels: ['Poco de acuerdo', 'De acuerdo', 'Completamente de acuerdo', 'Nada de acuerdo', 'Total desacuerdo'],
+            datasets: [{
+                label: 'Opinión (%)',
+                data: [31.1, 28.5, 25.6, 8.7, 6.1],
+                backgroundColor: ['#f4a261', '#2a9d8f', '#264653', '#e76f51', '#d62828'],
+                borderColor: '#333333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: {display: false}
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 40,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Opinión sobre Vicerrector' }
+                }
+            }
+        }
+    });
+
 });
 </script>
 </body>
