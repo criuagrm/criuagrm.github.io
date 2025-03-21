@@ -1,160 +1,506 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <base href="https://criuagrm.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca - Catálogo de Libros</title>
+    <title>CIRCPyCS - Resultados Encuesta UAGRM 2025</title>
+
+    <!-- Bootstrap, Font Awesome y Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Estilos personalizables -->
     <style>
+        :root {
+            --primary-color: #333333;
+            --secondary-color: #666666;
+            --accent-color: #999999;
+            --background-color: #f0f0f0;
+            --text-color: #333333;
+        }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
         }
-        h1 {
-            color: #003366;
-        }
-        .search-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input {
-            padding: 10px;
-            width: 100%;
-            max-width: 600px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .book-card {
-            background-color: #ffffff;
-            border: 2px solid #003366;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-        }
-        .book-card h3 {
-            color: #003366;
-            font-size: 18px;
-            margin: 10px 0 5px;
-        }
-        .book-card p {
-            color: #333333;
-            font-size: 14px;
-            margin: 5px 0;
-        }
-        .button-whatsapp {
-            background-color: #25D366;
+        .navbar, .footer {
+            background-color: var(--primary-color);
             color: white;
-            border: none;
-            padding: 10px 20px;
+        }
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .section {
+            padding: 3rem 0;
+        }
+        .chart-placeholder {
+            height: 450px;
+            background-color: #ffffff;
             border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 14px;
-            display: inline-block;
-            margin-top: 10px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            padding: 1rem;
         }
-        .button-whatsapp:hover {
-            background-color: #1ebc5a;
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
         }
-        .no-results {
-            display: none;
-            color: #666;
-            font-size: 16px;
-            margin-top: 20px;
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Catálogo de Libros - Biblioteca UAGRM</h1>
-    <div class="search-bar">
-        <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Buscar por título o autor...">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">CIRCPyCS</a>
+        <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
     </div>
+</nav>
 
-    <div class="book-grid" id="bookGrid">
-        <!-- Aquí se insertarán las tarjetas dinámicamente -->
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Resultados Encuesta UAGRM 2025</h1>
+        <p>Análisis de percepción sobre preferencias para Rector y Vicerrector UAGRM 2025</p>
     </div>
-    <div class="no-results" id="noResults">No se encontraron resultados para la búsqueda.</div>
+</section>
+
+<!-- Ficha Técnica -->
+<div class="container section">
+    <h2>Ficha Técnica</h2>
+    <ul>
+        <li><strong>Metodología:</strong> Encuesta de percepción académica, institucional y política mediante formularios virtuales.</li>
+        <li><strong>Muestra:</strong> 820 personas (286 docentes, 534 estudiantes).</li>
+        <li><strong>Fecha aplicación:</strong> 02 al 07 de marzo de 2025.</li>
+        <li><strong>Error de muestreo:</strong> ±4,1% (confianza del 95%).</li>
+    </ul>
 </div>
 
+<!-- Secciones Principales -->
+<div class="container section">
+    <h2 class="mb-4">Resultados Detallados</h2>
+    
+    <!-- Botones de navegación -->
+    <div class="text-center mb-5">
+        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
+        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
+        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
+        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
+        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
+    </div>
+
+    <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES -->
+    <div id="seccion-general" class="contenido-seccion">
+        <h3>Características Generales de los Encuestados</h3>
+        <h5 class="mt-4">Edad de los participantes</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-edad"></canvas>
+        </div>
+
+        <h5 class="mt-4">Facultad a la que pertenecen los encuestados</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-facultad"></canvas>
+        </div>
+
+        <h5 class="mt-4">Departamento de nacimiento</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-departamento"></canvas>
+        </div>
+    </div>
+
+    <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS -->
+    <div id="seccion-problemas" class="contenido-seccion d-none">
+        <h3>Problemas y Propuestas de mejora en la UAGRM</h3>
+        
+        <h5 class="mt-4">Principales problemas identificados por los encuestados</h5>
+        <div class="chart-placeholder">
+            <div id="nube-preocupaciones"></div>
+        </div>
+
+        <h5 class="mt-4">Propuestas más mencionadas por los encuestados</h5>
+        <div class="chart-placeholder">
+            <div id="nube-propuestas"></div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
+    <div id="seccion-gestion" class="contenido-seccion d-none">
+        <h3>Evaluación de la Gestión Actual</h3>
+
+        <h5 class="mt-4">Calificación general del Gobierno Universitario (todos)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-gobierno-general"></canvas>
+        </div>
+
+        <h5 class="mt-4">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-rector-general"></canvas>
+        </div>
+
+        <h5 class="mt-4">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-vicerrector-general"></canvas>
+        </div>
+    </div>
+
+    <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
+    <div id="seccion-candidatos" class="contenido-seccion d-none">
+        <h3>Percepción sobre los candidatos al Claustro Universitario</h3>
+
+        <h5 class="mt-4">Candidato que cree que ganará la elección a Rector (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-candidato-ganador"></canvas>
+        </div>
+
+        <h5 class="mt-4">Candidato preferido a Vicerrector (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-vicerrector-preferido"></canvas>
+        </div>
+
+        <h5 class="mt-4">Candidato a Rector por el que nunca votaría (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-candidato-rechazo"></canvas>
+        </div>
+
+        <h5 class="mt-4">Valoración de la candidatura del Vicerrector Reinerio Vargas (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-valoracion-vargas"></canvas>
+        </div>
+
+        <h5 class="mt-4">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar? (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-reeleccion-rector"></canvas>
+        </div>
+    </div>
+
+    <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
+    <div id="seccion-voto" class="contenido-seccion d-none">
+        <h3>Intención de Voto para Rector y Vicerrector</h3>
+        
+        <h5 class="mt-4">Intención de voto actual para Rector (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-voto-rector"></canvas>
+        </div>
+
+        <h5 class="mt-4">Preferencia para acompañante (Vicerrector) de Reinerio Vargas (general)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-voto-vicerrector"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer text-center py-3">
+    <div class="container">
+        <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM</p>
+    </div>
+</footer>
+
+<!-- Librerías JS esenciales -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Chart.js para gráficas -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- D3 y d3-cloud para nubes de palabras -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+
 <script>
-    let bookList = [];
+/* 
+    Función para mostrar la sección correspondiente (oculta las demás).
+*/
+function mostrarSeccion(id) {
+    document.querySelectorAll('.contenido-seccion').forEach((el) => {
+        el.classList.add('d-none');
+    });
+    document.getElementById(id).classList.remove('d-none');
+}
 
-    // Cargar el archivo JSON usando fetch
-    fetch("https://raw.githubusercontent.com/criuagrm/criuagrm.github.io/main/CATALOGO.json")
-        .then(response => response.json())
-        .then(data => {
-            bookList = data;
-            displayRandomBooks();
-        })
-        .catch(error => console.error("Error al cargar el archivo JSON:", error));
-
-    // Mostrar 6 libros aleatorios al cargar la página
-    function displayRandomBooks() {
-        const bookGrid = document.getElementById("bookGrid");
-        bookGrid.innerHTML = ""; // Limpiar contenido previo
-        let randomBooks = bookList.sort(() => 0.5 - Math.random()).slice(0, 6);
-
-        randomBooks.forEach(item => {
-            const card = document.createElement("div");
-            card.classList.add("book-card");
-            card.innerHTML = `
-                <h3>${item['TÍTULO']}</h3>
-                <p><strong>Autor:</strong> ${item['AUTOR']}</p>
-                <p><strong>Código:</strong> ${item['CÓDIGO']}</p>
-                <p><strong>Ejemplares:</strong> ${item['EJEM.']}</p>
-                <a class="button-whatsapp" href="https://wa.me/591XXXXXXXXX?text=Hola,%20quisiera%20reservar%20el%20libro:%20${encodeURIComponent(item['TÍTULO'])}" target="_blank">Reservar por WhatsApp</a>
-            `;
-            bookGrid.appendChild(card);
-        });
-    }
-
-    // Función de búsqueda
-    function searchBooks() {
-        const input = document.getElementById("searchInput").value.toLowerCase();
-        const bookGrid = document.getElementById("bookGrid");
-        const noResults = document.getElementById("noResults");
-        bookGrid.innerHTML = ""; // Limpiar resultados anteriores
-        let resultsCount = 0;
-
-        bookList.forEach(item => {
-            if (item['TÍTULO'].toLowerCase().includes(input) ||
-                item['AUTOR'].toLowerCase().includes(input)) {
-
-                const card = document.createElement("div");
-                card.classList.add("book-card");
-                card.innerHTML = `
-                    <h3>${item['TÍTULO']}</h3>
-                    <p><strong>Autor:</strong> ${item['AUTOR']}</p>
-                    <p><strong>Código:</strong> ${item['CÓDIGO']}</p>
-                    <p><strong>Ejemplares:</strong> ${item['EJEM.']}</p>
-                    <a class="button-whatsapp" href="https://wa.me/59167381294text=Hola,%20quisiera%20reservar%20el%20libro:%20${encodeURIComponent(item['TÍTULO'])}" target="_blank">Reservar por WhatsApp</a>
-                `;
-                bookGrid.appendChild(card);
-                resultsCount++;
+/*
+    Función genérica para crear gráficas con Chart.js.
+    @param {string} tipo - Tipo de gráfica (bar, line, etc.).
+    @param {string} idCanvas - ID del elemento <canvas> en el HTML.
+    @param {Array} etiquetas - Etiquetas (categories) para la gráfica.
+    @param {Array} datos - Datos numéricos.
+    @param {string} titulo - Título del dataset.
+*/
+function crearGrafica(tipo, idCanvas, etiquetas, datos, titulo) {
+    const ctx = document.getElementById(idCanvas).getContext('2d');
+    new Chart(ctx, {
+        type: tipo,
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: titulo,
+                data: datos,
+                backgroundColor: '#666666',
+                borderColor: '#333333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: false }
             }
-        });
+        }
+    });
+}
 
-        // Mostrar u ocultar la cuadrícula de resultados
-        bookGrid.style.display = resultsCount > 0 ? "grid" : "none";
-        noResults.style.display = resultsCount === 0 ? "block" : "none";
+/*
+    Función para crear nubes de palabras con d3-cloud.
+    Se ajusta tamaño y padding para evitar cuelgues.
+*/
+function crearNubePalabras(idElemento, palabras) {
+    // Ajustar dimensiones:
+    const cont = document.getElementById(idElemento);
+    const ancho = cont.offsetWidth;
+    const alto = 300; // Más bajo para reducir carga en el navegador
+
+    // Configurar layout
+    const layout = d3.layout.cloud()
+        .size([ancho, alto])
+        .words(palabras.map(d => Object.create(d)))
+        .padding(2)
+        .rotate(0)
+        .font('Impact')
+        .fontSize(d => d.size)
+        .on('end', dibujar);
+
+    layout.start();
+
+    function dibujar(words) {
+        // Limpiar contenido previo y luego crear el SVG
+        d3.select('#' + idElemento).html('');
+        d3.select('#' + idElemento)
+          .append('svg')
+          .attr('width', ancho)
+          .attr('height', alto)
+          .append('g')
+          .attr('transform', 'translate(' + (ancho / 2) + ',' + (alto / 2) + ')')
+          .selectAll('text')
+          .data(words)
+          .enter().append('text')
+          .style('font-family', 'Impact')
+          .style('fill', '#333')
+          .style('font-size', d => d.size + 'px')
+          .attr('text-anchor', 'middle')
+          .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
+          .text(d => d.text);
     }
+}
+
+/*
+    Apenas cargue el DOM, generamos las gráficas y las nubes de palabras.
+*/
+document.addEventListener('DOMContentLoaded', function() {
+    // =========================
+    // GRÁFICAS DE CARACTERÍSTICAS GENERALES
+    // =========================
+
+    // 1) Gráfica de Edades
+    new Chart(document.getElementById('grafica-edad'), {
+        type: 'bar',
+        data: {
+            labels: [
+                ['Entre','18 a 26'],
+                ['Entre','27 a 58'],
+                ['59 años','en adelante']
+            ],
+            datasets: [{
+                label: 'Edad de los Encuestados (%)',
+                data: [57.1, 26.9, 16.0],
+                backgroundColor: ['#264653', '#2a9d8f', '#e9c46a'],
+                borderColor: ['#1d3557', '#21867a', '#d4a341'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false}
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Rangos de Edad' }
+                }
+            }
+        }
+    });
+
+    // 2) Gráfica de Facultades
+    new Chart(document.getElementById('grafica-facultad'), {
+        type: 'bar',
+        data: {
+            labels: [
+                'Facultad de Ciencias Jurídicas, Políticas y Sociales',
+                'Facultad de Ciencias Económicas y Empresariales',
+                'Facultad de Contaduría Pública',
+                'Facultad de Ciencias de la Salud',
+                'Facultad Integral del Chaco',
+                'Facultad de Bioquímica y Farmacia',
+                'Facultad de Tecnología',
+                'Facultad de Ciencias Agrícolas',
+                'Facultad Tecnológica',
+                'Facultad de Informática y Redes',
+                'Facultad de Humanidades',
+                'Facultad de Ciencias del Hábitat',
+                'Facultad Integral del Noreste',
+                'Facultad Politécnica'
+            ],
+            datasets: [{
+                label: 'Facultades participantes (%)',
+                data: [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
+                backgroundColor: [
+                    '#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a',
+                    '#ff7c43','#ffa600','#5f9ea0','#20b2aa','#3cb371','#6b8e23',
+                    '#4682b4','#708090'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false}
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Facultades' }
+                }
+            }
+        }
+    });
+
+    // 3) Gráfica de Departamento
+    new Chart(document.getElementById('grafica-departamento'), {
+        type: 'bar',
+        data: {
+            labels: ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
+            datasets: [{
+                label: 'Departamento de Nacimiento (%)',
+                data: [83.0, 4.5, 3.2, 3.2, 2.2],
+                backgroundColor: ['#2b5876','#4e4376','#6a3093','#a044ff','#8e54e9'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {display: false}
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Porcentaje (%)' }
+                },
+                y: {
+                    title: { display: true, text: 'Departamentos' }
+                }
+            }
+        }
+    });
+
+
+    // =========================
+    // NUBES DE PALABRAS (Problemas y Propuestas)
+    // =========================
+
+    // Palabras principales de "problemas"
+    const palabrasPreocupaciones = [
+        {text:'Economía', size:40},
+        {text:'Sin presupuesto', size:40},
+        {text:'Formación académica deficiente', size:38},
+        {text:'Corrupción', size:35},
+        {text:'Mala calidad académica', size:30},
+        {text:'Sin tecnología e innovación', size:28},
+        {text:'Política interna', size:28},
+        {text:'Elecciones 2025', size:25},
+        {text:'Reelección facultativa', size:25},
+        {text:'Inestabilidad económica', size:22},
+        {text:'Inestabilidad institucional', size:22},
+        {text:'Acreditación carreras', size:20},
+        {text:'Docentes faltones', size:20},
+        {text:'Capacidad docente', size:18},
+        {text:'Becas', size:16},
+        {text:'Investigación', size:16},
+        {text:'Docentes interinos', size:14},
+        {text:'Extensión', size:14}
+    ];
+
+    // Palabras principales de "propuestas"
+    const palabrasPropuestas = [
+        {text:'Mejorar calidad académica', size:45},
+        {text:'Docentes más preparados', size:38},
+        {text:'Convenios internacionales', size:35},
+        {text:'Hacer investigación', size:35},
+        {text:'Actualizar programas', size:32},
+        {text:'Extensión y vinculación', size:28},
+        {text:'Innovación tecnológica', size:28},
+        {text:'Pasantías estudiantes', size:28},
+        {text:'Presupuesto laboratorios', size:25},
+        {text:'Reducir años estudio', size:20},
+        {text:'Doctorados docentes', size:20},
+        {text:'Becas laboratorios', size:18},
+        {text:'Revistas indexadas', size:16}
+    ];
+
+    crearNubePalabras('nube-preocupaciones', palabrasPreocupaciones);
+    crearNubePalabras('nube-propuestas', palabrasPropuestas);
+
+    // =========================
+    // OTRAS GRÁFICAS (Intención de Voto)
+    // =========================
+
+    // Intención de voto para Rector
+    crearGrafica('bar','grafica-voto-rector',
+        ['Reinerio Vargas','Vicente Cuéllar','Otros','Indecisos'],
+        [52,28,10,10],
+        'Intención de voto Rector (%)'
+    );
+
+    // Preferencia de Vicerrector acompañante
+    crearGrafica('bar','grafica-voto-vicerrector',
+        ['Candidato A','Candidato B','Candidato C','Indecisos'],
+        [40,30,15,15],
+        'Preferencia Vicerrector (%)'
+    );
+
+    // Aquí podrías agregar más gráficas si lo deseas (candidato-ganador, rechazo, etc.).
+});
 </script>
 
 </body>
 </html>
-
