@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- 
-        * Se establece la base para ruta de archivos (GitHub Pages).
-        * Metaetiquetas para responsive, codificación de caracteres y título de la página.
-        * Se incluyen las librerías CSS de Bootstrap, Font Awesome y Google Fonts.
-        * Estilos personalizados con variables CSS y clases propias.
-    -->
     <base href="https://criuagrm.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CIRCPyCS - Resultados Encuesta UAGRM 2025</title>
 
-    <!-- Librerías CSS -->
+    <!-- Bootstrap 5, Font Awesome, Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
-    <!-- Estilos Personalizados -->
+    <!-- Librerías de Chart.js y plugin para DataLabels -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
     <style>
         :root {
             --primary-color: #333333;
@@ -26,19 +23,23 @@
             --background-color: #f0f0f0;
             --text-color: #333333;
         }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
         }
+
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
         }
+
         .navbar, .footer {
             background-color: var(--primary-color);
             color: white;
         }
+
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
@@ -46,17 +47,23 @@
             text-align: center;
             margin-bottom: 2rem;
         }
+
         .section {
             padding: 3rem 0;
         }
+
+        /* Ajuste para que las gráficas se vean completas en móviles */
         .chart-placeholder {
-            height: 450px;
+            min-height: 350px;    /* altura mínima para móviles */
+            max-height: 650px;    /* altura máxima en pantallas grandes */
             background-color: #ffffff;
             border-radius: 5px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
             padding: 1rem;
+            overflow-x: auto;     /* scroll horizontal si las etiquetas son muy largas */
         }
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -65,30 +72,37 @@
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
         }
-    </style>
 
-    <!-- Librerías JS para gráficas y nubes de palabras -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+        /* Caja blanca para la ficha técnica */
+        .card-ficha {
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 2rem;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Centrado de títulos de gráficas */
+        .chart-title {
+            text-align: center;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
 
-<!-- 
-    * Barra de navegación con nombre de la entidad y enlace a la encuesta anterior.
-    * Usamos clases de Bootstrap para estilos y disposición.
--->
+<!-- Navbar simple con el botón de “Anterior Encuesta” -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="#">CIRCPyCS</a>
-        <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
+        <div class="d-flex">
+            <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
+        </div>
     </div>
 </nav>
 
-<!-- 
-    * Sección hero con título y descripción sobre los resultados de la encuesta.
-    * Diseñada con un fondo degradado y texto centrado.
--->
+<!-- Sección Hero -->
 <section class="hero">
     <div class="container">
         <h1>Resultados Encuesta UAGRM 2025</h1>
@@ -96,51 +110,54 @@
     </div>
 </section>
 
-<!-- 
-    * Ficha técnica de la encuesta: se presentan información metodológica y estadística.
-    * Lista con detalle de metodología, muestra, fecha y error de muestreo.
--->
-<div class="container section">
-    <h2>Ficha Técnica</h2>
-    <ul>
-        <li><strong>Metodología:</strong> Encuesta de percepción académica, institucional y política mediante formularios virtuales.</li>
-        <li><strong>Muestra:</strong> 820 personas (286 docentes, 534 estudiantes).</li>
-        <li><strong>Fecha aplicación:</strong> 02 al 07 de marzo de 2025.</li>
-        <li><strong>Error de muestreo:</strong> ±4,1% (confianza del 95%).</li>
-    </ul>
+<!-- Ficha Técnica (caja blanca) -->
+<div class="container my-5">
+    <div class="card-ficha">
+        <h2 class="text-center mb-5">Ficha Técnica</h2>
+        <ul>
+            <li><strong>Metodología:</strong> Encuesta de percepción académica, institucional y política mediante formularios virtuales.</li>
+            <li><strong>Características de la muestra:</strong> Muestreo no probabilístico y proporcional al tamaño de la población.</li>
+            <li><strong>Aplicación de la Encuesta:</strong> Del 02 al 07 de marzo de 2025.</li>
+            <li><strong>Universo poblacional:</strong> Docentes y estudiantes inscritos en la UAGRM, pertenecientes a las 18 facultades.</li>
+            <li><strong>Tamaño de la muestra:</strong> 820 personas encuestadas (286 docentes y 534 estudiantes).</li>
+            <li><strong>Distribución de la muestra:</strong> Sin diferenciación de género ni edad, incluyendo docentes regulares y estudiantes registrados.</li>
+            <li><strong>Coeficiente de fiabilidad:</strong> 95%.</li>
+            <li><strong>Error de muestreo:</strong> &plusmn;4.1%.</li>
+            <li><strong>Institución ejecutora:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales.</li>
+        </ul>
+    </div>
 </div>
 
-<!-- 
-    * Secciones principales con gráficas y nubes de palabras.
-    * Botones para alternar entre distintas vistas (Características Generales, Problemas, Evaluación Gestión, etc.).
--->
-<div class="container section">
-    <h2 class="mb-4">Resultados Detallados</h2>
-    
-    <!-- Botones de navegación para cada sección -->
-    <div class="text-center mb-5">
-        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
-        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
-        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
-        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
-        <button class="btn btn-primary mx-2" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
+<!-- Botones de secciones (debajo de la ficha técnica) -->
+<div class="container text-center">
+    <div class="btn-group mb-5" role="group" aria-label="Secciones Resultados">
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
+        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
     </div>
+</div>
+
+<!-- Secciones Principales -->
+<div class="container section">
+    <h2 class="text-center mb-5">Resultados Detallados</h2>
 
     <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES -->
     <div id="seccion-general" class="contenido-seccion">
-        <h3>Características Generales de los Encuestados</h3>
+        <h3 class="chart-title">Características Generales de los Encuestados</h3>
 
-        <h5 class="mt-4">Edad de los participantes</h5>
+        <h5 class="chart-title">Edad de los participantes</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-edad"></canvas>
         </div>
 
-        <h5 class="mt-4">Facultad a la que pertenecen los encuestados</h5>
+        <h5 class="chart-title">Facultad a la que pertenecen los encuestados</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-facultad"></canvas>
         </div>
 
-        <h5 class="mt-4">Departamento de nacimiento</h5>
+        <h5 class="chart-title">Departamento de nacimiento</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-departamento"></canvas>
         </div>
@@ -148,36 +165,34 @@
 
     <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS -->
     <div id="seccion-problemas" class="contenido-seccion d-none">
-        <h3>Problemas y Propuestas de mejora en la UAGRM</h3>
+        <h3 class="chart-title">Problemas y Propuestas de mejora en la UAGRM</h3>
 
-        <h5 class="mt-4">Principales problemas identificados por los encuestados</h5>
-        <!-- Nube de preocupaciones -->
-        <div class="chart-placeholder">
-            <div id="nube-preocupaciones"></div>
+        <h5 class="chart-title">Principales problemas identificados</h5>
+        <div class="chart-placeholder text-center">
+            <p class="text-muted">[Aquí podrías colocar una imagen o texto estático con los problemas]</p>
         </div>
 
-        <h5 class="mt-4">Propuestas más mencionadas por los encuestados</h5>
-        <!-- Nube de propuestas -->
-        <div class="chart-placeholder">
-            <div id="nube-propuestas"></div>
+        <h5 class="chart-title">Propuestas más mencionadas</h5>
+        <div class="chart-placeholder text-center">
+            <p class="text-muted">[Aquí podrías colocar una imagen o texto estático con las propuestas]</p>
         </div>
     </div>
 
     <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
     <div id="seccion-gestion" class="contenido-seccion d-none">
-        <h3>Evaluación de la Gestión Actual</h3>
+        <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
 
-        <h5 class="mt-4">Calificación general del Gobierno Universitario (todos)</h5>
+        <h5 class="chart-title">Calificación general del Gobierno Universitario</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-gobierno-general"></canvas>
         </div>
 
-        <h5 class="mt-4">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
+        <h5 class="chart-title">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-rector-general"></canvas>
         </div>
 
-        <h5 class="mt-4">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
+        <h5 class="chart-title">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-vicerrector-general"></canvas>
         </div>
@@ -185,29 +200,34 @@
 
     <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
     <div id="seccion-candidatos" class="contenido-seccion d-none">
-        <h3>Percepción sobre los candidatos al Claustro Universitario</h3>
+        <h3 class="chart-title">Percepción sobre los candidatos al Claustro Universitario</h3>
 
-        <h5 class="mt-4">Candidato que cree que ganará la elección a Rector (general)</h5>
+        <h5 class="chart-title">Candidato que cree que ganará la elección a Rector</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-candidato-ganador"></canvas>
         </div>
 
-        <h5 class="mt-4">Candidato preferido a Vicerrector (general)</h5>
+        <h5 class="chart-title">Candidato preferido a Vicerrector</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-vicerrector-preferido"></canvas>
         </div>
 
-        <h5 class="mt-4">Candidato a Rector por el que nunca votaría (general)</h5>
+        <h5 class="chart-title">Candidato a Rector por el que nunca votaría</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-candidato-rechazo"></canvas>
         </div>
 
-        <h5 class="mt-4">Valoración de la candidatura del Vicerrector Reinerio Vargas (general)</h5>
+        <h5 class="chart-title">Valoración de la candidatura del Vicerrector Reinerio Vargas</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-valoracion-vargas"></canvas>
         </div>
 
-        <h5 class="mt-4">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar? (general)</h5>
+        <h5 class="chart-title">Aspectos valorados en gestión de Reinerio Vargas</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-aspectos-vargas"></canvas>
+        </div>
+
+        <h5 class="chart-title">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar?</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-reeleccion-rector"></canvas>
         </div>
@@ -215,324 +235,251 @@
 
     <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
     <div id="seccion-voto" class="contenido-seccion d-none">
-        <h3>Intención de Voto para Rector y Vicerrector</h3>
+        <h3 class="chart-title">Intención de Voto para Rector y Vicerrector</h3>
 
-        <h5 class="mt-4">Intención de voto actual para Rector (general)</h5>
+        <h5 class="chart-title">Intención de voto actual para Rector</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-voto-rector"></canvas>
         </div>
 
-        <h5 class="mt-4">Preferencia para acompañante (Vicerrector) de Reinerio Vargas (general)</h5>
+        <h5 class="chart-title">Preferencia para acompañante (Vicerrector) de Reinerio Vargas</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-voto-vicerrector"></canvas>
         </div>
     </div>
 </div>
 
-<!-- 
-    * Footer con copyright.
-    * Se ubica al final de la página, centrado.
--->
+<!-- Footer -->
 <footer class="footer text-center py-3">
     <div class="container">
         <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM</p>
     </div>
 </footer>
 
-<!-- 
-    * Script de Bootstrap para funcionalidades (colapsables, etc.).
-    * Script para mostrar/ocultar secciones según el botón presionado.
-    * Scripts de gráficas con Chart.js y la función de nubes de palabras con D3.
--->
+<!-- Scripts Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    /* 
-       * Función para alternar la visibilidad de secciones.
-       * Recibe el id de la sección a mostrar y oculta las demás.
-    */
-    function mostrarSeccion(id) {
-        document.querySelectorAll('.contenido-seccion').forEach((el) => {
-            el.classList.add('d-none');
-        });
-        document.getElementById(id).classList.remove('d-none');
-    }
-</script>
+/* 
+   Función para mostrar/ocultar secciones.
+   Se basa en id, oculta todas y muestra la que se pide.
+*/
+function mostrarSeccion(id) {
+    document.querySelectorAll('.contenido-seccion').forEach((sec) => {
+        sec.classList.add('d-none');
+    });
+    document.getElementById(id).classList.remove('d-none');
+}
 
-<script>
-    /*
-       * Función genérica para crear gráficas con Chart.js.
-       * @param tipo (string) - tipo de gráfica (bar, line, etc.).
-       * @param idCanvas (string) - id del elemento <canvas> en el HTML.
-       * @param etiquetas (array) - etiquetas para el eje X o Y.
-       * @param datos (array) - datos numéricos correspondientes a las etiquetas.
-       * @param titulo (string) - etiqueta que aparecerá en la leyenda de la gráfica.
-    */
-    function crearGrafica(tipo, idCanvas, etiquetas, datos, titulo) {
-        const ctx = document.getElementById(idCanvas).getContext('2d');
-        new Chart(ctx, {
-            type: tipo,
-            data: {
-                labels: etiquetas,
-                datasets: [{
-                    label: titulo,
-                    data: datos,
-                    backgroundColor: '#666666',
-                    borderColor: '#333333',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: { beginAtZero: true }
+/*
+   Mapa global de colores. 
+   Se cambia el fallback color a #c0ca33 (verde lima) en lugar de gris, 
+   para no usar paleta gris.
+*/
+const colorMap = {
+    // Personas
+    "Reinerio Vargas": "#FFD700",  // Amarillo
+    "Vicente Cuéllar": "#228B22",  // Verde
+    "Juana Borja":     "#FF69B4",  // Rosa
+    "Oscar Nogales":   "#6495ED",  // Azul claro
+    "Orlando Pedraza": "#8A2BE2",  // Violeta
+    "Alfonso Coca":    "#FFA500",  // Naranja
+    "Osvaldo Ulloa":   "#A52A2A",  // Marrón
+    "Rogelio Espinoza":"#009999",  // Verde azulado
+    "Rolando López":   "#800000",  // Granate
+    "Otros":           "#BA55D3",  // Un lila distinto
+
+    // Facultades
+    "Facultad de Ciencias Jurídicas, Políticas y Sociales": "#003f5c",
+    "Facultad de Ciencias Económicas y Empresariales": "#2f4b7c",
+    "Facultad de Contaduría Pública": "#665191",
+    "Facultad de Ciencias de la Salud": "#a05195",
+    "Facultad Integral del Chaco": "#d45087",
+    "Facultad de Bioquímica y Farmacia": "#f95d6a",
+    "Facultad de Tecnología": "#ff7c43",
+    "Facultad de Ciencias Agrícolas": "#ffa600",
+    "Facultad Tecnológica": "#d36135",
+    "Facultad de Informática y Redes": "#b71c1c",
+    "Facultad de Humanidades": "#0d47a1",
+    "Facultad de Ciencias del Hábitat": "#00695c",
+    "Facultad Integral del Noreste": "#4a148c",
+    "Facultad Politécnica": "#33691e",
+
+    // Departamentos
+    "Santa Cruz":  "#008000",
+    "La Paz":      "#0000ff",
+    "Sucre":       "#ff00ff",
+    "Cochabamba":  "#ff0000",
+    "Potosí":      "#00ffff",
+
+    // Edades
+    "18-26": "#b59ed9",
+    "27-58": "#d69ed9",
+    "59+":   "#af65aa"
+};
+
+/* Damos un color fallback (verde lima) a todo lo que no esté en colorMap */
+function getColors(labels) {
+    return labels.map(label => colorMap[label] || "#c0ca33");
+}
+
+/* 
+   Registramos el plugin de DataLabels para mostrar el valor 
+   (%) al final de cada barra horizontal.
+*/
+Chart.register(ChartDataLabels);
+
+/*
+   Función para crear gráficas de barras horizontales con dataLabels y colores asignados.
+*/
+function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
+    const ctx = document.getElementById(idCanvas).getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: datasetLabel,
+                data: data,
+                backgroundColor: getColors(labels),
+                borderColor: '#333333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+                legend: { display: false },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    color: '#333333',
+                    formatter: function(value) {
+                        return value + '%';
+                    }
                 }
-            }
-        });
-    }
-</script>
-
-<!-- 
-    * Función para crear nubes de palabras con d3-cloud.
-    * Se configura el tamaño del contenedor según el ancho real del elemento.
-    * Luego se inicializa el layout con las palabras dadas, la fuente y el tamaño.
-    * Al finalizar, se dibuja un SVG con elementos <text> para cada palabra.
--->
-<script>
-    function crearNubePalabras(idElemento, palabras) {
-        // Definimos el ancho según el elemento contenedor y fijamos un alto deseado.
-        const ancho = document.getElementById(idElemento).offsetWidth;
-        const alto = 300; // Ajustar para que no sea muy alto y no consuma muchos recursos.
-
-        // Configuración inicial del layout de nube de palabras.
-        const layout = d3.layout.cloud()
-            .size([ancho, alto])
-            .words(palabras.map(d => Object.create(d)))
-            .padding(2) // Espacio mínimo entre palabras (para optimizar).
-            .rotate(0) // Sin rotación para consumo menor de recursos.
-            .font('Impact') // Se elige 'Impact' como ejemplo, puede cambiarse a otra fuente.
-            .fontSize(d => d.size) // Tamaño de fuente basado en el valor 'size' de cada palabra.
-            .on('end', dibujar);
-
-        // Ejecutamos el layout.
-        layout.start();
-
-        // Función que dibuja las palabras en un SVG.
-        function dibujar(words) {
-            d3.select('#' + idElemento).html('').append('svg')
-                .attr('width', ancho)
-                .attr('height', alto)
-              .append('g')
-                .attr('transform', 'translate(' + (ancho / 2) + ',' + (alto / 2) + ')')
-              .selectAll('text')
-              .data(words)
-              .enter().append('text')
-                .style('font-family', 'Impact')
-                .style('fill', '#333')
-                .style('font-size', d => d.size + 'px')
-                .attr('text-anchor', 'middle')
-                .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
-                .text(d => d.text);
-        }
-    }
-</script>
-
-<!-- 
-    * Script que renderiza las gráficas de la sección "Características Generales".
-    * Se ejecuta cuando el DOM está cargado ("DOMContentLoaded").
--->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-
-    // Gráfica de Edades de los encuestados.
-    new Chart(document.getElementById('grafica-edad'), {
-        type: 'bar',
-        data: {
-            labels: [
-                ['Entre','18 a 26'],
-                ['Entre','27 a 58'],
-                ['59 años','en adelante']
-            ],
-            datasets: [{
-                label: 'Edad de los Encuestados (%)',
-                data: [57.1, 26.9, 16.0],
-                backgroundColor: ['#264653', '#2a9d8f', '#e9c46a'],
-                borderColor: ['#1d3557', '#21867a', '#d4a341'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {display: false}
             },
             scales: {
                 x: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: { title: { display: true, text: 'Rangos de Edad' } }
-            }
-        }
-    });
-
-    // Gráfica de Facultades.
-    new Chart(document.getElementById('grafica-facultad'), {
-        type: 'bar',
-        data: {
-            labels: [
-                'Facultad de Ciencias Jurídicas, Políticas y Sociales',
-                'Facultad de Ciencias Económicas y Empresariales',
-                'Facultad de Contaduría Pública',
-                'Facultad de Ciencias de la Salud',
-                'Facultad Integral del Chaco',
-                'Facultad de Bioquímica y Farmacia',
-                'Facultad de Tecnología',
-                'Facultad de Ciencias Agrícolas',
-                'Facultad Tecnológica',
-                'Facultad de Informática y Redes',
-                'Facultad de Humanidades',
-                'Facultad de Ciencias del Hábitat',
-                'Facultad Integral del Noreste',
-                'Facultad Politécnica'
-            ],
-            datasets: [{
-                label: 'Facultades participantes (%)',
-                data: [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
-                backgroundColor: [
-                    '#003f5c','#2f4b7c','#665191','#a05195','#d45087','#f95d6a',
-                    '#ff7c43','#ffa600','#5f9ea0','#20b2aa','#3cb371','#6b8e23',
-                    '#4682b4','#708090'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {display: false}
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: { title: { display: true, text: 'Facultades' } }
-            }
-        }
-    });
-
-    // Gráfica de Departamentos de nacimiento.
-    new Chart(document.getElementById('grafica-departamento'), {
-        type: 'bar',
-        data: {
-            labels: ['Santa Cruz', 'La Paz', 'Sucre', 'Cochabamba', 'Potosí'],
-            datasets: [{
-                label: 'Departamento de Nacimiento (%)',
-                data: [83.0, 4.5, 3.2, 3.2, 2.2],
-                backgroundColor: ['#2b5876','#4e4376','#6a3093','#a044ff','#8e54e9'],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {display: false}
-            },
-            scales: {
-                x: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Porcentaje (%)' }
-                },
-                y: {
-                    title: { display: true, text: 'Departamentos' }
+                    beginAtZero: true
                 }
             }
         }
     });
-});
-</script>
+}
 
-<!-- 
-    * Script que renderiza las nubes de palabras para Problemas y Propuestas.
-    * Se ejecuta al cargar el DOM, usando la función crearNubePalabras.
-    * Se usan datos de ejemplo con 'text' y 'size' para cada palabra.
--->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-
-    // Palabras (problemas) con tamaños distintos. Se puede ajustar para optimizar.
-    const palabrasPreocupaciones = [
-        {text:'Economía',size:60},
-        {text:'Sin presupuesto',size:60},
-        {text:'Formación académica deficiente',size:55},
-        {text:'Corrupción',size:50},
-        {text:'Mala calidad académica',size:40},
-        {text:'Sin tecnología e innovación',size:38},
-        {text:'Política interna',size:36},
-        {text:'Elecciones Claustro 2025',size:35},
-        {text:'Reelección facultativa',size:35},
-        {text:'Inestabilidad económica',size:32},
-        {text:'Inestabilidad institucional',size:30},
-        {text:'Acreditación carreras',size:30},
-        {text:'Docentes faltones',size:28},
-        {text:'Capacidad docente',size:26},
-        {text:'Becas',size:24},
-        {text:'Investigación',size:20},
-        {text:'Docentes interinos',size:16},
-        {text:'Extensión',size:14}
-    ];
-
-    // Palabras (propuestas) con tamaños distintos.
-    const palabrasPropuestas = [
-        {text:'Mejorar calidad académica',size:65},
-        {text:'Docentes más preparados',size:50},
-        {text:'Convenios internacionales',size:48},
-        {text:'Hacer investigación',size:45},
-        {text:'Actualizar programas',size:45},
-        {text:'Extensión y vinculación',size:40},
-        {text:'Innovación tecnológica',size:38},
-        {text:'Pasantías estudiantes',size:38},
-        {text:'Presupuesto laboratorios',size:30},
-        {text:'Reducir años estudio',size:24},
-        {text:'Doctorados docentes',size:22},
-        {text:'Becas laboratorios',size:20},
-        {text:'Revistas indexadas',size:14}
-    ];
-
-    // Generamos las nubes con nuestra función.
-    crearNubePalabras('nube-preocupaciones', palabrasPreocupaciones);
-    crearNubePalabras('nube-propuestas', palabrasPropuestas);
-});
-</script>
-
-<!-- 
-    * Script que renderiza las gráficas de la sección "Intención de Voto".
-    * Muestra un ejemplo de favoritismo del electorado.
--->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-
-    // Intención de voto para Rector.
-    crearGrafica('bar','grafica-voto-rector',
-        ['Reinerio Vargas','Vicente Cuéllar','Otros','Indecisos'],
-        [52,28,10,10],
-        'Intención de voto Rector (%)'
+document.addEventListener('DOMContentLoaded', function() {
+    /* Sección A: Características Generales */
+    crearGraficaBarras(
+        'grafica-edad',
+        ['18-26', '27-58', '59+'],
+        [57.1, 26.9, 16.0],
+        'Edad de los Encuestados (%)'
+    );
+    crearGraficaBarras(
+        'grafica-facultad',
+        [
+            "Facultad de Ciencias Jurídicas, Políticas y Sociales",
+            "Facultad de Ciencias Económicas y Empresariales",
+            "Facultad de Contaduría Pública",
+            "Facultad de Ciencias de la Salud",
+            "Facultad Integral del Chaco",
+            "Facultad de Bioquímica y Farmacia",
+            "Facultad de Tecnología",
+            "Facultad de Ciencias Agrícolas",
+            "Facultad Tecnológica",
+            "Facultad de Informática y Redes",
+            "Facultad de Humanidades",
+            "Facultad de Ciencias del Hábitat",
+            "Facultad Integral del Noreste",
+            "Facultad Politécnica"
+        ],
+        [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
+        'Facultades participantes (%)'
+    );
+    crearGraficaBarras(
+        'grafica-departamento',
+        ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
+        [83.0, 4.5, 3.2, 3.2, 2.2],
+        'Departamento de Nacimiento (%)'
     );
 
-    // Preferencia para Vicerrector acompañante de Vargas.
-    crearGrafica('bar','grafica-voto-vicerrector',
-        ['Candidato A','Candidato B','Candidato C','Indecisos'],
-        [40,30,15,15],
-        'Preferencia Vicerrector (%)'
+    /* Sección C: Evaluación de la Gestión */
+    crearGraficaBarras(
+        'grafica-gobierno-general',
+        ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
+        [43.6, 26.3, 12.8, 12.2, 5.1],
+        'Calificación Gobierno Universitario (%)'
+    );
+    crearGraficaBarras(
+        'grafica-rector-general',
+        ['Baja','Media','Nula','Muy baja','Muy alta'],
+        [43.3,27.9,13.8,9.0,6.1],
+        'Opinión sobre Rector Vicente Cuéllar (%)'
+    );
+    crearGraficaBarras(
+        'grafica-vicerrector-general',
+        ['Baja','Media','Muy alta','Nula','Muy baja'],
+        [31.1,28.5,25.6,8.7,6.1],
+        'Opinión sobre Vicerrector Vargas (%)'
+    );
+
+    /* Sección D: Percepción Candidatos */
+    crearGraficaBarras(
+        'grafica-candidato-ganador',
+        ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
+        [50.3,11.2,9.0,6.7,3.8,3.2,15.8],
+        '¿Quién cree que ganará? (%)'
+    );
+    crearGraficaBarras(
+        'grafica-vicerrector-preferido',
+        ['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],
+        [28.2,15.7,11.2,9.6,7.4,27.9],
+        'Candidato preferido a Vicerrector (%)'
+    );
+    crearGraficaBarras(
+        'grafica-candidato-rechazo',
+        ['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],
+        [17.9,17.6,15.4,8.5,9.6,31.0],
+        'Candidato a Rector que NO votaría (%)'
+    );
+    crearGraficaBarras(
+        'grafica-valoracion-vargas',
+        ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
+        [32.1,29.8,17.0,15.1,6.1],
+        'Valoración candidatura Vargas (%)'
+    );
+    crearGraficaBarras(
+        'grafica-aspectos-vargas',
+        ['Defensa democracia','Acreditación','Defensa región','Disminución carga','Declaratoria 0 cargas'],
+        [33.3,22.1,21.2,11.9,11.5],
+        'Aspectos valorados en Vargas (%)'
+    );
+    crearGraficaBarras(
+        'grafica-reeleccion-rector',
+        ['No','Sí'],
+        [71.5,28.5],
+        '¿De acuerdo con reelección Cuéllar? (%)'
+    );
+
+    /* Sección E: Intención de Voto */
+    crearGraficaBarras(
+        'grafica-voto-rector',
+        [
+            'Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar',
+            'Osvaldo Ulloa','Alfonso Coca','Rogelio Espinoza','Orlando Pedraza',
+            'Rolando López','Otros'
+        ],
+        [51.9,10.3,7.7,7.1,3.2,3.8,2.2,1.9,1.9,10.0],
+        'Intención de voto a Rector (%)'
+    );
+    crearGraficaBarras(
+        'grafica-voto-vicerrector',
+        ['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],
+        [28.2,15.7,11.2,7.4,4.2,33.3],
+        'Preferencia acompañante (Vicerrector) (%)'
     );
 });
 </script>
