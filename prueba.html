@@ -54,14 +54,14 @@
 
         /* Ajuste para que las gráficas se vean completas en móviles */
         .chart-placeholder {
-            min-height: 350px;   
-            max-height: 650px;   
+            min-height: 350px;    /* altura mínima para móviles */
+            max-height: 650px;    /* altura máxima en pantallas grandes */
             background-color: #ffffff;
             border-radius: 5px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
             padding: 1rem;
-            overflow-x: auto;    
+            overflow-x: auto;     /* scroll horizontal si las etiquetas son muy largas */
         }
 
         .btn-primary {
@@ -128,14 +128,14 @@
     </div>
 </div>
 
-<!-- Botones de secciones (debajo de la ficha técnica) -->
+<!-- Botones de secciones (debajo de la ficha técnica), ajustados para móvil -->
 <div class="container text-center">
-    <div class="btn-group mb-5" role="group" aria-label="Secciones Resultados">
-        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
-        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
-        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
-        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
-        <button class="btn btn-primary mx-1" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
+    <div class="d-grid gap-2 d-md-flex justify-content-center flex-wrap mb-5" role="group" aria-label="Secciones Resultados">
+        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
+        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
+        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
+        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
+        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
     </div>
 </div>
 
@@ -169,12 +169,13 @@
 
         <h5 class="chart-title">Principales problemas identificados</h5>
         <div class="chart-placeholder text-center">
-            <p class="text-muted">[Aquí podrías colocar una imagen o texto estático con los problemas]</p>
+            <!-- Ajuste para que la imagen ocupe todo el ancho y se vea bien en móvil -->
+            <img src="nube1.png" alt="Nube de palabras sobre problemas" class="img-fluid w-100" style="max-height: 600px; object-fit: contain;">
         </div>
 
         <h5 class="chart-title">Propuestas más mencionadas</h5>
         <div class="chart-placeholder text-center">
-            <p class="text-muted">[Aquí podrías colocar una imagen o texto estático con las propuestas]</p>
+            <img src="nube2.png" alt="Nube de palabras sobre propuestas" class="img-fluid w-100" style="max-height: 600px; object-fit: contain;">
         </div>
     </div>
 
@@ -197,9 +198,9 @@
             <canvas id="grafica-vicerrector-general"></canvas>
         </div>
 
-        <!-- Botón al final que te lleve a las secciones (scroll hacia arriba) -->
+        <!-- Botón para regresar a la parte de arriba en móvil/desktop -->
         <div class="text-center mb-4">
-            <button class="btn btn-secondary mt-3" onclick="window.scrollTo({top:0, behavior:'smooth'});">
+            <button class="btn btn-outline-primary mt-3" onclick="window.scrollTo({top: 0, behavior:'smooth'});">
                 Volver a Secciones
             </button>
         </div>
@@ -238,6 +239,13 @@
         <div class="chart-placeholder">
             <canvas id="grafica-reeleccion-rector"></canvas>
         </div>
+
+        <!-- Botón para regresar arriba -->
+        <div class="text-center mb-4">
+            <button class="btn btn-outline-primary mt-3" onclick="window.scrollTo({top: 0, behavior:'smooth'});">
+                Volver a Secciones
+            </button>
+        </div>
     </div>
 
     <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
@@ -253,6 +261,13 @@
         <div class="chart-placeholder">
             <canvas id="grafica-voto-vicerrector"></canvas>
         </div>
+
+        <!-- Botón para regresar arriba -->
+        <div class="text-center mb-4">
+            <button class="btn btn-outline-primary mt-3" onclick="window.scrollTo({top: 0, behavior:'smooth'});">
+                Volver a Secciones
+            </button>
+        </div>
     </div>
 </div>
 
@@ -267,6 +282,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+/*
+   Función para mostrar/ocultar secciones.
+   Se basa en el id, oculta todas y muestra la que se pide.
+*/
 function mostrarSeccion(id) {
     document.querySelectorAll('.contenido-seccion').forEach((sec) => {
         sec.classList.add('d-none');
@@ -274,40 +293,30 @@ function mostrarSeccion(id) {
     document.getElementById(id).classList.remove('d-none');
 }
 
-/* Registramos el plugin de DataLabels para mostrar el valor (%) */
+/*
+   Registramos el plugin de DataLabels para mostrar el valor
+   (%) al final de cada barra horizontal.
+*/
 Chart.register(ChartDataLabels);
 
-/* 1) Función que genera una paleta degradé de azul (para la sección de Evaluación) */
-function getBluePalette(count) {
-    const startColor = {r:187, g:222, b:251}; // #BBDEFB (azul claro)
-    const endColor   = {r:13,  g:71,  b:161};  // #0D47A1 (azul oscuro)
-    const colors = [];
-    if (count <= 1) {
-        return [`rgb(${startColor.r},${startColor.g},${startColor.b})`];
-    }
-    for (let i = 0; i < count; i++) {
-        const ratio = i / (count - 1);
-        const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
-        const g = Math.round(startColor.g + (endColor.g - startColor.g) * ratio);
-        const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
-        colors.push(`rgb(${r},${g},${b})`);
-    }
-    return colors;
+/*
+   Función para crear gráficas de barras horizontales
+   con DataLabels y un color fallback verde lima (#c0ca33)
+   cuando no se encuentre la etiqueta en el colorMap.
+*/
+
+/* Mapa de colores si hace falta para el futuro */
+const colorMap = {
+    // ... (Si deseas mapear nombres específicos a colores)
+};
+
+/* Genera un array de colores para cada etiqueta: fallback verde lima */
+function getColors(labels) {
+    return labels.map(() => "#c0ca33");
 }
 
-/* 2) Función que retorna un color gris (#999999) para cada etiqueta (fallback anterior) */
-function getGrayPalette(count) {
-    const gray = "#999999";
-    return Array(count).fill(gray);
-}
-
-/* 3) Función principal para crear la gráfica */
-function crearGraficaBarras(idCanvas, labels, data, datasetLabel, isGestion = false) {
+function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
     const ctx = document.getElementById(idCanvas).getContext('2d');
-    // Si es Evaluación Gestión => degrade azul
-    // De lo contrario => gris
-    const backgroundColors = isGestion ? getBluePalette(labels.length) : getGrayPalette(labels.length);
-
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -315,8 +324,8 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel, isGestion = fa
             datasets: [{
                 label: datasetLabel,
                 data: data,
-                backgroundColor: backgroundColors,
-                borderColor: '#333333',
+                backgroundColor: getColors(labels),
+                borderColor: '#333',
                 borderWidth: 1
             }]
         },
@@ -329,28 +338,25 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel, isGestion = fa
                 datalabels: {
                     anchor: 'end',
                     align: 'end',
-                    color: '#333333',
+                    color: '#333',
                     formatter: function(value) {
                         return value + '%';
                     }
                 }
             },
             scales: {
-                x: { beginAtZero: true }
+                x: {
+                    beginAtZero: true
+                }
             }
         }
     });
 }
 
-/* Al cargar el DOM, generamos las gráficas */
 document.addEventListener('DOMContentLoaded', function() {
+    // Sección A: Características Generales
+    crearGraficaBarras('grafica-edad', ['18-26', '27-58', '59+'], [57.1, 26.9, 16.0], 'Edad de los Encuestados (%)');
 
-    // Sección A: Características Generales (gris)
-    crearGraficaBarras('grafica-edad',
-        ['18-26', '27-58', '59+'],
-        [57.1, 26.9, 16.0],
-        'Edad de los Encuestados (%)'
-    );
     crearGraficaBarras('grafica-facultad',
         [
             "Facultad de Ciencias Jurídicas, Políticas y Sociales",
@@ -371,33 +377,31 @@ document.addEventListener('DOMContentLoaded', function() {
         [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
         'Facultades participantes (%)'
     );
-    crearGraficaBarras('grafica-departamento',
+
+    crearGraficaBarras('grafica-departamento', 
         ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
         [83.0, 4.5, 3.2, 3.2, 2.2],
         'Departamento de Nacimiento (%)'
     );
 
-    // Sección C: Evaluación de la Gestión (degradé azul)
+    // Sección C: Evaluación de la Gestión
     crearGraficaBarras('grafica-gobierno-general',
         ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
         [43.6, 26.3, 12.8, 12.2, 5.1],
-        'Calificación Gobierno Universitario (%)',
-        true
+        'Calificación Gobierno Universitario (%)'
     );
     crearGraficaBarras('grafica-rector-general',
         ['Baja','Media','Nula','Muy baja','Muy alta'],
         [43.3,27.9,13.8,9.0,6.1],
-        'Opinión sobre Rector Vicente Cuéllar (%)',
-        true
+        'Opinión sobre Rector Vicente Cuéllar (%)'
     );
     crearGraficaBarras('grafica-vicerrector-general',
         ['Baja','Media','Muy alta','Nula','Muy baja'],
         [31.1,28.5,25.6,8.7,6.1],
-        'Opinión sobre Vicerrector Vargas (%)',
-        true
+        'Opinión sobre Vicerrector Vargas (%)'
     );
 
-    // Sección D: Percepción Candidatos (gris)
+    // Sección D: Percepción Candidatos
     crearGraficaBarras('grafica-candidato-ganador',
         ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
         [50.3,11.2,9.0,6.7,3.8,3.2,15.8],
@@ -429,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '¿De acuerdo con reelección Cuéllar? (%)'
     );
 
-    // Sección E: Intención de Voto (gris)
+    // Sección E: Intención de Voto
     crearGraficaBarras('grafica-voto-rector',
         [
             'Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar',
@@ -446,5 +450,6 @@ document.addEventListener('DOMContentLoaded', function() {
     );
 });
 </script>
+
 </body>
 </html>
