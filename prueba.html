@@ -54,14 +54,14 @@
 
         /* Ajuste para que las gráficas se vean completas en móviles */
         .chart-placeholder {
-            min-height: 350px;    /* altura mínima para móviles */
-            max-height: 650px;    /* altura máxima en pantallas grandes */
+            min-height: 350px;   
+            max-height: 650px;   
             background-color: #ffffff;
             border-radius: 5px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             margin-bottom: 2rem;
             padding: 1rem;
-            overflow-x: auto;     /* scroll horizontal si las etiquetas son muy largas */
+            overflow-x: auto;    
         }
 
         .btn-primary {
@@ -267,10 +267,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* 
-   Función para mostrar/ocultar secciones.
-   Se basa en id, oculta todas y muestra la que se pide.
-*/
 function mostrarSeccion(id) {
     document.querySelectorAll('.contenido-seccion').forEach((sec) => {
         sec.classList.add('d-none');
@@ -278,24 +274,17 @@ function mostrarSeccion(id) {
     document.getElementById(id).classList.remove('d-none');
 }
 
-/* 
-   Registramos el plugin de DataLabels para mostrar el valor 
-   (%) al final de cada barra horizontal.
-*/
+/* Registramos el plugin de DataLabels para mostrar el valor (%) */
 Chart.register(ChartDataLabels);
 
-/*
-   Función para crear gráficas de barras horizontales.
-   - Para Sección C (Evaluación Gestión), usaremos un degradé azul.
-   - Para las demás secciones, usamos el colorMap como fallback.
-*/
-
-/* 1) Función que genera una paleta degradé de azul */
+/* 1) Función que genera una paleta degradé de azul (para la sección de Evaluación) */
 function getBluePalette(count) {
     const startColor = {r:187, g:222, b:251}; // #BBDEFB (azul claro)
-    const endColor   = {r:13,  g:71,  b:161}; // #0D47A1 (azul oscuro)
+    const endColor   = {r:13,  g:71,  b:161};  // #0D47A1 (azul oscuro)
     const colors = [];
-    if (count <= 1) return [`rgb(${startColor.r},${startColor.g},${startColor.b})`];
+    if (count <= 1) {
+        return [`rgb(${startColor.r},${startColor.g},${startColor.b})`];
+    }
     for (let i = 0; i < count; i++) {
         const ratio = i / (count - 1);
         const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
@@ -306,18 +295,18 @@ function getBluePalette(count) {
     return colors;
 }
 
-/* 2) colorMap para las secciones que NO son Evaluación de la Gestión */
-function colorMap(labels) {
-    // Por defecto, verde lima
-    return labels.map(() => "#c0ca33");
+/* 2) Función que retorna un color gris (#999999) para cada etiqueta (fallback anterior) */
+function getGrayPalette(count) {
+    const gray = "#999999";
+    return Array(count).fill(gray);
 }
 
-/* 3) Función principal que crea la gráfica */
+/* 3) Función principal para crear la gráfica */
 function crearGraficaBarras(idCanvas, labels, data, datasetLabel, isGestion = false) {
     const ctx = document.getElementById(idCanvas).getContext('2d');
-    // Si es Evaluación de Gestión => degrade azul
-    // De lo contrario => colorMap verde lima
-    const backgroundColors = isGestion ? getBluePalette(labels.length) : colorMap(labels);
+    // Si es Evaluación Gestión => degrade azul
+    // De lo contrario => gris
+    const backgroundColors = isGestion ? getBluePalette(labels.length) : getGrayPalette(labels.length);
 
     new Chart(ctx, {
         type: 'bar',
@@ -353,17 +342,16 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel, isGestion = fa
     });
 }
 
+/* Al cargar el DOM, generamos las gráficas */
 document.addEventListener('DOMContentLoaded', function() {
 
-    /* Sección A: Características Generales (sin degrade azul) */
-    crearGraficaBarras(
-        'grafica-edad',
+    // Sección A: Características Generales (gris)
+    crearGraficaBarras('grafica-edad',
         ['18-26', '27-58', '59+'],
         [57.1, 26.9, 16.0],
         'Edad de los Encuestados (%)'
     );
-    crearGraficaBarras(
-        'grafica-facultad',
+    crearGraficaBarras('grafica-facultad',
         [
             "Facultad de Ciencias Jurídicas, Políticas y Sociales",
             "Facultad de Ciencias Económicas y Empresariales",
@@ -383,77 +371,66 @@ document.addEventListener('DOMContentLoaded', function() {
         [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
         'Facultades participantes (%)'
     );
-    crearGraficaBarras(
-        'grafica-departamento',
+    crearGraficaBarras('grafica-departamento',
         ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
         [83.0, 4.5, 3.2, 3.2, 2.2],
         'Departamento de Nacimiento (%)'
     );
 
-    /* Sección C: Evaluación de la Gestión (con degrade azul) */
-    crearGraficaBarras(
-        'grafica-gobierno-general',
+    // Sección C: Evaluación de la Gestión (degradé azul)
+    crearGraficaBarras('grafica-gobierno-general',
         ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
         [43.6, 26.3, 12.8, 12.2, 5.1],
         'Calificación Gobierno Universitario (%)',
         true
     );
-    crearGraficaBarras(
-        'grafica-rector-general',
+    crearGraficaBarras('grafica-rector-general',
         ['Baja','Media','Nula','Muy baja','Muy alta'],
         [43.3,27.9,13.8,9.0,6.1],
         'Opinión sobre Rector Vicente Cuéllar (%)',
         true
     );
-    crearGraficaBarras(
-        'grafica-vicerrector-general',
+    crearGraficaBarras('grafica-vicerrector-general',
         ['Baja','Media','Muy alta','Nula','Muy baja'],
         [31.1,28.5,25.6,8.7,6.1],
         'Opinión sobre Vicerrector Vargas (%)',
         true
     );
 
-    /* Sección D: Percepción Candidatos (sin degrade azul) */
-    crearGraficaBarras(
-        'grafica-candidato-ganador',
+    // Sección D: Percepción Candidatos (gris)
+    crearGraficaBarras('grafica-candidato-ganador',
         ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
         [50.3,11.2,9.0,6.7,3.8,3.2,15.8],
         '¿Quién cree que ganará? (%)'
     );
-    crearGraficaBarras(
-        'grafica-vicerrector-preferido',
+    crearGraficaBarras('grafica-vicerrector-preferido',
         ['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],
         [28.2,15.7,11.2,9.6,7.4,27.9],
         'Candidato preferido a Vicerrector (%)'
     );
-    crearGraficaBarras(
-        'grafica-candidato-rechazo',
+    crearGraficaBarras('grafica-candidato-rechazo',
         ['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],
         [17.9,17.6,15.4,8.5,9.6,31.0],
         'Candidato a Rector que NO votaría (%)'
     );
-    crearGraficaBarras(
-        'grafica-valoracion-vargas',
+    crearGraficaBarras('grafica-valoracion-vargas',
         ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
         [32.1,29.8,17.0,15.1,6.1],
         'Valoración candidatura Vargas (%)'
     );
-    crearGraficaBarras(
-        'grafica-aspectos-vargas',
+    crearGraficaBarras('grafica-aspectos-vargas',
         ['Defensa democracia','Acreditación','Defensa región','Disminución carga','Declaratoria 0 cargas'],
         [33.3,22.1,21.2,11.9,11.5],
         'Aspectos valorados en Vargas (%)'
     );
-    crearGraficaBarras(
-        'grafica-reeleccion-rector',
+    crearGraficaBarras('grafica-reeleccion-rector',
         ['No','Sí'],
         [71.5,28.5],
         '¿De acuerdo con reelección Cuéllar? (%)'
     );
 
-    /* Sección E: Intención de Voto (sin degrade azul) */
-    crearGraficaBarras(
-        'grafica-voto-rector',
+    // Sección E: Intención de Voto (gris)
+    crearGraficaBarras('grafica-voto-rector',
         [
             'Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar',
             'Osvaldo Ulloa','Alfonso Coca','Rogelio Espinoza','Orlando Pedraza',
@@ -462,8 +439,7 @@ document.addEventListener('DOMContentLoaded', function() {
         [51.9,10.3,7.7,7.1,3.2,3.8,2.2,1.9,1.9,10.0],
         'Intención de voto a Rector (%)'
     );
-    crearGraficaBarras(
-        'grafica-voto-vicerrector',
+    crearGraficaBarras('grafica-voto-vicerrector',
         ['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],
         [28.2,15.7,11.2,7.4,4.2,33.3],
         'Preferencia acompañante (Vicerrector) (%)'
@@ -472,4 +448,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
-
