@@ -56,6 +56,14 @@
             border-color: var(--secondary-color);
         }
     </style>
+
+    <!-- Chart.js para gráficas -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Librería para nubes de palabras -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-cloud/build/d3.layout.cloud.js"></script>
+
 </head>
 <body>
 
@@ -102,9 +110,9 @@
     <!-- Sección A: Características Generales -->
     <div id="seccion-general" class="contenido-seccion">
         <h3>Características Generales</h3>
-        <div class="chart-placeholder" id="grafica-edad"></div>
-        <div class="chart-placeholder" id="grafica-facultad"></div>
-        <div class="chart-placeholder" id="grafica-departamento"></div>
+        <canva class="chart-placeholder" id="grafica-edad"></div>
+        <canva class="chart-placeholder" id="grafica-facultad"></div>
+        <canva class="chart-placeholder" id="grafica-departamento"></div>
     </div>
 
     <!-- Sección B: Problemas y Propuestas -->
@@ -117,24 +125,24 @@
     <!-- Sección C: Evaluación Gestión -->
     <div id="seccion-gestion" class="contenido-seccion d-none">
         <h3>Evaluación de la Gestión Actual</h3>
-        <div class="chart-placeholder" id="grafica-gobierno"></div>
-        <div class="chart-placeholder" id="grafica-rector"></div>
-        <div class="chart-placeholder" id="grafica-vicerrector"></div>
+        <canva class="chart-placeholder" id="grafica-gobierno"></div>
+        <canva class="chart-placeholder" id="grafica-rector"></div>
+        <canva class="chart-placeholder" id="grafica-vicerrector"></div>
     </div>
 
     <!-- Sección D: Percepción Candidatos -->
     <div id="seccion-candidatos" class="contenido-seccion d-none">
         <h3>Percepción sobre Candidatos</h3>
-        <div class="chart-placeholder" id="grafica-candidato-ganador"></div>
-        <div class="chart-placeholder" id="grafica-vicerrector-fav"></div>
-        <div class="chart-placeholder" id="grafica-rechazo-candidato"></div>
+        <canva class="chart-placeholder" id="grafica-candidato-ganador"></div>
+        <canva class="chart-placeholder" id="grafica-vicerrector-fav"></div>
+        <canva class="chart-placeholder" id="grafica-rechazo-candidato"></div>
     </div>
 
     <!-- Sección E: Intención de Voto -->
     <div id="seccion-voto" class="contenido-seccion d-none">
         <h3>Intención de Voto</h3>
-        <div class="chart-placeholder" id="grafica-voto-rector"></div>
-        <div class="chart-placeholder" id="grafica-voto-vicerrector"></div>
+        <canva class="chart-placeholder" id="grafica-voto-rector"></div>
+        <canva class="chart-placeholder" id="grafica-voto-vicerrector"></div>
     </div>
 
 </div>
@@ -158,5 +166,67 @@ function mostrarSeccion(id) {
 }
 </script>
 
+<script>
+// Función para crear gráficas con Chart.js
+function crearGrafica(tipo, idCanvas, etiquetas, datos, titulo){
+    const ctx = document.getElementById(idCanvas).getContext('2d');
+    new Chart(ctx, {
+        type: tipo,
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: titulo,
+                data: datos,
+                backgroundColor: '#666666',
+                borderColor: '#333333',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+// Función para crear nube de palabras con d3-cloud
+function crearNubePalabras(idElemento, palabras) {
+    const layout = d3.layout.cloud()
+        .size([document.getElementById(idElemento).offsetWidth, 400])
+        .words(palabras.map(d => ({text: d.text, size: d.size})))
+        .padding(5)
+        .rotate(() => (~~(Math.random() * 2) * 90))
+        .fontSize(d => d.size)
+        .on("end", dibujar);
+
+    layout.start();
+
+    function dibujar(words) {
+        d3.select("#" + idElemento).html('').append("svg")
+            .attr("width", layout.size()[0])
+            .attr("height", layout.size()[1])
+            .append("g")
+            .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+            .selectAll("text")
+            .data(words)
+            .enter().append("text")
+            .style("font-size", d => d.size + "px")
+            .style("font-family", "Poppins")
+            .style("fill", "#333333")
+            .attr("text-anchor", "middle")
+            .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+            .text(d => d.text);
+    }
+}
+
+// Aquí se llamarán todas las funciones para crear gráficos cuando ya estén disponibles los datos.
+// Ejemplo:
+// crearGrafica('bar', 'grafica-edad', ['18-24', '25-34', '35-44'], [150, 350, 320], 'Edad de encuestados');
+</script>
+
+    
 </body>
 </html>
