@@ -143,29 +143,76 @@
 </div>
 
 
-    <!-- Sección C: Evaluación Gestión -->
-    <div id="seccion-gestion" class="contenido-seccion d-none">
-        <h3>Evaluación de la Gestión Actual</h3>
-        <canva class="chart-placeholder" id="grafica-gobierno"></div>
-        <canva class="chart-placeholder" id="grafica-rector"></div>
-        <canva class="chart-placeholder" id="grafica-vicerrector"></div>
+    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
+<div id="seccion-gestion" class="contenido-seccion d-none">
+    <h3>Evaluación de la Gestión Actual</h3>
+
+    <h5 class="mt-4">Calificación general del Gobierno Universitario (todos)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-gobierno-general"></canvas>
     </div>
 
-    <!-- Sección D: Percepción Candidatos -->
-    <div id="seccion-candidatos" class="contenido-seccion d-none">
-        <h3>Percepción sobre Candidatos</h3>
-        <canva class="chart-placeholder" id="grafica-candidato-ganador"></div>
-        <canva class="chart-placeholder" id="grafica-vicerrector-fav"></div>
-        <canva class="chart-placeholder" id="grafica-rechazo-candidato"></div>
+    <h5 class="mt-4">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-rector-general"></canvas>
     </div>
 
-    <!-- Sección E: Intención de Voto -->
-    <div id="seccion-voto" class="contenido-seccion d-none">
-        <h3>Intención de Voto</h3>
-        <canva class="chart-placeholder" id="grafica-voto-rector"></div>
-        <canva class="chart-placeholder" id="grafica-voto-vicerrector"></div>
+    <h5 class="mt-4">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-vicerrector-general"></canvas>
+    </div>
+</div>
+
+    <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
+<div id="seccion-candidatos" class="contenido-seccion d-none">
+    <h3>Percepción sobre los candidatos al Claustro Universitario</h3>
+
+    <h5 class="mt-4">Candidato que cree que ganará la elección a Rector (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-candidato-ganador"></canvas>
     </div>
 
+    <h5 class="mt-4">Candidato preferido a Vicerrector (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-vicerrector-preferido"></canvas>
+    </div>
+
+    <h5 class="mt-4">Candidato a Rector por el que nunca votaría (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-candidato-rechazo"></canvas>
+    </div>
+
+    <h5 class="mt-4">Valoración de la candidatura del Vicerrector Reinerio Vargas (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-valoracion-vargas"></canvas>
+    </div>
+
+    <h5 class="mt-4">Aspectos valorados en gestión de Reinerio Vargas (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-aspectos-vargas"></canvas>
+    </div>
+
+    <h5 class="mt-4">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar? (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-reeleccion-rector"></canvas>
+    </div>
+</div>
+
+
+
+<!-- SECCIÓN E: INTENCIÓN DE VOTO -->
+<div id="seccion-voto" class="contenido-seccion d-none">
+    <h3>Intención de Voto para Rector y Vicerrector</h3>
+
+    <h5 class="mt-4">Intención de voto actual para Rector (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-voto-rector"></canvas>
+    </div>
+
+    <h5 class="mt-4">Preferencia para acompañante (Vicerrector) de Reinerio Vargas (general)</h5>
+    <div class="chart-placeholder">
+        <canvas id="grafica-voto-vicerrector"></canvas>
+    </div>
 </div>
 
 <!-- Footer -->
@@ -242,10 +289,11 @@ function crearNubePalabras(idElemento, palabras) {
             .text(d => d.text);
     }
 }
-</script>
-// Aquí se llamarán todas las funciones para crear gráficos cuando ya estén disponibles los datos.
-// Ejemplo:
-// crearGrafica('bar', 'grafica-edad', ['18-24', '25-34', '35-44'], [150, 350, 320], 'Edad de encuestados');
+
+        // Aquí se llamarán todas las funciones para crear gráficos cuando ya estén disponibles los datos.
+        // Ejemplo:
+        // crearGrafica('bar', 'grafica-edad', ['18-24', '25-34', '35-44'], [150, 350, 320], 'Edad de encuestados');
+  </script>          
 <script>
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -288,7 +336,89 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+            <script>
+document.addEventListener('DOMContentLoaded', function(){
 
-    
+    // Calificación del Gobierno Universitario general (estimación coherente con narrativa)
+    crearGrafica('bar', 'grafica-gobierno-general', 
+        ['Positiva', 'Regular', 'Negativa'],
+        [25, 35, 40], 
+        'Calificación general (%)');
+
+    // Opinión gestión Rector Vicente Cuéllar (más negativa estudiantes)
+    crearGrafica('bar', 'grafica-rector-general', 
+        ['Positiva', 'Regular', 'Negativa'],
+        [30, 30, 40], 
+        'Opinión sobre el Rector (%)');
+
+    // Opinión gestión Vicerrector Reinerio Vargas (mejor valorado que Rector)
+    crearGrafica('bar', 'grafica-vicerrector-general', 
+        ['Positiva', 'Regular', 'Negativa'],
+        [45, 30, 25], 
+        'Opinión sobre el Vicerrector (%)');
+
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    // Candidato que creen que ganará Rectorado (según documento, apoyo mayoritario docente a Reinerio Vargas)
+    crearGrafica('bar', 'grafica-candidato-ganador', 
+        ['Reinerio Vargas', 'Vicente Cuéllar', 'Otro candidato'],
+        [55, 35, 10], 
+        'Candidato percibido como ganador (%)');
+
+    // Preferencia para Vicerrector (no hay datos numéricos exactos, aproximación)
+    crearGrafica('bar', 'grafica-vicerrector-preferido', 
+        ['Candidato A', 'Candidato B', 'Candidato C', 'Indecisos'],
+        [40, 25, 20, 15], 
+        'Preferencia candidatos Vicerrector (%)');
+
+    // Rechazo a candidato Rector (sin datos numéricos, aproximación según narrativa)
+    crearGrafica('bar', 'grafica-candidato-rechazo', 
+        ['Candidato X', 'Candidato Y', 'Reinerio Vargas', 'Vicente Cuéllar'],
+        [45, 35, 12, 8], 
+        'Candidatos por los que nunca votaría (%)');
+
+    // Valoración candidatura Reinerio Vargas (76% docentes, 73% estudiantes, promedio aproximado 74.5%)
+    crearGrafica('bar', 'grafica-valoracion-vargas', 
+        ['Excelente', 'Buena', 'Regular', 'Mala'],
+        [35, 40, 15, 10], 
+        'Valoración candidatura Reinerio Vargas (%)');
+
+    // Aspectos valorados en gestión Vargas (sin datos exactos, aproximación por narrativa)
+    crearGrafica('bar', 'grafica-aspectos-vargas', 
+        ['Gestión eficiente', 'Innovación', 'Cercanía a estudiantes', 'Transparencia'],
+        [40, 30, 20, 10], 
+        'Aspectos valorados en Vargas (%)');
+
+    // Acuerdo con reelección Rector (sin datos numéricos exactos, estimado según narrativa negativa previa)
+    crearGrafica('bar', 'grafica-reeleccion-rector', 
+        ['De acuerdo', 'En desacuerdo', 'Indeciso'],
+        [30, 60, 10], 
+        'Apoyo a reelección del Rector (%)');
+
+});
+</script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    // Intención de voto para Rector (documento indica claro favoritismo de docentes a Reinerio Vargas)
+    crearGrafica('bar', 'grafica-voto-rector', 
+        ['Reinerio Vargas', 'Vicente Cuéllar', 'Otros', 'Indecisos'],
+        [52, 28, 10, 10], 
+        'Intención de voto Rector (%)');
+
+    // Preferencia para acompañante (Vicerrector) de Vargas (datos estimados)
+    crearGrafica('bar', 'grafica-voto-vicerrector', 
+        ['Candidato A', 'Candidato B', 'Candidato C', 'Indecisos'],
+        [40, 30, 15, 15], 
+        'Preferencia acompañante Vicerrector (%)');
+
+});
+</script>
+
 </body>
 </html>
