@@ -30,7 +30,6 @@
             color: var(--text-color);
             line-height: 1.6;
         }
-
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
         }
@@ -54,7 +53,7 @@
 
         /* Ajuste para que las gráficas se vean completas en móviles */
         .chart-placeholder {
-            min-height: 350px;  /* altura mínima en pantallas pequeñas */
+            min-height: 350px;  /* altura mínima para móviles */
             max-height: 650px;  /* altura máxima en pantallas grandes */
             background-color: #ffffff;
             border-radius: 5px;
@@ -87,6 +86,11 @@
             margin-top: 1.5rem;
             margin-bottom: 1rem;
             font-weight: 600;
+        }
+
+        /* Ocultamos por clase, cuando se requiera */
+        .d-none {
+            display: none !important;
         }
 
         /* Optimización tamaño nube de palabras en móvil */
@@ -174,7 +178,8 @@
 <div class="container section">
     <h2 class="text-center mb-5">Resultados Detallados</h2>
 
-    <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES -->
+    <!-- ===================================================== -->
+    <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES (SIN CAMBIOS) -->
     <div id="seccion-general" class="contenido-seccion">
         <h3 class="chart-title">Características Generales de los Encuestados</h3>
 
@@ -193,8 +198,9 @@
             <canvas id="grafica-departamento"></canvas>
         </div>
     </div>
+    <!-- ===================================================== -->
 
-    <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS -->
+    <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS (SIN CAMBIOS) -->
     <div id="seccion-problemas" class="contenido-seccion d-none">
         <h3 class="chart-title">Problemas y Propuestas de mejora en la UAGRM</h3>
 
@@ -211,84 +217,172 @@
         </div>
     </div>
 
-    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN (solo 1 gráfica con Docentes/Estudiantes) -->
+    <!-- ===================================================== -->
+    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
     <div id="seccion-gestion" class="contenido-seccion d-none">
         <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
-        
-        <!-- Botones de cambio (Docentes / Estudiantes) -->
+
+        <!-- Botones para alternar TOTAL / DOCENTES / ESTUDIANTES -->
         <div class="text-center mb-3">
-            <button class="btn btn-secondary btn-sm" onclick="mostrarGrafica('gestion','doc')">Docentes</button>
-            <button class="btn btn-secondary btn-sm" onclick="mostrarGrafica('gestion','est')">Estudiantes</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('gestion','total')">Total</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('gestion','doc')">Docentes</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('gestion','est')">Estudiantes</button>
         </div>
-        
-        <!-- Gráfica DOCENTES (visible por defecto) -->
-        <div id="gestion-doc">
-            <h5 class="chart-title">Calificación Gobierno Universitario (Docentes)</h5>
-            <div class="chart-placeholder">
-                <canvas id="grafica-gestion-doc"></canvas>
-            </div>
+
+        <!-- Calificación del Gobierno Universitario -->
+        <h5 class="chart-title">Calificación del Gobierno Universitario</h5>
+        <!-- Total (del código original) -->
+        <div class="chart-placeholder gestion-total">
+            <canvas id="grafica-gobierno-general"></canvas>
         </div>
-        
-        <!-- Gráfica ESTUDIANTES (oculta inicialmente) -->
-        <div id="gestion-est" class="d-none">
-            <h5 class="chart-title">Calificación Gobierno Universitario (Estudiantes)</h5>
-            <div class="chart-placeholder">
-                <canvas id="grafica-gestion-est"></canvas>
-            </div>
+        <!-- Docentes (datos simulados) -->
+        <div class="chart-placeholder gestion-doc d-none">
+            <canvas id="grafica-gobierno-doc"></canvas>
+        </div>
+        <!-- Estudiantes (datos simulados) -->
+        <div class="chart-placeholder gestion-est d-none">
+            <canvas id="grafica-gobierno-est"></canvas>
+        </div>
+
+        <!-- Opinión sobre la gestión del Rector -->
+        <h5 class="chart-title">Opinión Rector Vicente Cuéllar</h5>
+        <div class="chart-placeholder gestion-total">
+            <canvas id="grafica-rector-general"></canvas>
+        </div>
+        <div class="chart-placeholder gestion-doc d-none">
+            <canvas id="grafica-rector-doc"></canvas>
+        </div>
+        <div class="chart-placeholder gestion-est d-none">
+            <canvas id="grafica-rector-est"></canvas>
+        </div>
+
+        <!-- Opinión sobre la gestión del Vicerrector -->
+        <h5 class="chart-title">Opinión Vicerrector Reinerio Vargas</h5>
+        <div class="chart-placeholder gestion-total">
+            <canvas id="grafica-vicerrector-general"></canvas>
+        </div>
+        <div class="chart-placeholder gestion-doc d-none">
+            <canvas id="grafica-vicerrector-doc"></canvas>
+        </div>
+        <div class="chart-placeholder gestion-est d-none">
+            <canvas id="grafica-vicerrector-est"></canvas>
         </div>
     </div>
+    <!-- ===================================================== -->
 
-    <!-- SECCIÓN D: PERCEPCIÓN CANDIDATOS (1 gráfica con Docentes/Estudiantes) -->
+    <!-- SECCIÓN D: PERCEPCIÓN CANDIDATOS -->
     <div id="seccion-candidatos" class="contenido-seccion d-none">
-        <h3 class="chart-title">Percepción Candidatos</h3>
-        
+        <h3 class="chart-title">Percepción sobre los Candidatos</h3>
+
+        <!-- Tres botones -->
         <div class="text-center mb-3">
-            <button class="btn btn-secondary btn-sm" onclick="mostrarGrafica('candidatos','doc')">Docentes</button>
-            <button class="btn btn-secondary btn-sm" onclick="mostrarGrafica('candidatos','est')">Estudiantes</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('candidatos','total')">Total</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('candidatos','doc')">Docentes</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('candidatos','est')">Estudiantes</button>
         </div>
 
-        <!-- Docentes visible por defecto -->
-        <div id="candidatos-doc">
-            <h5 class="chart-title">Candidato preferido a Rector (Docentes)</h5>
-            <div class="chart-placeholder">
-                <canvas id="grafica-candidatos-doc"></canvas>
-            </div>
+        <h5 class="chart-title">¿Quién cree que ganará la elección a Rector?</h5>
+        <div class="chart-placeholder candidatos-total">
+            <canvas id="grafica-candidato-ganador"></canvas>
         </div>
-        
-        <!-- Estudiantes oculto -->
-        <div id="candidatos-est" class="d-none">
-            <h5 class="chart-title">Candidato preferido a Rector (Estudiantes)</h5>
-            <div class="chart-placeholder">
-                <canvas id="grafica-candidatos-est"></canvas>
-            </div>
+        <div class="chart-placeholder candidatos-doc d-none">
+            <canvas id="grafica-candidato-doc"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-est d-none">
+            <canvas id="grafica-candidato-est"></canvas>
+        </div>
+
+        <h5 class="chart-title">Candidato preferido a Vicerrector</h5>
+        <div class="chart-placeholder candidatos-total">
+            <canvas id="grafica-vicerrector-preferido"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-doc d-none">
+            <canvas id="grafica-vicerrector-doc"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-est d-none">
+            <canvas id="grafica-vicerrector-est"></canvas>
+        </div>
+
+        <h5 class="chart-title">Candidato a Rector que NUNCA votaría</h5>
+        <div class="chart-placeholder candidatos-total">
+            <canvas id="grafica-candidato-rechazo"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-doc d-none">
+            <canvas id="grafica-rechazo-doc"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-est d-none">
+            <canvas id="grafica-rechazo-est"></canvas>
+        </div>
+
+        <h5 class="chart-title">Valoración de la candidatura de Reinerio Vargas</h5>
+        <div class="chart-placeholder candidatos-total">
+            <canvas id="grafica-valoracion-vargas"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-doc d-none">
+            <canvas id="grafica-valoracion-doc"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-est d-none">
+            <canvas id="grafica-valoracion-est"></canvas>
+        </div>
+
+        <h5 class="chart-title">Aspectos valorados en la gestión de Vargas</h5>
+        <div class="chart-placeholder candidatos-total">
+            <canvas id="grafica-aspectos-vargas"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-doc d-none">
+            <canvas id="grafica-aspectos-doc"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-est d-none">
+            <canvas id="grafica-aspectos-est"></canvas>
+        </div>
+
+        <h5 class="chart-title">¿Está de acuerdo con la reelección del Rector Cuéllar?</h5>
+        <div class="chart-placeholder candidatos-total">
+            <canvas id="grafica-reeleccion-rector"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-doc d-none">
+            <canvas id="grafica-reeleccion-doc"></canvas>
+        </div>
+        <div class="chart-placeholder candidatos-est d-none">
+            <canvas id="grafica-reeleccion-est"></canvas>
         </div>
     </div>
+    <!-- ===================================================== -->
 
-    <!-- SECCIÓN E: INTENCIÓN DE VOTO (1 gráfica con Docentes/Estudiantes) -->
+    <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
     <div id="seccion-voto" class="contenido-seccion d-none">
         <h3 class="chart-title">Intención de Voto</h3>
-        
+
+        <!-- Tres botones -->
         <div class="text-center mb-3">
-            <button class="btn btn-secondary btn-sm" onclick="mostrarGrafica('voto','doc')">Docentes</button>
-            <button class="btn btn-secondary btn-sm" onclick="mostrarGrafica('voto','est')">Estudiantes</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('voto','total')">Total</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('voto','doc')">Docentes</button>
+            <button class="btn btn-secondary btn-sm" onclick="mostrarTipo('voto','est')">Estudiantes</button>
         </div>
 
-        <!-- Docentes -->
-        <div id="voto-doc">
-            <h5 class="chart-title">Intención de Voto a Rector (Docentes)</h5>
-            <div class="chart-placeholder">
-                <canvas id="grafica-voto-doc"></canvas>
-            </div>
+        <h5 class="chart-title">Intención de voto actual para Rector</h5>
+        <div class="chart-placeholder voto-total">
+            <canvas id="grafica-voto-rector"></canvas>
         </div>
-        
-        <!-- Estudiantes -->
-        <div id="voto-est" class="d-none">
-            <h5 class="chart-title">Intención de Voto a Rector (Estudiantes)</h5>
-            <div class="chart-placeholder">
-                <canvas id="grafica-voto-est"></canvas>
-            </div>
+        <div class="chart-placeholder voto-doc d-none">
+            <canvas id="grafica-voto-doc"></canvas>
+        </div>
+        <div class="chart-placeholder voto-est d-none">
+            <canvas id="grafica-voto-est"></canvas>
+        </div>
+
+        <h5 class="chart-title">Preferencia de acompañante (Vicerrector) de Reinerio Vargas</h5>
+        <div class="chart-placeholder voto-total">
+            <canvas id="grafica-voto-vicerrector"></canvas>
+        </div>
+        <div class="chart-placeholder voto-doc d-none">
+            <canvas id="grafica-voto-vic-doc"></canvas>
+        </div>
+        <div class="chart-placeholder voto-est d-none">
+            <canvas id="grafica-voto-vic-est"></canvas>
         </div>
     </div>
+    <!-- ===================================================== -->
 </div>
 
 <!-- Footer -->
@@ -303,45 +397,64 @@
 
 <script>
 /* 
-   1) Función para mostrar/ocultar secciones principales (A, B, C, D, E).
+   1) Mostrar/ocultar secciones principales A,B,C,D,E 
 */
 function mostrarSeccion(id) {
-    document.querySelectorAll('.contenido-seccion').forEach((sec) => {
+    document.querySelectorAll('.contenido-seccion').forEach(sec => {
         sec.classList.add('d-none');
     });
     document.getElementById(id).classList.remove('d-none');
 }
 
 /*
-   2) Función para alternar entre Docentes y Estudiantes
-      en la misma sección (C, D, E). 
-      Ejemplo de uso: mostrarGrafica('gestion','doc')
+   2) Función para alternar TOTAL / DOC / EST en cada sección (C, D, E).
+   - sección -> string: 'gestion', 'candidatos', 'voto'
+   - tipo    -> string: 'total', 'doc', 'est'
 */
-function mostrarGrafica(seccion, tipo) {
-    // 1. Oculta ambos div: doc, est
-    document.getElementById(seccion + '-doc').classList.add('d-none');
-    document.getElementById(seccion + '-est').classList.add('d-none');
-    
-    // 2. Muestra solo el div que corresponde al botón pulsado
-    document.getElementById(seccion + '-' + tipo).classList.remove('d-none');
+function mostrarTipo(seccion, tipo) {
+    // Ocultar todo (las 3 clases)
+    document.querySelectorAll('.' + seccion + '-total').forEach(el => el.classList.add('d-none'));
+    document.querySelectorAll('.' + seccion + '-doc').forEach(el => el.classList.add('d-none'));
+    document.querySelectorAll('.' + seccion + '-est').forEach(el => el.classList.add('d-none'));
+
+    // Mostrar solo el tipo seleccionado
+    document.querySelectorAll('.' + seccion + '-' + tipo).forEach(el => el.classList.remove('d-none'));
 }
 
 /*
-   3) Mapa de colores global y fallback
+   3) Mapa de colores y fallback
 */
 const colorMap = {
-  "Excelente":"#1a9850",
-  "Bueno":    "#66bd63",
-  "Regular":  "#fdae61",
-  "Malo":     "#d73027",
-  "Pésimo":   "#a50026",
+    "Reinerio Vargas": "#FFD700", 
+    "Vicente Cuéllar": "#228B22",
+    "Juana Borja":     "#FF69B4",
+    "Oscar Nogales":   "#6495ED",
+    "Orlando Pedraza": "#8A2BE2",
+    "Alfonso Coca":    "#FFA500",
+    "Osvaldo Ulloa":   "#A52A2A",
+    "Rogelio Espinoza":"#009999",
+    "Rolando López":   "#800000",
+    "Otros":           "#BA55D3",
 
-  "18-26": "#b59ed9",
-  "27-58": "#d69ed9",
-  "59+":   "#af65aa",
+    "Excelente":"#1a9850",
+    "Bueno":    "#66bd63",
+    "Regular":  "#fdae61",
+    "Malo":     "#d73027",
+    "Pésimo":   "#a50026",
 
-  "Otros": "#BA55D3"
-  // Agrega los que necesites...
+    "Muy alta": "#1a9850",
+    "Media":    "#fdae61",
+    "Baja":     "#fee08b",
+    "Muy baja": "#d73027",
+    "Nula":     "#f46d43",
+
+    "Bien":      "#66c2a5",
+    "No acuerdo":"#fc8d62",
+    "Muy bien":  "#8da0cb",
+    "Muy mal":   "#e78ac3",
+
+    "Sí": "#1a9641",
+    "No": "#d7191c"
 };
 
 function getColors(labels) {
@@ -349,8 +462,7 @@ function getColors(labels) {
 }
 
 /*
-   4) Registro plugin DataLabels y
-      función para crear gráficas de barras horizontales.
+   4) Registrar plugin DataLabels + crearGraficaBarras()
 */
 Chart.register(ChartDataLabels);
 
@@ -378,88 +490,206 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
                     anchor: 'end',
                     align: 'end',
                     color: 'black',
-                    formatter: (value) => value + '%'
+                    formatter: value => value + '%'
                 }
             },
             scales: {
-                x: {
-                    beginAtZero: true
-                }
+                x: { beginAtZero: true }
             }
         }
     });
 }
 
 /*
-   5) Graficamos al cargar la página.
-      Usamos datos simulados para DOCENTES y ESTUDIANTES en
-      las 3 secciones finales. Tú podrás cambiarlos luego.
+   5) Lógica principal: cargamos datos
+      - Secciones A, B (total) se mantienen sin cambios
+      - Secciones C, D, E: 
+        * "Total" = datos originales
+        * "Doc" y "Est" = datos simulados
 */
 document.addEventListener('DOMContentLoaded', function() {
-    /* ====== SECCIÓN A (igual que antes) ====== */
-    crearGraficaBarras(
-        'grafica-edad',
-        ['18-26', '27-58', '59+'],
-        [57.1, 26.9, 16.0],
-        'Edad de los Encuestados (%)'
+    /* ===== SECCIÓN A (tal cual) ===== */
+    crearGraficaBarras('grafica-edad',
+       ['18-26', '27-58', '59+'], [57.1, 26.9, 16.0], 'Edad de los Encuestados (%)');
+
+    crearGraficaBarras('grafica-facultad',
+       ["F. de Ciencias Jurídicas, Políticas y Sociales","F. de Ciencias Económicas y Empresariales",
+        "F. de Contaduría Pública","F. de Ciencias de la Salud","F. Integral del Chaco","F. de Bioquímica y Farmacia",
+        "F. de Tecnología","F. de Ciencias Agrícolas","F. Tecnológica","F. de Informática y Redes","F. de Humanidades",
+        "F. de Ciencias del Hábitat","F. Integral del Noreste","F. Politécnica"],
+       [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
+       'Facultades participantes (%)'
     );
 
-    crearGraficaBarras(
-        'grafica-facultad',
-        ["F. de Jurídicas","F. de Económicas","F. de Salud","F. Integral","F. Informática","F. Politécnica","Otros"],
-        [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 26.2],
-        'Facultades participantes (%)'
+    crearGraficaBarras('grafica-departamento',
+       ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'], [83.0, 4.5, 3.2, 3.2, 2.2],
+       'Departamento de Nacimiento (%)'
     );
 
-    crearGraficaBarras(
-        'grafica-departamento',
-        ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
-        [83.0, 4.5, 3.2, 3.2, 2.2],
-        'Departamento de Nacimiento (%)'
+    /* ===== SECCIÓN C: EVALUACIÓN DE LA GESTIÓN ===== */
+    // Total (datos originales)
+    crearGraficaBarras('grafica-gobierno-general',
+       ['Excelente','Bueno','Regular','Malo','Pésimo'], [5.1, 26.3, 43.6, 12.8, 12.2],
+       'Calificación Gobierno Universitario (%)'
+    );
+    crearGraficaBarras('grafica-rector-general',
+       ['Muy alta','Media','Baja','Muy baja','Nula'], [6.1, 27.9, 43.3, 9.0, 13.8],
+       'Opinión Rector Cuéllar (%)'
+    );
+    crearGraficaBarras('grafica-vicerrector-general',
+       ['Muy alta','Media','Baja','Muy baja','Nula'], [25.6, 28.5, 31.1, 6.1, 8.7],
+       'Opinión Vicerrector Vargas (%)'
     );
 
-    /* ====== SECCIÓN C: EVALUACIÓN GESTIÓN (doc / est) ====== */
-    // Datos "docentes" (simulados)
-    crearGraficaBarras(
-        'grafica-gestion-doc',
-        ['Excelente','Bueno','Regular','Malo','Pésimo'],
-        [10, 30, 40, 15, 5],
-        'Evaluación Docentes'
+    // Docentes (simulados)
+    crearGraficaBarras('grafica-gobierno-doc',
+       ['Excelente','Bueno','Regular','Malo','Pésimo'], [10, 35, 30, 15, 10],
+       'Gobierno Universitario (Docentes)'
     );
-    // Datos "estudiantes" (simulados)
-    crearGraficaBarras(
-        'grafica-gestion-est',
-        ['Excelente','Bueno','Regular','Malo','Pésimo'],
-        [5, 20, 45, 20, 10],
-        'Evaluación Estudiantes'
+    crearGraficaBarras('grafica-rector-doc',
+       ['Muy alta','Media','Baja','Muy baja','Nula'], [12, 30, 36, 10, 12],
+       'Rector (Docentes)'
+    );
+    crearGraficaBarras('grafica-vicerrector-doc',
+       ['Muy alta','Media','Baja','Muy baja','Nula'], [28, 25, 30, 10, 7],
+       'Vicerrector (Docentes)'
     );
 
-    /* ====== SECCIÓN D: PERCEPCIÓN CANDIDATOS (doc / est) ====== */
-    crearGraficaBarras(
-        'grafica-candidatos-doc',
-        ['Vargas','Cuéllar','Nogales','Borja','Otros'],
-        [40, 25, 10, 15, 10],
-        'Preferencia Rector (Docentes)'
+    // Estudiantes (simulados)
+    crearGraficaBarras('grafica-gobierno-est',
+       ['Excelente','Bueno','Regular','Malo','Pésimo'], [3, 20, 45, 20, 12],
+       'Gobierno Universitario (Estudiantes)'
     );
-    crearGraficaBarras(
-        'grafica-candidatos-est',
-        ['Vargas','Cuéllar','Nogales','Borja','Otros'],
-        [50, 15, 5, 20, 10],
-        'Preferencia Rector (Estudiantes)'
+    crearGraficaBarras('grafica-rector-est',
+       ['Muy alta','Media','Baja','Muy baja','Nula'], [5, 25, 40, 20, 10],
+       'Rector (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-vicerrector-est',
+       ['Muy alta','Media','Baja','Muy baja','Nula'], [20, 30, 35, 5, 10],
+       'Vicerrector (Estudiantes)'
     );
 
-    /* ====== SECCIÓN E: INTENCIÓN DE VOTO (doc / est) ====== */
-    crearGraficaBarras(
-        'grafica-voto-doc',
-        ['Vargas','Cuéllar','Nogales','Otros'],
-        [45, 20, 10, 25],
-        'Intención de Voto (Docentes)'
+    /* ===== SECCIÓN D: PERCEPCIÓN CANDIDATOS ===== */
+    // Total (original)
+    crearGraficaBarras('grafica-candidato-ganador',
+       ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
+       [50.3,11.2,9.0,6.7,3.8,3.2,15.8],
+       '¿Quién cree que ganará? (%)'
     );
-    crearGraficaBarras(
-        'grafica-voto-est',
-        ['Vargas','Cuéllar','Nogales','Otros'],
-        [55, 10, 10, 25],
-        'Intención de Voto (Estudiantes)'
+    crearGraficaBarras('grafica-vicerrector-preferido',
+       ['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],
+       [28.2,15.7,11.2,9.6,7.4,27.9],
+       'Candidato preferido a Vicerrector (%)'
+    );
+    crearGraficaBarras('grafica-candidato-rechazo',
+       ['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],
+       [17.9,17.6,15.4,8.5,9.6,31.0],
+       'Candidato a Rector que NO votaría (%)'
+    );
+    crearGraficaBarras('grafica-valoracion-vargas',
+       ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
+       [32.1,29.8,17.0,15.1,6.1],
+       'Valoración Vargas (%)'
+    );
+    crearGraficaBarras('grafica-aspectos-vargas',
+       ['Defensa democracia','Acreditación','Defensa región','Disminución carga','Declaratoria 0 cargas'],
+       [33.3,22.1,21.2,11.9,11.5],
+       'Aspectos valorados Vargas (%)'
+    );
+    crearGraficaBarras('grafica-reeleccion-rector',
+       ['No','Sí'], [71.5,28.5],
+       'Reelección Cuéllar (%)'
+    );
+
+    // Docentes (simulados)
+    crearGraficaBarras('grafica-candidato-doc',
+       ['Vargas','Cuéllar','Borja','Nogales','Otros'], [45, 20, 10, 15, 10],
+       'Ganará (Docentes)'
+    );
+    crearGraficaBarras('grafica-vicerrector-doc',
+       ['Borja','Pedraza','Nogales','Otros'], [30, 20, 25, 25],
+       'Pref. Vicerrector (Docentes)'
+    );
+    crearGraficaBarras('grafica-rechazo-doc',
+       ['Cuéllar','Coca','Nogales','Vargas','Otros'], [15, 18, 10, 12, 45],
+       'Rechazo (Docentes)'
+    );
+    crearGraficaBarras('grafica-valoracion-doc',
+       ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
+       [35,30,15,10,10],
+       'Valoración Vargas (Docentes)'
+    );
+    crearGraficaBarras('grafica-aspectos-doc',
+       ['Defensa democracia','Acreditación','Defensa región','Disminución carga','0 cargas'],
+       [35,20,20,15,10],
+       'Aspectos Vargas (Docentes)'
+    );
+    crearGraficaBarras('grafica-reeleccion-doc',
+       ['No','Sí'], [60,40],
+       'Reelección Cuéllar (Docentes)'
+    );
+
+    // Estudiantes (simulados)
+    crearGraficaBarras('grafica-candidato-est',
+       ['Vargas','Cuéllar','Borja','Nogales','Otros'], [55, 10, 15, 10, 10],
+       'Ganará (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-vicerrector-est',
+       ['Borja','Pedraza','Nogales','Otros'], [25, 15, 20, 40],
+       'Pref. Vicerrector (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-rechazo-est',
+       ['Cuéllar','Coca','Nogales','Vargas','Otros'], [20, 20, 15, 10, 35],
+       'Rechazo (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-valoracion-est',
+       ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
+       [25,35,20,15,5],
+       'Valoración Vargas (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-aspectos-est',
+       ['Defensa democracia','Acreditación','Defensa región','Disminución carga','0 cargas'],
+       [30,25,20,15,10],
+       'Aspectos Vargas (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-reeleccion-est',
+       ['No','Sí'], [75,25],
+       'Reelección Cuéllar (Estudiantes)'
+    );
+
+    /* ===== SECCIÓN E: INTENCIÓN DE VOTO ===== */
+    // Total (original)
+    crearGraficaBarras('grafica-voto-rector',
+       ['Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar',
+        'Osvaldo Ulloa','Alfonso Coca','Rogelio Espinoza','Orlando Pedraza',
+        'Rolando López','Otros'],
+       [51.9,10.3,7.7,7.1,3.2,3.8,2.2,1.9,1.9,10.0],
+       'Intención de voto a Rector (%)'
+    );
+    crearGraficaBarras('grafica-voto-vicerrector',
+       ['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],
+       [28.2,15.7,11.2,7.4,4.2,33.3],
+       'Preferencia acompañante (Vicerrector) (%)'
+    );
+
+    // Docentes (simulados)
+    crearGraficaBarras('grafica-voto-doc',
+       ['Vargas','Borja','Nogales','Cuéllar','Otros'], [55, 12, 8, 10, 15],
+       'Intención Rector (Docentes)'
+    );
+    crearGraficaBarras('grafica-voto-vic-doc',
+       ['Borja','Pedraza','Nogales','Cuéllar','López','Otros'], [30, 20, 10, 10, 5, 25],
+       'Intención Vicerrector (Docentes)'
+    );
+
+    // Estudiantes (simulados)
+    crearGraficaBarras('grafica-voto-est',
+       ['Vargas','Borja','Nogales','Cuéllar','Otros'], [60, 10, 10, 15, 5],
+       'Intención Rector (Estudiantes)'
+    );
+    crearGraficaBarras('grafica-voto-vic-est',
+       ['Borja','Pedraza','Nogales','Cuéllar','López','Otros'], [25, 10, 15, 10, 5, 35],
+       'Intención Vicerrector (Estudiantes)'
     );
 });
 </script>
