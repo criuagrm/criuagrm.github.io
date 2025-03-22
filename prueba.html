@@ -217,30 +217,21 @@
 <div id="seccion-gestion" class="contenido-seccion d-none">
     <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
 
-    <!-- Botones de selección -->
-    <div class="container text-center my-4">
-        <button class="btn btn-secondary" onclick="mostrarGestion('total')">Total</button>
+    <!-- botones docentes y estudiantes -->
+    <div class="text-center my-4">
         <button class="btn btn-secondary" onclick="mostrarGestion('docentes')">Docentes</button>
         <button class="btn btn-secondary" onclick="mostrarGestion('estudiantes')">Estudiantes</button>
     </div>
 
-    <!-- Gráfica TOTAL -->
-    <div id="gestion-total">
-        <h5 class="chart-title">Calificación general del Gobierno Universitario (Total)</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-gobierno-total"></canvas>
-        </div>
-    </div>
-
-    <!-- Gráfica DOCENTES (oculta inicialmente) -->
-    <div id="gestion-docentes" class="d-none">
+    <!-- Gráfica DOCENTES visible por defecto -->
+    <div id="gestion-docentes">
         <h5 class="chart-title">Calificación general del Gobierno Universitario (Docentes)</h5>
         <div class="chart-placeholder">
             <canvas id="grafica-gobierno-docentes"></canvas>
         </div>
     </div>
 
-    <!-- Gráfica ESTUDIANTES (oculta inicialmente) -->
+    <!-- Gráfica ESTUDIANTES oculta inicialmente -->
     <div id="gestion-estudiantes" class="d-none">
         <h5 class="chart-title">Calificación general del Gobierno Universitario (Estudiantes)</h5>
         <div class="chart-placeholder">
@@ -359,6 +350,13 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
         }
     });
 }
+    function mostrarGestion(tipo) {
+    document.getElementById('gestion-docentes').classList.add('d-none');
+    document.getElementById('gestion-estudiantes').classList.add('d-none');
+
+    document.getElementById('gestion-' + tipo).classList.remove('d-none');
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     crearGraficaBarras('grafica-edad', ['18-26', '27-58', '59+'], [57.1, 26.9, 16.0], 'Edad (%)');
@@ -379,8 +377,21 @@ document.addEventListener('DOMContentLoaded', function() {
     crearGraficaBarras('grafica-voto-vicerrector',['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],[28.2,15.7,11.2,7.4,4.2,33.3],'Voto Vicerrector (%)');
 
     crearGraficaBarras('grafica-gobierno-total',['Excelente','Bueno','Regular','Malo','Pésimo'],[5.1,26.3,43.6,12.8,12.2],'Gestión Total (%)');
-    crearGraficaBarras('grafica-gobierno-docentes',['Excelente','Bueno','Regular','Malo','Pésimo'],[7.7,33.8,41.5,8.5,8.5],'Gestión Docentes (%)');
-    crearGraficaBarras('grafica-gobierno-estudiantes',['Excelente','Bueno','Regular','Malo','Pésimo'],[3.3,19.7,45.5,16.0,15.5],'Gestión Estudiantes (%)');
+    // Gráfica de barras DOCENTES
+crearGraficaBarras(
+    'grafica-gobierno-docentes',
+    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
+    [7.7, 33.8, 41.5, 8.5, 8.5],
+    'Calificación Gobierno Universitario (Docentes %)'
+);
+
+// Gráfica de barras ESTUDIANTES
+crearGraficaBarras(
+    'grafica-gobierno-estudiantes',
+    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
+    [3.3, 19.7, 45.5, 16.0, 15.5],
+    'Calificación Gobierno Universitario (Estudiantes %)'
+);
 
     function mostrarGestion(tipo) {
         ['total','docentes','estudiantes'].forEach(t => {
