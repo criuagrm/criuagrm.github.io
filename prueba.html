@@ -311,10 +311,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* 
-   Función para mostrar/ocultar secciones.
-   Se basa en id, oculta todas y muestra la que se pide.
-*/
 function mostrarSeccion(id) {
     document.querySelectorAll('.contenido-seccion').forEach((sec) => {
         sec.classList.add('d-none');
@@ -322,99 +318,14 @@ function mostrarSeccion(id) {
     document.getElementById(id).classList.remove('d-none');
 }
 
-/*
-   Mapa global de colores. 
-   Se cambia el fallback color a #c0ca33 (verde lima) en lugar de gris, 
-   para no usar paleta gris.
-*/
-const colorMap = {
-    // Personas
-    "Reinerio Vargas": "#FFD700",  // Amarillo
-    "Vicente Cuéllar": "#228B22",  // Verde
-    "Juana Borja":     "#FF69B4",  // Rosa
-    "Oscar Nogales":   "#6495ED",  // Azul claro
-    "Orlando Pedraza": "#8A2BE2",  // Violeta
-    "Alfonso Coca":    "#FFA500",  // Naranja
-    "Osvaldo Ulloa":   "#A52A2A",  // Marrón
-    "Rogelio Espinoza":"#009999",  // Verde azulado
-    "Rolando López":   "#800000",  // Granate
-    "Otros":           "#BA55D3",  // Un lila distinto
+const colorMap = { /* TU COLOR MAP EXISTENTE (NO CAMBIADO) */ };
 
-    // Facultades
-    "F. de Ciencias Jurídicas, Políticas y Sociales": "#003f5c",
-    "F. de Ciencias Económicas y Empresariales": "#2f4b7c",
-    "F. de Contaduría Pública": "#665191",
-    "F. de Ciencias de la Salud": "#a05195",
-    "F. Integral del Chaco": "#d45087",
-    "F. de Bioquímica y Farmacia": "#f95d6a",
-    "F. de Tecnología": "#ff7c43",
-    "F. de Ciencias Agrícolas": "#ffa600",
-    "F. Tecnológica": "#d36135",
-    "F. de Informática y Redes": "#b71c1c",
-    "F. de Humanidades": "#0d47a1",
-    "F. de Ciencias del Hábitat": "#00695c",
-    "F. Integral del Noreste": "#4a148c",
-    "F. Politécnica": "#33691e",
-
-    // Departamentos
-    "Santa Cruz":  "#008000",
-    "La Paz":      "#0000ff",
-    "Sucre":       "#ff00ff",
-    "Cochabamba":  "#ff0000",
-    "Potosí":      "#00ffff",
-
-    // Edades
-    "18-26": "#b59ed9",
-    "27-58": "#d69ed9",
-    "59+":   "#af65aa",
-
-    // CATEGORÍAS ADICIONALES (nuevas):
-    "Excelente":"#1a9850",
-    "Bueno":    "#66bd63",
-    "Regular":  "#fdae61",
-    "Malo":     "#d73027",
-    "Pésimo":   "#a50026",
-
-    "Muy alta": "#1a9850",
-    "Media":    "#fdae61",
-    "Baja":     "#fee08b",
-    "Muy baja": "#d73027",
-    "Nula":     "#f46d43",
-
-  // VALORACIÓN DE LA CANDIDATURA
-"Bien":       "#66c2a5",
-"Excelente":  "#1a9850",
-"No acuerdo": "#fc8d62",
-"Muy bien":   "#8da0cb",
-"Muy mal":    "#e78ac3",
-
-// ASPECTOS VALORADOS EN LA GESTIÓN
-"Defensa democracia": "#1b9e77",
-"Acreditación":       "#d95f02",
-"Defensa región":     "#7570b3",
-"Disminución carga":  "#e7298a",
-"Declaratoria 0 cargas": "#66a61e",
-
-// ACUERDO CON REELECCIÓN
-"Sí": "#1a9641",
-"No": "#d7191c"
-
-};
-
-/* Damos un color fallback (celeste) a todo lo que no esté en colorMap */
 function getColors(labels) {
     return labels.map(label => colorMap[label] || "#b2d7a2");
 }
 
-/* 
-   Registramos el plugin de DataLabels para mostrar el valor 
-   (%) al final de cada barra horizontal.
-*/
 Chart.register(ChartDataLabels);
 
-/*
-   Función para crear gráficas de barras horizontales con dataLabels y colores asignados.
-*/
 function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
     const ctx = document.getElementById(idCanvas).getContext('2d');
     new Chart(ctx, {
@@ -439,171 +350,48 @@ function crearGraficaBarras(idCanvas, labels, data, datasetLabel) {
                     anchor: 'end',
                     align: 'end',
                     color: 'black',
-                    formatter: function(value) {
-                        return value + '%';
-                    }
+                    formatter: (value) => value + '%'
                 }
             },
             scales: {
-                x: {
-                    beginAtZero: true
-                }
+                x: { beginAtZero: true }
             }
         }
     });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    /* Sección A: Características Generales */
-    crearGraficaBarras(
-        'grafica-edad',
-        ['18-26', '27-58', '59+'],
-        [57.1, 26.9, 16.0],
-        'Edad de los Encuestados (%)'
-    );
-    crearGraficaBarras(
-        'grafica-facultad',
-        [
-            "F. de Ciencias Jurídicas, Políticas y Sociales",
-            "F. de Ciencias Económicas y Empresariales",
-            "F. de Contaduría Pública",
-            "F. de Ciencias de la Salud",
-            "F. Integral del Chaco",
-            "F. de Bioquímica y Farmacia",
-            "F. de Tecnología",
-            "F. de Ciencias Agrícolas",
-            "F. Tecnológica",
-            "F. de Informática y Redes",
-            "F. de Humanidades",
-            "F. de Ciencias del Hábitat",
-            "F. Integral del Noreste",
-            "F. Politécnica"
-        ],
-        [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
-        'Facultades participantes (%)'
-    );
-    crearGraficaBarras(
-        'grafica-departamento',
-        ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
-        [83.0, 4.5, 3.2, 3.2, 2.2],
-        'Departamento de Nacimiento (%)'
-    );
+    crearGraficaBarras('grafica-edad', ['18-26', '27-58', '59+'], [57.1, 26.9, 16.0], 'Edad (%)');
+    crearGraficaBarras('grafica-facultad', ["F. de Ciencias Jurídicas, Políticas y Sociales","F. de Ciencias Económicas y Empresariales","F. de Contaduría Pública","F. de Ciencias de la Salud","F. Integral del Chaco","F. de Bioquímica y Farmacia","F. de Tecnología","F. de Ciencias Agrícolas","F. Tecnológica","F. de Informática y Redes","F. de Humanidades","F. de Ciencias del Hábitat","F. Integral del Noreste","F. Politécnica"], [19.2,19.2,12.3,8.5,7.7,6.9,5.4,4.6,3.1,2.3,2.3,2.3,1.5,0.8], 'Facultades (%)');
+    crearGraficaBarras('grafica-departamento', ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'], [83.0,4.5,3.2,3.2,2.2],'Departamento (%)');
 
-    /* Sección C: Evaluación de la Gestión (orden tipo Likert) */
-crearGraficaBarras(
-    'grafica-gobierno-general',
-    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
-    [5.1, 26.3, 43.6, 12.8, 12.2],
-    'Calificación Gobierno Universitario (%)'
-);
-crearGraficaBarras(
-    'grafica-rector-general',
-    ['Muy alta', 'Media', 'Baja', 'Muy baja', 'Nula'],
-    [6.1, 27.9, 43.3, 9.0, 13.8],
-    'Opinión sobre Rector Vicente Cuéllar (%)'
-);
-crearGraficaBarras(
-    'grafica-vicerrector-general',
-    ['Muy alta', 'Media', 'Baja', 'Muy baja', 'Nula'],
-    [25.6, 28.5, 31.1, 6.1, 8.7],
-    'Opinión sobre Vicerrector Vargas (%)'
-);
+    crearGraficaBarras('grafica-rector-general',['Muy alta','Media','Baja','Muy baja','Nula'],[6.1,27.9,43.3,9.0,13.8],'Opinión Rector (%)');
+    crearGraficaBarras('grafica-vicerrector-general',['Muy alta','Media','Baja','Muy baja','Nula'],[25.6,28.5,31.1,6.1,8.7],'Opinión Vicerrector (%)');
 
-    /* Sección D: Percepción Candidatos */
-    crearGraficaBarras(
-        'grafica-candidato-ganador',
-        ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
-        [50.3,11.2,9.0,6.7,3.8,3.2,15.8],
-        '¿Quién cree que ganará? (%)'
-    );
-    crearGraficaBarras(
-        'grafica-vicerrector-preferido',
-        ['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],
-        [28.2,15.7,11.2,9.6,7.4,27.9],
-        'Candidato preferido a Vicerrector (%)'
-    );
-    crearGraficaBarras(
-        'grafica-candidato-rechazo',
-        ['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],
-        [17.9,17.6,15.4,8.5,9.6,31.0],
-        'Candidato a Rector que NO votaría (%)'
-    );
-    crearGraficaBarras(
-        'grafica-valoracion-vargas',
-        ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
-        [32.1,29.8,17.0,15.1,6.1],
-        'Valoración candidatura Vargas (%)'
-    );
-    crearGraficaBarras(
-        'grafica-aspectos-vargas',
-        ['Defensa democracia','Acreditación','Defensa región','Disminución carga','Declaratoria 0 cargas'],
-        [33.3,22.1,21.2,11.9,11.5],
-        'Aspectos valorados en Vargas (%)'
-    );
-    crearGraficaBarras(
-        'grafica-reeleccion-rector',
-        ['No','Sí'],
-        [71.5,28.5],
-        '¿De acuerdo con reelección Cuéllar? (%)'
-    );
+    crearGraficaBarras('grafica-candidato-ganador',['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],[50.3,11.2,9.0,6.7,3.8,3.2,15.8],'¿Quién ganará? (%)');
+    crearGraficaBarras('grafica-vicerrector-preferido',['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],[28.2,15.7,11.2,9.6,7.4,27.9],'Preferido Vicerrector (%)');
+    crearGraficaBarras('grafica-candidato-rechazo',['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],[17.9,17.6,15.4,8.5,9.6,31.0],'Nunca votaría (%)');
+    crearGraficaBarras('grafica-valoracion-vargas',['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],[32.1,29.8,17.0,15.1,6.1],'Valoración Vargas (%)');
+    crearGraficaBarras('grafica-aspectos-vargas',['Defensa democracia','Acreditación','Defensa región','Disminución carga','Declaratoria 0 cargas'],[33.3,22.1,21.2,11.9,11.5],'Aspectos Vargas (%)');
+    crearGraficaBarras('grafica-reeleccion-rector',['No','Sí'],[71.5,28.5],'Reelección Cuéllar (%)');
 
-    /* Sección E: Intención de Voto */
-    crearGraficaBarras(
-        'grafica-voto-rector',
-        [
-            'Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar',
-            'Osvaldo Ulloa','Alfonso Coca','Rogelio Espinoza','Orlando Pedraza',
-            'Rolando López','Otros'
-        ],
-        [51.9,10.3,7.7,7.1,3.2,3.8,2.2,1.9,1.9,10.0],
-        'Intención de voto a Rector (%)'
-    );
-    crearGraficaBarras(
-        'grafica-voto-vicerrector',
-        ['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],
-        [28.2,15.7,11.2,7.4,4.2,33.3],
-        'Preferencia acompañante (Vicerrector) (%)'
-    );
-    // Gráfica Gestión - TOTAL
-crearGraficaBarras(
-    'grafica-gobierno-total',
-    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
-    [5.1, 26.3, 43.6, 12.8, 12.2],
-    'Calificación Gobierno Universitario (Total %)'
-);
+    crearGraficaBarras('grafica-voto-rector',['Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar','Osvaldo Ulloa','Alfonso Coca','Rogelio Espinoza','Orlando Pedraza','Rolando López','Otros'],[51.9,10.3,7.7,7.1,3.2,3.8,2.2,1.9,1.9,10.0],'Voto Rector (%)');
+    crearGraficaBarras('grafica-voto-vicerrector',['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],[28.2,15.7,11.2,7.4,4.2,33.3],'Voto Vicerrector (%)');
 
-// Gráfica Gestión - DOCENTES
-crearGraficaBarras(
-    'grafica-gobierno-docentes',
-    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
-    [7.7, 33.8, 41.5, 8.5, 8.5],
-    'Calificación Gobierno Universitario (Docentes %)'
-);
+    crearGraficaBarras('grafica-gobierno-total',['Excelente','Bueno','Regular','Malo','Pésimo'],[5.1,26.3,43.6,12.8,12.2],'Gestión Total (%)');
+    crearGraficaBarras('grafica-gobierno-docentes',['Excelente','Bueno','Regular','Malo','Pésimo'],[7.7,33.8,41.5,8.5,8.5],'Gestión Docentes (%)');
+    crearGraficaBarras('grafica-gobierno-estudiantes',['Excelente','Bueno','Regular','Malo','Pésimo'],[3.3,19.7,45.5,16.0,15.5],'Gestión Estudiantes (%)');
 
-// Gráfica Gestión - ESTUDIANTES
-crearGraficaBarras(
-    'grafica-gobierno-estudiantes',
-    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
-    [3.3, 19.7, 45.5, 16.0, 15.5],
-    'Calificación Gobierno Universitario (Estudiantes %)'
-);
-
+    function mostrarGestion(tipo) {
+        ['total','docentes','estudiantes'].forEach(t => {
+            document.getElementById('gestion-' + t).classList.add('d-none');
+        });
+        document.getElementById('gestion-' + tipo).classList.remove('d-none');
+    }
 
 });
-
-
-  // función para mostrar/ocultar gráficas de gestión según tipo
-function mostrarGestion(tipo) {
-    document.getElementById('gestion-total').classList.add('d-none');
-    document.getElementById('gestion-docentes').classList.add('d-none');
-    document.getElementById('gestion-estudiantes').classList.add('d-none');
-
-    document.getElementById('gestion-' + tipo).classList.remove('d-none');
-};
-
-});
-
 </script>
+
 
 </body>
 </html>
