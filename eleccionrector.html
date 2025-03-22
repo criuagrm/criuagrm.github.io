@@ -351,7 +351,26 @@ const colorMap = {
     "Media":    "#fdae61",
     "Baja":     "#fee08b",
     "Muy baja": "#d73027",
-    "Nula":     "#f46d43"
+    "Nula":     "#f46d43",
+
+  // VALORACIÓN DE LA CANDIDATURA
+"Bien":       "#66c2a5",
+"Excelente":  "#1a9850",
+"No acuerdo": "#fc8d62",
+"Muy bien":   "#8da0cb",
+"Muy mal":    "#e78ac3",
+
+// ASPECTOS VALORADOS EN LA GESTIÓN
+"Defensa democracia": "#1b9e77",
+"Acreditación":       "#d95f02",
+"Defensa región":     "#7570b3",
+"Disminución carga":  "#e7298a",
+"Declaratoria 0 cargas": "#66a61e",
+
+// ACUERDO CON REELECCIÓN
+"Sí": "#1a9641",
+"No": "#d7191c"
+
 };
 
 /* Damos un color fallback (celeste) a todo lo que no esté en colorMap */
@@ -442,25 +461,25 @@ document.addEventListener('DOMContentLoaded', function() {
         'Departamento de Nacimiento (%)'
     );
 
-    /* Sección C: Evaluación de la Gestión */
-    crearGraficaBarras(
-        'grafica-gobierno-general',
-        ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
-        [43.6, 26.3, 12.8, 12.2, 5.1],
-        'Calificación Gobierno Universitario (%)'
-    );
-    crearGraficaBarras(
-        'grafica-rector-general',
-        ['Baja','Media','Nula','Muy baja','Muy alta'],
-        [43.3,27.9,13.8,9.0,6.1],
-        'Opinión sobre Rector Vicente Cuéllar (%)'
-    );
-    crearGraficaBarras(
-        'grafica-vicerrector-general',
-        ['Baja','Media','Muy alta','Nula','Muy baja'],
-        [31.1,28.5,25.6,8.7,6.1],
-        'Opinión sobre Vicerrector Vargas (%)'
-    );
+    /* Sección C: Evaluación de la Gestión (orden tipo Likert) */
+crearGraficaBarras(
+    'grafica-gobierno-general',
+    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
+    [5.1, 26.3, 43.6, 12.8, 12.2],
+    'Calificación Gobierno Universitario (%)'
+);
+crearGraficaBarras(
+    'grafica-rector-general',
+    ['Muy alta', 'Media', 'Baja', 'Muy baja', 'Nula'],
+    [6.1, 27.9, 43.3, 9.0, 13.8],
+    'Opinión sobre Rector Vicente Cuéllar (%)'
+);
+crearGraficaBarras(
+    'grafica-vicerrector-general',
+    ['Muy alta', 'Media', 'Baja', 'Muy baja', 'Nula'],
+    [25.6, 28.5, 31.1, 6.1, 8.7],
+    'Opinión sobre Vicerrector Vargas (%)'
+);
 
     /* Sección D: Percepción Candidatos */
     crearGraficaBarras(
