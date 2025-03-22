@@ -216,11 +216,23 @@
     <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
     <div id="seccion-gestion" class="contenido-seccion d-none">
         <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
+<div class="container text-center my-4">
+    <button class="btn btn-secondary" onclick="mostrarGrafica('docentes')">Docentes</button>
+    <button class="btn btn-secondary" onclick="mostrarGrafica('estudiantes')">Estudiantes</button>
+</div>
 
-        <h5 class="chart-title">Calificación general del Gobierno Universitario</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-gobierno-general"></canvas>
-        </div>
+       <!-- Docentes -->
+<h5 class="chart-title" id="titulo-docentes">Calificación general del Gobierno Universitario (Docentes)</h5>
+<div class="chart-placeholder" id="grafica-docentes-container">
+    <canvas id="grafica-docentes"></canvas>
+</div>
+
+<!-- Estudiantes (oculto inicialmente) -->
+<h5 class="chart-title d-none" id="titulo-estudiantes">Calificación general del Gobierno Universitario (Estudiantes)</h5>
+<div class="chart-placeholder d-none" id="grafica-estudiantes-container">
+    <canvas id="grafica-estudiantes"></canvas>
+</div>
+
 
         <h5 class="chart-title">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
         <div class="chart-placeholder">
@@ -549,6 +561,65 @@ crearGraficaBarras(
         'Preferencia acompañante (Vicerrector) (%)'
     );
 });
+
+
+    // Función para cambiar gráficas Docentes/Estudiantes
+function mostrarGrafica(tipo) {
+    const docentesContainer = document.getElementById('grafica-docentes-container');
+    const estudiantesContainer = document.getElementById('grafica-estudiantes-container');
+    const tituloDocentes = document.getElementById('titulo-docentes');
+    const tituloEstudiantes = document.getElementById('titulo-estudiantes');
+
+    if (tipo === 'docentes') {
+        docentesContainer.classList.remove('d-none');
+        estudiantesContainer.classList.add('d-none');
+        tituloDocentes.classList.remove('d-none');
+        tituloEstudiantes.classList.add('d-none');
+    } else if (tipo === 'estudiantes') {
+        docentesContainer.classList.add('d-none');
+        estudiantesContainer.classList.remove('d-none');
+        tituloDocentes.classList.add('d-none');
+        tituloEstudiantes.classList.remove('d-none');
+    }
+}
+// Gráfica Pie Docentes
+new Chart(document.getElementById('grafica-docentes'), {
+    type: 'pie',
+    data: {
+        labels: ["Regular", "Bueno", "Malo", "Pésimo", "Excelente"],
+        datasets: [{
+            data: [41.5, 33.8, 8.5, 8.5, 7.7],
+            backgroundColor: ["#fdae61", "#66bd63", "#d73027", "#a50026", "#1a9850"]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'right' },
+            datalabels: { formatter: (value) => value + "%" }
+        }
+    }
+});
+
+// Gráfica Pie Estudiantes
+new Chart(document.getElementById('grafica-estudiantes'), {
+    type: 'pie',
+    data: {
+        labels: ["Regular", "Bueno", "Malo", "Pésimo", "Excelente"],
+        datasets: [{
+            data: [45.5, 19.7, 16.0, 15.5, 3.3],
+            backgroundColor: ["#fdae61", "#66bd63", "#d73027", "#a50026", "#1a9850"]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'right' },
+            datalabels: { formatter: (value) => value + "%" }
+        }
+    }
+});
+
 </script>
 
 </body>
