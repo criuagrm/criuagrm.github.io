@@ -213,37 +213,41 @@
         </div>
     </div>
 
-    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
-    <div id="seccion-gestion" class="contenido-seccion d-none">
-        <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
-<div class="container text-center my-4">
-    <button class="btn btn-secondary" onclick="mostrarGrafica('docentes')">Docentes</button>
-    <button class="btn btn-secondary" onclick="mostrarGrafica('estudiantes')">Estudiantes</button>
-</div>
+   <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
+<div id="seccion-gestion" class="contenido-seccion d-none">
+    <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
 
-       <!-- Docentes -->
-<h5 class="chart-title" id="titulo-docentes">Calificación general del Gobierno Universitario (Docentes)</h5>
-<div class="chart-placeholder" id="grafica-docentes-container">
-    <canvas id="grafica-docentes"></canvas>
-</div>
+    <!-- Botones de selección -->
+    <div class="container text-center my-4">
+        <button class="btn btn-secondary" onclick="mostrarGestion('total')">Total</button>
+        <button class="btn btn-secondary" onclick="mostrarGestion('docentes')">Docentes</button>
+        <button class="btn btn-secondary" onclick="mostrarGestion('estudiantes')">Estudiantes</button>
+    </div>
 
-<!-- Estudiantes (oculto inicialmente) -->
-<h5 class="chart-title d-none" id="titulo-estudiantes">Calificación general del Gobierno Universitario (Estudiantes)</h5>
-<div class="chart-placeholder d-none" id="grafica-estudiantes-container">
-    <canvas id="grafica-estudiantes"></canvas>
-</div>
-
-
-        <h5 class="chart-title">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
+    <!-- Gráfica TOTAL -->
+    <div id="gestion-total">
+        <h5 class="chart-title">Calificación general del Gobierno Universitario (Total)</h5>
         <div class="chart-placeholder">
-            <canvas id="grafica-rector-general"></canvas>
-        </div>
-
-        <h5 class="chart-title">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-vicerrector-general"></canvas>
+            <canvas id="grafica-gobierno-total"></canvas>
         </div>
     </div>
+
+    <!-- Gráfica DOCENTES (oculta inicialmente) -->
+    <div id="gestion-docentes" class="d-none">
+        <h5 class="chart-title">Calificación general del Gobierno Universitario (Docentes)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-gobierno-docentes"></canvas>
+        </div>
+    </div>
+
+    <!-- Gráfica ESTUDIANTES (oculta inicialmente) -->
+    <div id="gestion-estudiantes" class="d-none">
+        <h5 class="chart-title">Calificación general del Gobierno Universitario (Estudiantes)</h5>
+        <div class="chart-placeholder">
+            <canvas id="grafica-gobierno-estudiantes"></canvas>
+        </div>
+    </div>
+</div>
 
     <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
     <div id="seccion-candidatos" class="contenido-seccion d-none">
@@ -560,64 +564,43 @@ crearGraficaBarras(
         [28.2,15.7,11.2,7.4,4.2,33.3],
         'Preferencia acompañante (Vicerrector) (%)'
     );
+    // Gráfica Gestión - TOTAL
+crearGraficaBarras(
+    'grafica-gobierno-total',
+    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
+    [5.1, 26.3, 43.6, 12.8, 12.2],
+    'Calificación Gobierno Universitario (Total %)'
+);
+
+// Gráfica Gestión - DOCENTES
+crearGraficaBarras(
+    'grafica-gobierno-docentes',
+    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
+    [7.7, 33.8, 41.5, 8.5, 8.5],
+    'Calificación Gobierno Universitario (Docentes %)'
+);
+
+// Gráfica Gestión - ESTUDIANTES
+crearGraficaBarras(
+    'grafica-gobierno-estudiantes',
+    ['Excelente', 'Bueno', 'Regular', 'Malo', 'Pésimo'],
+    [3.3, 19.7, 45.5, 16.0, 15.5],
+    'Calificación Gobierno Universitario (Estudiantes %)'
+);
+
+
 });
 
 
-    // Función para cambiar gráficas Docentes/Estudiantes
-function mostrarGrafica(tipo) {
-    const docentesContainer = document.getElementById('grafica-docentes-container');
-    const estudiantesContainer = document.getElementById('grafica-estudiantes-container');
-    const tituloDocentes = document.getElementById('titulo-docentes');
-    const tituloEstudiantes = document.getElementById('titulo-estudiantes');
+  // función para mostrar/ocultar gráficas de gestión según tipo
+function mostrarGestion(tipo) {
+    document.getElementById('gestion-total').classList.add('d-none');
+    document.getElementById('gestion-docentes').classList.add('d-none');
+    document.getElementById('gestion-estudiantes').classList.add('d-none');
 
-    if (tipo === 'docentes') {
-        docentesContainer.classList.remove('d-none');
-        estudiantesContainer.classList.add('d-none');
-        tituloDocentes.classList.remove('d-none');
-        tituloEstudiantes.classList.add('d-none');
-    } else if (tipo === 'estudiantes') {
-        docentesContainer.classList.add('d-none');
-        estudiantesContainer.classList.remove('d-none');
-        tituloDocentes.classList.add('d-none');
-        tituloEstudiantes.classList.remove('d-none');
-    }
-}
-// Gráfica Pie Docentes
-new Chart(document.getElementById('grafica-docentes'), {
-    type: 'pie',
-    data: {
-        labels: ["Regular", "Bueno", "Malo", "Pésimo", "Excelente"],
-        datasets: [{
-            data: [41.5, 33.8, 8.5, 8.5, 7.7],
-            backgroundColor: ["#fdae61", "#66bd63", "#d73027", "#a50026", "#1a9850"]
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'right' },
-            datalabels: { formatter: (value) => value + "%" }
-        }
-    }
-});
+    document.getElementById('gestion-' + tipo).classList.remove('d-none');
+};
 
-// Gráfica Pie Estudiantes
-new Chart(document.getElementById('grafica-estudiantes'), {
-    type: 'pie',
-    data: {
-        labels: ["Regular", "Bueno", "Malo", "Pésimo", "Excelente"],
-        datasets: [{
-            data: [45.5, 19.7, 16.0, 15.5, 3.3],
-            backgroundColor: ["#fdae61", "#66bd63", "#d73027", "#a50026", "#1a9850"]
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'right' },
-            datalabels: { formatter: (value) => value + "%" }
-        }
-    }
 });
 
 </script>
