@@ -1,464 +1,946 @@
-<!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <base href="https://criuagrm.github.io/">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIRCPyCS - Resultados Encuesta UAGRM 2025</title>
-
-    <!-- Bootstrap 5, Font Awesome, Google Fonts -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-
-    <!-- Librerías de Chart.js y plugin para DataLabels -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
-    <style>
-        :root {
-            --primary-color: #333333;
-            --secondary-color: #666666;
-            --accent-color: #999999;
-            --background-color: #f0f0f0;
-            --text-color: #333333;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        .navbar, .footer {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 4rem 0;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .section {
-            padding: 3rem 0;
-        }
-
-        /* Ajuste para que las gráficas se vean completas en móviles */
-        .chart-placeholder {
-            min-height: 350px;     /* altura mínima para móviles */
-            max-height: 650px;     /* altura máxima en pantallas grandes */
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            padding: 1rem;
-            overflow-x: auto;      /* scroll horizontal si las etiquetas son muy largas */
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-
-        /* Caja blanca para la ficha técnica */
-        .card-ficha {
-            background-color: #ffffff;
-            border-radius: 6px;
-            padding: 2rem;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-
-        /* Centrado de títulos de gráficas */
-        .chart-title {
-            text-align: center;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Navbar con "Anterior Encuesta" -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">CIRCPyCS</a>
-        <div class="d-flex">
-            <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
-        </div>
-    </div>
-</nav>
-
-<!-- Sección Hero -->
-<section class="hero">
-    <div class="container">
-        <h1>Resultados Encuesta UAGRM 2025</h1>
-        <p>Análisis de percepción sobre preferencias para Rector y Vicerrector UAGRM 2025</p>
-    </div>
-</section>
-
-<!-- Ficha Técnica en caja blanca -->
-<div class="container my-5">
-    <div class="card-ficha">
-        <h2 class="text-center mb-5">Ficha Técnica</h2>
-        <ul>
-            <li><strong>Metodología:</strong> Encuesta de percepción académica, institucional y política mediante formularios virtuales.</li>
-            <li><strong>Características de la muestra:</strong> Muestreo no probabilístico y proporcional al tamaño de la población.</li>
-            <li><strong>Aplicación de la Encuesta:</strong> Del 02 al 07 de marzo de 2025.</li>
-            <li><strong>Universo poblacional:</strong> Docentes y estudiantes inscritos en la UAGRM, pertenecientes a las 18 facultades.</li>
-            <li><strong>Tamaño de la muestra:</strong> 820 personas encuestadas (286 docentes y 534 estudiantes).</li>
-            <li><strong>Distribución de la muestra:</strong> Sin diferenciación de género ni edad, incluyendo docentes regulares y estudiantes registrados.</li>
-            <li><strong>Coeficiente de fiabilidad:</strong> 95%.</li>
-            <li><strong>Error de muestreo:</strong> &plusmn;4.1%.</li>
-            <li><strong>Institución ejecutora:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales.</li>
-        </ul>
-    </div>
-</div>
-
-<!-- Botones de secciones (responsive para móvil) -->
-<div class="container text-center">
-    <div class="d-grid d-md-flex justify-content-center flex-wrap mb-5" role="group" aria-label="Secciones Resultados">
-        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-general')">Características Generales</button>
-        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button>
-        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button>
-        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button>
-        <button class="btn btn-primary m-1" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button>
-    </div>
-</div>
-
-<!-- Secciones Principales -->
-<div class="container section">
-    <h2 class="text-center mb-5">Resultados Detallados</h2>
-
-    <!-- SECCIÓN A: CARACTERÍSTICAS GENERALES -->
-    <div id="seccion-general" class="contenido-seccion">
-        <h3 class="chart-title">Características Generales de los Encuestados</h3>
-
-        <h5 class="chart-title">Edad de los participantes</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-edad"></canvas>
-        </div>
-
-        <h5 class="chart-title">Facultad a la que pertenecen los encuestados</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-facultad"></canvas>
-        </div>
-
-        <h5 class="chart-title">Departamento de nacimiento</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-departamento"></canvas>
-        </div>
-    </div>
-
-    <!-- SECCIÓN B: PROBLEMAS Y PROPUESTAS -->
-    <div id="seccion-problemas" class="contenido-seccion d-none">
-        <h3 class="chart-title">Problemas y Propuestas de mejora en la UAGRM</h3>
-
-        <h5 class="chart-title">Principales problemas identificados</h5>
-        <div class="chart-placeholder text-center">
-            <img src="nube1.png" alt="Nube de palabras sobre problemas"
-                 class="img-fluid w-100" style="max-height: 600px; object-fit: contain;">
-        </div>
-
-        <h5 class="chart-title">Propuestas más mencionadas</h5>
-        <div class="chart-placeholder text-center">
-            <img src="nube2.png" alt="Nube de palabras sobre propuestas"
-                 class="img-fluid w-100" style="max-height: 600px; object-fit: contain;">
-        </div>
-    </div>
-
-    <!-- SECCIÓN C: EVALUACIÓN DE LA GESTIÓN -->
-    <div id="seccion-gestion" class="contenido-seccion d-none">
-        <h3 class="chart-title">Evaluación de la Gestión Actual</h3>
-
-        <h5 class="chart-title">Calificación general del Gobierno Universitario</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-gobierno-general"></canvas>
-        </div>
-
-        <h5 class="chart-title">Opinión sobre la gestión del Rector Vicente Cuéllar</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-rector-general"></canvas>
-        </div>
-
-        <h5 class="chart-title">Opinión sobre la gestión del Vicerrector Reinerio Vargas</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-vicerrector-general"></canvas>
-        </div>
-    </div>
-
-    <!-- SECCIÓN D: PERCEPCIÓN SOBRE CANDIDATOS -->
-    <div id="seccion-candidatos" class="contenido-seccion d-none">
-        <h3 class="chart-title">Percepción sobre los candidatos al Claustro Universitario</h3>
-
-        <h5 class="chart-title">Candidato que cree que ganará la elección a Rector</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-candidato-ganador"></canvas>
-        </div>
-
-        <h5 class="chart-title">Candidato preferido a Vicerrector</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-vicerrector-preferido"></canvas>
-        </div>
-
-        <h5 class="chart-title">Candidato a Rector por el que nunca votaría</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-candidato-rechazo"></canvas>
-        </div>
-
-        <h5 class="chart-title">Valoración de la candidatura del Vicerrector Reinerio Vargas</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-valoracion-vargas"></canvas>
-        </div>
-
-        <h5 class="chart-title">Aspectos valorados en gestión de Reinerio Vargas</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-aspectos-vargas"></canvas>
-        </div>
-
-        <h5 class="chart-title">¿Está de acuerdo con la reelección del Rector Vicente Cuéllar?</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-reeleccion-rector"></canvas>
-        </div>
-    </div>
-
-    <!-- SECCIÓN E: INTENCIÓN DE VOTO -->
-    <div id="seccion-voto" class="contenido-seccion d-none">
-        <h3 class="chart-title">Intención de Voto para Rector y Vicerrector</h3>
-
-        <h5 class="chart-title">Intención de voto actual para Rector</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-voto-rector"></canvas>
-        </div>
-
-        <h5 class="chart-title">Preferencia para acompañante (Vicerrector) de Reinerio Vargas</h5>
-        <div class="chart-placeholder">
-            <canvas id="grafica-voto-vicerrector"></canvas>
-        </div>
-    </div>
-</div>
-
-<!-- Footer -->
-<footer class="footer text-center py-3">
-    <div class="container">
-        <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM</p>
-    </div>
-</footer>
-
-<!-- Scripts Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-function mostrarSeccion(id) {
-    document.querySelectorAll('.contenido-seccion').forEach((sec) => {
-        sec.classList.add('d-none');
-    });
-    document.getElementById(id).classList.remove('d-none');
-}
-
-/* Registramos el plugin DataLabels para mostrar valores (%) */
-Chart.register(ChartDataLabels);
-
-/* 
-   Para secciones que no sean Evaluación de Gestión, 
-   usaremos una paleta con fallback #c0ca33 (verde lima).
-*/
-function getColors(labels) {
-    return labels.map(() => '#c0ca33');
-}
-
-/*
-   Creamos gráficas de barras horizontales con dataLabels y un color degradé azul 
-   EXCLUSIVAMENTE para la sección Evaluación de Gestión (opcional).
-   Si no deseas degrade, puedes hacer que todas sean #c0ca33. 
-   Te lo dejo genérico para no perder tus personalizaciones previas.
-*/
-function getBluePalette(count) {
-    const startColor = {r:187, g:222, b:251}; // #BBDEFB
-    const endColor   = {r:13,  g:71,  b:161};  // #0D47A1
-    const colors = [];
-    if (count <= 1) return [`rgb(${startColor.r},${startColor.g},${startColor.b})`];
-    for (let i = 0; i < count; i++) {
-        const ratio = i / (count - 1);
-        const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
-        const g = Math.round(startColor.g + (endColor.g - startColor.g) * ratio);
-        const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
-        colors.push(`rgb(${r},${g},${b})`);
+  <base href="">
+  <title>CIRCPyCS - Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Estilos -->
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --background-color: #ecf0f1;
+      --text-color: #34495e;
     }
-    return colors;
-}
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 0;
+    }
+    /* Contenedor general */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    /* Encabezado */
+    header {
+      background: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center center no-repeat;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 50px 0; /* Reducido para un estilo más minimalista */
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: #fff;
+      font-weight: 700;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #eee;
+    }
+    /* Estilos de sección */
+    .section {
+      margin-bottom: 30px; /* Reducido */
+      padding: 20px;       /* Reducido */
+      background-color: #fff;
+      border-radius: 8px;  /* Más pequeño */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra ligera */
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: var(--primary-color);
+    }
+    /* Navegación */
+    .navbar {
+      background-color: #fff !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .nav-link {
+      color: var(--primary-color) !important;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: var(--secondary-color) !important;
+    }
+    /* Botones */
+    .btn-primary {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+    /* Elementos interactivos */
+    .interactive-graph {
+      width: 100%;
+      height: 400px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    #word-cloud {
+      height: 350px;
+    }
+    /* Tarjetas e iconos */
+    .icon-box {
+      text-align: center;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .icon-box:hover {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    .icon-box i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+    .icon-box:hover i {
+      color: white;
+    }
+    /* Sección de contacto */
+    .contact-info {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .contact-info h3 {
+      color: white;
+      margin-bottom: 10px;
+    }
+    /* Servicios */
+    .service-card {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    /* Cursos */
+    .course-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    .course-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .course-icon {
+      font-size: 2.5rem;
+      color: var(--secondary-color);
+      margin-bottom: 15px;
+    }
+    /* Pie de página */
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    footer a {
+      color: #fff;
+    }
+    /* Media queries */
+    @media (max-width: 768px) {
+      header {
+        padding: 60px 0;
+      }
+      .section {
+        padding: 15px;
+      }
+      .interactive-graph {
+        height: 300px;
+      }
+    }
+  </style>
 
-/* 
-   Función para crear la gráfica. 
-   - Recibimos un boolean "isGestion" para saber si es la sección Evaluación de la Gestión (opcional).
-*/
-function crearGraficaBarras(idCanvas, labels, data, datasetLabel, isGestion=false) {
-    const ctx = document.getElementById(idCanvas).getContext('2d');
-    const backgroundColors = isGestion ? getBluePalette(labels.length) : getColors(labels);
+  <!-- Librerías -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+</head>
 
-    new Chart(ctx, {
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">CIRCPyCS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#inicio">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#areas-trabajo">Líneas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://criuagrm.github.io/organizacion">Organización</a>
+          </li>
+          <!-- EAC sin resaltado -->
+          <li class="nav-item">
+            <a class="nav-link" href="https://criuagrm.github.io/eacscz.html" target="_blank">EAC</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#investigacion">Producción</a>
+          </li>
+          <!-- Menú desplegable para investigadores -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="investigadoresDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              Investigadores
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="investigadoresDropdown">
+              <li><a class="dropdown-item" href="https://criuagrm.github.io/researchers" target="_blank">Investigadores</a></li>
+              <li><a class="dropdown-item" href="#">1. Asociados</a></li>
+              <li><a class="dropdown-item" href="#">2. Estudiantes</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#servicios">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://criuagrm.github.io/int">Internacionalización</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#cursos">Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#impacto">Impacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contacto">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Encabezado -->
+  <header>
+    <div class="container">
+      <h1>CIRCPyCS</h1>
+      <p>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</p>
+      <a href="#areas-trabajo" class="btn btn-primary btn-lg mt-3">Descubre Nuestro Trabajo</a>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="container mt-5">
+
+    <!-- Sección de bienvenida -->
+    <section id="inicio" class="section">
+      <h2>Bienvenidos al CIRCPyCS</h2>
+      <p>
+        El Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) es una plataforma académica 
+        dedicada al análisis crítico y al desarrollo de conocimiento en el ámbito de las ciencias políticas y sociales. 
+        Nuestro enfoque interdisciplinario abarca investigaciones rigurosas sobre los desafíos contemporáneos de Bolivia 
+        y la región. Además, promovemos la colaboración entre académicos, estudiantes y expertos, contribuyendo al 
+        fortalecimiento de las instituciones democráticas y al desarrollo social.
+      </p>
+    </section>
+
+    <!-- Sección de líneas de investigación (Multidisciplinarias) -->
+    <section id="areas-trabajo" class="section">
+      <h2>Líneas de Investigación Multidisciplinarias - Investigadores UAGRM</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-seedling"></i>
+            <h3>Cambio Climático y Recursos Naturales</h3>
+            <p>
+              Estudios sobre el impacto del cambio climático y la gestión sostenible de los recursos naturales, con un 
+              enfoque en políticas y soluciones ambientales.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-university"></i>
+            <h3>Sistema Político e Instituciones Públicas</h3>
+            <p>
+              Análisis de las estructuras políticas y la interacción entre instituciones públicas, para fomentar la 
+              transparencia y eficacia en la administración.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-cogs"></i>
+            <h3>Desarrollo, Innovación y Tecnología</h3>
+            <p>
+              Investigación sobre el avance tecnológico y la innovación aplicada a diversos sectores, promoviendo el 
+              desarrollo sostenible y el crecimiento económico.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-tractor"></i>
+            <h3>Desarrollo Productivo, Agroindustria y Economía</h3>
+            <p>
+              Estudios centrados en el crecimiento económico a través del desarrollo productivo y la agroindustria, 
+              explorando su impacto en el bienestar social y económico.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-users"></i>
+            <h3>Sociedad, Salud y Educación</h3>
+            <p>
+              Análisis multidisciplinario de la interacción entre sociedad, salud y educación, promoviendo políticas 
+              que contribuyan al desarrollo social y bienestar integral.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de líneas de investigación (Ciencia Política) -->
+    <section id="areas-trabajo" class="section">
+      <h2>Líneas de Investigación para la Carrera de Ciencia Política y Administración Pública</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-balance-scale"></i>
+            <h3>Estado, Derecho y Gobierno</h3>
+            <p>
+              Análisis de sistemas democráticos, procesos de gobernanza, regímenes competenciales y relaciones 
+              intergubernamentales.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-users"></i>
+            <h3>Estado Plurinacional, Democracia e Interculturalidad</h3>
+            <p>
+              Estudio de mecanismos de participación y empoderamiento ciudadano.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-landmark"></i>
+            <h3>Administración Pública</h3>
+            <p>
+              Investigación y evaluación de la gestión pública, finanzas públicas y políticas fiscales.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-fist-raised"></i>
+            <h3>Descolonización y Despatriarcalización en el Estado Plurinacional</h3>
+            <p>
+              Análisis de políticas de igualdad y reconocimiento cultural en el Estado Plurinacional.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-globe"></i>
+            <h3>Relaciones Internacionales</h3>
+            <p>
+              Estudio de relaciones y alianzas internacionales y políticas exteriores.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-people-arrows"></i>
+            <h3>Migración y Construcción de Nuevas Identidades</h3>
+            <p>
+              Investigación sobre migración, multiculturalidad e identidad social.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-hands-helping"></i>
+            <h3>Partidos y Organizaciones Políticas, y Grupos de Presión</h3>
+            <p>
+              Análisis de estructuras políticas, influencia de grupos y comportamiento organizativo.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-flag"></i>
+            <h3>Movimientos Indígenas, Territorialidad y Autodeterminación</h3>
+            <p>
+              Estudios sobre derechos territoriales y la autodeterminación de pueblos indígenas.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-apple-alt"></i>
+            <h3>Seguridad y Soberanía Alimentaria</h3>
+            <p>
+              Análisis de políticas de seguridad alimentaria y desarrollo rural.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-chart-line"></i>
+            <h3>Modelos de Desarrollo, Pobreza y Cambio Social</h3>
+            <p>
+              Estudio de desarrollo económico y social, y su impacto en la reducción de la pobreza.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-city"></i>
+            <h3>Ciudades y Ciudadanías</h3>
+            <p>
+              Investigación sobre urbanización, gobernanza local y derechos ciudadanos.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-leaf"></i>
+            <h3>Medio Ambiente, Economía Verde y Recursos Naturales Estratégicos</h3>
+            <p>
+              Estudios sobre sostenibilidad, economía verde y la gestión de recursos naturales.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-brain"></i>
+            <h3>Comportamiento Político y Cognición Política</h3>
+            <p>
+              Análisis de la conducta política y factores psicológicos en la toma de decisiones.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="icon-box">
+            <i class="fas fa-laptop-code"></i>
+            <h3>Ciencia Política Computacional</h3>
+            <p>
+              Aplicación de métodos computacionales y análisis de datos en ciencia política.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conceptos Clave y Nube de Palabras -->
+    <section id="conceptos" class="section">
+      <h2>Conceptos Clave y Relaciones</h2>
+      <div id="concept-graph" class="interactive-graph"></div>
+      <h3 class="mt-4">Nube de Palabras Interactiva</h3>
+      <div id="word-cloud" class="interactive-graph"></div>
+    </section>
+
+    <!-- Investigación y Publicaciones -->
+    <section id="investigacion" class="section">
+      <h2>Investigación y Publicaciones</h2>
+      <div id="research-areas-chart" class="interactive-graph"></div>
+      <div class="table-responsive mt-4">
+        <table class="table table-striped" id="publications-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Tema</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Se cargan dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+      <!-- Botones para páginas de publicaciones -->
+      <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/libros" class="btn btn-primary btn-lg">Libros</a>
+        <a href="https://criuagrm.github.io/boletin" class="btn btn-primary btn-lg">Boletines</a>
+        <a href="https://criuagrm.github.io/conocimientoipolitica" class="btn btn-primary btn-lg">Revista</a>
+      </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section id="servicios" class="section">
+      <h2>Oferta de Servicios</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>Consultoría en Políticas Públicas</h3>
+            <p>
+              Ofrecemos asesoramiento experto en el diseño, implementación y evaluación de políticas públicas para 
+              gobiernos y organizaciones.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>Investigación Personalizada</h3>
+            <p>
+              Realizamos investigaciones a medida sobre temas específicos de ciencias políticas y sociales para 
+              instituciones académicas y organizaciones.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>Capacitación y Talleres</h3>
+            <p>
+              Desarrollamos programas de formación y talleres especializados en metodologías de investigación social 
+              y análisis político.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>Análisis de Datos Sociales</h3>
+            <p>
+              Ofrecemos servicios de análisis avanzado de datos sociales y políticos utilizando metodologías 
+              cuantitativas y cualitativas.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>Evaluación de Impacto</h3>
+            <p>
+              Realizamos evaluaciones rigurosas del impacto de programas y políticas sociales para mejorar su 
+              efectividad.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>Asesoría en Participación Ciudadana</h3>
+            <p>
+              Brindamos asesoramiento en el diseño e implementación de mecanismos de participación ciudadana y 
+              gobernanza colaborativa.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/services.html" class="btn btn-primary btn-lg">Ver Servicios Específicos</a>
+      </div>
+    </section>
+
+    <!-- Sección de Cursos -->
+    <section id="cursos" class="section">
+      <h2>Cursos Destacados</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="course-card">
+            <i class="fas fa-laptop-code course-icon"></i>
+            <h3>Ciencias Sociales con Python</h3>
+            <p><strong>Instructor:</strong> Ricardo Alonzo Fernández Salguero, PhD candidate</p>
+            <p><strong>Institución:</strong> La Universidad Politécnica de Cataluña</p>
+            <p><strong>Especialidad:</strong> Inteligencia Artificial</p>
+            <p><strong>Formación adicional:</strong></p>
+            <ul>
+              <li>Máster Universitario en Desarrollo del Software, Universidad de Granada</li>
+              <li>Máster Universitario en Estadística Aplicada, Universidad de Granada</li>
+              <li>Specialization in Computational Social Sciences, University of California, Davis</li>
+            </ul>
+            <p><strong>Horario:</strong> Lunes y Miércoles, 7:00 PM - 10:00 PM</p>
+            <p><strong>Duración:</strong> 4 sesiones</p>
+            <p><strong>Precio:</strong></p>
+            <ul>
+              <li>Estudiantes: Bs. 50</li>
+              <li>Profesionales: Bs. 200</li>
+            </ul>
+            <a href="https://forms.gle/HMs2kjA3TxTqBfEp9" class="btn btn-primary">Inscríbete Ahora</a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="course-card">
+            <i class="fas fa-network-wired course-icon"></i>
+            <h3>Introducción a las Ciencias Sociales Computacionales</h3>
+            <p><strong>Instructor:</strong> MSc. Daniel Hurtado Justiniano</p>
+            <p><strong>Institución:</strong> Universidad Autónoma Gabriel René Moreno</p>
+            <p><strong>Especialidad:</strong> Metodología de la Investigación y Ciencia de Datos</p>
+            <p><strong>Horario:</strong> Martes y Jueves, 6:00 PM - 9:00 PM</p>
+            <p><strong>Duración:</strong> 5 sesiones</p>
+            <p><strong>Estado:</strong> <span class="badge bg-danger">Cupos Agotados</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/courses.html" class="btn btn-primary btn-lg">Ver Más Cursos</a>
+      </div>
+    </section>
+
+    <!-- Métricas de Impacto -->
+    <section id="impacto" class="section">
+      <h2>Métricas de Impacto</h2>
+      <div id="impact-chart" class="interactive-graph"></div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contacto" class="section">
+      <h2>Contacto</h2>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="contact-info">
+            <h3>Información de Contacto</h3>
+            <p><i class="fas fa-envelope me-2"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+            <p><i class="fas fa-phone me-2"></i> +591 67381294</p>
+            <p><i class="fas fa-map-marker-alt me-2"></i> Av. Busch 2do a 3er anillo, Ciudad Universitaria, módulo 284, planta baja</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="container">
+      <p>© 2024 CIRCPyCS. Todos los derechos reservados.</p>
+      <p>Desarrollado por: Ricardo Alonzo Fernández Salguero y Daniel Hurtado Justiniano</p>
+      <p>
+        Contacto: 
+        <a href="mailto:danielhurtadoj@uagrm.edu.bo">danielhurtadoj@uagrm.edu.bo</a> | 
+        <a href="tel:+59167381294">+591 67381294</a>
+      </p>
+      <div class="mt-3">
+        <a href="https://github.com/RAFS20" class="btn btn-outline-light me-2" target="_blank">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-outline-light me-2" target="_blank">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://rafs20.github.io/" class="btn btn-outline-light" target="_blank">
+          <i class="fas fa-globe"></i> Website
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Datos simulados para las áreas de investigación
+    const researchAreasData = [
+      { area: 'Democracia', count: 45 },
+      { area: 'Participación Ciudadana', count: 38 },
+      { area: 'Desarrollo Institucional', count: 32 },
+      { area: 'Políticas Públicas', count: 28 },
+      { area: 'Derechos Humanos', count: 22 }
+    ];
+
+    // Gráfico de barras para áreas de investigación
+    const researchAreasOptions = {
+      series: [{
+        data: researchAreasData.map(item => item.count)
+      }],
+      chart: {
         type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: datasetLabel,
-                data: data,
-                backgroundColor: backgroundColors,
-                borderColor: '#333333',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            indexAxis: 'y',
-            plugins: {
-                legend: { display: false },
-                datalabels: {
-                    anchor: 'end',
-                    align: 'end',
-                    color: '#333333',
-                    formatter: function(value) {
-                        return value + '%';
-                    }
-                }
-            },
-            scales: {
-                x: { beginAtZero: true }
-            }
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
         }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: researchAreasData.map(item => item.area),
+      },
+      title: {
+        text: 'Publicaciones por Área de Investigación',
+        align: 'center'
+      }
+    };
+
+    const researchAreasChart = new ApexCharts(document.querySelector("#research-areas-chart"), researchAreasOptions);
+    researchAreasChart.render();
+
+    // Datos para el grafo de conceptos
+    const nodes = [
+      { id: 1, label: "Democracia", group: 1 },
+      { id: 2, label: "Participación Ciudadana", group: 1 },
+      { id: 3, label: "Gobernanza", group: 2 },
+      { id: 4, label: "Políticas Públicas", group: 2 },
+      { id: 5, label: "Derechos Humanos", group: 3 },
+      { id: 6, label: "Desarrollo Social", group: 3 },
+      { id: 7, label: "Instituciones", group: 4 },
+      { id: 8, label: "Movimientos Sociales", group: 4 },
+      { id: 9, label: "Inclusión", group: 5 },
+      { id: 10, label: "Justicia Social", group: 5 }
+    ];
+    const links = [
+      { source: 1, target: 2 },
+      { source: 1, target: 3 },
+      { source: 2, target: 4 },
+      { source: 2, target: 8 },
+      { source: 3, target: 4 },
+      { source: 3, target: 7 },
+      { source: 4, target: 6 },
+      { source: 5, target: 6 },
+      { source: 5, target: 9 },
+      { source: 6, target: 10 },
+      { source: 7, target: 8 },
+      { source: 8, target: 9 },
+      { source: 9, target: 10 }
+    ];
+
+    const width = document.getElementById('concept-graph').clientWidth;
+    const height = 400;
+
+    const svg = d3.select("#concept-graph")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(80))
+      .force("charge", d3.forceManyBody().strength(-250))
+      .force("center", d3.forceCenter(width / 2, height / 2));
+
+    const link = svg.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6);
+
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+    node.append("circle")
+      .attr("r", 5)
+      .attr("fill", d => d3.schemeCategory10[d.group]);
+
+    node.append("text")
+      .text(d => d.label)
+      .attr('x', 8)
+      .attr('y', 4)
+      .style("font-size", "0.9rem");
+
+    node.append("title")
+      .text(d => d.label);
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`);
     });
-}
 
-document.addEventListener('DOMContentLoaded', function() {
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
 
-    /* Características Generales (no degrade) */
-    crearGraficaBarras(
-        'grafica-edad',
-        ['18-26', '27-58', '59+'],
-        [57.1, 26.9, 16.0],
-        'Edad de los Encuestados (%)'
-    );
-    crearGraficaBarras(
-        'grafica-facultad',
-        [
-            'Facultad de Ciencias Jurídicas, Políticas y Sociales',
-            'Facultad de Ciencias Económicas y Empresariales',
-            'Facultad de Contaduría Pública',
-            'Facultad de Ciencias de la Salud',
-            'Facultad Integral del Chaco',
-            'Facultad de Bioquímica y Farmacia',
-            'Facultad de Tecnología',
-            'Facultad de Ciencias Agrícolas',
-            'Facultad Tecnológica',
-            'Facultad de Informática y Redes',
-            'Facultad de Humanidades',
-            'Facultad de Ciencias del Hábitat',
-            'Facultad Integral del Noreste',
-            'Facultad Politécnica'
-        ],
-        [19.2, 19.2, 12.3, 8.5, 7.7, 6.9, 5.4, 4.6, 3.1, 2.3, 2.3, 2.3, 1.5, 0.8],
-        'Facultades participantes (%)'
-    );
-    crearGraficaBarras(
-        'grafica-departamento',
-        ['Santa Cruz','La Paz','Sucre','Cochabamba','Potosí'],
-        [83.0, 4.5, 3.2, 3.2, 2.2],
-        'Departamento de Nacimiento (%)'
-    );
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
 
-    /* Evaluación de la Gestión (con degrade = true) */
-    crearGraficaBarras(
-        'grafica-gobierno-general',
-        ['Regular', 'Bueno', 'Malo', 'Pésimo', 'Excelente'],
-        [43.6, 26.3, 12.8, 12.2, 5.1],
-        'Calificación Gobierno Universitario (%)',
-        true
-    );
-    crearGraficaBarras(
-        'grafica-rector-general',
-        ['Baja','Media','Nula','Muy baja','Muy alta'],
-        [43.3,27.9,13.8,9.0,6.1],
-        'Opinión sobre Rector Vicente Cuéllar (%)',
-        true
-    );
-    crearGraficaBarras(
-        'grafica-vicerrector-general',
-        ['Baja','Media','Muy alta','Nula','Muy baja'],
-        [31.1,28.5,25.6,8.7,6.1],
-        'Opinión sobre Vicerrector Vargas (%)',
-        true
-    );
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
 
-    /* Percepción Candidatos (gris) */
-    crearGraficaBarras(
-        'grafica-candidato-ganador',
-        ['Reinerio Vargas','Vicente Cuéllar','Juana Borja','Oscar Nogales','Alfonso Coca','Orlando Pedraza','Otros'],
-        [50.3,11.2,9.0,6.7,3.8,3.2,15.8],
-        '¿Quién cree que ganará? (%)'
-    );
-    crearGraficaBarras(
-        'grafica-vicerrector-preferido',
-        ['Juana Borja','Orlando Pedraza','Oscar Nogales','Reinerio Vargas','Vicente Cuéllar','Otros'],
-        [28.2,15.7,11.2,9.6,7.4,27.9],
-        'Candidato preferido a Vicerrector (%)'
-    );
-    crearGraficaBarras(
-        'grafica-candidato-rechazo',
-        ['Vicente Cuéllar','Alfonso Coca','Osvaldo Ulloa','Oscar Nogales','Reinerio Vargas','Otros'],
-        [17.9,17.6,15.4,8.5,9.6,31.0],
-        'Candidato a Rector que NO votaría (%)'
-    );
-    crearGraficaBarras(
-        'grafica-valoracion-vargas',
-        ['Bien','Excelente','No acuerdo','Muy bien','Muy mal'],
-        [32.1,29.8,17.0,15.1,6.1],
-        'Valoración candidatura Vargas (%)'
-    );
-    crearGraficaBarras(
-        'grafica-aspectos-vargas',
-        ['Defensa democracia','Acreditación','Defensa región','Disminución carga','Declaratoria 0 cargas'],
-        [33.3,22.1,21.2,11.9,11.5],
-        'Aspectos valorados en Vargas (%)'
-    );
-    crearGraficaBarras(
-        'grafica-reeleccion-rector',
-        ['No','Sí'],
-        [71.5,28.5],
-        '¿De acuerdo con reelección Cuéllar? (%)'
-    );
+    // Nube de palabras
+    const words = [
+      {text: "Democracia", size: 60},
+      {text: "Participación", size: 55},
+      {text: "Gobernanza", size: 50},
+      {text: "Derechos", size: 45},
+      {text: "Inclusión", size: 40},
+      {text: "Justicia", size: 40},
+      {text: "Desarrollo", size: 35},
+      {text: "Política", size: 35},
+      {text: "Ciudadanía", size: 30},
+      {text: "Instituciones", size: 30},
+      {text: "Movimientos", size: 25},
+      {text: "Social", size: 25},
+      {text: "Equidad", size: 20},
+      {text: "Transparencia", size: 20},
+      {text: "Educación", size: 15},
+      {text: "Cultura", size: 15},
+      {text: "Economía", size: 15},
+      {text: "Medioambiente", size: 15},
+      {text: "Tecnología", size: 10},
+      {text: "Innovación", size: 10}
+    ];
+    const fontFamilies = [
+      'Arial','Helvetica','Times New Roman','Courier','Verdana',
+      'Georgia','Palatino','Garamond','Bookman','Comic Sans MS',
+      'Trebuchet MS','Arial Black','Impact'
+    ];
+    
+    const layout = d3.layout.cloud()
+      .size([width, 350])
+      .words(words)
+      .padding(5)
+      .rotate(() => Math.random() * 90 - 45)
+      .font(() => fontFamilies[Math.floor(Math.random() * fontFamilies.length)])
+      .fontSize(d => d.size)
+      .on("end", draw);
+    layout.start();
 
-    /* Intención de Voto (gris) */
-    crearGraficaBarras(
-        'grafica-voto-rector',
-        [
-            'Reinerio Vargas','Juana Borja','Oscar Nogales','Vicente Cuéllar',
-            'Osvaldo Ulloa','Alfonso Coca','Rogelio Espinoza','Orlando Pedraza',
-            'Rolando López','Otros'
-        ],
-        [51.9,10.3,7.7,7.1,3.2,3.8,2.2,1.9,1.9,10.0],
-        'Intención de voto a Rector (%)'
-    );
-    crearGraficaBarras(
-        'grafica-voto-vicerrector',
-        ['Juana Borja','Orlando Pedraza','Oscar Nogales','Vicente Cuéllar','Rolando López','Otros'],
-        [28.2,15.7,11.2,7.4,4.2,33.3],
-        'Preferencia acompañante (Vicerrector) (%)'
-    );
-});
-</script>
+    function draw(words) {
+      d3.select("#word-cloud").append("svg")
+        .attr("width", layout.size()[0])
+        .attr("height", layout.size()[1])
+        .append("g")
+        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+        .selectAll("text")
+        .data(words)
+        .enter().append("text")
+        .style("font-size", d => d.size + "px")
+        .style("font-family", d => d.font)
+        .style("fill", (d, i) => d3.schemeCategory10[i % 10])
+        .attr("text-anchor", "middle")
+        .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+        .text(d => d.text)
+        .on("mouseover", function() {
+          d3.select(this)
+            .transition()
+            .duration(300)
+            .style("font-size", d => (d.size + 5) + "px")
+            .style("font-weight", "bold");
+        })
+        .on("mouseout", function() {
+          d3.select(this)
+            .transition()
+            .duration(300)
+            .style("font-size", d => d.size + "px")
+            .style("font-weight", "normal");
+        });
+    }
+
+    // Datos simulados para publicaciones
+    const publications = [
+      {
+        title: "Elección de magistrados constitucionales vía sufragio universal en Bolivia",
+        author: "Rudy Vladimir Guarachi Cota",
+        topic: "Instituciones Políticas",
+        date: "2024-11-15"
+      },
+      {
+        title: "Rebelión y Pandemia",
+        author: "José Orlando Peralta",
+        topic: "Análisis Político",
+        date: "2020-02-28"
+      },
+      {
+        title: "Santa Cruz No Somos Todos",
+        author: "Maria Angélica Suarez Ribera",
+        topic: "Participación política",
+        date: "2019-01-20"
+      },
+      {
+        title: "Fundamentos de Machine Learning",
+        author: "Ricardo Alonso Fernandez",
+        topic: "Metodología",
+        date: "2023-12-10"
+      },
+      {
+        title: "Percepciones de la ciudadanía, respecto a las opciones de relacionamiento del departamento de Santa Cruz con el Estado",
+        author: "Dunia Sandoval",
+        topic: "Instituciones Políticas",
+        date: "2023-11-05"
+      }
+    ];
+
+    const publicationsTable = document.getElementById('publications-table').getElementsByTagName('tbody')[0];
+    publications.forEach(pub => {
+      let row = publicationsTable.insertRow();
+      row.insertCell(0).innerHTML = pub.title;
+      row.insertCell(1).innerHTML = pub.author;
+      row.insertCell(2).innerHTML = pub.topic;
+      row.insertCell(3).innerHTML = pub.date;
+    });
+
+    // Datos simulados para métricas de impacto
+    const impactData = [
+      { name: 'Citas Académicas', data: [30, 40, 45, 50, 49, 60] },
+      { name: 'Menciones en Medios', data: [12, 19, 25, 32, 30, 35] },
+      { name: 'Colaboraciones Internacionales', data: [5, 7, 10, 15, 20, 25] }
+    ];
+
+    // Gráfico radar de métricas de impacto
+    const impactOptions = {
+      series: impactData,
+      chart: {
+        height: 350,
+        type: 'radar',
+      },
+      title: {
+        text: 'Impacto de Investigaciones'
+      },
+      xaxis: {
+        categories: ['2019', '2020', '2021', '2022', '2023', '2024']
+      }
+    };
+
+    const impactChart = new ApexCharts(document.querySelector("#impact-chart"), impactOptions);
+    impactChart.render();
+  </script>
+
 </body>
 </html>
