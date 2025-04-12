@@ -1,777 +1,964 @@
-<html><head><base href=""><title>CIRCPyCS - Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CIRCPyCS - Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Estilos -->
+  <style>
     :root {
-        --primary-color: #2c3e50;
-        --secondary-color: #3498db;
-        --accent-color: #e74c3c;
-        --background-color: #ecf0f1;
-        --text-color: #34495e;
+      --primary-color: #2c3e50;  /* Azul oscuro/grisáceo */
+      --secondary-color: #546778; /* Un tono gris-azulado */
+      --accent-color: #e74c3c;
+      --background-color: #f2f2f2;
+      --text-color: #333;
     }
+
     body {
-        font-family: 'Roboto', sans-serif;
-        line-height: 1.6;
-        color: var(--text-color);
-        background-color: var(--background-color);
-        margin: 0;
-        padding: 0;
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 0;
     }
+
+    /* Contenedor general */
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
-    header {
-        background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
-        background-size: cover;
-        color: white;
-        padding: 150px 0;
-        text-align: center;
-    }
-    h1, h2, h3 {
-        color: var(--primary-color);
-    }
-    .section {
-        margin-bottom: 50px;
-        padding: 40px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .section:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    }
-    .interactive-graph {
-        width: 100%;
-        height: 500px;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        margin-bottom: 30px;
-        overflow: hidden;
-    }
-    footer {
-        background-color: var(--primary-color);
-        color: white;
-        padding: 40px 0;
-        text-align: center;
-    }
-    .btn-primary {
-        background-color: var(--secondary-color);
-        border-color: var(--secondary-color);
-        transition: all 0.3s ease;
-    }
-    .btn-primary:hover {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-        transform: translateY(-2px);
-    }
+
+    /* Barra de navegación */
     .navbar {
-        background-color: rgba(255, 255, 255, 0.95) !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-brand {
+      font-weight: 600;
+      color: var(--primary-color) !important;
     }
     .nav-link {
-        color: var(--primary-color) !important;
-        font-weight: 500;
-        transition: color 0.3s ease;
+      color: var(--primary-color) !important;
+      font-weight: 500;
+      transition: color 0.3s ease;
     }
     .nav-link:hover {
-        color: var(--secondary-color) !important;
+      color: var(--secondary-color) !important;
     }
-    #word-cloud {
-        width: 100%;
-        height: 400px;
+
+    /* Header con imagen de fondo más opaca */
+    header {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                  url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')
+                  center center no-repeat;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 60px 0;
     }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    header p {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #ddd;
+    }
+    header .btn {
+      margin-top: 20px;
+    }
+
+    /* Secciones */
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .section h2 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-size: 1.6rem;
+      text-align: center; /* Centra los subtítulos */
+    }
+
+    /* Texto de bienvenida justificado */
+    .welcome-text {
+      text-align: justify;
+    }
+
+    /* Botones */
+    .btn-primary {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    /* Líneas de investigación */
     .icon-box {
-        text-align: center;
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        transition: all 0.3s ease;
+      text-align: center;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.88rem;
     }
     .icon-box:hover {
-        background-color: var(--secondary-color);
-        color: white;
+      background-color: var(--secondary-color);
+      color: #fff;
     }
     .icon-box i {
-        font-size: 3rem;
-        margin-bottom: 15px;
-        color: var(--primary-color);
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--primary-color);
     }
     .icon-box:hover i {
-        color: white;
+      color: #fff;
     }
-    .contact-info {
-        background-color: var(--primary-color);
-        color: white;
-        padding: 30px;
-        border-radius: 10px;
-        margin-top: 30px;
+    .icon-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--primary-color);
     }
-    .contact-info h3 {
-        color: white;
-        margin-bottom: 20px;
+    .icon-box p {
+      margin: 0;
     }
-    .contact-info p {
-        margin-bottom: 10px;
+
+    /* Gráficos interactivos */
+    .interactive-graph {
+      width: 100%;
+      height: 400px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
     }
+    #word-cloud {
+      height: 350px;
+    }
+
+    /* Servicios */
     .service-card {
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        transition: all 0.3s ease;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
     }
     .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
+    .service-card h3 {
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* Cursos */
     .course-card {
-        background-color: #ffffff;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
     }
     .course-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     .course-icon {
-        font-size: 3rem;
-        color: var(--secondary-color);
-        margin-bottom: 15px;
+      font-size: 2rem;
+      color: var(--secondary-color);
+      margin-bottom: 10px;
     }
-    @media (max-width: 768px) {
-        header {
-            padding: 100px 0;
-        }
-        .section {
-            padding: 20px;
-        }
-        .interactive-graph {
-            height: 300px;
-        }
+    .course-card h3 {
+      text-align: center;
     }
-</style>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+
+    /* Contacto */
+    .contact-info {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .contact-info h3 {
+      margin-bottom: 10px;
+      color: #fff;
+      text-align: center;
+    }
+
+    /* Pie de página */
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      margin-top: 30px;
+    }
+    footer p, footer a {
+      color: #fff;
+      margin: 0;
+    }
+    footer a {
+      text-decoration: none;
+    }
+    footer .btn-outline-light {
+      border-color: #fff;
+      color: #fff;
+    }
+    footer .btn-outline-light:hover {
+      background-color: #fff;
+      color: var(--primary-color);
+    }
+
+    /* Responsivo */
+    @media (max-width: 992px) {
+      .row > .col-md-6 {
+        margin-bottom: 20px;
+      }
+    }
+    @media (max-width: 576px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+
+  <!-- Librerías -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">CIRCPyCS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#inicio">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#areas-trabajo">Líneas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://criuagrm.github.io/organizacion">Organización</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link btn btn-primary text-white px-3 py-1" href="https://criuagrm.github.io/eacscz.html" target="_blank">EAC</a>
-                </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#investigacion">Producción</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="https://criuagrm.github.io/researchers" target="_blank">Investigadores</a>
-                </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#servicios">Servicios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://criuagrm.github.io/int">Internacionalización</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#cursos">Cursos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#impacto">Impacto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contacto">Contacto</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <header>
-        <div class="container">
-           <h1 class="display-4 fw-bold text-white">CIRCPyCS</h1>
-            <p class="lead">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</p>
-            <a href="#areas-trabajo" class="btn btn-primary btn-lg mt-3">Descubre Nuestro Trabajo</a>
-        </div>
-    </header>
-
-    <main class="container mt-5">
-        <section id="inicio" class="section">
-            <h2>Bienvenidos al CIRCPyCS</h2>
-            <p>El Centro de Investigación Regional  en Ciencia Política y Ciencias Sociales (CIRCPyCS) es una plataforma académica dedicada al análisis crítico y al desarrollo de conocimiento en el ámbito de las ciencias políticas y sociales. Nuestro enfoque interdisciplinario abarca investigaciones rigurosas sobre los desafíos contemporáneos de Bolivia y la región. Además, promovemos la colaboración entre académicos, estudiantes y expertos, contribuyendo al fortalecimiento de las instituciones democráticas y al desarrollo social.</p>
-        </section>
-
-<section id="areas-trabajo" class="section">
-    <h2>Líneas de Investigación Multidisciplinarias - Investigadores UAGRM</h2>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-seedling"></i>
-                <h3>Cambio Climático y Recursos Naturales</h3>
-                <p>Estudios sobre el impacto del cambio climático y la gestión sostenible de los recursos naturales, con un enfoque en políticas y soluciones ambientales.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-university"></i>
-                <h3>Sistema Político e Instituciones Públicas</h3>
-                <p>Análisis de las estructuras políticas y la interacción entre instituciones públicas, para fomentar la transparencia y eficacia en la administración.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-cogs"></i>
-                <h3>Desarrollo, Innovación y Tecnología</h3>
-                <p>Investigación sobre el avance tecnológico y la innovación aplicada a diversos sectores, promoviendo el desarrollo sostenible y el crecimiento económico.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-tractor"></i>
-                <h3>Desarrollo Productivo, Agroindustria y Economía</h3>
-                <p>Estudios centrados en el crecimiento económico a través del desarrollo productivo y la agroindustria, explorando su impacto en el bienestar social y económico.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-users"></i>
-                <h3>Sociedad, Salud y Educación</h3>
-                <p>Análisis multidisciplinario de la interacción entre sociedad, salud y educación, promoviendo políticas que contribuyan al desarrollo social y bienestar integral.</p>
-            </div>
-        </div>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">CIRCPyCS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#inicio">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#interdisciplinarias">Líneas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://criuagrm.github.io/organizacion" target="_blank">Organización</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://criuagrm.github.io/eacscz.html" target="_blank">EAC</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#investigacion">Producción</a>
+          </li>
+          <!-- Menú desplegable para Miembros -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="miembrosDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              Miembros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="miembrosDropdown">
+              <li><a class="dropdown-item" href="https://criuagrm.github.io/researchers" target="_blank">Investigadores</a></li>
+              <li><a class="dropdown-item" href="https://criuagrm.github.io/students">Estudiantes</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#servicios">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://criuagrm.github.io/int" target="_blank">Internacionalización</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#cursos">Cursos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#impacto">Impacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contacto">Contacto</a>
+          </li>
+        </ul>
+      </div>
     </div>
-</section>
+  </nav>
 
-        
-       <section id="areas-trabajo" class="section">
-    <h2>Líneas de Investigación para la Carrera de Ciencia Política y Administración Pública</h2>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-balance-scale"></i>
-                <h3>Estado, Derecho y Gobierno</h3>
-                <p>Análisis de sistemas democráticos, procesos de gobernanza, regímenes competenciales y relaciones intergubernamentales.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-users"></i>
-                <h3>Estado Plurinacional, Democracia e Interculturalidad</h3>
-                <p>Estudio de mecanismos de participación y empoderamiento ciudadano.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-landmark"></i>
-                <h3>Administración Pública</h3>
-                <p>Investigación y evaluación de la gestión pública, finanzas públicas y políticas fiscales.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-fist-raised"></i>
-                <h3>Descolonización y Despatriarcalización en el Estado Plurinacional</h3>
-                <p>Análisis de políticas de igualdad y reconocimiento cultural en el Estado Plurinacional.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-globe"></i>
-                <h3>Relaciones Internacionales</h3>
-                <p>Estudio de relaciones y alianzas internacionales y políticas exteriores.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-people-arrows"></i>
-                <h3>Migración y Construcción de Nuevas Identidades</h3>
-                <p>Investigación sobre migración, multiculturalidad e identidad social.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-hands-helping"></i>
-                <h3>Partidos y Organizaciones Políticas, y Grupos de Presión</h3>
-                <p>Análisis de estructuras políticas, influencia de grupos y comportamiento organizativo.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-flag"></i>
-                <h3>Movimientos Indígenas, Territorialidad y Autodeterminación</h3>
-                <p>Estudios sobre derechos territoriales y la autodeterminación de pueblos indígenas.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-apple-alt"></i>
-                <h3>Seguridad y Soberanía Alimentaria</h3>
-                <p>Análisis de políticas de seguridad alimentaria y desarrollo rural.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-chart-line"></i>
-                <h3>Modelos de Desarrollo, Pobreza y Cambio Social</h3>
-                <p>Estudio de desarrollo económico y social, y su impacto en la reducción de la pobreza.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-city"></i>
-                <h3>Ciudades y Ciudadanías</h3>
-                <p>Investigación sobre urbanización, gobernanza local y derechos ciudadanos.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-leaf"></i>
-                <h3>Medio Ambiente, Economía Verde y Recursos Naturales Estratégicos</h3>
-                <p>Estudios sobre sostenibilidad, economía verde y la gestión de recursos naturales.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-brain"></i>
-                <h3>Comportamiento Político y Cognición Política</h3>
-                <p>Análisis de la conducta política y factores psicológicos en la toma de decisiones.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="icon-box">
-                <i class="fas fa-laptop-code"></i>
-                <h3>Ciencia Política Computacional</h3>
-                <p>Aplicación de métodos computacionales y análisis de datos en ciencia política.</p>
-            </div>
-        </div>
+  <!-- Encabezado -->
+  <header>
+    <div class="container">
+      <h1>CIRCPyCS</h1>
+      <h2>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</h2>
+      <h2>Universidad Autónoma Gabriel René Moreno</h2>
+      <a href="#interdisciplinarias" class="btn btn-primary btn-lg">Descubre Nuestro Trabajo</a>
     </div>
-</section>
- 
-    <section id="conceptos" class="section">
-            <h2>Conceptos Clave y Relaciones</h2>
-            <div id="concept-graph" class="interactive-graph"></div>
-            <h3 class="mt-4">Nube de Palabras Interactiva</h3>
-            <div id="word-cloud" class="interactive-graph"></div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="container mt-5">
+
+    <!-- Sección de bienvenida -->
+    <section id="inicio" class="section">
+      <h2>Bienvenidos al CIRCPyCS</h2>
+      <p class="welcome-text">
+        El Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) es una entidad académica 
+        dedicada al análisis crítico y al desarrollo de conocimiento en el ámbito de la ciencia política y las ciencias sociales. 
+        Nuestro enfoque interdisciplinario abarca investigaciones rigurosas sobre los desafíos contemporáneos de Bolivia 
+        y la región. Además, promovemos la colaboración entre académicos, estudiantes y expertos, contribuyendo al 
+        fortalecimiento de las instituciones democráticas y al desarrollo político regional.
+      </p>
     </section>
-        
-        <section id="investigacion" class="section">
-    <h2>Investigación y Publicaciones</h2>
-    <div id="research-areas-chart" class="interactive-graph"></div>
-    <div class="table-responsive mt-4">
+
+    <!-- Sección de líneas de investigación (Multidisciplinarias) -->
+    <section id="interdisciplinarias" class="section">
+      <h2>Líneas de Investigación Multidisciplinarias - Investigadores UAGRM</h2>
+      <div class="row">
+        <div class="col-md-2 offset-md-1">
+          <div class="icon-box">
+            <i class="fas fa-seedling"></i>
+            <h3>Cambio Climático y Recursos Naturales</h3>
+            <p>Estudios con enfoques en políticas y soluciones ambientales.</p>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="icon-box">
+            <i class="fas fa-university"></i>
+            <h3>Sistema Político e Instituciones Públicas</h3>
+            <p>Análisis de las estructuras políticas y la interacción entre instituciones públicas</p>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="icon-box">
+            <i class="fas fa-cogs"></i>
+            <h3>Desarrollo, Innovación y Tecnología</h3>
+            <p>Investigación sobre el avance tecnológico y la innovación aplicada a diversos sectores en la región </p>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="icon-box">
+            <i class="fas fa-tractor"></i>
+            <h3>Desarrollo Productivo, Agroindustria y Economía</h3>
+            <p>Agroindustria, crecimiento económico y bienestar social.</p>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="icon-box">
+            <i class="fas fa-users"></i>
+            <h3>Sociedad, Salud y Educación</h3>
+            <p>Análisis multidisciplinario de la interacción entre sociedad, salud y educación.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de líneas de investigación (Ciencia Política) -->
+    <section id="areas-trabajo" class="section">
+      <h2>Líneas de Investigación para Ciencia Política y Administración Pública</h2>
+      <!-- 14 líneas, en pares de dos columnas -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-balance-scale"></i>
+            <h3>Estado, Derecho y Gobierno</h3>
+            <p>Análisis de sistemas democráticos, procesos de gobernanza, regímenes competenciales y relaciones intergubernamentales.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-users"></i>
+            <h3>Estado Plurinacional, Democracia e Interculturalidad</h3>
+            <p>Estudio de mecanismos de participación y empoderamiento ciudadano</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-landmark"></i>
+            <h3>Administración Pública</h3>
+            <p>Investigación y evaluación de la gestión pública, finanzas públicas y políticas fiscales.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-fist-raised"></i>
+            <h3>Descolonización y Despatriarcalización en el Estado Plurinacional</h3>
+            <p>Análisis de políticas de igualdad y reconocimiento cultural en el Estado Plurinacional.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-globe"></i>
+            <h3>Relaciones Internacionales</h3>
+            <p>Estudio de relaciones y alianzas internacionales y políticas exteriores.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-people-arrows"></i>
+            <h3>Migración y Construcción de Nuevas Identidades</h3>
+            <p>Investigación sobre migración, multiculturalidad e identidad social.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-hands-helping"></i>
+            <h3>Partidos y Organizaciones Políticas, y Grupos de Presión</h3>
+            <p>Análisis de estructuras políticas, influencia de grupos y comportamiento organizativo.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-flag"></i>
+            <h3>Movimientos Indígenas, Territorialidad y Autodeterminación</h3>
+            <p>Estudios sobre derechos territoriales y la autodeterminación de pueblos indígenas.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-apple-alt"></i>
+            <h3>Seguridad y Soberanía Alimentaria</h3>
+            <p>Análisis de políticas de seguridad alimentaria y desarrollo rural.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-chart-line"></i>
+            <h3>Modelos de Desarrollo, Pobreza y Cambio Social</h3>
+            <p>Estudio de desarrollo económico y social, y su impacto en la reducción de la pobreza.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-city"></i>
+            <h3>Ciudades y Ciudadanías</h3>
+            <p>Investigación sobre urbanización, gobernanza local y derechos ciudadanos.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-leaf"></i>
+            <h3>Medio Ambiente, Economía Verde y Recursos Naturales Estratégicos</h3>
+            <p>Estudios sobre sostenibilidad, economía verde y la gestión de recursos naturales.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-brain"></i>
+            <h3>Comportamiento Político y Cognición Política</h3>
+            <p>Análisis de la conducta política y factores cognitivos en la toma de decisiones.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="icon-box">
+            <i class="fas fa-laptop-code"></i>
+            <h3>Ciencia Política Computacional</h3>
+            <p>Aplicación de métodos computacionales, análisis de datos e inteligencia artificial en ciencia política.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conceptos Clave y Nube de Palabras -->
+    <section id="conceptos" class="section">
+      <h2>Conceptos Clave y Relaciones</h2>
+      <div id="concept-graph" class="interactive-graph"></div>
+      <h3 style="text-align:center; margin-top:20px;">Nube de Palabras Interactiva</h3>
+      <div id="word-cloud" class="interactive-graph"></div>
+    </section>
+
+    <!-- Investigación y Publicaciones -->
+    <section id="investigacion" class="section">
+      <h2>Investigación y Publicaciones</h2>
+      <div id="research-areas-chart" class="interactive-graph"></div>
+      <div class="table-responsive mt-4">
         <table class="table table-striped" id="publications-table">
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Autor</th>
-                    <th>Tema</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Datos de publicaciones se cargarán dinámicamente -->
-            </tbody>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Autor</th>
+              <th>Tema</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Se cargan dinámicamente -->
+          </tbody>
         </table>
-    </div>
-    <!-- Botón añadido para ir a la página de publicaciones -->
-    <div class="text-center mt-4">
+      </div>
+      <div class="text-center mt-4">
         <a href="https://criuagrm.github.io/libros" class="btn btn-primary btn-lg">Libros</a>
         <a href="https://criuagrm.github.io/boletin" class="btn btn-primary btn-lg">Boletines</a>
         <a href="https://criuagrm.github.io/conocimientoipolitica" class="btn btn-primary btn-lg">Revista</a>
-    </div>
-</section>
+      </div>
+    </section>
 
-        <section id="servicios" class="section">
-            <h2>Oferta de Servicios</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="service-card">
-                        <h3>Consultoría en Políticas Públicas</h3>
-                        <p>Ofrecemos asesoramiento experto en el diseño, implementación y evaluación de políticas públicas para gobiernos y organizaciones.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="service-card">
-                        <h3>Investigación Personalizada</h3>
-                        <p>Realizamos investigaciones a medida sobre temas específicos de ciencias políticas y sociales para instituciones académicas y organizaciones.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="service-card">
-                        <h3>Capacitación y Talleres</h3>
-                        <p>Desarrollamos programas de formación y talleres especializados en metodologías de investigación social y análisis político.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="service-card">
-                        <h3>Análisis de Datos Sociales</h3>
-                        <p>Ofrecemos servicios de análisis avanzado de datos sociales y políticos utilizando metodologías cuantitativas y cualitativas.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="service-card">
-                        <h3>Evaluación de Impacto</h3>
-                        <p>Realizamos evaluaciones rigurosas del impacto de programas y políticas sociales para mejorar su efectividad.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="service-card">
-                        <h3>Asesoría en Participación Ciudadana</h3>
-                        <p>Brindamos asesoramiento en el diseño e implementación de mecanismos de participación ciudadana y gobernanza colaborativa.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-4">
-                <a href="https://criuagrm.github.io/services.html" class="btn btn-primary btn-lg">Ver Servicios Específicos</a>
-            </div>
-        </section>
-
-        <section id="cursos" class="section">
-            <h2>Cursos Destacados</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="course-card">
-                        <i class="fas fa-laptop-code course-icon"></i>
-                        <h3>Ciencias Sociales con Python</h3>
-                        <p><strong>Instructor:</strong> Ricardo Alonzo Fernández Salguero, PhD candidate</p>
-                        <p><strong>Institución:</strong> La Universidad Politécnica de Cataluña</p>
-                        <p><strong>Especialidad:</strong> Inteligencia Artificial</p>
-                        <p><strong>Formación adicional:</strong></p>
-                        <ul>
-                            <li>Máster Universitario en Desarrollo del Software, Universidad de Granada</li>
-                            <li>Máster Universitario en Estadística Aplicada, Universidad de Granada</li>
-                            <li>Specialization in Computational Social Sciences, University of California, Davis</li>
-                        </ul>
-                        <p><strong>Horario:</strong> Lunes y Miércoles, 7:00 PM - 10:00 PM</p>
-                        <p><strong>Duración:</strong> 4 sesiones</p>
-                        <p><strong>Precio:</strong></p>
-                        <ul>
-                            <li>Estudiantes: Bs. 50</li>
-                            <li>Profesionales: Bs. 200</li>
-                        </ul>
-                        <a href="https://forms.gle/HMs2kjA3TxTqBfEp9" class="btn btn-primary">Inscríbete Ahora</a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="course-card">
-                        <i class="fas fa-network-wired course-icon"></i>
-                        <h3>Introducción a las Ciencias Sociales Computacionales</h3>
-                        <p><strong>Instructor:</strong> MSc. Daniel Hurtado Justiniano </p>
-                        <p><strong>Institución:</strong> Universidad Autónoma Gabriel René Moreno</p>
-                        <p><strong>Especialidad:</strong> Metodología de la Investigación y Ciencia de Datos</p>
-                        <p><strong>Horario:</strong> Martes y Jueves, 6:00 PM - 9:00 PM</p>
-                        <p><strong>Duración:</strong> 5 sesiones</p>
-                        <p><strong>Estado:</strong> <span class="badge bg-danger">Cupos Agotados</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-4">
-                <a href="https://criuagrm.github.io/courses.html" class="btn btn-primary btn-lg">Ver Más Cursos</a>
-            </div>
-        </section>
-
-        <section id="impacto" class="section">
-            <h2>Métricas de Impacto</h2>
-            <div id="impact-chart" class="interactive-graph"></div>
-        </section>
-
-        <section id="contacto" class="section">
-            <h2>Contacto</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="contact-info">
-                        <h3>Información de Contacto</h3>
-                        <p><i class="fas fa-envelope me-2"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
-                        <p><i class="fas fa-phone me-2"></i> +591 67381294</p>
-                        <p><i class="fas fa-map-marker-alt me-2"></i> Av. Busch 2do a 3er anillo, Ciudad Universitaria, módulo 284, planta baja</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>© 2024 CIRCPyCS. Todos los derechos reservados.</p>
-            <p>Desarrollado por: Ricardo Alonzo Fernández Salguero y Daniel Hurtado Justiniano</p>
-            <p>Contacto: <a href="mailto:danielhurtadoj@uagrm.edu.bo">danielhurtadoj@uagrm.edu.bo</a> | <a href="tel:+59167381294">+591 67381294</a></p>
-            <div class="mt-3">
-                <a href="https://github.com/RAFS20" class="btn btn-outline-light me-2" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-outline-light me-2" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <a href="https://rafs20.github.io/" class="btn btn-outline-light" target="_blank"><i class="fas fa-globe"></i> Website</a>
-            </div>
+    <!-- Sección de Servicios (con botón) -->
+    <section id="servicios" class="section">
+      <h2>Servicios</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>1) Asesoría en Políticas Públicas</h3>
+            <p>
+              Ofrecemos asesoramiento especializado en el diseño, implementación y evaluación de políticas públicas 
+              para gobiernos y organizaciones.
+            </p>
+          </div>
         </div>
-    </footer>
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>2) Asesoría en Análisis Avanzado de Datos</h3>
+            <p>
+              Desarrollamos metodologías y aplicamos herramientas de ciencia de datos y machine learning para el análisis profundo de 
+              información social, política y económica.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <h3>3) Investigación personalizada </h3>
+            <p>
+              Realizamos investigaciones a medida sobre temas específicos de ciencia política 
+              y sociales para instituciones académicas, organizaciones y empresas.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/services.html" class="btn btn-primary btn-lg">Ver Servicios Específicos</a>
+      </div>
+    </section>
 
-    <script>
-        // Datos simulados para las áreas de investigación
-        const researchAreasData = [
-            { area: 'Democracia', count: 45 },
-            { area: 'Participación Ciudadana', count: 38 },
-            { area: 'Desarrollo Institucional', count: 32 },
-            { area: 'Políticas Públicas', count: 28 },
-            { area: 'Derechos Humanos', count: 22 }
-        ];
+    <!-- Sección de Cursos -->
+    <section id="cursos" class="section">
+      <h2>Cursos Destacados</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="course-card">
+            <i class="fas fa-laptop-code course-icon"></i>
+            <h3>Ciencias Sociales con Python</h3>
+            <p><strong>Instructor:</strong> Ricardo Alonzo Fernández Salguero, PhD candidate</p>
+            <p><strong>Institución:</strong> La Universidad Politécnica de Cataluña</p>
+            <p><strong>Especialidad:</strong> Inteligencia Artificial</p>
+            <p><strong>Formación adicional:</strong></p>
+            <ul>
+              <li>Máster Universitario en Desarrollo del Software, Universidad de Granada</li>
+              <li>Máster Universitario en Estadística Aplicada, Universidad de Granada</li>
+              <li>Specialization in Computational Social Sciences, University of California, Davis</li>
+            </ul>
+            <p><strong>Horario:</strong> Lunes y Miércoles, 7:00 PM - 10:00 PM</p>
+            <p><strong>Duración:</strong> 4 sesiones</p>
+            <p><strong>Precio:</strong></p>
+            <ul>
+              <li>Estudiantes: Bs. 50</li>
+              <li>Profesionales: Bs. 200</li>
+            </ul>
+            <a href="https://forms.gle/HMs2kjA3TxTqBfEp9" class="btn btn-primary">Inscríbete Ahora</a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="course-card">
+            <i class="fas fa-network-wired course-icon"></i>
+            <h3>Introducción a las Ciencias Sociales Computacionales</h3>
+            <p><strong>Instructor:</strong> MSc. Daniel Hurtado Justiniano</p>
+            <p><strong>Institución:</strong> Universidad Autónoma Gabriel René Moreno</p>
+            <p><strong>Especialidad:</strong> Metodología de la Investigación y Ciencia de Datos</p>
+            <p><strong>Horario:</strong> Martes y Jueves, 6:00 PM - 9:00 PM</p>
+            <p><strong>Duración:</strong> 5 sesiones</p>
+            <p><strong>Estado:</strong> <span class="badge bg-danger">Cupos Agotados</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/courses.html" class="btn btn-primary btn-lg">Ver Más Cursos</a>
+      </div>
+    </section>
 
-        // Gráfico de áreas de investigación
-        const researchAreasOptions = {
-            series: [{
-                data: researchAreasData.map(item => item.count)
-            }],
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    borderRadius: 4,
-                    horizontal: true,
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            xaxis: {
-                categories: researchAreasData.map(item => item.area),
-            },
-            title: {
-                text: 'Publicaciones por Área de Investigación',
-                align: 'center'
-            }
-        };
+    <!-- Métricas de Impacto -->
+    <section id="impacto" class="section">
+      <h2>Métricas de Impacto</h2>
+      <div id="impact-chart" class="interactive-graph"></div>
+    </section>
 
-        const researchAreasChart = new ApexCharts(document.querySelector("#research-areas-chart"), researchAreasOptions);
-        researchAreasChart.render();
+    <!-- Sección de Contacto -->
+    <section id="contacto" class="section">
+      <h2>Contacto</h2>
+      <div class="contact-info">
+        <h3>Información de Contacto</h3>
+        <p><i class="fas fa-envelope me-2"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+        <p><i class="fas fa-phone me-2"></i> +591 67381294</p>
+        <p><i class="fas fa-map-marker-alt me-2"></i> Av. Busch 2do a 3er anillo, Ciudad Universitaria, módulo 284, planta baja</p>
+      </div>
+    </section>
+  </main>
 
-        // Datos simulados para el grafo de conceptos
-        const nodes = [
-            { id: 1, label: "Democracia", group: 1 },
-            { id: 2, label: "Participación Ciudadana", group: 1 },
-            { id: 3, label: "Gobernanza", group: 2 },
-            { id: 4, label: "Políticas Públicas", group: 2 },
-            { id: 5, label: "Derechos Humanos", group: 3 },
-            { id: 6, label: "Desarrollo Social", group: 3 },
-            { id: 7, label: "Instituciones", group: 4 },
-            { id: 8, label: "Movimientos Sociales", group: 4 },
-            { id: 9, label: "Inclusión", group: 5 },
-            { id: 10, label: "Justicia Social", group: 5 }
-        ];
+  <!-- Pie de página -->
+  <footer>
+    <div class="container">
+      <p>© 2025 CIRCPyCS. Todos los derechos reservados.</p>
+      <p>Desarrollado por: Ricardo Alonzo Fernández Salguero y Daniel Hurtado Justiniano</p>
+      <p>
+        Contacto: 
+        <a href="mailto:danielhurtadoj@uagrm.edu.bo">danielhurtadoj@uagrm.edu.bo</a> | 
+        <a href="tel:+59167381294">+591 67381294</a>
+      </p>
+      <div class="mt-3">
+        <a href="https://github.com/RAFS20" class="btn btn-outline-light me-2" target="_blank">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-outline-light me-2" target="_blank">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://rafs20.github.io/" class="btn btn-outline-light" target="_blank">
+          <i class="fas fa-globe"></i> Website
+        </a>
+      </div>
+    </div>
+  </footer>
 
-        const links = [
-            { source: 1, target: 2 },
-            { source: 1, target: 3 },
-            { source: 2, target: 4 },
-            { source: 2, target: 8 },
-            { source: 3, target: 4 },
-            { source: 3, target: 7 },
-            { source: 4, target: 6 },
-            { source: 5, target: 6 },
-            { source: 5, target: 9 },
-            { source: 6, target: 10 },
-            { source: 7, target: 8 },
-            { source: 8, target: 9 },
-            { source: 9, target: 10 }
-        ];
+  <!-- Scripts -->
+  <script>
+    // Configuración de ApexCharts responsivo
+    const responsiveOptions = [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: '100%'
+          }
+        }
+      }
+    ];
 
-        // Crear gráfico de conceptos interactivo
-        const width = document.getElementById('concept-graph').clientWidth;
-        const height = 500;
+    // Datos simulados para las áreas de investigación
+    const researchAreasData = [
+      { area: 'Democracia', count: 45 },
+      { area: 'Participación Ciudadana', count: 38 },
+      { area: 'Desarrollo Institucional', count: 32 },
+      { area: 'Políticas Públicas', count: 28 },
+      { area: 'Derechos Humanos', count: 22 }
+    ];
 
-        const svg = d3.select("#concept-graph")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+    // Gráfico de barras para áreas de investigación
+    const researchAreasOptions = {
+      series: [{
+        data: researchAreasData.map(item => item.count)
+      }],
+      chart: {
+        type: 'bar',
+        height: 350,
+        width: '100%',
+        redrawOnWindowResize: true,
+        toolbar: { show: false },
+        responsive: responsiveOptions
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: researchAreasData.map(item => item.area),
+      },
+      title: {
+        text: 'Publicaciones por Área de Investigación',
+        align: 'center'
+      }
+    };
+    const researchAreasChart = new ApexCharts(document.querySelector("#research-areas-chart"), researchAreasOptions);
+    researchAreasChart.render();
 
-        const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-            .force("charge", d3.forceManyBody().strength(-300))
-            .force("center", d3.forceCenter(width / 2, height / 2));
+    // Datos para el grafo de conceptos
+    const nodes = [
+      { id: 1, label: "Democracia", group: 1 },
+      { id: 2, label: "Participación Ciudadana", group: 1 },
+      { id: 3, label: "Gobernanza", group: 2 },
+      { id: 4, label: "Políticas Públicas", group: 2 },
+      { id: 5, label: "Derechos Humanos", group: 3 },
+      { id: 6, label: "Desarrollo Social", group: 3 },
+      { id: 7, label: "Instituciones", group: 4 },
+      { id: 8, label: "Movimientos Sociales", group: 4 },
+      { id: 9, label: "Inclusión", group: 5 },
+      { id: 10, label: "Justicia Social", group: 5 }
+    ];
+    const links = [
+      { source: 1, target: 2 },
+      { source: 1, target: 3 },
+      { source: 2, target: 4 },
+      { source: 2, target: 8 },
+      { source: 3, target: 4 },
+      { source: 3, target: 7 },
+      { source: 4, target: 6 },
+      { source: 5, target: 6 },
+      { source: 5, target: 9 },
+      { source: 6, target: 10 },
+      { source: 7, target: 8 },
+      { source: 8, target: 9 },
+      { source: 9, target: 10 }
+    ];
 
-        const link = svg.append("g")
-            .selectAll("line")
-            .data(links)
-            .enter().append("line")
-            .attr("stroke", "#999")
-            .attr("stroke-opacity", 0.6)
-            .attr("stroke-width", d => Math.sqrt(d.value));
+    const width = document.getElementById('concept-graph').clientWidth;
+    const height = 400;
 
-        const node = svg.append("g")
-            .selectAll("g")
-            .data(nodes)
-            .enter().append("g")
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended));
+    const svg = d3.select("#concept-graph")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
-        const circles = node.append("circle")
-            .attr("r", 5)
-            .attr("fill", d => d3.schemeCategory10[d.group]);
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(80))
+      .force("charge", d3.forceManyBody().strength(-250))
+      .force("center", d3.forceCenter(width / 2, height / 2));
 
-        const labels = node.append("text")
-            .text(d => d.label)
-            .attr('x', 6)
-            .attr('y', 3);
+    const link = svg.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6);
 
-        node.append("title")
-            .text(d => d.label);
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
 
-        simulation.on("tick", () => {
-            link
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
+    node.append("circle")
+      .attr("r", 5)
+      .attr("fill", d => d3.schemeCategory10[d.group]);
 
-            node
-                .attr("transform", d => `translate(${d.x},${d.y})`);
+    node.append("text")
+      .text(d => d.label)
+      .attr('x', 8)
+      .attr('y', 4)
+      .style("font-size", "0.9rem");
+
+    node.append("title")
+      .text(d => d.label);
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+
+    // Nube de palabras
+    const words = [
+      {text: "Democracia", size: 60},
+      {text: "Participación", size: 55},
+      {text: "Gobernanza", size: 50},
+      {text: "Derechos", size: 45},
+      {text: "Inclusión", size: 40},
+      {text: "Justicia", size: 40},
+      {text: "Desarrollo", size: 35},
+      {text: "Política", size: 35},
+      {text: "Ciudadanía", size: 30},
+      {text: "Instituciones", size: 30},
+      {text: "Movimientos", size: 25},
+      {text: "Social", size: 25},
+      {text: "Equidad", size: 20},
+      {text: "Transparencia", size: 20},
+      {text: "Educación", size: 15},
+      {text: "Cultura", size: 15},
+      {text: "Economía", size: 15},
+      {text: "Medioambiente", size: 15},
+      {text: "Tecnología", size: 10},
+      {text: "Innovación", size: 10}
+    ];
+    const fontFamilies = [
+      'Arial','Helvetica','Times New Roman','Courier','Verdana',
+      'Georgia','Palatino','Garamond','Bookman','Comic Sans MS',
+      'Trebuchet MS','Arial Black','Impact'
+    ];
+
+    const layout = d3.layout.cloud()
+      .size([width, 350])
+      .words(words)
+      .padding(5)
+      .rotate(() => Math.random() * 90 - 45)
+      .font(() => fontFamilies[Math.floor(Math.random() * fontFamilies.length)])
+      .fontSize(d => d.size)
+      .on("end", draw);
+    layout.start();
+
+    function draw(words) {
+      d3.select("#word-cloud").append("svg")
+        .attr("width", layout.size()[0])
+        .attr("height", layout.size()[1])
+        .append("g")
+        .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+        .selectAll("text")
+        .data(words)
+        .enter().append("text")
+        .style("font-size", d => d.size + "px")
+        .style("font-family", d => d.font)
+        .style("fill", (d, i) => d3.schemeCategory10[i % 10])
+        .attr("text-anchor", "middle")
+        .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+        .text(d => d.text)
+        .on("mouseover", function() {
+          d3.select(this)
+            .transition()
+            .duration(300)
+            .style("font-size", d => (d.size + 5) + "px")
+            .style("font-weight", "bold");
+        })
+        .on("mouseout", function() {
+          d3.select(this)
+            .transition()
+            .duration(300)
+            .style("font-size", d => d.size + "px")
+            .style("font-weight", "normal");
         });
+    }
 
-        function dragstarted(event, d) {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-        }
+    // Datos simulados para publicaciones
+    const publications = [
+      {
+        title: "Elección de magistrados constitucionales vía sufragio universal en Bolivia",
+        author: "Rudy Vladimir Guarachi Cota",
+        topic: "Instituciones Políticas",
+        date: "2024-11-15"
+      },
+      {
+        title: "Rebelión y Pandemia",
+        author: "José Orlando Peralta",
+        topic: "Análisis Político",
+        date: "2020-02-28"
+      },
+      {
+        title: "Santa Cruz No Somos Todos",
+        author: "Maria Angélica Suarez Ribera",
+        topic: "Participación política",
+        date: "2019-01-20"
+      },
+      {
+        title: "Fundamentos de Machine Learning",
+        author: "Ricardo Alonso Fernandez",
+        topic: "Metodología",
+        date: "2023-12-10"
+      },
+      {
+        title: "Percepciones de la ciudadanía, respecto a las opciones de relacionamiento del departamento de Santa Cruz con el Estado",
+        author: "Dunia Sandoval",
+        topic: "Instituciones Políticas",
+        date: "2023-11-05"
+      }
+    ];
 
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
-        }
+    const publicationsTable = document.getElementById('publications-table').getElementsByTagName('tbody')[0];
+    publications.forEach(pub => {
+      let row = publicationsTable.insertRow();
+      row.insertCell(0).innerHTML = pub.title;
+      row.insertCell(1).innerHTML = pub.author;
+      row.insertCell(2).innerHTML = pub.topic;
+      row.insertCell(3).innerHTML = pub.date;
+    });
 
-        function dragended(event, d) {
-            if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        }
+    // Datos simulados para métricas de impacto
+    const impactData = [
+      { name: 'Citas Académicas', data: [30, 40, 45, 50, 49, 60] },
+      { name: 'Menciones en Medios', data: [12, 19, 25, 32, 30, 35] },
+      { name: 'Colaboraciones Internacionales', data: [5, 7, 10, 15, 20, 25] }
+    ];
 
-         // Nube de palabras interactiva mejorada
-        const words = [
-            {text: "Democracia", size: 60},
-            {text: "Participación", size: 55},
-            {text: "Gobernanza", size: 50},
-            {text: "Derechos", size: 45},
-            {text: "Inclusión", size: 40},
-            {text: "Justicia", size: 40},
-            {text: "Desarrollo", size: 35},
-            {text: "Política", size: 35},
-            {text: "Ciudadanía", size: 30},
-            {text: "Instituciones", size: 30},
-            {text: "Movimientos", size: 25},
-            {text: "Social", size: 25},
-            {text: "Equidad", size: 20},
-            {text: "Transparencia", size: 20},
-            {text: "Educación", size: 15},
-            {text: "Cultura", size: 15},
-            {text: "Economía", size: 15},
-            {text: "Medioambiente", size: 15},
-            {text: "Tecnología", size: 10},
-            {text: "Innovación", size: 10}
-        ];
-        const fontFamilies = ['Arial', 'Helvetica', 'Times New Roman', 'Courier', 'Verdana', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Arial Black', 'Impact'];
-        const layout = d3.layout.cloud()
-            .size([width, 400])
-            .words(words)
-            .padding(5)
-            .rotate(() => Math.random() * 90 - 45)
-            .font(() => fontFamilies[Math.floor(Math.random() * fontFamilies.length)])
-            .fontSize(d => d.size)
-            .on("end", draw);
-        layout.start();
-        function draw(words) {
-            d3.select("#word-cloud").append("svg")
-                .attr("width", layout.size()[0])
-                .attr("height", layout.size()[1])
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter().append("text")
-                .style("font-size", d => d.size + "px")
-                .style("font-family", d => d.font)
-                .style("fill", (d, i) => d3.schemeCategory10[i % 10])
-                .attr("text-anchor", "middle")
-                .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
-                .text(d => d.text)
-                .on("mouseover", function() {
-                    d3.select(this)
-                        .transition()
-                        .duration(300)
-                        .style("font-size", d => (d.size + 5) + "px")
-                        .style("font-weight", "bold");
-                })
-                .on("mouseout", function() {
-                    d3.select(this)
-                        .transition()
-                        .duration(300)
-                        .style("font-size", d => d.size + "px")
-                        .style("font-weight", "normal");
-                });
-        }
-        // Datos simulados para publicaciones
-        const publications = [
-            { title: "Elección de magistrados constitucionales vía sufragio universal en Bolivia", author: "Rudy Vladimir Guarachi Cota", topic: "Instituciones Políticas", date: "2024-11-15" },
-            { title: "Rebelión y Pandemia", author: "José Orlando Peralta", topic: "Análisis Político", date: "2020-02-28" },
-            { title: "Santa Cruz No Somos Todos", author: "Maria Angélica Suarez Ribera", topic: "Participación política", date: "2019-01-20" },
-            { title: "Fundamentos de Machine Learning", author: "Ricardo Alonso Fernandez", topic: "Metodología", date: "2023-12-10" },
-            { title: "Percepciones de la ciudadanía, respecto a las opciones de relacionamiento del departamento de Santa Cruz con el Estado", author: "Dunia Sandoval", topic: "Instituciones Políticas", date: "2023-11-05" }
-        ];
+    // Gráfico radar de métricas de impacto
+    const impactOptions = {
+      series: impactData,
+      chart: {
+        height: 350,
+        type: 'radar',
+        width: '100%',
+        redrawOnWindowResize: true,
+        toolbar: { show: false },
+        responsive: responsiveOptions
+      },
+      title: {
+        text: 'Impacto de Investigaciones'
+      },
+      xaxis: {
+        categories: ['2019', '2020', '2021', '2022', '2023', '2024']
+      }
+    };
 
-        // Cargar tabla de publicaciones
-        const publicationsTable = document.getElementById('publications-table').getElementsByTagName('tbody')[0];
-        publications.forEach(pub => {
-            let row = publicationsTable.insertRow();
-            row.insertCell(0).innerHTML = pub.title;
-            row.insertCell(1).innerHTML = pub.author;
-            row.insertCell(2).innerHTML = pub.topic;
-            row.insertCell(3).innerHTML = pub.date;
-        });
-        // Datos simulados para métricas de impacto
-        const impactData = [
-            { name: 'Citas Académicas', data: [30, 40, 45, 50, 49, 60] },
-            { name: 'Menciones en Medios', data: [12, 19, 25, 32, 30, 35] },
-            { name: 'Colaboraciones Internacionales', data: [5, 7, 10, 15, 20, 25] }
-        ];
-
-        // Gráfico de métricas de impacto
-        const impactOptions = {
-            series: impactData,
-            chart: {
-                height: 350,
-                type: 'radar',
-            },
-            title: {
-                text: 'Impacto de Investigaciones'
-            },
-            xaxis: {
-                categories: ['2019', '2020', '2021', '2022', '2023', '2024']
-            }
-        };
-
-        const impactChart = new ApexCharts(document.querySelector("#impact-chart"), impactOptions);
-        impactChart.render();
-    </script>
-</body></html>
+    const impactChart = new ApexCharts(document.querySelector("#impact-chart"), impactOptions);
+    impactChart.render();
+  </script>
+</body>
+</html>
