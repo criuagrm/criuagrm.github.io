@@ -75,8 +75,8 @@
 
     /* Secciones */
     .section {
-      margin-bottom: 30px; 
-      padding: 20px;      
+      margin-bottom: 30px;
+      padding: 20px;
       background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -90,6 +90,12 @@
       color: var(--primary-color);
       margin-bottom: 15px;
       font-size: 1.6rem;
+      text-align: center; /* Centra los subtítulos */
+    }
+
+    /* Texto de bienvenida justificado */
+    .welcome-text {
+      text-align: justify;
     }
 
     /* Botones */
@@ -136,19 +142,6 @@
       margin: 0;
     }
 
-    /* Filas de 5 columnas */
-    .col-5-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center; /* Centra horizontalmente */
-    }
-    .col-5 {
-      flex: 0 0 calc(20% - 10px); 
-      box-sizing: border-box;
-      min-width: 200px; /* Para que en pantallas muy pequeñas no se rompa feo */
-    }
-
     /* Gráficos interactivos */
     .interactive-graph {
       width: 100%;
@@ -178,6 +171,7 @@
       margin-bottom: 10px;
       color: var(--primary-color);
       font-size: 1.1rem;
+      text-align: center;
     }
 
     /* Cursos */
@@ -198,6 +192,9 @@
       color: var(--secondary-color);
       margin-bottom: 10px;
     }
+    .course-card h3 {
+      text-align: center;
+    }
 
     /* Contacto */
     .contact-info {
@@ -210,6 +207,7 @@
     .contact-info h3 {
       margin-bottom: 10px;
       color: #fff;
+      text-align: center;
     }
 
     /* Pie de página */
@@ -238,13 +236,16 @@
 
     /* Responsivo */
     @media (max-width: 992px) {
-      .col-5 {
-        flex: 0 0 calc(50% - 10px); /* 2 en cada fila en pantallas medianas */
+      .row > .col-md-6 {
+        margin-bottom: 20px;
       }
     }
     @media (max-width: 576px) {
-      .col-5 {
-        flex: 0 0 100%; /* 1 en cada fila en pantallas muy pequeñas */
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
       }
     }
   </style>
@@ -334,7 +335,7 @@
     <!-- Sección de bienvenida -->
     <section id="inicio" class="section">
       <h2>Bienvenidos al CIRCPyCS</h2>
-      <p>
+      <p class="welcome-text">
         El Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) es una plataforma académica 
         dedicada al análisis crítico y al desarrollo de conocimiento en el ámbito de las ciencias políticas y sociales. 
         Nuestro enfoque interdisciplinario abarca investigaciones rigurosas sobre los desafíos contemporáneos de Bolivia 
@@ -346,36 +347,36 @@
     <!-- Sección de líneas de investigación (Multidisciplinarias) -->
     <section id="interdisciplinarias" class="section">
       <h2>Líneas de Investigación Multidisciplinarias - Investigadores UAGRM</h2>
-      <div class="col-5-container">
-        <div class="col-5">
+      <div class="row">
+        <div class="col-md-2 offset-md-1">
           <div class="icon-box">
             <i class="fas fa-seedling"></i>
             <h3>Cambio Climático</h3>
             <p>Gestión sostenible de recursos naturales, soluciones ambientales.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-2">
           <div class="icon-box">
             <i class="fas fa-university"></i>
             <h3>Sistema Político</h3>
-            <p>Análisis de estructuras políticas, instituciones públicas y transparencia.</p>
+            <p>Análisis de estructuras políticas, instituciones y transparencia.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-2">
           <div class="icon-box">
             <i class="fas fa-cogs"></i>
             <h3>Innovación y Tecnología</h3>
             <p>Avance tecnológico y crecimiento económico sostenible.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-2">
           <div class="icon-box">
             <i class="fas fa-tractor"></i>
             <h3>Desarrollo Productivo</h3>
             <p>Agroindustria, crecimiento económico y bienestar social.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-2">
           <div class="icon-box">
             <i class="fas fa-users"></i>
             <h3>Sociedad y Educación</h3>
@@ -388,77 +389,80 @@
     <!-- Sección de líneas de investigación (Ciencia Política) -->
     <section id="areas-trabajo" class="section">
       <h2>Líneas de Investigación para Ciencia Política y Administración Pública</h2>
-
-      <!-- Primera fila de 5 -->
-      <div class="col-5-container">
-        <div class="col-5">
+      <!-- 14 líneas, en pares de dos columnas -->
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-balance-scale"></i>
             <h3>Estado y Gobierno</h3>
             <p>Análisis de sistemas democráticos y gobernanza.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-users"></i>
             <h3>Estado Plurinacional</h3>
             <p>Participación, empoderamiento e interculturalidad.</p>
           </div>
         </div>
-        <div class="col-5">
+      </div>
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-landmark"></i>
             <h3>Administración Pública</h3>
             <p>Evaluación de la gestión pública y finanzas fiscales.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-fist-raised"></i>
             <h3>Descolonización</h3>
             <p>Políticas de igualdad y reconocimiento cultural.</p>
           </div>
         </div>
-        <div class="col-5">
+      </div>
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-globe"></i>
             <h3>Relaciones Internacionales</h3>
             <p>Alianzas, política exterior y globalización.</p>
           </div>
         </div>
-      </div>
-      
-      <!-- Segunda fila de 5 -->
-      <div class="col-5-container">
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-people-arrows"></i>
             <h3>Migración e Identidad</h3>
             <p>Análisis de flujos migratorios y multiculturalidad.</p>
           </div>
         </div>
-        <div class="col-5">
+      </div>
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-hands-helping"></i>
             <h3>Partidos Políticos</h3>
             <p>Estructuras, influencia y comportamiento organizativo.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-flag"></i>
             <h3>Movimientos Indígenas</h3>
             <p>Territorialidad y autodeterminación de pueblos originarios.</p>
           </div>
         </div>
-        <div class="col-5">
+      </div>
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-apple-alt"></i>
             <h3>Seguridad Alimentaria</h3>
             <p>Políticas de desarrollo rural y abastecimiento.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-chart-line"></i>
             <h3>Desarrollo y Pobreza</h3>
@@ -466,31 +470,31 @@
           </div>
         </div>
       </div>
-
-      <!-- Tercera fila (4 restantes) -->
-      <div class="col-5-container">
-        <div class="col-5">
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-city"></i>
             <h3>Ciudades y Ciudadanías</h3>
             <p>Urbanización y gobernanza local.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-leaf"></i>
             <h3>Economía Verde</h3>
             <p>Sostenibilidad y recursos naturales estratégicos.</p>
           </div>
         </div>
-        <div class="col-5">
+      </div>
+      <div class="row">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-brain"></i>
             <h3>Cognición Política</h3>
             <p>Conducta política y procesos psicológicos en decisiones.</p>
           </div>
         </div>
-        <div class="col-5">
+        <div class="col-md-6">
           <div class="icon-box">
             <i class="fas fa-laptop-code"></i>
             <h3>Política Computacional</h3>
@@ -504,7 +508,7 @@
     <section id="conceptos" class="section">
       <h2>Conceptos Clave y Relaciones</h2>
       <div id="concept-graph" class="interactive-graph"></div>
-      <h3 class="mt-4">Nube de Palabras Interactiva</h3>
+      <h3 style="text-align:center; margin-top:20px;">Nube de Palabras Interactiva</h3>
       <div id="word-cloud" class="interactive-graph"></div>
     </section>
 
@@ -534,7 +538,7 @@
       </div>
     </section>
 
-    <!-- Sección de Servicios (solo 3) -->
+    <!-- Sección de Servicios (con botón) -->
     <section id="servicios" class="section">
       <h2>Servicios</h2>
       <div class="row">
@@ -565,6 +569,9 @@
             </p>
           </div>
         </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/services.html" class="btn btn-primary btn-lg">Ver Servicios Específicos</a>
       </div>
     </section>
 
@@ -657,6 +664,18 @@
 
   <!-- Scripts -->
   <script>
+    // Configuración de ApexCharts responsivo
+    const responsiveOptions = [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: '100%'
+          }
+        }
+      }
+    ];
+
     // Datos simulados para las áreas de investigación
     const researchAreasData = [
       { area: 'Democracia', count: 45 },
@@ -673,7 +692,11 @@
       }],
       chart: {
         type: 'bar',
-        height: 350
+        height: 350,
+        width: '100%',
+        redrawOnWindowResize: true,
+        toolbar: { show: false },
+        responsive: responsiveOptions
       },
       plotOptions: {
         bar: {
@@ -692,7 +715,6 @@
         align: 'center'
       }
     };
-
     const researchAreasChart = new ApexCharts(document.querySelector("#research-areas-chart"), researchAreasOptions);
     researchAreasChart.render();
 
@@ -921,6 +943,10 @@
       chart: {
         height: 350,
         type: 'radar',
+        width: '100%',
+        redrawOnWindowResize: true,
+        toolbar: { show: false },
+        responsive: responsiveOptions
       },
       title: {
         text: 'Impacto de Investigaciones'
