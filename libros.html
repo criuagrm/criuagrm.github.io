@@ -4,176 +4,226 @@
     <base href="https://criuagrm.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CIRCPyCS - Producción Académica del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</title>
+    <title>CIRCPyCS - Producción Académica</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         :root {
-            --primary-color: #333333;
-            --secondary-color: #666666;
-            --accent-color: #999999;
-            --background-color: #f0f0f0;
-            --text-color: #333333;
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #e67e22;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
         }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
         }
+
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
         }
+
         .navbar {
             background-color: var(--primary-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
+
         .navbar-brand {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1.5rem;
+            color: white !important;
         }
-        .hero {
+
+        .btn-volver {
+            border-color: white;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .hero-section {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 4rem 0;
-            margin-bottom: 2rem;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
         }
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .card {
+
+        .libro-card {
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             background: white;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
         }
-        .card img {
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            width: 100%;
-            height: 200px;
+
+        .libro-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+
+        .portada-libro {
+            height: 350px;
             object-fit: cover;
+            border-bottom: 4px solid var(--accent-color);
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+
+        .card-body {
+            padding: 2rem;
         }
+
+        .badge-categoria {
+            background: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .btn-descarga {
+            background: var(--primary-color);
+            color: white !important;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-descarga:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
         .footer {
             background-color: var(--primary-color);
             color: white;
             padding: 3rem 0;
+            margin-top: 5rem;
         }
     </style>
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">CIRCPyCS</a>
-            <a href="https://criuagrm.github.io/" class="btn btn-outline-light">Volver al Inicio</a>
+            <a href="https://criuagrm.github.io/" class="btn btn-outline-light btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </a>
         </div>
     </nav>
 
-    <section class="hero">
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="container text-center">
-            <h1>Producción Académica</h1>
-            <p>Explora y descarga libros producidos por el CIRCPyCS.</p>
+            <h1 class="display-4 mb-3">Producción Académica</h1>
+            <p class="lead">Obras destacadas de nuestros investigadores</p>
         </div>
     </section>
 
-    <div class="container my-5">
-        <h1 class="text-center mb-5">Libros</h1>
-        
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+    <!-- Libros -->
+    <div class="container">
+        <div class="row row-cols-1 row-cols-lg-3 g-4">
+            <!-- Libro 1 -->
             <div class="col">
-                <div class="card">
-                    <!-- Imagen de portada del libro -->
-                    <img src="https://i.imgur.com/Fm3nLEc.png" alt="Elección de magistrados constitucionales vía sufragio universal en Bolivia">
+                <div class="libro-card">
+                    <img src="https://i.imgur.com/gollCp9.jpeg" class="portada-libro" alt="Elección de magistrados constitucionales">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-book"></i> Elección de magistrados constitucionales vía sufragio universal en Bolivia: Resultados y oportunidades hacia la responsabilidad judicial</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor: Rudy Vladimir Guarachi Cota</h6>
-                        <p class="card-text"><i class="fas fa-university"></i> <strong>Editorial:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales<br>
-                        <i class="fas fa-calendar-alt"></i> <strong>Año de Publicación:</strong> 2024<br>
-                        <i class="fas fa-tags"></i> <strong>Categoría:</strong> Instituciones Políticas</p>
-                        <p>Este libro ofrece un análisis detallado de las elecciones judiciales en Bolivia y las posibilidades de cambio en el sistema de justicia constitucional. Este estudio examina los resultados recientes y plantea escenarios para mejorar el funcionamiento judicial, con un enfoque en la transparencia y la rendición de cuentas, elementos clave para el desarrollo de la democracia en el país.</p>
-                        <a href="https://drive.google.com/file/d/10BPFOyN9NwrBnQuwb_ni6phuUAMllu5_/view?usp=drive_link" class="btn btn-primary mt-3 me-2"><i class="fas fa-download"></i> Descargar</a>
-                        <a href="#detalles-libro1" class="btn btn-success mt-3">Más Información</a>
+                        <span class="badge-categoria mb-3">Instituciones Políticas</span>
+                        <h3 class="card-title mb-3">Elección de magistrados constitucionales vía sufragio universal en Bolivia</h3>
+                        <div class="meta-info mb-4">
+                            <p class="mb-2"><i class="fas fa-user-tie me-2"></i><strong>Autor:</strong> Rudy Vladimir Guarachi Cota</p>
+                            <p class="mb-2"><i class="fas fa-university me-2"></i><strong>Editorial:</strong> CIRCPyCS</p>
+                            <p class="mb-0"><i class="fas fa-calendar-alt me-2"></i><strong>Año:</strong> 2024</p>
+                        </div>
+                        <p class="card-text mb-4">Análisis detallado de las elecciones judiciales en Bolivia y propuestas para mejorar el sistema de justicia constitucional con enfoque en transparencia y rendición de cuentas.</p>
+                        <div class="d-grid gap-2">
+                            <a href="https://drive.google.com/file/d/10BPFOyN9NwrBnQuwb_ni6phuUAMllu5_/view?usp=drive_link" 
+                               class="btn btn-descarga">
+                               <i class="fas fa-download me-2"></i>Descargar PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- Libro 2 -->
             <div class="col">
-                <div class="card">
-                    <!-- Imagen de portada del libro -->
-                    <img src="https://i.imgur.com/sUp7GTd.jpeg" alt="Rebelión y Pandemia">
+                <div class="libro-card">
+                    <img src="https://i.imgur.com/NrJYpbM.png" class="portada-libro" alt="Rebelión y Pandemia">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-book"></i> Rebelión y Pandemia</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Autor: MSc. José Orlando Peralta</h6>
-                        <p class="card-text"><i class="fas fa-university"></i> <strong>Editorial:</strong> Plural Editores<br>
-                        <i class="fas fa-calendar-alt"></i> <strong>Año de Publicación:</strong> 2020<br>
-                        <i class="fas fa-tags"></i> <strong>Categoría:</strong> Análisis Político</p>
-                        <p>Ensayo del politólogo cruceño José Orlando Peralta en la que describe la atmósfera y las condiciones de los sucesos sociopolíticos sucedidos entre octubre y noviembre de 2019 y gran parte de 2020, “desde el espacio llano, libre de intereses partidarios y distanciado de los centros de poder”</p>
-                        <a href="https://libreriagisbert.com/producto/rebelion-y-pandemia-proceso-polit-elect-2019-2020/" class="btn btn-primary mt-3 me-2"><i class="fas fa-download"></i> Comprar</a>
-                        <a href="#detalles-libro2" class="btn btn-success mt-3">Más Información</a>
+                        <span class="badge-categoria mb-3">Análisis Político</span>
+                        <h3 class="card-title mb-3">Rebelión y Pandemia</h3>
+                        <div class="meta-info mb-4">
+                            <p class="mb-2"><i class="fas fa-user-tie me-2"></i><strong>Autor:</strong> MSc. José Orlando Peralta</p>
+                            <p class="mb-2"><i class="fas fa-university me-2"></i><strong>Editorial:</strong> Plural Editores</p>
+                            <p class="mb-0"><i class="fas fa-calendar-alt me-2"></i><strong>Año:</strong> 2020</p>
+                        </div>
+                        <p class="card-text mb-4">Análisis crítico de los eventos sociopolíticos de 2019-2020 en Bolivia desde una perspectiva independiente y objetiva.</p>
+                        <div class="d-grid gap-2">
+                            <a href="https://libreriagisbert.com/producto/rebelion-y-pandemia-proceso-polit-elect-2019-2020/" 
+                               class="btn btn-descarga">
+                               <i class="fas fa-shopping-cart me-2"></i>Comprar Libro
+                            </a>
+                        </div>
                     </div>
-<div class="col">
-            <div class="card">
-                <!-- Imagen de portada del nuevo libro -->
-                <img src="https://i.imgur.com/uCscXn0.jpeg" alt="Santa Cruz No Somos Todos">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-book"></i> Santa Cruz No Somos Todos</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Autor: Msc. María Angélica Suarez Ribera</h6>
-                    <p class="card-text"><i class="fas fa-university"></i> <strong>Editorial:</strong> Editorial El País <br>
-                    <i class="fas fa-calendar-alt"></i> <strong>Año de Publicación:</strong> 2019<br>
-                    <i class="fas fa-tags"></i> <strong>Categoría:</strong> Participación Social</p>
-                    <p>En Santa Cruz de la Sierra deciden unos cuantos, no decide el pueblo, y eso debe cambiar, es urgente transparentar la administración municipal y desarrollar mecanismos de participación real de los vecinos, a través de sus organizaciones e instituciones; parte de los argumentos de la investigación de este libro.</p>
-                    <a href="https://wa.link/ovk1aw" class="btn btn-primary mt-3 me-2"><i class="fas fa-download"></i> Comprar</a>
-                    <a href="#detalles-libro3" class="btn btn-success mt-3">Más Información</a>
                 </div>
             </div>
-        </div>
-                    
+
+            <!-- Libro 3 -->
+            <div class="col">
+                <div class="libro-card">
+                    <img src="https://i.imgur.com/uCscXn0.jpeg" class="portada-libro" alt="Santa Cruz No Somos Todos">
+                    <div class="card-body">
+                        <span class="badge-categoria mb-3">Participación Social</span>
+                        <h3 class="card-title mb-3">Santa Cruz No Somos Todos</h3>
+                        <div class="meta-info mb-4">
+                            <p class="mb-2"><i class="fas fa-user-tie me-2"></i><strong>Autor:</strong> Msc. María Angélica Suarez Ribera</p>
+                            <p class="mb-2"><i class="fas fa-university me-2"></i><strong>Editorial:</strong> Editorial El País</p>
+                            <p class="mb-0"><i class="fas fa-calendar-alt me-2"></i><strong>Año:</strong> 2019</p>
+                        </div>
+                        <p class="card-text mb-4">Investigación sobre la necesidad de transparencia y participación ciudadana en la administración municipal de Santa Cruz.</p>
+                        <div class="d-grid gap-2">
+                            <a href="https://wa.link/ovk1aw" 
+                               class="btn btn-descarga">
+                               <i class="fas fa-shopping-cart me-2"></i>Comprar Libro
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
-    
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <h5>Información de Contacto</h5>
-                    <p><i class="fas fa-envelope"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
-                    <p><i class="fas fa-phone"></i> +591 67381294</p>
+                <div class="col-md-6 mb-4">
+                    <h5>Contacto</h5>
+                    <p><i class="fas fa-envelope me-2"></i>cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+                    <p><i class="fas fa-phone me-2"></i>+591 67381294</p>
                 </div>
                 <div class="col-md-6">
                     <h5>Síguenos</h5>
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in fa-lg"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-        });
-    </script>
 </body>
 </html>
