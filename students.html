@@ -33,8 +33,11 @@
             z-index: 1000;
         }
 
-        .navbar-brand img {
-            height: 40px;
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
         }
 
         .btn-volver {
@@ -58,14 +61,21 @@
             color: var(--primary-color);
             margin-bottom: 2rem;
             font-weight: 700;
+            font-size: 2rem;
         }
 
         /* Tarjetas */
         .contenedor-tarjetas {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
             padding: 1rem;
+        }
+
+        @media (max-width: 992px) {
+            .contenedor-tarjetas {
+                grid-template-columns: 1fr;
+            }
         }
 
         .tarjeta-investigador {
@@ -107,11 +117,11 @@
         }
 
         .foto-perfil {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             margin: 0 auto 1rem;
-            border: 3px solid;
+            border: 4px solid;
             object-fit: cover;
         }
 
@@ -160,7 +170,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="https://i.imgur.com/R952Ljv.png" alt="Logo CIRCPyCS">
+                CIRCPyCS
             </a>
             <a href="https://criuagrm.github.io/" class="btn btn-outline-light btn-volver">
                 <i class="fas fa-arrow-left"></i> Volver al Inicio
@@ -170,10 +180,10 @@
 
     <!-- Contenido principal -->
     <div class="contenedor-principal">
-        <h1 class="titulo-principal">Investigadores Estudiantiles</h1>
+        <h1 class="titulo-principal">Estudiantes Investigadores del<br>Centro de Investigación Regional UAGRM</h1>
         
         <div class="contenedor-tarjetas">
-            <!-- Investigador Avanzado -->
+            <!-- Investigador 1 -->
             <div class="tarjeta-investigador avanzado">
                 <div class="text-center">
                     <img src="https://i.imgur.com/7Qj7nzM.jpg" alt="María Fernández" class="foto-perfil">
@@ -207,7 +217,7 @@
                 </div>
             </div>
 
-            <!-- Investigador en Formación -->
+            <!-- Investigador 2 -->
             <div class="tarjeta-investigador formacion">
                 <div class="text-center">
                     <img src="https://i.imgur.com/5Xd3WzP.jpg" alt="Carlos Méndez" class="foto-perfil">
@@ -231,6 +241,40 @@
                 
                 <div class="acciones-tarjeta">
                     <a href="https://wa.me/591987654321?text=Hola%20Carlos,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" 
+                       target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- Investigador 3 -->
+            <div class="tarjeta-investigador avanzado">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/VvHdR5k.jpg" alt="Laura Gutiérrez" class="foto-perfil">
+                    <h3 class="mb-1">Laura Gutiérrez Paz</h3>
+                    <span class="badge-estatus">Investigador Avanzado</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1"><strong><i class="fas fa-envelope"></i> Correo:</strong> l.gutierrez@estudiante.uagrm.edu.bo</p>
+                    <p class="mb-1"><strong><i class="fas fa-graduation-cap"></i> Formación:</strong> Lic. Economía</p>
+                    <p class="mb-1"><strong><i class="fas fa-flask"></i> Experiencia:</strong> 1.5 años</p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Economía del Desarrollo</li>
+                            <li>• Políticas Económicas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591654987321?text=Hola%20Laura,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
                        class="btn btn-whatsapp" 
                        target="_blank">
                         <i class="fab fa-whatsapp"></i> Contactar
