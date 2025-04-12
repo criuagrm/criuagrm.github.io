@@ -2,26 +2,33 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Organización - CIRCPyCS UAGRM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organización - CIRCPYCS UAGRM</title>
+    
+    <!-- Bootstrap CSS y FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Estilos Internos -->
     <style>
         :root {
-            --primary-color: #333333; /* Negro */
-            --secondary-color: #666666; /* Plomo oscuro */
-            --background-color: #f5f5f5; /* Gris claro */
-            --text-color: #222222; /* Negro suave */
+            --primary-color: #333333;      /* Negro */
+            --secondary-color: #666666;    /* Plomo oscuro */
+            --background-color: #f5f5f5;   /* Gris claro */
+            --text-color: #222222;         /* Negro suave */
         }
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
+            margin: 0;
+            padding: 0;
         }
         h1, h2 {
             font-family: 'Playfair Display', serif;
             color: var(--primary-color);
         }
+        /* Barra de navegación */
         .navbar {
             background-color: var(--primary-color);
         }
@@ -31,238 +38,228 @@
         .nav-link.active {
             text-decoration: underline;
         }
+        /* Secciones */
         .section {
-            padding: 2rem 0;
+            padding: 50px 0;
         }
         .section h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #003366;
+            text-transform: uppercase;
             text-align: center;
             margin-bottom: 1rem;
         }
-       
-/* Estilos para las tarjetas de autoridades */
-.authority-card {
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    width: 100%; /* Ajustado para adaptarse al contenedor */
-    height: 280px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.authority-card img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
-    border: 3px solid #003366;
-}
-
-
-.authority-card h5 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 10px 0 5px;
-    color: #003366;
-}
-
-.authority-card p {
-    font-size: 0.9rem;
-    color: #555555;
-}
-
-.authority-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Espaciado para la sección */
-.section {
-    padding: 50px 0;
-}
-
-.section h2 {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #003366;
-    text-transform: uppercase;
-}
-
-        .minimal-button {
-            background-color: var(--primary-color);
+        /* Banner */
+        .banner-header {
+            background-color: #000; /* Fondo oscuro para contrastar */
             color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 6px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            padding: 40px 0;
         }
-        .minimal-button:hover {
-            background-color: var(--secondary-color);
+        /* Tarjetas de autoridades */
+        .authority-card {
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            width: 100%;
+            height: 280px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-.team-card {
-        background-color: #ffffff;
-        border: 1px solid #dddddd;
-        border-radius: 8px;
-        width: 220px;
-        height: 300px; /* Tamaño fijo */
-        padding: 15px;
-        text-align: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .team-card img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-        border: 3px solid #003366;
-    }
-
-    .team-card h5 {
-        font-size: 1rem;
-        font-weight: bold;
-        margin: 10px 0 5px;
-        color: #003366;
-    }
-
-    .team-card p {
-        font-size: 0.9rem;
-        color: #555555;
-    }
-
-    .team-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-    }
-
-        
-/* Estilos del organigrama */
-.org-chart {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-.node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    margin: 10px;
-    background-color: #fff;
-    border: 2px solid #003366;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    min-width: 150px;
-}
-
-.node .title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #003366;
-    margin-top: 10px;
-}
-
-.node .photo img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid #003366;
-    margin-bottom: 10px;
-}
-
-.child-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    position: relative;
-}
-
-.child-container:before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    width: 0;
-    height: 20px;
-    border-left: 2px solid #003366;
-}
-
-.child-container > .node:not(:last-child):after {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    border-top: 2px solid #003366;
-}
-
-.child-container > .node:not(:last-child):before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    right: 50%;
-    width: 50%;
-    border-top: 2px solid #003366;
-}
+        .authority-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid #003366;
+        }
+        .authority-card h5 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #003366;
+        }
+        .authority-card p {
+            font-size: 0.9rem;
+            color: #555555;
+        }
+        .authority-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* Tarjetas del Equipo, Investigadores, etc. */
+        .team-card, .investigador-card {
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            width: 220px;
+            height: 300px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .team-card img, .investigador-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid #003366;
+        }
+        .team-card h5, .investigador-card h5 {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #003366;
+        }
+        .team-card p, .investigador-card p {
+            font-size: 0.9rem;
+            color: #555555;
+        }
+        .team-card:hover, .investigador-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        /* Organigrama EAC */
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            margin: 10px;
+            background-color: #fff;
+            border: 2px solid #003366;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-width: 150px;
+        }
+        .node .title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #003366;
+            margin-top: 10px;
+        }
+        .node .photo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #003366;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        .child-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+        }
+        .child-container:before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            width: 0;
+            height: 20px;
+            border-left: 2px solid #003366;
+        }
+        .child-container > .node:not(:last-child):after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-top: 2px solid #003366;
+        }
+        .child-container > .node:not(:last-child):before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: 50%;
+            width: 50%;
+            border-top: 2px solid #003366;
+        }
+        /* Footer */
         .footer {
             background-color: var(--primary-color);
             color: white;
             padding: 3rem 0;
         }
+        .footer p, .footer h5 {
+            margin: 0;
+        }
+        .footer h5 {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        /* Responsivo */
+        @media (max-width: 576px) {
+            .authority-card, .team-card, .investigador-card {
+                height: auto;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="https://criuagrm.github.io/">CIRCPyCS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#autoridades">Autoridades</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#equipo">Equipo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#eac">EAC</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#investigadores">Investigadores</a></li>
-                     <li class="nav-item">
-                    <a href="https://criuagrm.github.io" class="btn btn-light ms-3" style="font-weight: bold;">Volver a Inicio</a>
-                </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Banner -->
-    <header class="text-center py-5 bg-dark text-white">
-        <h1 style="color: white; font-weight: bold; margin: 0;">Organización del Centro de Investigación Regional - UAGRM</h1>
-        <p>Conoce cómo estamos estructurados para liderar la investigación en el Departamento de Santa Cruz.</p>
-    </header>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="https://criuagrm.github.io/">CIRCPyCS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- Enlaces de Secciones según el orden solicitado -->
+                <li class="nav-item"><a class="nav-link" href="#autoridades">Autoridades</a></li>
+                <li class="nav-item"><a class="nav-link" href="#equipo">Equipo</a></li>
+                <li class="nav-item"><a class="nav-link" href="#comite-cientifico">Comité Científico</a></li>
+                <li class="nav-item"><a class="nav-link" href="#eac">EAC</a></li>
+                <li class="nav-item"><a class="nav-link" href="#investigadores">Investigadores</a></li>
+                <li class="nav-item"><a class="nav-link" href="#estudiantes">Estudiantes</a></li>
+                <li class="nav-item">
+                    <a href="https://criuagrm.github.io" class="btn btn-light ms-3" style="font-weight: bold;">
+                        Volver a Inicio
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Banner Principal -->
+<header class="text-center py-5 bg-dark text-white">
+    <h1 style="color: white; font-weight: bold; margin: 0;">
+        Organización del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM
+    </h1>
+    <p>Conoce cómo estamos estructurados para liderar la investigación en el Departamento de Santa Cruz.</p>
+</header>
 
 <!-- Sección Autoridades -->
-<section id="autoridades" class="section bg-light py-5">
-    <h2 class="text-center mb-4">Autoridades</h2>
+<section id="autoridades" class="section bg-light">
+    <h2>Autoridades</h2>
     <div class="container">
         <div class="row justify-content-center">
             <!-- Tarjeta 1 -->
             <div class="col-md-2 col-sm-4 mb-3">
                 <div class="authority-card">
                     <img src="https://i.imgur.com/0wFGVzw.jpeg" alt="Rector">
+                    <!-- EJEMPLO DE SALTOS DE LÍNEA con <br> -->
                     <h5>Dr. Vicente Cuéllar</h5>
-                    <p>Rector UAGRM</p>
+                    <p>Rector <br> UAGRM</p>
                 </div>
             </div>
             <!-- Tarjeta 2 -->
@@ -270,7 +267,7 @@
                 <div class="authority-card">
                     <img src="https://i.imgur.com/nKvJms9.jpeg" alt="Vicerrector">
                     <h5>Dr. Reinerio Vargas</h5>
-                    <p>Vicerrector UAGRM</p>
+                    <p>Vicerrector <br> UAGRM</p>
                 </div>
             </div>
             <!-- Tarjeta 3 -->
@@ -278,15 +275,15 @@
                 <div class="authority-card">
                     <img src="https://i.imgur.com/YKuyiDE.jpeg" alt="Decano">
                     <h5>Dr. Alfonso Coca</h5>
-                    <p>Decano F.C.J.P.S.RR.II.</p>
+                    <p>Decano <br> F.C.J.P.S.RR.II.</p>
                 </div>
             </div>
             <!-- Tarjeta 4 -->
             <div class="col-md-2 col-sm-4 mb-3">
                 <div class="authority-card">
                     <img src="https://i.imgur.com/bDNReAS.jpeg" alt="Vicedecana">
-                    <h5>Dra. Rosario Caballero V.</h5>
-                    <p>Vicedecana F.C.J.P.S.RR.II.</p>
+                    <h5>Dra. Rosario Caballero</h5>
+                    <p>Vicedecana <br> F.C.J.P.S.RR.II.</p>
                 </div>
             </div>
             <!-- Tarjeta 5 -->
@@ -294,48 +291,100 @@
                 <div class="authority-card">
                     <img src="https://i.imgur.com/7mlNXEy.png" alt="Director">
                     <h5>MSc. Francisco Méndez E.</h5>
-                    <p>Director de Carrera Ciencia Política y Adm. Pública</p>
+                    <p>Director <br> Ciencia Política y Adm. Pública</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-
-  <!-- Sección Equipo -->
-<section id="equipo" class="section bg-light py-5">
+<!-- Sección Equipo de Gestión Institucional -->
+<section id="equipo" class="section bg-light">
     <h2>Equipo de Gestión Institucional</h2>
     <div class="container d-flex justify-content-center flex-wrap gap-3">
         <!-- Directora -->
         <div class="team-card">
             <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="Directora">
-            <h5>María Angélica Suárez Ribera</h5>
+            <h5>María Angélica Suárez</h5>
             <p>Directora del Centro de Investigación Regional</p>
         </div>
         <!-- Responsable de Programas -->
         <div class="team-card">
             <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="Responsable de Programas">
-            <h5>José Orlando Peralta Beltrán</h5>
+            <h5>José Orlando Peralta</h5>
             <p>Programas de Investigación e Interacción Social</p>
         </div>
         <!-- Responsable de Análisis Político -->
         <div class="team-card">
             <img src="https://i.imgur.com/pcBiXh2.png" alt="Responsable de Análisis Político">
-            <h5>Daniel Hurtado Justiniano</h5>
+            <h5>Daniel Hurtado</h5>
             <p>Análisis Político, Vinculación y Canalización de Recursos</p>
         </div>
         <!-- Coordinador Internacional -->
         <div class="team-card">
             <img src="https://i.imgur.com/QNuYClh.jpeg" alt="Coordinador Internacional">
-            <h5>Tte. Cab. James M. Campos Cuéllar</h5>
+            <h5>Tte. Cab. James Campos</h5>
             <p>Coordinador Internacional</p>
-        </div>
         </div>
     </div>
 </section>
 
-
-    
+<!-- Sección Comité Científico -->
+<section id="comite-cientifico" class="section bg-light">
+    <h2>Comité Científico</h2>
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Presidente -->
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="authority-card">
+                    <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Luis Andia">
+                    <h5>Dr. Luis Andia</h5>
+                    <p>Presidente del Comité Científico</p>
+                </div>
+            </div>
+            <!-- Miembro 1 -->
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="authority-card">
+                    <img src="https://i.imgur.com/ycOxMJk.jpeg" alt="Paula Peña">
+                    <h5>Lic. Paula Peña Hasbún</h5>
+                    <p>Miembro del Comité Científico</p>
+                </div>
+            </div>
+            <!-- Miembro 2 -->
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="authority-card">
+                    <img src="https://i.imgur.com/wQvHcAm.jpeg" alt="Reymi Ferreira">
+                    <h5>Dr. Reymi Ferreira</h5>
+                    <p>Miembro del Comité Científico</p>
+                </div>
+            </div>
+            <!-- Miembro 3 -->
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="authority-card">
+                    <img src="https://i.imgur.com/vdMqwM0.jpeg" alt="Odin Rodriguez">
+                    <h5>Msc. Odin Rodriguez</h5>
+                    <p>Miembro del Comité Científico</p>
+                </div>
+            </div>
+            <!-- Miembro 4 -->
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="authority-card">
+                    <img src="https://i.imgur.com/9dZXWQG.jpeg" alt="Elizabeth Galarza">
+                    <h5>Dra. Elizabeth Galarza</h5>
+                    <p>Miembro del Comité Científico</p>
+                </div>
+            </div>
+            <!-- Miembro 5 -->
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="authority-card">
+                    <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Javier Hernández">
+                    <h5>Msc. Javier Hernández</h5>
+                    <p>Miembro del Comité Científico</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Sección Organigrama del EAC -->
 <section id="eac" class="section">
@@ -368,7 +417,7 @@
                                     <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Jefe de Área Economía">
                                 </div>
                                 <span class="title">Jefe de Área Economía</span>
-                                <p>Javier Hernández Serrano</p>
+                                <p>Javier Hernández</p>
                             </div>
                             <div class="node">
                                 <div class="photo">
@@ -379,7 +428,7 @@
                             </div>
                             <div class="node">
                                 <div class="photo">
-                                    <img src="https://i.imgur.com/448ZaAc.jpeg" alt="Jefe de Área Relaciones Internacionales">
+                                    <img src="https://i.imgur.com/448ZaAc.jpeg" alt="Jefa de Área Relaciones Internacionales">
                                 </div>
                                 <span class="title">Jefa de Área Relaciones Internacionales</span>
                                 <p>Carmen Sandoval</p>
@@ -413,108 +462,74 @@
     </div>
 </section>
 
-
-
- <!-- Sección Investigadores -->
+<!-- Sección Investigadores -->
 <section id="investigadores" class="section">
     <h2>Investigadores</h2>
     <div class="container d-flex justify-content-around align-items-center flex-wrap">
-        <!-- Investigadora 1: Mónica Ximena Guzmán -->
-        <div class="investigador text-center mx-3">
-            <div class="profile-picture">
-                <img src="https://i.imgur.com/iXCNpu0.png" alt="Mónica Ximena Guzmán" style="width: 100px; height: 100px; border-radius: 50%;">
-            </div>
+        <!-- Investigadora 1 -->
+        <div class="investigador-card my-2">
+            <img src="https://i.imgur.com/iXCNpu0.png" alt="Mónica Guzmán">
             <h5>Mónica Ximena Guzmán</h5>
             <p>Investigadora Principal</p>
         </div>
-        <!-- Investigadora 2: Vilma Paredes Villalba -->
-        <div class="investigador text-center mx-3">
-            <div class="profile-picture">
-                <img src="https://i.imgur.com/UIsvDSC.jpeg" alt="Vilma Paredes Villalba" style="width: 100px; height: 100px; border-radius: 50%;">
-            </div>
+        <!-- Investigadora 2 -->
+        <div class="investigador-card my-2">
+            <img src="https://i.imgur.com/UIsvDSC.jpeg" alt="Vilma Paredes">
             <h5>Vilma Paredes Villalba</h5>
             <p>Investigadora Principal</p>
         </div>
-        <!-- Investigador 3: Rudy Guarachi -->
-        <div class="investigador text-center mx-3">
-            <div class="profile-picture">
-                <img src="https://i.imgur.com/AeNQMe6.jpeg" alt="Rudy Guarachi" style="width: 100px; height: 100px; border-radius: 50%;">
-            </div>
+        <!-- Investigador 3 -->
+        <div class="investigador-card my-2">
+            <img src="https://i.imgur.com/AeNQMe6.jpeg" alt="Rudy Guarachi">
             <h5>Rudy Vladimir Guarachi</h5>
             <p>Investigador Asociado</p>
         </div>
     </div>
-   <div class="text-center mt-4">
-    <a href="https://criuagrm.github.io/researchers" 
-       class="btn px-5 py-3" 
-       style="font-size: 18px; font-weight: bold; background-color: #6c757d; border-color: #6c757d; color: white; border-radius: 8px;">
-        Web de Investigadores
-    </a>
-</div>
-
-
-</section>
-
-<!-- Sección Comité Científico -->
-<section id="comite-cientifico" class="section bg-light py-5">
-    <h2 class="text-center mb-4">Comité Científico</h2>
-    <div class="container">
-        <div class="row justify-content-center">
-            <!-- Presidente -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Luis Andia">
-                    <h5>Dr. Luis Andia</h5>
-                    <p>Presidente del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 1 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/ycOxMJk.jpeg" alt="Paula Peña">
-                    <h5>Lic. Paula Peña Hasbún</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 2 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/wQvHcAm.jpeg" alt="Reymi Ferreira">
-                    <h5>Dr. Reymi Ferreira Justiniano</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 3 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/vdMqwM0.jpeg" alt="Odin Rodriguez">
-                    <h5>Msc. Odin Rodriguez Mercado</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 4 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/9dZXWQG.jpeg" alt="Elizabeth Galarza">
-                    <h5>Dra. Elizabeth Galarza de Eid</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 5 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Javier Hernández">
-                    <h5>Msc. Javier Hernández Serrano</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-        </div>
+    <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/researchers" 
+           class="btn px-5 py-3" 
+           style="font-size: 18px; font-weight: bold; background-color: #6c757d; border-color: #6c757d; color: white; border-radius: 8px;">
+            Web de Investigadores
+        </a>
     </div>
 </section>
 
-    
+<!-- Sección Estudiantes Investigadores (solo 3 ejemplos) -->
+<section id="estudiantes" class="section bg-light">
+    <h2>Estudiantes Investigadores</h2>
+    <div class="container d-flex justify-content-around align-items-center flex-wrap">
+        <!-- 1. Investigador Avanzado: Aneth Flores -->
+        <div class="investigador-card my-2" style="width: 230px; height: auto;">
+            <img src="https://i.imgur.com/7Qj7nzM.jpg" alt="Aneth" 
+                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #8e44ad;">
+            <h5>Aneth Flores</h5>
+            <p>Est. Investigador Avanzado</p>
+        </div>
+        <!-- 2. Investigador en Formación: Carmen Michelle King -->
+        <div class="investigador-card my-2" style="width: 230px; height: auto;">
+            <img src="https://i.imgur.com/5Xd3WzP.jpg" alt="Carmen Michelle King"
+                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #16a085;">
+            <h5>Carmen Michelle King</h5>
+            <p>Est. Investigador en Formación</p>
+        </div>
+        <!-- 3. Investigador en Formación: Yhelsy Nikol Torrico -->
+        <div class="investigador-card my-2" style="width: 230px; height: auto;">
+            <img src="https://i.imgur.com/9Sg2Z4s.jpg" alt="Yhelsy Nikol Torrico Mendoza"
+                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #16a085;">
+            <h5>Yhelsy Nikol Torrico</h5>
+            <p>Est. Investigador en Formación</p>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="https://criuagrm.github.io/students" 
+           class="btn px-5 py-3" 
+           style="font-size: 18px; font-weight: bold; background-color: #343a40; border-color: #343a40; color: white; border-radius: 8px;">
+            Web de Estudiantes
+        </a>
+    </div>
+</section>
 
-     <!-- Footer -->
+<!-- Footer -->
 <footer class="footer">
     <div class="container">
         <div class="row">
@@ -539,7 +554,7 @@
     </div>
 </footer>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
