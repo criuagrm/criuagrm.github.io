@@ -1,647 +1,736 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIRCPyCS - Investigadores Estudiantiles</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CIRCPyCS - Investigadores Estudiantiles</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --background-color: #f8f9fa;
+      --text-color: #34495e;
+      --avanzado-color: #8e44ad;
+      --formacion-color: #16a085;
+      --header-bg: #2c3e50;
+    }
 
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --background-color: #f8f9fa;
-            --text-color: #34495e;
-            --avanzado-color: #8e44ad;
-            --formacion-color: #16a085;
-            --header-bg: #2c3e50;
-        }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      padding-top: 80px;
+      margin: 0;
+    }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            padding-top: 80px;
-            margin: 0;
-        }
+    /* Header */
+    .navbar-custom {
+      background-color: var(--header-bg) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
 
-        /* Header */
-        .navbar-custom {
-            background-color: var(--header-bg) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
+    .navbar-brand {
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white !important;
+    }
 
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: white !important;
-        }
+    .btn-volver {
+      border-color: white;
+      color: white !important;
+    }
+    .btn-volver:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
 
-        .btn-volver {
-            border-color: white;
-            color: white !important;
-        }
-        .btn-volver:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
+    /* Contenido principal */
+    .contenedor-principal {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 15px;
+    }
 
-        /* Contenido principal */
-        .contenedor-principal {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 15px;
-        }
+    h1.titulo-principal {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 2rem;
+    }
 
-        h1.titulo-principal {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            font-weight: 700;
-            font-size: 2rem;
-        }
+    /* Tarjetas */
+    .contenedor-tarjetas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      padding: 1rem;
+    }
+    /* A 1200px o menos, cambia a 2 columnas */
+    @media (max-width: 1200px) {
+      .contenedor-tarjetas {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    /* A 768px o menos, cambia a 1 columna */
+    @media (max-width: 768px) {
+      .contenedor-tarjetas {
+        grid-template-columns: 1fr;
+      }
+    }
 
-        /* Tarjetas */
-        .contenedor-tarjetas {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            padding: 1rem;
-        }
-        /* A 1200px o menos, cambia a 2 columnas */
-        @media (max-width: 1200px) {
-            .contenedor-tarjetas {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        /* A 768px o menos, cambia a 1 columna */
-        @media (max-width: 768px) {
-            .contenedor-tarjetas {
-                grid-template-columns: 1fr;
-            }
-        }
+    .tarjeta-investigador {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      transition: transform 0.3s ease;
+      border-left: 5px solid;
+    }
+    .tarjeta-investigador:hover {
+      transform: translateY(-5px);
+    }
 
-        .tarjeta-investigador {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            transition: transform 0.3s ease;
-            border-left: 5px solid;
-        }
-        .tarjeta-investigador:hover {
-            transform: translateY(-5px);
-        }
+    .avanzado {
+      border-color: var(--avanzado-color);
+    }
+    .formacion {
+      border-color: var(--formacion-color);
+    }
 
-        .avanzado {
-            border-color: var(--avanzado-color);
-        }
-        .formacion {
-            border-color: var(--formacion-color);
-        }
+    .badge-estatus {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .avanzado .badge-estatus {
+      background: var(--avanzado-color);
+      color: white;
+    }
+    .formacion .badge-estatus {
+      background: var(--formacion-color);
+      color: white;
+    }
 
-        .badge-estatus {
-            font-size: 0.85rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-        .avanzado .badge-estatus {
-            background: var(--avanzado-color);
-            color: white;
-        }
-        .formacion .badge-estatus {
-            background: var(--formacion-color);
-            color: white;
-        }
+    .foto-perfil {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      border: 4px solid;
+      object-fit: cover;
+    }
+    .avanzado .foto-perfil {
+      border-color: var(--avanzado-color);
+    }
+    .formacion .foto-perfil {
+      border-color: var(--formacion-color);
+    }
 
-        .foto-perfil {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            border: 4px solid;
-            object-fit: cover;
-        }
-        .avanzado .foto-perfil {
-            border-color: var(--avanzado-color);
-        }
-        .formacion .foto-perfil {
-            border-color: var(--formacion-color);
-        }
+    .detalles-investigador {
+      margin: 1rem 0;
+      padding-left: 1rem;
+      border-left: 3px solid;
+    }
 
-        .detalles-investigador {
-            margin: 1rem 0;
-            padding-left: 1rem;
-            border-left: 3px solid;
-        }
+    .acciones-tarjeta {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .btn-whatsapp {
+      background-color: #25d366;
+      color: white !important;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-certificado {
+      background-color: var(--primary-color);
+      color: white !important;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
 
-        .acciones-tarjeta {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white !important;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-certificado {
-            background-color: var(--primary-color);
-            color: white !important;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        footer a {
-            color: #fff;
-            margin: 0 0.5rem;
-            transition: color 0.3s ease;
-        }
-        footer a:hover {
-            color: #16a085;
-        }
-    </style>
+    /* Footer */
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.5rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #16a085;
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                CIRCPyCS
-            </a>
-            <a href="https://criuagrm.github.io/" class="btn btn-outline-light btn-volver">
-                <i class="fas fa-arrow-left"></i> Volver al Inicio
-            </a>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        CIRCPyCS
+      </a>
+      <a href="https://criuagrm.github.io/" class="btn btn-outline-light btn-volver">
+        <i class="fas fa-arrow-left"></i> Volver al Inicio
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="contenedor-principal">
+    <h1 class="titulo-principal">
+      Estudiantes Investigadores del<br>Centro de Investigación Regional UAGRM
+    </h1>
+
+    <div class="contenedor-tarjetas">
+      <!-- 1. Investigador Avanzado -->
+      <div class="tarjeta-investigador avanzado">
+        <div class="text-center">
+          <img src="https://i.imgur.com/7Qj7nzM.jpg" alt="Aneth" class="foto-perfil" />
+          <h3 class="mb-1">Aneth Flores</h3>
+          <span class="badge-estatus">Estudiante Investigador Avanzado</span>
         </div>
-    </nav>
 
-    <!-- Contenido principal -->
-    <div class="contenedor-principal">
-        <h1 class="titulo-principal">
-            Estudiantes Investigadores del<br>Centro de Investigación Regional UAGRM
-        </h1>
-        
-        <div class="contenedor-tarjetas">
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong> aneth@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            2 años
+          </p>
 
-            <!-- 1. Investigador Avanzado -->
-            <div class="tarjeta-investigador avanzado">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/7Qj7nzM.jpg" alt="Aneth" class="foto-perfil">
-                    <h3 class="mb-1">Aneth Flores</h3>
-                    <span class="badge-estatus">Estudiante Investigador Avanzado</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1"><strong><i class="fas fa-envelope"></i> Correo:</strong> aneth@gmail.com</p>
-                    <p class="mb-1"><strong><i class="fas fa-graduation-cap"></i> Formación:</strong> Est. Ciencia Política</p>
-                    <p class="mb-1"><strong><i class="fas fa-flask"></i> Experiencia:</strong> 2 años</p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• Ciencias Sociales Computacionales</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591123456789?text=Hola%20María,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 2. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/5Xd3WzP.jpg" alt="Carmen Michelle King" class="foto-perfil">
-                    <h3 class="mb-1">Carmen Michelle King</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        carmenmichellek@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        1 año
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• Sociedad, Salud y Educación</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591987654321?text=Hola%20Carlos,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 3. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/VvHdR5k.jpg" alt="Jorge Carlos" class="foto-perfil">
-                    <h3 class="mb-1">Jorge Carlos</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        jckoelet.10@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        Proceso...
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591654987321?text=Hola%20Sofía,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 4. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/KZqYSOq.jpg" alt="Mariano Ramos Claure" class="foto-perfil">
-                    <h3 class="mb-1">Mariano Ramos Claure</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        ramosm8124@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        Proceso...
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591987651234?text=Hola%20Juan,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 5. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/a4AQQ1j.jpg" alt="Layonel Quiñones Nova" class="foto-perfil">
-                    <h3 class="mb-1">Layonel Quiñones Nova</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        quinacademy123@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        Proceso
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591768951234?text=Hola%20Ana,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 6. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/C51S5jN.jpg" alt="Hugo Renato Espinoza Pardo" class="foto-perfil">
-                    <h3 class="mb-1">Hugo Renato Espinoza Pardo</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        hugorenato.16ep@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        Proceso...
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591712345678?text=Hola%20Pedro,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 7. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/b5Ex9MW.jpg" alt="Ghilmar Felix Quispe Espinoza" class="foto-perfil">
-                    <h3 class="mb-1">Ghilmar Felix Quispe Espinoza</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        ghilmarfqe@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        Proceso...
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591700000001?text=Hola%20Diana,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 8. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/DScUpOP.jpg" alt="Cristian Ricardo Mendez Lopez" class="foto-perfil">
-                    <h3 class="mb-1">Cristian Ricardo Mendez Lopez</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        cristianml050314@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Derecho
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        Proceso...
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591712300001?text=Hola%20Andrés,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 9. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/9Sg2Z4s.jpg" alt="Yhelsy Nikol Torrico Mendoza" class="foto-perfil">
-                    <h3 class="mb-1">Yhelsy Nikol Torrico Mendoza</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        torricomendozanikol@gmail.com
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Est. Ciencia Política
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        9 meses
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Sistema Político e Instituciones Públicas</li>
-                            <li>• (Pendiente)</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591600000000?text=Hola%20Lucía,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
-            <!-- 10. Investigador en Formación -->
-            <div class="tarjeta-investigador formacion">
-                <div class="text-center">
-                    <img src="https://i.imgur.com/gOA5gn1.jpg" alt="Pablo Fernández" class="foto-perfil">
-                    <h3 class="mb-1">Pablo Fernández Rico</h3>
-                    <span class="badge-estatus">Investigador en Formación</span>
-                </div>
-                
-                <div class="detalles-investigador">
-                    <p class="mb-1">
-                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
-                        p.fernandez@estudiante.uagrm.edu.bo
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
-                        Lic. Derecho
-                    </p>
-                    <p class="mb-1">
-                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
-                        3 meses
-                    </p>
-                    
-                    <div class="mt-2">
-                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
-                        <ul class="list-unstyled">
-                            <li>• Derecho Constitucional</li>
-                            <li>• Legislación Comparada</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="acciones-tarjeta">
-                    <a href="https://wa.me/591600000999?text=Hola%20Pablo,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
-                       class="btn btn-whatsapp" target="_blank">
-                        <i class="fab fa-whatsapp"></i> Contactar
-                    </a>
-                    <button class="btn btn-certificado">
-                        <i class="fas fa-file-certificate"></i> Certificado
-                    </button>
-                </div>
-            </div>
-
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• Ciencias Sociales Computacionales</li>
+            </ul>
+          </div>
         </div>
-    </div> <!-- /contenedor-principal -->
 
-    <!-- Footer con copyright, contacto y redes sociales -->
-    <footer>
-        <div class="container">
-            <p class="mb-1">
-                &copy; 2023 Centro de Investigación Regional UAGRM (CIRCPyCS). Todos los derechos reservados.
-            </p>
-            <p class="mb-1">
-                Contacto: 
-                <a href="mailto:contacto@circpycs.uagrm.edu.bo">contacto@circpycs.uagrm.edu.bo</a> | 
-                <i class="fas fa-phone"></i> +591 12345678
-            </p>
-            <p>
-                Síguenos en:
-                <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-            </p>
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591123456789?text=Hola%20María,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
         </div>
-    </footer>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- 2. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/5Xd3WzP.jpg"
+            alt="Carmen Michelle King"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Carmen Michelle King</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            carmenmichellek@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            1 año
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• Sociedad, Salud y Educación</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591987654321?text=Hola%20Carlos,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/VvHdR5k.jpg"
+            alt="Jorge Carlos"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Jorge Carlos</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            jckoelet.10@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            Proceso...
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591654987321?text=Hola%20Sofía,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/KZqYSOq.jpg"
+            alt="Mariano Ramos Claure"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Mariano Ramos Claure</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            ramosm8124@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            Proceso...
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591987651234?text=Hola%20Juan,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/a4AQQ1j.jpg"
+            alt="Layonel Quiñones Nova"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Layonel Quiñones Nova</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            quinacademy123@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            Proceso
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591768951234?text=Hola%20Ana,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 6. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/C51S5jN.jpg"
+            alt="Hugo Renato Espinoza Pardo"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Hugo Renato Espinoza Pardo</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            hugorenato.16ep@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            Proceso...
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591712345678?text=Hola%20Pedro,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 7. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/b5Ex9MW.jpg"
+            alt="Ghilmar Felix Quispe Espinoza"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Ghilmar Felix Quispe Espinoza</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            ghilmarfqe@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            Proceso...
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591700000001?text=Hola%20Diana,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 8. Investigador en Formación (CRISTIAN) -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <!-- Foto actualizada -->
+          <img
+            src="https://i.imgur.com/tG0u9bV.jpeg"
+            alt="Cristian Ricardo Mendez Lopez"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Cristian Ricardo Mendez Lopez</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <!-- Correo actualizado -->
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            cri.cspoliticas.fcjpsri@uagrm.edu.bo
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Derecho
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            Proceso...
+          </p>
+          <!-- Teléfono agregado -->
+          <p class="mb-1">
+            <strong><i class="fas fa-phone"></i> Teléfono:</strong>
+            +591 67381294
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591712300001?text=Hola%20Andrés,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 9. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/9Sg2Z4s.jpg"
+            alt="Yhelsy Nikol Torrico Mendoza"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Yhelsy Nikol Torrico Mendoza</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            torricomendozanikol@gmail.com
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Est. Ciencia Política
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            9 meses
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Sistema Político e Instituciones Públicas</li>
+              <li>• (Pendiente)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591600000000?text=Hola%20Lucía,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+
+      <!-- 10. Investigador en Formación -->
+      <div class="tarjeta-investigador formacion">
+        <div class="text-center">
+          <img
+            src="https://i.imgur.com/gOA5gn1.jpg"
+            alt="Pablo Fernández"
+            class="foto-perfil"
+          />
+          <h3 class="mb-1">Pablo Fernández Rico</h3>
+          <span class="badge-estatus">Investigador en Formación</span>
+        </div>
+
+        <div class="detalles-investigador">
+          <p class="mb-1">
+            <strong><i class="fas fa-envelope"></i> Correo:</strong>
+            p.fernandez@estudiante.uagrm.edu.bo
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+            Lic. Derecho
+          </p>
+          <p class="mb-1">
+            <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+            3 meses
+          </p>
+
+          <div class="mt-2">
+            <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+            <ul class="list-unstyled">
+              <li>• Derecho Constitucional</li>
+              <li>• Legislación Comparada</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="acciones-tarjeta">
+          <a
+            href="https://wa.me/591600000999?text=Hola%20Pablo,%20me%20interesa%20tu%20trabajo%20de%20investigación"
+            class="btn btn-whatsapp"
+            target="_blank"
+          >
+            <i class="fab fa-whatsapp"></i> Contactar
+          </a>
+          <button class="btn btn-certificado">
+            <i class="fas fa-file-certificate"></i> Certificado
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /contenedor-principal -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="mb-1">
+        &copy; 2025 Centro de Investigación Regional UAGRM (CIRCPyCS). Todos los derechos
+        reservados.
+      </p>
+      <p class="mb-1">
+        Contacto:
+        <a href="mailto:contacto@circpycs.uagrm.edu.bo">contacto@circpycs.uagrm.edu.bo</a>
+        |
+        <i class="fas fa-phone"></i> +591 12345678
+      </p>
+      <p>
+        Síguenos en:
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
 </body>
 </html>
