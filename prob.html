@@ -2,559 +2,646 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Organización - CIRCPyCS UAGRM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Bootstrap CSS y FontAwesome -->
+    <title>CIRCPyCS - Investigadores Estudiantiles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Estilos Internos -->
     <style>
         :root {
-            --primary-color: #333333;      /* Negro */
-            --secondary-color: #666666;    /* Plomo oscuro */
-            --background-color: #f5f5f5;   /* Gris claro */
-            --text-color: #222222;         /* Negro suave */
+            --primary-color: #2c3e50;
+            --background-color: #f8f9fa;
+            --text-color: #34495e;
+            --avanzado-color: #8e44ad;
+            --formacion-color: #16a085;
+            --header-bg: #2c3e50;
         }
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
+            padding-top: 80px;
             margin: 0;
-            padding: 0;
         }
-        h1, h2 {
+
+        /* Header */
+        .navbar-custom {
+            background-color: var(--header-bg) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
             font-family: 'Playfair Display', serif;
-            color: var(--primary-color);
-        }
-        /* Barra de navegación */
-        .navbar {
-            background-color: var(--primary-color);
-        }
-        .navbar-brand, .nav-link {
+            font-weight: 700;
+            font-size: 1.5rem;
             color: white !important;
         }
-        .nav-link.active {
-            text-decoration: underline;
+
+        .btn-volver {
+            border-color: white;
+            color: white !important;
         }
-        /* Secciones */
-        .section {
-            padding: 50px 0;
+        .btn-volver:hover {
+            background-color: rgba(255,255,255,0.1);
         }
-        .section h2 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #003366;
-            text-transform: uppercase;
+
+        /* Contenido principal */
+        .contenedor-principal {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 15px;
+        }
+
+        h1.titulo-principal {
             text-align: center;
-            margin-bottom: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-weight: 700;
+            font-size: 2rem;
         }
-        /* Banner */
-        .banner-header {
-            background-color: #000; /* Fondo oscuro para contrastar */
+
+        /* Tarjetas */
+        .contenedor-tarjetas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 1rem;
+        }
+        /* A 1200px o menos, cambia a 2 columnas */
+        @media (max-width: 1200px) {
+            .contenedor-tarjetas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        /* A 768px o menos, cambia a 1 columna */
+        @media (max-width: 768px) {
+            .contenedor-tarjetas {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tarjeta-investigador {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            border-left: 5px solid;
+        }
+        .tarjeta-investigador:hover {
+            transform: translateY(-5px);
+        }
+
+        .avanzado {
+            border-color: var(--avanzado-color);
+        }
+        .formacion {
+            border-color: var(--formacion-color);
+        }
+
+        .badge-estatus {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .avanzado .badge-estatus {
+            background: var(--avanzado-color);
             color: white;
-            padding: 40px 0;
         }
-        /* Tarjetas de autoridades */
-        .authority-card {
-            background-color: #ffffff;
-            border: 1px solid #dddddd;
-            border-radius: 8px;
-            width: 100%;
-            height: 280px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .formacion .badge-estatus {
+            background: var(--formacion-color);
+            color: white;
         }
-        .authority-card img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 10px;
-            border: 3px solid #003366;
-        }
-        .authority-card h5 {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin: 10px 0 5px;
-            color: #003366;
-        }
-        .authority-card p {
-            font-size: 0.9rem;
-            color: #555555;
-        }
-        .authority-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-        }
-        /* Tarjetas del Equipo, Investigadores, etc. */
-        .team-card, .investigador-card {
-            background-color: #ffffff;
-            border: 1px solid #dddddd;
-            border-radius: 8px;
-            width: 220px;
-            height: 300px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .team-card img, .investigador-card img {
+
+        .foto-perfil {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 10px;
-            border: 3px solid #003366;
-        }
-        .team-card h5, .investigador-card h5 {
-            font-size: 1rem;
-            font-weight: bold;
-            margin: 10px 0 5px;
-            color: #003366;
-        }
-        .team-card p, .investigador-card p {
-            font-size: 0.9rem;
-            color: #555555;
-        }
-        .team-card:hover, .investigador-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-        }
-        /* Organigrama EAC */
-        .org-chart {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .node {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            margin: 10px;
-            background-color: #fff;
-            border: 2px solid #003366;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            min-width: 150px;
-        }
-        .node .title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #003366;
-            margin-top: 10px;
-        }
-        .node .photo img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2px solid #003366;
-            margin-bottom: 10px;
+            margin: 0 auto 1rem;
+            border: 4px solid;
             object-fit: cover;
         }
-        .child-container {
+        .avanzado .foto-perfil {
+            border-color: var(--avanzado-color);
+        }
+        .formacion .foto-perfil {
+            border-color: var(--formacion-color);
+        }
+
+        .detalles-investigador {
+            margin: 1rem 0;
+            padding-left: 1rem;
+            border-left: 3px solid;
+        }
+
+        .acciones-tarjeta {
+            margin-top: 1.5rem;
             display: flex;
+            gap: 1rem;
             justify-content: center;
-            margin-top: 20px;
-            position: relative;
         }
-        .child-container:before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            width: 0;
-            height: 20px;
-            border-left: 2px solid #003366;
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .child-container > .node:not(:last-child):after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            border-top: 2px solid #003366;
-        }
-        .child-container > .node:not(:last-child):before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            right: 50%;
-            width: 50%;
-            border-top: 2px solid #003366;
-        }
-        /* Footer */
-        .footer {
+        .btn-certificado {
             background-color: var(--primary-color);
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
             color: white;
-            padding: 3rem 0;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
         }
-        .footer p, .footer h5 {
-            margin: 0;
+        footer a {
+            color: #fff;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
         }
-        .footer h5 {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        /* Responsivo */
-        @media (max-width: 576px) {
-            .authority-card, .team-card, .investigador-card {
-                height: auto;
-            }
+        footer a:hover {
+            color: #16a085;
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                CIRCPyCS
+            </a>
+            <a href="https://criuagrm.github.io/" class="btn btn-outline-light btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </a>
+        </div>
+    </nav>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="https://criuagrm.github.io/">CIRCPyCS</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <!-- Enlaces de Secciones según el orden solicitado -->
-                <li class="nav-item"><a class="nav-link" href="#autoridades">Autoridades</a></li>
-                <li class="nav-item"><a class="nav-link" href="#equipo">Equipo</a></li>
-                <li class="nav-item"><a class="nav-link" href="#comite-cientifico">Comité Científico</a></li>
-                <li class="nav-item"><a class="nav-link" href="#eac">EAC</a></li>
-                <li class="nav-item"><a class="nav-link" href="#investigadores">Investigadores</a></li>
-                <li class="nav-item"><a class="nav-link" href="#estudiantes">Estudiantes</a></li>
-                <li class="nav-item">
-                    <a href="https://criuagrm.github.io" class="btn btn-light ms-3" style="font-weight: bold;">
-                        Volver a Inicio
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    <!-- Contenido principal -->
+    <div class="contenedor-principal">
+        <h1 class="titulo-principal">
+            Estudiantes Investigadores del<br>Centro de Investigación Regional UAGRM
+        </h1>
+        
+        <div class="contenedor-tarjetas">
 
-<!-- Banner Principal -->
-<header class="text-center py-5 bg-dark text-white">
-    <h1 style="color: white; font-weight: bold; margin: 0;">
-        Organización del Centro de Investigación Regional - UAGRM
-    </h1>
-    <p>Conoce cómo estamos estructurados para liderar la investigación en el Departamento de Santa Cruz.</p>
-</header>
-
-<!-- Sección Autoridades -->
-<section id="autoridades" class="section bg-light">
-    <h2>Autoridades</h2>
-    <div class="container">
-        <div class="row justify-content-center">
-            <!-- Tarjeta 1 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/0wFGVzw.jpeg" alt="Rector">
-                    <!-- EJEMPLO DE SALTOS DE LÍNEA con <br> -->
-                    <h5>Dr. Vicente Cuéllar</h5>
-                    <p>Rector <br> UAGRM</p>
+            <!-- 1. Investigador Avanzado -->
+            <div class="tarjeta-investigador avanzado">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/7Qj7nzM.jpg" alt="Aneth" class="foto-perfil">
+                    <h3 class="mb-1">Aneth Flores</h3>
+                    <span class="badge-estatus">Estudiante Investigador Avanzado</span>
                 </div>
-            </div>
-            <!-- Tarjeta 2 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/nKvJms9.jpeg" alt="Vicerrector">
-                    <h5>Dr. Reinerio Vargas</h5>
-                    <p>Vicerrector <br> UAGRM</p>
-                </div>
-            </div>
-            <!-- Tarjeta 3 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/YKuyiDE.jpeg" alt="Decano">
-                    <h5>Dr. Alfonso Coca</h5>
-                    <p>Decano <br> F.C.J.P.S.RR.II.</p>
-                </div>
-            </div>
-            <!-- Tarjeta 4 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/bDNReAS.jpeg" alt="Vicedecana">
-                    <h5>Dra. Rosario Caballero</h5>
-                    <p>Vicedecana <br> F.C.J.P.S.RR.II.</p>
-                </div>
-            </div>
-            <!-- Tarjeta 5 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/7mlNXEy.png" alt="Director">
-                    <h5>MSc. Francisco Méndez E.</h5>
-                    <p>Director de Carrera <br> Ciencia Política y Adm. Pública</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Sección Equipo de Gestión Institucional -->
-<section id="equipo" class="section bg-light">
-    <h2>Equipo de Gestión Institucional</h2>
-    <div class="container d-flex justify-content-center flex-wrap gap-3">
-        <!-- Directora -->
-        <div class="team-card">
-            <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="Directora">
-            <h5>María Angélica Suárez</h5>
-            <p>Directora del Centro de Investigación Regional</p>
-        </div>
-        <!-- Responsable de Programas -->
-        <div class="team-card">
-            <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="Responsable de Programas">
-            <h5>José Orlando Peralta</h5>
-            <p>Programas de Investigación e Interacción Social</p>
-        </div>
-        <!-- Responsable de Análisis Político -->
-        <div class="team-card">
-            <img src="https://i.imgur.com/pcBiXh2.png" alt="Responsable de Análisis Político">
-            <h5>Daniel Hurtado</h5>
-            <p>Análisis Político, Vinculación y Canalización de Recursos</p>
-        </div>
-        <!-- Coordinador Internacional -->
-        <div class="team-card">
-            <img src="https://i.imgur.com/QNuYClh.jpeg" alt="Coordinador Internacional">
-            <h5>Tte. Cab. James Campos</h5>
-            <p>Coordinador Internacional</p>
-        </div>
-    </div>
-</section>
-
-<!-- Sección Comité Científico -->
-<section id="comite-cientifico" class="section bg-light">
-    <h2>Comité Científico</h2>
-    <div class="container">
-        <div class="row justify-content-center">
-            <!-- Presidente -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Luis Andia">
-                    <h5>Dr. Luis Andia</h5>
-                    <p>Presidente del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 1 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/ycOxMJk.jpeg" alt="Paula Peña">
-                    <h5>Lic. Paula Peña Hasbún</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 2 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/wQvHcAm.jpeg" alt="Reymi Ferreira">
-                    <h5>Dr. Reymi Ferreira</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 3 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/vdMqwM0.jpeg" alt="Odin Rodriguez">
-                    <h5>Msc. Odin Rodriguez</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 4 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/9dZXWQG.jpeg" alt="Elizabeth Galarza">
-                    <h5>Dra. Elizabeth Galarza</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-            <!-- Miembro 5 -->
-            <div class="col-md-2 col-sm-4 mb-3">
-                <div class="authority-card">
-                    <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Javier Hernández">
-                    <h5>Msc. Javier Hernández</h5>
-                    <p>Miembro del Comité Científico</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Sección Organigrama del EAC -->
-<section id="eac" class="section">
-    <div class="container text-center">
-        <h2>Organigrama del Equipo de Análisis de Coyuntura (EAC)</h2>
-        <div class="org-chart">
-            <div class="node">
-                <div class="photo">
-                    <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="Directora del EAC">
-                </div>
-                <span class="title">Directora del EAC</span>
-                <p>María Angélica Suarez Ribera</p>
-                <div class="child-container">
-                    <div class="node">
-                        <div class="photo">
-                            <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Subdirector del EAC">
-                        </div>
-                        <span class="title">Subdirector del EAC</span>
-                        <p>Luis Andia</p>
-                        <div class="child-container">
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="Jefe de Área Política">
-                                </div>
-                                <span class="title">Jefe de Área Política</span>
-                                <p>Orlando Peralta Beltrán</p>
-                            </div>
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Jefe de Área Economía">
-                                </div>
-                                <span class="title">Jefe de Área Economía</span>
-                                <p>Javier Hernández</p>
-                            </div>
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/MjeCkKC.png" alt="Jefe de Área Sociedad">
-                                </div>
-                                <span class="title">Jefe de Área Sociedad</span>
-                                <p>Marcial Trigo Valverde</p>
-                            </div>
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/448ZaAc.jpeg" alt="Jefa de Área Relaciones Internacionales">
-                                </div>
-                                <span class="title">Jefa de Área Relaciones Internacionales</span>
-                                <p>Carmen Sandoval</p>
-                            </div>
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/GWijiNJ.jpeg" alt="Jefe de Área Medios y Comunicación">
-                                </div>
-                                <span class="title">Jefe de Área Medios y Comunicación</span>
-                                <p>Marco Torrez Valverde</p>
-                            </div>
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/GHEtQho.png" alt="Jefe de Área Jurídica y Constitucional">
-                                </div>
-                                <span class="title">Jefe de Área Jurídica y Constitucional</span>
-                                <p>Roy Céspedes</p>
-                            </div>
-                            <div class="node">
-                                <div class="photo">
-                                    <img src="https://i.imgur.com/9EzDO9D.jpeg" alt="Jefa de Medio Ambiente, Agua y Cambio Climático">
-                                </div>
-                                <span class="title">Jefa de Medio Ambiente, Agua y Cambio Climático</span>
-                                <p>Paola Parra Rojas</p>
-                            </div>
-                        </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1"><strong><i class="fas fa-envelope"></i> Correo:</strong> aneth@gmail.com</p>
+                    <p class="mb-1"><strong><i class="fas fa-graduation-cap"></i> Formación:</strong> Est. Ciencia Política</p>
+                    <p class="mb-1"><strong><i class="fas fa-flask"></i> Experiencia:</strong> 2 años</p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• Ciencias Sociales Computacionales</li>
+                        </ul>
                     </div>
                 </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591123456789?text=Hola%20María,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
 
-<!-- Sección Investigadores -->
-<section id="investigadores" class="section">
-    <h2>Investigadores</h2>
-    <div class="container d-flex justify-content-around align-items-center flex-wrap">
-        <!-- Investigadora 1 -->
-        <div class="investigador-card my-2">
-            <img src="https://i.imgur.com/iXCNpu0.png" alt="Mónica Guzmán">
-            <h5>Mónica Ximena Guzmán</h5>
-            <p>Investigadora Principal</p>
-        </div>
-        <!-- Investigadora 2 -->
-        <div class="investigador-card my-2">
-            <img src="https://i.imgur.com/UIsvDSC.jpeg" alt="Vilma Paredes">
-            <h5>Vilma Paredes Villalba</h5>
-            <p>Investigadora Principal</p>
-        </div>
-        <!-- Investigador 3 -->
-        <div class="investigador-card my-2">
-            <img src="https://i.imgur.com/AeNQMe6.jpeg" alt="Rudy Guarachi">
-            <h5>Rudy Vladimir Guarachi</h5>
-            <p>Investigador Asociado</p>
-        </div>
-    </div>
-    <div class="text-center mt-4">
-        <a href="https://criuagrm.github.io/researchers" 
-           class="btn px-5 py-3" 
-           style="font-size: 18px; font-weight: bold; background-color: #6c757d; border-color: #6c757d; color: white; border-radius: 8px;">
-            Web de Investigadores
-        </a>
-    </div>
-</section>
-
-<!-- Sección Estudiantes Investigadores (solo 3 ejemplos) -->
-<section id="estudiantes" class="section bg-light">
-    <h2>Estudiantes Investigadores</h2>
-    <div class="container d-flex justify-content-around align-items-center flex-wrap">
-        <!-- 1. Investigador Avanzado: Aneth Flores -->
-        <div class="investigador-card my-2" style="width: 230px; height: auto;">
-            <img src="https://i.imgur.com/7Qj7nzM.jpg" alt="Aneth" 
-                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #8e44ad;">
-            <h5>Aneth Flores</h5>
-            <p>Estudiante Investigador Avanzado</p>
-        </div>
-        <!-- 2. Investigador en Formación: Carmen Michelle King -->
-        <div class="investigador-card my-2" style="width: 230px; height: auto;">
-            <img src="https://i.imgur.com/5Xd3WzP.jpg" alt="Carmen Michelle King"
-                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #16a085;">
-            <h5>Carmen Michelle King</h5>
-            <p>Investigador en Formación</p>
-        </div>
-        <!-- 3. Investigador en Formación: Yhelsy Nikol Torrico -->
-        <div class="investigador-card my-2" style="width: 230px; height: auto;">
-            <img src="https://i.imgur.com/9Sg2Z4s.jpg" alt="Yhelsy Nikol Torrico Mendoza"
-                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 3px solid #16a085;">
-            <h5>Yhelsy Nikol Torrico</h5>
-            <p>Investigador en Formación</p>
-        </div>
-    </div>
-    <div class="text-center mt-4">
-        <a href="https://criuagrm.github.io/students" 
-           class="btn px-5 py-3" 
-           style="font-size: 18px; font-weight: bold; background-color: #343a40; border-color: #343a40; color: white; border-radius: 8px;">
-            Web de Estudiantes
-        </a>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h5>Información de Contacto</h5>
-                <p><i class="fas fa-envelope"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
-                <p><i class="fas fa-phone"></i> +591 67381294</p>
+            <!-- 2. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/5Xd3WzP.jpg" alt="Carmen Michelle King" class="foto-perfil">
+                    <h3 class="mb-1">Carmen Michelle King</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        carmenmichellek@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        1 año
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• Sociedad, Salud y Educación</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591987654321?text=Hola%20Carlos,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h5>Síguenos</h5>
-                <a href="https://www.facebook.com/circpycs" class="text-white me-3">
+
+            <!-- 3. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/VvHdR5k.jpg" alt="Jorge Carlos" class="foto-perfil">
+                    <h3 class="mb-1">Jorge Carlos</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        jckoelet.10@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        Proceso...
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591654987321?text=Hola%20Sofía,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/KZqYSOq.jpg" alt="Mariano Ramos Claure" class="foto-perfil">
+                    <h3 class="mb-1">Mariano Ramos Claure</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        ramosm8124@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        Proceso...
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591987651234?text=Hola%20Juan,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 5. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/a4AQQ1j.jpg" alt="Layonel Quiñones Nova" class="foto-perfil">
+                    <h3 class="mb-1">Layonel Quiñones Nova</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        quinacademy123@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        Proceso
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591768951234?text=Hola%20Ana,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 6. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/C51S5jN.jpg" alt="Hugo Renato Espinoza Pardo" class="foto-perfil">
+                    <h3 class="mb-1">Hugo Renato Espinoza Pardo</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        hugorenato.16ep@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        Proceso...
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591712345678?text=Hola%20Pedro,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 7. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/b5Ex9MW.jpg" alt="Ghilmar Felix Quispe Espinoza" class="foto-perfil">
+                    <h3 class="mb-1">Ghilmar Felix Quispe Espinoza</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        ghilmarfqe@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        Proceso...
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591700000001?text=Hola%20Diana,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 8. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/DScUpOP.jpg" alt="Cristian Ricardo Mendez Lopez" class="foto-perfil">
+                    <h3 class="mb-1">Cristian Ricardo Mendez Lopez</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        cristianml050314@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Derecho
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        Proceso...
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591712300001?text=Hola%20Andrés,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 9. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/9Sg2Z4s.jpg" alt="Yhelsy Nikol Torrico Mendoza" class="foto-perfil">
+                    <h3 class="mb-1">Yhelsy Nikol Torrico Mendoza</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        torricomendozanikol@gmail.com
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Est. Ciencia Política
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        9 meses
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Sistema Político e Instituciones Públicas</li>
+                            <li>• (Pendiente)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591600000000?text=Hola%20Lucía,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+            <!-- 10. Investigador en Formación -->
+            <div class="tarjeta-investigador formacion">
+                <div class="text-center">
+                    <img src="https://i.imgur.com/gOA5gn1.jpg" alt="Pablo Fernández" class="foto-perfil">
+                    <h3 class="mb-1">Pablo Fernández Rico</h3>
+                    <span class="badge-estatus">Investigador en Formación</span>
+                </div>
+                
+                <div class="detalles-investigador">
+                    <p class="mb-1">
+                        <strong><i class="fas fa-envelope"></i> Correo:</strong>
+                        p.fernandez@estudiante.uagrm.edu.bo
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-graduation-cap"></i> Formación:</strong>
+                        Lic. Derecho
+                    </p>
+                    <p class="mb-1">
+                        <strong><i class="fas fa-flask"></i> Experiencia:</strong>
+                        3 meses
+                    </p>
+                    
+                    <div class="mt-2">
+                        <h6><i class="fas fa-search"></i> Líneas de Investigación</h6>
+                        <ul class="list-unstyled">
+                            <li>• Derecho Constitucional</li>
+                            <li>• Legislación Comparada</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="acciones-tarjeta">
+                    <a href="https://wa.me/591600000999?text=Hola%20Pablo,%20me%20interesa%20tu%20trabajo%20de%20investigación" 
+                       class="btn btn-whatsapp" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Contactar
+                    </a>
+                    <button class="btn btn-certificado">
+                        <i class="fas fa-file-certificate"></i> Certificado
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- /contenedor-principal -->
+
+    <!-- Footer con copyright, contacto y redes sociales -->
+    <footer>
+        <div class="container">
+            <p class="mb-1">
+                &copy; 2023 Centro de Investigación Regional UAGRM (CIRCPyCS). Todos los derechos reservados.
+            </p>
+            <p class="mb-1">
+                Contacto: 
+                <a href="mailto:contacto@circpycs.uagrm.edu.bo">contacto@circpycs.uagrm.edu.bo</a> | 
+                <i class="fas fa-phone"></i> +591 12345678
+            </p>
+            <p>
+                Síguenos en:
+                <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
                     <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" class="text-white me-3">
+                <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
                     <i class="fab fa-twitter"></i>
                 </a>
-                <a href="https://linkedin.com/circpycs" class="text-white">
-                    <i class="fab fa-linkedin-in"></i>
+                <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
                 </a>
-            </div>
+            </p>
         </div>
-    </div>
-</footer>
+    </footer>
 
-<!-- Scripts Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
