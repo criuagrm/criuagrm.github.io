@@ -5,121 +5,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CIRCPyCS - Investigadores</title>
+
+    <!-- Bootstrap y Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #333333;
-            --background-color: #f0f0f0;
-            --text-color: #333333;
-            --asociado-color: #f0f9ff;
-            --principal-color: #e6f7e9;
-            --senior-color: #fff4e6;
-        }
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        h1, h2 {
-            font-family: 'Playfair Display', serif;
-        }
-        .navbar {
-            background-color: var(--primary-color);
-        }
-        .navbar-brand {
-            font-weight: 600;
-        }
-        .card-columns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .investigador {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            padding: 25px;
-            transition: box-shadow 0.3s;
-            width: 100%;
-            max-width: 350px;
-            box-sizing: border-box;
-            text-align: center;
-        }
-        .investigador:hover {
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-        }
-        .profile-picture img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-        }
-        .investigador h2 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        .badge {
-            font-size: 0.9rem;
-            font-weight: 600;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        .asociado .badge { background-color: #008cba; color: white; }
-        .principal .badge { background-color: #28a745; color: white; }
-        .senior .badge { background-color: #ff9800; color: white; }
-        .asistente .badge { background-color: #6c757d; color: white; } 
-}
 
-          .research, .publications {
-            margin-top: 15px;
-            font-size: 0.95rem;
-            text-align: left;
+    <!-- jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <style>
+      :root {
+        --primary-color: #333333;       /* Color principal del navbar y algunos textos */
+        --background-color: #f0f0f0;    /* Color de fondo de la página */
+        --text-color: #333333;          /* Color de texto general */
+        --asociado-color: #f0f9ff;
+        --principal-color: #e6f7e9;
+        --senior-color: #fff4e6;
+      }
+
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        margin: 0;
+        padding-top: 80px; /* Espacio para navbar fijo */
+        font-size: 0.95rem; /* Tamaño de fuente reducido para mayor compactación */
+      }
+
+      h1, h2 {
+        font-family: 'Playfair Display', serif;
+      }
+
+      /* Navbar */
+      .navbar {
+        background-color: var(--primary-color) !important;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+      }
+      .navbar-brand {
+        font-weight: 600;
+        font-size: 1.4rem; /* Un poco más pequeño */
+      }
+      .btn-outline-light {
+        font-size: 0.85rem;
+      }
+
+      /* Contenedor principal */
+      .container.my-5 {
+        max-width: 1100px; /* Reducido un poco */
+      }
+      .container.my-5 h1 {
+        font-size: 1.8rem; /* Ligeramente más pequeño */
+      }
+
+      /* Card columns (ahora en grid para mejor responsividad) */
+      .card-columns {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem; /* Menos espacio entre tarjetas */
+        justify-content: center;
+      }
+      /* 992px -> 2 columnas */
+      @media (max-width: 992px) {
+        .card-columns {
+          grid-template-columns: repeat(2, 1fr);
         }
-        .research h6, .publications h6 {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1rem;
-            margin-bottom: 8px;
+      }
+      /* 600px -> 1 columna */
+      @media (max-width: 600px) {
+        .card-columns {
+          grid-template-columns: 1fr;
         }
-        .research-item, .publication-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        .research-item i, .publication-item i {
-            color: var(--primary-color);
-            margin-right: 8px;
-        }
-       
-    .minimal-button {
+      }
+
+      /* Tarjeta del investigador */
+      .investigador {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        padding: 1rem; /* Menos padding */
+        transition: box-shadow 0.3s;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+      }
+      .investigador:hover {
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      }
+
+      /* Imagen de perfil */
+      .profile-picture img {
+        width: 100px;  /* Reducción de la imagen */
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        object-fit: cover;
+      }
+
+      /* Título del investigador */
+      .investigador h2 {
+        font-size: 1.2rem; /* Más pequeño */
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
+
+      /* Badges según categoría (se mantienen los colores) */
+      .badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      .asociado .badge  { background-color: #008cba; color: white; }
+      .principal .badge { background-color: #28a745; color: white; }
+      .senior .badge    { background-color: #ff9800; color: white; }
+      .asistente .badge { background-color: #6c757d; color: white; }
+
+      /* Secciones de investigación y publicaciones */
+      .research, .publications {
+        margin-top: 10px;
+        font-size: 0.9rem; /* Reducido */
+        text-align: left;
+      }
+      .research h6, .publications h6 {
+        font-weight: bold;
+        color: var(--primary-color);
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+      }
+      .research-item, .publication-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      .research-item i, .publication-item i {
+        color: var(--primary-color);
+        margin-right: 8px;
+      }
+
+      /* Botón minimal */
+      .minimal-button {
         background-color: #007bff; /* Azul */
         color: white;
         border: none;
         border-radius: 5px;
         padding: 6px 12px;
-        font-size: 14px;
+        font-size: 0.85rem;
         cursor: pointer;
         transition: background-color 0.3s ease;
         font-family: Arial, sans-serif;
         margin-top: 10px;
-    }
-
-    .minimal-button:hover {
+      }
+      .minimal-button:hover {
         background-color: #0056b3; /* Azul más oscuro para hover */
-    }
-.footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 3rem 0;
-        }
+      }
+
+      /* Footer */
+      .footer {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 2rem 0; /* Un poco más compacto */
+        margin-top: 2rem;
+        font-size: 0.9rem; 
+      }
+      .footer h5 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+      .footer a {
+        color: white;
+        margin-right: 0.6rem;
+      }
+      .footer a:hover {
+        color: #ddd;
+      }
     </style>
 </head>
 <body>
@@ -133,10 +198,14 @@
 
     <!-- Main Content -->
     <div class="container my-5">
-        <h1 class="text-center mb-5">Investigadores del Centro de Investigación Regional           UAGRM</h1>
-        
+        <h1 class="text-center mb-5">
+            Investigadores del Centro de Investigación Regional UAGRM
+        </h1>
+
+        <!-- Tarjetas en "card-columns" (convertido a grid) -->
         <div class="card-columns">
-    <!-- Investigador 1 -->
+
+            <!-- Investigador 1 -->
             <div class="investigador senior">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/ZkcUerp.png" alt="Loreto Correa Vera">
@@ -163,17 +232,15 @@
                 <a href="https://orcid.org/0000-0003-2051-1548" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                 <a href="https://www.linkedin.com/in/maria-angelica-suarez-72b54517a/" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 <button class="minimal-button" onclick="generarCertificado('Loreto Correa Vera', 'Investigadora Senior', ['Sistema Político e Instituciones Públicas', 'Desarrollo Productivo, Agroindustria y Economia'])">Certificado</button>
-
             </div>
 
-            
-             <!-- Investigador 2 -->
+            <!-- Investigador 2 -->
             <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="María Angélica Suarez">
                 </div>
                 <h2>María Angélica Suárez</h2>
-                 <span class="badge">Investigadora Principal</span>
+                <span class="badge">Investigadora Principal</span>
                 <p><strong>Correo Electrónico:</strong> angelicasuarez@uagrm.edu.bo</p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
                 <p><strong>Años de Experiencia: </strong> Más de 5 años</p>
@@ -188,11 +255,11 @@
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i>Santa Cruz No Somos Todos (2019) </div>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i>Santa Cruz No Somos Todos (2019)</div>
                 </div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                 <a href="https://www.linkedin.com/in/maria-angelica-suarez-72b54517a/" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                           <button class="minimal-button" onclick="generarCertificado('Maria Angélica Suarez Ribera', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas', 'Cambio Climático y Recursos Naturales'])">Certificado</button>
+                <button class="minimal-button" onclick="generarCertificado('Maria Angélica Suarez Ribera', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas', 'Cambio Climático y Recursos Naturales'])">Certificado</button>
             </div>
 
             <!-- Investigador 3 -->
@@ -217,13 +284,13 @@
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> Comentarios a la obra de Enrique de Gandía “Santa Cruz de la Sierra, una nueva republica en Sud America (2022)</div>
-                     <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Nelson Alberto Jordán Bazán', 'Investigador Senior', ['Cambio Climático y Recursos Naturales', 'Sociedad, Salud y Educación'])">Certificado</button>
                 </div>
             </div>
-          
-              <!-- Investigador 4 -->
+
+            <!-- Investigador 4 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/ER0tp5a.jpeg" alt="Carlos JR Escobar V.">
@@ -244,45 +311,102 @@
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Análisis de la dinámica de las redes legislativas en el Concejo Municipal de Santa Cruz de la Sierra" (2023) </div>
-                   <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Carlos Jr Escobar Vargas', 'Investigador Asociado', ['Ciencias Sociales Computacionales'])">Certificado</button>
                 </div>
-            </div>      
-            
-              <!-- Investigador 5 -->
-           <div class="investigador principal">
-    <div class="profile-picture">
-        <img src="https://i.imgur.com/iXCNpu0.png" alt="Mónica Ximena Guzmán Rojo">
-    </div>
-    <h2>Mónica Ximena Guzmán</h2>
-    <span class="badge">Investigadora Principal</span>
-    <p><strong>Correo Electrónico:</strong> mguzman@ucb.edu.bo</p>
-    <p><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
-    <p><strong>Años de Experiencia:</strong> Más de 8 años</p>
+            </div>
 
-    <!-- Líneas de Investigación -->
-    <div class="research">
-        <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
-        <div class="research-item"><i class="fas fa-check-circle"></i> Cambio Climático y Recursos Naturales</div>
-    </div>
+            <!-- Investigador 4.1 - NUEVO asociado (1) -->
+            <div class="investigador asociado">
+                <div class="profile-picture">
+                    <img src="https://i.imgur.com/7Ha4and.jpeg" alt="Ejemplo 1">
+                </div>
+                <h2>Tito Daza Cazón</h2>
+                <span class="badge">Investigador Asociado</span>
+                <p><strong>Correo Electrónico:</strong>  titodaza2209@gmail.com</p>
+                <p><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
+                <p><strong>Años de Experiencia:</strong> 1 a 3 años</p>
 
-    <!-- Publicaciones -->
-    <div class="publications">
-        <h6><i class="fas fa-book"></i> Publicaciones</h6>
-        <div class="publication-item"><i class="fas fa-file-alt"></i> "Impacts of Wildfires on Groundwater Recharge: A Comprehensive Analysis of Processes, Methodological Challenges, and Research Opportunities" (2024)</div>
-    </div>
+                <!-- Líneas de Investigación -->
+                <div class="research">
+                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Sistema Político e Instituciones Públicas</div>
+                </div>
 
-    <!-- Enlaces -->
-    <div class="links">
-        <a href="https://orcid.org/0000-0002-0264-7874" class="btn btn-link"><i class="fas fa-id-card"></i> ORCID</a>
-        <a href="https://www.linkedin.com/in/mónica-x-guzmán-rojo-1ba03773" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-    </div>
+                <!-- Publicaciones -->
+                <div class="publications">
+                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
+                    <div class="publication-item">
+                      <i class="fas fa-file-alt"></i> 
+                      "Reformas Constitucionales en Bolivia y su impacto en el Régimen de Tierras" en curso
+                    </div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('Tito Daza Cazón', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
+                </div>
+            </div>
 
-    <!-- Botón de Certificado -->
-    <button class="minimal-button" onclick="generarCertificado('Mónica Ximena Guzmán Rojo', 'Investigadora Principal', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
-</div>
+            <!-- Investigador 4.2 - NUEVO asociado (2) -->
+            <div class="investigador asociado">
+                <div class="profile-picture">
+                    <img src="https://i.imgur.com/Trn7Mh2.jpeg" alt="Ejemplo 2">
+                </div>
+                <h2>Yessenia Pedraza Surano</h2>
+                <span class="badge">Investigadora Asociada</span>
+                <p><strong>Correo Electrónico:</strong> yesseniapedraza@gmail.com</p>
+                <p><strong>Nivel de Formación Académica:</strong> Maestría en Curso</p>
+                <p><strong>Años de Experiencia:</strong> 1 a 3 años</p>
 
+                <!-- Líneas de Investigación -->
+                <div class="research">
+                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Ciencias Sociales Computacionales</div>
+                </div>
+
+                <!-- Publicaciones -->
+                <div class="publications">
+                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
+                    <div class="publication-item">
+                      <i class="fas fa-file-alt"></i> 
+                      "Diseño un algoritmo de impacto territorial de politicas públicas educativas" (2021)
+                    </div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('Gladys Yessenia Pedraza Surano', 'Investigadora Asociada', ['Ciencias Sociales Computacionales'])">Certificado</button>
+                </div>
+            </div>
+
+            <!-- Investigador 5 -->
+            <div class="investigador principal">
+                <div class="profile-picture">
+                    <img src="https://i.imgur.com/iXCNpu0.png" alt="Mónica Ximena Guzmán Rojo">
+                </div>
+                <h2>Mónica Ximena Guzmán</h2>
+                <span class="badge">Investigadora Principal</span>
+                <p><strong>Correo Electrónico:</strong> mguzman@ucb.edu.bo</p>
+                <p><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
+                <p><strong>Años de Experiencia:</strong> Más de 8 años</p>
+
+                <!-- Líneas de Investigación -->
+                <div class="research">
+                    <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Cambio Climático y Recursos Naturales</div>
+                </div>
+
+                <!-- Publicaciones -->
+                <div class="publications">
+                    <h6><i class="fas fa-book"></i> Publicaciones</h6>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Impacts of Wildfires on Groundwater Recharge: A Comprehensive Analysis of Processes, Methodological Challenges, and Research Opportunities" (2024)</div>
+                </div>
+
+                <div class="links">
+                    <a href="https://orcid.org/0000-0002-0264-7874" class="btn btn-link"><i class="fas fa-id-card"></i> ORCID</a>
+                    <a href="https://www.linkedin.com/in/mónica-x-guzmán-rojo-1ba03773" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </div>
+
+                <button class="minimal-button" onclick="generarCertificado('Mónica Ximena Guzmán Rojo', 'Investigadora Principal', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
+            </div>
 
             <!-- Investigador 6 -->
             <div class="investigador asociado">
@@ -306,8 +430,8 @@
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
                 </div>
-                   <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                   <a href="https://www.linkedin.com/in/marioadiaz" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                <a href="https://www.linkedin.com/in/marioadiaz" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 <button class="minimal-button" onclick="generarCertificado('Mario Alberto Renán Díaz Leiva', 'Investigador Asociado', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
             </div>
 
@@ -333,14 +457,15 @@
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Fundamentos de Machine Learning" (2023)</div>
-                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Informe: Estigma y discriminación a personas que viven con VIH/SIDA Bolivia" (2022)</div>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Informe: Estigma y discriminación a personas que viven con VIH/SIDA Bolivia" (2022)</div>
                 </div>
 
                 <a href="https://orcid.org/0000-0002-4189-961X" class="btn btn-link"><i class="fas fa-id-card"></i> ORCID</a>
                 <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
-            <button class="minimal-button" onclick="generarCertificado('Ricardo Alonzo Fernández Salguero', 'Investigador Principal', ['Ciencias Sociales Computacionales', 'Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
+                <button class="minimal-button" onclick="generarCertificado('Ricardo Alonzo Fernández Salguero', 'Investigador Principal', ['Ciencias Sociales Computacionales', 'Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
             </div>
-  <!-- Investigador 8 -->
+
+            <!-- Investigador 8 -->
             <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/wQvHcAm.jpeg" alt="reymi ferreira">
@@ -365,10 +490,9 @@
 
                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i> ORCID</a>
                 <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
-            <button class="minimal-button" onclick="generarCertificado('Reymi Ferreira Justiniano', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
+                <button class="minimal-button" onclick="generarCertificado('Reymi Ferreira Justiniano', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
             </div>
 
-            
             <!-- Investigador 9 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
@@ -391,19 +515,19 @@
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Presevación y revitalización del Centro Histórico de Santa Cruz de la Sierra"(2022)</div>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Intervención urbana sostenible para el acercamiento de la ciudad de Santa Cruz de la Sierra al Río Piraí"(2021)</div>
-                  <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Fabiola Rodriguez Hatfield', 'Investigadora Asociada', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
                 </div>
             </div>
 
-<!-- Investigador 10 -->
-             <div class="investigador principal">
+            <!-- Investigador 10 -->
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/JUkqNio.jpeg" alt="Monica Vincenti Calani ">
                 </div>
                 <h2>Monica Vicente Calani</h2>
-               <span class="badge">Investigadora Principal</span>
+                <span class="badge">Investigadora Principal</span>
                 <p><strong>Correo Electrónico:</strong> monicavicente@uagrm.edu.bo</p>
                 <p><strong>Nivel de Formación Académica:</strong> Maestría completada</p>
                 <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
@@ -417,15 +541,15 @@
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Prescripción Silvicultural para un Plan de Manejo Forestal en un bosque subtropical en la Provincia Guarayos, Santa Cruz, Bolivia (2016) </div>
-                 <div class="publication-item"><i class="fas fa-file-alt"></i> "Dendrochronological potential of Tarara colorada (Platymiscium ulei Harms) in tropical dry forests of Bolivia" (2023)</div>
-                     <a href="https://orcid.org/0000-0002-1610-984X" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                     <a href="https://www.linkedin.com/in/monica-vicente-calani-5b214b33a/" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> Prescripción Silvicultural para un Plan de Manejo Forestal en un bosque subtropical en la Provincia Guarayos, Santa Cruz, Bolivia (2016)</div>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Dendrochronological potential of Tarara colorada (Platymiscium ulei Harms) in tropical dry forests of Bolivia" (2023)</div>
+                    <a href="https://orcid.org/0000-0002-1610-984X" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="https://www.linkedin.com/in/monica-vicente-calani-5b214b33a/" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Monica Vicente Calani', 'Investigadora Principal', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
                 </div>
             </div>
-            
-             <!-- Investigador 11 -->
+
+            <!-- Investigador 11 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/QNuYClh.jpeg" alt="James Campos">
@@ -449,19 +573,19 @@
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "La Guerra de los Sitios de Zaragoza - España 1808 -0809"(2023)</div>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Tomas de las tierras del Oriente y la quema de los Bosques"(2024)</div>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Los Tercios Españoles (en curso)"</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('James M. Campos Cuellar ', 'Investigador Asociado', ['Cambio Climático y Recursos Naturales','Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
             </div>
 
-  <!-- Investigador 12 -->
-             <div class="investigador principal">
+            <!-- Investigador 12 -->
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/GWijiNJ.jpeg" alt="Marco Torrez Valverde">
                 </div>
                 <h2>Marco Torrez Valverde</h2>
-               <span class="badge">Investigador Principal</span>
+                <span class="badge">Investigador Principal</span>
                 <p><strong>Correo Electrónico:</strong> torrezmarcoa@gmail.com </p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado Completado</p>
                 <p><strong>Años de Experiencia:</strong> Más de 10 años</p>
@@ -476,19 +600,19 @@
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso </div>
-                       <a href="https://orcid.org/0000-0002-8683-4748" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="https://orcid.org/0000-0002-8683-4748" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Marco Torrez Valverde', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
             </div>
-           
+
             <!-- Investigador 13 -->
-             <div class="investigador principal">
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/sx67mvX.jpeg" alt="Javier Vizcarra Valdivia">
                 </div>
                 <h2>Javier Vizcarra Valdivia</h2>
-               <span class="badge">Investigador Principal</span>
+                <span class="badge">Investigador Principal</span>
                 <p><strong>Correo Electrónico:</strong> javoviscarra@gmail.com </p>
                 <p><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
                 <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
@@ -503,20 +627,19 @@
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso </div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Javier Vizcarra Valdivia', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
             </div>
-           
-            
+
             <!-- Investigador 14 -->
-             <div class="investigador principal">
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/9dZXWQG.jpeg" alt="Elizabeth Galarza ">
                 </div>
                 <h2>Elizabeth Galarza de Eid</h2>
-               <span class="badge">Investigadora Principal</span>
+                <span class="badge">Investigadora Principal</span>
                 <p><strong>Correo Electrónico:</strong> galarzaely.105@gmail.com </p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
                 <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
@@ -525,20 +648,19 @@
                 <div class="research">
                     <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
                     <div class="research-item"><i class="fas fa-check-circle"></i> Sistema Político e Instituciones Públicas</div>
-                <div class="research-item"><i class="fas fa-check-circle"></i> Salud Educación y Sociedad</div>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Salud Educación y Sociedad</div>
                 </div>
 
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> La educación a partir de la Ley Avelino Siñani-Elizardo Pérez: procesos de apropiación y aplicación de sus principios por parte del profesorado cruceño (2015) </div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> La educación a partir de la Ley Avelino Siñani-Elizardo Pérez: procesos de apropiación y aplicación de sus principios por parte del profesorado cruceño (2015)</div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('María Elizabeth Galarza Claudio', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas','Salud, Educación y Sociedad'])">Certificado</button>
                 </div>
             </div>
-            
-            
+
             <!-- Investigador 15 -->
             <div class="investigador principal">
                 <div class="profile-picture">
@@ -588,12 +710,12 @@
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "La relación de MORENA y MAS con los movimientos feministas e indígenas en
 México y Bolivia (2018-2023)".</div>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Deliverys y la ausencia de derechos laborales" (2024) </div>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Deliverys y la ausencia de derechos laborales" (2024)</div>
                 </div>
 
                 <a href="https://orcid.org/0000-0003-2781-156X" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                 <a href="https://www.linkedin.com/in/rudy-guarachi-cota/" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
-            <button class="minimal-button" onclick="generarCertificado('Rudy Vladimir Guarachi Cota', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
+                <button class="minimal-button" onclick="generarCertificado('Rudy Vladimir Guarachi Cota', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
             </div>
 
             <!-- Investigador 17 -->
@@ -617,9 +739,9 @@ México y Bolivia (2018-2023)".</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                     <button class="minimal-button" onclick="generarCertificado('Yessica Torrico Yépez', 'Investigador Asociado', ['Desarrollo, Innovación y Tecnología'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Yessica Torrico Yépez', 'Investigador Asociado', ['Desarrollo, Innovación y Tecnología'])">Certificado</button>
                 </div>
             </div>
 
@@ -644,9 +766,9 @@ México y Bolivia (2018-2023)".</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                     <button class="minimal-button" onclick="generarCertificado('Kimby Alpire Rivero', 'Investigador Asociado', ['Sociedad, Salud y Educación'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Kimby Alpire Rivero', 'Investigador Asociado', ['Sociedad, Salud y Educación'])">Certificado</button>
                 </div>
             </div>
 
@@ -671,9 +793,9 @@ México y Bolivia (2018-2023)".</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Rebelión y Pandemia" (2020)</div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                     <button class="minimal-button" onclick="generarCertificado('José Orlando Peralta Beltrán', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('José Orlando Peralta Beltrán', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
             </div>
 
@@ -701,13 +823,13 @@ México y Bolivia (2018-2023)".</div>
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Percepciones de los comerciantes mayoristas y minoristas de La Paz, El Alto y Santa Cruz, sobre la coyuntura económica. OXFAM." (2024)</div>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Percepciones de la ciudadanía, respecto a las opciones de relacionamiento del departamento de Santa Cruz con el Estado." (2023)</div>
-                  <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Dunia Sandoval Arenas', 'Investigadora Senior', ['Sistema Político e Instituciones Públicas', 'Sociedad, Salud y Educación'])">Certificado</button>
                 </div>
             </div>
 
-   <!-- Investigador 21 -->
+            <!-- Investigador 21 -->
             <div class="investigador senior">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Luis Andia">
@@ -728,15 +850,14 @@ México y Bolivia (2018-2023)".</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> El régimen Autonómico en Bolivia (2024)</div>
-                   <div class="publication-item"><i class="fas fa-file-alt"></i> Crisis, democracia y desafíos de la Izquierda en Bolivia - FES (2021)</div>
-                   <div class="publication-item"><i class="fas fa-file-alt"></i>Historia Política, económica y social Latinoamericana, Segunda Parte.(en curso)</div>  
+                    <div class="publication-item"><i class="fas fa-file-alt"></i> Crisis, democracia y desafíos de la Izquierda en Bolivia - FES (2021)</div>
+                    <div class="publication-item"><i class="fas fa-file-alt"></i>Historia Política, económica y social Latinoamericana, Segunda Parte.(en curso)</div>
                     <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('José Luis Andia Fernández', 'Investigador Senior', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
             </div>
-          
-            
+
             <!-- Investigador 22-->
             <div class="investigador asistente">
                 <div class="profile-picture">
@@ -758,13 +879,13 @@ México y Bolivia (2018-2023)".</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> Violencias en las interacciones sociales de los universitarios de Santa Cruz. (2023)</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                 <a href="https://www.linkedin.com/in/jenny-monta%C3%B1o-85077414b/" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
-               <button class="minimal-button" onclick="generarCertificado('María Jesús Villanueva Achá', 'Investigadora Asistente', ['Salud Educación y Sociedad'])">Certificado</button>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="https://www.linkedin.com/in/jenny-monta%C3%B1o-85077414b/" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('María Jesús Villanueva Achá', 'Investigadora Asistente', ['Salud Educación y Sociedad'])">Certificado</button>
                 </div>
-                </div>
-            
-              <!-- Investigador 23 -->
+            </div>
+
+            <!-- Investigador 23 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/kBAQVvA.jpeg" alt="Stefany Arredondo">
@@ -785,13 +906,12 @@ México y Bolivia (2018-2023)".</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> Desarrollo de un Modelo de Disertación Efectiva para Estudiantes Universitarios (En curso)</div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                     <button class="minimal-button" onclick="generarCertificado('Stefany Arredondo Villagómez', 'Investigadora Asociada', ['Sociedad Salud y Educación'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Stefany Arredondo Villagómez', 'Investigadora Asociada', ['Sociedad Salud y Educación'])">Certificado</button>
                 </div>
             </div>
- 
-            
+
             <!-- Investigador 24 -->
             <div class="investigador senior">
                 <div class="profile-picture">
@@ -813,17 +933,23 @@ México y Bolivia (2018-2023)".</div>
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "“El rendimiento académico y el cristal de la enseñanza para docentes empleando realidad virtual en
-neurotecnoeducación - RIDE" (2023)</div>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> "Proyecto de Indicadores de Percepción Pública, Cultura Científica y Participación Ciudadana en el entorno
-universitario de Santa Cruz de la Sierra" (2019)</div>
+                    <div class="publication-item">
+                        <i class="fas fa-file-alt"></i> 
+                        "“El rendimiento académico y el cristal de la enseñanza para docentes empleando realidad virtual en
+neurotecnoeducación - RIDE" (2023)
+                    </div>
+                    <div class="publication-item">
+                        <i class="fas fa-file-alt"></i> 
+                        "Proyecto de Indicadores de Percepción Pública, Cultura Científica y Participación Ciudadana en el entorno
+universitario de Santa Cruz de la Sierra" (2019)
+                    </div>
                     <a href="https://orcid.org/0000-0003-2781-156X" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                <a href="http://www.linkedin.com/in/rosacastrocavero1974" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
+                    <a href="http://www.linkedin.com/in/rosacastrocavero1974" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Rosa Castro Cavero', 'Investigadora Senior', ['Sociedad, Salud y Educación'])">Certificado</button>
                 </div>
             </div>
 
-             <!-- Investigador 25 -->
+            <!-- Investigador 25 -->
             <div class="investigador senior">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/vvvd1GA.jpeg" alt="Edgar Rau Flores">
@@ -846,14 +972,13 @@ universitario de Santa Cruz de la Sierra" (2019)</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "“El Objeto de Estudio Como Crisol de la Ciencia" (2021)</div>
-                     <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Edgar Rau Flores', 'Investigador Senior', ['Desarrollo Productivo, Agroindustria y Economía','Sistema Político e Institucioes Públicas'])">Certificado</button>
                 </div>
             </div>
-  
 
-<!-- Investigador 26 -->
+            <!-- Investigador 26 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/pcBiXh2.png" alt="Daniel Hurtado Justiniano">
@@ -875,13 +1000,13 @@ universitario de Santa Cruz de la Sierra" (2019)</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Gerrymandering y malapportionment como factores distorsionadores del Sistema Electoral Boliviano" en curso</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Daniel Hurtado Justiniano', 'Investigador Asociado', ['Ciencias Sociales Computacionales', 'Comportamiento y Cognición Política'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
-<!-- Investigador 27-->
+            <!-- Investigador 27-->
             <div class="investigador asistente">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/9XaJf5l.jpeg" alt="Jenny Montaño Mariscal">
@@ -902,19 +1027,19 @@ universitario de Santa Cruz de la Sierra" (2019)</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                 <a href="https://www.linkedin.com/in/jenny-monta%C3%B1o-85077414b/" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
-               <button class="minimal-button" onclick="generarCertificado('Jenny Ingrid Montaño Mariscal', 'Investigadora Asistente', ['Salud Educación y Sociedad'])">Certificado</button>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="https://www.linkedin.com/in/jenny-monta%C3%B1o-85077414b/" class="btn btn-link"><i class="fab fa-linkedin"></i>LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('Jenny Ingrid Montaño Mariscal', 'Investigadora Asistente', ['Salud Educación y Sociedad'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
-<!-- Investigador 28 -->
-             <div class="investigador principal">
+            <!-- Investigador 28 -->
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/UIsvDSC.jpeg" alt="Vilma Paredes ">
                 </div>
                 <h2>Vilma Paredes Villalba</h2>
-               <span class="badge">Investigadora Principal</span>
+                <span class="badge">Investigadora Principal</span>
                 <p><strong>Correo Electrónico:</strong> zzaffiro56@gmail.com</p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
                 <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
@@ -929,14 +1054,14 @@ universitario de Santa Cruz de la Sierra" (2019)</div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> “La Sociedad de Economía Mixta: Régimen jurídico en el Derecho
-Boliviano” (2017) </div>
-                       <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+Boliviano” (2017)</div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Vilma Paredes Villalba', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
             </div>
 
-<!-- Investigador 29 -->
+            <!-- Investigador 29 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/7mlNXEy.png" alt="Francisco Mendez Eguez">
@@ -951,19 +1076,19 @@ Boliviano” (2017) </div>
                 <div class="research">
                     <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
                     <div class="research-item"><i class="fas fa-check-circle"></i> Sistema Político e Instituciones Públicas </div>
-                 </div>
+                </div>
 
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "La formación del poder político y los sistemas políticos" (2022)</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Francisco Mendez Eguez', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
-<!-- Investigador 30 -->
+            <!-- Investigador 30 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/9EzDO9D.jpeg" alt="Paola Parra">
@@ -984,11 +1109,11 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> Incidencia de los plaguicidas en la salud (2023)</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                 <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <button class="minimal-button" onclick="generarCertificado('Paola Mercedes Parra Rojas ', 'Investigadora Asociada', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('Paola Mercedes Parra Rojas ', 'Investigadora Asociada', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
             <!-- Investigador 31 -->
             <div class="investigador asociado">
@@ -1005,24 +1130,24 @@ Boliviano” (2017) </div>
                 <div class="research">
                     <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
                     <div class="research-item"><i class="fas fa-check-circle"></i> Sistema Político e Instituciones Públicas </div>
-                     <div class="research-item"><i class="fas fa-check-circle"></i> Desarrollo Productivo, Agroindustria y Economía </div>
-                 </div>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Desarrollo Productivo, Agroindustria y Economía </div>
+                </div>
 
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> "Impacto de las Instituciones en los costos sociales de transacción. Tesis doctoral en curso"</div>
-            <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-            <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <button class="minimal-button" onclick="generarCertificado('Javier Hernández Serrano', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas','Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('Javier Hernández Serrano', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas','Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
                 </div>
-                </div>
-            
-<!-- Investigador 32-->
+            </div>
+
+            <!-- Investigador 32-->
             <div class="investigador asistente">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/DhDumIG.png" alt="Saba Lenk Añez Parra ">
-                </div> 
+                </div>
                 <h2>Saba Lenk Añez Parra </h2>
                 <span class="badge">Investigadora Asistente</span>
                 <p><strong>Correo Electrónico:</strong> sanez@santacruz.gob.bo</p>
@@ -1039,17 +1164,17 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                   <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                   <button class="minimal-button" onclick="generarCertificado('Saba Lenk Añez Parra', 'Investigadora Asistente', ['Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Saba Lenk Añez Parra', 'Investigadora Asistente', ['Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
-<!-- Investigador 33-->
+            <!-- Investigador 33-->
             <div class="investigador asistente">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/08aaRXP.jpeg" alt="Fátima Roxana Céspedes Justiniano">
-                </div> 
+                </div>
                 <h2>Fátima Céspedes Justiniano</h2>
                 <span class="badge">Investigadora Asistente</span>
                 <p><strong>Correo Electrónico:</strong> rcep.jus@gmail.com </p>
@@ -1066,13 +1191,13 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                   <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                   <button class="minimal-button" onclick="generarCertificado('Fátima Roxana Céspedes Justiniano', 'Investigadora Asistente', ['Sociedad Salud y Educación'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Fátima Roxana Céspedes Justiniano', 'Investigadora Asistente', ['Sociedad Salud y Educación'])">Certificado</button>
                 </div>
-                </div>
-            
-<!-- Investigador 34 -->
+            </div>
+
+            <!-- Investigador 34 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/QJYKnnA.png" alt="Iris Vaca Martinez">
@@ -1093,12 +1218,13 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
-                 <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <button class="minimal-button" onclick="generarCertificado('Iris Vaca Martínez', 'Investigadora Asociada', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <button class="minimal-button" onclick="generarCertificado('Iris Vaca Martínez', 'Investigadora Asociada', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
-                </div>
-<!-- Investigador 35 -->
+            </div>
+
+            <!-- Investigador 35 -->
             <div class="investigador asociado">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/MjeCkKC.png" alt="Marcial Trigo Valverde">
@@ -1118,20 +1244,23 @@ Boliviano” (2017) </div>
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i> Diagnóstico de la lectoescritura y el pensamiento lógico matemático de los estudiantes del nivel Primario de los distritos educativos I, II y II y Plan 3000 del Municipio de Santa Cruz de la Sierra (2024)</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <div class="publication-item">
+                        <i class="fas fa-file-alt"></i>
+                        Diagnóstico de la lectoescritura y el pensamiento lógico matemático de los estudiantes del nivel Primario de los distritos educativos I, II y II y Plan 3000 del Municipio de Santa Cruz de la Sierra (2024)
+                    </div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Marcial Trigo Valverde', 'Investigador Asociado', ['Salud, Sociedad y Educación'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
-                 <!-- Investigador 36 -->
+            <!-- Investigador 36 -->
             <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/qmkexzu.jpeg" alt="Jorge Nuñez del Prado">
                 </div>
                 <h2>Jorge Nuñez del Prado</h2>
-                 <span class="badge">Investigador Principal</span>
+                <span class="badge">Investigador Principal</span>
                 <p><strong>Correo Electrónico:</strong> jorgenuñez@uagrm.edu.bo</p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado completo</p>
                 <p><strong>Años de Experiencia: </strong> Más de 10 años</p>
@@ -1148,15 +1277,16 @@ Boliviano” (2017) </div>
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> La importancia de la axiología en la Educación Superior (2024)</div>
                 </div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                 <a href="https://www.linkedin.com/in/maria-angelica-suarez-72b54517a/" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                           <button class="minimal-button" onclick="generarCertificado('Jorge Nuñez del Prado', 'Investigador Principal', ['Sistema Político e Instituciones Públicas', 'Sociedad Salud y Educación'])">Certificado</button>
+                <button class="minimal-button" onclick="generarCertificado('Jorge Nuñez del Prado', 'Investigador Principal', ['Sistema Político e Instituciones Públicas', 'Sociedad Salud y Educación'])">Certificado</button>
             </div>
-<!-- Investigador 37-->
+
+            <!-- Investigador 37-->
             <div class="investigador asistente">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/u33SxYP.jpeg" alt="Amparo Susy Torrico Velasquez">
-                </div> 
+                </div>
                 <h2>Amparo Torrico Velasquez</h2>
                 <span class="badge">Investigador Asistente</span>
                 <p><strong>Correo Electrónico:</strong> Suebombom@hotmail.com</p>
@@ -1173,12 +1303,11 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> En curso</div>
-                   <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                   <button class="minimal-button" onclick="generarCertificado('Amparo Susy Torrico Velasquez', 'Investigador Asistente', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Amparo Susy Torrico Velasquez', 'Investigador Asistente', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
-                </div>
-
+            </div>
 
             <!-- Investigador 38 -->
             <div class="investigador asociado">
@@ -1201,16 +1330,17 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> Analisis de la credibilidad en el sistema de partidos politicos en Bolivia y Latinoamérica (tesis doctoral en curso) (2024)</div>
-                 <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Roy Céspedes Justiniano', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
                 </div>
-                </div>
-<!-- Investigador 39-->
+            </div>
+
+            <!-- Investigador 39-->
             <div class="investigador asistente">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/0fjLDma.jpeg" alt="Damián Vaca Céspedes">
-                </div> 
+                </div>
                 <h2>Damián Vaca Céspedes</h2>
                 <span class="badge">Investigador Asistente</span>
                 <p><strong>Correo Electrónico:</strong> biodavaces@gmail.com</p>
@@ -1227,20 +1357,19 @@ Boliviano” (2017) </div>
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
                     <div class="publication-item"><i class="fas fa-file-alt"></i> Riesgos Hidrogeológicos para la Llanura Cruceña(en curso)</div>
-                   <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                   <button class="minimal-button" onclick="generarCertificado('Damián Vaca Céspedes', 'Investigador Asistente', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
+                    <button class="minimal-button" onclick="generarCertificado('Damián Vaca Céspedes', 'Investigador Asistente', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
                 </div>
-                </div>
+            </div>
 
-            
             <!-- Investigador 40 -->
-             <div class="investigador principal">
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/ndwpiaI.jpeg" alt="Cesar Rosso">
                 </div>
                 <h2>Cesar Rosso</h2>
-               <span class="badge">Investigador Principal</span>
+                <span class="badge">Investigador Principal</span>
                 <p><strong>Correo Electrónico:</strong> cesarrosso@hotmal.com</p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
                 <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
@@ -1249,26 +1378,29 @@ Boliviano” (2017) </div>
                 <div class="research">
                     <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
                     <div class="research-item"><i class="fas fa-check-circle"></i> Sistema Político e Instituciones Públicas</div>
-                <div class="research-item"><i class="fas fa-check-circle"></i> Salud Educación y Sociedad</div>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Salud Educación y Sociedad</div>
                 </div>
 
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i>Hacia una nueva ética de relación con los pueblos originarios en la Bolivia plurinacional (2021) </div>
-                      <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    <div class="publication-item">
+                        <i class="fas fa-file-alt"></i>
+                        Hacia una nueva ética de relación con los pueblos originarios en la Bolivia plurinacional (2021)
+                    </div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Cesar Rosso Neueneschwander', 'Investigador Principal', ['Sistema Político e Instituciones Públicas','Salud, Educación y Sociedad'])">Certificado</button>
                 </div>
-            </div>  
-            
-     <!-- Investigador 41 -->
-             <div class="investigador principal">
+            </div>
+
+            <!-- Investigador 41 -->
+            <div class="investigador principal">
                 <div class="profile-picture">
                     <img src="https://i.imgur.com/qP3MyO8.png" alt="Alberto Mendieta Arredondo">
                 </div>
                 <h2>Alberto Mendieta Arredondo</h2>
-               <span class="badge">Investigador Principal</span>
+                <span class="badge">Investigador Principal</span>
                 <p><strong>Correo Electrónico:</strong> albertomendieta@hotmal.com</p>
                 <p><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
                 <p><strong>Años de Experiencia:</strong> Más de 5 años</p>
@@ -1277,169 +1409,161 @@ Boliviano” (2017) </div>
                 <div class="research">
                     <h6><i class="fas fa-lightbulb"></i> Líneas de Investigación</h6>
                     <div class="research-item"><i class="fas fa-check-circle"></i> Sistema Político e Instituciones Públicas</div>
-                <div class="research-item"><i class="fas fa-check-circle"></i> Salud Educación y Sociedad</div>
+                    <div class="research-item"><i class="fas fa-check-circle"></i> Salud Educación y Sociedad</div>
                 </div>
 
                 <!-- Publicaciones -->
                 <div class="publications">
                     <h6><i class="fas fa-book"></i> Publicaciones</h6>
-                    <div class="publication-item"><i class="fas fa-file-alt"></i>Proyecto educativo de investigación acción para perfeccionar e innovar la
+                    <div class="publication-item">
+                        <i class="fas fa-file-alt"></i>
+                        Proyecto educativo de investigación acción para perfeccionar e innovar la
 investigación científica en las universidades (2024 en proceso de desarrollo con universidades de Dinamarca y locales)
- </div>
-                      <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
+                    </div>
+                    <a href="" class="btn btn-link"><i class="fas fa-id-card"></i>ORCID</a>
                     <a href="" class="btn btn-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
                     <button class="minimal-button" onclick="generarCertificado('Alberto Mendieta Arredondo', 'Investigador Principal', ['Sistema Político e Instituciones Públicas','Salud, Educación y Sociedad'])">Certificado</button>
                 </div>
-            </div>  
-
-           
-        </div>
-            
-        </div>
-    
-  <!-- Footer -->
-<footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Información de Contacto</h5>
-                    <p><i class="fas fa-envelope"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
-                    <p><i class="fas fa-phone"></i> +591 67381294</p>
-                </div>
-                <div class="col-md-6">
-                    <h5>Síguenos</h5>
-                    <a href="https://www.facebook.com/circpycs" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="https://linkedin.com/circpycs" class="text-white"><i class="fab fa-linkedin-in"></i></a>
-                </div>
             </div>
+
+        </div> <!-- fin de card-columns -->
+    </div> <!-- fin de container my-5 -->
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Información de Contacto</h5>
+            <p><i class="fas fa-envelope"></i> cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+            <p><i class="fas fa-phone"></i> +591 67381294</p>
+          </div>
+          <div class="col-md-6">
+            <h5>Síguenos</h5>
+            <a href="https://www.facebook.com/circpycs" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+            <a href="https://linkedin.com/circpycs" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+          </div>
         </div>
-    </div>
-    </div>
-    </div>
-    </div>
+      </div>
     </footer>
 
-<script>
-    async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            format: "letter" // Tamaño carta
-        });
+    <script>
+      async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({
+              format: "letter" // Tamaño carta
+          });
 
-        // Fondo blanco en tamaño carta
-        doc.setFillColor(255, 255, 255);
-        doc.rect(0, 0, 216, 279, 'F'); // Tamaño carta en mm (216 x 279)
+          // Fondo blanco en tamaño carta
+          doc.setFillColor(255, 255, 255);
+          doc.rect(0, 0, 216, 279, 'F'); // Tamaño carta en mm (216 x 279)
 
-        // Marca de agua del logo en el fondo con opacidad al 15%
-        const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.1 }));
-        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
-        doc.setGState(new doc.GState({ opacity: 1 }));
+          // Marca de agua del logo en el fondo con opacidad al 15%
+          const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
+          doc.setGState(new doc.GState({ opacity: 0.1 }));
+          doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
+          doc.setGState(new doc.GState({ opacity: 1 }));
 
-        // Logo en la esquina superior derecha
-        const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 60, 1, 90, 20);
+          // Logo en la esquina superior derecha
+          const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
+          doc.addImage(logoSuperiorDerecho, "PNG", 60, 1, 90, 20);
 
-        // Encabezado de la universidad
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(14);
-        doc.setTextColor("#B22222");
-        doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
-        doc.setTextColor("#003366");
-        doc.setFontSize(12);
-        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
-        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
+          // Encabezado de la universidad
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(14);
+          doc.setTextColor("#B22222");
+          doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
+          doc.setTextColor("#003366");
+          doc.setFontSize(12);
+          doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
+          doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
+          doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
 
-        // Título del certificado
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(20);
-        doc.text("Certificado de Investigador", 105, 65, { align: "center" });
+          // Título del certificado
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(20);
+          doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-        // Cuerpo del certificado
-        const textoCertificacion = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
+          // Cuerpo del certificado
+          const textoCertificacion = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
 
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(textoCertificacion, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0);
+          doc.text(textoCertificacion, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
-        // Líneas de investigación
-        doc.setFontSize(11);
-        let yPosition = 130;
-        lineasInvestigacion.forEach((linea) => {
-            doc.text(`• ${linea}`, 25, yPosition, { align: "left" });
-            yPosition += 8;
-        });
+          // Líneas de investigación
+          doc.setFontSize(11);
+          let yPosition = 130;
+          lineasInvestigacion.forEach((linea) => {
+              doc.text(`• ${linea}`, 25, yPosition, { align: "left" });
+              yPosition += 8;
+          });
 
-        // Texto de agradecimiento y cierre
-        const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
-        const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
+          // Texto de agradecimiento y cierre
+          const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
+          const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
 
-        doc.setFontSize(12);
-        doc.text(textoAgradecimiento, 25, yPosition + 17, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-        doc.text(textoSolicitud, 25, yPosition + 35, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+          doc.setFontSize(12);
+          doc.text(textoAgradecimiento, 25, yPosition + 17, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+          doc.text(textoSolicitud, 25, yPosition + 35, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
-        // Fecha de emisión
-        doc.setFontSize(10);
-        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
+          // Fecha de emisión
+          doc.setFontSize(10);
+          doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
 
-        // Firmas
-        const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-        const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-        const imgDecano = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
+          // Firmas
+          const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
+          const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
+          const imgDecano = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
 
-        // Añadir firmas
-        doc.addImage(imgDirector, "PNG", 35, yPosition + 65, 40, 20); // Firma Director
-        doc.addImage(imgDecano, "PNG", 90, yPosition + 65, 40, 20); // Firma Decano
-        doc.addImage(imgDirectora, "PNG", 145, yPosition + 65, 40, 20); // Firma Directora
+          // Añadir firmas
+          doc.addImage(imgDirector, "PNG", 35, yPosition + 65, 40, 20); // Firma Director
+          doc.addImage(imgDecano, "PNG", 90, yPosition + 65, 40, 20);  // Firma Decano
+          doc.addImage(imgDirectora, "PNG", 145, yPosition + 65, 40, 20); // Firma Directora
 
-        // Nombres y títulos bajo las firmas
-        doc.setFont("helvetica", "bold");
+          // Nombres y títulos bajo las firmas
+          doc.setFont("helvetica", "bold");
 
-        // Director
-        doc.text("Francisco Méndez Égüez", 55, yPosition + 88, { align: "center" });
-        doc.text("Director", 55, yPosition + 93, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Adm. Pública", 55, yPosition + 98, { align: "center" });
+          // Director
+          doc.text("Francisco Méndez Égüez", 55, yPosition + 88, { align: "center" });
+          doc.text("Director", 55, yPosition + 93, { align: "center" });
+          doc.text("Carrera de Ciencia Política y Adm. Pública", 55, yPosition + 98, { align: "center" });
 
-        // Decano
-        doc.text("Alfonso Coca", 110, yPosition + 88, { align: "center" });
-        doc.text("Decano", 110, yPosition + 93, { align: "center" });
-        doc.text("FCJPSRRII", 110, yPosition + 98, { align: "center" });
+          // Decano
+          doc.text("Alfonso Coca", 110, yPosition + 88, { align: "center" });
+          doc.text("Decano", 110, yPosition + 93, { align: "center" });
+          doc.text("FCJPSRRII", 110, yPosition + 98, { align: "center" });
 
-        // Directora
-        doc.text("María Angélica Suárez Ribera", 165, yPosition + 88, { align: "center" });
-        doc.text("Directora", 165, yPosition + 93, { align: "center" });
-        doc.text("CIRCPyCS", 165, yPosition + 98, { align: "center" });
+          // Directora
+          doc.text("María Angélica Suárez Ribera", 165, yPosition + 88, { align: "center" });
+          doc.text("Directora", 165, yPosition + 93, { align: "center" });
+          doc.text("CIRCPyCS", 165, yPosition + 98, { align: "center" });
 
-        // Pie de página
-        doc.setDrawColor(178, 34, 34);
-        doc.setLineWidth(0.5);
-        doc.line(10, 265, 200, 265);
+          // Pie de página
+          doc.setDrawColor(178, 34, 34);
+          doc.setLineWidth(0.5);
+          doc.line(10, 265, 200, 265);
 
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 105, 272, { align: "center" });
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(10);
+          doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 105, 272, { align: "center" });
 
-        // Guardar el PDF
-        doc.save(`Certificado_${nombreInvestigador}.pdf`);
-    }
+          // Guardar el PDF
+          doc.save(`Certificado_${nombreInvestigador}.pdf`);
+      }
 
-    // Función para cargar imágenes desde URLs
-    async function cargarImagen(url) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        return new Promise((resolve, reject) => {
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = url;
-        });
-    }
-</script>
-
-
+      // Función para cargar imágenes desde URLs
+      async function cargarImagen(url) {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          return new Promise((resolve, reject) => {
+              img.onload = () => resolve(img);
+              img.onerror = reject;
+              img.src = url;
+          });
+      }
+    </script>
 </body>
 </html>
-
-
