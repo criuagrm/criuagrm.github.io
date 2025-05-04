@@ -2,107 +2,144 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Infografía: Gestión de Proyectos en Mi Teleférico</title>
+  <title>Infografía · Gestión de Proyectos en Mi Teleférico</title>
+
+  <!-- — Estilos básicos — -->
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f7fa;
-      color: #333;
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
+    :root{
+      --azul:#006699;
+      --azulClaro:#27a5ff;
+      --gris:#f4f7fa;
     }
-    h1, h2 {
-      text-align: center;
-      color: #006699;
+    *{box-sizing:border-box;}
+    html,body{
+      margin:0;
+      padding:0;
+      font-family:'Segoe UI',Arial,sans-serif;
+      background:var(--gris);
+      color:#333;
     }
-    .section {
-      margin-bottom: 30px;
-      padding: 20px;
-      background: white;
-      border-left: 5px solid #0077cc;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    #content{
+      max-width:920px;
+      margin:auto;
+      padding:25px;
+      background:#fff;
+      box-shadow:0 0 12px rgba(0,0,0,.07);
     }
-    img {
-      max-width: 100%;
-      margin-top: 10px;
+    h1,h2{
+      color:var(--azul);
+      text-align:center;
+      margin:0 0 15px 0;
     }
-    .ref {
-      font-size: 0.9em;
-      color: #777;
+    h1{font-size:1.9rem;margin-bottom:25px;}
+    h2{font-size:1.4rem;}
+    .section{
+      margin-bottom:32px;
+      padding:22px 24px;
+      border-left:6px solid var(--azulClaro);
     }
-    button {
-      background-color: #0077cc;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      margin: 20px auto;
-      display: block;
-      cursor: pointer;
-      font-size: 1em;
+    ul{margin:0 0 10px 18px;}
+    img.responsive{max-width:100%;height:auto;margin-top:14px;border-radius:6px;}
+    .ref{font-size:.85rem;color:#666;}
+    /* — Botón PDF — */
+    .btn{
+      background:var(--azul);
+      color:#fff;
+      border:none;
+      padding:11px 26px;
+      font-size:1rem;
+      border-radius:4px;
+      cursor:pointer;
+      display:block;
+      margin:35px auto 5px;
     }
+    .btn:hover{background:#004f7d;}
   </style>
 </head>
-<body id="content">
 
-  <h1>Infografía: Herramientas de Gestión de Proyectos en Mi Teleférico</h1>
+<body>
+  <div id="content">
 
-  <div class="section">
-    <h2>Empresa Seleccionada</h2>
-    <p><strong>Mi Teleférico</strong> es una empresa estatal boliviana que gestiona el sistema de transporte por cable más grande del mundo. Ha desarrollado múltiples líneas en La Paz y El Alto, utilizando técnicas modernas de gestión de proyectos.</p>
+    <h1>Herramientas de Gestión de Proyectos<br>en <em>Mi Teleférico</em></h1>
+
+    <!-- — 1. Empresa — -->
+    <div class="section">
+      <h2>1&nbsp;· Empresa seleccionada</h2>
+      <p><strong>Mi Teleférico</strong> es la red de transporte por cable que une La Paz y El Alto, reconocida como la red urbana de teleféricos más extensa del mundo. Desde 2014 desarrolla de forma incremental nuevas líneas utilizando metodologías y software de gestión de proyectos.</p>
+      <img class="responsive"
+           src="https://upload.wikimedia.org/wikipedia/commons/3/34/La_Paz%2C_Teleferico-_Linea_Amarilla.JPG"
+           alt="Cabinas de Mi Teleférico sobre el centro de La Paz">
+    </div>
+
+    <!-- — 2. Herramientas de software — -->
+    <div class="section">
+      <h2>2&nbsp;· Herramientas de software utilizadas</h2>
+      <ul>
+        <li><strong>Microsoft Project</strong> – Planificación y seguimiento temporal</li>
+        <li><strong>SAP ERP</strong> – Gestión integrada de recursos y presupuesto</li>
+        <li><strong>AutoCAD & BIM</strong> – Diseño, interferencias y control de obra</li>
+      </ul>
+      <img class="responsive"
+           src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Linea_Roja_de_Mi_Teleferico%2C_La_Paz.jpg"
+           alt="Estación de la Línea Roja de Mi Teleférico">
+    </div>
+
+    <!-- — 3. Gestión de usuarios y respaldos — -->
+    <div class="section">
+      <h2>3&nbsp;· Gestión de usuarios y respaldos</h2>
+      <p>La autenticación de usuarios se centraliza en SAP (módulos <em>Basis</em>) con control de roles (RBAC). Los respaldos automáticos siguen una política 3‑2‑1: tres copias, en dos soportes distintos y una réplica fuera de sitio, alojada en un <em>cloud</em> híbrido del <abbr title="Agencia de Gobierno Electrónico y Tecnologías de Información y Comunicación">AGETIC</abbr>.</p>
+    </div>
+
+    <!-- — 4. Aplicación de técnicas (Gantt / PERT) — -->
+    <div class="section">
+      <h2>4&nbsp;· Técnicas de planificación aplicadas</h2>
+      <p>Se elaboraron cronogramas <strong>Gantt</strong> y diagramas <strong>PERT/CPM</strong> para identificar el <em>camino crítico</em> en cada línea. El gráfico inferior resume la línea Amarilla:</p>
+      <img class="responsive" src="gantt_miteleferico.png" alt="Gráfico Gantt del proyecto (generado en Python)">
+    </div>
+
+    <!-- — 5. Lecciones aprendidas — -->
+    <div class="section">
+      <h2>5&nbsp;· Lecciones aprendidas</h2>
+      <ul>
+        <li>Coordinación interinstitucional es clave para permisos y servidumbres.</li>
+        <li>Modelo <em>Fast‑Track</em>: diseño y construcción se solapan para reducir plazos.</li>
+        <li>Comunicación comunitaria minimiza conflictos sociales.</li>
+      </ul>
+    </div>
+
+    <!-- — 6. Propuestas de mejora — -->
+    <div class="section">
+      <h2>6&nbsp;· Propuestas de mejora</h2>
+      <ul>
+        <li>Automatizar reportes de avance vía <em>Power BI</em> conectados a SAP.</li>
+        <li>Implementar mantenimiento predictivo con sensores IoT.</li>
+        <li>Capacitar al personal en metodologías <em>Agile</em> para fases de mejoras menores.</li>
+      </ul>
+    </div>
+
+    <!-- — 7. Referencias — -->
+    <div class="section ref">
+      <strong>Referencias</strong><br>
+      Memoria Anual Mi Teleférico (2022); Ministerio de Obras Públicas (2023); SAP Bolivia; Fotografías bajo CC‑BY‑SA 4.0 de Wikimedia Commons: Línea Amarilla&nbsp;:contentReference[oaicite:0]{index=0} y Línea Roja&nbsp;:contentReference[oaicite:1]{index=1}.
+    </div>
+
+    <!-- — Botón PDF — -->
+    <button class="btn" onclick="downloadPDF()">Descargar como PDF</button>
   </div>
 
-  <div class="section">
-    <h2>Herramientas de Software Utilizadas</h2>
-    <ul>
-      <li><strong>Microsoft Project:</strong> planificación y seguimiento de actividades.</li>
-      <li><strong>SAP:</strong> gestión de recursos y presupuesto.</li>
-      <li><strong>AutoCAD + BIM:</strong> diseño e ingeniería.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Gestión de Usuarios y Respaldos</h2>
-    <p>La empresa utiliza sistemas de gestión centralizada mediante SAP. Los respaldos están alojados en servidores del Estado y en sistemas de nube híbrida con redundancia regional.</p>
-  </div>
-
-  <div class="section">
-    <h2>Aplicación de Técnicas de Proyectos</h2>
-    <p>Se aplicaron técnicas como <strong>Gantt</strong> y <strong>PERT</strong> para visualizar cronogramas y caminos críticos durante la construcción de líneas. Abajo se muestra una visualización Gantt simplificada:</p>
-    <img src="grafico_gantt.png" alt="Gráfico Gantt del proyecto">
-  </div>
-
-  <div class="section">
-    <h2>Lecciones Aprendidas</h2>
-    <ul>
-      <li>Importancia de la coordinación interinstitucional.</li>
-      <li>Riesgos asociados a permisos y licencias locales.</li>
-      <li>Beneficio de procesos estandarizados y seguimiento digital.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Propuestas de Mejora</h2>
-    <ul>
-      <li>Automatización de reportes de avance.</li>
-      <li>Mayor uso de inteligencia de datos para mantenimiento predictivo.</li>
-      <li>Capacitación continua en herramientas Agile y digitales.</li>
-    </ul>
-  </div>
-
-  <div class="section ref">
-    <p><strong>Referencias:</strong> Ministerio de Obras Públicas (2023), Informe de Mi Teleférico (2022), SAP Bolivia, entrevistas públicas.</p>
-  </div>
-
-  <button onclick="downloadPDF()">Descargar como PDF</button>
-
-  <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+  <!-- — html2pdf — -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    function downloadPDF() {
-      const element = document.getElementById("content");
-      html2pdf().from(element).save("Infografia_MiTeleferico.pdf");
+    function downloadPDF(){
+      const element=document.getElementById('content');
+      html2pdf().set({
+        margin: 10,
+        filename:'Infografia_MiTeleferico.pdf',
+        image:{type:'jpeg',quality:0.98},
+        html2canvas:{scale:2},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+      }).from(element).save();
     }
   </script>
-
 </body>
 </html>
