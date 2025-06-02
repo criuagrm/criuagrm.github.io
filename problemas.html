@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIRCPyCS - Selección de Problemas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #8e44ad;
+      --accent-color: #16a085;
+      --background-color: #f8f9fa;
+      --text-color: #34495e;
+      --light-gray: #e9ecef;
+      --dark-gray: #6c757d;
+      --header-bg: #2c3e50;
+      --card-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      padding-top: 80px;
+      font-size: 0.95rem;
+    }
+
+    /* Header */
+    .navbar-custom {
+      background-color: var(--header-bg) !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-brand {
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: white !important;
+    }
+    .btn-volver {
+      border-color: white;
+      color: white !important;
+      font-size: 0.85rem;
+    }
+    .btn-volver:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Contenido principal */
+    .contenedor-principal {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 15px;
+    }
+    h1.titulo-principal {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    .subtitulo {
+      text-align: center;
+      color: var(--dark-gray);
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    /* Filtros */
+    .filtros-container {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .filtros-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .filtros-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .filtro-grupo {
+      margin-bottom: 1rem;
+    }
+    .filtro-grupo label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .filtro-grupo select, .filtro-grupo input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ced4da;
+    }
+    .btn-filtros {
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-filtros:hover {
+      background-color: #7d3c98;
+      transform: translateY(-2px);
+    }
+    .btn-reset {
+      background-color: var(--dark-gray);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-reset:hover {
+      background-color: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    /* Tarjetas de problemas */
+    .contenedor-tarjetas {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    .tarjeta-problema {
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 5px solid var(--secondary-color);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .tarjeta-problema:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+    .tarjeta-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .codigo-problema {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .area-problema {
+      background-color: var(--light-gray);
+      color: var(--text-color);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .politica { background-color: #3498db; color: white; }
+    .economia { background-color: #2ecc71; color: white; }
+    .ambiental { background-color: #e74c3c; color: white; }
+    .social { background-color: #f39c12; color: white; }
+    .econ-polit { background-color: #9b59b6; color: white; }
+    
+    .titulo-problema {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+      color: var(--primary-color);
+      flex-grow: 1;
+    }
+    .linea-investigacion {
+      background-color: var(--light-gray);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: inline-block;
+      margin-bottom: 0.8rem;
+    }
+    .pregunta-problema {
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+      flex-grow: 2;
+    }
+    .asignado-a {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: var(--dark-gray);
+      font-style: italic;
+    }
+    .btn-detalles {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-detalles:hover {
+      background-color: #138a72;
+      transform: translateY(-2px);
+    }
+
+    /* Modal de detalles */
+    .modal-content {
+      border-radius: 15px;
+    }
+    .modal-header {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .modal-title {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+    .modal-body {
+      padding: 1.5rem;
+    }
+    .detalle-grupo {
+      margin-bottom: 1.5rem;
+    }
+    .detalle-titulo {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--secondary-color);
+    }
+    .detalle-contenido {
+      background-color: var(--light-gray);
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .metodologia-badge {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      margin: 0.3rem;
+      font-size: 0.85rem;
+    }
+
+    /* Formulario */
+    .formulario-grupo {
+      margin-bottom: 1.5rem;
+    }
+    .formulario-grupo label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .formulario-grupo input, .formulario-grupo select {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #ced4da;
+      font-size: 1rem;
+    }
+    .btn-formulario {
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    .btn-formulario:hover {
+      background-color: #7d3c98;
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--header-bg);
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.3rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: var(--accent-color);
+    }
+    .footer-contacto {
+      margin: 0.5rem 0;
+    }
+    .footer-social {
+      margin-top: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .contenedor-tarjetas {
+        grid-template-columns: 1fr;
+      }
+      .filtros-row {
+        grid-template-columns: 1fr;
+      }
+      .filtros-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .botones-filtros {
+        margin-top: 1rem;
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .btn-filtros, .btn-reset {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container">
+      <a class="navbar-brand" href="#">CIRCPyCS</a>
+      <a href="https://cir.uagrm.edu.bo/" class="btn btn-outline-light btn-volver">
+        <i class="fas fa-arrow-left"></i> Volver al Inicio
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="contenedor-principal">
+    <h1 class="titulo-principal">Problemas de Investigación 2025-2026</h1>
+    <p class="subtitulo">Explora y selecciona un problema de investigación para abordar</p>
+
+    <!-- Filtros -->
+    <div class="filtros-container">
+      <div class="filtros-header">
+        <h2><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
+        <div class="botones-filtros">
+          <button class="btn btn-filtros" id="aplicarFiltros">
+            <i class="fas fa-check"></i> Aplicar Filtros
+          </button>
+          <button class="btn btn-reset" id="resetFiltros">
+            <i class="fas fa-sync-alt"></i> Reiniciar
+          </button>
+        </div>
+      </div>
+      
+      <div class="filtros-row">
+        <div class="filtro-grupo">
+          <label for="filtro-area"><i class="fas fa-layer-group"></i> Área</label>
+          <select id="filtro-area" class="form-select">
+            <option value="">Todas las áreas</option>
+            <option value="Política">Política</option>
+            <option value="Economía">Economía</option>
+            <option value="Ambiental">Ambiental</option>
+            <option value="Social">Social</option>
+            <option value="Econ. Polít.">Econ. Polít.</option>
+          </select>
+        </div>
+        
+        <div class="filtro-grupo">
+          <label for="filtro-linea"><i class="fas fa-stream"></i> Línea de Investigación</label>
+          <select id="filtro-linea" class="form-select">
+            <option value="">Todas las líneas</option>
+            <option value="Sistema Político e Instituciones Públicas">Sistema Político e Instituciones Públicas</option>
+            <option value="Desarrollo, Innovación y Tecnología">Desarrollo, Innovación y Tecnología</option>
+            <option value="Comportamiento Político y Cognición Política">Comportamiento Político y Cognición Política</option>
+            <option value="Partidos y Organizaciones Políticas">Partidos y Organizaciones Políticas</option>
+            <option value="Estado Plurinacional, Democracia e Interculturalidad">Estado Plurinacional, Democracia e Interculturalidad</option>
+            <option value="Ciencia Política Computacional">Ciencia Política Computacional</option>
+            <option value="Desarrollo Productivo, Agroindustria y Economía">Desarrollo Productivo, Agroindustria y Economía</option>
+            <option value="Cambio Climático y Recursos Naturales">Cambio Climático y Recursos Naturales</option>
+            <option value="Sociedad, Salud y Educación">Sociedad, Salud y Educación</option>
+          </select>
+        </div>
+        
+        <div class="filtro-grupo">
+          <label for="filtro-estado"><i class="fas fa-tasks"></i> Estado</label>
+          <select id="filtro-estado" class="form-select">
+            <option value="">Todos los estados</option>
+            <option value="asignado">Asignado</option>
+            <option value="disponible">Disponible</option>
+          </select>
+        </div>
+        
+        <div class="filtro-grupo">
+          <label for="filtro-busqueda"><i class="fas fa-search"></i> Buscar</label>
+          <input type="text" id="filtro-busqueda" class="form-control" placeholder="Buscar por código, tema o pregunta...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjetas de problemas -->
+    <div class="contenedor-tarjetas" id="contenedor-problemas">
+      <!-- Las tarjetas se generarán con JavaScript -->
+    </div>
+  </div>
+
+  <!-- Modal para detalles -->
+  <div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitulo"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalCuerpo">
+          <!-- Detalles se cargarán dinámicamente -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="btnSeleccionar">Seleccionar este problema</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para formulario de registro -->
+  <div class="modal fade" id="modalFormulario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Registro de Investigador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="formulario-grupo">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" placeholder="Ingresa tu nombre completo">
+          </div>
+          
+          <div class="formulario-grupo">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" placeholder="Ingresa tu correo institucional">
+          </div>
+          
+          <div class="formulario-grupo">
+            <label for="matricula">Matrícula</label>
+            <input type="text" id="matricula" placeholder="Número de matrícula">
+          </div>
+          
+          <div class="formulario-grupo">
+            <label for="carrera">Carrera</label>
+            <select id="carrera">
+              <option value="">Selecciona tu carrera</option>
+              <option value="Ciencia Política">Ciencia Política</option>
+              <option value="Administración Pública">Administración Pública</option>
+              <option value="Sociología">Sociología</option>
+              <option value="Economía">Economía</option>
+              <option value="Derecho">Derecho</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+          
+          <div class="formulario-grupo">
+            <label for="semestre">Semestre</label>
+            <select id="semestre">
+              <option value="">Selecciona tu semestre</option>
+              <option value="1">1° Semestre</option>
+              <option value="2">2° Semestre</option>
+              <option value="3">3° Semestre</option>
+              <option value="4">4° Semestre</option>
+              <option value="5">5° Semestre</option>
+              <option value="6">6° Semestre</option>
+              <option value="7">7° Semestre</option>
+              <option value="8">8° Semestre</option>
+              <option value="9">9° Semestre</option>
+              <option value="10">10° Semestre</option>
+            </select>
+          </div>
+          
+          <button class="btn-formulario" id="btnRegistrar">
+            <i class="fas fa-file-pdf"></i> Generar PDF y Registrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS)</p>
+      <p class="footer-contacto">
+        Contacto: <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+        | <i class="fas fa-phone"></i> +591 67381294
+      </p>
+      <div class="footer-social">
+        Síguenos en:
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Datos de problemas de investigación
+    const problemas = [
+      // Problemas del Área Política
+      {
+        codigo: "P-01",
+        area: "Política",
+        linea: "Sistema Político e Instituciones Públicas",
+        tema: "Polarización política, afectiva e ideológica",
+        pregunta: "¿Cuáles son las características de la polarización en Bolivia entre 2019 y 2025?",
+        objetivo: "Analizar el impacto de la polarización política en Bolivia entre 2019 y 2025 y sus efectos en la estabilidad/inestabilidad política del país.",
+        metodologia: "Análisis de redes semánticas + Modelos de opinión dinámica (Hegselmann-Krause)",
+        asignado: "Orlando Peralta",
+        estado: "asignado"
+      },
+      {
+        codigo: "P-02",
+        area: "Política",
+        linea: "Desarrollo, Innovación y Tecnología",
+        tema: "Políticas de innovación en Bolivia 2025",
+        pregunta: "¿Cuáles son las políticas de innovación del gobierno nacional en el desarrollo de ecosistemas emprendedores en Bolivia? ¿Cuáles son los factores políticos que explican el éxito de los ecosistemas de innovación en países de América Latina?",
+        objetivo: "Examinar las políticas públicas que fomentan el emprendimiento y la innovación. Comparar modelos de innovación entre distintos países de América Latina.",
+        metodologia: "Análisis de ecosistemas institucionales (IE) + Benchmarking regulatorio con QCA",
+        asignado: "Roman Cruz",
+        estado: "asignado"
+      },
+      // ... (otros problemas) ...
+    ];
+
+    // Variables globales
+    let problemasFiltrados = [...problemas];
+    let problemaSeleccionado = null;
+    const modalDetalles = new bootstrap.Modal(document.getElementById('modalDetalles'));
+    const modalFormulario = new bootstrap.Modal(document.getElementById('modalFormulario'));
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      renderizarProblemas();
+      configurarEventos();
+    });
+
+    // Renderizar problemas
+    function renderizarProblemas() {
+      const contenedor = document.getElementById('contenedor-problemas');
+      contenedor.innerHTML = '';
+
+      if (problemasFiltrados.length === 0) {
+        contenedor.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-3x mb-3" style="color: #6c757d;"></i>
+            <h3>No se encontraron problemas</h3>
+            <p>Intenta ajustar los filtros o buscar con términos diferentes</p>
+          </div>
+        `;
+        return;
+      }
+
+      problemasFiltrados.forEach(problema => {
+        const claseArea = problema.area.toLowerCase().replace(/[^a-záéíóúñ]/g, '');
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'tarjeta-problema';
+        tarjeta.innerHTML = `
+          <div class="tarjeta-header">
+            <span class="codigo-problema">${problema.codigo}</span>
+            <span class="area-problema ${claseArea}">${problema.area}</span>
+          </div>
+          <div class="titulo-problema">${problema.tema}</div>
+          <span class="linea-investigacion">${problema.linea}</span>
+          <div class="pregunta-problema">${problema.pregunta}</div>
+          <div class="asignado-a">Asignado a: <strong>${problema.asignado}</strong></div>
+          <button class="btn-detalles" data-codigo="${problema.codigo}">
+            <i class="fas fa-info-circle"></i> Ver detalles
+          </button>
+        `;
+        contenedor.appendChild(tarjeta);
+      });
+
+      // Configurar eventos para los botones de detalles
+      document.querySelectorAll('.btn-detalles').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const codigo = this.getAttribute('data-codigo');
+          mostrarDetallesProblema(codigo);
+        });
+      });
+    }
+
+    // Mostrar detalles de un problema
+    function mostrarDetallesProblema(codigo) {
+      problemaSeleccionado = problemas.find(p => p.codigo === codigo);
+      if (!problemaSeleccionado) return;
+
+      document.getElementById('modalTitulo').textContent = problemaSeleccionado.tema;
+      
+      const cuerpoModal = document.getElementById('modalCuerpo');
+      cuerpoModal.innerHTML = `
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Código</div>
+          <div class="detalle-contenido">${problemaSeleccionado.codigo}</div>
+        </div>
+        
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Área</div>
+          <div class="detalle-contenido">${problemaSeleccionado.area}</div>
+        </div>
+        
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Línea de Investigación</div>
+          <div class="detalle-contenido">${problemaSeleccionado.linea}</div>
+        </div>
+        
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Pregunta de Investigación</div>
+          <div class="detalle-contenido">${problemaSeleccionado.pregunta}</div>
+        </div>
+        
+        ${problemaSeleccionado.objetivo ? `
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Objetivo</div>
+          <div class="detalle-contenido">${problemaSeleccionado.objetivo}</div>
+        </div>
+        ` : ''}
+        
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Metodología</div>
+          <div class="detalle-contenido">
+            ${problemaSeleccionado.metodologia.split('+').map(m => 
+              `<span class="metodologia-badge">${m.trim()}</span>`
+            ).join('')}
+          </div>
+        </div>
+        
+        <div class="detalle-grupo">
+          <div class="detalle-titulo">Asignado a</div>
+          <div class="detalle-contenido">${problemaSeleccionado.asignado}</div>
+        </div>
+      `;
+
+      // Configurar botón de selección
+      document.getElementById('btnSeleccionar').onclick = function() {
+        modalDetalles.hide();
+        // Esperar un momento antes de mostrar el formulario
+        setTimeout(() => {
+          mostrarFormularioRegistro();
+        }, 300);
+      };
+
+      modalDetalles.show();
+    }
+
+    // Mostrar formulario de registro
+    function mostrarFormularioRegistro() {
+      // Limpiar formulario
+      document.getElementById('nombre').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('matricula').value = '';
+      document.getElementById('carrera').value = '';
+      document.getElementById('semestre').value = '';
+      
+      modalFormulario.show();
+    }
+
+    // Configurar eventos de filtros
+    function configurarEventos() {
+      document.getElementById('aplicarFiltros').addEventListener('click', aplicarFiltros);
+      document.getElementById('resetFiltros').addEventListener('click', resetFiltros);
+      document.getElementById('filtro-busqueda').addEventListener('input', aplicarFiltros);
+      
+      // Evento para el botón de registro
+      document.getElementById('btnRegistrar').addEventListener('click', registrarProblema);
+    }
+
+    // Aplicar filtros
+    function aplicarFiltros() {
+      const filtroArea = document.getElementById('filtro-area').value.toLowerCase();
+      const filtroLinea = document.getElementById('filtro-linea').value.toLowerCase();
+      const filtroEstado = document.getElementById('filtro-estado').value;
+      const busqueda = document.getElementById('filtro-busqueda').value.toLowerCase();
+
+      problemasFiltrados = problemas.filter(problema => {
+        const cumpleArea = !filtroArea || problema.area.toLowerCase().includes(filtroArea);
+        const cumpleLinea = !filtroLinea || problema.linea.toLowerCase().includes(filtroLinea);
+        const cumpleEstado = !filtroEstado || 
+                            (filtroEstado === 'asignado' && problema.estado === 'asignado') ||
+                            (filtroEstado === 'disponible' && problema.estado === 'disponible');
+        
+        const cumpleBusqueda = !busqueda || 
+                              problema.codigo.toLowerCase().includes(busqueda) ||
+                              problema.tema.toLowerCase().includes(busqueda) ||
+                              problema.pregunta.toLowerCase().includes(busqueda);
+        
+        return cumpleArea && cumpleLinea && cumpleEstado && cumpleBusqueda;
+      });
+
+      renderizarProblemas();
+    }
+
+    // Reiniciar filtros
+    function resetFiltros() {
+      document.getElementById('filtro-area').value = '';
+      document.getElementById('filtro-linea').value = '';
+      document.getElementById('filtro-estado').value = '';
+      document.getElementById('filtro-busqueda').value = '';
+      
+      problemasFiltrados = [...problemas];
+      renderizarProblemas();
+    }
+
+    // Registrar problema seleccionado
+    function registrarProblema() {
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+      const matricula = document.getElementById('matricula').value;
+      const carrera = document.getElementById('carrera').value;
+      const semestre = document.getElementById('semestre').value;
+      
+      if (!nombre || !email || !matricula || !carrera || !semestre) {
+        alert('Por favor completa todos los campos del formulario');
+        return;
+      }
+      
+      // Guardar registro en localStorage
+      const registro = {
+        estudiante: { nombre, email, matricula, carrera, semestre },
+        problema: problemaSeleccionado,
+        fecha: new Date().toISOString()
+      };
+      
+      // Guardar en localStorage
+      const registros = JSON.parse(localStorage.getItem('registrosInvestigacion') || '[]');
+      registros.push(registro);
+      localStorage.setItem('registrosInvestigacion', JSON.stringify(registros));
+      
+      // Generar PDF
+      generarPDF(registro);
+      
+      // Cerrar modal
+      modalFormulario.hide();
+      
+      // Mostrar mensaje de éxito
+      alert(`¡Registro exitoso!\nHas seleccionado el problema ${problemaSeleccionado.codigo}.\nSe ha generado un PDF con los detalles de tu registro.`);
+    }
+
+    // Generar PDF con jsPDF
+    function generarPDF(registro) {
+      // Crear instancia de jsPDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // Logo de la universidad
+      doc.addImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/UAGRM_Logo.svg/1200px-UAGRM_Logo.svg.png', 'PNG', 10, 10, 30, 15);
+      
+      // Encabezado
+      doc.setFontSize(18);
+      doc.text('Registro de Investigación CIRCPyCS', 105, 20, null, null, 'center');
+      doc.setFontSize(12);
+      doc.text('Centro de Investigación Regional en Ciencia Política y Ciencias Sociales', 105, 27, null, null, 'center');
+      doc.text('Universidad Autónoma Gabriel René Moreno', 105, 32, null, null, 'center');
+      
+      // Línea divisoria
+      doc.setLineWidth(0.5);
+      doc.line(10, 37, 200, 37);
+      
+      // Datos del estudiante
+      doc.setFontSize(14);
+      doc.text('Datos del Investigador Estudiantil', 20, 45);
+      
+      doc.setFontSize(12);
+      doc.text(`Nombre: ${registro.estudiante.nombre}`, 20, 55);
+      doc.text(`Correo: ${registro.estudiante.email}`, 20, 62);
+      doc.text(`Matrícula: ${registro.estudiante.matricula}`, 20, 69);
+      doc.text(`Carrera: ${registro.estudiante.carrera}`, 20, 76);
+      doc.text(`Semestre: ${registro.estudiante.semestre}°`, 20, 83);
+      
+      // Problema seleccionado
+      doc.setFontSize(14);
+      doc.text('Problema de Investigación Seleccionado', 20, 95);
+      
+      doc.setFontSize(12);
+      doc.text(`Código: ${registro.problema.codigo}`, 20, 103);
+      doc.text(`Área: ${registro.problema.area}`, 20, 110);
+      doc.text(`Línea: ${registro.problema.linea}`, 20, 117);
+      doc.text(`Tema: ${registro.problema.tema}`, 20, 124);
+      
+      // Pregunta de investigación (con ajuste de texto)
+      const preguntaLines = doc.splitTextToSize(`Pregunta: ${registro.problema.pregunta}`, 170);
+      doc.text(preguntaLines, 20, 131);
+      
+      // Objetivo
+      if (registro.problema.objetivo) {
+        const objetivoLines = doc.splitTextToSize(`Objetivo: ${registro.problema.objetivo}`, 170);
+        doc.text(objetivoLines, 20, 141 + preguntaLines.length * 7);
+      }
+      
+      // Metodología
+      const metodologiaLines = doc.splitTextToSize(`Metodología: ${registro.problema.metodologia}`, 170);
+      const startY = registro.problema.objetivo ? 151 + preguntaLines.length * 7 : 141 + preguntaLines.length * 7;
+      doc.text(metodologiaLines, 20, startY);
+      
+      // Asignado a
+      doc.text(`Asignado a: ${registro.problema.asignado}`, 20, startY + metodologiaLines.length * 7 + 5);
+      
+      // Fecha
+      const fecha = new Date(registro.fecha).toLocaleDateString();
+      doc.text(`Fecha de registro: ${fecha}`, 20, 280);
+      
+      // Guardar PDF
+      doc.save(`Registro-Investigacion-${registro.problema.codigo}-${registro.estudiante.matricula}.pdf`);
+    }
+  </script>
+</body>
+</html>
