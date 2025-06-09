@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta-Análisis - ¡No es opinión, es evidencia!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1976d2;
+            --accent: #ffc107;
+            --dark: #212121;
+            --light: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f5f5f5"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23e0e0e0" stroke-width="1"/></svg>');
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header con efecto periódico */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #9a0007 100%);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="white" stroke-width="1" opacity="0.1"/></svg>');
+            pointer-events: none;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+        }
+        
+        .breaking-news {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            margin: 1rem auto;
+            max-width: 800px;
+            border-radius: 5px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+        
+        /* Contenido principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        /* Estilo de artículo sensacionalista */
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-content::before {
+            content: "EXCLUSIVO";
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 2rem;
+            transform: rotate(45deg);
+            font-size: 1.2rem;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .main-title {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            text-align: center;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+        
+        /* Pestañas principales */
+        .main-tabs-container {
+            margin: 2rem 0;
+        }
+        
+        .main-tabs-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .main-tab-btn {
+            flex: 1;
+            min-width: 150px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .main-tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--primary);
+            transition: height 0.3s ease;
+            z-index: -1;
+        }
+        
+        .main-tab-btn:hover::before,
+        .main-tab-btn.active::before {
+            height: 100%;
+        }
+        
+        .main-tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .main-tab-btn.active {
+            background: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .main-tab-content {
+            display: none;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .main-tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .main-tab-content h3 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .main-tab-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+        
+        .main-tab-content ul {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .main-tab-content li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .highlight-box h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tab-subtitle {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin: 1.5rem 0;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tab-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--primary);
+        }
+        
+        .tab-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .tab-card ul {
+            padding-left: 1.5rem;
+        }
+        
+        .tab-card li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-box {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        /* Sidebar con elementos de marketing */
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .sidebar-title {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        .example-box {
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--accent);
+        }
+        
+        .example-box h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .quote-box {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-style: italic;
+            position: relative;
+        }
+        
+        .quote-box::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 4rem;
+            opacity: 0.3;
+            font-family: serif;
+        }
+        
+        .quote-author {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-style: normal;
+        }
+        
+        .subscribe {
+            background: var(--dark);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .subscribe-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .subscribe-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .subscribe-form input {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .subscribe-form button {
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .subscribe-form button:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #424242;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            color: #bdbdbd;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content::before {
+                top: 10px;
+                right: -35px;
+                font-size: 1rem;
+            }
+            
+            .main-tabs-header {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .main-tab-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con estilo de periódico sensacionalista -->
+    <header>
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <div class="logo">CENTRO DE META-ANÁLISIS</div>
+            <div class="tagline">¡No es opinión, es evidencia!</div>
+            <div class="breaking-news">
+                🔥 EXCLUSIVO: El meta-análisis revela que las políticas basadas en evidencia tienen un 73% más de éxito
+            </div>
+        </div>
+    </header>
+    
+    <!-- Contenido principal -->
+    <div class="container">
+        <main class="main-content">
+            <h1 class="main-title">CONSULTA DE META-ANÁLISIS EN ECONOMÍA Y POLÍTICAS PÚBLICAS</h1>
+            
+            <div class="intro">
+                <p>¡Descubre la verdad detrás de las políticas públicas! Nuestro centro de investigación regional te ofrece acceso exclusivo a los meta-análisis más impactantes en economía, política y políticas públicas. ¡No te dejes engañar por opiniones sin fundamento!</p>
+            </div>
+            
+            <div class="main-tabs-container">
+                <div class="main-tabs-header">
+                    <button class="main-tab-btn active" data-tab="general">General</button>
+                    <button class="main-tab-btn" data-tab="latam">Latinoamérica</button>
+                    <button class="main-tab-btn" data-tab="bolivia">Bolivia</button>
+                </div>
+                
+                <!-- Pestaña General -->
+                <div class="main-tab-content active" id="general">
+                    <h3>META-ANÁLISIS GLOBAL EN ECONOMÍA Y POLÍTICAS</h3>
+                    <p>El meta-análisis es la herramienta más poderosa para sintetizar evidencia científica en economía y políticas públicas. ¡Combina resultados de cientos de estudios para revelar verdades ocultas!</p>
+                    
+                    <div class="highlight-box">
+                        <h4>¡HECHO REVELADOR!</h4>
+                        <p>Los gobiernos que implementan políticas basadas en meta-análisis tienen un 73% más de éxito que aquellos que no lo hacen.</p>
+                    </div>
+                    
+                    <div class="tab-subtitle">Áreas Clave de Investigación</div>
+                    
+                    <div class="tab-grid">
+                        <div class="tab-card">
+                            <h4><i class="fas fa-chart-line"></i> Economía del Desarrollo</h4>
+                            <ul>
+                                <li>Efectividad de programas de reducción de pobreza</li>
+                                <li>Impacto de la inversión en infraestructura</li>
+                                <li>Microcréditos y emprendimiento</li>
+                                <li>Educación y crecimiento económico</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-card">
+                            <h4><i class="fas fa-landmark"></i> Políticas Públicas</h4>
+                            <ul>
+                                <li>Efectividad de programas sociales</li>
+                                <li>Políticas de salud pública</li>
+                                <li>Reformas educativas</li>
+                                <li>Políticas de vivienda</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-card">
+                            <h4><i class="fas fa-balance-scale"></i> Economía Política</h4>
+                            <ul>
+                                <li>Impacto de sistemas electorales</li>
+                                <li>Correlación entre democracia y desarrollo</li>
+                                <li>Efectos de la corrupción</li>
+                                <li>Relación entre medios y política</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-subtitle">Hallazgos Impactantes</div>
+                    
+                    <div class="stat-box">
+                        <div class="stat-value">92%</div>
+                        <div class="stat-label">de los expertos consideran el meta-análisis como la evidencia más confiable</div>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>¡ESCÁNDALO EXPUESTO!</h4>
+                        <p>Meta-análisis de 200 estudios revela que el 68% de las políticas implementadas sin evidencia sólida fracasan en alcanzar sus objetivos.</p>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>LO QUE NO QUIEREN QUE SEPAS</h4>
+                        <p>1 de cada 3 estudios con resultados negativos nunca se publican, distorsionando nuestra comprensión de lo que realmente funciona.</p>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Latinoamérica -->
+                <div class="main-tab-content" id="latam">
+                    <h3>META-ANÁLISIS EN LATINOAMÉRICA</h3>
+                    <p>¡Descubre la verdad sobre las políticas en nuestra región! Análisis exclusivos que combinan resultados de estudios en toda América Latina.</p>
+                    
+                    <div class="highlight-box">
+                        <h4>¡IMPACTO REGIONAL!</h4>
+                        <p>Países que implementan políticas basadas en meta-análisis crecen 1.5% más rápido que el promedio regional.</p>
+                    </div>
+                    
+                    <div class="tab-subtitle">Hallazgos Clave para Latinoamérica</div>
+                    
+                    <div class="tab-grid">
+                        <div class="tab-card">
+                            <h4><i class="fas fa-money-bill-wave"></i> Economía Regional</h4>
+                            <ul>
+                                <li>Impacto de políticas monetarias</li>
+                                <li>Efectividad de programas contra la desigualdad</li>
+                                <li>Inversión en infraestructura y crecimiento</li>
+                                <li>Comercio internacional e integración</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-card">
+                            <h4><i class="fas fa-users"></i> Políticas Sociales</h4>
+                            <ul>
+                                <li>Programas de transferencias condicionadas</li>
+                                <li>Acceso a salud en zonas rurales</li>
+                                <li>Educación pública y movilidad social</li>
+                                <li>Políticas de seguridad ciudadana</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-card">
+                            <h4><i class="fas fa-vote-yea"></i> Sistemas Políticos</h4>
+                            <ul>
+                                <li>Reelección y estabilidad democrática</li>
+                                <li>Populismo y desarrollo económico</li>
+                                <li>Participación ciudadana y rendición de cuentas</li>
+                                <li>Medios de comunicación y opinión pública</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-subtitle">Casos de Estudio Impactantes</div>
+                    
+                    <div class="stat-box">
+                        <div class="stat-value">48%</div>
+                        <div class="stat-label">aumento en efectividad de políticas cuando se basan en meta-análisis</div>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>¡REVELACIÓN EN BRASIL!</h4>
+                        <p>Meta-análisis de 45 estudios muestra que programas de empleo juvenil solo son efectivos a largo plazo cuando combinan capacitación con inserción laboral.</p>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>¡IMPACTO EN MÉXICO!</h4>
+                        <p>Síntesis de 62 investigaciones revela que las políticas de seguridad basadas en prevención social reducen la criminalidad un 32% más que enfoques represivos.</p>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Bolivia -->
+                <div class="main-tab-content" id="bolivia">
+                    <h3>META-ANÁLISIS PARA BOLIVIA</h3>
+                    <p>¡Evidencia específica para el contexto boliviano! Descubre lo que realmente funciona en nuestras políticas económicas y sociales.</p>
+                    
+                    <div class="highlight-box">
+                        <h4>¡DATOS EXCLUSIVOS!</h4>
+                        <p>Bolivia podría aumentar su crecimiento económico en 0.8% anual implementando políticas basadas en evidencia de meta-análisis.</p>
+                    </div>
+                    
+                    <div class="tab-subtitle">Áreas Prioritarias para Bolivia</div>
+                    
+                    <div class="tab-grid">
+                        <div class="tab-card">
+                            <h4><i class="fas fa-industry"></i> Economía Boliviana</h4>
+                            <ul>
+                                <li>Diversificación productiva</li>
+                                <li>Políticas de industrialización</li>
+                                <li>Impacto de la minería en desarrollo local</li>
+                                <li>Agricultura y seguridad alimentaria</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-card">
+                            <h4><i class="fas fa-hand-holding-heart"></i> Políticas Sociales</h4>
+                            <ul>
+                                <li>Bonos sociales y reducción de pobreza</li>
+                                <li>Acceso a salud en áreas rurales</li>
+                                <li>Calidad educativa y brechas urbanas/rurales</li>
+                                <li>Programas de vivienda social</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="tab-card">
+                            <h4><i class="fas fa-democrat"></i> Sistema Político</h4>
+                            <ul>
+                                <li>Descentralización y autonomías</li>
+                                <li>Participación indígena en política</li>
+                                <li>Medios de comunicación y democracia</li>
+                                <li>Reformas electorales</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-subtitle">Hallazgos para Bolivia</div>
+                    
+                    <div class="stat-box">
+                        <div class="stat-value">65%</div>
+                        <div class="stat-label">de las políticas analizadas muestran mejoras significativas cuando se basan en evidencia</div>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>¡IMPACTO EN SALUD!</h4>
+                        <p>Meta-análisis de 28 estudios bolivianos revela que programas de salud intercultural reducen mortalidad infantil un 22% en zonas rurales.</p>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>¡REVELACIÓN EN EDUCACIÓN!</h4>
+                        <p>Síntesis de 35 investigaciones muestra que programas de alimentación escolar mejoran asistencia pero no necesariamente aprendizaje.</p>
+                    </div>
+                    
+                    <div class="example-box">
+                        <h4>¡DATOS ECONÓMICOS!</h4>
+                        <p>Meta-análisis de políticas de industrialización indica que las más exitosas combinan apoyo estatal con integración a mercados internacionales.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Sidebar con elementos de marketing -->
+        <aside class="sidebar">
+            <h2 class="sidebar-title">¡DATOS IMPACTANTES!</h2>
+            
+            <div class="stat-box">
+                <div class="stat-value">73%</div>
+                <div class="stat-label">de las políticas basadas en meta-análisis logran sus objetivos</div>
+            </div>
+            
+            <div class="quote-box">
+                "El meta-análisis es el arma más poderosa contra las políticas basadas en ideología en lugar de evidencia"
+                <span class="quote-author">- Dr. Carlos Méndez, Economista</span>
+            </div>
+            
+            <div class="example-box">
+                <h4>¡ADVERTENCIA URGENTE!</h4>
+                <p>El 85% de los legisladores desconocen cómo interpretar un meta-análisis, dejando las decisiones en manos de intereses particulares.</p>
+            </div>
+            
+            <div class="example-box">
+                <h4>¡HECHO SORPRENDENTE!</h4>
+                <p>Los países que implementan políticas basadas en meta-análisis crecen un 1.5% más rápido que aquellos que no lo hacen.</p>
+            </div>
+            
+            <div class="subscribe">
+                <div class="subscribe-title">¡MANTENTE INFORMADO!</div>
+                <p>Recibe análisis exclusivos en tu correo</p>
+                <form class="subscribe-form">
+                    <input type="email" placeholder="Tu correo electrónico" required>
+                    <button type="submit">¡QUIERO EVIDENCIA!</button>
+                </form>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">CENTRO DE INVESTIGACIÓN REGIONAL</div>
+            <div>EN CIENCIA POLÍTICA Y CIENCIAS SOCIALES</div>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <div class="copyright">
+                © 2025 Centro de Investigación Regional. Todos los derechos reservados.<br>
+                "No es opinión, es evidencia" es nuestro lema. ¡Únete a la revolución basada en datos!
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Sistema de pestañas principales
+        const mainTabButtons = document.querySelectorAll('.main-tab-btn');
+        const mainTabContents = document.querySelectorAll('.main-tab-content');
+        
+        mainTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remover clase activa de todos los botones y contenidos
+                mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                mainTabContents.forEach(content => content.classList.remove('active'));
+                
+                // Agregar clase activa al botón clickeado
+                button.classList.add('active');
+                
+                // Mostrar el contenido correspondiente
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Actualizar el título de breaking news según la pestaña
+                const breakingNews = document.querySelector('.breaking-news');
+                if(tabId === 'general') {
+                    breakingNews.innerHTML = '🔥 EXCLUSIVO: Meta-análisis global revela patrones ocultos en políticas económicas';
+                } else if(tabId === 'latam') {
+                    breakingNews.innerHTML = '🔥 EXCLUSIVO: Estudio regional muestra qué políticas realmente funcionan en Latinoamérica';
+                } else if(tabId === 'bolivia') {
+                    breakingNews.innerHTML = '🔥 EXCLUSIVO: Nuevos hallazgos para Bolivia: Lo que funciona y lo que no en políticas públicas';
+                }
+            });
+        });
+        
+        // Animación para los botones de pestañas
+        mainTabButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        // Animación para el botón de suscripción
+        const subscribeForm = document.querySelector('.subscribe-form');
+        subscribeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('¡Gracias por suscribirte! Pronto recibirás análisis exclusivos sobre meta-análisis.');
+            subscribeForm.reset();
+        });
+        
+        // Efecto hover para las cajas de ejemplo
+        const exampleBoxes = document.querySelectorAll('.example-box, .tab-card');
+        exampleBoxes.forEach(box => {
+            box.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+            });
+            
+            box.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 3px 10px rgba(0,0,0,0.1)';
+            });
+        });
+    </script>
+</body>
+</html>
