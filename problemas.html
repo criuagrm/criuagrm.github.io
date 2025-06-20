@@ -553,85 +553,87 @@
     }
 
     /*----------------------------------------------------
-      Generar certificado con jsPDF
-    ----------------------------------------------------*/
-    async function generarCertificado(nombreInvestigador,tipoInvestigador,lineasInvestigacion){
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({format:"letter"});      // Carta (216×279 mm)
+   Generar certificado con jsPDF  –  versión actualizada
+----------------------------------------------------*/
+async function generarCertificado(nombreInvestigador,
+                                   tipoInvestigador = "Investigador Estudiantil",
+                                   lineasInvestigacion = []) {
 
-      // fondo
-      doc.setFillColor(255,255,255); doc.rect(0,0,216,279,"F");
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ format: "letter" });           // 216 × 279 mm
 
-      // marca de agua
-      const logoAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-      doc.setGState(new doc.GState({opacity:.15}));
-      doc.addImage(logoAgua,"PNG",30,90,150,150);
-      doc.setGState(new doc.GState({opacity:1}));
+  /* — Fondo y marca de agua — */
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, 216, 279, "F");
 
-      // logo superior
-      const logoTop = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-      doc.addImage(logoTop,"PNG",60,5,90,20);
+  const logoAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
+  doc.setGState(new doc.GState({ opacity: 0.15 }));
+  doc.addImage(logoAgua, "PNG", 30, 90, 150, 150);
+  doc.setGState(new doc.GState({ opacity: 1 }));
 
-      // encabezado
-      doc.setFont("helvetica","bold"); doc.setFontSize(14); doc.setTextColor("#B22222");
-      doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO",108,30,{align:"center"});
-      doc.setTextColor("#003366"); doc.setFontSize(12);
-      doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales",108,35,{align:"center"});
-      doc.text("Carrera de Ciencia Política y Administración Pública",108,40,{align:"center"});
-      doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales",108,45,{align:"center"});
+  /* — Logo superior — */
+  const logoTop = await cargarImagen("https://i.imgur.com/R952Ljv.png");
+  doc.addImage(logoTop, "PNG", 60, 5, 90, 20);
 
-      // título
-      doc.setFontSize(20); doc.text("Certificado de Investigador",108,65,{align:"center"});
+  /* — Encabezado institucional — */
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor("#B22222");
+  doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 108, 30, { align: "center" });
 
-      // cuerpo
-      const texto = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en la(s) siguiente(s) línea(s) de investigación:`;
-      doc.setFont("helvetica","normal"); doc.setFontSize(12); doc.setTextColor(0,0,0);
-      doc.text(doc.splitTextToSize(texto,160),25,90);
+  doc.setTextColor("#003366");
+  doc.setFontSize(12);
+  doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 108, 35, { align: "center" });
+  doc.text("Carrera de Ciencia Política y Administración Pública", 108, 40, { align: "center" });
+  doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 108, 45, { align: "center" });
 
-      // líneas
-      let y = 125; doc.setFontSize(11); doc.setFont("helvetica","italic");
-      lineasInvestigacion.forEach(lin=>{ doc.text(`• ${lin}`,25,y); y+=8; });
+  /* — Título principal — */
+  doc.setFontSize(20);
+  doc.text("Certificación de Elección de Problema de Investigación", 108, 65, { align: "center" });
 
-      // cierre
-      doc.setFont("helvetica","normal"); doc.setFontSize(12);
-      const cierre = "Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución. Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.";
-      doc.text(doc.splitTextToSize(cierre,160),25,y+15);
+  /* — Tenor solicitado — */
+  const tenor = `Por medio del presente, el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno certifica que ${nombreInvestigador}, estudiante de la ${tipoInvestigador}, ha seleccionado formalmente el problema de investigación ${lineasInvestigacion[0]}. El investigador se compromete a desarrollar y culminar dicho proyecto durante el período académico 2025-2026, siguiendo las directrices metodológicas acordadas con su tutor y con la coordinación del CIRCPyCS.\n\nEsta certificación se expide a solicitud del interesado, para los fines académicos y administrativos que creyere convenientes.`;
 
-      // fecha
-      doc.setFontSize(10); doc.text(`Santa Cruz de la Sierra, ${new Date().toLocaleDateString()}`,108,y+45,{align:"center"});
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text(doc.splitTextToSize(tenor, 160), 25, 90);
 
-      // firmas
-      const f1 = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-      const f2 = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
-      const f3 = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-      doc.addImage(f1,"PNG",35,y+55,40,20);
-      doc.addImage(f2,"PNG",90,y+55,40,20);
-      doc.addImage(f3,"PNG",145,y+55,40,20);
+  /* — Fecha — */
+  const yFecha = 190;
+  doc.setFontSize(10);
+  doc.text(`Santa Cruz de la Sierra, ${new Date().toLocaleDateString()}`, 108, yFecha, { align: "center" });
 
-      doc.setFont("helvetica","bold"); doc.setFontSize(10);
-      doc.text("Francisco Méndez Égüez",55,y+80,{align:"center"});
-      doc.text("Director Carrera",55,y+85,{align:"center"});
-      doc.text("Alfonso Coca",108,y+80,{align:"center"});
-      doc.text("Decano FCJPSRRII",108,y+85,{align:"center"});
-      doc.text("María A. Suárez R.",165,y+80,{align:"center"});
-      doc.text("Directora CIRCPyCS",165,y+85,{align:"center"});
+  /* — Firmas (solo Director y Directora) — */
+  const imgDirector  = await cargarImagen("https://i.imgur.com/o9tccxV.png");
+  const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
 
-      // pie
-      doc.setDrawColor(178,34,34); doc.setLineWidth(.5); doc.line(10,265,206,265);
-      doc.setFont("helvetica","normal"); doc.setFontSize(10);
-      doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja",108,272,{align:"center"});
+  doc.addImage(imgDirector,  "PNG", 40,  yFecha + 10, 40, 20);
+  doc.addImage(imgDirectora, "PNG", 135, yFecha + 10, 40, 20);
 
-      // guardar
-      doc.save(`Certificado_${nombreInvestigador.replace(/\s+/g,"_")}.pdf`);
-    }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
 
-    // carga de imágenes
-    function cargarImagen(url){
-      return new Promise((ok,err)=>{
-        const img=new Image(); img.crossOrigin="anonymous";
-        img.onload=()=>ok(img); img.onerror=err; img.src=url;
-      });
-    }
-  </script>
+  // Director Carrera
+  doc.text("Francisco Méndez Égüez", 60,  yFecha + 35, { align: "center" });
+  doc.text("Director Carrera",       60,  yFecha + 40, { align: "center" });
+
+  // Directora CIRCPyCS
+  doc.text("María A. Suárez Ribera", 155, yFecha + 35, { align: "center" });
+  doc.text("Directora CIRCPyCS",     155, yFecha + 40, { align: "center" });
+
+  /* — Pie de página — */
+  doc.setDrawColor(178, 34, 34);
+  doc.setLineWidth(0.5);
+  doc.line(10, 265, 206, 265);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 108, 272, { align: "center" });
+
+  /* — Guardar archivo — */
+  doc.save(`Certificacion_${nombreInvestigador.replace(/\s+/g, "_")}.pdf`);
+}
+
 </body>
 </html>
