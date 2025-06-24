@@ -11,21 +11,20 @@
     :root {
       --main-bg: #222831;
       --main-accent: #0077b6;
-      --accent2: #8e44ad;
-      --accent3: #00b894;
-      --light-bg: #f8f9fa;
-      --kpi-bg: #fff;
       --kpi-border: #e1e1e1;
       --font-main: 'Segoe UI', 'Inter', sans-serif;
       --font-title: 'Playfair Display', serif;
     }
     body {
       font-family: var(--font-main);
-      background: var(--main-bg);
       color: #fff;
       margin: 0;
       padding-top: 84px;
       font-size: 0.97rem;
+      /* Fondo con imagen y overlay oscuro */
+      background: linear-gradient(0deg,rgba(28,28,28,0.76) 0%,rgba(28,28,28,0.66) 100%), 
+        url('https://i.imgur.com/4xA4Fa0.jpeg') center/cover no-repeat fixed;
+      min-height: 100vh;
     }
     h1, h2, h3, h4, h5 {
       font-family: var(--font-title);
@@ -33,7 +32,7 @@
       letter-spacing: .5px;
     }
     a { color: var(--main-accent); text-decoration: none; }
-    /* NAVBAR */
+    /* NAVBAR SOLO MARCA */
     .navbar-custom {
       background: rgba(34,40,49,0.98);
       box-shadow: 0 2px 10px rgba(0,0,0,0.07);
@@ -58,8 +57,7 @@
     .hero {
       height: 34vh;
       min-height: 170px;
-      background: linear-gradient(98deg, rgba(0,119,182,0.18) 0%, rgba(34,40,49,0.90) 65%),
-      url('https://i.imgur.com/4xA4Fa0.jpeg') center/cover no-repeat;
+      background: transparent;
       display: flex; align-items: center; justify-content: center;
       text-align: center; position: relative;
     }
@@ -72,46 +70,74 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.07);
     }
     /* SECTIONS */
-    .section { max-width:1200px; margin:0 auto; padding:2.4rem 1rem 2.2rem;}
-    .section-title { text-align:center; font-size:2.1rem; margin-bottom:2.1rem;}
-    /* DASHBOARD KPIs */
-    .dashboard-row { display: flex; gap:2.5rem; flex-wrap:wrap; justify-content: space-around;}
-    .kpi-card {
-    background: rgba(255,255,255,0.94); /* translúcido blanco */
-    color: #222;
-    border-radius: 1rem;
-    padding: 1.4rem 1.6rem;
-    flex: 1 1 210px;
-    margin: .5rem 0;
-    min-width: 210px;
-    max-width: 350px;
-    box-shadow: 0 6px 28px 0 rgba(36,40,48,0.27), 0 1.5px 5px 0 rgba(0,0,0,0.09);
-    border: 1px solid var(--kpi-border);
-    display: flex; flex-direction: column; align-items: flex-start;
-    transition: box-shadow 0.18s;
-    position: relative;
-    /* Efecto blur muy suave opcional para glassmorphism */
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-  }
-  .kpi-card:hover {
-    box-shadow: 0 14px 38px 0 rgba(0,119,182,0.22), 0 2.5px 10px 0 rgba(0,0,0,0.17);
-  }
-    .kpi-title { font-size: 1rem; color: var(--main-accent); margin-bottom: .2rem;}
-    /* Badges y botones */
-    .badge { font-size: 0.90rem; margin-right:0.45rem;}
-    .badge.bg-info, .badge.bg-success, .badge.bg-primary, .badge.bg-secondary, .badge.bg-warning, .badge.bg-dark, .badge.bg-danger {
-      opacity: 0.94;
-      margin-top:0.19rem;
+    .section { 
+      max-width:1200px; 
+      margin:0 auto; 
+      padding:2.4rem 1rem 2.2rem;
     }
+    .section-title { 
+      text-align:center; 
+      font-size:2.1rem; 
+      margin-bottom:2.1rem;
+      color: #fff;
+    }
+    /* Tarjetas de equipo */
+    .dashboard-row { 
+      display: flex; 
+      gap:2.2rem; 
+      flex-wrap:wrap; 
+      justify-content:center;
+    }
+    .kpi-card.card-equipo {
+      background: rgba(255,255,255,0.95);
+      color: #222;
+      border-radius: 1rem;
+      padding: 1.2rem 1.1rem 1.4rem 1.1rem;
+      min-width: 210px;
+      max-width: 320px;
+      box-shadow: 0 6px 28px 0 rgba(36,40,48,0.27), 0 1.5px 5px 0 rgba(0,0,0,0.09);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: box-shadow 0.18s;
+      position: relative;
+      /* Blur para glassmorphism */
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .kpi-card.card-equipo:hover {
+      box-shadow: 0 14px 38px 0 rgba(0,119,182,0.22), 0 2.5px 10px 0 rgba(0,0,0,0.17);
+    }
+    .avatar-perfil {
+      width:70px; height:70px; border-radius:50%; border:3px solid #0077b6;
+    }
+    .nombre-equipo {
+      margin:0; color:#0077b6; font-size:1.11rem; line-height:1.1;
+    }
+    .badge-cargo {
+      background: #0077b6 !important;
+      color: #fff !important;
+      font-weight: 600;
+      font-size: 0.98rem;
+      margin-top: 0.3rem;
+      border-radius: 14px;
+      padding: 0.28em 0.7em;
+      display: inline-block;
+    }
+    .desc-equipo {
+      margin-top:1rem;font-size:0.98rem;max-width:100%;word-break:break-word;
+    }
+    .cargo-area { font-weight:600; display:inline-block; margin-bottom:2px;}
+    .tags-equipo .badge { margin-top:0.23rem; margin-right:0.18rem; }
+    .links-equipo {margin-top:0.7rem;}
     .orcid-btn, .web-btn {
       background: #fff;
-      color: var(--main-accent);
-      border: 1px solid #ddd;
+      color: #0077b6;
+      border: 1px solid #e1e1e1;
       border-radius: 25px;
       padding: 0.3rem 1.05rem;
       margin-right: 0.45rem;
-      margin-top:0.6rem;
       font-size: 0.97rem;
       display: inline-flex;
       align-items: center;
@@ -119,25 +145,42 @@
       transition: background .15s, color .18s, border .18s;
       text-decoration: none;
     }
-    .orcid-btn:hover {
-      background: #a6ce39;
+    .orcid-btn:hover, .web-btn:hover {
+      background: #0077b6;
       color: #fff;
-      border: 1px solid #a6ce39;
+      border: 1px solid #0077b6;
     }
-    .web-btn:hover {
-      background: var(--main-accent);
-      color: #fff;
-      border: 1px solid var(--main-accent);
+    /* Estudiantes */
+    .kpi-card.card-estudiante {
+      background: rgba(255,255,255,0.92);
+      color: #222;
+      border-radius: 1rem;
+      padding: 1.2rem 1.1rem 1.0rem 1.1rem;
+      min-width: 170px;
+      max-width: 220px;
+      box-shadow: 0 4px 18px 0 rgba(36,40,48,0.14), 0 1.5px 5px 0 rgba(0,0,0,0.07);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: box-shadow 0.16s;
+      position: relative;
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(1px);
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .kpi-card.card-estudiante .avatar-perfil {
+      width:48px;height:48px;border-radius:50%;border:2px solid #0077b6;
     }
     /* Responsive */
-    @media (max-width: 900px) {
-      .dashboard-row { flex-direction: column; gap:1.5rem;}
-      .section {padding:1.6rem 1rem 1.2rem;}
+    @media (max-width:900px){
+      .dashboard-row{flex-direction:column;gap:1.5rem;}
+      .kpi-card.card-equipo{max-width:98vw;}
+      .kpi-card.card-estudiante{max-width:97vw;}
     }
-    @media (max-width: 600px) {
-      .hero h1 { font-size:1.25rem;}
-      .section-title {font-size:1.15rem;}
-      .section {padding:1.0rem 0.2rem 0.7rem;}
+    @media (max-width:600px){
+      .hero h1{font-size:1.25rem;}
+      .section-title{font-size:1.15rem;}
+      .section{padding:1.0rem 0.2rem 0.7rem;}
       .navbar-custom{padding:0 .4rem;}
     }
     /* Footer */
@@ -179,161 +222,173 @@
   <!-- EQUIPO LABAP -->
   <section class="section" id="equipo">
     <div class="section-title">Equipo LABAP–CIRCPyCS</div>
-    <div class="dashboard-row" style="gap:2.2rem;flex-wrap:wrap;justify-content:center;">
+    <div class="dashboard-row">
       <!-- Daniel Hurtado Justiniano -->
-      <div class="kpi-card" style="max-width:350px;">
+      <div class="kpi-card card-equipo">
         <div style="display:flex;gap:1.2rem;align-items:center;">
-          <img src="https://ui-avatars.com/api/?name=Daniel+Hurtado+Justiniano&size=100&background=0077b6&color=fff" style="width:70px;height:70px;border-radius:50%;border:3px solid #0077b6;">
+          <img src="https://ui-avatars.com/api/?name=Daniel+Hurtado+Justiniano&size=100&background=0077b6&color=fff" class="avatar-perfil">
           <div>
-            <h5 style="margin:0;color:#0077b6;">Daniel Hurtado Justiniano</h5>
-            <span class="badge bg-primary">Coordinador</span>
+            <h5 class="nombre-equipo">Daniel Hurtado Justiniano</h5>
+            <span class="badge badge-cargo">Investigador Asociado</span>
           </div>
         </div>
-        <div style="margin-top:1rem;font-size:0.98rem;">
-          <span style="font-weight:600;"><i class="fas fa-brain"></i> Análisis Político Computacional</span><br>
-          Modelización avanzada con R, Python, QGIS, NetLogo y simulación de escenarios electorales e institucionales.<br>
-          <span class="badge rounded-pill bg-info text-dark mt-2">Simulación política</span>
-          <span class="badge rounded-pill bg-secondary mt-2">Geodatos</span>
-          <span class="badge rounded-pill bg-success mt-2">Machine learning</span>
-          <span class="badge rounded-pill bg-dark mt-2">Docencia & mentoría</span>
-          <br>
-          <a class="orcid-btn" href="https://orcid.org/0000-0002-XXXX-XXXX" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
-          <a class="web-btn" href="https://danielhurtado.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+        <div class="desc-equipo">
+          <span class="cargo-area"><i class="fas fa-brain"></i> Análisis Político Computacional</span><br>
+          Modelización avanzada con R, Python, QGIS, NetLogo y simulación de escenarios electorales e institucionales.
+          <div class="tags-equipo">
+            <span class="badge bg-info text-dark">Simulación política</span>
+            <span class="badge bg-secondary">Geodatos</span>
+            <span class="badge bg-success">Machine learning</span>
+            <span class="badge bg-dark">Docencia & mentoría</span>
+          </div>
+          <div class="links-equipo">
+            <a class="orcid-btn" href="https://orcid.org/0000-0002-XXXX-XXXX" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+            <a class="web-btn" href="https://danielhurtado.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+          </div>
         </div>
       </div>
       <!-- José Orlando Peralta -->
-      <div class="kpi-card" style="max-width:350px;">
+      <div class="kpi-card card-equipo">
         <div style="display:flex;gap:1.2rem;align-items:center;">
-          <img src="https://ui-avatars.com/api/?name=Jose+Orlando+Peralta&size=100&background=8e44ad&color=fff" style="width:70px;height:70px;border-radius:50%;border:3px solid #8e44ad;">
+          <img src="https://ui-avatars.com/api/?name=Jose+Orlando+Peralta&size=100&background=0077b6&color=fff" class="avatar-perfil">
           <div>
-            <h5 style="margin:0;color:#8e44ad;">José Orlando Peralta</h5>
-            <span class="badge bg-dark">Investigador Senior</span>
+            <h5 class="nombre-equipo">José Orlando Peralta</h5>
+            <span class="badge badge-cargo">Investigador Asociado</span>
           </div>
         </div>
-        <div style="margin-top:1rem;font-size:0.98rem;">
-          <span style="font-weight:600;"><i class="fas fa-landmark"></i> Análisis Político Neoinstitucional</span><br>
-          Gobernanza, instituciones comparadas y evaluación de políticas estatales.<br>
-          <span class="badge rounded-pill bg-secondary mt-2">Neo–institucionalismo</span>
-          <span class="badge rounded-pill bg-warning text-dark mt-2">Política comparada</span>
-          <span class="badge rounded-pill bg-primary mt-2">Capacitación</span>
-          <br>
-          <a class="orcid-btn" href="https://orcid.org/0000-0002-YYYY-YYYY" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
-          <a class="web-btn" href="https://joseperalta.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+        <div class="desc-equipo">
+          <span class="cargo-area"><i class="fas fa-landmark"></i> Análisis Político Neoinstitucional</span><br>
+          Gobernanza, instituciones comparadas y evaluación de políticas estatales.
+          <div class="tags-equipo">
+            <span class="badge bg-secondary">Neo–institucionalismo</span>
+            <span class="badge bg-warning text-dark">Política comparada</span>
+            <span class="badge bg-primary">Capacitación</span>
+          </div>
+          <div class="links-equipo">
+            <a class="orcid-btn" href="https://orcid.org/0000-0002-YYYY-YYYY" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+            <a class="web-btn" href="https://joseperalta.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+          </div>
         </div>
       </div>
       <!-- Carlos Jr Escobar -->
-      <div class="kpi-card" style="max-width:350px;">
+      <div class="kpi-card card-equipo">
         <div style="display:flex;gap:1.2rem;align-items:center;">
-          <img src="https://ui-avatars.com/api/?name=Carlos+Jr+Escobar&size=100&background=00b894&color=fff" style="width:70px;height:70px;border-radius:50%;border:3px solid #00b894;">
+          <img src="https://ui-avatars.com/api/?name=Carlos+Jr+Escobar&size=100&background=0077b6&color=fff" class="avatar-perfil">
           <div>
-            <h5 style="margin:0;color:#00b894;">Carlos Jr Escobar</h5>
-            <span class="badge bg-success">Investigador Asociado</span>
+            <h5 class="nombre-equipo">Carlos Jr Escobar</h5>
+            <span class="badge badge-cargo">Investigador Asociado</span>
           </div>
         </div>
-        <div style="margin-top:1rem;font-size:0.98rem;">
-          <span style="font-weight:600;"><i class="fas fa-project-diagram"></i> Redes Sociales y Ciencia de Datos</span><br>
-          Especialista en análisis de redes sociales (SNA) y visualización con Python.<br>
-          <span class="badge rounded-pill bg-info text-dark mt-2">Python</span>
-          <span class="badge rounded-pill bg-primary mt-2">Network Science</span>
-          <span class="badge rounded-pill bg-dark mt-2">Visualización</span>
-          <br>
-          <a class="orcid-btn" href="https://orcid.org/0000-0002-ZZZZ-ZZZZ" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
-          <a class="web-btn" href="https://carlosescobar.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+        <div class="desc-equipo">
+          <span class="cargo-area"><i class="fas fa-project-diagram"></i> Redes Sociales y Ciencia de Datos</span><br>
+          Especialista en análisis de redes sociales (SNA) y visualización con Python.
+          <div class="tags-equipo">
+            <span class="badge bg-info text-dark">Python</span>
+            <span class="badge bg-primary">Network Science</span>
+            <span class="badge bg-dark">Visualización</span>
+          </div>
+          <div class="links-equipo">
+            <a class="orcid-btn" href="https://orcid.org/0000-0002-ZZZZ-ZZZZ" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+            <a class="web-btn" href="https://carlosescobar.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+          </div>
         </div>
       </div>
       <!-- Yessenia Pedraza Surano -->
-      <div class="kpi-card" style="max-width:350px;">
+      <div class="kpi-card card-equipo">
         <div style="display:flex;gap:1.2rem;align-items:center;">
-          <img src="https://ui-avatars.com/api/?name=Yessenia+Pedraza+Surano&size=100&background=c0392b&color=fff" style="width:70px;height:70px;border-radius:50%;border:3px solid #c0392b;">
+          <img src="https://ui-avatars.com/api/?name=Yessenia+Pedraza+Surano&size=100&background=0077b6&color=fff" class="avatar-perfil">
           <div>
-            <h5 style="margin:0;color:#c0392b;">Yessenia Pedraza Surano</h5>
-            <span class="badge bg-danger">Analista Junior</span>
+            <h5 class="nombre-equipo">Yessenia Pedraza Surano</h5>
+            <span class="badge badge-cargo">Investigadora Asociada</span>
           </div>
         </div>
-        <div style="margin-top:1rem;font-size:0.98rem;">
-          <span style="font-weight:600;"><i class="fas fa-chart-line"></i> Análisis Político Computacional</span><br>
-          Aplicación de Python para análisis electoral y procesamiento de datos políticos.<br>
-          <span class="badge rounded-pill bg-primary mt-2">Python</span>
-          <span class="badge rounded-pill bg-secondary mt-2">Procesamiento de datos</span>
-          <span class="badge rounded-pill bg-info text-dark mt-2">Encuestas</span>
-          <br>
-          <a class="orcid-btn" href="https://orcid.org/0000-0002-AAAA-AAAA" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
-          <a class="web-btn" href="https://yesseniapedraza.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+        <div class="desc-equipo">
+          <span class="cargo-area"><i class="fas fa-chart-line"></i> Análisis Político Computacional</span><br>
+          Aplicación de Python para análisis electoral y procesamiento de datos políticos.
+          <div class="tags-equipo">
+            <span class="badge bg-primary">Python</span>
+            <span class="badge bg-secondary">Procesamiento de datos</span>
+            <span class="badge bg-info text-dark">Encuestas</span>
+          </div>
+          <div class="links-equipo">
+            <a class="orcid-btn" href="https://orcid.org/0000-0002-AAAA-AAAA" target="_blank"><i class="fab fa-orcid"></i> ORCID</a>
+            <a class="web-btn" href="https://yesseniapedraza.com" target="_blank"><i class="fas fa-globe"></i> Web</a>
+          </div>
         </div>
       </div>
     </div>
     <!-- Estudiantes investigadores -->
-    <div class="section-title" style="font-size:1.38rem;margin-top:2.8rem;margin-bottom:1.5rem;">
+    <div class="section-title" style="font-size:1.38rem;margin-top:2.8rem;margin-bottom:1.5rem;color:#fff;">
       Estudiantes Investigadores LABAP
     </div>
-    <div class="dashboard-row" style="gap:1.4rem;flex-wrap:wrap;justify-content:center;">
+    <div class="dashboard-row">
       <!-- 10 ejemplos de estudiantes investigadores -->
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Aneth+Flores&size=80&background=1976d2&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #1976d2;">
+          <img src="https://ui-avatars.com/api/?name=Aneth+Flores&size=80&background=1976d2&color=fff" class="avatar-perfil">
           <span><b>Aneth Flores</b><br><span style="font-size:0.9rem;">Política Comparada</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 3er año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Carmen+Michelle+King&size=80&background=8e44ad&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #8e44ad;">
+          <img src="https://ui-avatars.com/api/?name=Carmen+Michelle+King&size=80&background=8e44ad&color=fff" class="avatar-perfil">
           <span><b>Carmen Michelle King</b><br><span style="font-size:0.9rem;">Sociedad & Educación</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 2do año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Fatty+Arredondo&size=80&background=00b894&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #00b894;">
+          <img src="https://ui-avatars.com/api/?name=Fatty+Arredondo&size=80&background=009688&color=fff" class="avatar-perfil">
           <span><b>Fatty Arredondo</b><br><span style="font-size:0.9rem;">Sistemas Políticos</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 1er año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Carla+Saravia&size=80&background=c0392b&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #c0392b;">
+          <img src="https://ui-avatars.com/api/?name=Carla+Saravia&size=80&background=c0392b&color=fff" class="avatar-perfil">
           <span><b>Carla Saravia</b><br><span style="font-size:0.9rem;">Instituciones Públicas</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 2do año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Mariano+Ramos&size=80&background=009688&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #009688;">
+          <img src="https://ui-avatars.com/api/?name=Mariano+Ramos&size=80&background=009688&color=fff" class="avatar-perfil">
           <span><b>Mariano Ramos</b><br><span style="font-size:0.9rem;">Participación Electoral</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 4to año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Hilda+Arispe&size=80&background=2c3e50&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #2c3e50;">
+          <img src="https://ui-avatars.com/api/?name=Hilda+Arispe&size=80&background=2c3e50&color=fff" class="avatar-perfil">
           <span><b>Hilda Arispe</b><br><span style="font-size:0.9rem;">Política & Género</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Derecho y Ciencia Política, 2do año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Yhelsy+Torrico&size=80&background=e67e22&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #e67e22;">
+          <img src="https://ui-avatars.com/api/?name=Yhelsy+Torrico&size=80&background=e67e22&color=fff" class="avatar-perfil">
           <span><b>Yhelsy Torrico</b><br><span style="font-size:0.9rem;">Innovación Pública</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 1er año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Diego+Callau&size=80&background=8e44ad&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #8e44ad;">
+          <img src="https://ui-avatars.com/api/?name=Diego+Callau&size=80&background=8e44ad&color=fff" class="avatar-perfil">
           <span><b>Diego Callaú</b><br><span style="font-size:0.9rem;">Datos Electorales</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 2do año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Claudio+Cortez&size=80&background=009688&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #009688;">
+          <img src="https://ui-avatars.com/api/?name=Claudio+Cortez&size=80&background=009688&color=fff" class="avatar-perfil">
           <span><b>Claudio Cortez</b><br><span style="font-size:0.9rem;">Gobernanza Local</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 4to año</div>
       </div>
-      <div class="kpi-card" style="max-width:220px;">
+      <div class="kpi-card card-estudiante">
         <div style="display:flex;align-items:center;gap:0.7rem;">
-          <img src="https://ui-avatars.com/api/?name=Jhutsara+Camacho&size=80&background=1976d2&color=fff" style="width:48px;height:48px;border-radius:50%;border:2px solid #1976d2;">
+          <img src="https://ui-avatars.com/api/?name=Jhutsara+Camacho&size=80&background=1976d2&color=fff" class="avatar-perfil">
           <span><b>Jhutsara Camacho</b><br><span style="font-size:0.9rem;">Economía Política</span></span>
         </div>
         <div style="font-size:0.93rem;margin-top:0.3rem;"><i class="fas fa-graduation-cap"></i> Ciencia Política, 3er año</div>
