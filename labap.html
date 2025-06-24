@@ -80,7 +80,7 @@
       height: 60vh;
       min-height: 340px;
       background: linear-gradient(98deg, rgba(0,119,182,0.23) 0%, rgba(34,40,49,0.90) 60%),
-      url('https://i.imgur.com/ALJUMrF.jpeg') center/cover no-repeat;
+      url('https://imgur.com/a/2NFAOBt') center/cover no-repeat;
       display: flex; align-items: center; justify-content: center;
       text-align: center; position: relative;
     }
@@ -197,7 +197,6 @@
   <section class="section" id="dashboard">
     <div class="section-title">Mega Dashboard Internacional Bolivia 2024-25</div>
     <div class="dashboard-row">
-      <!-- KPIs -->
       <div class="kpi-card">
         <span class="kpi-title"><i class="fas fa-gavel"></i> Rule of Law (WJP 2024)</span>
         <span class="kpi-value">0.37</span>
@@ -209,14 +208,14 @@
         <span class="kpi-trend"><i class="fas fa-arrow-down"></i> "Régimen híbrido"</span>
       </div>
       <div class="kpi-card">
-        <span class="kpi-title"><i class="fas fa-shield-alt"></i> Riesgo País (EMBI)</span>
-        <span class="kpi-value">2 190 pb</span>
-        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> 2.º más alto en LatAm</span>
-      </div>
-      <div class="kpi-card">
         <span class="kpi-title"><i class="fas fa-university"></i> CPI Transparencia Intl.</span>
         <span class="kpi-value">28/100</span>
         <span class="kpi-trend"><i class="fas fa-arrow-down"></i> Puesto 133/180</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-shield-alt"></i> Riesgo País (EMBI)</span>
+        <span class="kpi-value">2 190 pb</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> 2.º más alto en LatAm</span>
       </div>
       <div class="kpi-card">
         <span class="kpi-title"><i class="fas fa-chart-bar"></i> PIB per cápita (USD, 2023)</span>
@@ -228,18 +227,39 @@
         <span class="kpi-value">12,318,000</span>
         <span class="kpi-trend"><i class="fas fa-arrow-up"></i> Fuente: INE</span>
       </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-thumbs-up"></i> Aprobación presidencial</span>
+        <span class="kpi-value">24.1%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> Mayo 2024</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-poll"></i> Confianza en elecciones (Latinobarómetro)</span>
+        <span class="kpi-value">29%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> 2023 (prom. LatAm: 37%)</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-balance-scale"></i> Confianza en justicia (Latinobarómetro)</span>
+        <span class="kpi-value">15%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> 2023 (prom. LatAm: 21%)</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-user-friends"></i> Satisfacción con la democracia</span>
+        <span class="kpi-value">19%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> Latinobarómetro 2023</span>
+      </div>
     </div>
   </section>
 
   <!-- VISUALIZACIÓN AVANZADA -->
   <section class="section" id="visualizacion">
     <div id="mainViz">
-      <h4>Simulación: Intención de voto presidencial 2025<br><small>Bolivia — Últimos sondeos y tendencias</small></h4>
-      <div id="plotly-intencion-voto" style="height:430px;width:100%;"></div>
+      <h4>Simulación: Intención de voto presidencial 2025<br>
+      <small>Candidatos según encuestas y proyecciones (junio 2024)</small></h4>
+      <div id="plotly-intencion-voto" style="height:500px;width:100%;"></div>
       <div class="text-center mt-3" style="color:#333;">
         <small>
-          <b>Fuente:</b> Simulación CIRCPyCS con promedios de encuestas públicas y proyecciones.<br>
-          <span style="color:var(--main-accent)">Haz click en los partidos para activar/desactivar líneas. Mouse sobre puntos para detalles históricos.</span>
+          <b>Fuente:</b> Simulación CIRCPyCS, estimación de intención de voto a partir de promedios de encuestas públicas (2024) y proyecciones académicas.<br>
+          <span style="color:var(--main-accent)">Haz click en los candidatos para activar/desactivar líneas. Mouse sobre puntos para detalles históricos.</span>
         </small>
       </div>
     </div>
@@ -287,64 +307,96 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Plotly visualización avanzada - Intención de voto simulada 2025
-    var years = ['2023-II', '2024-I', '2024-II', '2025-I', '2025-II'];
-    // Simulación de partidos/fórmulas 2025: Arce/MAS, Evo, Mesa/CC, Camacho/Creemos, Eva Copa/SUMATE, Indecisos
-    var traceMAS = {
+    // Datos simulados para intención de voto: encuestas 2024 y proyección 2025
+    var years = ['2024-I', '2024-II', '2025-I', '2025-II'];
+
+    var traceCastillo = {
       x: years,
-      y: [25, 23, 21, 20, 19],
-      name: 'MAS (Arce)',
+      y: [17, 16, 16, 15],
+      name: 'Eduardo del Castillo (MAS–IPSP)',
       mode: 'lines+markers',
       line: { color: '#1976d2', width: 4 },
       marker: { size: 10 }
     };
-    var traceEvo = {
+    var traceAndronico = {
       x: years,
-      y: [17, 17, 18, 19, 20],
-      name: 'Evo Morales',
+      y: [14, 13, 13, 12],
+      name: 'Andrónico Rodríguez (MAS disidente)',
       mode: 'lines+markers',
-      line: { color: '#43a047', width: 4, dash:'dot' },
+      line: { color: '#009688', width: 4, dash: 'dot' },
       marker: { size: 10 }
     };
-    var traceCC = {
+    var traceDoria = {
       x: years,
-      y: [18, 18, 19, 21, 22],
-      name: 'Comunidad Ciudadana (Mesa)',
+      y: [12, 13, 13, 14],
+      name: 'Samuel Doria Medina (Unidad)',
       mode: 'lines+markers',
-      line: { color: '#e67e22', width: 4, dash:'solid' },
+      line: { color: '#e67e22', width: 4 },
       marker: { size: 10 }
     };
-    var traceCreemos = {
+    var traceTuto = {
       x: years,
-      y: [12, 14, 15, 16, 17],
-      name: 'Creemos (Camacho)',
+      y: [11, 11, 12, 12],
+      name: 'Jorge "Tuto" Quiroga (Libre)',
       mode: 'lines+markers',
-      line: { color: '#c0392b', width: 4, dash:'dash' },
+      line: { color: '#ff9800', width: 4, dash:'dashdot' },
       marker: { size: 10 }
     };
-    var traceSumate = {
+    var traceManfred = {
       x: years,
-      y: [7, 8, 9, 9, 9],
-      name: 'SUMATE (Eva Copa)',
+      y: [11, 12, 13, 13],
+      name: 'Manfred Reyes Villa (APB–Súmate)',
       mode: 'lines+markers',
       line: { color: '#8e44ad', width: 4, dash:'dot' },
       marker: { size: 10 }
     };
+    var tracePaz = {
+      x: years,
+      y: [6, 6, 7, 8],
+      name: 'Rodrigo Paz Pereira (PDC)',
+      mode: 'lines+markers',
+      line: { color: '#388e3c', width: 4, dash: 'dot' },
+      marker: { size: 10 }
+    };
+    var traceEva = {
+      x: years,
+      y: [7, 8, 8, 9],
+      name: 'Eva Copa (MORENA)',
+      mode: 'lines+markers',
+      line: { color: '#c0392b', width: 4, dash: 'dash' },
+      marker: { size: 10 }
+    };
+    var traceDunn = {
+      x: years,
+      y: [4, 5, 5, 5],
+      name: 'Jaime Dunn (NGP)',
+      mode: 'lines+markers',
+      line: { color: '#6d4c41', width: 4, dash:'dashdot' },
+      marker: { size: 10 }
+    };
+    var traceJohnny = {
+      x: years,
+      y: [5, 5, 5, 5],
+      name: 'Jhonny Fernández (UCS)',
+      mode: 'lines+markers',
+      line: { color: '#00bcd4', width: 4, dash:'solid' },
+      marker: { size: 10 }
+    };
     var traceIndecisos = {
       x: years,
-      y: [19, 17, 18, 15, 13],
+      y: [13, 11, 10, 9],
       name: 'Indecisos',
       mode: 'lines+markers',
       line: { color: '#666', width: 3, dash: 'dot' },
       marker: { size: 10 }
     };
-    var data = [traceMAS, traceEvo, traceCC, traceCreemos, traceSumate, traceIndecisos];
+    var data = [traceCastillo, traceAndronico, traceDoria, traceTuto, traceManfred, tracePaz, traceEva, traceDunn, traceJohnny, traceIndecisos];
     var layout = {
       plot_bgcolor: '#f7f7fa',
       paper_bgcolor: '#fff',
-      legend: {"orientation":"h", x:0.02, y:1.14, font:{size:13}},
+      legend: {"orientation":"h", x:0.01, y:1.18, font:{size:13}},
       xaxis: { title: 'Período de sondeo', tickfont:{color:'#222'} },
-      yaxis: { title: '% intención de voto', range:[0,35], gridcolor:'#eee', tickfont:{color:'#222'} },
+      yaxis: { title: '% intención de voto', range:[0,20], gridcolor:'#eee', tickfont:{color:'#222'} },
       margin: {l:50, r:20, t:20, b:40},
       font: { family: 'Inter, Segoe UI, sans-serif', size: 14, color: '#1a1a1a' }
     };
