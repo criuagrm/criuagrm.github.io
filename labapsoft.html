@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Software • LABAP CIRCPyCS</title>
+  <!-- Bootstrap y Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --main-bg: #222831;
+      --main-accent: #0077b6;
+      --kpi-border: #e1e1e1;
+      --font-main: 'Segoe UI', 'Inter', sans-serif;
+      --font-title: 'Playfair Display', serif;
+    }
+    body {
+      font-family: var(--font-main);
+      color: #fff;
+      margin: 0;
+      padding-top: 84px;
+      font-size: 0.97rem;
+      background: linear-gradient(0deg,rgba(28,28,28,0.76) 0%,rgba(28,28,28,0.66) 100%), 
+        url('https://i.imgur.com/4xA4Fa0.jpeg') center/cover no-repeat fixed;
+      min-height: 100vh;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-title);
+      color: var(--main-accent);
+      letter-spacing: .5px;
+    }
+    a { color: var(--main-accent); text-decoration: none; }
+    /* NAVBAR SOLO MARCA */
+    .navbar-custom {
+      background: rgba(34,40,49,0.98);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 2.5rem;
+      height: 64px;
+    }
+    .brand {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    /* HERO */
+    .hero {
+      height: 22vh;
+      min-height: 120px;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    .hero h1 {
+      font-size: 2.1rem; color: #fff;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.14);
+    }
+    .hero p {
+      font-size: 1.04rem; color: #e9ecef; margin-bottom: 1.0rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    /* SECTIONS */
+    .section { 
+      max-width:1200px; 
+      margin:0 auto; 
+      padding:2.4rem 1rem 2.2rem;
+    }
+    .section-title { 
+      text-align:center; 
+      font-size:2.1rem; 
+      margin-bottom:2.1rem;
+      color: #fff;
+    }
+    .subtitulo {
+      color:#fff;
+      font-family:var(--font-title);
+      font-size:1.28rem;
+      margin:2.3rem 0 1.2rem 0;
+      text-align:left;
+      letter-spacing:.2px;
+    }
+    /* Tarjetas de software */
+    .soft-row { 
+      display: flex; 
+      gap:1.3rem; 
+      flex-wrap:wrap; 
+      justify-content:center;
+    }
+    .card-soft {
+      background: rgba(255,255,255,0.96);
+      color: #222;
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.1rem 1.4rem 1.1rem;
+      min-width: 210px;
+      max-width: 320px;
+      box-shadow: 0 7px 32px 0 rgba(36,40,48,0.24), 0 1.5px 5px 0 rgba(0,0,0,0.09);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: box-shadow 0.18s;
+      position: relative;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .card-soft:hover {
+      box-shadow: 0 14px 38px 0 rgba(0,119,182,0.20), 0 2.5px 10px 0 rgba(0,0,0,0.15);
+    }
+    .soft-icon {
+      font-size:2.2rem;margin-right:.7rem;vertical-align:middle;color:var(--main-accent);
+    }
+    .soft-title {font-size:1.13rem;font-weight:600;color:#0077b6;margin-bottom:.17rem;}
+    .soft-desc {font-size:.97rem;margin-bottom:.65rem;}
+    .soft-tags .badge {margin-right:0.22rem;margin-bottom:.2rem;}
+    .soft-links {margin-top:.5rem;}
+    .soft-btn {
+      background:#fff;
+      color: #0077b6;
+      border: 1px solid #e1e1e1;
+      border-radius: 25px;
+      padding: 0.27rem 1.03rem;
+      margin-right: 0.35rem;
+      font-size: 0.97rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background .13s, color .18s, border .18s;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .soft-btn:hover {
+      background: #0077b6;
+      color: #fff;
+      border: 1px solid #0077b6;
+    }
+    @media (max-width:900px){
+      .soft-row{flex-direction:column;gap:1.2rem;}
+      .card-soft{max-width:98vw;}
+    }
+    @media (max-width:600px){
+      .hero h1{font-size:1.22rem;}
+      .section-title{font-size:1.1rem;}
+      .section{padding:1.0rem 0.2rem 0.7rem;}
+      .navbar-custom{padding:0 .4rem;}
+    }
+    /* Footer */
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.3rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #16a085;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR SOLO MARCA -->
+  <nav class="navbar-custom">
+    <span class="brand">LAP-CIRCPyCS</span>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>Software y Herramientas del Laboratorio de Análisis Político</h1>
+      <p>
+        Soluciones para el análisis político avanzado, ciencia de datos, simulación, mapas y visualización institucional.<br>
+        <span style="color:var(--main-accent); font-weight:600;">Innovación abierta | Desarrollo propio | Recursos internacionales</span>
+      </p>
+    </div>
+  </header>
+
+  <!-- Software propio -->
+  <section class="section" id="software">
+    <div class="section-title">Software Propio LABAP–CIRCPyCS</div>
+    <div class="soft-row">
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-chart-network soft-icon"></i> Simulador Electoral CIRCPyCS</span>
+        <div class="soft-desc">
+          Plataforma web de simulación electoral multinivel y análisis de escenarios (Python, Flask, JS, Plotly).
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-primary">Simulación</span>
+          <span class="badge bg-info text-dark">Python</span>
+          <span class="badge bg-success">Open Source</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="#" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+          <a class="soft-btn" href="#" target="_blank"><i class="fa-solid fa-download"></i> Descargar</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-database soft-icon"></i> Observatorio de Datos Políticos</span>
+        <div class="soft-desc">
+          Repositorio y dashboard de datos electorales, encuestas, y variables institucionales para Bolivia y Latinoamérica.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-secondary">Datos abiertos</span>
+          <span class="badge bg-primary">Dashboard</span>
+          <span class="badge bg-warning text-dark">CSV/JSON</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="#" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+          <a class="soft-btn" href="#" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-network-wired soft-icon"></i> Analizador de Redes Políticas</span>
+        <div class="soft-desc">
+          Herramienta de análisis de redes sociales y políticas, visualización de grafos y cálculo de centralidad.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-primary">SNA</span>
+          <span class="badge bg-dark">NetworkX</span>
+          <span class="badge bg-info text-dark">Python</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="#" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-globe soft-icon"></i> Mapas Políticos UAGRM</span>
+        <div class="soft-desc">
+          Módulo de geovisualización de resultados electorales y variables institucionales en mapas interactivos (QGIS, Leaflet).
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-success">Geodatos</span>
+          <span class="badge bg-info text-dark">QGIS</span>
+          <span class="badge bg-primary">Leaflet</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="#" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Herramientas recomendadas -->
+    <div class="subtitulo" style="margin-top:3.1rem;"><i class="fa-solid fa-tools"></i> Herramientas Recomendadas</div>
+    <div class="soft-row">
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-brands fa-python soft-icon"></i> Python para Ciencia Política</span>
+        <div class="soft-desc">
+          Librerías para análisis electoral, redes y ciencia de datos: <b>Pandas, Plotly, NetworkX, Scikit-learn, GeoPandas</b>.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-info text-dark">Python</span>
+          <span class="badge bg-primary">Data Science</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://pandas.pydata.org/" target="_blank"><i class="fa-solid fa-book"></i> Pandas</a>
+          <a class="soft-btn" href="https://scikit-learn.org/" target="_blank"><i class="fa-solid fa-book"></i> Scikit-learn</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-chart-area soft-icon"></i> RStudio y Shiny</span>
+        <div class="soft-desc">
+          Análisis estadístico, visualización avanzada, dashboards interactivos, paquetes tidyverse, igraph, sf.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-primary">R</span>
+          <span class="badge bg-info text-dark">Shiny</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://posit.co/download/rstudio-desktop/" target="_blank"><i class="fa-solid fa-download"></i> Descargar</a>
+          <a class="soft-btn" href="https://shiny.posit.co/" target="_blank"><i class="fa-solid fa-book"></i> Shiny</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-map-location-dot soft-icon"></i> QGIS</span>
+        <div class="soft-desc">
+          Software libre para análisis y visualización de datos espaciales, ideal para mapas políticos y electorales.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-success">Geodatos</span>
+          <span class="badge bg-dark">QGIS</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://qgis.org/" target="_blank"><i class="fa-solid fa-download"></i> Descargar</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-robot soft-icon"></i> NetLogo</span>
+        <div class="soft-desc">
+          Modelado basado en agentes para simulación social, experimentos y dinámica de sistemas complejos.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-secondary">Simulación</span>
+          <span class="badge bg-dark">ABM</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://ccl.northwestern.edu/netlogo/" target="_blank"><i class="fa-solid fa-download"></i> Descargar</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recursos abiertos -->
+    <div class="subtitulo" style="margin-top:3.1rem;"><i class="fa-solid fa-code-branch"></i> Recursos Abiertos</div>
+    <div class="soft-row">
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-database soft-icon"></i> Latinobarómetro</span>
+        <div class="soft-desc">
+          Base de datos abierta sobre opinión pública, democracia y economía para América Latina.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-primary">Opinión Pública</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://www.latinobarometro.org/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-scale-balanced soft-icon"></i> V-Dem Dataset</span>
+        <div class="soft-desc">
+          Indicadores globales de democracia, calidad institucional y régimen de partidos.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-dark">Instituciones</span>
+          <span class="badge bg-secondary">Comparado</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://v-dem.net/data/the-v-dem-dataset/" target="_blank"><i class="fa-solid fa-download"></i> Descargar</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-flag soft-icon"></i> Transparencia Internacional</span>
+        <div class="soft-desc">
+          Índices de corrupción, riesgo país y transparencia gubernamental a nivel internacional.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-danger">Corrupción</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://www.transparency.org/es/cpi" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="card-soft">
+        <span class="soft-title"><i class="fa-solid fa-chart-bar soft-icon"></i> CEPALSTAT</span>
+        <div class="soft-desc">
+          Portal de estadísticas socioeconómicas y demográficas de América Latina y el Caribe.
+        </div>
+        <div class="soft-tags">
+          <span class="badge bg-primary">Economía</span>
+        </div>
+        <div class="soft-links">
+          <a class="soft-btn" href="https://statistics.cepal.org/portal/cepalstat.html" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer institucional CIRCPyCS -->
+  <footer>
+    <div class="container">
+      <p class="mb-1">
+        &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.
+      </p>
+      <p class="mb-1">
+        Contacto:
+        <a href="mailto:contacto@circpycs.uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+        |
+        <i class="fas fa-phone"></i> +591 67381294
+      </p>
+      <p>
+        Síguenos en:
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </p>
+    </div>
+  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
