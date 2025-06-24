@@ -3,188 +3,353 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LAP-CIRCPyCS · Laboratorio de Análisis Político</title>
-
-  <!--  ▸ Tipografía & utilidades  -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <!--  ▸ Chart.js  -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
+  <title>Laboratorio de Análisis Político • CIRCPyCS</title>
+  <!-- Bootstrap y Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Plotly para visualizaciones avanzadas -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
   <style>
-    :root{
-      --dark:#1e1e24;--brand:#006c8b;--bg:#f5f7fa;--accent:#ffb703;
-      --mas:#3a8e2d;--evo:#00589e;--cc:#f39000;--creemos:#b81414;--sumate:#8e44ad;--gris:#7f8c8d;
+    :root {
+      --main-bg: #222831;
+      --main-accent: #0077b6;
+      --accent2: #8e44ad;
+      --accent3: #00b894;
+      --light-bg: #f8f9fa;
+      --kpi-bg: #fff;
+      --kpi-border: #e1e1e1;
+      --font-main: 'Segoe UI', 'Inter', sans-serif;
+      --font-title: 'Playfair Display', serif;
     }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:var(--bg);color:#36404a;line-height:1.4}
-
-    /* ---------- NAVBAR ---------- */
-    .navbar{position:fixed;inset:0 0 auto 0;height:64px;display:flex;align-items:center;
-            justify-content:space-between;padding:0 2rem;background:var(--dark);z-index:1000}
-    .brand{font-weight:800;color:#fff;font-size:1.25rem;letter-spacing:.5px}
-    .nav a{color:#dfe6ec;text-decoration:none;margin-left:1.5rem;font-weight:500;transition:.25s}
-    .nav a:hover{color:var(--accent)}
-
-    /* ---------- HERO ---------- */
-    header.hero{margin-top:64px;height:44vh;min-height:320px;display:flex;align-items:center;
-        justify-content:center;background:url('https://live.staticflickr.com/65535/510666045228879283_c9f3adec36_h.jpg') center/cover}
-    header .overlay{backdrop-filter:brightness(.55);position:absolute;inset:0}
-    header h1{position:relative;color:#fff;font-size:2.6rem;font-weight:800;text-align:center;z-index:2}
-
-    /* ---------- SECCIONES ---------- */
-    section{padding:3.5rem 7vw}
-    .section-title{font-size:1.75rem;font-weight:700;color:var(--brand);margin-bottom:1rem;position:relative}
-    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
-
-    /* KPI cards */
-    .kpi{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 6px 18px rgba(0,0,0,.08);
-         display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-    .kpi h3{font-size:1.9rem;margin:.25rem 0;font-weight:800}
-    .kpi small{color:var(--gris);font-size:.8rem}
-
-    /* ---------- GRÁFICO ---------- */
-    #votoCard{background:#fff;border-radius:14px;padding:2rem;box-shadow:0 6px 18px rgba(0,0,0,.08)}
-    #sliderWrap{display:flex;align-items:center;justify-content:center;margin-top:1.2rem;gap:.75rem}
-    input[type=range]{width:60%;accent-color:var(--brand)}
-
-    /* ---------- FOOTER ---------- */
-    footer{background:#2c3e50;color:#fff;text-align:center;padding:1.5rem .5rem;font-size:.9rem}
-    footer a{color:#fff;margin:0 .35rem;transition:.25s}
-    footer a:hover{color:var(--accent)}
+    body {
+      font-family: var(--font-main);
+      background: var(--main-bg);
+      color: #fff;
+      margin: 0;
+      padding-top: 84px;
+      font-size: 0.97rem;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-title);
+      color: var(--main-accent);
+      letter-spacing: .5px;
+    }
+    a { color: var(--main-accent); text-decoration: none; }
+    /* NAVBAR */
+    .navbar-custom {
+      background: rgba(34,40,49,0.98);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+    }
+    .brand {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 1.7rem;
+    }
+    .nav a {
+      color: #fff;
+      font-weight: 500;
+      font-size: 1.04rem;
+      letter-spacing: .1px;
+      text-decoration: none;
+      transition: color .2s;
+      padding-bottom: 2px;
+      border-bottom: 2px solid transparent;
+    }
+    .nav a:hover, .nav a.active {
+      color: var(--main-accent);
+      border-bottom: 2px solid var(--main-accent);
+    }
+    /* HERO */
+    .hero {
+      height: 60vh;
+      min-height: 340px;
+      background: linear-gradient(98deg, rgba(0,119,182,0.23) 0%, rgba(34,40,49,0.90) 60%),
+      url('https://live.staticflickr.com/65535/51066045228_26f0c97b40_h.jpg') center/cover no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    .hero h1 {
+      font-size: 2.6rem; color: #fff;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+    .hero p {
+      font-size: 1.17rem; color: #e9ecef; margin-bottom: 1.1rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .hero .cta {
+      background: var(--main-accent); color: #fff; border: none;
+      border-radius: 30px; padding: .8rem 2rem; font-size: 1.09rem;
+      font-weight: 700; letter-spacing: .5px; cursor: pointer;
+      transition: .17s;
+    }
+    .hero .cta:hover { background: var(--accent2);}
+    /* SECTION */
+    .section { max-width:1200px; margin:0 auto; padding:3.2rem 1rem 2.7rem;}
+    .section-title { text-align:center; font-size:2.05rem; margin-bottom:2.1rem;}
+    /* DASHBOARD KPIs */
+    .dashboard-row { display: flex; gap:2.5rem; flex-wrap:wrap; justify-content: space-around;}
+    .kpi-card {
+      background: var(--kpi-bg);
+      color: #222;
+      border-radius: 1rem;
+      padding: 1.4rem 1.6rem;
+      flex: 1 1 210px;
+      margin: .5rem 0;
+      min-width: 210px;
+      max-width: 320px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.09);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: box-shadow 0.18s;
+    }
+    .kpi-card:hover { box-shadow: 0 8px 28px rgba(0, 119, 182, .15);}
+    .kpi-title { font-size: 1rem; color: var(--main-accent); margin-bottom: .2rem;}
+    .kpi-value { font-size: 2.2rem; font-weight: 700; margin-bottom: .25rem;}
+    .kpi-trend { font-size: .9rem; color: var(--accent2);}
+    /* Visualización avanzada */
+    #mainViz {
+      margin: 1.8rem auto 0 auto;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+      background: #fff;
+      padding: 2.2rem 1.5rem 1.3rem 1.5rem;
+      max-width: 1000px;
+    }
+    #mainViz h4 {
+      color: var(--main-accent);
+      font-family: var(--font-title);
+      font-size: 1.3rem;
+      margin-bottom: 1.3rem;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .dashboard-row { flex-direction: column; gap:1.5rem;}
+      .section {padding:2.2rem 1rem 1.5rem;}
+    }
+    @media (max-width: 600px) {
+      .hero h1 { font-size:1.28rem;}
+      .section-title {font-size:1.09rem;}
+      .section {padding:1.2rem 1rem 1rem;}
+      #mainViz {padding:.9rem;}
+      .navbar-custom{padding:0 .7rem;}
+    }
+    /* Footer - igual al ejemplo proporcionado */
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.3rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #16a085;
+    }
   </style>
 </head>
 <body>
-
-<!-- ▸ NAVBAR -->
-<nav class="navbar">
-  <span class="brand">LAP-CIRCPyCS</span>
-  <span class="nav">
+  <!-- NAVBAR -->
+  <nav class="navbar-custom">
+    <span class="brand">LAP-CIRCPyCS</span>
+    <span class="nav">
       <a href="#lineas">Líneas</a>
       <a href="#proyectos">Proyectos</a>
       <a href="#equipo">Equipo</a>
       <a href="#blog">Insights</a>
       <a href="#contacto">Contacto</a>
-  </span>
-</nav>
+    </span>
+  </nav>
 
-<!-- ▸ HERO -->
-<header class="hero">
-  <div class="overlay"></div>
-  <h1>Análisis Electoral&nbsp;2025 · Bolivia</h1>
-</header>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>Laboratorio de Análisis Político</h1>
+      <p>
+        <b>Simulación electoral, indicadores institucionales y riesgos para Bolivia 2025</b><br>
+        <span style="color:var(--main-accent); font-weight:600;">Investigación avanzada | Visualización interactiva | Foresight político</span>
+      </p>
+      <a href="#dashboard" class="cta">Ir al Dashboard</a>
+    </div>
+  </header>
 
-<!-- ▸ MEGA-DASHBOARD -->
-<section id="dashboard">
-  <h2 class="section-title">Indicadores&nbsp;Claves&nbsp;2024-25</h2>
-  <div class="grid2" id="kpiWrap">
-     <div class="kpi">
-       <small>Corruption Perceptions Index (CPI)</small>
-       <h3>28/100</h3>
-       <small>Ranking 133&nbsp;/ 180</small>
-     </div>
-     <div class="kpi">
-       <small>Democracy&nbsp;Index (EIU)</small>
-       <h3>4.20/10</h3>
-       <small>Ranking 106&nbsp;/ 167</small>
-     </div>
-     <div class="kpi">
-       <small>Rule&nbsp;of&nbsp;Law Index (WJP)</small>
-       <h3>0.37</h3>
-       <small>Ranking 131&nbsp;/ 142</small>
-     </div>
-     <div class="kpi">
-       <small>Riesgo País (EMBI)</small>
-       <h3>2 190&nbsp;pb</h3>
-       <small>2.º más alto en LatAm</small>
-     </div>
-  </div>
-</section>
-
-<section id="encuestas">
-  <h2 class="section-title">Simulación&nbsp;de&nbsp;Intención de Voto 2025</h2>
-  <div id="votoCard">
-      <canvas id="votoChart" height="260"></canvas>
-
-      <div id="sliderWrap">
-        <span style="font-size:.85rem;font-weight:600">2024-I</span>
-        <input id="dateSlider" type="range" min="0" max="4" step="1" value="4">
-        <span style="font-size:.85rem;font-weight:600">2025-II</span>
+  <!-- DASHBOARD INTERACTIVO -->
+  <section class="section" id="dashboard">
+    <div class="section-title">Mega Dashboard Internacional Bolivia 2024-25</div>
+    <div class="dashboard-row">
+      <!-- KPIs -->
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-gavel"></i> Rule of Law (WJP 2024)</span>
+        <span class="kpi-value">0.37</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> Puesto 131/142</span>
       </div>
-  </div>
-</section>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-globe"></i> Democracy Index (EIU 2023)</span>
+        <span class="kpi-value">4.20/10</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> "Régimen híbrido"</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-shield-alt"></i> Riesgo País (EMBI)</span>
+        <span class="kpi-value">2 190 pb</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> 2.º más alto en LatAm</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-university"></i> CPI Transparencia Intl.</span>
+        <span class="kpi-value">28/100</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> Puesto 133/180</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-chart-bar"></i> PIB per cápita (USD, 2023)</span>
+        <span class="kpi-value">$3,680</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> Por debajo de LatAm</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-users"></i> Población (2024)</span>
+        <span class="kpi-value">12,318,000</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> Fuente: INE</span>
+      </div>
+    </div>
+  </section>
 
-<!-- ▸ FOOTER (idéntico al que solicitaste) -->
-<footer>
-  <p class="mb-1">
-    &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS).  
-    Todos los derechos reservados.
-  </p>
-  <p class="mb-1">
-    Contacto: <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> |
-    <i class="fas fa-phone"></i> +591 67381294
-  </p>
-  <p>
-    Síguenos en:
-    <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://www.twitter.com"  target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-    <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-  </p>
-</footer>
+  <!-- VISUALIZACIÓN AVANZADA -->
+  <section class="section" id="visualizacion">
+    <div id="mainViz">
+      <h4>Simulación: Intención de voto presidencial 2025<br><small>Bolivia — Últimos sondeos y tendencias</small></h4>
+      <div id="plotly-intencion-voto" style="height:430px;width:100%;"></div>
+      <div class="text-center mt-3" style="color:#333;">
+        <small>
+          <b>Fuente:</b> Simulación CIRCPyCS con promedios de encuestas públicas y proyecciones.<br>
+          <span style="color:var(--main-accent)">Haz click en los partidos para activar/desactivar líneas. Mouse sobre puntos para detalles históricos.</span>
+        </small>
+      </div>
+    </div>
+  </section>
 
-<!-- ▸ JS para el dashboard -->
-<script>
-/* ---------- ENCUESTAS SIMULADAS ---------- */
-const fechas = ["2024-I","2024-II","2024-IV","2025-I","2025-II"];
-const dataSondeo = [
-  { MAS:28, LIBRE:16, CC:18, UNIDAD:14, Sumate:6, ND:18 },
-  { MAS:26, LIBRE:17, CC:20, UNIDAD:15, Sumate:7, ND:15 },
-  { MAS:24, LIBRE:18, CC:21, UNIDAD:17, Sumate:7, ND:13 },
-  { MAS:22, LIBRE:18, CC:22, UNIDAD:18, Sumate:8, ND:12 },
-  { MAS:20, LIBRE:19, CC:23, UNIDAD:20, Sumate:8, ND:10 }
-];
-/* ---------- GRÁFICO LÍNEAS ---------- */
-const ctx = document.getElementById('votoChart');
-const colores = {MAS:'var(--mas)',Evo:'var(--evo)',CC:'var(--cc)',Creemos:'var(--creemos)',Sumate:'var(--sumate)',ND:'var(--gris)'};
-const chartData = () => {
-  return {
-    labels: Object.keys(dataSondeo[0]),
-    datasets: [{
-        data: Object.values(dataSondeo[document.getElementById('dateSlider').value]),
-        backgroundColor:Object.values(colores),
-        borderWidth:0
-    }]
-  }
-};
-let votoChart = new Chart(ctx,{
-  type:'bar',
-  data: chartData(),
-  options:{
-    plugins:{
-      legend:{display:false},
-      tooltip:{callbacks:{label:ctx=> `${ctx.parsed.y}%`}}
-    },
-    scales:{
-      y:{beginAtZero:true,max:35,ticks:{callback:v=>v+'%'}}
-    }
-  }
-});
-document.getElementById('dateSlider').addEventListener('input',e=>{
-  votoChart.data.datasets[0].data = Object.values(dataSondeo[e.target.value]);
-  votoChart.update();
-});
+  <!-- Footer profesional CIRCPyCS -->
+  <footer>
+    <div class="container">
+      <p class="mb-1">
+        &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los
+        derechos reservados.
+      </p>
+      <p class="mb-1">
+        Contacto:
+        <a href="mailto:contacto@circpycs.uagrm.edu.bo"
+          >cri.cspoliticas.fcjpsri@uagrm.edu.bo</a
+        >
+        |
+        <i class="fas fa-phone"></i> +591 67381294
+      </p>
+      <p>
+        Síguenos en:
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          aria-label="Facebook"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          aria-label="Twitter"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          aria-label="Instagram"
+          ><i class="fab fa-instagram"></i
+        ></a>
+      </p>
+    </div>
+  </footer>
 
-/* ---------- Darken hero overlay en scroll ---------- */
-window.addEventListener('scroll',()=>{
-  const hero = document.querySelector('header.hero');
-  const overlay = document.querySelector('.overlay');
-  const ratio = Math.min(1,window.scrollY/hero.offsetHeight);
-  overlay.style.backdropFilter=`brightness(${0.55+ratio*0.45})`;
-});
-</script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Plotly visualización avanzada - Intención de voto simulada 2025
+    var years = ['2023-II', '2024-I', '2024-II', '2025-I', '2025-II'];
+    // Simulación de partidos/fórmulas 2025: Arce/MAS, Evo, Mesa/CC, Camacho/Creemos, Eva Copa/SUMATE, Indecisos
+    var traceMAS = {
+      x: years,
+      y: [25, 23, 21, 20, 19],
+      name: 'MAS (Arce)',
+      mode: 'lines+markers',
+      line: { color: '#1976d2', width: 4 },
+      marker: { size: 10 }
+    };
+    var traceEvo = {
+      x: years,
+      y: [17, 17, 18, 19, 20],
+      name: 'Evo Morales',
+      mode: 'lines+markers',
+      line: { color: '#43a047', width: 4, dash:'dot' },
+      marker: { size: 10 }
+    };
+    var traceCC = {
+      x: years,
+      y: [18, 18, 19, 21, 22],
+      name: 'Comunidad Ciudadana (Mesa)',
+      mode: 'lines+markers',
+      line: { color: '#e67e22', width: 4, dash:'solid' },
+      marker: { size: 10 }
+    };
+    var traceCreemos = {
+      x: years,
+      y: [12, 14, 15, 16, 17],
+      name: 'Creemos (Camacho)',
+      mode: 'lines+markers',
+      line: { color: '#c0392b', width: 4, dash:'dash' },
+      marker: { size: 10 }
+    };
+    var traceSumate = {
+      x: years,
+      y: [7, 8, 9, 9, 9],
+      name: 'SUMATE (Eva Copa)',
+      mode: 'lines+markers',
+      line: { color: '#8e44ad', width: 4, dash:'dot' },
+      marker: { size: 10 }
+    };
+    var traceIndecisos = {
+      x: years,
+      y: [19, 17, 18, 15, 13],
+      name: 'Indecisos',
+      mode: 'lines+markers',
+      line: { color: '#666', width: 3, dash: 'dot' },
+      marker: { size: 10 }
+    };
+    var data = [traceMAS, traceEvo, traceCC, traceCreemos, traceSumate, traceIndecisos];
+    var layout = {
+      plot_bgcolor: '#f7f7fa',
+      paper_bgcolor: '#fff',
+      legend: {"orientation":"h", x:0.02, y:1.14, font:{size:13}},
+      xaxis: { title: 'Período de sondeo', tickfont:{color:'#222'} },
+      yaxis: { title: '% intención de voto', range:[0,35], gridcolor:'#eee', tickfont:{color:'#222'} },
+      margin: {l:50, r:20, t:20, b:40},
+      font: { family: 'Inter, Segoe UI, sans-serif', size: 14, color: '#1a1a1a' }
+    };
+    Plotly.newPlot('plotly-intencion-voto', data, layout, {responsive:true, displayModeBar:false});
+  </script>
 </body>
 </html>
 
