@@ -1,343 +1,321 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Laboratorio de Análisis Político • CIRCPyCS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <!-- FontAwesome para iconos -->
-  <script src="https://kit.fontawesome.com/3d9f4bd2cc.js" crossorigin="anonymous"></script>
+  <!-- Bootstrap y Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Plotly para visualizaciones avanzadas -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
   <style>
     :root {
       --main-bg: #222831;
       --main-accent: #0077b6;
-      --accent2: #e63946;
+      --accent2: #8e44ad;
       --accent3: #00b894;
-      --light-bg: #f1f1f1;
-      --font-main: 'Inter', sans-serif;
+      --light-bg: #f8f9fa;
+      --kpi-bg: #fff;
+      --kpi-border: #e1e1e1;
+      --font-main: 'Segoe UI', 'Inter', sans-serif;
       --font-title: 'Playfair Display', serif;
     }
-    html,body {
-      margin:0; padding:0; box-sizing: border-box;
-      background: var(--main-bg); color: #fff;
+    body {
       font-family: var(--font-main);
-      scroll-behavior: smooth;
+      background: var(--main-bg);
+      color: #fff;
+      margin: 0;
+      padding-top: 84px;
+      font-size: 0.97rem;
     }
-    h1,h2,h3,h4 {
+    h1, h2, h3, h4 {
       font-family: var(--font-title);
       color: var(--main-accent);
       letter-spacing: .5px;
     }
-    a { color:var(--main-accent); text-decoration:none; }
+    a { color: var(--main-accent); text-decoration: none; }
     /* NAVBAR */
     .navbar {
-      background: rgba(34,40,49,0.97); padding: 1.2rem 0;
-      position:fixed; width:100vw; top:0; z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(34,40,49,0.99) !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
     }
-    .navbar .brand { font-size: 1.7rem; font-family: var(--font-title); color:#fff; font-weight:700;}
-    .navbar .nav { display:flex; gap:2rem;}
-    .navbar .nav a { color:#fff; font-weight:600; position:relative;}
-    .navbar .nav a::after {content:''; display:block; width:0;height:2px; background:var(--main-accent); transition:.2s;}
-    .navbar .nav a:hover::after {width:100%;}
+    .navbar-brand { font-family: var(--font-title); font-weight: 700; font-size: 1.4rem; color: white !important; }
+    .nav-link { color: #fff !important; font-weight: 500; }
+    .nav-link.active, .nav-link:hover { color: var(--main-accent) !important; }
     /* HERO */
     .hero {
-      height: 85vh; min-height: 450px;
-      background: linear-gradient(100deg, rgba(0,119,182,0.15) 0%, rgba(34,40,49,0.85) 60%), url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
-      display: flex; align-items:center; justify-content:center;
-      text-align: center; position:relative;
+      height: 65vh;
+      min-height: 370px;
+      background: linear-gradient(100deg, rgba(0,119,182,0.22) 0%, rgba(34,40,49,0.9) 60%), url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
     }
-    .hero h1 { font-size:2.9rem; color:#fff; }
-    .hero p { font-size:1.3rem; color:#e9ecef; margin-bottom:2.2rem;}
+    .hero h1 { font-size:2.7rem; color:#fff; }
+    .hero p { font-size:1.2rem; color:#e9ecef; margin-bottom:1.7rem;}
     .hero .cta {
       background: var(--main-accent); color: #fff; border:none;
-      border-radius:30px; padding:.95rem 2.2rem; font-size:1.2rem;
+      border-radius:30px; padding:.88rem 2rem; font-size:1.08rem;
       font-weight:700; letter-spacing:.5px; cursor:pointer;
-      transition:.18s; box-shadow:0 6px 18px 0 rgba(0,119,182,0.1);
+      transition:.17s;
     }
-    .hero .cta:hover { background:var(--accent2);}
-    /* SECTIONS */
-    .section { max-width:1150px; margin:0 auto; padding:5.5rem 2rem 4.5rem;}
-    .section-title { text-align:center; font-size:2.3rem; margin-bottom:2.2rem;}
-    /* LÍNEAS */
-    .lines-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:2.5rem;}
-    .line-card {
-      background: #232c3a; border-radius:1.3rem; padding:2.2rem 1.3rem 1.7rem;
-      box-shadow:0 2px 14px rgba(0,0,0,0.04); text-align:center; transition:.16s;
-      border:2px solid transparent;
+    .hero .cta:hover { background: var(--accent2);}
+    /* SECTION */
+    .section { max-width:1200px; margin:0 auto; padding:3.2rem 1rem 2.7rem;}
+    .section-title { text-align:center; font-size:2.05rem; margin-bottom:2.1rem;}
+    /* DASHBOARD KPIs */
+    .dashboard-row { display: flex; gap:2.5rem; flex-wrap:wrap; justify-content: space-around;}
+    .kpi-card {
+      background: var(--kpi-bg);
+      color: #222;
+      border-radius: 1rem;
+      padding: 1.4rem 1.6rem;
+      flex: 1 1 210px;
+      margin: .5rem 0;
+      min-width: 210px;
+      max-width: 320px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.09);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      transition: box-shadow 0.18s;
     }
-    .line-card:hover { border:2px solid var(--main-accent); transform:translateY(-4px) scale(1.03);}
-    .line-card i { font-size:2.3rem; color:var(--main-accent); margin-bottom:1.2rem;}
-    .line-card h3 { color:#fff; margin-bottom:.7rem; font-size:1.18rem;}
-    .line-card p { color:#adb5bd; font-size:1.01rem;}
-    /* PROYECTOS */
-    .projects-carousel { display:flex; overflow-x:auto; gap:2.5rem; scroll-snap-type: x mandatory; padding-bottom:1rem;}
-    .project-card {
-      background: #fff; color:#222; border-radius:1.2rem; min-width:330px; max-width:330px;
-      box-shadow:0 2px 18px rgba(0,119,182,0.06); flex-shrink:0; scroll-snap-align:center;
-      display:flex; flex-direction:column; justify-content:space-between;
-      transition:box-shadow .2s;
+    .kpi-card:hover { box-shadow: 0 8px 28px rgba(0, 119, 182, .15);}
+    .kpi-title { font-size: 1rem; color: var(--main-accent); margin-bottom: .2rem;}
+    .kpi-value { font-size: 2.2rem; font-weight: 700; margin-bottom: .25rem;}
+    .kpi-trend { font-size: .9rem; color: var(--accent2);}
+    /* Visualización avanzada */
+    #mainViz {
+      margin: 1.8rem auto 0 auto;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+      background: #fff;
+      padding: 2.2rem 1.5rem 1.3rem 1.5rem;
+      max-width: 1000px;
     }
-    .project-card img { border-radius:1.2rem 1.2rem 0 0; width:100%; height:170px; object-fit:cover;}
-    .project-card .pcontent {padding:1.3rem;}
-    .project-card h4 {color:var(--main-accent);}
-    .project-card .details {margin-top:.8rem;}
-    .project-card .btn {
-      background:var(--main-accent); color:#fff; border:none; border-radius:20px;
-      padding:.65rem 1.4rem; margin-top:.5rem; font-weight:600; cursor:pointer;
-      font-size:.95rem; transition:.15s;
+    #mainViz h4 {
+      color: var(--main-accent);
+      font-family: var(--font-title);
+      font-size: 1.3rem;
+      margin-bottom: 1.3rem;
+      text-align: center;
     }
-    .project-card .btn:hover { background:var(--accent3);}
-    /* EQUIPO */
-    .team-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:2.2rem;}
-    .team-card {
-      background:#232c3a; border-radius:1.3rem; text-align:center; padding:2.1rem 1.1rem 1.4rem;
-      box-shadow:0 1px 7px rgba(0,0,0,0.06); transition:.18s;
+    @media (max-width: 900px) {
+      .dashboard-row { flex-direction: column; gap:1.5rem;}
+      .section {padding:2.2rem 1rem 1.5rem;}
     }
-    .team-card img {border-radius:50%; width:90px; height:90px; margin-bottom:.8rem;}
-    .team-card h5 {margin:0; font-size:1.15rem;}
-    .team-card p {color:var(--main-accent); margin-bottom:.5rem;}
-    .team-card small {color:#adb5bd;}
-    /* BLOG */
-    .blog-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem;}
-    .blog-card {
-      background:#fff; color:#222; border-radius:1.1rem; overflow:hidden; transition:.15s;
-      box-shadow:0 2px 18px rgba(0,119,182,0.07);
+    @media (max-width: 600px) {
+      .hero h1 { font-size:1.28rem;}
+      .section-title {font-size:1.09rem;}
+      .section {padding:1.2rem 1rem 1rem;}
+      #mainViz {padding:.9rem;}
     }
-    .blog-card img { width:100%; height:135px; object-fit:cover;}
-    .blog-card .bcontent {padding:1.1rem 1rem;}
-    .blog-card .tags {margin-top:.7rem;}
-    .blog-card .tag {background:var(--main-accent); color:#fff; font-size:.8rem; border-radius:12px; padding:.18rem .8rem; margin-right:.5rem;}
-    .blog-card .tag.secondary {background:var(--accent2);}
-    /* CONTACTO */
-    .contact-box {background:#232c3a; border-radius:1.3rem; padding:2rem 2rem 1.2rem; max-width:470px; margin:0 auto;}
-    .contact-box label {color:#adb5bd;}
-    .contact-box input,.contact-box textarea {
-      background:#222831; border:none; border-radius:9px; color:#fff;
-      width:100%; padding:.8rem .7rem; margin-bottom:1rem;
-      font-size:1.03rem; font-family:var(--font-main);
+    /* Footer - igual al ejemplo proporcionado */
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
     }
-    .contact-box button { background:var(--main-accent); color:#fff; border:none; border-radius:20px; padding:.65rem 1.3rem; font-size:1.02rem; font-weight:600; }
-    /* FOOTER */
-    footer {background:#181b21; color:#bfc9d4; text-align:center; padding:2.7rem 0 1.2rem;}
-    @media(max-width:680px){
-      .section {padding:2.6rem 1.1rem;}
-      .hero h1 {font-size:2rem;}
+    footer a {
+      color: #fff;
+      margin: 0 0.3rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #16a085;
     }
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <span class="brand">LAP-CIRCPyCS</span>
-    <span class="nav">
-      <a href="#lineas">Líneas</a>
-      <a href="#proyectos">Proyectos</a>
-      <a href="#equipo">Equipo</a>
-      <a href="#blog">Insights</a>
-      <a href="#contacto">Contacto</a>
-    </span>
+  <!-- Header/Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">LAP-CIRCPyCS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="mainNav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link active" href="#dashboard">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="#visualizacion">Visualización avanzada</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
   </nav>
-  <div style="height:80px"></div>
-  <!-- HERO -->
+
+  <!-- Hero -->
   <header class="hero">
-    <div style="width:100%;">
-      <h1>Investigación Política del Futuro</h1>
+    <div class="container">
+      <h1>Laboratorio de Análisis Político</h1>
       <p>
-        Análisis doctoral de procesos electorales, gobernanza e innovación política.<br>
-        <span style="color:var(--main-accent); font-weight:700;">Bolivia • América Latina • Comparado internacional</span>
+        <b>Análisis doctoral</b> y visualización de datos para anticipar escenarios políticos en Bolivia y América Latina.<br>
+        <span style="color:var(--main-accent); font-weight:600;">Investigación aplicada | Ciencia de datos | Foresight político</span>
       </p>
-      <a class="cta" href="#lineas">Explorar líneas</a>
+      <a href="#dashboard" class="cta">Ir al Dashboard</a>
     </div>
   </header>
 
-  <!-- LÍNEAS DE INVESTIGACIÓN -->
-  <section class="section" id="lineas">
-    <div class="section-title">Líneas de investigación</div>
-    <div class="lines-grid">
-      <div class="line-card">
-        <i class="fas fa-robot"></i>
-        <h3>IA & Democracia</h3>
-        <p>Análisis de inteligencia artificial en procesos políticos y riesgos para la democracia emergente.</p>
+  <!-- DASHBOARD INTERACTIVO -->
+  <section class="section" id="dashboard">
+    <div class="section-title">Mega Dashboard Político (2025)</div>
+    <div class="dashboard-row">
+      <!-- KPIs -->
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-vote-yea"></i> Participación electoral nacional</span>
+        <span class="kpi-value" id="kpi-participacion">81.4%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> +2.1% vs 2020</span>
       </div>
-      <div class="line-card">
-        <i class="fas fa-project-diagram"></i>
-        <h3>Foresight Político</h3>
-        <p>Escenarios prospectivos, simulación electoral avanzada, teoría de juegos y políticas anticipatorias.</p>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-user-tie"></i> Indecisos</span>
+        <span class="kpi-value" id="kpi-indecisos">18.2%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> -1.9% mes anterior</span>
       </div>
-      <div class="line-card">
-        <i class="fas fa-globe-americas"></i>
-        <h3>Geoanalítica Regional</h3>
-        <p>Cartografía digital de conflictos, urbanismo electoral y análisis territorial para Bolivia y la región andina.</p>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-chart-bar"></i> Aprobación presidencial</span>
+        <span class="kpi-value" id="kpi-aprobacion">41.9%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> +0.7% última semana</span>
       </div>
-      <div class="line-card">
-        <i class="fas fa-chart-bar"></i>
-        <h3>Comportamiento Político</h3>
-        <p>Modelos de opinión pública, redes sociales y psicología política aplicada.</p>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-people-arrows"></i> Intención de voto MAS</span>
+        <span class="kpi-value" id="kpi-mas">27.6%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-down"></i> -3.2% vs 2024</span>
       </div>
-      <div class="line-card">
-        <i class="fas fa-balance-scale"></i>
-        <h3>Política Comparada</h3>
-        <p>Estudio transversal de regímenes políticos: Bolivia, Europa del Este y Asia-Pacífico.</p>
+    </div>
+    <div class="dashboard-row">
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-flag"></i> Intención de voto Comunidad Ciudadana</span>
+        <span class="kpi-value" id="kpi-cc">23.4%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> +4.4% vs 2024</span>
       </div>
-      <div class="line-card">
-        <i class="fas fa-university"></i>
-        <h3>Institucionalidad y Gobernanza</h3>
-        <p>Evaluación de desempeño, transparencia y diseño institucional para gobiernos y universidades.</p>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-balance-scale"></i> Confianza en el TSE</span>
+        <span class="kpi-value" id="kpi-tse">38.1%</span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> +1.5% semestre</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title"><i class="fas fa-globe-americas"></i> Comparativo LatAm</span>
+        <span class="kpi-value" id="kpi-latam">Bolivia: 41.9%<br><small style="color:var(--accent3)">LatAm Prom.: 37.2%</small></span>
+        <span class="kpi-trend"><i class="fas fa-arrow-up"></i> Bolivia +4.7 pts</span>
       </div>
     </div>
   </section>
 
-  <!-- PROYECTOS DESTACADOS / CASOS DE ESTUDIO -->
-  <section class="section" id="proyectos">
-    <div class="section-title">Casos de estudio &amp; proyectos</div>
-    <div class="projects-carousel">
-      <div class="project-card">
-        <img src="https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=600&q=80" alt="">
-        <div class="pcontent">
-          <h4>Simulador Electoral 2025</h4>
-          <div class="details">
-            Proyección probabilística y visualización interactiva de resultados presidenciales en Bolivia.
-            <br><br>
-            <span style="font-size:.98em;color:var(--main-accent);">Gráfico en tiempo real: <span id="votoSim"></span>% indecisos</span>
-          </div>
-          <button class="btn">Ver detalles</button>
-        </div>
-      </div>
-      <div class="project-card">
-        <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="">
-        <div class="pcontent">
-          <h4>Índice de Gobernanza Municipal</h4>
-          <div class="details">
-            Ranking interactivo de transparencia y gestión en municipios bolivianos.<br>
-            <span style="font-size:.98em;color:var(--accent2);">Dashboard comparativo internacional</span>
-          </div>
-          <button class="btn">Ver dashboard</button>
-        </div>
-      </div>
-      <div class="project-card">
-        <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=600&q=80" alt="">
-        <div class="pcontent">
-          <h4>Big Data &amp; Opinión Pública</h4>
-          <div class="details">
-            Monitoreo avanzado de redes sociales y encuestas para anticipar cambios políticos clave.<br>
-            <span style="font-size:.95em;color:var(--accent3);">Análisis de sentimiento y bots políticos</span>
-          </div>
-          <button class="btn">Explorar análisis</button>
-        </div>
+  <!-- VISUALIZACIÓN AVANZADA -->
+  <section class="section" id="visualizacion">
+    <div id="mainViz">
+      <h4>Simulación comparativa: Intención de voto presidencial (Bolivia vs Región)</h4>
+      <div id="plotly-intencion-voto" style="height:400px;width:100%;"></div>
+      <div class="text-center mt-3" style="color:#333;">
+        <small>
+          <b>Fuente:</b> Simulación CIRCPyCS con datos públicos y proyecciones<br>
+          *Haga click en los partidos para activar/desactivar líneas. Pase el mouse sobre los puntos para detalles históricos.
+        </small>
       </div>
     </div>
   </section>
 
-  <!-- EQUIPO PRINCIPAL -->
-  <section class="section" id="equipo">
-    <div class="section-title">Equipo</div>
-    <div class="team-grid">
-      <div class="team-card">
-        <img src="https://randomuser.me/api/portraits/men/11.jpg">
-        <h5>Daniel Hurtado Justiniano</h5>
-        <p>Director • Ph.D. Comparative Politics</p>
-        <small>UAGRM &amp; CIRCPyCS</small>
-      </div>
-      <div class="team-card">
-        <img src="https://randomuser.me/api/portraits/women/12.jpg">
-        <h5>Jennifer Arredondo</h5>
-        <p>Data & Survey Lead</p>
-        <small>Ciencia de Datos UAGRM</small>
-      </div>
-      <div class="team-card">
-        <img src="https://randomuser.me/api/portraits/men/21.jpg">
-        <h5>Higor Encinas</h5>
-        <p>Analista Geopolítico</p>
-        <small>Urbanismo & Cartografía</small>
-      </div>
-      <div class="team-card">
-        <img src="https://randomuser.me/api/portraits/men/31.jpg">
-        <h5>Jesús Ramos</h5>
-        <p>Modelador Estadístico</p>
-        <small>Python & Visualización</small>
-      </div>
-    </div>
-  </section>
-
-  <!-- BLOG / INSIGHTS -->
-  <section class="section" id="blog">
-    <div class="section-title">Insights &amp; publicaciones</div>
-    <div class="blog-grid">
-      <div class="blog-card">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80">
-        <div class="bcontent">
-          <h4>¿Es posible anticipar la inestabilidad democrática?</h4>
-          <div class="tags">
-            <span class="tag">Foresight</span><span class="tag secondary">Bolivia</span>
-          </div>
-        </div>
-      </div>
-      <div class="blog-card">
-        <img src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=600&q=80">
-        <div class="bcontent">
-          <h4>IA y política: ¿Amenaza o oportunidad?</h4>
-          <div class="tags">
-            <span class="tag">IA</span><span class="tag">Análisis comparado</span>
-          </div>
-        </div>
-      </div>
-      <div class="blog-card">
-        <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=600&q=80">
-        <div class="bcontent">
-          <h4>Mapas de conflicto: Bolivia y América Latina 2025</h4>
-          <div class="tags">
-            <span class="tag">Geoanalítica</span><span class="tag secondary">LatAm</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACTO -->
-  <section class="section" id="contacto">
-    <div class="section-title">Contacto &amp; colaboraciones</div>
-    <form class="contact-box" id="formContacto">
-      <label>Nombre</label>
-      <input type="text" required>
-      <label>Correo</label>
-      <input type="email" required>
-      <label>Mensaje</label>
-      <textarea rows="3" required></textarea>
-      <button>Enviar</button>
-      <div id="msgOK" style="display:none; margin-top:.9rem; color:var(--main-accent); font-weight:600;">¡Mensaje enviado!</div>
-    </form>
-  </section>
-
+  <!-- Footer profesional CIRCPyCS -->
   <footer>
-    Laboratorio de Análisis Político — CIRCPyCS • UAGRM<br>
-    <small style="opacity:.7;">© 2025 | Investigación política avanzada para Bolivia y el mundo</small>
+    <div class="container">
+      <p class="mb-1">
+        &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los
+        derechos reservados.
+      </p>
+      <p class="mb-1">
+        Contacto:
+        <a href="mailto:contacto@circpycs.uagrm.edu.bo"
+          >cri.cspoliticas.fcjpsri@uagrm.edu.bo</a
+        >
+        |
+        <i class="fas fa-phone"></i> +591 67381294
+      </p>
+      <p>
+        Síguenos en:
+        <a
+          href="https://www.facebook.com"
+          target="_blank"
+          aria-label="Facebook"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        <a
+          href="https://www.twitter.com"
+          target="_blank"
+          aria-label="Twitter"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.instagram.com"
+          target="_blank"
+          aria-label="Instagram"
+          ><i class="fab fa-instagram"></i
+        ></a>
+      </p>
+    </div>
   </footer>
 
-  <!-- ANIMACIONES Y LOGICA JS -->
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Simulación de datos en vivo para demo
-    setInterval(()=>{ document.getElementById('votoSim').textContent = (18 + Math.random()*9).toFixed(2); },1100);
-    // Formulario contacto (fake)
-    document.getElementById('formContacto').onsubmit = function(e){
-      e.preventDefault();
-      this.reset();
-      document.getElementById('msgOK').style.display = 'block';
-      setTimeout(()=>{document.getElementById('msgOK').style.display = 'none';},3500);
-    }
-    // Simple animación de aparición
-    window.addEventListener('scroll',()=>{
-      document.querySelectorAll('.section').forEach(sec=>{
-        if(sec.getBoundingClientRect().top < window.innerHeight-80){
-          sec.style.opacity=1;sec.style.transform='none';
-        }
-      });
-    });
-    document.querySelectorAll('.section').forEach(sec=>{sec.style.opacity=0;sec.style.transform='translateY(60px)';});
-    setTimeout(()=>window.dispatchEvent(new Event('scroll')),400);
+    // Plotly visualización avanzada - Intención de voto simulada
+    var years = ['2019', '2020', '2021', '2022', '2023', '2024', '2025'];
+    var traceMAS = {
+      x: years,
+      y: [45, 39, 34, 31, 29, 28, 27.6],
+      name: 'MAS',
+      mode: 'lines+markers',
+      line: { color: '#1565c0', width: 4 },
+      marker: { size: 10 }
+    };
+    var traceCC = {
+      x: years,
+      y: [20, 21, 22, 21, 22.7, 22.9, 23.4],
+      name: 'Comunidad Ciudadana',
+      mode: 'lines+markers',
+      line: { color: '#e67e22', width: 4, dash:'dot' },
+      marker: { size: 10 }
+    };
+    var traceCreemos = {
+      x: years,
+      y: [10, 14, 14.5, 17, 18, 19.5, 20.5],
+      name: 'Creemos',
+      mode: 'lines+markers',
+      line: { color: '#a93226', width: 4, dash:'dash' },
+      marker: { size: 10 }
+    };
+    var traceIndecisos = {
+      x: years,
+      y: [13, 17, 18, 18.5, 19.2, 18.8, 18.2],
+      name: 'Indecisos',
+      mode: 'lines+markers',
+      line: { color: '#666', width: 3, dash: 'dot' },
+      marker: { size: 10 }
+    };
+    var traceLatam = {
+      x: years,
+      y: [36, 36.7, 37, 37.2, 37.1, 37.2, 37.2],
+      name: 'Promedio LatAm',
+      mode: 'lines',
+      line: { color: '#00b894', width: 2, dash:'dot' },
+      marker: { size: 0 }
+    };
+    var data = [traceMAS, traceCC, traceCreemos, traceIndecisos, traceLatam];
+    var layout = {
+      plot_bgcolor: '#f7f7fa',
+      paper_bgcolor: '#fff',
+      legend: {"orientation":"h", x:0.12, y:1.13, font:{size:13}},
+      xaxis: { title: 'Año electoral', tickfont:{color:'#222'} },
+      yaxis: { title: '% de intención de voto', range:[0,55], gridcolor:'#eee', tickfont:{color:'#222'} },
+      margin: {l:50, r:20, t:20, b:40},
+      font: { family: 'Inter, Segoe UI, sans-serif', size: 14, color: '#1a1a1a' }
+    };
+    Plotly.newPlot('plotly-intencion-voto', data, layout, {responsive:true, displayModeBar:false});
   </script>
 </body>
 </html>
-
