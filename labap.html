@@ -1,270 +1,343 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>LAP-CIRCPyCS • Laboratorio de Análisis Político</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- ======  Fuentes y utilidades  ====== -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Laboratorio de Análisis Político • CIRCPyCS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- FontAwesome para iconos -->
   <script src="https://kit.fontawesome.com/3d9f4bd2cc.js" crossorigin="anonymous"></script>
-
-  <!-- ======  Estilos propios  ====== -->
   <style>
-    :root { --uagrmBlue:#1C3B70; --uagrmBlueLight:#2953a6; --lapGrey:#f8f9fa; }
-    body        { font-family:"Poppins", sans-serif; scroll-behavior:smooth; }
-    h1, h2, h3  { color:var(--uagrmBlue); font-weight:700; }
-    .navbar     { background:var(--uagrmBlue); }
-    .nav-link   { color:#fff!important; font-weight:500; }
-    .nav-link:hover{ color:#e2e6f0!important; }
-    .hero       { background:url('https://source.unsplash.com/1600x800/?politics,analysis') center/cover no-repeat; height:70vh; position:relative; }
-    .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.55); }
-    .hero-content{ position:relative; z-index:1; color:#fff; top:50%; transform:translateY(-50%); text-align:center; }
-    .section-pad{ padding:4rem 0; }
-    .card-lap   { border:none; transition:transform .2s; }
-    .card-lap:hover{ transform:translateY(-6px); box-shadow:0 0.5rem 1rem rgba(0,0,0,.15); }
-    .gallery img{ object-fit:cover; height:100%; width:100%; transition:all .3s ease; }
-    .gallery img:hover{ filter:brightness(80%); transform:scale(1.05); }
-    footer      { background:var(--uagrmBlue); color:#fff; padding:2rem 0; text-align:center; }
+    :root {
+      --main-bg: #222831;
+      --main-accent: #0077b6;
+      --accent2: #e63946;
+      --accent3: #00b894;
+      --light-bg: #f1f1f1;
+      --font-main: 'Inter', sans-serif;
+      --font-title: 'Playfair Display', serif;
+    }
+    html,body {
+      margin:0; padding:0; box-sizing: border-box;
+      background: var(--main-bg); color: #fff;
+      font-family: var(--font-main);
+      scroll-behavior: smooth;
+    }
+    h1,h2,h3,h4 {
+      font-family: var(--font-title);
+      color: var(--main-accent);
+      letter-spacing: .5px;
+    }
+    a { color:var(--main-accent); text-decoration:none; }
+    /* NAVBAR */
+    .navbar {
+      background: rgba(34,40,49,0.97); padding: 1.2rem 0;
+      position:fixed; width:100vw; top:0; z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .navbar .brand { font-size: 1.7rem; font-family: var(--font-title); color:#fff; font-weight:700;}
+    .navbar .nav { display:flex; gap:2rem;}
+    .navbar .nav a { color:#fff; font-weight:600; position:relative;}
+    .navbar .nav a::after {content:''; display:block; width:0;height:2px; background:var(--main-accent); transition:.2s;}
+    .navbar .nav a:hover::after {width:100%;}
+    /* HERO */
+    .hero {
+      height: 85vh; min-height: 450px;
+      background: linear-gradient(100deg, rgba(0,119,182,0.15) 0%, rgba(34,40,49,0.85) 60%), url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+      display: flex; align-items:center; justify-content:center;
+      text-align: center; position:relative;
+    }
+    .hero h1 { font-size:2.9rem; color:#fff; }
+    .hero p { font-size:1.3rem; color:#e9ecef; margin-bottom:2.2rem;}
+    .hero .cta {
+      background: var(--main-accent); color: #fff; border:none;
+      border-radius:30px; padding:.95rem 2.2rem; font-size:1.2rem;
+      font-weight:700; letter-spacing:.5px; cursor:pointer;
+      transition:.18s; box-shadow:0 6px 18px 0 rgba(0,119,182,0.1);
+    }
+    .hero .cta:hover { background:var(--accent2);}
+    /* SECTIONS */
+    .section { max-width:1150px; margin:0 auto; padding:5.5rem 2rem 4.5rem;}
+    .section-title { text-align:center; font-size:2.3rem; margin-bottom:2.2rem;}
+    /* LÍNEAS */
+    .lines-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:2.5rem;}
+    .line-card {
+      background: #232c3a; border-radius:1.3rem; padding:2.2rem 1.3rem 1.7rem;
+      box-shadow:0 2px 14px rgba(0,0,0,0.04); text-align:center; transition:.16s;
+      border:2px solid transparent;
+    }
+    .line-card:hover { border:2px solid var(--main-accent); transform:translateY(-4px) scale(1.03);}
+    .line-card i { font-size:2.3rem; color:var(--main-accent); margin-bottom:1.2rem;}
+    .line-card h3 { color:#fff; margin-bottom:.7rem; font-size:1.18rem;}
+    .line-card p { color:#adb5bd; font-size:1.01rem;}
+    /* PROYECTOS */
+    .projects-carousel { display:flex; overflow-x:auto; gap:2.5rem; scroll-snap-type: x mandatory; padding-bottom:1rem;}
+    .project-card {
+      background: #fff; color:#222; border-radius:1.2rem; min-width:330px; max-width:330px;
+      box-shadow:0 2px 18px rgba(0,119,182,0.06); flex-shrink:0; scroll-snap-align:center;
+      display:flex; flex-direction:column; justify-content:space-between;
+      transition:box-shadow .2s;
+    }
+    .project-card img { border-radius:1.2rem 1.2rem 0 0; width:100%; height:170px; object-fit:cover;}
+    .project-card .pcontent {padding:1.3rem;}
+    .project-card h4 {color:var(--main-accent);}
+    .project-card .details {margin-top:.8rem;}
+    .project-card .btn {
+      background:var(--main-accent); color:#fff; border:none; border-radius:20px;
+      padding:.65rem 1.4rem; margin-top:.5rem; font-weight:600; cursor:pointer;
+      font-size:.95rem; transition:.15s;
+    }
+    .project-card .btn:hover { background:var(--accent3);}
+    /* EQUIPO */
+    .team-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:2.2rem;}
+    .team-card {
+      background:#232c3a; border-radius:1.3rem; text-align:center; padding:2.1rem 1.1rem 1.4rem;
+      box-shadow:0 1px 7px rgba(0,0,0,0.06); transition:.18s;
+    }
+    .team-card img {border-radius:50%; width:90px; height:90px; margin-bottom:.8rem;}
+    .team-card h5 {margin:0; font-size:1.15rem;}
+    .team-card p {color:var(--main-accent); margin-bottom:.5rem;}
+    .team-card small {color:#adb5bd;}
+    /* BLOG */
+    .blog-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem;}
+    .blog-card {
+      background:#fff; color:#222; border-radius:1.1rem; overflow:hidden; transition:.15s;
+      box-shadow:0 2px 18px rgba(0,119,182,0.07);
+    }
+    .blog-card img { width:100%; height:135px; object-fit:cover;}
+    .blog-card .bcontent {padding:1.1rem 1rem;}
+    .blog-card .tags {margin-top:.7rem;}
+    .blog-card .tag {background:var(--main-accent); color:#fff; font-size:.8rem; border-radius:12px; padding:.18rem .8rem; margin-right:.5rem;}
+    .blog-card .tag.secondary {background:var(--accent2);}
+    /* CONTACTO */
+    .contact-box {background:#232c3a; border-radius:1.3rem; padding:2rem 2rem 1.2rem; max-width:470px; margin:0 auto;}
+    .contact-box label {color:#adb5bd;}
+    .contact-box input,.contact-box textarea {
+      background:#222831; border:none; border-radius:9px; color:#fff;
+      width:100%; padding:.8rem .7rem; margin-bottom:1rem;
+      font-size:1.03rem; font-family:var(--font-main);
+    }
+    .contact-box button { background:var(--main-accent); color:#fff; border:none; border-radius:20px; padding:.65rem 1.3rem; font-size:1.02rem; font-weight:600; }
+    /* FOOTER */
+    footer {background:#181b21; color:#bfc9d4; text-align:center; padding:2.7rem 0 1.2rem;}
+    @media(max-width:680px){
+      .section {padding:2.6rem 1.1rem;}
+      .hero h1 {font-size:2rem;}
+    }
   </style>
 </head>
-
 <body>
-
-<!-- ======  NAVBAR  ====== -->
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#">LAP-CIRCPyCS</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div id="mainNav" class="collapse navbar-collapse">
-      <ul class="navbar-nav ms-auto gap-2">
-        <li class="nav-item"><a class="nav-link" href="#lineas">Líneas</a></li>
-        <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
-        <li class="nav-item"><a class="nav-link" href="#equipo">Equipo</a></li>
-        <li class="nav-item"><a class="nav-link" href="#publicaciones">Publicaciones</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-      </ul>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <span class="brand">LAP-CIRCPyCS</span>
+    <span class="nav">
+      <a href="#lineas">Líneas</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#blog">Insights</a>
+      <a href="#contacto">Contacto</a>
+    </span>
+  </nav>
+  <div style="height:80px"></div>
+  <!-- HERO -->
+  <header class="hero">
+    <div style="width:100%;">
+      <h1>Investigación Política del Futuro</h1>
+      <p>
+        Análisis doctoral de procesos electorales, gobernanza e innovación política.<br>
+        <span style="color:var(--main-accent); font-weight:700;">Bolivia • América Latina • Comparado internacional</span>
+      </p>
+      <a class="cta" href="#lineas">Explorar líneas</a>
     </div>
-  </div>
-</nav>
+  </header>
 
-<!-- ======  HERO  ====== -->
-<header class="hero d-flex align-items-center">
-  <div class="container hero-content">
-    <h1 class="display-5 fw-bold">Laboratorio de Análisis Político</h1>
-    <p class="lead">Investigación aplicada y visualización de datos para comprender la dinámica institucional y electoral boliviana.</p>
-    <a href="#lineas" class="btn btn-outline-light btn-lg mt-3">Explorar</a>
-  </div>
-</header>
-
-<!-- ======  LÍNEAS TEMÁTICAS  ====== -->
-<section id="lineas" class="section-pad">
-  <div class="container">
-    <h2 class="text-center mb-5">Líneas de investigación</h2>
-    <div class="row g-4">
-      <!-- Card 1 -->
-      <div class="col-md-4">
-        <div class="card card-lap h-100 text-center p-4">
-          <i class="fas fa-vote-yea fa-3x text-primary mb-3"></i>
-          <h3>Procesos Electorales</h3>
-          <p>Modelos predictivos y análisis de volatilidad para elecciones nacionales, subnacionales y gremiales.</p>
-        </div>
+  <!-- LÍNEAS DE INVESTIGACIÓN -->
+  <section class="section" id="lineas">
+    <div class="section-title">Líneas de investigación</div>
+    <div class="lines-grid">
+      <div class="line-card">
+        <i class="fas fa-robot"></i>
+        <h3>IA & Democracia</h3>
+        <p>Análisis de inteligencia artificial en procesos políticos y riesgos para la democracia emergente.</p>
       </div>
-      <!-- Card 2 -->
-      <div class="col-md-4">
-        <div class="card card-lap h-100 text-center p-4">
-          <i class="fas fa-landmark fa-3x text-primary mb-3"></i>
-          <h3>Institucionalidad y Gobernanza</h3>
-          <p>Evaluación de desempeño institucional, rendición de cuentas y reformas administrativas.</p>
-        </div>
+      <div class="line-card">
+        <i class="fas fa-project-diagram"></i>
+        <h3>Foresight Político</h3>
+        <p>Escenarios prospectivos, simulación electoral avanzada, teoría de juegos y políticas anticipatorias.</p>
       </div>
-      <!-- Card 3 -->
-      <div class="col-md-4">
-        <div class="card card-lap h-100 text-center p-4">
-          <i class="fas fa-users fa-3x text-primary mb-3"></i>
-          <h3>Opinión Pública</h3>
-          <p>Análisis de encuestas, redes sociales y experimentos de comportamiento político.</p>
-        </div>
+      <div class="line-card">
+        <i class="fas fa-globe-americas"></i>
+        <h3>Geoanalítica Regional</h3>
+        <p>Cartografía digital de conflictos, urbanismo electoral y análisis territorial para Bolivia y la región andina.</p>
       </div>
-      <!-- Card 4 -->
-      <div class="col-md-4">
-        <div class="card card-lap h-100 text-center p-4">
-          <i class="fas fa-map-marked-alt fa-3x text-primary mb-3"></i>
-          <h3>Geopolítica Urbana</h3>
-          <p>Cartografía de proyectos, transporte y servicios en Santa Cruz; impacto en participación ciudadana.</p>
-        </div>
+      <div class="line-card">
+        <i class="fas fa-chart-bar"></i>
+        <h3>Comportamiento Político</h3>
+        <p>Modelos de opinión pública, redes sociales y psicología política aplicada.</p>
       </div>
-      <!-- Card 5 -->
-      <div class="col-md-4">
-        <div class="card card-lap h-100 text-center p-4">
-          <i class="fas fa-database fa-3x text-primary mb-3"></i>
-          <h3>Datos Abiertos</h3>
-          <p>Estandarización y publicación de datasets cívicos para fomentar la transparencia y replicabilidad.</p>
-        </div>
+      <div class="line-card">
+        <i class="fas fa-balance-scale"></i>
+        <h3>Política Comparada</h3>
+        <p>Estudio transversal de regímenes políticos: Bolivia, Europa del Este y Asia-Pacífico.</p>
       </div>
-      <!-- Card 6 -->
-      <div class="col-md-4">
-        <div class="card card-lap h-100 text-center p-4">
-          <i class="fas fa-balance-scale fa-3x text-primary mb-3"></i>
-          <h3>Política Comparada</h3>
-          <p>Comparación de instituciones latinoamericanas, con énfasis en Bolivia, Ecuador y Perú.</p>
-        </div>
+      <div class="line-card">
+        <i class="fas fa-university"></i>
+        <h3>Institucionalidad y Gobernanza</h3>
+        <p>Evaluación de desempeño, transparencia y diseño institucional para gobiernos y universidades.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ======  PROYECTOS DESTACADOS  ====== -->
-<section id="proyectos" class="section-pad bg-light">
-  <div class="container">
-    <h2 class="text-center mb-5">Proyectos destacados</h2>
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <img src="https://source.unsplash.com/800x400/?election,statistics" class="card-img-top" alt="Proyecto 1">
-          <div class="card-body">
-            <h3 class="card-title">Simulador Electoral 2025</h3>
-            <p class="card-text">Plataforma interactiva que proyecta resultados de la elección general boliviana a partir de encuestas, series históricas y machine learning.</p>
+  <!-- PROYECTOS DESTACADOS / CASOS DE ESTUDIO -->
+  <section class="section" id="proyectos">
+    <div class="section-title">Casos de estudio &amp; proyectos</div>
+    <div class="projects-carousel">
+      <div class="project-card">
+        <img src="https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="pcontent">
+          <h4>Simulador Electoral 2025</h4>
+          <div class="details">
+            Proyección probabilística y visualización interactiva de resultados presidenciales en Bolivia.
+            <br><br>
+            <span style="font-size:.98em;color:var(--main-accent);">Gráfico en tiempo real: <span id="votoSim"></span>% indecisos</span>
+          </div>
+          <button class="btn">Ver detalles</button>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="pcontent">
+          <h4>Índice de Gobernanza Municipal</h4>
+          <div class="details">
+            Ranking interactivo de transparencia y gestión en municipios bolivianos.<br>
+            <span style="font-size:.98em;color:var(--accent2);">Dashboard comparativo internacional</span>
+          </div>
+          <button class="btn">Ver dashboard</button>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="pcontent">
+          <h4>Big Data &amp; Opinión Pública</h4>
+          <div class="details">
+            Monitoreo avanzado de redes sociales y encuestas para anticipar cambios políticos clave.<br>
+            <span style="font-size:.95em;color:var(--accent3);">Análisis de sentimiento y bots políticos</span>
+          </div>
+          <button class="btn">Explorar análisis</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO PRINCIPAL -->
+  <section class="section" id="equipo">
+    <div class="section-title">Equipo</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="https://randomuser.me/api/portraits/men/11.jpg">
+        <h5>Daniel Hurtado Justiniano</h5>
+        <p>Director • Ph.D. Comparative Politics</p>
+        <small>UAGRM &amp; CIRCPyCS</small>
+      </div>
+      <div class="team-card">
+        <img src="https://randomuser.me/api/portraits/women/12.jpg">
+        <h5>Jennifer Arredondo</h5>
+        <p>Data & Survey Lead</p>
+        <small>Ciencia de Datos UAGRM</small>
+      </div>
+      <div class="team-card">
+        <img src="https://randomuser.me/api/portraits/men/21.jpg">
+        <h5>Higor Encinas</h5>
+        <p>Analista Geopolítico</p>
+        <small>Urbanismo & Cartografía</small>
+      </div>
+      <div class="team-card">
+        <img src="https://randomuser.me/api/portraits/men/31.jpg">
+        <h5>Jesús Ramos</h5>
+        <p>Modelador Estadístico</p>
+        <small>Python & Visualización</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG / INSIGHTS -->
+  <section class="section" id="blog">
+    <div class="section-title">Insights &amp; publicaciones</div>
+    <div class="blog-grid">
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80">
+        <div class="bcontent">
+          <h4>¿Es posible anticipar la inestabilidad democrática?</h4>
+          <div class="tags">
+            <span class="tag">Foresight</span><span class="tag secondary">Bolivia</span>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card h-100 border-0 shadow-sm">
-          <img src="https://source.unsplash.com/800x400/?parliament,law" class="card-img-top" alt="Proyecto 2">
-          <div class="card-body">
-            <h3 class="card-title">Índice de Desempeño Institucional Municipal</h3>
-            <p class="card-text">Dashboard que mide transparencia, participación y eficacia presupuestaria en 56 gobiernos locales de Santa Cruz.</p>
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=600&q=80">
+        <div class="bcontent">
+          <h4>IA y política: ¿Amenaza o oportunidad?</h4>
+          <div class="tags">
+            <span class="tag">IA</span><span class="tag">Análisis comparado</span>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=600&q=80">
+        <div class="bcontent">
+          <h4>Mapas de conflicto: Bolivia y América Latina 2025</h4>
+          <div class="tags">
+            <span class="tag">Geoanalítica</span><span class="tag secondary">LatAm</span>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ======  EQUIPO  ====== -->
-<section id="equipo" class="section-pad">
-  <div class="container">
-    <h2 class="text-center mb-5">Equipo multidisciplinario</h2>
-    <div class="row text-center g-4">
-      <!-- Person 1 -->
-      <div class="col-sm-6 col-lg-3">
-        <img class="rounded-circle mb-3" src="https://source.unsplash.com/200x200/?person,political" alt="Foto 1">
-        <h5 class="mb-0">Daniel Hurtado J.</h5>
-        <small class="text-muted">Director • Ph.D. Política Comparada</small>
-      </div>
-      <!-- Person 2 -->
-      <div class="col-sm-6 col-lg-3">
-        <img class="rounded-circle mb-3" src="https://source.unsplash.com/200x200/?woman,analyst" alt="Foto 2">
-        <h5 class="mb-0">Jennifer Arredondo</h5>
-        <small class="text-muted">Coordinadora de Datos</small>
-      </div>
-      <!-- Person 3 -->
-      <div class="col-sm-6 col-lg-3">
-        <img class="rounded-circle mb-3" src="https://source.unsplash.com/200x200/?researcher" alt="Foto 3">
-        <h5 class="mb-0">Higor Encinas</h5>
-        <small class="text-muted">Modelador Estadístico</small>
-      </div>
-      <!-- Person 4 -->
-      <div class="col-sm-6 col-lg-3">
-        <img class="rounded-circle mb-3" src="https://source.unsplash.com/200x200/?data,scientist" alt="Foto 4">
-        <h5 class="mb-0">Jesús Ramos</h5>
-        <small class="text-muted">Desarrollador Full-stack</small>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- CONTACTO -->
+  <section class="section" id="contacto">
+    <div class="section-title">Contacto &amp; colaboraciones</div>
+    <form class="contact-box" id="formContacto">
+      <label>Nombre</label>
+      <input type="text" required>
+      <label>Correo</label>
+      <input type="email" required>
+      <label>Mensaje</label>
+      <textarea rows="3" required></textarea>
+      <button>Enviar</button>
+      <div id="msgOK" style="display:none; margin-top:.9rem; color:var(--main-accent); font-weight:600;">¡Mensaje enviado!</div>
+    </form>
+  </section>
 
-<!-- ======  PUBLICACIONES / GALERÍA  ====== -->
-<section id="publicaciones" class="section-pad bg-light">
-  <div class="container">
-    <h2 class="text-center mb-5">Visualizaciones &amp; publicaciones</h2>
-    <div class="row g-2 gallery">
-      <!-- 12 thumbnails  -->
-      <!-- Usa tu backend o GSHEET para popular dinámicamente -->
-      <template id="thumb-template">
-        <div class="col-6 col-md-3">
-          <a href="#" target="_blank">
-            <img class="w-100 rounded-2" src="" alt="thumb">
-          </a>
-        </div>
-      </template>
-    </div>
-  </div>
-</section>
+  <footer>
+    Laboratorio de Análisis Político — CIRCPyCS • UAGRM<br>
+    <small style="opacity:.7;">© 2025 | Investigación política avanzada para Bolivia y el mundo</small>
+  </footer>
 
-<!-- ======  CONTACTO  ====== -->
-<section id="contacto" class="section-pad">
-  <div class="container">
-    <h2 class="text-center mb-5">Contáctanos</h2>
-    <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <form id="contactForm">
-          <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Correo</label>
-            <input type="email" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Mensaje</label>
-            <textarea class="form-control" rows="4" required></textarea>
-          </div>
-          <button class="btn btn-primary" type="submit">Enviar</button>
-        </form>
-        <div id="formAlert" class="alert alert-success mt-3 d-none" role="alert">
-          ¡Mensaje enviado! Te responderemos pronto.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======  FOOTER  ====== -->
-<footer>
-  <div class="container">
-    <small>© 2025 Laboratorio de Análisis Político • CIRCPyCS – UAGRM</small>
-  </div>
-</footer>
-
-<!-- ======  SCRIPTS  ====== -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-/* =====  GALERÍA DINÁMICA (mini demo)  ===== */
-const thumbs = [
-  'https://source.unsplash.com/600x600/?charts',
-  'https://source.unsplash.com/600x600/?politics',
-  'https://source.unsplash.com/600x600/?data',
-  'https://source.unsplash.com/600x600/?election',
-  'https://source.unsplash.com/600x600/?analysis',
-  'https://source.unsplash.com/600x600/?government',
-  'https://source.unsplash.com/600x600/?map',
-  'https://source.unsplash.com/600x600/?survey',
-  'https://source.unsplash.com/600x600/?statistics',
-  'https://source.unsplash.com/600x600/?democracy',
-  'https://source.unsplash.com/600x600/?institution',
-  'https://source.unsplash.com/600x600/?social'
-];
-const galleryContainer = document.querySelector('#publicaciones .gallery');
-const tpl = document.getElementById('thumb-template').content;
-thumbs.forEach(src => {
-  const clone = tpl.cloneNode(true);
-  clone.querySelector('img').src = src;
-  clone.querySelector('a').href = src;
-  galleryContainer.appendChild(clone);
-});
-
-/* =====  FORM SIMULADO  ===== */
-document.getElementById('contactForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  e.target.reset();
-  document.getElementById('formAlert').classList.remove('d-none');
-  setTimeout(()=>document.getElementById('formAlert').classList.add('d-none'), 5000);
-});
-</script>
+  <!-- ANIMACIONES Y LOGICA JS -->
+  <script>
+    // Simulación de datos en vivo para demo
+    setInterval(()=>{ document.getElementById('votoSim').textContent = (18 + Math.random()*9).toFixed(2); },1100);
+    // Formulario contacto (fake)
+    document.getElementById('formContacto').onsubmit = function(e){
+      e.preventDefault();
+      this.reset();
+      document.getElementById('msgOK').style.display = 'block';
+      setTimeout(()=>{document.getElementById('msgOK').style.display = 'none';},3500);
+    }
+    // Simple animación de aparición
+    window.addEventListener('scroll',()=>{
+      document.querySelectorAll('.section').forEach(sec=>{
+        if(sec.getBoundingClientRect().top < window.innerHeight-80){
+          sec.style.opacity=1;sec.style.transform='none';
+        }
+      });
+    });
+    document.querySelectorAll('.section').forEach(sec=>{sec.style.opacity=0;sec.style.transform='translateY(60px)';});
+    setTimeout(()=>window.dispatchEvent(new Event('scroll')),400);
+  </script>
 </body>
 </html>
+
