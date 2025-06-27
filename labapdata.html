@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Datos • LABAP CIRCPyCS</title>
+  <!-- Bootstrap y Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --main-bg: #222831;
+      --main-accent: #0077b6;
+      --kpi-border: #e1e1e1;
+      --font-main: 'Segoe UI', 'Inter', sans-serif;
+      --font-title: 'Playfair Display', serif;
+    }
+    body {
+      font-family: var(--font-main);
+      color: #fff;
+      margin: 0;
+      padding-top: 84px;
+      font-size: 0.97rem;
+      background: linear-gradient(0deg,rgba(28,28,28,0.77) 0%,rgba(28,28,28,0.63) 100%), 
+        url('https://i.imgur.com/4xA4Fa0.jpeg') center/cover no-repeat fixed;
+      min-height: 100vh;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-title);
+      color: var(--main-accent);
+      letter-spacing: .5px;
+    }
+    /* NAVBAR SOLO MARCA */
+    .navbar-custom {
+      background: rgba(34,40,49,0.98);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 2.5rem;
+      height: 64px;
+    }
+    .brand {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .hero {
+      height: 18vh;
+      min-height: 100px;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    .hero h1 {
+      font-size: 2.1rem; color: #fff;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.14);
+    }
+    .hero p {
+      font-size: 1.09rem; color: #e9ecef; margin-bottom: 1.0rem;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .section { 
+      max-width:1200px; 
+      margin:0 auto; 
+      padding:2.4rem 1rem 2.2rem;
+    }
+    .section-title { 
+      text-align:center; 
+      font-size:2.1rem; 
+      margin-bottom:2.1rem;
+      color: #fff;
+    }
+    .subtitulo {
+      color:#fff;
+      font-family:var(--font-title);
+      font-size:1.23rem;
+      margin:2.1rem 0 1.1rem 0;
+      text-align:left;
+      letter-spacing:.2px;
+    }
+    /* Cards de bases de datos */
+    .data-row { 
+      display: flex; 
+      gap:1.2rem; 
+      flex-wrap:wrap; 
+      justify-content:center;
+    }
+    .data-card {
+      background: rgba(255,255,255,0.97);
+      color: #222;
+      border-radius: 1.18rem;
+      padding: 1.15rem 1.05rem 1.15rem 1.05rem;
+      min-width: 210px;
+      max-width: 320px;
+      box-shadow: 0 7px 32px 0 rgba(36,40,48,0.17), 0 1.5px 5px 0 rgba(0,0,0,0.08);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      position: relative;
+      transition: box-shadow 0.16s;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      word-break: break-word;
+      overflow-wrap: break-word;
+      margin-bottom: 0.5rem;
+    }
+    .data-card:hover {
+      box-shadow: 0 10px 40px 0 rgba(0,119,182,0.17), 0 2.5px 10px 0 rgba(0,0,0,0.13);
+    }
+    .data-icon {
+      font-size:1.85rem;margin-right:.6rem;vertical-align:middle;color:var(--main-accent);
+    }
+    .data-title {font-size:1.09rem;font-weight:600;color:#0077b6;margin-bottom:.12rem;}
+    .data-desc {font-size:.95rem;margin-bottom:.4rem;}
+    .data-tags .badge {margin-right:0.18rem;margin-bottom:.15rem;}
+    .data-links {margin-top:.4rem;}
+    .data-btn {
+      background:#fff;
+      color: #0077b6;
+      border: 1px solid #e1e1e1;
+      border-radius: 25px;
+      padding: 0.21rem 0.88rem;
+      margin-right: 0.29rem;
+      font-size: 0.93rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      transition: background .13s, color .18s, border .18s;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .data-btn:hover {
+      background: #0077b6;
+      color: #fff;
+      border: 1px solid #0077b6;
+    }
+    /* Mini dashboard de indicadores */
+    .indicadores-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.1rem;
+      justify-content: center;
+      margin: 2rem 0 0.7rem 0;
+    }
+    .kpi-card-dato {
+      background: rgba(255,255,255,0.97);
+      color: #222;
+      border-radius: 1rem;
+      padding: 1.1rem 1.2rem;
+      min-width: 160px;
+      max-width: 220px;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.09);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+    }
+    .kpi-title-dato { font-size: 1rem; color: var(--main-accent); margin-bottom: .1rem;}
+    .kpi-value-dato { font-size: 1.54rem; font-weight: 700; margin-bottom: .12rem;}
+    .kpi-trend-dato { font-size: .83rem; color: #2c3e50;}
+    /* Botón solicitar */
+    .solicitar-btn {
+      margin: 1.2rem auto 0 auto;
+      display: block;
+      background: #0077b6;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: .9rem 2.2rem;
+      font-size: 1.09rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+      transition: background .15s;
+    }
+    .solicitar-btn:hover {
+      background: #005682;
+    }
+    @media (max-width:900px){
+      .data-row, .indicadores-row {flex-direction:column;gap:1.1rem;}
+      .data-card,.kpi-card-dato{max-width:97vw;}
+    }
+    @media (max-width:600px){
+      .hero h1{font-size:1.12rem;}
+      .section-title{font-size:1.02rem;}
+      .section{padding:.7rem 0.1rem 0.7rem;}
+      .navbar-custom{padding:0 .4rem;}
+    }
+    /* Footer */
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.3rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #16a085;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR SOLO MARCA -->
+  <nav class="navbar-custom">
+    <span class="brand">LAP-CIRCPyCS</span>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>Datos Abiertos & Indicadores • LABAP CIRCPyCS</h1>
+      <p>
+        Bases de datos, microdatos, geodatos e indicadores políticos y socioeconómicos<br>
+        <span style="color:var(--main-accent); font-weight:600;">Ciencia de datos | Transparencia | Investigación abierta</span>
+      </p>
+    </div>
+  </header>
+
+  <section class="section" id="datos-abiertos">
+    <div class="section-title">Bases de Datos Destacadas</div>
+    <div class="data-row">
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-database data-icon"></i> Latinobarómetro Bolivia</span>
+        <div class="data-desc">Encuestas de opinión pública sobre democracia, confianza y economía en Bolivia y América Latina (1995–2023).</div>
+        <div class="data-tags">
+          <span class="badge bg-primary">Opinión Pública</span>
+          <span class="badge bg-success">CSV</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.latinobarometro.org/latContents.jsp" target="_blank"><i class="fa-solid fa-globe"></i> Descargar</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-scale-balanced data-icon"></i> V-Dem Bolivia</span>
+        <div class="data-desc">Índices globales de democracia, participación, estado de derecho e instituciones para Bolivia (1970–2024).</div>
+        <div class="data-tags">
+          <span class="badge bg-secondary">Instituciones</span>
+          <span class="badge bg-warning text-dark">Panel</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://v-dem.net/data/the-v-dem-dataset/" target="_blank"><i class="fa-solid fa-download"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-flag data-icon"></i> Transparencia Internacional</span>
+        <div class="data-desc">Índice de Percepción de Corrupción (CPI), riesgo país y rankings internacionales de transparencia.</div>
+        <div class="data-tags">
+          <span class="badge bg-danger">Corrupción</span>
+          <span class="badge bg-info text-dark">Ranking</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.transparency.org/es/cpi" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-chart-bar data-icon"></i> CEPALSTAT Bolivia</span>
+        <div class="data-desc">Indicadores económicos, sociales y demográficos para Bolivia y región andina, exportación a Excel y API.</div>
+        <div class="data-tags">
+          <span class="badge bg-primary">Socioeconómico</span>
+          <span class="badge bg-success">API</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://statistics.cepal.org/portal/cepalstat.html" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-vote-yea data-icon"></i> Datos Electorales TSE</span>
+        <div class="data-desc">Resultados oficiales de elecciones generales, departamentales y municipales (TSE Bolivia).</div>
+        <div class="data-tags">
+          <span class="badge bg-info text-dark">Electoral</span>
+          <span class="badge bg-primary">CSV</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.oep.org.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-map-location-dot data-icon"></i> Geodatos & Shapefiles</span>
+        <div class="data-desc">Mapas, límites, capas y shapefiles actualizados para análisis espacial y geovisualización política en Bolivia.</div>
+        <div class="data-tags">
+          <span class="badge bg-success">Geodatos</span>
+          <span class="badge bg-secondary">SHP</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://geo.gob.bo/descargas" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="subtitulo"><i class="fa-solid fa-chart-line"></i> Indicadores Clave Bolivia (últimos datos disponibles)</div>
+    <div class="indicadores-row">
+      <div class="kpi-card-dato">
+        <span class="kpi-title-dato"><i class="fa-solid fa-vote-yea"></i> Participación electoral</span>
+        <span class="kpi-value-dato">81.4%</span>
+        <span class="kpi-trend-dato">Elecciones 2020</span>
+      </div>
+      <div class="kpi-card-dato">
+        <span class="kpi-title-dato"><i class="fa-solid fa-user-tie"></i> Aprobación presidencial</span>
+        <span class="kpi-value-dato">41.9%</span>
+        <span class="kpi-trend-dato">Fuente: Latinobarómetro 2023</span>
+      </div>
+      <div class="kpi-card-dato">
+        <span class="kpi-title-dato"><i class="fa-solid fa-flag"></i> CPI Corrupción (TI)</span>
+        <span class="kpi-value-dato">29/100</span>
+        <span class="kpi-trend-dato">Ranking 2023</span>
+      </div>
+      <div class="kpi-card-dato">
+        <span class="kpi-title-dato"><i class="fa-solid fa-chart-area"></i> Pobreza monetaria</span>
+        <span class="kpi-value-dato">36.3%</span>
+        <span class="kpi-trend-dato">INE 2023</span>
+      </div>
+      <div class="kpi-card-dato">
+        <span class="kpi-title-dato"><i class="fa-solid fa-scale-balanced"></i> V-Dem índice democracia</span>
+        <span class="kpi-value-dato">0.38</span>
+        <span class="kpi-trend-dato">Escala 0–1 (2024)</span>
+      </div>
+    </div>
+
+    <div class="subtitulo"><i class="fa-solid fa-folder-open"></i> Recursos & Tablas Abiertas</div>
+    <div class="data-row">
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-table data-icon"></i> Microdatos Encuestas UDAPE</span>
+        <div class="data-desc">Encuestas sociales, demográficas y económicas de hogares. Microdatos y documentación.</div>
+        <div class="data-tags">
+          <span class="badge bg-success">Microdatos</span>
+          <span class="badge bg-warning text-dark">Stata/SPSS</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.udape.gob.bo/microdatos/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-database data-icon"></i> Banco Mundial Data Bolivia</span>
+        <div class="data-desc">Indicadores comparados de economía, educación y desarrollo para Bolivia. Exportación y API.</div>
+        <div class="data-tags">
+          <span class="badge bg-primary">Socioeconómico</span>
+          <span class="badge bg-info text-dark">API</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://databankfiles.worldbank.org/public/ddpext_download/ISO_BOL.csv" target="_blank"><i class="fa-solid fa-download"></i> Descargar CSV</a>
+          <a class="data-btn" href="https://data.worldbank.org/country/bolivia" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+    </div>
+
+    <a class="solicitar-btn" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo?subject=Solicitud%20de%20datos%20LABAP%20CIRCPyCS">Solicitar datos especiales</a>
+  </section>
+
+  <!-- Footer institucional CIRCPyCS -->
+  <footer>
+    <div class="container">
+      <p class="mb-1">
+        &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.
+      </p>
+      <p class="mb-1">
+        Contacto:
+        <a href="mailto:contacto@circpycs.uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+        |
+        <i class="fas fa-phone"></i> +591 67381294
+      </p>
+      <p>
+        Síguenos en:
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </p>
+    </div>
+  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
