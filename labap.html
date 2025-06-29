@@ -13,8 +13,6 @@
       --main-bg: #222831;
       --main-accent: #0077b6;
       --accent2: #8e44ad;
-      --accent3: #00b894;
-      --light-bg: #f8f9fa;
       --kpi-bg: #fff;
       --kpi-border: #e1e1e1;
       --font-main: 'Segoe UI', 'Inter', sans-serif;
@@ -232,14 +230,9 @@
       margin-top: 10px;
       font-size: 1rem;
     }
-    /* Título Plotly centrado y blanco */
-    #plotly-intencion-voto .gtitle, #plotly-intencion-voto .xtitle, #plotly-intencion-voto .ytitle {
-      fill: #fff !important;
-      text-align: center !important;
-    }
     /* Responsive height for Plotly */
     @media (max-width: 600px) {
-      #plotly-intencion-voto {height: 280px !important;}
+      #plotly-intencion-voto {height: 260px !important;}
     }
   </style>
 </head>
@@ -406,7 +399,7 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Gráfica tracking poll Plotly mejorada
+    // Gráfica tracking poll Plotly mejorada y responsiva
     var fechas = [
       "2025-06-01<br>UNITEL", "2025-06-18<br>EL DEBER"
     ];
@@ -461,42 +454,56 @@
     };
 
     var data = [doria, tuto, andronico, manfred, paz, johnny, castillo, copa];
-    let legendLayout = {
-  orientation: "h",
-  x: 0.01,
-  y: 1.18,
-  font: { size: 13, color: "#fff" }
-};
 
-if (window.innerWidth < 600) {
-  legendLayout = {
-    orientation: "v",
-    x: 1.01,
-    y: 0.5,
-    font: { size: 13, color: "#fff" }
-  };
-}
-    var layout = {
-      plot_bgcolor: '#1e2228',
-      paper_bgcolor: '#222831',
-      legend: legendLayout,,
-      xaxis: {
-        title: {text: '<b>Fecha y encuestadora</b>', font: {color: "#fff", size: 16}},
-        tickfont: {color:'#fff', size: 13},
-        automargin:true,
-        showgrid: false
-      },
-      yaxis: {
-        title: {text: '<b>% intención de voto</b>', font: {color: "#fff", size: 16}},
-        range:[0,28],
-        gridcolor:'#444',
-        tickfont:{color:'#fff', size: 13}
-      },
-      margin: {l:50, r:20, t:30, b:60},
-      font: { family: 'Inter, Segoe UI, sans-serif', size: 15, color: '#fff' }
-    };
+    // --- Responsividad de la leyenda de la gráfica ---
+    function getLegendLayout() {
+      if (window.innerWidth < 700) {
+        // En móvil: leyenda vertical a la derecha y tamaño de fuente más chico
+        return {
+          orientation: "v",
+          x: 1.08,
+          y: 0.5,
+          xanchor: "left",
+          yanchor: "middle",
+          font: { size: 11, color: "#fff" },
+          bgcolor: "rgba(34,40,49,0.97)"
+        };
+      } else {
+        // En PC: leyenda horizontal arriba
+        return {
+          orientation: "h",
+          x: 0.01,
+          y: 1.16,
+          font: { size: 13, color: "#fff" }
+        };
+      }
+    }
 
-    Plotly.newPlot('plotly-intencion-voto', data, layout, {responsive:true, displayModeBar:false});
+    function plotEncuesta() {
+      var layout = {
+        plot_bgcolor: '#1e2228',
+        paper_bgcolor: '#222831',
+        legend: getLegendLayout(),
+        xaxis: {
+          title: {text: '<b>Fecha y encuestadora</b>', font: {color: "#fff", size: 16}},
+          tickfont: {color:'#fff', size: 13},
+          automargin:true,
+          showgrid: false
+        },
+        yaxis: {
+          title: {text: '<b>% intención de voto</b>', font: {color: "#fff", size: 16}},
+          range:[0,28],
+          gridcolor:'#444',
+          tickfont:{color:'#fff', size: 13}
+        },
+        margin: {l:50, r: window.innerWidth<700 ? 110 : 20, t:30, b:60},
+        font: { family: 'Inter, Segoe UI, sans-serif', size: 15, color: '#fff' }
+      };
+      Plotly.newPlot('plotly-intencion-voto', data, layout, {responsive:true, displayModeBar:false});
+    }
+    plotEncuesta();
+    window.addEventListener('resize', plotEncuesta);
   </script>
 </body>
 </html>
+
