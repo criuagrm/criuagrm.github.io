@@ -30,7 +30,7 @@
       color: var(--main-accent);
       letter-spacing: .5px;
     }
-    /* NAVBAR SOLO MARCA */
+    /* NAVBAR */
     .navbar-custom {
       background: rgba(34,40,49,0.98);
       box-shadow: 0 2px 10px rgba(0,0,0,0.07);
@@ -40,9 +40,29 @@
       z-index: 1000;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
       padding: 0 2.5rem;
       height: 64px;
+    }
+    .nav-volver {
+      margin-right: 1.15rem;
+      background: #0077b6;
+      color: #fff;
+      border-radius: 22px;
+      font-size: 1rem;
+      padding: 0.38rem 1.25rem;
+      border: none;
+      font-weight: 600;
+      transition: background .15s;
+      display: flex;
+      align-items: center;
+      gap: .33rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-volver:hover {
+      background: #005682;
+      color: #fff;
+      text-decoration: none;
     }
     .brand {
       font-family: var(--font-title);
@@ -53,11 +73,12 @@
     }
     /* HERO */
     .hero {
-      height: 18vh;
-      min-height: 100px;
+      height: 17vh;
+      min-height: 85px;
       background: transparent;
       display: flex; align-items: center; justify-content: center;
       text-align: center; position: relative;
+      padding-top: .3rem;
     }
     .hero h1 {
       font-size: 2.1rem; color: #fff;
@@ -66,15 +87,43 @@
     .hero p {
       font-size: 1.09rem; color: #e9ecef; margin-bottom: 1.0rem;
       text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-weight: 500;
     }
-    .section { 
-      max-width:1200px; 
-      margin:0 auto; 
+    /* Chips sección navegación */
+    .chips-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .8rem;
+      margin-bottom: 2.4rem;
+    }
+    .chip-section {
+      background: #fff;
+      color: #0077b6;
+      border: none;
+      border-radius: 24px;
+      padding: .45rem 1.3rem;
+      font-size: 1.02rem;
+      font-weight: 600;
+      box-shadow: 0 2px 7px rgba(36,40,48,0.13);
+      cursor: pointer;
+      transition: background .16s, color .17s;
+      display: flex; align-items: center; gap: .45rem;
+      text-decoration: none;
+    }
+    .chip-section:hover, .chip-section:focus {
+      background: #0077b6;
+      color: #fff;
+      text-decoration: none;
+    }
+    .section {
+      max-width:1200px;
+      margin:0 auto;
       padding:2.4rem 1rem 2.2rem;
     }
     .section-title {
-      text-align:center; 
-      font-size:2.1rem; 
+      text-align:center;
+      font-size:2.1rem;
       margin-bottom:2.1rem;
       color: #fff;
       letter-spacing: .7px;
@@ -88,10 +137,10 @@
       letter-spacing:.2px;
     }
     /* Cards de bases de datos */
-    .data-row { 
-      display: flex; 
-      gap:1.2rem; 
-      flex-wrap:wrap; 
+    .data-row {
+      display: flex;
+      gap:1.2rem;
+      flex-wrap:wrap;
       justify-content:center;
       align-items: stretch;
     }
@@ -153,6 +202,7 @@
     }
     /* Responsive */
     @media (max-width:900px){
+      .navbar-custom{padding:0 .7rem;}
       .data-row {flex-direction:column;gap:1.1rem;}
       .data-card{max-width:97vw; min-width: 90vw;}
     }
@@ -160,26 +210,28 @@
       .hero h1{font-size:1.12rem;}
       .section-title{font-size:1.09rem;}
       .section{padding:.7rem 0.1rem 0.7rem;}
-      .navbar-custom{padding:0 .4rem;}
       .data-card {max-width: 99vw; min-width: 93vw;}
+      .navbar-custom{padding:0 .4rem;}
+      .chips-nav{gap:.45rem;}
     }
-    /* Botón LABAP y subir móvil */
-    .btn-mobile {
+    /* Botón subir */
+    .btn-subir {
       background: #0077b6;
       color: #fff;
-      border-radius: 25px;
-      padding: 0.8rem 1.7rem;
+      border-radius: 22px;
       font-weight: 600;
-      font-size: 1.03rem;
       border: none;
-      margin: 0.8rem auto 1.5rem auto;
-      display: block;
-      transition: background 0.16s;
+      font-size: 0.93rem;
+      padding: .49rem 1.1rem;
+      margin: 2.1rem auto 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .16s;
+      width: fit-content;
+      box-shadow: 0 2px 7px rgba(36,40,48,0.09);
     }
-    .btn-mobile:hover {background: #005682; color:#fff;}
-    @media (min-width: 601px) {
-      .btn-mobile {display:none;}
-    }
+    .btn-subir:hover {background: #005682; color:#fff;}
     /* Footer */
     footer {
       background-color: #2c3e50;
@@ -200,30 +252,33 @@
   </style>
 </head>
 <body>
-  <!-- NAVBAR SOLO MARCA -->
+  <!-- NAVBAR SOLO MARCA + volver -->
   <nav class="navbar-custom">
+    <a href="index.html" class="nav-volver"><i class="fa-solid fa-arrow-left"></i> Volver al LABAP</a>
     <span class="brand">LAP-CIRCPyCS</span>
   </nav>
-
-  <!-- Botón móvil: Volver al LABAP -->
-  <a href="index.html" class="btn-mobile" id="btn-volver-labap">← Volver al LABAP</a>
 
   <!-- Hero -->
   <header class="hero">
     <div class="container">
-      <h1>Datos Abiertos & Indicadores • LABAP CIRCPyCS</h1>
-      <p>
-        Bases de datos, microdatos, geodatos e indicadores políticos y socioeconómicos<br>
-        <span style="color:var(--main-accent); font-weight:600;">Ciencia de datos | Transparencia | Investigación abierta</span>
-      </p>
+      <h1>Datos Abiertos • LABAP CIRCPyCS</h1>
+      <p>Explora, descarga y analiza bases de datos para investigación política y social en Bolivia y el mundo.</p>
     </div>
   </header>
+
+  <!-- Chips navegación de secciones -->
+  <div class="chips-nav">
+    <a href="#internacionales" class="chip-section"><i class="fa-solid fa-globe"></i> Internacionales</a>
+    <a href="#nacionales" class="chip-section"><i class="fa-solid fa-flag"></i> Nacionales</a>
+    <a href="#departamentales" class="chip-section"><i class="fa-solid fa-map-location-dot"></i> Departamentales / Municipales</a>
+    <a href="#labap" class="chip-section"><i class="fa-solid fa-flask"></i> Construidas por el Centro</a>
+  </div>
 
   <section class="section" id="datos-abiertos">
     <div class="section-title">Bases de Datos Abiertas y Recursos</div>
     
     <!-- INTERNACIONALES -->
-    <h4 class="text-white mt-4 mb-3">🌎 Internacionales</h4>
+    <h4 class="text-white mt-4 mb-3" id="internacionales">🌎 Internacionales</h4>
     <div class="data-row">
       <div class="data-card">
         <span class="data-title"><i class="fa-solid fa-database data-icon"></i> Latinobarómetro Bolivia</span>
@@ -284,7 +339,7 @@
     </div>
 
     <!-- NACIONALES (GOBIERNO) -->
-    <h4 class="text-white mt-4 mb-3">🇧🇴 Nacionales (Gobierno)</h4>
+    <h4 class="text-white mt-4 mb-3" id="nacionales">🇧🇴 Nacionales (Gobierno)</h4>
     <div class="data-row">
       <div class="data-card">
         <span class="data-title"><i class="fa-solid fa-building-columns data-icon"></i> Aduana Nacional</span>
@@ -320,30 +375,41 @@
         </div>
       </div>
       <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-school data-icon"></i> SEIE Educación</span>
-        <div class="data-desc">Estadísticas educativas: matrícula, rendimiento, cobertura, infraestructura y microdatos de Bolivia.</div>
+        <span class="data-title"><i class="fa-solid fa-folder-open data-icon"></i> Bolivia Datos Abiertos OEP</span>
+        <div class="data-desc">Directorio nacional de datos abiertos oficiales: electoral, demografía, género, más.</div>
         <div class="data-tags">
-          <span class="badge bg-warning text-dark">Educación</span>
-          <span class="badge bg-info text-dark">SEDUCA</span>
+          <span class="badge bg-info text-dark">Datos Abiertos</span>
+          <span class="badge bg-success">CSV</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://datos.oeplab.org.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-graduation-cap data-icon"></i> SEIE Educación</span>
+        <div class="data-desc">Datos y microdatos del Sistema Educativo, reportes y matrices institucionales (Ministerio de Educación).</div>
+        <div class="data-tags">
+          <span class="badge bg-primary">Educación</span>
+          <span class="badge bg-info text-dark">Tablas</span>
         </div>
         <div class="data-links">
           <a class="data-btn" href="https://seie.minedu.gob.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
         </div>
       </div>
       <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-heart-pulse data-icon"></i> SNIS Salud</span>
-        <div class="data-desc">Estadísticas e indicadores de salud, servicios, infraestructura y microdatos nacionales.</div>
+        <span class="data-title"><i class="fa-solid fa-notes-medical data-icon"></i> SNIS Salud</span>
+        <div class="data-desc">Registros, estadísticas hospitalarias, vigilancia epidemiológica y microdatos (Ministerio de Salud).</div>
         <div class="data-tags">
-          <span class="badge bg-danger">Salud</span>
-          <span class="badge bg-success">Microdatos</span>
+          <span class="badge bg-success">Salud</span>
+          <span class="badge bg-warning text-dark">Tablas</span>
         </div>
         <div class="data-links">
           <a class="data-btn" href="https://snis.minsalud.gob.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
         </div>
       </div>
       <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-industry data-icon"></i> Ministerio de Producción</span>
-        <div class="data-desc">Series y microdatos de producción industrial, agropecuaria y empleo nacional.</div>
+        <span class="data-title"><i class="fa-solid fa-industry data-icon"></i> Producción & Industria</span>
+        <div class="data-desc">Indicadores de producción industrial, manufactura, consumo y exportaciones.</div>
         <div class="data-tags">
           <span class="badge bg-info text-dark">Producción</span>
           <span class="badge bg-primary">CSV</span>
@@ -364,9 +430,9 @@
         </div>
       </div>
     </div>
-    
+
     <!-- DEPARTAMENTALES / MUNICIPALES -->
-    <h4 class="text-white mt-4 mb-3">🏞️ Departamentales / Municipales / Geo</h4>
+    <h4 class="text-white mt-4 mb-3" id="departamentales">🏞️ Departamentales / Municipales / Geo</h4>
     <div class="data-row">
       <div class="data-card">
         <span class="data-title"><i class="fa-solid fa-map-location-dot data-icon"></i> IDE‑EPB / GeoBolivia</span>
@@ -381,9 +447,9 @@
         </div>
       </div>
     </div>
-    
+
     <!-- BASES PROPIAS / CENTRO -->
-    <h4 class="text-white mt-4 mb-3">🛠️ Construidas por LABAP CIRCPyCS</h4>
+    <h4 class="text-white mt-4 mb-3" id="labap">🛠️ Construidas por LABAP CIRCPyCS</h4>
     <div class="data-row">
       <div class="data-card">
         <span class="data-title"><i class="fa-solid fa-users data-icon"></i> Encuesta LABAP–CIRCPyCS</span>
@@ -442,8 +508,10 @@
       </div>
     </div>
 
-    <!-- Botón subir (solo móvil) -->
-    <a href="#datos-abiertos" class="btn-mobile" id="btn-subir">↑ Subir</a>
+    <!-- Botón subir centrado (móvil y desktop) -->
+    <div style="display:flex;justify-content:center;">
+      <a href="#datos-abiertos" class="btn-subir"><i class="fa-solid fa-arrow-up"></i> Subir</a>
+    </div>
   </section>
 
   <!-- Footer institucional CIRCPyCS -->
@@ -470,3 +538,4 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
