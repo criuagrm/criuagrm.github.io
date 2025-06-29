@@ -461,10 +461,25 @@
     };
 
     var data = [doria, tuto, andronico, manfred, paz, johnny, castillo, copa];
+    let legendLayout = {
+  orientation: "h",
+  x: 0.01,
+  y: 1.18,
+  font: { size: 13, color: "#fff" }
+};
+
+if (window.innerWidth < 600) {
+  legendLayout = {
+    orientation: "v",
+    x: 1.01,
+    y: 0.5,
+    font: { size: 13, color: "#fff" }
+  };
+}
     var layout = {
       plot_bgcolor: '#1e2228',
       paper_bgcolor: '#222831',
-      legend: {orientation:"h", x:0.01, y:1.18, font:{size:13, color: "#fff"}},
+      legend: legendLayout,,
       xaxis: {
         title: {text: '<b>Fecha y encuestadora</b>', font: {color: "#fff", size: 16}},
         tickfont: {color:'#fff', size: 13},
