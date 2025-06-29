@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboards • LABAP CIRCPyCS</title>
+  <!-- Bootstrap y Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --main-bg: #222831;
+      --main-accent: #0077b6;
+      --accent2: #8e44ad;
+      --font-main: 'Segoe UI', 'Inter', sans-serif;
+      --font-title: 'Playfair Display', serif;
+      --kpi-border: #e1e1e1;
+    }
+    body {
+      font-family: var(--font-main);
+      background: linear-gradient(0deg,rgba(28,28,28,.82),rgba(28,28,28,.54)), url('https://i.imgur.com/ALJUMrF.jpeg') center/cover no-repeat fixed;
+      color: #fff;
+      margin: 0;
+      padding-top: 72px;
+      min-height: 100vh;
+      font-size: 0.97rem;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-title);
+      color: #fff;
+      letter-spacing: .5px;
+    }
+    .navbar-custom {
+      background: rgba(34,40,49,0.97);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      height: 64px;
+    }
+    .brand {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .btn-volver {
+      background: var(--main-accent);
+      color: #fff !important;
+      border-radius: 22px;
+      padding: 0.37rem 1rem;
+      font-weight: 600;
+      font-size: 1.01rem;
+      border: none;
+      margin-left: 0.5rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.15s;
+    }
+    .btn-volver:hover { background: var(--accent2); color: #fff !important; }
+    @media (max-width:600px) {
+      .navbar-custom { padding: 0 0.3rem;}
+      .brand { font-size: 1rem;}
+      .btn-volver { font-size: 0.93rem; padding: 0.27rem 0.82rem;}
+    }
+
+    .hero {
+      min-height: 120px;
+      background: linear-gradient(96deg,rgba(0,119,182,0.24) 0%,rgba(34,40,49,0.89) 70%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+      margin-bottom: 0.7rem;
+      padding: 2.1rem 0 1.1rem 0;
+    }
+    .hero h1 {
+      font-size: 2.1rem; color: #fff; font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .hero p {
+      font-size: 1.09rem; color: #e9ecef;
+      margin: 0.8rem 0 0.4rem 0;
+    }
+    .nav-mini {
+      margin: 1.2rem 0 2.2rem 0;
+      text-align: center;
+    }
+    .nav-mini .mini-btn {
+      background: #fff;
+      color: var(--main-accent);
+      border-radius: 17px;
+      border: 1px solid var(--kpi-border);
+      font-size: 0.97rem;
+      font-weight: 500;
+      margin: 0.08rem 0.17rem;
+      padding: 0.22rem 0.93rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: background .13s, color .16s, border .17s;
+      text-decoration: none;
+    }
+    .nav-mini .mini-btn:hover {
+      background: var(--main-accent);
+      color: #fff;
+      border: 1px solid var(--main-accent);
+    }
+    .section { max-width:1200px; margin:0 auto; padding:2.3rem 1rem 2.1rem;}
+    .section-title { text-align:center; font-size:2.05rem; margin-bottom:2.1rem; color: #fff;}
+    .dash-row { display:flex; flex-wrap:wrap; gap:1.25rem; justify-content:center;}
+    .dash-card {
+      background: rgba(255,255,255,0.97);
+      color: #222;
+      border-radius: 1.18rem;
+      padding: 1.2rem 1.13rem 1.2rem 1.13rem;
+      min-width: 210px;
+      max-width: 360px;
+      box-shadow: 0 7px 32px 0 rgba(36,40,48,0.14), 0 1.5px 5px 0 rgba(0,0,0,0.09);
+      border: 1px solid var(--kpi-border);
+      display: flex; flex-direction: column; align-items: flex-start;
+      position: relative; transition: box-shadow 0.16s;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      margin-bottom: 0.4rem;
+    }
+    .dash-card:hover { box-shadow: 0 10px 42px 0 rgba(0,119,182,0.18);}
+    .dash-icon {
+      font-size:2.12rem;margin-right:.57rem;vertical-align:middle;color:var(--main-accent);
+    }
+    .dash-title {font-size:1.09rem;font-weight:600;color:#0077b6;margin-bottom:.17rem;}
+    .dash-desc {font-size:.98rem;margin-bottom:.46rem;}
+    .dash-tags .badge {margin-right:0.17rem;margin-bottom:.18rem;}
+    .dash-links {margin-top:.33rem;}
+    .dash-btn {
+      background:#fff; color:#0077b6; border:1px solid #e1e1e1;
+      border-radius:22px; padding:.22rem .85rem;
+      margin-right:.22rem; font-size:.97rem;
+      display:inline-flex; align-items:center; gap:.27rem;
+      transition:background .13s, color .17s, border .16s;
+      text-decoration:none; font-weight:500;
+    }
+    .dash-btn:hover {background:#0077b6; color:#fff; border:1px solid #0077b6;}
+    @media (max-width:900px){.dash-row{flex-direction:column;} .dash-card{max-width:98vw;}}
+    @media (max-width:600px){
+      .hero h1{font-size:1.14rem;}
+      .section-title{font-size:1.04rem;}
+      .section{padding:1.1rem 0.12rem 0.7rem;}
+    }
+    .btn-subir {
+      display: inline-block;
+      background: var(--main-accent);
+      color: #fff !important;
+      border-radius: 50px;
+      padding: 0.28rem 1.19rem;
+      font-weight: 500;
+      font-size: 1.08rem;
+      border: none;
+      margin: 1.6rem auto 0 auto;
+      text-decoration: none;
+      transition: background .18s;
+      box-shadow: 0 2px 14px rgba(0,119,182,.13);
+    }
+    .btn-subir:hover {background: var(--accent2);}
+    footer {
+      background-color: #2c3e50;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    footer a {color: #fff; margin: 0 0.3rem; transition: color 0.3s;}
+    footer a:hover {color: #16a085;}
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar-custom">
+    <span class="brand">LABAP–CIRCPyCS</span>
+    <a href="labap.html" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+  </nav>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <h1>Dashboards Interactivos • Ciencia de Datos Política Bolivia</h1>
+      <p>Accede a análisis avanzados, simuladores, mapas y visualización interactiva de riesgos, elecciones e indicadores clave.</p>
+    </div>
+    <div class="nav-mini">
+      <a href="#nacionales" class="mini-btn"><i class="fa-solid fa-globe"></i> Nacionales</a>
+      <a href="#elecciones" class="mini-btn"><i class="fa-solid fa-vote-yea"></i> Elecciones</a>
+      <a href="#institucional" class="mini-btn"><i class="fa-solid fa-balance-scale"></i> Institucional</a>
+      <a href="#riesgo" class="mini-btn"><i class="fa-solid fa-shield-alt"></i> Riesgo País</a>
+      <a href="#mapas" class="mini-btn"><i class="fa-solid fa-map-location-dot"></i> Mapas</a>
+      <a href="#visualizacion" class="mini-btn"><i class="fa-solid fa-chart-bar"></i> Visualización</a>
+    </div>
+  </header>
+  <section class="section" id="nacionales">
+    <div class="section-title"><i class="fa-solid fa-globe"></i> Dashboards Nacionales Bolivia</div>
+    <div class="dash-row">
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-gauge dash-icon"></i> Mega Dashboard Político Bolivia</span>
+        <div class="dash-desc">
+          Análisis integrado: indicadores democráticos, opinión pública, economía, gobernabilidad, riesgos y comparativos regionales.
+        </div>
+        <div class="dash-tags">
+          <span class="badge bg-primary">Integrado</span>
+          <span class="badge bg-info text-dark">Comparado</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapmega.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver Dashboard</a>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-globe dash-icon"></i> Indicadores País • Bolivia 2025</span>
+        <div class="dash-desc">
+          Dashboard de seguimiento a indicadores clave: PIB, educación, salud, pobreza, empleo, corrupción y calidad institucional.
+        </div>
+        <div class="dash-tags">
+          <span class="badge bg-success">Indicadores</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapindicadores.html" target="_blank"><i class="fa-solid fa-chart-simple"></i> Ver Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="elecciones">
+    <div class="section-title"><i class="fa-solid fa-vote-yea"></i> Dashboards Electorales</div>
+    <div class="dash-row">
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-person-booth dash-icon"></i> Tracking Poll 2025</span>
+        <div class="dash-desc">Visualizador interactivo de encuestas electorales y proyecciones presidenciales Bolivia 2025.</div>
+        <div class="dash-tags">
+          <span class="badge bg-primary">Tracking Poll</span>
+          <span class="badge bg-info text-dark">Encuestas</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labaptracking2025.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver</a>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-calendar-days dash-icon"></i> Calendario Electoral Bolivia</span>
+        <div class="dash-desc">Panel de fechas, eventos clave y procesos electorales nacionales y municipales.</div>
+        <div class="dash-tags">
+          <span class="badge bg-success">Fechas</span>
+          <span class="badge bg-primary">Panel</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapcalendario.html" target="_blank"><i class="fa-solid fa-calendar-days"></i> Ver</a>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-table-list dash-icon"></i> Resultados Oficiales OEP</span>
+        <div class="dash-desc">Tableros y visualizadores de resultados oficiales del Órgano Electoral Plurinacional (OEP).</div>
+        <div class="dash-tags">
+          <span class="badge bg-danger">OEP</span>
+          <span class="badge bg-info text-dark">Resultados</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="https://www.oep.org.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Portal OEP</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="institucional">
+    <div class="section-title"><i class="fa-solid fa-balance-scale"></i> Dashboards Institucionales</div>
+    <div class="dash-row">
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-scale-balanced dash-icon"></i> Instituciones y Gobernabilidad</span>
+        <div class="dash-desc">Análisis longitudinal y comparativo de indicadores institucionales, democracia y gobernanza (V-Dem, BTI, WJP, TI).</div>
+        <div class="dash-tags">
+          <span class="badge bg-warning text-dark">Instituciones</span>
+          <span class="badge bg-primary">Comparado</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapinstituciones.html" target="_blank"><i class="fa-solid fa-scale-balanced"></i> Ver</a>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-user-shield dash-icon"></i> Transparencia & Corrupción</span>
+        <div class="dash-desc">Dashboard de percepción, rankings, CPI y transparencia institucional a nivel nacional e internacional.</div>
+        <div class="dash-tags">
+          <span class="badge bg-danger">Corrupción</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapcorrupcion.html" target="_blank"><i class="fa-solid fa-shield-halved"></i> Ver</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="riesgo">
+    <div class="section-title"><i class="fa-solid fa-shield-alt"></i> Dashboards de Riesgo País</div>
+    <div class="dash-row">
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-exclamation-triangle dash-icon"></i> Monitor Riesgo País Bolivia</span>
+        <div class="dash-desc">Visualización y alerta temprana de riesgo país, EMBI, conflictividad, precios y factores críticos para Bolivia.</div>
+        <div class="dash-tags">
+          <span class="badge bg-warning text-dark">Riesgo País</span>
+          <span class="badge bg-primary">Alertas</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapriesgo.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="mapas">
+    <div class="section-title"><i class="fa-solid fa-map-location-dot"></i> Dashboards de Mapas & Geodatos</div>
+    <div class="dash-row">
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-map dash-icon"></i> Mapa Electoral Interactivo</span>
+        <div class="dash-desc">Mapas interactivos de resultados electorales, participación y variación territorial.</div>
+        <div class="dash-tags">
+          <span class="badge bg-success">Geodatos</span>
+          <span class="badge bg-info text-dark">Mapas</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapmapas.html" target="_blank"><i class="fa-solid fa-map"></i> Ver</a>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-tree-city dash-icon"></i> Mapas Municipales SCZ</span>
+        <div class="dash-desc">Dashboard de mapas, shapefiles y capas urbanas para municipios de Santa Cruz y oriente boliviano.</div>
+        <div class="dash-tags">
+          <span class="badge bg-secondary">Santa Cruz</span>
+          <span class="badge bg-success">Urbano</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapmunicipal.html" target="_blank"><i class="fa-solid fa-tree-city"></i> Ver</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="visualizacion">
+    <div class="section-title"><i class="fa-solid fa-chart-bar"></i> Dashboards de Visualización & Opinión</div>
+    <div class="dash-row">
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-comments dash-icon"></i> Opinión Pública Bolivia</span>
+        <div class="dash-desc">Encuestas, clima de opinión, aprobación, confianza en instituciones y percepción ciudadana.</div>
+        <div class="dash-tags">
+          <span class="badge bg-info text-dark">Encuestas</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapopinion.html" target="_blank"><i class="fa-solid fa-comments"></i> Ver</a>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-title"><i class="fa-solid fa-graduation-cap dash-icon"></i> Educación y Desempeño</span>
+        <div class="dash-desc">Panel de datos sobre logros educativos, pruebas, deserción y desempeño escolar por región y año.</div>
+        <div class="dash-tags">
+          <span class="badge bg-primary">Educación</span>
+          <span class="badge bg-info text-dark">Indicadores</span>
+        </div>
+        <div class="dash-links">
+          <a class="dash-btn" href="labapeducacion.html" target="_blank"><i class="fa-solid fa-graduation-cap"></i> Ver</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- BOTÓN SUBIR -->
+  <div style="text-align:center;">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});" class="btn-subir"><i class="fa-solid fa-arrow-up"></i> Subir</a>
+  </div>
+  <!-- Footer institucional CIRCPyCS -->
+  <footer>
+    <div class="container">
+      <p class="mb-1">
+        &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.
+      </p>
+      <p class="mb-1">
+        Contacto:
+        <a href="mailto:contacto@circpycs.uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+        |
+        <i class="fas fa-phone"></i> +591 67381294
+      </p>
+      <p>
+        Síguenos en:
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </p>
+    </div>
+  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
