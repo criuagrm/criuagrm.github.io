@@ -18,7 +18,7 @@
     body {
       font-family: var(--font-main); color: #fff;
       margin: 0; padding-top: 84px; font-size: .97rem;
-      background: linear-gradient(0deg,rgba(28,28,28,.80),rgba(28,28,28,.58)), 
+      background: linear-gradient(0deg,rgba(28,28,28,.80),rgba(28,28,28,.58)),
                   url('https://i.imgur.com/4xA4Fa0.jpeg') center/cover fixed;
       min-height:100vh;
     }
@@ -27,6 +27,27 @@
       position: fixed; width:100%; top:0; height:64px;
       background: rgba(34,40,49,.98); box-shadow:0 2px 10px rgba(0,0,0,.07);
       display:flex; align-items:center; padding:0 2.5rem; z-index:1000;
+    }
+    .nav-volver {
+      margin-right: 1.1rem;
+      background: #0077b6;
+      color: #fff;
+      border-radius: 22px;
+      font-size: 1rem;
+      padding: 0.38rem 1.25rem;
+      border: none;
+      font-weight: 600;
+      transition: background .15s;
+      display: flex;
+      align-items: center;
+      gap: .33rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-volver:hover {
+      background: #005682;
+      color: #fff;
+      text-decoration: none;
     }
     .brand {
       font-family: var(--font-title); font-weight:700; font-size:1.35rem;
@@ -41,14 +62,15 @@
     .section { max-width:1200px; margin:0 auto; padding:2.4rem 1rem;}
     .section-title { text-align:center; font-size:2.1rem; margin-bottom:2.1rem;}
     .proyectos-row {
-      display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center;
+      display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center; align-items:stretch;
     }
     .proy-card {
       background:rgba(255,255,255,.97); color:#222;
-      border-radius:1.15rem; padding:1.18rem; min-width:230px;
-      max-width:370px; box-shadow:0 7px 32px rgba(36,40,48,.13);
+      border-radius:1.15rem; padding:1.18rem; min-width:240px;
+      max-width:360px; flex:1 1 280px;
+      box-shadow:0 7px 32px rgba(36,40,48,.13);
       border:1px solid var(--kpi-border);
-      display:flex; flex-direction:column; align-items:flex-start;
+      display:flex; flex-direction:column; align-items:flex-start; justify-content:stretch;
       backdrop-filter:blur(2px); word-break:break-word; transition:box-shadow .15s;
     }
     .proy-card:hover {
@@ -66,9 +88,32 @@
       text-decoration:none; font-weight:500;
     }
     .proy-btn:hover {background:#0077b6; color:#fff; border:1px solid #0077b6;}
-    @media(max-width:900px){.proyectos-row{flex-direction:column;} .proy-card{max-width:97vw;}}
-    @media(max-width:600px){.hero h1{font-size:1.11rem;} .section-title{font-size:1.02rem;}
-      .navbar-custom{padding:0 .4rem;}}
+    .btn-subir {
+      background: #0077b6;
+      color: #fff;
+      border-radius: 22px;
+      font-weight: 600;
+      border: none;
+      font-size: 0.93rem;
+      padding: .49rem 1.1rem;
+      margin: 2.1rem auto 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .16s;
+      width: fit-content;
+      box-shadow: 0 2px 7px rgba(36,40,48,0.09);
+    }
+    .btn-subir:hover {background: #005682; color:#fff;}
+    @media(max-width:900px){.navbar-custom{padding:0 .7rem;}
+      .proyectos-row{flex-direction:column;} .proy-card{max-width:98vw; min-width:92vw;}
+    }
+    @media(max-width:600px){
+      .hero h1{font-size:1.11rem;}
+      .section-title{font-size:1.02rem;}
+      .navbar-custom{padding:0 .4rem;}
+      .proy-card{max-width:99vw; min-width:95vw;}
+    }
     footer {
       background:#2c3e50; color:#fff; text-align:center;
       padding:1rem; margin-top:2rem; font-size:.9rem;
@@ -78,107 +123,209 @@
   </style>
 </head>
 <body>
+  <!-- NAVBAR + volver -->
   <nav class="navbar-custom">
+    <a href="index.html" class="nav-volver"><i class="fa-solid fa-arrow-left"></i> Volver al LABAP</a>
     <span class="brand">LABAP–CIRCPyCS</span>
   </nav>
   <header class="hero">
     <div class="container">
       <h1>Proyectos Operativos • Santa Cruz</h1>
-      <p>Iniciativas lideradas por politólogos, con ciencia de datos, análisis institucional y laboratorios aplicados.</p>
+      <p>Iniciativas interdisciplinares lideradas por politólogos, con análisis institucional, ciencia de datos y experimentación aplicada.</p>
     </div>
   </header>
   <section class="section" id="proyectos">
-    <div class="section-title">Proyectos Activos</div>
+    <div class="section-title">Proyectos Activos e Innovadores</div>
     <div class="proyectos-row">
-      <!-- Fiscalización local -->
+      <!-- 1 -->
       <div class="proy-card">
         <span class="proy-title"><i class="fa-solid fa-eye"></i> Fiscalización de Municipalidades</span>
-        <div class="proy-desc">
-          Plataforma en Python+R para monitorear contratos, gasto y corrupción local en municipios de Santa Cruz.
-        </div>
+        <div class="proy-desc">Monitor en Python+R para contratos, gasto, corrupción local y gobierno abierto en municipios cruceños.</div>
         <div class="proy-tags">
           <span class="badge bg-info">Transparencia</span>
           <span class="badge bg-success">Python</span>
           <span class="badge bg-secondary">R</span>
         </div>
         <div class="proy-links">
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-database"></i> Base de datos</a>
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-database"></i> Base de datos</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
         </div>
       </div>
-      <!-- Simulación regional -->
+      <!-- 2 -->
       <div class="proy-card">
         <span class="proy-title"><i class="fa-solid fa-map-location-dot"></i> Simulación Electoral Santa Cruz</span>
-        <div class="proy-desc">
-          Tool en NetLogo + QGIS para modelar comportamientos electorales por áreas urbanas/rurales.
-        </div>
+        <div class="proy-desc">Modelos con NetLogo + QGIS para simular participación y preferencias electorales urbanas/rurales.</div>
         <div class="proy-tags">
           <span class="badge bg-primary">Simulación</span>
           <span class="badge bg-dark">NetLogo</span>
           <span class="badge bg-info">QGIS</span>
         </div>
         <div class="proy-links">
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-code"></i> Código</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-code"></i> Código</a>
         </div>
       </div>
-      <!-- Institucional -->
+      <!-- 3 -->
       <div class="proy-card">
         <span class="proy-title"><i class="fa-solid fa-balance-scale"></i> Monitoreo Riesgo País</span>
-        <div class="proy-desc">
-          Monitor de indicadores internacionales: TI, V‑Dem, BTI, Freedom House para análisis institucional.
-        </div>
+        <div class="proy-desc">Monitor de TI, V‑Dem, BTI, Freedom House y datos económicos, en tiempo real, para análisis institucional y financiero.</div>
         <div class="proy-tags">
           <span class="badge bg-warning">Institucional</span>
           <span class="badge bg-primary">Datos</span>
         </div>
         <div class="proy-links">
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-table"></i> Informe</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-table"></i> Informe</a>
         </div>
       </div>
-      <!-- Redes -->
+      <!-- 4 -->
       <div class="proy-card">
-        <span class="proy-title"><i class="fa-solid fa-network-wired"></i> Análisis de Redes Políticas</span>
-        <div class="proy-desc">
-          Estudio de influencia en Twitter y medios regionales, usando Python + NetworkX.
-        </div>
+        <span class="proy-title"><i class="fa-solid fa-network-wired"></i> Redes Políticas Bolivia</span>
+        <div class="proy-desc">Grafos, análisis de relaciones y alianzas, edge-lists y visualización con NetworkX y Gephi.</div>
         <div class="proy-tags">
           <span class="badge bg-secondary">Redes</span>
           <span class="badge bg-info">NetworkX</span>
           <span class="badge bg-success">Python</span>
         </div>
         <div class="proy-links">
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-file-lines"></i> Paper</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-file-lines"></i> Paper</a>
         </div>
       </div>
-      <!-- Machine learning -->
+      <!-- 5 -->
       <div class="proy-card">
         <span class="proy-title"><i class="fa-solid fa-robot"></i> ML para Opinión Pública</span>
-        <div class="proy-desc">
-          Clasificación de sentimientos en redes sociales sobre políticas locales usando ML supervisado.
-        </div>
+        <div class="proy-desc">Clasificación de sentimientos y temas políticos usando ML y redes sociales.</div>
         <div class="proy-tags">
           <span class="badge bg-primary">Machine Learning</span>
           <span class="badge bg-dark">IA</span>
           <span class="badge bg-info">Python</span>
         </div>
         <div class="proy-links">
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-code"></i> Repositorio</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-code"></i> Repositorio</a>
         </div>
       </div>
-      <!-- Formación -->
+      <!-- 6 -->
       <div class="proy-card">
         <span class="proy-title"><i class="fa-solid fa-chalkboard-user"></i> Talleres de Ciencia de Datos</span>
-        <div class="proy-desc">
-          Formación en R, Python, QGIS, ML y NetLogo para politólogos y estudiantes de UAGRM.
-        </div>
+        <div class="proy-desc">Formación avanzada en R, Python, QGIS, ML y NetLogo para estudiantes y profesionales.</div>
         <div class="proy-tags">
           <span class="badge bg-success">Formación</span>
           <span class="badge bg-info">Capacitación</span>
         </div>
         <div class="proy-links">
-          <a class="proy-btn" href="#" target="_blank"><i class="fa-solid fa-calendar"></i> Cronograma</a>
+          <a class="proy-btn" href="#"><i class="fa-solid fa-calendar"></i> Cronograma</a>
         </div>
       </div>
+      <!-- 7 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-city"></i> Smart Cities & Gobernanza Digital</span>
+        <div class="proy-desc">Implementación de sistemas inteligentes y plataformas cívicas para gestión urbana sostenible.</div>
+        <div class="proy-tags">
+          <span class="badge bg-info">Smart City</span>
+          <span class="badge bg-primary">Gobernanza</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-laptop-code"></i> Demo</a>
+        </div>
+      </div>
+      <!-- 8 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-leaf"></i> Monitoreo Ambiental Participativo</span>
+        <div class="proy-desc">Sensores ciudadanos, IA y datos abiertos para analizar contaminación, incendios y cambios climáticos.</div>
+        <div class="proy-tags">
+          <span class="badge bg-success">Ambiente</span>
+          <span class="badge bg-info">Sensores</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-download"></i> Resultados</a>
+        </div>
+      </div>
+      <!-- 9 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-vote-yea"></i> Auditoría Electoral Transparente</span>
+        <div class="proy-desc">Verificación independiente, análisis forense de actas y conteos con algoritmos de control social.</div>
+        <div class="proy-tags">
+          <span class="badge bg-warning">Electoral</span>
+          <span class="badge bg-primary">Auditoría</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-bug"></i> Reporte</a>
+        </div>
+      </div>
+      <!-- 10 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-shield-halved"></i> Laboratorio de Desinformación</span>
+        <div class="proy-desc">Detección, seguimiento y neutralización de fake news políticas usando NLP y fact-checking.</div>
+        <div class="proy-tags">
+          <span class="badge bg-danger">Desinformación</span>
+          <span class="badge bg-info">NLP</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-file-code"></i> Herramienta</a>
+        </div>
+      </div>
+      <!-- 11 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-handshake-angle"></i> Conflictos y Negociación Social</span>
+        <div class="proy-desc">Análisis de protestas, bloqueos y acuerdos usando redes y teoría de juegos.</div>
+        <div class="proy-tags">
+          <span class="badge bg-info">Conflictos</span>
+          <span class="badge bg-primary">Negociación</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-scale-balanced"></i> Informe</a>
+        </div>
+      </div>
+      <!-- 12 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-file-invoice-dollar"></i> Gasto Social y Evaluación de Políticas</span>
+        <div class="proy-desc">Herramientas para medir impacto y eficiencia de gasto en salud, educación y protección social.</div>
+        <div class="proy-tags">
+          <span class="badge bg-success">Política Social</span>
+          <span class="badge bg-warning">Evaluación</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-chart-pie"></i> Resultados</a>
+        </div>
+      </div>
+      <!-- 13 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-earth-americas"></i> Mapas Históricos & Geopolítica</span>
+        <div class="proy-desc">Recreación y análisis de mapas históricos, fronteras, recursos estratégicos y geopolítica regional.</div>
+        <div class="proy-tags">
+          <span class="badge bg-secondary">Historia</span>
+          <span class="badge bg-success">Geopolítica</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-globe"></i> Visualización</a>
+        </div>
+      </div>
+      <!-- 14 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-flask-vial"></i> Ciencia de Datos Aplicada a Políticas Públicas</span>
+        <div class="proy-desc">Proyectos de impacto directo: microdatos, segmentación, economía política, modelos institucionales.</div>
+        <div class="proy-tags">
+          <span class="badge bg-info">Ciencia de Datos</span>
+          <span class="badge bg-primary">Políticas Públicas</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-folder-open"></i> Carpeta</a>
+        </div>
+      </div>
+      <!-- 15 -->
+      <div class="proy-card">
+        <span class="proy-title"><i class="fa-solid fa-graduation-cap"></i> Capacitación en Open Science y Reproducibilidad</span>
+        <div class="proy-desc">Curso y certificación para investigadores jóvenes sobre replicabilidad, bases abiertas y FAIR data.</div>
+        <div class="proy-tags">
+          <span class="badge bg-info">Open Science</span>
+          <span class="badge bg-success">Capacitación</span>
+        </div>
+        <div class="proy-links">
+          <a class="proy-btn" href="#"><i class="fa-solid fa-certificate"></i> Certificación</a>
+        </div>
+      </div>
+    </div>
+    <!-- Botón subir -->
+    <div style="display:flex;justify-content:center;">
+      <a href="#proyectos" class="btn-subir"><i class="fa-solid fa-arrow-up"></i> Subir</a>
     </div>
   </section>
   <footer>
