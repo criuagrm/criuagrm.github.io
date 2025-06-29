@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Incubadora de Consultores Jr. CIRCPyCS</title>
+  <!-- Google Fonts y Bootstrap -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --primary: #233057;
+      --accent: #f24554;
+      --bg: #f6f7fa;
+      --card: #fff;
+      --text: #2c3e50;
+      --secondary: #17a2b8;
+      --radius: 18px;
+      --shadow: 0 2px 16px rgba(35, 48, 87, 0.09);
+      --fade: #eceff4;
+    }
+
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .header-hero {
+      background: linear-gradient(120deg, var(--primary) 75%, var(--accent) 100%);
+      color: #fff;
+      padding: 60px 0 36px 0;
+      border-radius: 0 0 45px 45px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .header-hero .lead {
+      font-size: 1.25rem;
+      color: #dde3ee;
+      max-width: 600px;
+      margin: 0 auto 18px auto;
+    }
+    .btn-main {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 30px;
+      font-weight: bold;
+      padding: 12px 38px;
+      border: none;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 12px rgba(242,69,84,0.10);
+      transition: background .2s;
+    }
+    .btn-main:hover { background: #d61b32; }
+
+    .seccion {
+      padding: 45px 0 30px 0;
+    }
+    .titulo-seccion {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 25px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    /* Fases animadas */
+    .fases-incubacion {
+      display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-bottom: 35px;
+    }
+    .fase-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 245px; min-height: 270px;
+      padding: 28px 18px 22px 18px;
+      text-align: center;
+      transition: transform .18s;
+      position: relative;
+    }
+    .fase-card:hover { transform: translateY(-7px) scale(1.03); box-shadow: 0 8px 30px rgba(35, 48, 87, 0.12);}
+    .fase-icon {
+      font-size: 2.2rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .fase-titulo { font-size: 1.11rem; font-weight: 700; color: var(--primary); margin-bottom: 7px;}
+    .fase-desc { font-size: 0.97rem; color: #333; }
+
+    /* Servicios incubadora */
+    .servicios-row {
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 22px;
+    }
+    .servicio-card {
+      flex: 1 1 280px;
+      max-width: 340px;
+      background: linear-gradient(135deg, #eaf6fa 80%, #f24554 100%);
+      border-radius: var(--radius);
+      padding: 30px 22px 22px 22px;
+      min-height: 220px;
+      box-shadow: var(--shadow);
+      margin: 8px 6px;
+      transition: box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .servicio-card .serv-icon {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 9px;
+    }
+    .servicio-card .serv-titulo { font-weight: 700; font-size: 1.05rem; color: var(--primary); }
+    .servicio-card .serv-desc { color: #4d596a; font-size: 0.97rem; margin-top: 4px;}
+    .servicio-card::after {
+      content: '';
+      position: absolute;
+      top: -20px; right: -45px;
+      width: 120px; height: 120px;
+      background: rgba(242,69,84,0.07);
+      border-radius: 100%;
+      z-index: 0;
+    }
+
+    /* Dashboard resumen */
+    .dashboard-metrics {
+      display: flex; flex-wrap: wrap; gap: 18px; justify-content: center;
+      margin: 20px 0 38px 0;
+    }
+    .metric-card {
+      background: var(--fade);
+      border-radius: 15px;
+      padding: 22px 28px;
+      text-align: center;
+      min-width: 185px;
+      box-shadow: 0 2px 8px rgba(35,48,87,0.07);
+      font-size: 1.08rem;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .metric-icon { font-size: 2.0rem; color: var(--secondary);}
+    .metric-value { font-size: 2.1rem; font-weight: bold; color: var(--primary);}
+    .metric-label { color: #666; font-size: 0.95rem;}
+
+    /* Cards de consultores/mentores */
+    .consultores-row {
+      display: flex; flex-wrap: wrap; gap: 18px; justify-content: center;
+      margin-bottom: 32px;
+    }
+    .consultor-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 25px 16px 14px 16px;
+      text-align: center;
+      width: 195px;
+      margin-bottom: 10px;
+      position: relative;
+      transition: transform .18s;
+    }
+    .consultor-card:hover { transform: scale(1.04);}
+    .consultor-avatar {
+      width: 74px; height: 74px; border-radius: 50%; object-fit: cover;
+      margin-bottom: 8px; border: 3px solid var(--primary);
+    }
+    .consultor-nombre { font-weight: 700; color: var(--primary); font-size: 1.06rem; margin-bottom: 2px;}
+    .consultor-label { color: var(--secondary); font-size: 0.96rem;}
+    .consultor-tags { font-size: 0.9rem; color: #555; margin-top: 4px;}
+
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 32px 0 12px 0;
+      border-radius: 38px 38px 0 0;
+      margin-top: 40px;
+      font-size: 1.02rem;
+      letter-spacing: .1px;
+    }
+    .footer-social a { color: #fff; margin: 0 10px; font-size: 1.2rem;}
+    .footer-social a:hover { color: var(--accent);}
+    @media (max-width:900px) { .fases-incubacion,.servicios-row,.consultores-row,.dashboard-metrics {flex-direction:column;align-items:center;} }
+    @media (max-width:500px) { .header-hero h1 { font-size: 2rem; } .titulo-seccion{font-size:1.2rem;} }
+  </style>
+</head>
+<body>
+
+  <!-- HERO HEADER -->
+  <div class="header-hero">
+    <h1>Incubadora de Consultores Jr.<br><span style="font-size:1.3rem;color:#ffd9dc;font-family:Montserrat;">Ciencia Política y Ciencias Sociales CIRCPyCS</span></h1>
+    <p class="lead">Puente entre la formación avanzada y el impacto profesional.<br>
+      Consultoría real, mentoría, tecnología y ética en acción.<br>
+      <span style="color:#fff;opacity:.8;">#TransformandoTalento</span>
+    </p>
+    <a href="#postula" class="btn btn-main mt-2"><i class="fa-solid fa-user-plus"></i> Postula Aquí</a>
+  </div>
+
+  <!-- METRICAS DASHBOARD -->
+  <section class="seccion" style="padding-bottom:18px;">
+    <div class="dashboard-metrics">
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-users"></i></div>
+        <div class="metric-value" id="metric-consultores">0</div>
+        <div class="metric-label">Consultores Jr. certificados</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-file-alt"></i></div>
+        <div class="metric-value" id="metric-proyectos">0</div>
+        <div class="metric-label">Proyectos con impacto regional</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-user-tie"></i></div>
+        <div class="metric-value" id="metric-mentores">0</div>
+        <div class="metric-label">Mentores y expertos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-signal"></i></div>
+        <div class="metric-value" id="metric-satisfaccion">0%</div>
+        <div class="metric-label">Satisfacción del cliente</div>
+      </div>
+    </div>
+    <script>
+      // Animación de conteo
+      function animateValue(id, start, end, duration, symbol="") {
+        let range = end - start, stepTime = Math.abs(Math.floor(duration / range)), startTime = new Date().getTime(), endTime = startTime + duration;
+        let obj = document.getElementById(id);
+        function run(){
+          let now = new Date().getTime(), remaining = Math.max((endTime - now) / duration, 0), value = Math.round(end - (remaining * range));
+          obj.innerHTML = value + symbol;
+          if(value == end) return;
+          requestAnimationFrame(run);
+        } run();
+      }
+      document.addEventListener("DOMContentLoaded",()=>{
+        animateValue("metric-consultores",0,30,1100,"");
+        animateValue("metric-proyectos",0,10,900,"");
+        animateValue("metric-mentores",0,8,800,"");
+        animateValue("metric-satisfaccion",0,97,1100,"%");
+      });
+    </script>
+  </section>
+
+  <!-- MODELO DE INCUBACIÓN -->
+  <section class="seccion" style="background:#fff6f7;border-radius:25px;">
+    <h2 class="titulo-seccion">Fases de la Incubadora</h2>
+    <div class="fases-incubacion">
+      <div class="fase-card">
+        <div class="fase-icon"><i class="fa-solid fa-rocket"></i></div>
+        <div class="fase-titulo">Selección</div>
+        <div class="fase-desc">Convocatoria abierta, pruebas de aptitud y dinámica grupal.<br><b>Deliverable:</b> Lista de cohortes seleccionadas.</div>
+      </div>
+      <div class="fase-card">
+        <div class="fase-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <div class="fase-titulo">Formación Intensiva</div>
+        <div class="fase-desc">Bootcamp de análisis cuantitativo, cualitativo, ética y comunicación.<br><b>Deliverable:</b> Certificación intermedia.</div>
+      </div>
+      <div class="fase-card">
+        <div class="fase-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+        <div class="fase-titulo">Prácticas de Consultoría</div>
+        <div class="fase-desc">Proyectos reales con clientes. Supervisión semanal, entregables ejecutivos.</div>
+      </div>
+      <div class="fase-card">
+        <div class="fase-icon"><i class="fa-solid fa-award"></i></div>
+        <div class="fase-titulo">Acompañamiento al Egreso</div>
+        <div class="fase-desc">Talleres de networking, mentoría personalizada, bolsa de trabajo y certificación oficial CIRCPyCS.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS Y EXPERIENCIA INNOVADORA -->
+  <section class="seccion">
+    <h2 class="titulo-seccion">¿Qué hace única a la incubadora?</h2>
+    <div class="servicios-row">
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-code"></i></div>
+        <div class="serv-titulo">Ciencia de datos aplicada</div>
+        <div class="serv-desc">Aprende Python, R, análisis cualitativo y Machine Learning, aplicados a desafíos públicos reales.</div>
+      </div>
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="serv-titulo">Ética y responsabilidad social</div>
+        <div class="serv-desc">Consultoría con impacto social, cumplimiento ético y prácticas de open science en todos los proyectos.</div>
+      </div>
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-network-wired"></i></div>
+        <div class="serv-titulo">Mentoría y networking</div>
+        <div class="serv-desc">Mentores expertos, acompañamiento 1:1 y eventos con organismos públicos, ONGs y empresas privadas.</div>
+      </div>
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-dashboard"></i></div>
+        <div class="serv-titulo">Dashboard y monitoreo en tiempo real</div>
+        <div class="serv-desc">Plataforma digital con seguimiento de proyectos, lecciones aprendidas y métricas de desempeño.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MALLA CURRICULAR/PORTAFOLIO -->
+  <section class="seccion" style="background:#eaf4ff;border-radius:25px;">
+    <h2 class="titulo-seccion">Áreas de Formación y Portafolio</h2>
+    <div class="servicios-row">
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="serv-titulo">Análisis Cuantitativo</div>
+        <div class="serv-desc">Estadística, R y Python, visualización de datos. <br><b>Proyectos: Encuestas electorales, mapeo de pobreza.</b></div>
+      </div>
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-balance-scale"></i></div>
+        <div class="serv-titulo">Análisis Cualitativo</div>
+        <div class="serv-desc">Teoría institucional, métodos mixtos, entrevistas.<br><b>Proyectos: Diagnóstico institucional, policy brief.</b></div>
+      </div>
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-project-diagram"></i></div>
+        <div class="serv-titulo">Gestión de Proyectos</div>
+        <div class="serv-desc">Metodologías ágiles, cronogramas, riesgos. <br><b>Proyectos: Gestión de reformas, análisis de políticas públicas.</b></div>
+      </div>
+      <div class="servicio-card">
+        <div class="serv-icon"><i class="fas fa-bullhorn"></i></div>
+        <div class="serv-titulo">Comunicación Política</div>
+        <div class="serv-desc">Storytelling de datos, presentaciones ejecutivas.<br><b>Proyectos: Campañas y análisis de opinión pública.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTOR@S Y MENTORES -->
+  <section class="seccion" id="postula">
+    <h2 class="titulo-seccion">Consultores Jr. y Mentores</h2>
+    <div class="consultores-row">
+      <div class="consultor-card">
+        <img src="https://i.imgur.com/tv4cq5M.jpeg" alt="Aneth" class="consultor-avatar">
+        <div class="consultor-nombre">Aneth Flores</div>
+        <div class="consultor-label">Consultora Jr. (Cohorte 2025)</div>
+        <div class="consultor-tags">Instituciones Públicas • Ciencia de Datos</div>
+      </div>
+      <div class="consultor-card">
+        <img src="https://i.imgur.com/DJsGBEh.jpeg" alt="Carmen" class="consultor-avatar">
+        <div class="consultor-nombre">Carmen M. King</div>
+        <div class="consultor-label">Consultora Jr. (Cohorte 2025)</div>
+        <div class="consultor-tags">Salud Pública • Análisis Cualitativo</div>
+      </div>
+      <div class="consultor-card">
+        <img src="https://i.imgur.com/xlq72EJ.png" alt="Mentor" class="consultor-avatar">
+        <div class="consultor-nombre">Ricardo Alonzo</div>
+        <div class="consultor-label">Mentor PMP</div>
+        <div class="consultor-tags">Proyectos • Gestión Ágil</div>
+      </div>
+      <div class="consultor-card">
+        <img src="https://i.imgur.com/xlq72EJ.png" alt="Mentor" class="consultor-avatar">
+        <div class="consultor-nombre">Jennifer Arredondo</div>
+        <div class="consultor-label">Mentora Senior</div>
+        <div class="consultor-tags">Política Pública • Metodología</div>
+      </div>
+      <!-- Puedes añadir más -->
+    </div>
+    <div class="text-center mt-3">
+      <a href="mailto:circpycs@uagrm.edu.bo?subject=Postulación%20Incubadora%20CIRCPyCS" class="btn btn-main"><i class="fa-solid fa-envelope"></i> Postularme</a>
+    </div>
+  </section>
+
+  <!-- FOOTER INSTITUCIONAL -->
+  <footer>
+    <div>
+      <strong>CIRCPyCS – Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM</strong><br>
+      Incubadora de Consultores Jr. 2025 &copy; Todos los derechos reservados.<br>
+      Contacto: <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" style="color:#ffd6d9">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · <i class="fas fa-phone"></i> +591 67381294
+      <div class="footer-social mt-2">
+        <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+      <div style="margin-top:8px;font-size:.97rem;">
+        <em>Inspirando una nueva generación de consultores con ética, ciencia y compromiso regional.</em>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
