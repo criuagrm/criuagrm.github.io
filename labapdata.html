@@ -21,7 +21,7 @@
       margin: 0;
       padding-top: 84px;
       font-size: 0.97rem;
-      background: linear-gradient(0deg,rgba(28,28,28,0.77) 0%,rgba(28,28,28,0.63) 100%), 
+      background: linear-gradient(0deg,rgba(28,28,28,0.77) 0%,rgba(28,28,28,0.63) 100%),
         url('https://i.imgur.com/4xA4Fa0.jpeg') center/cover no-repeat fixed;
       min-height: 100vh;
     }
@@ -51,6 +51,7 @@
       color: #fff;
       letter-spacing: 1px;
     }
+    /* HERO */
     .hero {
       height: 18vh;
       min-height: 100px;
@@ -71,11 +72,12 @@
       margin:0 auto; 
       padding:2.4rem 1rem 2.2rem;
     }
-    .section-title { 
+    .section-title {
       text-align:center; 
       font-size:2.1rem; 
       margin-bottom:2.1rem;
       color: #fff;
+      letter-spacing: .7px;
     }
     .subtitulo {
       color:#fff;
@@ -91,17 +93,19 @@
       gap:1.2rem; 
       flex-wrap:wrap; 
       justify-content:center;
+      align-items: stretch;
     }
     .data-card {
       background: rgba(255,255,255,0.97);
       color: #222;
       border-radius: 1.18rem;
       padding: 1.15rem 1.05rem 1.15rem 1.05rem;
-      min-width: 210px;
+      min-width: 240px;
       max-width: 320px;
+      flex: 1 1 260px;
       box-shadow: 0 7px 32px 0 rgba(36,40,48,0.17), 0 1.5px 5px 0 rgba(0,0,0,0.08);
       border: 1px solid var(--kpi-border);
-      display: flex; flex-direction: column; align-items: flex-start;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: stretch;
       position: relative;
       transition: box-shadow 0.16s;
       backdrop-filter: blur(2px);
@@ -140,54 +144,41 @@
       color: #fff;
       border: 1px solid #0077b6;
     }
-    /* Mini dashboard de indicadores */
-    .indicadores-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.1rem;
-      justify-content: center;
-      margin: 2rem 0 0.7rem 0;
+    .data-btn.disabled, .data-btn[disabled] {
+      background: #f2f2f2;
+      color: #b6b6b6;
+      cursor: not-allowed;
+      border: 1px solid #ececec;
+      pointer-events: none;
     }
-    .kpi-card-dato {
-      background: rgba(255,255,255,0.97);
-      color: #222;
-      border-radius: 1rem;
-      padding: 1.1rem 1.2rem;
-      min-width: 160px;
-      max-width: 220px;
-      box-shadow: 0 3px 16px rgba(0,0,0,0.09);
-      border: 1px solid var(--kpi-border);
-      display: flex; flex-direction: column; align-items: flex-start;
-    }
-    .kpi-title-dato { font-size: 1rem; color: var(--main-accent); margin-bottom: .1rem;}
-    .kpi-value-dato { font-size: 1.54rem; font-weight: 700; margin-bottom: .12rem;}
-    .kpi-trend-dato { font-size: .83rem; color: #2c3e50;}
-    /* Botón solicitar */
-    .solicitar-btn {
-      margin: 1.2rem auto 0 auto;
-      display: block;
-      background: #0077b6;
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      padding: .9rem 2.2rem;
-      font-size: 1.09rem;
-      font-weight: 600;
-      letter-spacing: .3px;
-      transition: background .15s;
-    }
-    .solicitar-btn:hover {
-      background: #005682;
-    }
+    /* Responsive */
     @media (max-width:900px){
-      .data-row, .indicadores-row {flex-direction:column;gap:1.1rem;}
-      .data-card,.kpi-card-dato{max-width:97vw;}
+      .data-row {flex-direction:column;gap:1.1rem;}
+      .data-card{max-width:97vw; min-width: 90vw;}
     }
     @media (max-width:600px){
       .hero h1{font-size:1.12rem;}
-      .section-title{font-size:1.02rem;}
+      .section-title{font-size:1.09rem;}
       .section{padding:.7rem 0.1rem 0.7rem;}
       .navbar-custom{padding:0 .4rem;}
+      .data-card {max-width: 99vw; min-width: 93vw;}
+    }
+    /* Botón LABAP y subir móvil */
+    .btn-mobile {
+      background: #0077b6;
+      color: #fff;
+      border-radius: 25px;
+      padding: 0.8rem 1.7rem;
+      font-weight: 600;
+      font-size: 1.03rem;
+      border: none;
+      margin: 0.8rem auto 1.5rem auto;
+      display: block;
+      transition: background 0.16s;
+    }
+    .btn-mobile:hover {background: #005682; color:#fff;}
+    @media (min-width: 601px) {
+      .btn-mobile {display:none;}
     }
     /* Footer */
     footer {
@@ -214,6 +205,9 @@
     <span class="brand">LAP-CIRCPyCS</span>
   </nav>
 
+  <!-- Botón móvil: Volver al LABAP -->
+  <a href="index.html" class="btn-mobile" id="btn-volver-labap">← Volver al LABAP</a>
+
   <!-- Hero -->
   <header class="hero">
     <div class="container">
@@ -226,7 +220,10 @@
   </header>
 
   <section class="section" id="datos-abiertos">
-    <div class="section-title">Bases de Datos Destacadas</div>
+    <div class="section-title">Bases de Datos Abiertas y Recursos</div>
+    
+    <!-- INTERNACIONALES -->
+    <h4 class="text-white mt-4 mb-3">🌎 Internacionales</h4>
     <div class="data-row">
       <div class="data-card">
         <span class="data-title"><i class="fa-solid fa-database data-icon"></i> Latinobarómetro Bolivia</span>
@@ -251,7 +248,7 @@
         </div>
       </div>
       <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-flag data-icon"></i> Transparencia Internacional</span>
+        <span class="data-title"><i class="fa-solid fa-flag data-icon"></i> Transparencia Internacional CPI</span>
         <div class="data-desc">Índice de Percepción de Corrupción (CPI), riesgo país y rankings internacionales de transparencia.</div>
         <div class="data-tags">
           <span class="badge bg-danger">Corrupción</span>
@@ -259,6 +256,45 @@
         </div>
         <div class="data-links">
           <a class="data-btn" href="https://www.transparency.org/es/cpi" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-database data-icon"></i> Banco Mundial Data Bolivia</span>
+        <div class="data-desc">Indicadores comparados de economía, educación y desarrollo para Bolivia. Exportación y API.</div>
+        <div class="data-tags">
+          <span class="badge bg-primary">Socioeconómico</span>
+          <span class="badge bg-info text-dark">API</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://data.worldbank.org/country/bolivia" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+          <a class="data-btn" href="https://databankfiles.worldbank.org/public/ddpext_download/ISO_BOL.csv" target="_blank"><i class="fa-solid fa-download"></i> CSV</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-table data-icon"></i> Microdatos Encuestas UDAPE</span>
+        <div class="data-desc">Encuestas sociales, demográficas y económicas de hogares. Microdatos y documentación.</div>
+        <div class="data-tags">
+          <span class="badge bg-success">Microdatos</span>
+          <span class="badge bg-warning text-dark">Stata/SPSS</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.udape.gob.bo/microdatos/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- NACIONALES (GOBIERNO) -->
+    <h4 class="text-white mt-4 mb-3">🇧🇴 Nacionales (Gobierno)</h4>
+    <div class="data-row">
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-building-columns data-icon"></i> Aduana Nacional</span>
+        <div class="data-desc">Importaciones y exportaciones, volúmenes, partidas y más.</div>
+        <div class="data-tags">
+          <span class="badge bg-primary">Comercio Exterior</span>
+          <span class="badge bg-info text-dark">CSV</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.aduana.gob.bo/aduana7/content/datos-abiertos" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
         </div>
       </div>
       <div class="data-card">
@@ -284,17 +320,71 @@
         </div>
       </div>
       <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-map-location-dot data-icon"></i> Geodatos & Shapefiles Bolivia</span>
-        <div class="data-desc">Mapas, límites, capas y shapefiles actualizados para análisis espacial y geovisualización política en Bolivia.</div>
+        <span class="data-title"><i class="fa-solid fa-school data-icon"></i> SEIE Educación</span>
+        <div class="data-desc">Estadísticas educativas: matrícula, rendimiento, cobertura, infraestructura y microdatos de Bolivia.</div>
         <div class="data-tags">
-          <span class="badge bg-success">Geodatos</span>
+          <span class="badge bg-warning text-dark">Educación</span>
+          <span class="badge bg-info text-dark">SEDUCA</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://seie.minedu.gob.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-heart-pulse data-icon"></i> SNIS Salud</span>
+        <div class="data-desc">Estadísticas e indicadores de salud, servicios, infraestructura y microdatos nacionales.</div>
+        <div class="data-tags">
+          <span class="badge bg-danger">Salud</span>
+          <span class="badge bg-success">Microdatos</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://snis.minsalud.gob.bo/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-industry data-icon"></i> Ministerio de Producción</span>
+        <div class="data-desc">Series y microdatos de producción industrial, agropecuaria y empleo nacional.</div>
+        <div class="data-tags">
+          <span class="badge bg-info text-dark">Producción</span>
+          <span class="badge bg-primary">CSV</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://produccion.gob.bo/?page_id=8467" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-sitemap data-icon"></i> SICOES Contrataciones</span>
+        <div class="data-desc">Contratos públicos, adjudicaciones, obras, empresas y proveedores en Bolivia.</div>
+        <div class="data-tags">
+          <span class="badge bg-warning text-dark">Contrataciones</span>
+          <span class="badge bg-success">Tablas</span>
+        </div>
+        <div class="data-links">
+          <a class="data-btn" href="https://www.sicoes.gob.bo/portal/index.php" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- DEPARTAMENTALES / MUNICIPALES -->
+    <h4 class="text-white mt-4 mb-3">🏞️ Departamentales / Municipales / Geo</h4>
+    <div class="data-row">
+      <div class="data-card">
+        <span class="data-title"><i class="fa-solid fa-map-location-dot data-icon"></i> IDE‑EPB / GeoBolivia</span>
+        <div class="data-desc">Catálogo geoespacial de Bolivia, Atlas Bicentenario, mapas, capas, SHP y metadatos.</div>
+        <div class="data-tags">
+          <span class="badge bg-success">GeoDatos</span>
           <span class="badge bg-secondary">SHP</span>
         </div>
         <div class="data-links">
-          <a class="data-btn" href="https://geo.gob.bo/descargas" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
+          <a class="data-btn" href="https://geo.gob.bo/descargas" target="_blank"><i class="fa-solid fa-globe"></i> Web GeoBolivia</a>
+          <a class="data-btn" href="https://ideepb.geo.gob.bo/" target="_blank"><i class="fa-solid fa-globe"></i> IDE-EPB</a>
         </div>
       </div>
-      <!-- Ejemplo de bases propias o a construir -->
+    </div>
+    
+    <!-- BASES PROPIAS / CENTRO -->
+    <h4 class="text-white mt-4 mb-3">🛠️ Construidas por LABAP CIRCPyCS</h4>
+    <div class="data-row">
       <div class="data-card">
         <span class="data-title"><i class="fa-solid fa-users data-icon"></i> Encuesta LABAP–CIRCPyCS</span>
         <div class="data-desc">Próximamente: microdatos de encuestas originales sobre cultura política, economía y participación ciudadana en Santa Cruz y Bolivia.</div>
@@ -303,7 +393,7 @@
           <span class="badge bg-primary">CSV</span>
         </div>
         <div class="data-links">
-          <a class="data-btn disabled" href="#" tabindex="-1"><i class="fa-solid fa-lock"></i> Pronto</a>
+          <a class="data-btn disabled" href="#"><i class="fa-solid fa-lock"></i> Pronto</a>
         </div>
       </div>
       <div class="data-card">
@@ -314,7 +404,7 @@
           <span class="badge bg-success">CSV</span>
         </div>
         <div class="data-links">
-          <a class="data-btn disabled" href="#" tabindex="-1"><i class="fa-solid fa-lock"></i> Pronto</a>
+          <a class="data-btn disabled" href="#"><i class="fa-solid fa-lock"></i> Pronto</a>
         </div>
       </div>
       <div class="data-card">
@@ -325,7 +415,7 @@
           <span class="badge bg-dark">GraphML</span>
         </div>
         <div class="data-links">
-          <a class="data-btn disabled" href="#" tabindex="-1"><i class="fa-solid fa-lock"></i> Pronto</a>
+          <a class="data-btn disabled" href="#"><i class="fa-solid fa-lock"></i> Pronto</a>
         </div>
       </div>
       <div class="data-card">
@@ -336,7 +426,7 @@
           <span class="badge bg-secondary">LABAP</span>
         </div>
         <div class="data-links">
-          <a class="data-btn disabled" href="#" tabindex="-1"><i class="fa-solid fa-lock"></i> Pronto</a>
+          <a class="data-btn disabled" href="#"><i class="fa-solid fa-lock"></i> Pronto</a>
         </div>
       </div>
       <div class="data-card">
@@ -347,68 +437,13 @@
           <span class="badge bg-secondary">SHP</span>
         </div>
         <div class="data-links">
-          <a class="data-btn disabled" href="#" tabindex="-1"><i class="fa-solid fa-lock"></i> Pronto</a>
+          <a class="data-btn disabled" href="#"><i class="fa-solid fa-lock"></i> Pronto</a>
         </div>
       </div>
     </div>
 
-    <div class="subtitulo"><i class="fa-solid fa-chart-line"></i> Indicadores Clave Bolivia (últimos datos disponibles)</div>
-    <div class="indicadores-row">
-      <div class="kpi-card-dato">
-        <span class="kpi-title-dato"><i class="fa-solid fa-vote-yea"></i> Participación electoral</span>
-        <span class="kpi-value-dato">81.4%</span>
-        <span class="kpi-trend-dato">Elecciones 2020</span>
-      </div>
-      <div class="kpi-card-dato">
-        <span class="kpi-title-dato"><i class="fa-solid fa-user-tie"></i> Aprobación presidencial</span>
-        <span class="kpi-value-dato">41.9%</span>
-        <span class="kpi-trend-dato">Fuente: Latinobarómetro 2023</span>
-      </div>
-      <div class="kpi-card-dato">
-        <span class="kpi-title-dato"><i class="fa-solid fa-flag"></i> CPI Corrupción (TI)</span>
-        <span class="kpi-value-dato">29/100</span>
-        <span class="kpi-trend-dato">Ranking 2023</span>
-      </div>
-      <div class="kpi-card-dato">
-        <span class="kpi-title-dato"><i class="fa-solid fa-chart-area"></i> Pobreza monetaria</span>
-        <span class="kpi-value-dato">36.3%</span>
-        <span class="kpi-trend-dato">INE 2023</span>
-      </div>
-      <div class="kpi-card-dato">
-        <span class="kpi-title-dato"><i class="fa-solid fa-scale-balanced"></i> V-Dem índice democracia</span>
-        <span class="kpi-value-dato">0.38</span>
-        <span class="kpi-trend-dato">Escala 0–1 (2024)</span>
-      </div>
-    </div>
-
-    <div class="subtitulo"><i class="fa-solid fa-folder-open"></i> Recursos & Tablas Abiertas</div>
-    <div class="data-row">
-      <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-table data-icon"></i> Microdatos Encuestas UDAPE</span>
-        <div class="data-desc">Encuestas sociales, demográficas y económicas de hogares. Microdatos y documentación.</div>
-        <div class="data-tags">
-          <span class="badge bg-success">Microdatos</span>
-          <span class="badge bg-warning text-dark">Stata/SPSS</span>
-        </div>
-        <div class="data-links">
-          <a class="data-btn" href="https://www.udape.gob.bo/microdatos/" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
-        </div>
-      </div>
-      <div class="data-card">
-        <span class="data-title"><i class="fa-solid fa-database data-icon"></i> Banco Mundial Data Bolivia</span>
-        <div class="data-desc">Indicadores comparados de economía, educación y desarrollo para Bolivia. Exportación y API.</div>
-        <div class="data-tags">
-          <span class="badge bg-primary">Socioeconómico</span>
-          <span class="badge bg-info text-dark">API</span>
-        </div>
-        <div class="data-links">
-          <a class="data-btn" href="https://databankfiles.worldbank.org/public/ddpext_download/ISO_BOL.csv" target="_blank"><i class="fa-solid fa-download"></i> Descargar CSV</a>
-          <a class="data-btn" href="https://data.worldbank.org/country/bolivia" target="_blank"><i class="fa-solid fa-globe"></i> Web</a>
-        </div>
-      </div>
-    </div>
-
-    <a class="solicitar-btn" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo?subject=Solicitud%20de%20datos%20LABAP%20CIRCPyCS">Solicitar datos especiales</a>
+    <!-- Botón subir (solo móvil) -->
+    <a href="#datos-abiertos" class="btn-mobile" id="btn-subir">↑ Subir</a>
   </section>
 
   <!-- Footer institucional CIRCPyCS -->
@@ -435,4 +470,3 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
