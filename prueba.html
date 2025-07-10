@@ -1,200 +1,408 @@
 <!DOCTYPE html>
 <html lang="es">
-<head> 
-    <base href="https://criuagrm.github.io/">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIRCPyCS - Resultados Encuesta UAGRM 2025</title>
-
-    <!-- Bootstrap 5, Font Awesome, Google Fonts -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>José Orlando Peralta Beltrán – Analista Político e Investigador</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/5/5e/UAGRM_logo.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-
-    <!-- Chart.js y plugin DataLabels -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
     <style>
-        :root {
-            --primary-color: #333333;
-            --secondary-color: #666666;
-            --accent-color: #999999;
-            --background-color: #f0f0f0;
-            --text-color: #333333;
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background: #f5f6fa;
+            color: #1a1a1a;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-size: 1.05rem;
         }
-
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
-        .navbar, .footer { background-color: var(--primary-color); color: white; }
-
+        .navbar {
+            background: #183153;
+            border-bottom: 1.5px solid #b3b9c9;
+            font-family: 'Merriweather', 'Georgia', serif;
+            font-size: 1.01rem;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff !important;
+            font-family: 'Merriweather', 'Georgia', serif;
+        }
+        .navbar-nav .nav-link {
+            color: #e0e6f6 !important;
+            margin-left: 0.6rem;
+            margin-right: 0.6rem;
+            border-radius: 3px;
+            transition: all .18s;
+        }
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:hover {
+            background: #d7222a !important;
+            color: #fff !important;
+        }
+        .section-title {
+            font-family: 'Merriweather', serif;
+            color: #183153;
+            border-left: 6px solid #d7222a;
+            padding-left: 15px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 45px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
         .hero {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 4rem 0;
+            background: #fff;
+            border-bottom: 2px solid #c6d0e1;
+            padding: 50px 0 40px 0;
             text-align: center;
-            margin-bottom: 2rem;
         }
-
-        .section { padding: 3rem 0; }
-
-        .chart-placeholder {
-            min-height: 350px; max-height: 650px;
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-            margin-bottom: 2rem; padding: 1rem;
-            overflow-x: auto;
+        .hero img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #d7e3fa;
+            margin-bottom: 10px;
         }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
+        .hero h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 2.3rem;
+            font-weight: bold;
+            color: #183153;
+            margin-bottom: 5px;
         }
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+        .hero h2 {
+            font-size: 1.2rem;
+            color: #d7222a;
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            margin-bottom: 16px;
         }
-
-        .card-ficha {
-            background-color: #ffffff;
-            border-radius: 6px;
-            padding: 2rem;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        .hero p.lead {
+            color: #3a3a3a;
+            max-width: 670px;
+            margin: 0 auto 16px auto;
         }
-
-        .chart-title { text-align: center; margin: 1.5rem 0 1rem; font-weight: 600; }
-
-        .d-none { display: none !important; }
-
-        @media (max-width: 768px) {
-            .chart-placeholder img { max-height: 300px; width: auto; margin: 0 auto; display: block; object-fit: contain; }
+        .btn-profile {
+            background: #183153;
+            color: #fff;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin: 0 6px 8px 0;
+        }
+        .btn-profile:hover {
+            background: #d7222a;
+            color: #fff;
+        }
+        /* Cards (estilo académico) */
+        .card-custom {
+            background: #fff;
+            border: 1px solid #e6eaf1;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(40,40,60,0.07);
+            min-height: 240px;
+            transition: box-shadow .17s;
+        }
+        .card-custom:hover {
+            box-shadow: 0 6px 24px rgba(34,34,62,0.13);
+        }
+        .card-title {
+            font-family: 'Merriweather', serif;
+            color: #183153;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .btn-outline-primary, .btn-outline-light {
+            border-radius: 50px !important;
+        }
+        .btn-outline-primary:hover {
+            background: #d7222a;
+            border-color: #d7222a;
+            color: #fff !important;
+        }
+        .btn-outline-light:hover {
+            background: #d7222a;
+            border-color: #d7222a;
+            color: #fff !important;
+        }
+        /* Libros destacados */
+        .card-libro {
+            border: 1.5px solid #e6eaf1;
+            border-radius: 13px;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(40,40,60,0.05);
+            min-height: 360px;
+            margin-bottom: 24px;
+        }
+        .card-libro img {
+            border-radius: 7px;
+            margin: 20px auto 0 auto;
+            box-shadow: 0 3px 9px rgba(40,40,60,0.11);
+            width: 120px;
+            display: block;
+        }
+        .card-libro .card-title {
+            color: #183153;
+            margin-top: 15px;
+        }
+        /* CV Cards */
+        .card-cv i {
+            font-size: 2.7rem;
+            margin-bottom: 8px;
+            color: #d7222a;
+        }
+        .card-cv .btn {
+            border-radius: 50px !important;
+        }
+        .papers-row .card-title {
+            min-height: 72px;
+            font-size: 1.06rem;
+            font-weight: 600;
+        }
+        /* Footer académico extendido */
+        footer {
+            background: #183153;
+            color: #f5f6fa;
+            border-top: 2.5px solid #d7222a;
+            padding: 30px 0 10px 0;
+            margin-top: 55px;
+            font-size: 1.01rem;
+        }
+        .footer-social a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+        .footer-social a:hover {
+            color: #d7222a;
+        }
+        @media (max-width: 991px) {
+            .hero h1 { font-size: 2rem; }
+            .section-title { font-size: 1.3rem; }
+        }
+        @media (max-width: 767px) {
+            .section-title { font-size: 1.12rem; padding-left: 7px;}
+            .hero img { width: 110px; height: 110px;}
         }
     </style>
+    <!-- Google Fonts para un look más académico -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600|Merriweather:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Navbar académico -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">J. Orlando Peralta B.</a>
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#proyectos">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#libros">Libros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#papers">Papers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cv">CV</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#medios">Medios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">CIRCPyCS</a>
-        <div class="d-flex">
-            <a href="https://criuagrm.github.io/rectornov2024" class="btn btn-outline-light">Anterior Encuesta</a>
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <img src="https://i.imgur.com/eG9yXG6.jpeg" alt="Orlando Peralta Beltrán">
+        <h1>José Orlando Peralta Beltrán</h1>
+        <h2>Politólogo</h2>
+        <p class="lead">
+            Investigador Asociado en el Centro de Investigación Regional de Ciencia Política y Ciencias Sociales de la UAGRM.<br>
+            Apasionado por el análisis político, la docencia universitaria y la formación de futuros profesionales en Ciencias Sociales.
+        </p>
+        <div class="d-flex justify-content-center flex-wrap mb-3">
+            <a href="https://orcid.org/0000-0003-0415-5950" target="_blank" class="btn btn-profile me-2 mb-2"><i class="fab fa-orcid me-1"></i> ORCID</a>
+            <a href="https://www.academia.edu/example" target="_blank" class="btn btn-profile me-2 mb-2"><i class="fas fa-university me-1"></i> Academia.edu</a>
+            <a href="https://www.researchgate.net/example" target="_blank" class="btn btn-profile me-2 mb-2"><i class="fab fa-researchgate me-1"></i> ResearchGate</a>
+            <a href="https://scholar.google.es/citations?user=I7_X6QgAAAAJ&hl=es&oi=ao" target="_blank" class="btn btn-profile me-2 mb-2"><i class="fas fa-graduation-cap me-1"></i> Google Scholar</a>
+        </div>
+        <a href="#contacto" class="btn btn-outline-primary btn-lg px-5 rounded-pill"><i class="fas fa-envelope me-2"></i>Contactar</a>
+    </section>
+
+    <main class="container">
+
+        <!-- Proyectos Destacados -->
+        <div id="proyectos" class="mt-5">
+            <h2 class="section-title">Proyectos Destacados</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Análisis del Proceso Político-Electoral en Bolivia 2019-2020</h3>
+                            <p class="card-text">Libro <b>Rebelión y Pandemia</b>, análisis sobre eventos políticos y electorales en Bolivia 2019-2020.</p>
+                            <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="btn btn-outline-primary">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Centro de Investigación Regional – UAGRM</h3>
+                            <p class="card-text">Investigador Asociado del CIRCPyCS y Jefe del Área Política del Equipo de Análisis Político (EAC).</p>
+                            <a href="https://criuagrm.github.io/researchers" class="btn btn-outline-primary" target="_blank">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medios -->
+        <div id="medios">
+            <h2 class="section-title">Apariciones en Medios</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Entrevista en France 24</h5>
+                            <p class="card-text">Análisis sobre bloqueos de carreteras y declaraciones de Evo Morales.</p>
+                            <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="btn btn-outline-primary">Ver entrevista</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Artículo en TalCual Digital</h5>
+                            <p class="card-text">“Bolivia y sus eternos conflictos sociales”: análisis sobre las fracturas estructurales del país.</p>
+                            <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="btn btn-outline-primary">Leer artículo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Colaboraciones en Latinoamérica 21</h5>
+                            <p class="card-text">Artículos sobre radicalidad discursiva y política boliviana.</p>
+                            <a href="https://latinoamerica21.com/es/autor/jose-orlando-peralta/" target="_blank" class="btn btn-outline-primary">Leer colaboraciones</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Publicación en El Mostrador</h5>
+                            <p class="card-text">Sobre Evo Morales y la nueva Convención Constitucional en Chile.</p>
+                            <a href="https://www.elmostrador.cl/dia/2021/08/14/la-radicalidad-discursiva-de-evo-morales-y-la-nueva-convencion-constitucional-en-chile/" target="_blank" class="btn btn-outline-primary">Leer artículo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Libros -->
+        <div id="libros">
+            <h2 class="section-title">Libros</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card card-libro text-center h-100">
+                        <img src="https://i.imgur.com/NrJYpbM.png" alt="Rebelión y Pandemia">
+                        <div class="card-body">
+                            <h5 class="card-title">Rebelión y Pandemia</h5>
+                            <p class="card-text">Análisis de los eventos políticos y electorales en Bolivia 2019–2020.</p>
+                            <a href="https://drive.google.com/link_al_libro1" target="_blank" class="btn btn-outline-primary mt-2">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="card card-libro text-center h-100">
+                        <img src="https://i.imgur.com/lCdPwMT.jpeg" alt="Rebelión en la Llanura">
+                        <div class="card-body">
+                            <h5 class="card-title">Rebelión en la Llanura</h5>
+                            <p class="card-text">La politización de la clase media urbana en Santa Cruz, Bolivia.</p>
+                            <a href="https://drive.google.com/link_al_libro2" target="_blank" class="btn btn-outline-primary mt-2">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Papers -->
+        <div id="papers">
+            <h2 class="section-title">Papers</h2>
+            <div class="row papers-row g-3">
+                <div class="col-md-3">
+                    <div class="card card-custom h-100 text-center">
+                        <img src="https://i.imgur.com/0AdBgYr.jpeg" class="card-img-top mx-auto mt-3" alt="Portada Revista 1" style="width:130px;">
+                        <div class="card-body">
+                            <div class="card-title">Las ciudades votan: ¿Continuidades o cambios en Santa Cruz de la Sierra?</div>
+                            <a href="https://drive.google.com/link_a_tu_articulo1" target="_blank" class="btn btn-outline-primary btn-sm">Ver artículo</a>
+</div>
+</div>
+</div>
+<!-- Puedes añadir más papers aquí -->
+</div>
+</div>
+    <!-- CV -->
+    <div id="cv" class="mt-5">
+        <h2 class="section-title">Currículum Vitae</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card card-cv card-custom h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-file-pdf"></i>
+                        <h5 class="card-title">Descargar CV Académico</h5>
+                        <a href="https://drive.google.com/your_cv_link" class="btn btn-outline-primary" target="_blank"><i class="fas fa-download"></i> Descargar PDF</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-cv card-custom h-100 text-center">
+                    <div class="card-body">
+                        <i class="fas fa-user-graduate"></i>
+                        <h5 class="card-title">Perfil en ResearchGate</h5>
+                        <a href="https://www.researchgate.net/example" target="_blank" class="btn btn-outline-primary"><i class="fab fa-researchgate"></i> Ver perfil</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
 
-<!-- Hero -->
-<section class="hero">
-    <div class="container">
-        <h1>Resultados Encuesta UAGRM 2025</h1>
-        <p>Análisis de percepción sobre preferencias para Rector y Vicerrector UAGRM 2025</p>
+    <!-- Contacto -->
+    <div id="contacto" class="my-5">
+        <h2 class="section-title">Contacto</h2>
+        <div class="card card-custom mx-auto" style="max-width:600px;">
+            <div class="card-body">
+                <p><i class="fas fa-envelope text-danger me-2"></i>Correo electrónico: <a href="mailto:joperalta@uagrm.edu.bo" class="text-danger">joperalta@uagrm.edu.bo</a></p>
+                <p><i class="fab fa-whatsapp text-success me-2"></i>WhatsApp: <a href="https://wa.me/59177000100" class="text-success" target="_blank">+591 77000100</a></p>
+                <p><i class="fab fa-facebook text-primary me-2"></i>Facebook: <a href="https://facebook.com/orlando.peralta" target="_blank">orlando.peralta</a></p>
+            </div>
+        </div>
     </div>
-</section>
+</main>
 
-<!-- Ficha Técnica -->
-<div class="container my-5">
-    <div class="card-ficha">
-        <h2 class="text-center mb-5">Ficha Técnica</h2>
-        <ul>
-            <li><strong>Metodología:</strong> Encuesta de percepción académica, institucional y política mediante formularios virtuales.</li>
-            <li><strong>Características de la muestra:</strong> Muestreo no probabilístico y proporcional al tamaño de la población.</li>
-            <li><strong>Aplicación:</strong> Del 02 al 07 de marzo de 2025.</li>
-            <li><strong>Universo:</strong> Docentes y estudiantes inscritos en la UAGRM, 18 facultades.</li>
-            <li><strong>Tamaño de la muestra:</strong> 820 personas (286 docentes, 534 estudiantes).</li>
-            <li><strong>Distribución:</strong> Sin diferenciación de género o edad, incluyendo docentes regulares y estudiantes registrados.</li>
-            <li><strong>Coeficiente de fiabilidad:</strong> 95%.</li>
-            <li><strong>Error muestral:</strong> ±4.1%.</li>
-            <li><strong>Institución:</strong> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales.</li>
-        </ul>
-    </div>
-</div>
-
-<!-- Botones secciones -->
-<div class="container text-center">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-center">
-    <div class="col"><button class="btn btn-primary w-100 btn-sm" onclick="mostrarSeccion('seccion-general')">Características Generales</button></div>
-    <div class="col"><button class="btn btn-primary w-100 btn-sm" onclick="mostrarSeccion('seccion-problemas')">Problemas y Propuestas</button></div>
-    <div class="col"><button class="btn btn-primary w-100 btn-sm" onclick="mostrarSeccion('seccion-gestion')">Evaluación Gestión</button></div>
-    <div class="col"><button class="btn btn-primary w-100 btn-sm" onclick="mostrarSeccion('seccion-candidatos')">Percepción Candidatos</button></div>
-    <div class="col"><button class="btn btn-primary w-100 btn-sm" onclick="mostrarSeccion('seccion-voto')">Intención de Voto</button></div>
-  </div>
-</div>
-<script>
-function mostrarSeccion(id) {
-    document.querySelectorAll('.contenido-seccion').forEach(sec => sec.classList.add('d-none'));
-    document.getElementById(id).classList.remove('d-none');
-}
-
-function mostrarTipo(seccion, tipo) {
-    document.querySelectorAll(`.${seccion}-total, .${seccion}-doc, .${seccion}-est`).forEach(el => el.classList.add('d-none'));
-    document.querySelectorAll(`.${seccion}-${tipo}`).forEach(el => el.classList.remove('d-none'));
-}
-
-Chart.register(ChartDataLabels);
-
-const colores = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f'];
-
-function crearChart(id, labels, datos) {
-    const ctx = document.getElementById(id).getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{ data: datos, backgroundColor: colores }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            plugins: {
-                legend: { display: false },
-                datalabels: { anchor:'end', align:'end', formatter:(v)=>v+'%' }
-            },
-            scales: { x: { beginAtZero:true } }
-        }
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-
-  // Rector Cuéllar
-  crearChart('rector-total', ['Estoy poco acuerdo','Estoy acuerdo','Nada acuerdo','Total desacuerdo','Completamente acuerdo'],
-             [43.3,27.9,13.8,9.0,6.1]);
-
-  crearChart('rector-doc', ['Estoy poco acuerdo','Estoy acuerdo','Nada acuerdo','Total desacuerdo','Completamente acuerdo'],
-             [36.2,36.2,13.1,8.5,6.2]);
-
-  crearChart('rector-est', ['Estoy poco acuerdo','Estoy acuerdo','Nada acuerdo','Total desacuerdo','Completamente acuerdo'],
-             [46.2,21.7,16.0,10.4,5.7]);
-
-  // Vicerrector Vargas
-  crearChart('vic-total', ['Estoy poco acuerdo','Estoy acuerdo','Completamente acuerdo','Nada acuerdo','Total desacuerdo'],
-             [31.1,28.5,25.6,8.7,6.1]);
-
-  crearChart('vic-doc', ['Completamente acuerdo','Estoy acuerdo','Estoy poco acuerdo','Total desacuerdo','Nada acuerdo'],
-             [38.5,30.8,18.5,6.9,5.4]);
-
-  crearChart('vic-est', ['Estoy poco acuerdo','Estoy acuerdo','Completamente acuerdo','Nada acuerdo','Total desacuerdo'],
-             [39.0,26.8,16.4,10.8,7.0]);
-});
-</script>
-
-<!-- Footer -->
-<footer class="footer text-center py-3">
+<!-- Footer académico extendido -->
+<footer>
     <div class="container">
-        <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales - UAGRM</p>
+        <div class="row">
+            <div class="col-md-7 text-start">
+                <b>&copy; 2024 José Orlando Peralta Beltrán</b><br>
+                Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS-UAGRM).<br>
+                Santa Cruz de la Sierra, Bolivia.<br>
+                <small>Web y diseño: <a href="https://criuagrm.github.io/" style="color:#f4cdce;">criuagrm.github.io</a></small>
+            </div>
+            <div class="col-md-5 text-end footer-social mt-2">
+                <span>Sígueme:</span>
+                <a href="https://facebook.com/orlando.peralta" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/orlando_peralta" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/orlando.peralta" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://orcid.org/0000-0003-0415-5950" target="_blank"><i class="fab fa-orcid"></i></a>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <a href="https://cir.uagrm.edu.bo/" class="btn btn-outline-light btn-sm px-4 rounded-pill"><i class="fas fa-arrow-left me-2"></i>Volver al Inicio CIRCPyCS</a>
+        </div>
     </div>
 </footer>
 
-<!-- Scripts Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-</body>
-</html>
+
+        
