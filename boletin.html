@@ -4,62 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boletín del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        /* === VARIABLES Y RESET BÁSICO === */
+        :root {
+            --azul-principal: #003366;
+            --azul-secundario: #00509e;
+            --verde-hover: #16a085;
+            --texto-oscuro: #333;
+            --gris-suave: #f4f4f4;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: var(--gris-suave);
+            color: var(--texto-oscuro);
         }
+
+        /* === ENCABEZADO === */
         header {
-            background-color: #003366;
-            color: white;
-            padding: 40px 0;
+            background-color: var(--azul-principal);
+            color: #fff;
             text-align: center;
+            padding: 40px 15px;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-        header p {
-            margin: 10px 0 0;
-            font-size: 1.2rem;
-        }
+        header h1 { font-size: 2.5rem; margin-bottom: 0.3rem; }
+        header h2 { font-size: 1.4rem; margin-bottom: 0.6rem; font-weight: 500; }
+        header p  { font-size: 1.1rem; }
+
+        /* === NAVEGACIÓN === */
         nav {
             display: flex;
             justify-content: center;
-            background-color: #00509e;
-            padding: 10px 0;
+            flex-wrap: wrap;
+            background-color: var(--azul-secundario);
+            gap: 15px;
+            padding: 12px 10px;
         }
         nav a {
-            color: white;
+            color: #fff;
             text-decoration: none;
-            margin: 0 15px;
             font-weight: bold;
             font-size: 1rem;
+            transition: opacity 0.25s ease;
         }
-        nav a:hover {
-            text-decoration: underline;
+        nav a:hover { opacity: 0.8; }
+        /* Botón estilo outline dentro del nav */
+        .btn-return {
+            border: 2px solid #fff;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.9rem;
         }
+        .btn-return:hover { background-color: rgba(255,255,255,0.15); }
+
+        /* === CONTENIDO PRINCIPAL === */
         .main-container {
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 25px auto;
+            padding: 0 20px;
         }
         .cards-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
             justify-content: center;
+            gap: 20px;
         }
         .card {
-            background-color: white;
+            background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            width: 100%;
             max-width: 300px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -72,98 +90,105 @@
             height: 400px;
             object-fit: cover;
         }
-        .card-content {
-            padding: 20px;
-        }
-        .card-content h3 {
-            margin: 0 0 10px;
-            font-size: 1.5rem;
-            color: #003366;
-        }
-        .card-content p {
-            margin: 0;
-            font-size: 1rem;
-            color: #666;
-        }
+        .card-content { padding: 18px 20px 22px; }
+        .card-content h3 { color: var(--azul-principal); margin-bottom: 8px; font-size: 1.5rem; }
+        .card-content p  { color: #666; font-size: 1rem; }
         .card-content a {
             display: inline-block;
             margin-top: 15px;
+            background-color: var(--azul-secundario);
+            color: #fff;
             padding: 10px 15px;
-            background-color: #00509e;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 0.9rem;
+            text-decoration: none;
             transition: background-color 0.3s ease;
         }
-        .card-content a:hover {
-            background-color: #003366;
-        }
+        .card-content a:hover { background-color: var(--azul-principal); }
+
+        /* === PIE DE PÁGINA (heredado del otro documento) === */
         footer {
-            background-color: #003366;
-            color: white;
+            background-color: var(--azul-principal);
+            color: #fff;
             text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
-        }
-        footer p {
-            margin: 0;
+            padding: 1.2rem 0;
+            margin-top: 2.5rem;
             font-size: 0.9rem;
         }
+        footer a {
+            color: #fff;
+            margin: 0 0.35rem;
+            transition: color 0.3s ease;
+        }
+        footer a:hover { color: var(--verde-hover); }
     </style>
 </head>
 <body>
 
-<header>
-    <h2> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</h2>
-    <h1> Boletín Informativo</h1>
-    <p>Información actualizada sobre nuestras actividades, proyectos y publicaciones</p>
-</header>
+    <!-- ================= ENCABEZADO ================= -->
+    <header>
+        <h2>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</h2>
+        <h1>Boletín Informativo</h1>
+        <p>Información actualizada sobre nuestras actividades, proyectos y publicaciones</p>
+    </header>
 
-<nav>
-    <a href="#boletines">Boletines</a>
-    <a href="#archivo">Archivo</a>
-    <a href="https://criuagrm.github.io/contabol">Contacto</a>
-</nav>
+    <!-- ================= MENÚ DE NAVEGACIÓN ================= -->
+    <nav>
+        <a href="#boletines">Boletines</a>
+        <a href="#archivo">Archivo</a>
+        <a href="https://cir.uagrm.edu.bo/contabol.html" target="_blank">Contacto</a>
+        <!-- Botón de regreso al sitio principal -->
+        <a href="https://cir.uagrm.edu.bo.html"></i> Volver al Inicio</a>
+    </nav>
 
-<main class="main-container">
-    <section id="boletines">
-        <h2 style="text-align: center; color: #003366; margin-bottom: 30px;">Últimos Boletines</h2>
-        <div class="cards-container">
-            <!-- Boletín 1 -->
-            <div class="card">
-                <img src="https://i.imgur.com/BeAwYwD.png" alt="Boletín 5">
-                <div class="card-content">
-                    <h3>Boletín #5</h3>
-                    <p>Explora las últimas actividades y los proyectos más recientes del Centro de Investigación Regional.</p>
-                    <a href="https://drive.google.com/file/d/1xiH2jljMPftS4pCNysV2kO-9u9Pt-mcx/view?usp=sharing">Leer más</a>
+    <!-- ================= CONTENIDO ================= -->
+    <main class="main-container">
+        <section id="boletines">
+            <h2 style="text-align:center;color:var(--azul-principal);margin-bottom:30px;">Últimos Boletines</h2>
+            <div class="cards-container">
+                <!-- Boletín 1 -->
+                <div class="card">
+                    <img src="https://i.imgur.com/BeAwYwD.png" alt="Boletín 5">
+                    <div class="card-content">
+                        <h3>Boletín #5</h3>
+                        <p>Explora las últimas actividades y los proyectos más recientes del Centro de Investigación Regional.</p>
+                        <a href="https://drive.google.com/file/d/1xiH2jljMPftS4pCNysV2kO-9u9Pt-mcx/view?usp=sharing" target="_blank">Leer más</a>
+                    </div>
+                </div>
+                <!-- Boletín 2 -->
+                <div class="card">
+                    <img src="https://i.imgur.com/32MEdtu.png" alt="Boletín 6">
+                    <div class="card-content">
+                        <h3>Boletín #6</h3>
+                        <p>Descubre los análisis políticos de la coyuntura electoral y la Primera Encuesta de Gestión Institucional UAGRM 2025.</p>
+                        <a href="https://drive.google.com/file/d/1ZWLSaU-XC5Wl3S0WT5e-jVLfHpp0IxjW/view?usp=sharing" target="_blank">Leer más</a>
+                    </div>
+                </div>
+                <!-- Boletín 3 -->
+                <div class="card">
+                    <img src="https://i.imgur.com/b6y8PEF.png" alt="Boletín 7">
+                    <div class="card-content">
+                        <h3>Boletín #7</h3>
+                        <p>Conoce la coyuntura política actual en Bolivia y el mundo.</p>
+                        <a href="https://drive.google.com/file/d/1KtAX9zI-Vbf9H_ktwV-xxyqKjl4UP_rO/view?usp=sharing" target="_blank">Leer más</a>
+                    </div>
                 </div>
             </div>
-            <!-- Boletín 2 -->
-            <div class="card">
-                <img src="https://i.imgur.com/32MEdtu.png" alt="Boletín 6">
-                <div class="card-content">
-                    <h3>Boletín #6</h3>
-                    <p>Descubre los análisis políticos de la coyuntura electoral y la Primer Encuesta de Gestión Institucional UAGRM 2025</p>
-                    <a href="https://drive.google.com/file/d/1ZWLSaU-XC5Wl3S0WT5e-jVLfHpp0IxjW/view?usp=sharing">Leer más</a>
-                </div>
-            </div>
-            <!-- Boletín 3 -->
-            <div class="card">
-                <img src="https://i.imgur.com/b6y8PEF.png" alt="Boletín 7">
-                <div class="card-content">
-                    <h3>Boletín #7 </h3>
-                    <p>Conoce la coyuntura política y actual en Bolivia y el Mundo</p>
-                    <a href="https://drive.google.com/file/d/1KtAX9zI-Vbf9H_ktwV-xxyqKjl4UP_rO/view?usp=sharing">Leer más</a>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
-<footer>
-    <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencia Sociales. Todos los derechos reservados.</p>
-</footer>
+    <!-- ================= PIE DE PÁGINA ================= -->
+    <footer>
+        <p class="mb-1">&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="mb-1">Contacto: <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> | <i class="fas fa-phone"></i> +591 67381294</p>
+        <p>
+            Síguenos en:
+            <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </p>
+    </footer>
 
 </body>
 </html>
+
