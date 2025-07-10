@@ -398,112 +398,148 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Gráfica tracking poll Plotly mejorada y responsiva
-    var fechas = [
-      "2025-06-01<br>UNITEL", "2025-06-18<br>EL DEBER"
-    ];
+ <script>
+  // Nuevas fechas de encuestas
+  var fechas = [
+    "2025-06-01<br>UNITEL",
+    "2025-06-14<br>EL DEBER",
+    "2025-06-20<br>RED UNO"
+  ];
 
-    var doria = {
-      x: fechas, y: [19.1, 24.0], name: "Samuel Doria Medina",
-      mode: "lines+markers", line: {color: "#e67e22", width: 4},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var tuto = {
-      x: fechas, y: [18.4, 22.0], name: "Jorge Tuto Quiroga",
-      mode: "lines+markers", line: {color: "#ff9800", width: 4, dash: 'dot'},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var andronico = {
-      x: fechas, y: [14.2, 14.7], name: "Andrónico Rodríguez",
-      mode: "lines+markers", line: {color: "#009688", width: 4, dash: 'dash'},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var manfred = {
-      x: fechas, y: [7.9, 9.4], name: "Manfred Reyes Villa",
-      mode: "lines+markers", line: {color: "#8e44ad", width: 4},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var paz = {
-      x: fechas, y: [4.3, 5.6], name: "Rodrigo Paz Pereira",
-      mode: "lines+markers", line: {color: "#388e3c", width: 4, dash: 'dot'},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var johnny = {
-      x: fechas, y: [3.7, 2.5], name: "Jhonny Fernández",
-      mode: "lines+markers", line: {color: "#00bcd4", width: 4, dash: 'dot'},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var castillo = {
-      x: fechas, y: [2.3, 2.0], name: "Eduardo del Castillo",
-      mode: "lines+markers", line: {color: "#1976d2", width: 4, dash: 'dashdot'},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
-    var copa = {
-      x: fechas, y: [1.7, 2.0], name: "Eva Copa",
-      mode: "lines+markers", line: {color: "#c0392b", width: 4},
-      marker: {size: 15}, hoverinfo: "y+name+x",
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    };
+  // Datos actualizados para cada candidato (según tu tabla)
+  var doria = {
+    x: fechas,
+    y: [19.1, 24.0, 19.6],
+    name: "Samuel Doria Medina",
+    mode: "lines+markers",
+    line: {color: "#e67e22", width: 4},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var tuto = {
+    x: fechas,
+    y: [18.4, 22.1, 16.6],
+    name: "Jorge Tuto Quiroga",
+    mode: "lines+markers",
+    line: {color: "#ff9800", width: 4, dash: 'dot'},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var andronico = {
+    x: fechas,
+    y: [14.2, 14.7, 13.7],
+    name: "Andrónico Rodríguez",
+    mode: "lines+markers",
+    line: {color: "#009688", width: 4, dash: 'dash'},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var manfred = {
+    x: fechas,
+    y: [7.9, 9.4, 8.8],
+    name: "Manfred Reyes Villa",
+    mode: "lines+markers",
+    line: {color: "#8e44ad", width: 4},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var paz = {
+    x: fechas,
+    y: [4.3, 5.6, 6.4],
+    name: "Rodrigo Paz Pereira",
+    mode: "lines+markers",
+    line: {color: "#388e3c", width: 4, dash: 'dot'},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var johnny = {
+    x: fechas,
+    y: [3.7, 2.6, 3.8],
+    name: "Jhonny Fernández",
+    mode: "lines+markers",
+    line: {color: "#00bcd4", width: 4, dash: 'dot'},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var castillo = {
+    x: fechas,
+    y: [2.3, 1.7, 1.4],
+    name: "Eduardo del Castillo",
+    mode: "lines+markers",
+    line: {color: "#1976d2", width: 4, dash: 'dashdot'},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
+  var copa = {
+    x: fechas,
+    y: [1.7, 1.4, 1.1],
+    name: "Eva Copa",
+    mode: "lines+markers",
+    line: {color: "#c0392b", width: 4},
+    marker: {size: 15},
+    hoverinfo: "y+name+x",
+    hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
+  };
 
-    var data = [doria, tuto, andronico, manfred, paz, johnny, castillo, copa];
+  var data = [doria, tuto, andronico, manfred, paz, johnny, castillo, copa];
 
-    // --- Responsividad de la leyenda de la gráfica ---
-    function getLegendLayout() {
-      if (window.innerWidth < 700) {
-        // En móvil: leyenda vertical a la derecha y tamaño de fuente más chico
-        return {
-          orientation: "v",
-          x: 1.08,
-          y: 0.5,
-          xanchor: "left",
-          yanchor: "middle",
-          font: { size: 11, color: "#fff" },
-          bgcolor: "rgba(34,40,49,0.97)"
-        };
-      } else {
-        // En PC: leyenda horizontal arriba
-        return {
-          orientation: "h",
-          x: 0.01,
-          y: 1.16,
-          font: { size: 13, color: "#fff" }
-        };
-      }
-    }
-
-    function plotEncuesta() {
-      var layout = {
-        plot_bgcolor: '#1e2228',
-        paper_bgcolor: '#222831',
-        legend: getLegendLayout(),
-        xaxis: {
-          title: {text: '<b>Fecha y encuestadora</b>', font: {color: "#fff", size: 16}},
-          tickfont: {color:'#fff', size: 13},
-          automargin:true,
-          showgrid: false
-        },
-        yaxis: {
-          title: {text: '<b>% intención de voto</b>', font: {color: "#fff", size: 16}},
-          range:[0,28],
-          gridcolor:'#444',
-          tickfont:{color:'#fff', size: 13}
-        },
-        margin: {l:50, r: window.innerWidth<700 ? 110 : 20, t:30, b:60},
-        font: { family: 'Inter, Segoe UI, sans-serif', size: 15, color: '#fff' }
+  // --- Responsividad de la leyenda de la gráfica ---
+  function getLegendLayout() {
+    if (window.innerWidth < 700) {
+      // En móvil: leyenda vertical a la derecha y tamaño de fuente más chico
+      return {
+        orientation: "v",
+        x: 1.08,
+        y: 0.5,
+        xanchor: "left",
+        yanchor: "middle",
+        font: { size: 11, color: "#fff" },
+        bgcolor: "rgba(34,40,49,0.97)"
       };
-      Plotly.newPlot('plotly-intencion-voto', data, layout, {responsive:true, displayModeBar:false});
+    } else {
+      // En PC: leyenda horizontal arriba
+      return {
+        orientation: "h",
+        x: 0.01,
+        y: 1.16,
+        font: { size: 13, color: "#fff" }
+      };
     }
-    plotEncuesta();
-    window.addEventListener('resize', plotEncuesta);
-  </script>
+  }
+
+  function plotEncuesta() {
+    var layout = {
+      plot_bgcolor: '#1e2228',
+      paper_bgcolor: '#222831',
+      legend: getLegendLayout(),
+      xaxis: {
+        title: {text: '<b>Fecha y encuestadora</b>', font: {color: "#fff", size: 16}},
+        tickfont: {color:'#fff', size: 13},
+        automargin:true,
+        showgrid: false
+      },
+      yaxis: {
+        title: {text: '<b>% intención de voto</b>', font: {color: "#fff", size: 16}},
+        range:[0,28],
+        gridcolor:'#444',
+        tickfont:{color:'#fff', size: 13}
+      },
+      margin: {l:50, r: window.innerWidth<700 ? 110 : 20, t:30, b:60},
+      font: { family: 'Inter, Segoe UI, sans-serif', size: 15, color: '#fff' }
+    };
+    Plotly.newPlot('plotly-intencion-voto', data, layout, {responsive:true, displayModeBar:false});
+  }
+  plotEncuesta();
+  window.addEventListener('resize', plotEncuesta);
+</script>
+
 </body>
 </html>
 
