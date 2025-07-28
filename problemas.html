@@ -4,14 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CIRCPyCS – Selección de Problemas de Investigación</title>
-
-  <!-- Bootstrap & Font-Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <style>
     :root{
       --primary:#2c3e50;--secondary:#8e44ad;--accent:#16a085;
@@ -19,19 +14,13 @@
       --header:#2c3e50;--shadow:0 8px 18px rgba(0,0,0,.1);
     }
     body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);margin:0;padding-top:80px;font-size:.95rem;}
-
-    /* Header */
     .navbar-custom{background:var(--header)!important;box-shadow:0 2px 10px rgba(0,0,0,.1);position:fixed;width:100%;top:0;z-index:1000;}
     .navbar-brand{font-family:"Playfair Display",serif;font-weight:700;font-size:1.4rem;color:#fff!important;}
     .btn-volver{border-color:#fff;color:#fff!important;font-size:.85rem;}
     .btn-volver:hover{background:rgba(255,255,255,.1);}
-
-    /* Layout */
     .contenedor-principal{max-width:1200px;margin:2rem auto;padding:0 15px;}
     .titulo-principal{text-align:center;color:var(--primary);margin-bottom:1.5rem;font-weight:700;font-size:1.8rem;}
     .subtitulo{text-align:center;color:var(--dark);margin-bottom:2rem;font-size:1.1rem;}
-
-    /* Filtros */
     .filtros-container{background:#fff;border-radius:15px;box-shadow:var(--shadow);padding:1.5rem;margin-bottom:2rem;}
     .filtros-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
     .filtros-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
@@ -41,8 +30,6 @@
     .btn-filtros:hover{background:#7d3c98;transform:translateY(-2px);}
     .btn-reset{background:var(--dark);color:#fff;border:none;padding:.5rem 1.5rem;border-radius:20px;font-weight:600;transition:.3s;}
     .btn-reset:hover{background:#5a6268;transform:translateY(-2px);}
-
-    /* Tarjetas */
     .contenedor-tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem;}
     .tarjeta-problema{background:#fff;border-radius:15px;box-shadow:var(--shadow);padding:1.5rem;border-left:5px solid var(--secondary);display:flex;flex-direction:column;transition:.3s;}
     .tarjeta-problema:hover{transform:translateY(-5px);box-shadow:0 12px 25px rgba(0,0,0,.15);}
@@ -59,8 +46,6 @@
     .asignado-a{font-size:.9rem;margin-bottom:1rem;color:var(--dark);font-style:italic;}
     .btn-detalles{background:var(--accent);color:#fff;border:none;padding:.5rem 1.2rem;border-radius:20px;font-weight:600;transition:.3s;width:100%;text-align:center;}
     .btn-detalles:hover{background:#138a72;transform:translateY(-2px);}
-
-    /* Modal */
     .modal-content{border-radius:15px;}
     .modal-header{border-bottom:none;padding-bottom:0;}
     .modal-title{color:var(--primary);font-weight:700;}
@@ -68,21 +53,15 @@
     .detalle-titulo{font-weight:600;margin-bottom:.5rem;color:var(--secondary);}
     .detalle-contenido{background:var(--light);padding:1rem;border-radius:10px;}
     .metodologia-badge{display:inline-block;background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:20px;margin:.3rem;font-size:.85rem;}
-
-    /* Formulario */
     .formulario-grupo{margin-bottom:1.5rem;}
     .formulario-grupo label{display:block;margin-bottom:.5rem;font-weight:600;}
     .formulario-grupo input,.formulario-grupo select{width:100%;padding:.75rem;border-radius:8px;border:1px solid #ced4da;font-size:1rem;}
     .btn-formulario{background:var(--secondary);color:#fff;border:none;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer;transition:.3s;width:100%;margin-top:1rem;}
     .btn-formulario:hover{background:#7d3c98;transform:translateY(-2px);}
-
-    /* Footer */
     footer{background:var(--header);color:#fff;text-align:center;padding:1.5rem;margin-top:3rem;font-size:.9rem;}
     footer a{color:#fff;margin:0 .3rem;transition:color .3s;}
     footer a:hover{color:var(--accent);}
     .footer-contacto{margin:.5rem 0;}
-
-    /* Responsive */
     @media(max-width:768px){
       .contenedor-tarjetas{grid-template-columns:1fr;}
       .filtros-row{grid-template-columns:1fr;}
@@ -93,7 +72,6 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
     <div class="container">
       <a class="navbar-brand" href="#">CIRCPyCS</a>
@@ -102,13 +80,9 @@
       </a>
     </div>
   </nav>
-
-  <!-- Contenido principal -->
   <div class="contenedor-principal">
     <h1 class="titulo-principal">Problemas de Investigación 2025–2026</h1>
     <p class="subtitulo">Explora y selecciona un problema de investigación para abordar</p>
-
-    <!-- Filtros -->
     <div class="filtros-container">
       <div class="filtros-header">
         <h2><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
@@ -154,11 +128,8 @@
         </div>
       </div>
     </div>
-
-    <!-- Tarjetas -->
     <div class="contenedor-tarjetas" id="contenedor-problemas"></div>
   </div>
-
   <!-- Modal Detalles -->
   <div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -175,7 +146,6 @@
       </div>
     </div>
   </div>
-
   <!-- Modal Formulario -->
   <div class="modal fade" id="modalFormulario" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -216,8 +186,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Footer -->
   <footer>
     <div class="container">
       <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS)</p>
@@ -233,18 +201,14 @@
       </div>
     </div>
   </footer>
-
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-  /*----------------------------------------------------
-    Datos (EP-01/02/03 ya figuran en área Economía)
-  ----------------------------------------------------*/
-/*----------------------------------------------------
-   BASE COMPLETA DE PROBLEMAS DE INVESTIGACIÓN
-   (Política, Economía, Ambiental, Social)
-----------------------------------------------------*/
-const problemas = [
+    // Copia aquí el array 'problemas' COMPLETO que me diste (por espacio, NO lo vuelvo a pegar)
+    // ... tu array completo ...
+    // (por ejemplo: const problemas = [ ... ];)
+    // ---- Pegado del array de problemas ----
+    // (Pega aquí tal cual el bloque que me diste en tu mensaje anterior.)
+    const problemas = [
   /* ========== ÁREA POLÍTICA ========== */
 
   /* ---------- EXISTENTES ---------- */
@@ -363,7 +327,7 @@ const problemas = [
   {
     codigo: "P-11",
     area: "Política",
-    linea: "Ciberseguridad Electoral",
+    linea: "Ciencia Política Computacional",
     tema: "Desinformación y deepfakes en la campaña 2025",
     pregunta: "¿Qué impacto tienen los deepfakes generados con IA sobre la intención de voto y la confianza ciudadana?",
     objetivo: "Mapear redes de desinformación y medir su influencia en la opinión pública.",
@@ -374,7 +338,7 @@ const problemas = [
   {
     codigo: "P-12",
     area: "Política",
-    linea: "Partidos y Organización Interna",
+    linea: "Partidos y Organizaciones Políticas, y Grupos de Presión",
     tema: "Fragmentación del MAS y crisis de liderazgo",
     pregunta: "¿Cómo afecta la pugna Evo Morales-Luis Arce a la cohesión partidaria y al proceso electoral 2025?",
     objetivo: "Analizar la dinámica faccional y sus derivaciones electorales.",
@@ -385,7 +349,7 @@ const problemas = [
   {
     codigo: "P-13",
     area: "Política",
-    linea: "Estado de Derecho y Lucha contra la Corrupción",
+    linea: "Estado, Derecho y Gobierno",
     tema: "Corrupción selectiva y judicialización de la política",
     pregunta: "¿Cómo se utilizan los procesos judiciales para neutralizar rivales políticos?",
     objetivo: "Evaluar independencia judicial y patrones de persecución selectiva.",
@@ -396,7 +360,7 @@ const problemas = [
   {
     codigo: "P-14",
     area: "Política",
-    linea: "Reforma Institucional",
+    linea: "Estado, Derecho y Gobierno",
     tema: "Justicia constitucional en transición",
     pregunta: "¿Qué modelos comparados de tribunales constitucionales podrían fortalecer la tutela de derechos en Bolivia?",
     objetivo: "Diseñar un esquema viable de reforma de la justicia constitucional.",
@@ -407,7 +371,7 @@ const problemas = [
   {
     codigo: "P-15",
     area: "Política",
-    linea: "Seguridad y Crimen Organizado",
+    linea: "Relaciones Internacionales",
     tema: "Crimen transnacional y gobernanza de fronteras",
     pregunta: "¿Cuál es la capacidad del Estado para contener economías ilícitas en sus fronteras amazónicas y chaqueñas?",
     objetivo: "Medir eficacia de la seguridad fronteriza e identificar brechas institucionales.",
@@ -418,7 +382,7 @@ const problemas = [
   {
     codigo: "P-16",
     area: "Política",
-    linea: "Participación y Nuevas Ciudadanías",
+    linea: "Partidos y Organizaciones Políticas, y Grupos de Presión",
     tema: "Activismo juvenil en plataformas digitales",
     pregunta: "¿Cómo articulan los jóvenes bolivianos sus demandas políticas vía TikTok e Instagram?",
     objetivo: "Identificar repertorios de acción colectiva digital de la generación Z.",
@@ -429,7 +393,7 @@ const problemas = [
   {
     codigo: "P-17",
     area: "Política",
-    linea: "Política Energética",
+    linea: "Relaciones Internacionales",
     tema: "Geopolítica del litio y transición energética",
     pregunta: "¿Qué estrategias soberanas puede adoptar Bolivia frente a la competencia global por el litio?",
     objetivo: "Evaluar captura de valor y riesgos de dependencia tecnológica.",
@@ -440,7 +404,7 @@ const problemas = [
   {
     codigo: "P-18",
     area: "Política",
-    linea: "Relaciones Internacionales y Clima",
+    linea: "Relaciones Internacionales",
     tema: "Diplomacia climática boliviana post-COP30",
     pregunta: "¿Qué oportunidades tiene Bolivia para liderar negociaciones climáticas regionales?",
     objetivo: "Mapear soft-power ambiental y alianzas estratégicas.",
@@ -451,7 +415,7 @@ const problemas = [
   {
     codigo: "P-19",
     area: "Política",
-    linea: "Gobernanza Metropolitana",
+    linea: "Ciudades y Ciudadanías",
     tema: "Gestión coordinada del Gran Santa Cruz",
     pregunta: "¿Qué modelos de gobernanza metropolitana optimizan servicios públicos peri-urbanos?",
     objetivo: "Diseñar marco multinivel para la región metropolitana cruceña.",
@@ -462,7 +426,7 @@ const problemas = [
   {
     codigo: "P-20",
     area: "Política",
-    linea: "Autonomías y Plurinacionalidad",
+    linea: "Estado Plurinacional, Democracia e Interculturalidad",
     tema: "Derecho a la Consulta Previa",
     pregunta: "¿Cómo se implementa la consulta previa y qué vacíos normativos persisten?",
     objetivo: "Evaluar cumplimiento con estándares internacionales.",
@@ -473,18 +437,18 @@ const problemas = [
   {
     codigo: "P-21",
     area: "Política",
-    linea: "Financiamiento y Transparencia",
+    linea: "Ciencia Política Computacional",
     tema: "Big-data y control de gasto electoral",
     pregunta: "¿Qué patrones de financiamiento opaco se detectan en la elección 2025?",
     objetivo: "Construir un sistema de alerta temprana de gastos irregulares.",
     metodologia: "Minería de datos financieros + Detección de outliers",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Javier Hernández",
+    estado: "asignado"
   },
   {
     codigo: "P-22",
     area: "Política",
-    linea: "Gobierno Digital",
+    linea: "Ciencia Política Computacional",
     tema: "Interoperabilidad y datos abiertos estatales",
     pregunta: "¿Qué barreras técnico-normativas obstaculizan la interoperabilidad de registros públicos?",
     objetivo: "Proponer un roadmap de gobernanza de datos abiertos 2026-2030.",
@@ -495,90 +459,90 @@ const problemas = [
   {
     codigo: "P-23",
     area: "Política",
-    linea: "Ciberseguridad Electoral",
-    tema: "Protección de infraestructura crítica",
-    pregunta: "¿Cuál es el nivel de resiliencia cibernética del OEP frente a amenazas avanzadas?",
-    objetivo: "Testear protocolos de respuesta ante intrusiones.",
+    linea: "Estado, Derecho y Gobierno",
+    tema: "Protección Institucional",
+    pregunta: "¿Cuál es el nivel de resiliencia institucional del OEP frente a amenazas mediáticas?",
+    objetivo: "Testear protocolos de respuesta ante amenazas.",
     metodologia: "Pen-testing ético + Simulación red-team",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Daniel Hurtado",
+    estado: "asignado"
   },
   {
     codigo: "P-24",
     area: "Política",
-    linea: "Género y Política",
+    linea: "Descolonización y Despatriarcalización en el Estado Plurinacional",
     tema: "Violencia política digital de género",
     pregunta: "¿Cómo se manifiesta la violencia política contra candidatas en redes y qué estrategias son efectivas?",
     objetivo: "Cuantificar acoso y diseñar estrategias de mitigación.",
     metodologia: "PLN + Focus groups con candidatas",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Marco Torrez",
+    estado: "asignado"
   },
   {
     codigo: "P-25",
     area: "Política",
-    linea: "Medios y Opinión Pública",
+    linea: "Comportamiento Político y Cognición Política",
     tema: "Polarización emotiva y medios alternativos",
     pregunta: "¿Qué rol juegan los podcasts y medios nativos digitales en la intensificación de la polarización emotiva?",
     objetivo: "Medir efecto de narrativa emotiva sobre actitudes políticas.",
     metodologia: "Análisis de sentimiento + Experimentos de laboratorio",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Jorge Espinoza",
+    estado: "asignado"
   },
   {
     codigo: "P-26",
     area: "Política",
-    linea: "Descentralización y Finanzas Públicas",
+    linea: "Administración Pública",
     tema: "Resiliencia fiscal municipal post-COVID",
     pregunta: "¿Qué estrategias de descentralización fiscal fortalecen la resiliencia de ingresos propios?",
     objetivo: "Modelar escenarios de reforma tributaria sub-nacional.",
     metodologia: "Equilibrio general municipal + Análisis DEA",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "José Alberti",
+    estado: "asignado"
   },
   {
     codigo: "P-27",
     area: "Política",
-    linea: "Política Internacional",
+    linea: "Relaciones Internacionales",
     tema: "Sanciones y política doméstica",
     pregunta: "¿Cómo afectan las sanciones internacionales sobre funcionarios a la toma de decisiones políticas internas?",
     objetivo: "Examinar efectos de sanciones selectivas en élites políticas.",
     metodologia: "Análisis de redes de poder + Series temporales",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Loreto Correa",
+    estado: "asignado"
   },
   {
     codigo: "P-28",
     area: "Política",
-    linea: "Migración y Demografía",
+    linea: "Migración y Construcción de Nuevas Identidades",
     tema: "Migración interna y reconfiguración del voto",
     pregunta: "¿Qué patrones de migración campo-ciudad alteran la geografía electoral boliviana?",
     objetivo: "Correlacionar flujos migratorios con cambios en comportamiento electoral.",
     metodologia: "Datos censales + Modelos espaciales de voto",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Nicolas Ribera",
+    estado: "asignado"
   },
   {
     codigo: "P-29",
     area: "Política",
-    linea: "Innovación Legislativa",
+    linea: "Ciencia Política Computacional",
     tema: "IA generativa en deliberación parlamentaria",
     pregunta: "¿Puede la IA generativa mejorar la calidad y la velocidad del proceso legislativo?",
     objetivo: "Prototipar un asistente legislativo basado en LLM.",
     metodologia: "Desarrollo de prototipo + Pruebas de usabilidad",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Daniel Hurtado",
+    estado: "asignado"
   },
   {
     codigo: "P-30",
     area: "Política",
-    linea: "Gobernanza Algorítmica y Derechos",
+    linea: "Ciencia Política Computacional",
     tema: "Vigilancia digital y libertades civiles",
     pregunta: "¿Cómo impacta la vigilancia algorítmica estatal en la privacidad y la libertad de expresión?",
     objetivo: "Auditar marcos legales y proponer salvaguardas democráticas.",
     metodologia: "Auditoría de algoritmos + Encuesta de percepción ciudadana",
-    asignado: "Disponible",
-    estado: "disponible"
+    asignado: "Nicolas Ribera",
+    estado: "asignado"
   },
 
   /* ========== ÁREA ECONOMÍA ========== */
@@ -659,7 +623,7 @@ const problemas = [
   {
     codigo: "EP-01",
     area: "Economía",
-    linea: "Medio Ambiente, Economía Verde y Recursos Naturales Estratégicos",
+    linea: "Cambio Climático y Recursos Naturales",
     tema: "Modelo extractivista e institucionalidad ambiental",
     pregunta: "¿Qué grado de institucionalidad ambiental existe para compatibilizar crecimiento extractivo con sostenibilidad?",
     metodologia: "Metabolismo social + Indicadores de sostenibilidad fuerte",
@@ -764,7 +728,7 @@ const problemas = [
     pregunta: "¿Qué configuraciones organizacionales reducen brechas de calidad con restricciones presupuestarias?",
     objetivo: "Identificar patrones de eficiencia relativa con variables contextuales.",
     metodologia: "DEA no paramétrico + Regresión cuantitativa",
-    asignado: "Grupo Social 2",
+    asignado: "Elizabeth Galarza",
     estado: "asignado"
   },
   {
@@ -834,154 +798,156 @@ const problemas = [
     estado: "asignado"
   }
 ];
-  /*----------------------------------------------------
-    Variables & modales
-  ----------------------------------------------------*/
-  let problemasFiltrados=[...problemas], problemaSeleccionado=null;
-  const modalDetalles=new bootstrap.Modal("#modalDetalles");
-  const modalFormulario=new bootstrap.Modal("#modalFormulario");
-
-  /*----------------------------------------------------
-    INIT
-  ----------------------------------------------------*/
-  document.addEventListener("DOMContentLoaded",()=>{renderizarProblemas();configurarEventos();});
-
-  /*----------------------------------------------------
-    Renderizar tarjetas  (línea = título, tema = píldora)
-  ----------------------------------------------------*/
-  function renderizarProblemas(){
-    const cont=document.getElementById("contenedor-problemas");
-    cont.innerHTML="";
-    if(!problemasFiltrados.length){
-      cont.innerHTML=`<div class="col-12 text-center py-5">
-        <i class="fas fa-search fa-3x mb-3 text-secondary"></i>
-        <h3>No se encontraron problemas</h3>
-        <p>Intenta ajustar los filtros o términos de búsqueda.</p></div>`;
-      return;
+    // (LO DEMÁS NO CAMBIA)
+    let problemasFiltrados=[...problemas], problemaSeleccionado=null;
+    const modalDetalles=new bootstrap.Modal("#modalDetalles");
+    const modalFormulario=new bootstrap.Modal("#modalFormulario");
+    document.addEventListener("DOMContentLoaded",()=>{renderizarProblemas();configurarEventos();});
+    function renderizarProblemas(){
+      const cont=document.getElementById("contenedor-problemas");
+      cont.innerHTML="";
+      if(!problemasFiltrados.length){
+        cont.innerHTML=`<div class="col-12 text-center py-5">
+          <i class="fas fa-search fa-3x mb-3 text-secondary"></i>
+          <h3>No se encontraron problemas</h3>
+          <p>Intenta ajustar los filtros o términos de búsqueda.</p></div>`;
+        return;
+      }
+      problemasFiltrados.forEach(p=>{
+        const cls=p.area.toLowerCase().replace(/[^a-záéíóúñ]/g,"");
+        const div=document.createElement("div");
+        div.className="tarjeta-problema";
+        div.innerHTML=`
+          <div class="tarjeta-header">
+            <span class="codigo-problema">${p.codigo}</span>
+            <span class="area-problema ${cls}">${p.area}</span>
+          </div>
+          <div class="titulo-problema">${p.linea}</div>
+          <span class="linea-investigacion">${p.tema}</span>
+          <div class="pregunta-problema">${p.pregunta}</div>
+          <div class="asignado-a">Asignado a: <strong>${p.asignado}</strong></div>
+          <button class="btn-detalles" data-codigo="${p.codigo}">
+            <i class="fas fa-info-circle"></i> Ver detalles
+          </button>`;
+        cont.appendChild(div);
+      });
+      document.querySelectorAll(".btn-detalles").forEach(b=>b.onclick=()=>mostrarDetallesProblema(b.dataset.codigo));
     }
-    problemasFiltrados.forEach(p=>{
-      const cls=p.area.toLowerCase().replace(/[^a-záéíóúñ]/g,"");
-      const div=document.createElement("div");
-      div.className="tarjeta-problema";
-      div.innerHTML=`
-        <div class="tarjeta-header">
-          <span class="codigo-problema">${p.codigo}</span>
-          <span class="area-problema ${cls}">${p.area}</span>
-        </div>
-        <div class="titulo-problema">${p.linea}</div>
-        <span class="linea-investigacion">${p.tema}</span>
-        <div class="pregunta-problema">${p.pregunta}</div>
-        <div class="asignado-a">Asignado a: <strong>${p.asignado}</strong></div>
-        <button class="btn-detalles" data-codigo="${p.codigo}">
-          <i class="fas fa-info-circle"></i> Ver detalles
-        </button>`;
-      cont.appendChild(div);
-    });
-    document.querySelectorAll(".btn-detalles").forEach(b=>b.onclick=()=>mostrarDetallesProblema(b.dataset.codigo));
-  }
-
-  /*----------------------------------------------------
-    Modal detalles
-  ----------------------------------------------------*/
-  function mostrarDetallesProblema(codigo){
-    problemaSeleccionado=problemas.find(p=>p.codigo===codigo);
-    if(!problemaSeleccionado)return;
-    document.getElementById("modalTitulo").textContent=problemaSeleccionado.linea;
-    document.getElementById("modalCuerpo").innerHTML=`
-      <div class="detalle-grupo"><div class="detalle-titulo">Tema</div>
-        <div class="detalle-contenido">${problemaSeleccionado.tema}</div></div>
-      <div class="detalle-grupo"><div class="detalle-titulo">Área</div>
-        <div class="detalle-contenido">${problemaSeleccionado.area}</div></div>
-      <div class="detalle-grupo"><div class="detalle-titulo">Línea de Investigación</div>
-        <div class="detalle-contenido">${problemaSeleccionado.linea}</div></div>
-      <div class="detalle-grupo"><div class="detalle-titulo">Pregunta</div>
-        <div class="detalle-contenido">${problemaSeleccionado.pregunta}</div></div>
-      ${problemaSeleccionado.objetivo?`
-        <div class="detalle-grupo"><div class="detalle-titulo">Objetivo</div>
-          <div class="detalle-contenido">${problemaSeleccionado.objetivo}</div></div>`:""}
-      <div class="detalle-grupo"><div class="detalle-titulo">Metodología</div>
-        <div class="detalle-contenido">${
-          problemaSeleccionado.metodologia.split("+").map(m=>`<span class="metodologia-badge">${m.trim()}</span>`).join("")
-        }</div></div>`;
-    document.getElementById("btnSeleccionar").onclick=()=>{modalDetalles.hide();setTimeout(mostrarFormularioRegistro,300);};
-    modalDetalles.show();
-  }
-
-  /*----------------------------------------------------
-    Formulario
-  ----------------------------------------------------*/
-  function mostrarFormularioRegistro(){["nombre","email","matricula","carrera","semestre"].forEach(id=>document.getElementById(id).value="");modalFormulario.show();}
-
-  /*----------------------------------------------------
-    Filtros y eventos
-  ----------------------------------------------------*/
-  function configurarEventos(){
-    document.getElementById("aplicarFiltros").onclick=aplicarFiltros;
-    document.getElementById("resetFiltros").onclick=resetFiltros;
-    document.getElementById("filtro-busqueda").oninput=aplicarFiltros;
-    document.getElementById("btnRegistrar").onclick=registrarProblema;
-  }
-  function aplicarFiltros(){
-    const area=document.getElementById("filtro-area").value.toLowerCase();
-    const linea=document.getElementById("filtro-linea").value.toLowerCase();
-    const estado=document.getElementById("filtro-estado").value;
-    const q=document.getElementById("filtro-busqueda").value.toLowerCase();
-    problemasFiltrados=problemas.filter(p=>{
-      const okArea=!area||p.area.toLowerCase().includes(area);
-      const okLinea=!linea||p.linea.toLowerCase().includes(linea);
-      const okEstado=!estado||(estado==="asignado"&&p.estado==="asignado")||(estado==="disponible"&&p.estado==="disponible");
-      const okQ=!q||p.codigo.toLowerCase().includes(q)||p.tema.toLowerCase().includes(q)||p.linea.toLowerCase().includes(q);
-      return okArea&&okLinea&&okEstado&&okQ;
-    });
-    renderizarProblemas();
-  }
-  function resetFiltros(){["filtro-area","filtro-linea","filtro-estado","filtro-busqueda"].forEach(id=>document.getElementById(id).value="");problemasFiltrados=[...problemas];renderizarProblemas();}
-
-  /*----------------------------------------------------
-    Registro + descarga PDF (función jsPDF sin cambios)
-  ----------------------------------------------------*/
-  async function registrarProblema(){
-    const nombre=document.getElementById("nombre").value.trim(),
-          email=document.getElementById("email").value.trim(),
-          matricula=document.getElementById("matricula").value.trim(),
-          carrera=document.getElementById("carrera").value,
-          semestre=document.getElementById("semestre").value;
-    if(!nombre||!email||!matricula||!carrera||!semestre){alert("Completa todos los campos.");return;}
-    await generarCertificado(nombre,"Investigador Estudiantil",[`${problemaSeleccionado.codigo} – ${problemaSeleccionado.linea}`]);
-    modalFormulario.hide();alert("¡Registro exitoso! Se descargó tu certificado.");
-  }
-
-  /*----------------------------------------------------
-    Certificado jsPDF (idéntico al que ya funciona)
-  ----------------------------------------------------*/
-  async function generarCertificado(nombreInvestigador,tipoInvestigador,lineasInvestigacion){
-    const{jsPDF}=window.jspdf;const doc=new jsPDF({format:"letter"});
-    doc.setFillColor(255,255,255);doc.rect(0,0,216,279,"F");
-    const marca=await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-    doc.setGState(new doc.GState({opacity:.15}));doc.addImage(marca,"PNG",30,90,150,150);doc.setGState(new doc.GState({opacity:1}));
-    const logo=await cargarImagen("https://i.imgur.com/R952Ljv.png");doc.addImage(logo,"PNG",60,5,90,20);
-    doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor("#B22222");
-    doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO",108,30,{align:"center"});
-    doc.setTextColor("#003366");doc.setFontSize(12);
-    doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales",108,35,{align:"center"});
-    doc.text("Carrera de Ciencia Política y Administración Pública",108,40,{align:"center"});
-    doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales",108,45,{align:"center"});
-    doc.setFontSize(20);doc.text("Certificación de Elección de Problema de Investigación",108,65,{align:"center"});
-    const tenor=`Por medio del presente, el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno certifica que ${nombreInvestigador}, estudiante de la ${tipoInvestigador}, ha seleccionado formalmente el problema de investigación ${lineasInvestigacion[0]}. El investigador se compromete a desarrollar y culminar dicho proyecto durante el período académico 2025-2026, siguiendo las directrices metodológicas acordadas con su tutor y con la coordinación del CIRCPyCS.\n\nEsta certificación se expide a solicitud del interesado, para los fines académicos y administrativos que creyere convenientes.`;
-    doc.setFont("helvetica","normal");doc.setFontSize(12);doc.setTextColor(0,0,0);
-    doc.text(doc.splitTextToSize(tenor,160),25,90);
-    const y=190;doc.setFontSize(10);doc.text(`Santa Cruz de la Sierra, ${new Date().toLocaleDateString()}`,108,y,{align:"center"});
-    const f1=await cargarImagen("https://i.imgur.com/o9tccxV.png"),f2=await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-    doc.addImage(f1,"PNG",40,y+10,40,20);doc.addImage(f2,"PNG",135,y+10,40,20);
-    doc.setFont("helvetica","bold");doc.text("Francisco Méndez Égüez",60,y+35,{align:"center"});doc.text("Director Carrera",60,y+40,{align:"center"});
-    doc.text("María A. Suárez Ribera",155,y+35,{align:"center"});doc.text("Directora CIRCPyCS",155,y+40,{align:"center"});
-    doc.setDrawColor(178,34,34);doc.setLineWidth(.5);doc.line(10,265,206,265);
-    doc.setFont("helvetica","normal");doc.setFontSize(10);
-    doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja",108,272,{align:"center"});
-    doc.save(`Certificacion_${nombreInvestigador.replace(/\s+/g,"_")}.pdf`);
-  }
-  function cargarImagen(url){return new Promise((ok,er)=>{const i=new Image();i.crossOrigin="anonymous";i.onload=()=>ok(i);i.onerror=er;i.src=url;});}
+    function mostrarDetallesProblema(codigo){
+      problemaSeleccionado=problemas.find(p=>p.codigo===codigo);
+      if(!problemaSeleccionado)return;
+      document.getElementById("modalTitulo").textContent=problemaSeleccionado.linea;
+      document.getElementById("modalCuerpo").innerHTML=`
+        <div class="detalle-grupo"><div class="detalle-titulo">Tema</div>
+          <div class="detalle-contenido">${problemaSeleccionado.tema}</div></div>
+        <div class="detalle-grupo"><div class="detalle-titulo">Área</div>
+          <div class="detalle-contenido">${problemaSeleccionado.area}</div></div>
+        <div class="detalle-grupo"><div class="detalle-titulo">Línea de Investigación</div>
+          <div class="detalle-contenido">${problemaSeleccionado.linea}</div></div>
+        <div class="detalle-grupo"><div class="detalle-titulo">Pregunta</div>
+          <div class="detalle-contenido">${problemaSeleccionado.pregunta}</div></div>
+        ${problemaSeleccionado.objetivo?`
+          <div class="detalle-grupo"><div class="detalle-titulo">Objetivo</div>
+            <div class="detalle-contenido">${problemaSeleccionado.objetivo}</div></div>`:""}
+        <div class="detalle-grupo"><div class="detalle-titulo">Metodología</div>
+          <div class="detalle-contenido">${
+            (problemaSeleccionado.metodologia||"").split("+").map(m=>`<span class="metodologia-badge">${m.trim()}</span>`).join("")
+          }</div></div>`;
+      document.getElementById("btnSeleccionar").onclick=()=>{modalDetalles.hide();setTimeout(mostrarFormularioRegistro,300);};
+      modalDetalles.show();
+    }
+    function mostrarFormularioRegistro(){
+      ["nombre","email","matricula","carrera","semestre"].forEach(id=>document.getElementById(id).value="");
+      modalFormulario.show();
+    }
+    function configurarEventos(){
+      document.getElementById("aplicarFiltros").onclick=aplicarFiltros;
+      document.getElementById("resetFiltros").onclick=resetFiltros;
+      document.getElementById("filtro-busqueda").oninput=aplicarFiltros;
+      document.getElementById("btnRegistrar").onclick=registrarProblema;
+    }
+    function aplicarFiltros(){
+      const area=document.getElementById("filtro-area").value.toLowerCase();
+      const linea=document.getElementById("filtro-linea").value.toLowerCase();
+      const estado=document.getElementById("filtro-estado").value;
+      const q=document.getElementById("filtro-busqueda").value.toLowerCase();
+      problemasFiltrados=problemas.filter(p=>{
+        const okArea=!area||p.area.toLowerCase().includes(area);
+        const okLinea=!linea||p.linea.toLowerCase().includes(linea);
+        const okEstado=!estado||(estado==="asignado"&&p.estado==="asignado")||(estado==="disponible"&&p.estado==="disponible");
+        const okQ=!q||p.codigo.toLowerCase().includes(q)||p.tema.toLowerCase().includes(q)||p.linea.toLowerCase().includes(q);
+        return okArea&&okLinea&&okEstado&&okQ;
+      });
+      renderizarProblemas();
+    }
+    function resetFiltros(){
+      ["filtro-area","filtro-linea","filtro-estado","filtro-busqueda"].forEach(id=>document.getElementById(id).value="");
+      problemasFiltrados=[...problemas];
+      renderizarProblemas();
+    }
+    async function registrarProblema(){
+      const nombre=document.getElementById("nombre").value.trim(),
+            email=document.getElementById("email").value.trim(),
+            matricula=document.getElementById("matricula").value.trim(),
+            carrera=document.getElementById("carrera").value,
+            semestre=document.getElementById("semestre").value;
+      if(!nombre||!email||!matricula||!carrera||!semestre){alert("Completa todos los campos.");return;}
+      // Pasa la pregunta seleccionada y tutor
+      await generarCertificado(
+        nombre,
+        carrera,
+        matricula,
+        problemaSeleccionado.pregunta,
+        problemaSeleccionado.asignado
+      );
+      modalFormulario.hide();alert("¡Registro exitoso! Se descargó tu certificado.");
+    }
+    async function generarCertificado(nombreInvestigador,carrera,registro,pregunta,tutor){
+      const{jsPDF}=window.jspdf;const doc=new jsPDF({format:"letter"});
+      doc.setFillColor(255,255,255);doc.rect(0,0,216,279,"F");
+      const marca=await cargarImagen("https://i.imgur.com/OjAw4PH.png");
+      doc.setGState(new doc.GState({opacity:.15}));doc.addImage(marca,"PNG",30,90,150,150);doc.setGState(new doc.GState({opacity:1}));
+      const logo=await cargarImagen("https://i.imgur.com/R952Ljv.png");doc.addImage(logo,"PNG",60,5,90,20);
+      doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor("#B22222");
+      doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO",108,30,{align:"center"});
+      doc.setTextColor("#003366");doc.setFontSize(12);
+      doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales",108,35,{align:"center"});
+      doc.text("Carrera de Ciencia Política y Administración Pública",108,40,{align:"center"});
+      doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales",108,45,{align:"center"});
+      doc.setFontSize(20);doc.text("Certificación de Elección de Problema de Investigación",108,65,{align:"center"});
+      // Cuerpo profesional y justificado
+      doc.setFont("helvetica","normal");doc.setFontSize(12);doc.setTextColor(0,0,0);
+      let tenor =
+        `Por medio del presente, el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno certifica que el/la estudiante:\n\n` +
+        `Nombre: ${nombreInvestigador}\n` +
+        `Registro (Matrícula): ${registro}\n` +
+        `Carrera: ${carrera}\n\n` +
+        `Ha seleccionado formalmente el siguiente problema de investigación:\n\n` +
+        `Pregunta seleccionada:\n${pregunta}\n\n` +
+        `Tutor/a asignado/a: ${tutor}\n\n` +
+        `El/la investigador/a se compromete a desarrollar y culminar dicho proyecto durante el período académico 2025-2026, siguiendo las directrices metodológicas acordadas con su tutor/a y con la coordinación del CIRCPyCS.\n\n` +
+        `Esta certificación se expide a solicitud del interesado/a, para los fines académicos y administrativos que creyere convenientes.`;
+      doc.text(doc.splitTextToSize(tenor,160),25,90);
+      const y=205;
+      doc.setFontSize(10);
+      doc.text(`Santa Cruz de la Sierra, ${new Date().toLocaleDateString()}`,108,y,{align:"center"});
+      const f1=await cargarImagen("https://i.imgur.com/o9tccxV.png"),
+            f2=await cargarImagen("https://i.imgur.com/vvpbKq7.png");
+      doc.addImage(f1,"PNG",40,y+10,40,20);doc.addImage(f2,"PNG",135,y+10,40,20);
+      doc.setFont("helvetica","bold");
+      doc.text("Francisco Méndez Égüez",60,y+35,{align:"center"});doc.text("Director Carrera",60,y+40,{align:"center"});
+      doc.text("María A. Suárez Ribera",155,y+35,{align:"center"});doc.text("Directora CIRCPyCS",155,y+40,{align:"center"});
+      doc.setDrawColor(178,34,34);doc.setLineWidth(.5);doc.line(10,265,206,265);
+      doc.setFont("helvetica","normal");doc.setFontSize(10);
+      doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja",108,272,{align:"center"});
+      doc.save(`Certificacion_${nombreInvestigador.replace(/\s+/g,"_")}.pdf`);
+    }
+    function cargarImagen(url){
+      return new Promise((ok,er)=>{
+        const i=new Image();i.crossOrigin="anonymous";
+        i.onload=()=>ok(i);i.onerror=er;i.src=url;
+      });
+    }
   </script>
 </body>
 </html>
-
