@@ -1,319 +1,295 @@
-export default function CIRCPyCSHome() {
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Top ribbon with brand colors */}
-      <div className="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" />
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — UAGRM</title>
+  <meta name="description" content="Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "Segoe UI", "Roboto", "Helvetica Neue", "Arial"] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Top ribbon with brand colors -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-      {/* Header / Nav */}
-      <header className="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-          <a href="#inicio" className="flex items-center gap-3 group">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-sky-600 to-rose-600 shadow-sm" />
-            <div className="leading-tight">
-              <p className="text-sm tracking-wide text-slate-500">UAGRM — Santa Cruz</p>
-              <h1 className="font-bold text-lg">CIRCPyCS</h1>
-            </div>
-          </a>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#agenda" className="hover:text-sky-700">Agenda</a>
-            <a href="#repositorio" className="hover:text-sky-700">Repositorio</a>
-            <a href="#investigacion" className="hover:text-sky-700">Investigación</a>
-            <a href="#laboratorio" className="hover:text-sky-700">Laboratorio</a>
-            <a href="#publicaciones" className="hover:text-sky-700">Publicaciones</a>
-            <a href="#eventos" className="hover:text-sky-700">Eventos</a>
-            <a href="#formacion" className="hover:text-sky-700">Formación</a>
-            <a href="#sobre" className="hover:text-sky-700">Sobre</a>
-          </nav>
-          <div className="md:hidden">
-            <a href="#menu" className="inline-flex items-center px-3 py-2 rounded-xl border border-slate-200">Menú</a>
-          </div>
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-sky-600 to-rose-600 shadow-sm"></div>
+        <div class="leading-tight">
+          <p class="text-sm tracking-wide text-slate-500">UAGRM — Santa Cruz</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
         </div>
-      </header>
+      </a>
 
-      {/* Hero */}
-      <section id="inicio" className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 opacity-20" aria-hidden>
-          <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl" />
-          <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl" />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</span>
-            <h2 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Evidencia para políticas públicas locales y regionales
-            </h2>
-            <p className="mt-4 text-slate-600 max-w-prose">
-              Diseñamos investigación aplicada, formamos comunidad académica y abrimos datos para fortalecer la toma de decisiones en Santa Cruz y Bolivia. Nuestro trabajo integra <strong>política comparada</strong>, <strong>economía del comportamiento</strong>, <strong>planificación urbana</strong> y <strong>análisis institucional</strong>.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#repositorio" className="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Ir al Repositorio</a>
-              <a href="#laboratorio" className="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700">Datos y Tablas</a>
-            </div>
-            {/* Quick stats */}
-            <dl className="mt-8 grid grid-cols-3 gap-6 text-center">
-              <div className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Líneas</dt>
-                <dd className="mt-1 text-2xl font-bold">8</dd>
-              </div>
-              <div className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Datasets</dt>
-                <dd className="mt-1 text-2xl font-bold">15+</dd>
-              </div>
-              <div className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Eventos/año</dt>
-                <dd className="mt-1 text-2xl font-bold">30</dd>
-              </div>
-            </dl>
-          </div>
-          {/* Featured card */}
-          <div className="relative">
-            <div className="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden">
-              <div className="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" />
-              <div className="p-6">
-                <h3 className="font-bold text-xl">Revista <span className="italic">Conocimiento i Política</span> — Nueva Época</h3>
-                <p className="mt-2 text-slate-600">Acceso abierto en OJS. Lee el Número 5 (julio 2025), envía artículos y revisa nuestras normas editoriales.</p>
-                <div className="mt-4 flex gap-3">
-                  <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700">Abrir en OJS</a>
-                  <a href="#publicaciones" className="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Ver publicaciones</a>
-                </div>
-              </div>
-            </div>
-            <div className="absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200">
-              <span className="font-semibold">Actualizado:</span> Ago 2025
+      <!-- primary nav -->
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#servicios" class="hover:text-sky-700">Servicios</a>
+        <a href="#repositorio" class="hover:text-sky-700">Repositorio</a>
+
+        <!-- Investigación (dropdown) -->
+        <div class="relative group">
+          <a href="#investigacion" class="hover:text-sky-700">Investigación</a>
+          <div class="absolute left-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
+            <div class="p-2 grid gap-1 text-sm">
+              <a href="#lineas" class="px-3 py-2 rounded-lg hover:bg-slate-50">Líneas de investigación</a>
+              <a href="#grupos" class="px-3 py-2 rounded-lg hover:bg-slate-50">Grupos de investigación</a>
+              <a href="#proyectos" class="px-3 py-2 rounded-lg hover:bg-slate-50">Proyectos de investigación</a>
+              <a href="#protocolos" class="px-3 py-2 rounded-lg hover:bg-slate-50">Protocolos de investigación</a>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Shortcut grid */}
-      <section className="py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { id: 'agenda', title: 'Agenda', desc: 'Próximos conversatorios, seminarios y talleres.', href: '#agenda' },
-              { id: 'repositorio', title: 'Repositorio', desc: 'Normativa, calendarios y bibliografía temática.', href: '#repositorio' },
-              { id: 'investigacion', title: 'Investigación', desc: 'Líneas, grupos y proyectos en curso.', href: '#investigacion' },
-              { id: 'laboratorio', title: 'Laboratorio', desc: 'Tablas comparativas, bases y GitHub.', href: '#laboratorio' },
-              { id: 'publicaciones', title: 'Publicaciones', desc: 'Revista, documentos de trabajo y reseñas.', href: '#publicaciones' },
-              { id: 'eventos', title: 'Eventos', desc: 'Memorias y multimedia de actividades.', href: '#eventos' },
-              { id: 'formacion', title: 'Formación', desc: 'Cursos, grupo de lectura y escuela de métodos.', href: '#formacion' },
-              { id: 'sobre', title: 'Sobre', desc: 'Equipo, consejo asesor y contacto.', href: '#sobre' },
-            ].map((item) => (
-              <a key={item.id} href={`#${item.id}`} className="group rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all">
-                <div className="flex items-start justify-between">
-                  <h3 className="font-semibold text-lg">{item.title}</h3>
-                  <span className="text-slate-400 group-hover:text-sky-600">→</span>
-                </div>
-                <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
-                <div className="mt-4 h-1 rounded bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 opacity-70" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
+        <a href="#laboratorio" class="hover:text-sky-700">Laboratorio</a>
+        <a href="#publicaciones" class="hover:text-sky-700">Publicaciones</a>
+        <a href="#eventos" class="hover:text-sky-700">Eventos y multimedia</a>
+        <a href="#sobre" class="hover:text-sky-700">Organización</a>
+        <a href="#formacion" class="hover:text-sky-700">Formación</a>
+        <a href="#internacionalizacion" class="hover:text-sky-700">Internacionalización</a>
+      </nav>
 
-      {/* Agenda */}
-      <section id="agenda" className="py-14 bg-white border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Agenda</h2>
-            <a href="#" className="text-sm text-sky-700 hover:underline">Ver calendario completo</a>
-          </div>
-          <div className="mt-6 grid md:grid-cols-3 gap-5">
-            {[
-              { date: '28 Ago • 08:00 (BO)', title: 'Conversatorios Críticos sobre Liberalismo Económico', note: 'Sesión con invitado internacional (virtual).', status: 'Próximo (tentativo)' },
-              { date: 'Sep • 2025', title: 'SEPECI — Seminario Permanente', note: 'Ciclo sobre comportamiento político e instituciones.', status: 'En curso' },
-              { date: 'Todo el año', title: 'Grupo de Lectura', note: 'Economía política clásica y políticas públicas.', status: 'Inscripciones abiertas' },
-            ].map((ev, i) => (
-              <div key={i} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                <p className="text-xs uppercase tracking-wide text-slate-500">{ev.status}</p>
-                <h3 className="mt-1 font-semibold">{ev.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{ev.note}</p>
-                <div className="mt-4 text-sm font-medium text-slate-800">{ev.date}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Repositorio */}
-      <section id="repositorio" className="py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold">Repositorio</h2>
-          <p className="mt-2 text-slate-600 max-w-prose">Colección curada de normativa, calendarios electorales, bibliografía recomendada y hemeroteca regional.</p>
-          <div className="mt-6 grid md:grid-cols-3 gap-5">
-            {[
-              { title: 'Normativa Municipal/Departamental', desc: 'Compendio de leyes y ordenanzas relevantes.', tag: 'Actualizable' },
-              { title: 'Calendarios Electorales', desc: 'Cronogramas y enlaces oficiales.', tag: 'Enlazado' },
-              { title: 'Bibliografía y Hemeroteca', desc: 'Lecturas clave y dossiers temáticos.', tag: 'Curado' },
-            ].map((b, i) => (
-              <div key={i} className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
-                <div className="inline-flex items-center gap-2 text-xs font-semibold px-2 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">{b.tag}</div>
-                <h3 className="mt-3 font-semibold">{b.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Investigación */}
-      <section id="investigacion" className="py-14 bg-white border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold">Investigación</h2>
-          <p className="mt-2 text-slate-600 max-w-prose">Líneas: instituciones, políticas públicas, comportamiento político, economía política, género y política, gobernanza electoral, urbanismo y datos públicos.</p>
-          <div className="mt-6 grid md:grid-cols-3 gap-5">
-            {[
-              { title: 'Líneas y Grupos', desc: 'Definiciones, objetivos y equipo.' },
-              { title: 'Proyectos', desc: 'Portafolio activo y resultados.' },
-              { title: 'Publicaciones científicas', desc: 'Artículos, capítulos y libros.' },
-            ].map((c, i) => (
-              <div key={i} className="rounded-2xl p-5 bg-gradient-to-br from-white to-slate-50 border border-slate-200">
-                <h3 className="font-semibold">{c.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{c.desc}</p>
-                <div className="mt-4 h-1 rounded bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 opacity-70" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Laboratorio */}
-      <section id="laboratorio" className="py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Laboratorio de Datos</h2>
-            <a href="#" className="text-sm text-emerald-700 hover:underline">Abrir en GitHub</a>
-          </div>
-          <div className="mt-6 grid lg:grid-cols-3 gap-5">
-            {[
-              { title: 'Tablas comparativas', desc: 'Sistemas electorales, representación y financiamiento.', badge: 'CSV/JSON' },
-              { title: 'Supervivencia política', desc: 'Base de datos pedagógica para análisis de eventos.', badge: 'Proyecto' },
-              { title: 'Observatorio municipal', desc: 'Indicadores urbanos y de gestión pública local.', badge: 'Mapa & Panel' },
-            ].map((d, i) => (
-              <div key={i} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 inline-flex">{d.badge}</div>
-                <h3 className="mt-3 font-semibold">{d.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{d.desc}</p>
-                <div className="mt-4 grid grid-cols-3 gap-2 text-xs text-slate-500">
-                  <div className="rounded-lg border border-slate-200 p-2">Descargar</div>
-                  <div className="rounded-lg border border-slate-200 p-2">Documentación</div>
-                  <div className="rounded-lg border border-slate-200 p-2">Vista</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Publicaciones */}
-      <section id="publicaciones" className="py-14 bg-white border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold">Publicaciones</h2>
-          <div className="mt-6 grid md:grid-cols-3 gap-5">
-            {[
-              { title: 'Revista Conocimiento i Política', desc: 'Nueva Época — Acceso abierto en OJS.', cta: 'Abrir OJS', href: 'https://ojs.uagrm.edu.bo/revista-conocimiento-politica' },
-              { title: 'Documentos de trabajo', desc: 'Series temáticas y métodos aplicados.', cta: 'Ver serie', href: '#' },
-              { title: 'Blog y reseñas', desc: 'Debates, datos y lecturas recomendadas.', cta: 'Leer', href: '#' },
-            ].map((p, i) => (
-              <a key={i} href={p.href} target={p.href.startsWith('http') ? '_blank' : undefined} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
-                <h3 className="font-semibold">{p.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{p.desc}</p>
-                <div className="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">{p.cta} <span>→</span></div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Eventos (memorias/multimedia) */}
-      <section id="eventos" className="py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold">Eventos — Memorias y Multimedia</h2>
-          <div className="mt-6 grid md:grid-cols-3 gap-5">
-            {[
-              { title: 'Conversatorios Críticos', desc: 'Videos y presentaciones.' },
-              { title: 'Seminario Permanente SEPECI', desc: 'Sesiones y lecturas.' },
-              { title: 'Escuela de Métodos', desc: 'Talleres prácticos y recursos.' },
-            ].map((e, i) => (
-              <div key={i} className="rounded-2xl border border-slate-200 bg-white p-5">
-                <h3 className="font-semibold">{e.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{e.desc}</p>
-                <div className="mt-3 text-sm text-emerald-700">Abrir colección →</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Formación */}
-      <section id="formacion" className="py-14 bg-white border-y border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold">Formación de RRHH</h2>
-          <p className="mt-2 text-slate-600 max-w-prose">Cursos y talleres, grupo de lectura, y laboratorio de análisis de datos aplicados a políticas públicas.</p>
-          <div className="mt-6 grid md:grid-cols-3 gap-5">
-            {[
-              { title: 'Curso: Métodos y Técnicas de Investigación', desc: 'Actualización intensiva para profesionales.' },
-              { title: 'Taller de Análisis de Datos', desc: 'Python/R, visualización y reproducibilidad.' },
-              { title: 'Programa de Mentorías', desc: 'Acompañamiento de tesis y proyectos.' },
-            ].map((f, i) => (
-              <div key={i} className="rounded-2xl p-5 bg-gradient-to-br from-white to-slate-50 border border-slate-200">
-                <h3 className="font-semibold">{f.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Sobre */}
-      <section id="sobre" className="py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <h2 className="text-2xl font-bold">Sobre el Centro</h2>
-              <p className="mt-2 text-slate-600">El CIRCPyCS es una iniciativa de la UAGRM dedicada a investigación aplicada y formación en ciencia política y ciencias sociales. Promovemos datos abiertos, colaboración interdisciplinaria y transferencia de conocimiento para el desarrollo regional.</p>
-              <ul className="mt-4 space-y-2 text-slate-700 list-disc list-inside">
-                <li>Consejo asesor y equipo de investigación.</li>
-                <li>Metodología y lineamientos éticos.</li>
-                <li>Informes de actividades y transparencia.</li>
-              </ul>
-            </div>
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="font-semibold">Contacto</h3>
-              <p className="mt-1 text-sm text-slate-600">Escríbenos para colaboraciones, cursos o investigaciones conjuntas.</p>
-              <div className="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
-                <div className="rounded-xl border border-slate-200 p-3">
-                  <div className="text-slate-500">Email</div>
-                  <div className="font-medium">centro.investigacion@uagrm.edu.bo</div>
-                </div>
-                <div className="rounded-xl border border-slate-200 p-3">
-                  <div className="text-slate-500">Ciudad</div>
-                  <div className="font-medium">Santa Cruz de la Sierra, Bolivia</div>
-                </div>
-                <div className="rounded-xl border border-slate-200 p-3">
-                  <div className="text-slate-500">Redes</div>
-                  <div className="font-medium">YouTube • Facebook • X</div>
-                </div>
-                <div className="rounded-xl border border-slate-200 p-3">
-                  <div className="text-slate-500">OJS</div>
-                  <a className="font-medium text-sky-700 hover:underline" target="_blank" href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica">Revista Conocimiento i Política</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p>© {new Date().getFullYear()} CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
-            <p className="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span className="ml-2">Actualizado: Ago 2025</span></p>
-          </div>
-        </div>
-      </footer>
+      <div class="md:hidden">
+        <a href="#menu" class="inline-flex items-center px-3 py-2 rounded-xl border border-slate-200">Menú</a>
+      </div>
     </div>
-  );
-}
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</span>
+        <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Bienvenidos al CIRCPyCS</h2>
+        <p class="mt-4 text-slate-600 max-w-prose">
+          Diseñamos investigación aplicada, formamos comunidad académica y abrimos datos para fortalecer la toma de decisiones en Santa Cruz y Bolivia. Nuestro trabajo integra <strong>política comparada</strong>, <strong>economía del comportamiento</strong>, <strong>planificación urbana</strong> y <strong>análisis institucional</strong>.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#repositorio" class="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Ir al Repositorio</a>
+          <a href="#laboratorio" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700">Datos y Tablas</a>
+        </div>
+
+        <!-- Quick stats (dos filas; los largos más anchos) -->
+        <dl class="mt-8 grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-normal text-slate-500 leading-4 break-words">Líneas</dt>
+            <dd class="mt-1 text-3xl font-extrabold">18</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-normal text-slate-500 leading-4 break-words">Seminarios</dt>
+            <dd class="mt-1 text-3xl font-extrabold">10</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-normal text-slate-500 leading-4 break-words">Conferencias</dt>
+            <dd class="mt-1 text-3xl font-extrabold">6</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-normal text-slate-500 leading-4 break-words">Conversatorios</dt>
+            <dd class="mt-1 text-3xl font-extrabold">3</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm md:col-span-2">
+            <dt class="text-[11px] uppercase tracking-normal text-slate-500 leading-4 break-words">Investigadores adscritos</dt>
+            <dd class="mt-1 text-3xl font-extrabold">50</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm md:col-span-2">
+            <dt class="text-[11px] uppercase tracking-normal text-slate-500 leading-4 break-words">Estudiantes investigadores</dt>
+            <dd class="mt-1 text-3xl font-extrabold">33</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Featured card -->
+      <div class="relative">
+        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden">
+          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
+            <p class="mt-2 text-slate-600">Acceso abierto en OJS. Lee el Número 5 (julio 2025), envía artículos y revisa nuestras normas editoriales.</p>
+            <div class="mt-4 flex gap-3">
+              <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700">Abrir en OJS</a>
+              <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Ver publicaciones</a>
+            </div>
+          </div>
+        </div>
+        <div class="absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200">
+          <span class="font-semibold">Actualizado:</span> Ago 2025
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios (para que el enlace del header apunte a algo real) -->
+  <section id="servicios" class="py-14 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">Servicios</h2>
+        <a href="#" class="text-sm text-sky-700 hover:underline">Ver catálogo completo</a>
+      </div>
+      <div class="mt-6 grid md:grid-cols-3 gap-5">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Asesoría</p>
+          <h3 class="mt-1 font-semibold">Políticas públicas y diseño institucional</h3>
+          <p class="mt-1 text-sm text-slate-600">Diagnósticos, líneas base y evaluación.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Datos</p>
+          <h3 class="mt-1 font-semibold">Laboratorio y visualización</h3>
+          <p class="mt-1 text-sm text-slate-600">Dashboards, mapas y publicación de datos.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Difusión</p>
+          <h3 class="mt-1 font-semibold">Revista y series de documentos</h3>
+          <p class="mt-1 text-sm text-slate-600">OJS, working papers y reseñas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Repositorio -->
+  <section id="repositorio" class="py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold">Repositorio</h2>
+      <p class="mt-2 text-slate-600 max-w-prose">Colección curada de normativa, calendarios electorales, bibliografía recomendada y hemeroteca regional.</p>
+      <div class="mt-6 grid md:grid-cols-3 gap-5">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold px-2 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Actualizable</div>
+          <h3 class="mt-3 font-semibold">Normativa Municipal/Departamental</h3>
+          <p class="mt-1 text-sm text-slate-600">Compendio de leyes y ordenanzas relevantes.</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold px-2 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Enlazado</div>
+          <h3 class="mt-3 font-semibold">Calendarios Electorales</h3>
+          <p class="mt-1 text-sm text-slate-600">Cronogramas y enlaces oficiales.</p>
+        </div>
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+          <div class="inline-flex items-center gap-2 text-xs font-semibold px-2 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Curado</div>
+          <h3 class="mt-3 font-semibold">Bibliografía y Hemeroteca</h3>
+          <p class="mt-1 text-sm text-slate-600">Lecturas clave y dossiers temáticos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publicaciones -->
+  <section id="publicaciones" class="py-14 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold">Publicaciones</h2>
+      <div class="mt-6 grid md:grid-cols-3 gap-5">
+        <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Revista Conocimiento i Política</h3>
+          <p class="mt-1 text-sm text-slate-600">Nueva Época — Acceso abierto en OJS.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Abrir OJS <span>→</span></div>
+        </a>
+        <a href="#" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Documentos de trabajo</h3>
+          <p class="mt-1 text-sm text-slate-600">Series temáticas y métodos aplicados.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver serie <span>→</span></div>
+        </a>
+        <a href="#" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Blog y reseñas</h3>
+          <p class="mt-1 text-sm text-slate-600">Debates, datos y lecturas recomendadas.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Leer <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eventos (memorias/multimedia) -->
+  <section id="eventos" class="py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold">Eventos y Multimedia</h2>
+      <p class="mt-2 text-slate-600">Sigue nuestras transmisiones, repositorios de video y actualizaciones en redes.</p>
+      <div class="mt-6 grid md:grid-cols-3 gap-5">
+        <a href="#" target="_blank" class="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">YouTube</div>
+          <h3 class="mt-3 font-semibold text-lg">Canal — Conversatorios, seminarios y conferencias</h3>
+          <p class="mt-1 text-sm text-slate-600">Videos completos y listas de reproducción.</p>
+          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir canal <span>→</span></div>
+        </a>
+        <a href="#" target="_blank" class="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Facebook</div>
+          <h3 class="mt-3 font-semibold text-lg">Página — Eventos, fotos y transmisiones</h3>
+          <p class="mt-1 text-sm text-slate-600">Cobertura y anuncios en tiempo real.</p>
+          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir página <span>→</span></div>
+        </a>
+        <a href="#" target="_blank" class="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">X</div>
+          <h3 class="mt-3 font-semibold text-lg">Perfil — Hilos, avisos y clips</h3>
+          <p class="mt-1 text-sm text-slate-600">Actualizaciones rápidas y enlaces.</p>
+          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir perfil <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section id="sobre" class="py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="text-2xl font-bold">Sobre el Centro</h2>
+          <p class="mt-2 text-slate-600">El CIRCPyCS es una iniciativa de la UAGRM dedicada a investigación aplicada y formación en ciencia política y ciencias sociales. Promovemos datos abiertos, colaboración interdisciplinaria y transferencia de conocimiento para el desarrollo regional.</p>
+          <ul class="mt-4 space-y-2 text-slate-700 list-disc list-inside">
+            <li>Consejo asesor y equipo de investigación.</li>
+            <li>Metodología y lineamientos éticos.</li>
+            <li>Informes de actividades y transparencia.</li>
+          </ul>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 class="font-semibold">Contacto</h3>
+          <p class="mt-1 text-sm text-slate-600">Escríbenos para colaboraciones, cursos o investigaciones conjuntas.</p>
+          <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">Email</div>
+              <div class="font-medium">centro.investigacion@uagrm.edu.bo</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">Ciudad</div>
+              <div class="font-medium">Santa Cruz de la Sierra, Bolivia</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">Redes</div>
+              <div class="font-medium">YouTube • Facebook • X</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">OJS</div>
+              <a class="font-medium text-sky-700 hover:underline" target="_blank" href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica">Revista Conocimiento i Política</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
+        <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span class="ml-2">Actualizado: Ago 2025</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico en el pie
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
