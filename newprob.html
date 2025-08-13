@@ -27,20 +27,21 @@
   <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       <a href="#inicio" class="flex items-center gap-3 group">
-        <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-sky-600 to-rose-600 shadow-sm"></div>
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-sky-600 to-rose-600 shadow-sm" aria-hidden="true"></div>
         <div class="leading-tight">
           <p class="text-sm tracking-wide text-slate-500">UAGRM — Santa Cruz</p>
           <h1 class="font-bold text-lg">CIRCPyCS</h1>
         </div>
       </a>
 
+      <!-- Nav escritorio -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="#servicios" class="hover:text-sky-700">Servicios</a>
         <a href="#repositorio" class="hover:text-sky-700">Repositorio</a>
 
         <!-- Investigación (dropdown) -->
         <div class="relative group">
-          <a href="#investigacion" class="hover:text-sky-700">Investigación</a>
+          <button class="hover:text-sky-700">Investigación</button>
           <div class="absolute left-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
             <div class="p-2 grid gap-1 text-sm">
               <a href="#lineas" class="px-3 py-2 rounded-lg hover:bg-slate-50">Líneas de investigación</a>
@@ -59,9 +60,61 @@
         <a href="#internacionalizacion" class="hover:text-sky-700">Internacionalización</a>
       </nav>
 
-      <div class="md:hidden">
-        <a href="#menu" class="inline-flex items-center px-3 py-2 rounded-xl border border-slate-200">Menú</a>
-      </div>
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+        <span>Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Panel móvil -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="h-7 w-7 rounded-lg bg-gradient-to-tr from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+            <span class="font-semibold">CIRCPyCS</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#servicios">Servicios</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#repositorio">Repositorio</a></li>
+
+          <!-- Investigación (acordeón) -->
+          <li class="border-t border-slate-200 pt-3 mt-3">
+            <details id="m-investigacion" class="group">
+              <summary class="list-none flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg hover:bg-slate-50">
+                <span>Investigación</span>
+                <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </summary>
+              <div class="mt-1 space-y-1 pl-3">
+                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#lineas">Líneas de investigación</a>
+                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#grupos">Grupos de investigación</a>
+                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#proyectos">Proyectos de investigación</a>
+                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#protocolos">Protocolos de investigación</a>
+              </div>
+            </details>
+          </li>
+
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#laboratorio">Laboratorio</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#publicaciones">Publicaciones</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#eventos">Eventos y multimedia</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#sobre">Organización</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#formacion">Formación</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#internacionalizacion">Internacionalización</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
@@ -84,7 +137,7 @@
           <a href="#laboratorio" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700">Datos y Tablas</a>
         </div>
 
-        <!-- Marcadores (2 filas / 3 columnas; rótulos sin cortes raros) -->
+        <!-- Marcadores -->
         <dl class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
           <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
             <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Líneas</dt>
@@ -116,7 +169,7 @@
       <!-- Tarjeta destacada -->
       <div class="relative">
         <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden">
-          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
           <div class="p-6">
             <h3 class="font-bold text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
             <p class="mt-2 text-slate-600">Acceso abierto en OJS. Lee el Número 5 (julio 2025), envía artículos y revisa nuestras normas editoriales.</p>
@@ -209,7 +262,7 @@
     </div>
   </section>
 
-  <!-- Eventos (memorias/multimedia) -->
+  <!-- Eventos -->
   <section id="eventos" class="py-14">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold">Eventos y Multimedia</h2>
@@ -287,8 +340,34 @@
   </footer>
 
   <script>
-    // Año dinámico en el pie
+    // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+
+    function openMenu() {
+      wrap.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      wrap.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    backdrop.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+    // Cerrar al hacer click en un enlace del panel
+    wrap.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t.tagName === 'A') closeMenu();
+    });
   </script>
 </body>
 </html>
