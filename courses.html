@@ -1,203 +1,309 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es" class="scroll-smooth">
 <head>
-<base href="https://cir.uagrm.edu.bo/">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CIRCPyCS - Cursos de Ciencias Sociales</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-:root {--primary-color: #333333; --secondary-color: #666666; --accent-color: #999999; --background-color: #f0f0f0; --text-color: #333333;}
-body {font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); line-height: 1.6;}
-h1, h2, h3, h4, h5, h6 {font-family: 'Playfair Display', serif;}
-.navbar {background-color: var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
-.navbar-brand {font-weight: 600; font-size: 1.5rem;}
-.hero {background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; padding: 4rem 0; margin-bottom: 2rem;}
-.hero h1 {font-size: 3rem; margin-bottom: 1rem;}
-.hero p {font-size: 1.2rem; opacity: 0.9;}
-.card {border: none; border-radius: 8px; transition: all 0.3s ease; background: white; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-.card:hover {transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1);}
-.card-title {color: var(--primary-color);}
-.card-body {padding: 2rem;}
-.btn-primary {background-color: var(--primary-color); border-color: var(--primary-color); transition: all 0.3s ease;}
-.btn-primary:hover {background-color: var(--secondary-color); border-color: var(--secondary-color);}
-.footer {background-color: var(--primary-color); color: white; padding: 3rem 0;}
-.course-details {display: block; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;}
-.alert-info {background-color: #e1f5fe; border-color: #4fc3f7; color: #0288d1;}
-</style>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container">
-    <a class="navbar-brand" href="#">CIRCPyCS</a>
-    <a href="https://cir.uagrm.edu.bo/" class="btn btn-outline-light">Volver al Inicio</a>
-  </div>
-</nav>
-<section class="hero">
-  <div class="container text-center">
-    <h1>Cursos de Ciencias Sociales</h1>
-    <p>Descubre el poder de la tecnología en las ciencias sociales</p>
-  </div>
-</section>
-<div class="container my-5">
-  <h1 class="text-center mb-5">Cursos de Ciencias Sociales</h1>
-  <div class="alert alert-info" role="alert">
-    <h4 class="alert-heading">Información Importante</h4>
-    <p>Los cursos son virtuales o presenciales y requieren que los participantes tengan acceso a una laptop o PC con conexión a internet.</p>
-  </div>
-  <div class="row row-cols-1 row-cols-md-2 g-4">
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><i class="fas fa-python"></i> Ciencias Sociales con Python</h5>
-          <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-user-tie"></i> Instructor: Ricardo Alonzo Fernández Salguero, PhD candidate</h6>
-          <div class="alert alert-success" role="alert"><strong><i class="fas fa-check-circle"></i> ¡Curso Vigente!</strong> Inscripciones abiertas para la edición de Octubre 2025.</div>
-          <p class="card-text">
-            <i class="fas fa-university"></i> <strong>Institución:</strong> Universidad Politécnica de Cataluña, España<br>
-            <i class="fas fa-brain"></i> <strong>Especialidad:</strong> Inteligencia Artificial<br>
-            <i class="far fa-clock"></i> <strong>Horario:</strong> Lunes y Miércoles, 7:00 PM - 10:00 PM<br>
-            <i class="fas fa-calendar-alt"></i> <strong>Duración:</strong> 4 sesiones<br>
-            <i class="fas fa-calendar-check"></i> <strong>Inicio:</strong> Octubre 2025<br>
-            <i class="fas fa-certificate"></i> <strong>Certificado:</strong> Se otorga certificado al finalizar el curso
-          </p>
-          <div class="alert alert-info" role="alert">
-            <h6><i class="fas fa-tags"></i> Precios:</h6>
-            <p><strong>Participantes Nacionales:</strong><br>Estudiantes: Bs. 50<br>Profesionales: Bs. 200</p>
-            <p><strong>Participantes Extranjeros (PayPal):</strong><br>Estudiantes: USD 10<br>Profesionales: USD 40</p>
-          </div>
-          <div id="python-details" class="course-details">
-            <h6><i class="fas fa-list-ul"></i> Temario:</h6>
-            <ol>
-              <li>Introducción a Python para Ciencias Sociales</li>
-              <li>Análisis de datos con Pandas</li>
-              <li>Visualización de datos sociales con Matplotlib y Seaborn</li>
-              <li>Análisis de redes sociales con NetworkX</li>
-              <li>Minería de texto y análisis de sentimientos</li>
-              <li>Introducción al aprendizaje automático para ciencias sociales</li>
-            </ol>
-            <p>Este curso está diseñado para introducir a los científicos sociales en el uso de Python para el análisis de datos. Los participantes aprenderán a manejar, analizar y visualizar datos sociales utilizando las bibliotecas más populares de Python. Al final del curso, los estudiantes serán capaces de aplicar técnicas computacionales a sus propios proyectos de investigación social.</p>
-          </div>
-          <a href="https://forms.gle/HMs2kjA3TxTqBfEp9" class="btn btn-primary mt-3 me-2"><i class="fas fa-sign-in-alt"></i> Inscríbete Ahora</a>
-          <a href="#opciones-pago" class="btn btn-success mt-3"><i class="fas fa-money-bill-wave"></i> Pagar</a>
-        </div>
-      </div>
-    </div>
-      <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><i class="fas fa-python"></i> Construcción de habilidades de Investigación</h5>
-          <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-user-tie"></i> Instructora: Dra. Loreto Correa Vera</h6>
-          <div class="alert alert-success" role="alert"><strong><i class="fas fa-check-circle"></i> ¡Curso Vigente!</strong> Inscripciones abiertas para la edición de Septiembre 2025.</div>
-          <p class="card-text">
-            <i class="fas fa-university"></i> <strong>Institución:</strong> Academia Nacional de Estudios Políticos y Estratégicos, Chile<br>
-            <i class="fas fa-brain"></i> <strong>Especialidad:</strong> Historia<br>
-            <i class="far fa-clock"></i> <strong>Horario:</strong> Lunes y Martes, 8:30 AM - 13:30 PM<br>
-            <i class="fas fa-calendar-alt"></i> <strong>Duración:</strong> 2 sesiones<br>
-            <i class="fas fa-calendar-check"></i> <strong>Inicio:</strong> Septiembre 2025<br>
-            <i class="fas fa-certificate"></i> <strong>Certificado:</strong> Se otorga certificado al finalizar el curso
-          </p>
-          <div class="alert alert-info" role="alert">
-            <h6><i class="fas fa-tags"></i> Precios:</h6>
-            <p><strong>Participantes Nacionales:</strong><br>Estudiantes: Bs. 200<br>Profesionales: Bs. 300</p>
-            <p><strong>Participantes Extranjeros (PayPal):</strong><br>Estudiantes: USD 20<br>Profesionales: USD 40</p>
-          </div>
-          <div id="python-details" class="course-details">
-            <h6><i class="fas fa-list-ul"></i> Temario:</h6>
-            <ol>
-              <li>Tema 1: El problema de investigación</li>
-              <li>Tema 2: Estrategia, utilidad y pertinencia del estudio</li>
-              <li>Tema 3: Técnicas de recolección de información</li>
-              <li>Tema 4: Estructura del reporte de investigación</li>
-            </ol>
-            <p>Este curso está diseñado para introducir a los científicos sociales en los pasos iniciales de la producción académica. Los participantes aprenderán a analizar, construir y redactar problemas de investigación . Al final del curso, los estudiantes serán capaces de redactar sus propios proyectos de investigación.</p>
-          </div>
-          <a href="https://forms.gle/LB41ZE8zey9AAZJS6" class="btn btn-primary mt-3 me-2"><i class="fas fa-sign-in-alt"></i> Inscríbete Ahora</a>
-          <a href="https://wa.link/1z440f" class="btn btn-success mt-3"><i class="fas fa-money-bill-wave"></i> Pagar</a>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Introducción a la Ciencia de Datos para Científicos Sociales</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Instructor: MSc. Daniel Hurtado Justiniano</h6>
-          <p class="card-text">
-            <strong>Institución:</strong> Universidad Autónoma Gabriel René Moreno, Bolivia<br>
-            <strong>Especialidad:</strong> Inteligencia Artificial<br>
-            <strong>Horario:</strong> Martes y Jueves, 7:00 PM - 10:00 PM<br>
-            <strong>Duración:</strong> 5 sesiones<br>
-            <strong>Fecha:</strong> Marzo 2025
-          </p>
-          <div id="datascience-details" class="course-details">
-            <h6>Temario:</h6>
-            <ol>
-              <li>Fundamentos de la Ciencia de Datos</li>
-              <li>Recolección y preparación de datos sociales</li>
-              <li>Exploración y visualización de datos</li>
-              <li>Introducción al aprendizaje automático para ciencias sociales</li>
-              <li>Ética y privacidad en el manejo de datos sociales</li>
-              <li>Comunicación efectiva de resultados en ciencia de datos</li>
-            </ol>
-            <p>Este curso proporciona una introducción completa a la ciencia de datos desde la perspectiva de las ciencias sociales. Los participantes aprenderán el proceso completo de un proyecto de ciencia de datos, desde la recolección y limpieza de datos hasta el análisis y la comunicación de resultados. Se utilizarán herramientas como Python y R, y se discutirán las implicaciones éticas del uso de datos en la investigación social.</p>
-          </div>
-          <a href="#" class="btn btn-primary mt-3 me-2">Más Información</a>
-          <a href="#opciones-pago" class="btn btn-success mt-3">Pagar</a>
-        </div>
-      </div>
-    </div>
-  </div>
- <footer class="footer">
-  <div class="container text-center">
-    <p class="mb-1">
-      &copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los
-      derechos reservados.
-    </p>
-    <p class="mb-1">
-      Contacto:
-      <a href="mailto:contacto@circpycs.uagrm.edu.bo" class="text-white">
-        cri.cspoliticas.fcjpsri@uagrm.edu.bo
-      </a>
-      |
-      <i class="fas fa-phone"></i> +591 67381294
-    </p>
-    <p>
-      Síguenos en:
-      <a href="https://www.facebook.com" target="_blank" aria-label="Facebook" class="text-white me-3">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="https://www.twitter.com" target="_blank" aria-label="Twitter" class="text-white me-3">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="https://www.instagram.com" target="_blank" aria-label="Instagram" class="text-white">
-        <i class="fab fa-instagram"></i>
-      </a>
-    </p>
-  </div>
-</footer>
+  <base href="https://cir.uagrm.edu.bo/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — Cursos de Ciencias Sociales</title>
+  <meta name="description" content="Cursos y talleres del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
 
-<script>
-document.addEventListener('DOMContentLoaded', (event) => {
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      card.style.transform = 'translateY(-5px)';
-      card.style.boxShadow = '0 8px 15px rgba(0,0,0,0.1)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'translateY(0)';
-      card.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-    });
-  });
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({behavior: 'smooth'});
-    });
-  });
-});
-</script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+        <div class="leading-tight">
+          <p class="text-sm tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#cursos" class="hover:text-sky-700">Cursos</a>
+        <a href="#opciones-pago" class="hover:text-sky-700">Pago</a>
+        <a href="#contacto" class="hover:text-sky-700">Contacto</a>
+        <a href="https://cir.uagrm.edu.bo/" target="_blank" class="hover:text-sky-700">Volver al inicio</a>
+      </nav>
+
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+        <span>Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Panel móvil -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
+            <span class="font-semibold">CIRCPyCS</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cursos">Cursos</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#opciones-pago">Pago</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank">Volver al inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Formación continua — Ciencias Sociales</span>
+        <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Cursos de Ciencias Sociales</h2>
+        <p class="mt-4 text-slate-600">Descubre el poder de la tecnología en las ciencias sociales.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cursos -->
+  <section id="cursos" class="py-12 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Oferta vigente</h3>
+
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Curso 1: Python -->
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+          <div class="p-5">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold text-lg text-slate-900">Ciencias Sociales con Python</h4>
+              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 ring-1 ring-emerald-200 px-2 py-1 rounded-full">Vigente</span>
+            </div>
+            <p class="mt-1 text-sm text-slate-500">Instructor: Ricardo Alonzo Fernández Salguero, PhD candidate</p>
+
+            <div class="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700">
+              <div><span class="font-medium">Institución:</span> Universidad Politécnica de Cataluña, España</div>
+              <div><span class="font-medium">Especialidad:</span> Inteligencia Artificial</div>
+              <div><span class="font-medium">Horario:</span> Lunes y Miércoles, 7:00–10:00 PM</div>
+              <div><span class="font-medium">Duración:</span> 4 sesiones</div>
+              <div><span class="font-medium">Inicio:</span> Octubre 2025</div>
+              <div><span class="font-medium">Certificado:</span> Sí</div>
+            </div>
+
+            <div class="mt-4 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-slate-700">
+              <h5 class="font-semibold text-sky-800">Precios</h5>
+              <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <div class="text-slate-500 text-xs uppercase tracking-wide">Participantes Nacionales</div>
+                  <ul class="mt-1 space-y-1">
+                    <li>Estudiantes: <span class="font-medium whitespace-nowrap">Bs.&nbsp;50</span></li>
+                    <li>Profesionales: <span class="font-medium whitespace-nowrap">Bs.&nbsp;200</span></li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="text-slate-500 text-xs uppercase tracking-wide">Extranjeros (PayPal)</div>
+                  <ul class="mt-1 space-y-1">
+                    <li>Estudiantes: <span class="font-medium whitespace-nowrap">USD&nbsp;10</span></li>
+                    <li>Profesionales: <span class="font-medium whitespace-nowrap">USD&nbsp;40</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <h6 class="font-semibold">Temario</h6>
+              <ol class="mt-2 list-decimal list-inside text-sm text-slate-700 space-y-1">
+                <li>Introducción a Python para Ciencias Sociales</li>
+                <li>Análisis de datos con Pandas</li>
+                <li>Visualización con Matplotlib y Seaborn</li>
+                <li>Análisis de redes sociales con NetworkX</li>
+                <li>Minería de texto y sentimientos</li>
+                <li>Aprendizaje automático introductorio</li>
+              </ol>
+              <p class="mt-2 text-sm text-slate-600">Curso de entrada al uso de Python para análisis de datos sociales.</p>
+            </div>
+
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="https://forms.gle/HMs2kjA3TxTqBfEp9" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Inscríbete ahora<span>→</span></a>
+              <a href="#opciones-pago" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium border border-slate-300 hover:border-sky-600 hover:text-sky-700">Pagar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Curso 2: Investigación -->
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+          <div class="p-5">
+            <div class="flex items-center justify-between">
+              <h4 class="font-semibold text-lg text-slate-900">Construcción de habilidades de Investigación</h4>
+              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 ring-1 ring-emerald-200 px-2 py-1 rounded-full">Vigente</span>
+            </div>
+            <p class="mt-1 text-sm text-slate-500">Instructora: Dra. Loreto Correa Vera</p>
+
+            <div class="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700">
+              <div><span class="font-medium">Institución:</span> Academia Nacional de Estudios Políticos y Estratégicos, Chile</div>
+              <div><span class="font-medium">Especialidad:</span> Historia</div>
+              <div><span class="font-medium">Horario:</span> Lunes y Martes, 8:30 AM–1:30 PM</div>
+              <div><span class="font-medium">Duración:</span> 2 sesiones</div>
+              <div><span class="font-medium">Inicio:</span> Septiembre 2025</div>
+              <div><span class="font-medium">Certificado:</span> Sí</div>
+            </div>
+
+            <div class="mt-4 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-slate-700">
+              <h5 class="font-semibold text-sky-800">Precios</h5>
+              <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <div class="text-slate-500 text-xs uppercase tracking-wide">Participantes Nacionales</div>
+                  <ul class="mt-1 space-y-1">
+                    <li>Estudiantes: <span class="font-medium whitespace-nowrap">Bs.&nbsp;200</span></li>
+                    <li>Profesionales: <span class="font-medium whitespace-nowrap">Bs.&nbsp;300</span></li>
+                  </ul>
+                </div>
+                <div>
+                  <div class="text-slate-500 text-xs uppercase tracking-wide">Extranjeros (PayPal)</div>
+                  <ul class="mt-1 space-y-1">
+                    <li>Estudiantes: <span class="font-medium whitespace-nowrap">USD&nbsp;20</span></li>
+                    <li>Profesionales: <span class="font-medium whitespace-nowrap">USD&nbsp;40</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <h6 class="font-semibold">Temario</h6>
+              <ol class="mt-2 list-decimal list-inside text-sm text-slate-700 space-y-1">
+                <li>El problema de investigación</li>
+                <li>Estrategia, utilidad y pertinencia</li>
+                <li>Técnicas de recolección</li>
+                <li>Estructura del reporte</li>
+              </ol>
+              <p class="mt-2 text-sm text-slate-600">Pasos iniciales de la producción académica con énfasis práctico.</p>
+            </div>
+
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="https://forms.gle/LB41ZE8zey9AAZJS6" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Inscríbete ahora<span>→</span></a>
+              <a href="https://wa.link/1z440f" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium border border-slate-300 hover:border-sky-600 hover:text-sky-700">Pagar</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Curso 3: Ciencia de datos -->
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+          <div class="p-5">
+            <h4 class="font-semibold text-lg text-slate-900">Introducción a la Ciencia de Datos para Científicos Sociales</h4>
+            <p class="mt-1 text-sm text-slate-500">Instructor: MSc. Daniel Hurtado Justiniano</p>
+
+            <div class="mt-3 grid grid-cols-1 gap-2 text-sm text-slate-700">
+              <div><span class="font-medium">Institución:</span> UAGRM, Bolivia</div>
+              <div><span class="font-medium">Especialidad:</span> Inteligencia Artificial</div>
+              <div><span class="font-medium">Horario:</span> Martes y Jueves, 7:00–10:00 PM</div>
+              <div><span class="font-medium">Duración:</span> 5 sesiones</div>
+              <div><span class="font-medium">Fecha:</span> Marzo 2025</div>
+            </div>
+
+            <div class="mt-4">
+              <h6 class="font-semibold">Temario</h6>
+              <ol class="mt-2 list-decimal list-inside text-sm text-slate-700 space-y-1">
+                <li>Fundamentos de la ciencia de datos</li>
+                <li>Recolección y preparación de datos</li>
+                <li>Exploración y visualización</li>
+                <li>Introducción al aprendizaje automático</li>
+                <li>Ética y privacidad</li>
+                <li>Comunicación de resultados</li>
+              </ol>
+              <p class="mt-2 text-sm text-slate-600">Recorrido completo del ciclo de un proyecto de ciencia de datos aplicado a lo social.</p>
+            </div>
+
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Más información<span>→</span></a>
+              <a href="#opciones-pago" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium border border-slate-300 hover:border-sky-600 hover:text-sky-700">Pagar</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pago -->
+  <section id="opciones-pago" class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 items-start">
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="font-semibold text-lg">Opciones de pago</h3>
+        <p class="mt-2 text-sm text-slate-600">Próximamente: transferencia bancaria, QR y PayPal. Si tienes dudas, escríbenos por WhatsApp.</p>
+      </div>
+      <div id="contacto" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="font-semibold text-lg">Contacto</h3>
+        <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Email</div>
+            <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="font-medium text-sky-700">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Teléfono</div>
+            <div class="font-medium">+591 67381294</div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Ciudad</div>
+            <div class="font-medium">Santa Cruz de la Sierra, Bolivia</div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Sitio principal</div>
+            <a href="https://cir.uagrm.edu.bo/" target="_blank" class="font-medium text-sky-700">cir.uagrm.edu.bo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="text-slate-500">Este sitio no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+
+    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
+    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
+
+    openBtn?.addEventListener('click', openMenu);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+    backdrop?.addEventListener('click', closeMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+
+    // Cerrar al hacer click en un enlace del panel
+    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+  </script>
 </body>
 </html>
+
