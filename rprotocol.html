@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Protocolos de investigación — CIRCPyCS UAGRM</title>
+  <meta name="description" content="Protocolos y plantillas para proyectos de investigación del CIRCPyCS — UAGRM. Incluye metanálisis (PRISMA) y economía del comportamiento (RCT)." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#003366',
+            bgbase: '#f5f7fb',
+            borderc: '#e5e7eb'
+          },
+          fontFamily: {
+            sans: ['Poppins','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'],
+            serif: ['Playfair Display','serif']
+          },
+          boxShadow: {
+            soft: '0 8px 22px rgba(2,6,23,.08)'
+          },
+          borderRadius: { xl2: '18px' }
+        }
+      }
+    }
+  </script>
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.75rem;line-height:1rem}
+    .hero-bg:before{content:"";position:absolute;inset:-30%;background:radial-gradient(60% 60% at 20% 20%,rgba(16,185,129,.25),transparent 60%),radial-gradient(60% 60% at 80% 80%,rgba(244,63,94,.25),transparent 60%)}
+    .kbd{border:1px solid #e5e7eb;border-bottom-width:3px;border-radius:8px;padding:.1rem .35rem;font-size:.75rem}
+    textarea.template{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+  </style>
+</head>
+<body class="min-h-screen bg-bgbase text-slate-800 font-sans">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#protocolos" class="hover:text-sky-700">Protocolos</a>
+        <a href="#detalles" class="hover:text-sky-700">Detalles</a>
+        <a href="#plantillas" class="hover:text-sky-700">Plantillas</a>
+        <a href="#etica" class="hover:text-sky-700">Ética & Datos</a>
+        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
+      </nav>
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+        <span>Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <!-- Panel móvil -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-2xl p-6 overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
+            <span class="font-semibold">CIRCPyCS</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#protocolos">Protocolos</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#detalles">Detalles</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#plantillas">Plantillas</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#etica">Ética & Datos</a></li>
+          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative hero-bg">
+    <div class="absolute inset-0 -z-10 opacity-30"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación</span>
+      <h2 class="mt-4 font-serif text-3xl sm:text-4xl font-bold text-brand">Protocolos de investigación</h2>
+      <p class="mt-2 max-w-3xl text-slate-600">Estructuras claras para diseñar, ejecutar y reportar proyectos. Incluye metanálisis (PRISMA) y economía del comportamiento (RCT), con plantillas para prerregistros, consentimientos y gestión de datos.</p>
+    </div>
+  </section>
+
+  <!-- CATÁLOGO DE PROTOCOLOS -->
+  <section id="protocolos" class="pb-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Protocolo general -->
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft">
+          <div class="p-5">
+            <h3 class="font-semibold text-brand">Protocolo general para proyectos</h3>
+            <p class="mt-1 text-sm text-slate-600">Objetivos, preguntas, diseño, métodos, cronograma e indicadores de éxito.</p>
+            <div class="mt-3 space-x-2">
+              <span class="chip bg-sky-50 text-sky-700">Mixto</span>
+              <span class="chip bg-emerald-50 text-emerald-700">Reproducible</span>
+              <span class="chip bg-rose-50 text-rose-700">Prerregistro</span>
+            </div>
+            <a href="#detalles-general" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">Ver detalle <span aria-hidden>→</span></a>
+          </div>
+        </article>
+        <!-- Metanálisis -->
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft">
+          <div class="p-5">
+            <h3 class="font-semibold text-brand">Metanálisis (PRISMA)</h3>
+            <p class="mt-1 text-sm text-slate-600">Búsqueda sistemática, cribado, extracción, sesgo y meta-analítica.</p>
+            <div class="mt-3 space-x-2">
+              <span class="chip bg-sky-50 text-sky-700">PRISMA</span>
+              <span class="chip bg-emerald-50 text-emerald-700">Forest plot</span>
+              <span class="chip bg-rose-50 text-rose-700">Sesgo</span>
+            </div>
+            <a href="#detalles-metan" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">Ver detalle <span aria-hidden>→</span></a>
+          </div>
+        </article>
+        <!-- Economía del comportamiento -->
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft">
+          <div class="p-5">
+            <h3 class="font-semibold text-brand">Economía del comportamiento (RCT)</h3>
+            <p class="mt-1 text-sm text-slate-600">Nudges y ensayos controlados aleatorizados con análisis de poder.</p>
+            <div class="mt-3 space-x-2">
+              <span class="chip bg-sky-50 text-sky-700">RCT</span>
+              <span class="chip bg-emerald-50 text-emerald-700">Aleatorización</span>
+              <span class="chip bg-rose-50 text-rose-700">Ética</span>
+            </div>
+            <a href="#detalles-beh" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">Ver detalle <span aria-hidden>→</span></a>
+          </div>
+        </article>
+        <!-- Observacional & Encuesta -->
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft">
+          <div class="p-5">
+            <h3 class="font-semibold text-brand">Observacional & Encuesta</h3>
+            <p class="mt-1 text-sm text-slate-600">Muestreo, cuestionarios validados, sesgo de no respuesta y ponderadores.</p>
+            <div class="mt-3 space-x-2">
+              <span class="chip bg-sky-50 text-sky-700">Encuesta</span>
+              <span class="chip bg-emerald-50 text-emerald-700">Muestreo</span>
+              <span class="chip bg-rose-50 text-rose-700">Ponderación</span>
+            </div>
+            <a href="#detalles-obs" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">Ver detalle <span aria-hidden>→</span></a>
+          </div>
+        </article>
+        <!-- Cualitativo -->
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft">
+          <div class="p-5">
+            <h3 class="font-semibold text-brand">Cualitativo</h3>
+            <p class="mt-1 text-sm text-slate-600">Entrevistas, grupos focales, saturación teórica y triangulación.</p>
+            <div class="mt-3 space-x-2">
+              <span class="chip bg-sky-50 text-sky-700">Entrevistas</span>
+              <span class="chip bg-emerald-50 text-emerald-700">Focales</span>
+              <span class="chip bg-rose-50 text-rose-700">ATLAS.ti/NVivo</span>
+            </div>
+            <a href="#detalles-cual" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">Ver detalle <span aria-hidden>→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- DETALLES / ESTRUCTURAS -->
+  <main id="detalles" class="pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8">
+      <!-- General -->
+      <section id="detalles-general" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <h3 class="text-xl font-bold text-brand">Protocolo general de investigación</h3>
+            <ol class="mt-3 list-decimal pl-5 text-sm text-slate-700 space-y-1">
+              <li>Resumen ejecutivo (250–300 palabras).</li>
+              <li>Preguntas y hipótesis; teoría de cambio.</li>
+              <li>Diseño (experimental, cuasi-experimental, observacional o cualitativo).</li>
+              <li>Plan de muestreo y poder estadístico.</li>
+              <li>Instrumentos y variables; plan de análisis.</li>
+              <li>Cronograma e hitos; presupuesto resumido.</li>
+              <li>Riesgos/mitigación; ética, consentimiento y DMP.</li>
+              <li>Productos esperados y estrategia de difusión.</li>
+            </ol>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+              <button class="copy-btn px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-general">Copiar como plantilla</button>
+              <button class="download-btn px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-general" data-fn="protocolo-general.txt">Descargar .txt</button>
+            </div>
+            <p class="mt-2 text-xs text-slate-500">Si el copiado automático está bloqueado, el sistema seleccionará el texto: presiona <span class="kbd">Ctrl</span> + <span class="kbd">C</span> / <span class="kbd">⌘</span> + <span class="kbd">C</span>.</p>
+          </div>
+          <div class="rounded-2xl border border-borderc p-0 overflow-hidden">
+            <textarea id="tpl-general" class="template w-full h-60 p-3 text-xs"># Protocolo general
+
+## 1. Resumen
+
+## 2. Preguntas e hipótesis
+- P1: ...
+- H1: ...
+
+## 3. Diseño y población
+- Diseño: [experimental | observacional | cualitativo | mixto]
+- Marco muestral y cálculo de tamaño (poder α=0.05, 1-β=0.8)
+
+## 4. Variables e instrumentos
+- X (intervención/exposición), Y (resultado), C (confusores)
+- Validación de instrumentos
+
+## 5. Plan analítico
+- Modelos, supuestos, chequeos de robustez
+- Manejo de datos faltantes
+
+## 6. Cronograma e hitos
+
+## 7. Ética y DMP
+- Consentimiento informado, anonimización
+- Plan de gestión de datos (metadatos, repositorio)
+
+## 8. Productos
+- Artículo, policy brief, dataset, tablero</textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Metanálisis (PRISMA) -->
+      <section id="detalles-metan" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <h3 class="text-xl font-bold text-brand">Protocolo de metanálisis (PRISMA)</h3>
+            <p class="mt-2 text-slate-600">Plan para revisiones sistemáticas y metanálisis cuantitativos. Incluye flujo PRISMA, estimación de efectos y heterogeneidad.</p>
+            <ul class="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-slate-700 list-disc pl-5">
+              <li>Pregunta PICO/PECO y registro (p.ej., PROSPERO/OSF).</li>
+              <li>Estrategia de búsqueda (bases, cadenas y límites).</li>
+              <li>Criterios de inclusión/exclusión; doble cribado.</li>
+              <li>Extracción de datos y evaluación de sesgo (RoB/ROBINS).</li>
+              <li>Modelo de efectos (fijos/aleatorios) y heterogeneidad (I², τ²).</li>
+              <li>Sensibilidad, sesgo de publicación (funnel, Egger).</li>
+            </ul>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+              <button class="copy-btn px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-metan">Copiar como plantilla</button>
+              <button class="download-btn px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-metan" data-fn="protocolo-metaanalisis.txt">Descargar .txt</button>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-borderc p-0 overflow-hidden">
+            <textarea id="tpl-metan" class="template w-full h-60 p-3 text-xs"># Protocolo de metanálisis (PRISMA)
+
+## 1. Registro y pregunta
+- Registro: OSF/PROSPERO URL
+- PICO/PECO: P=, I/E=, C=, O=
+
+## 2. Búsqueda
+- Bases: Scopus, WoS, PubMed, regionales
+- Estrategias y fechas
+
+## 3. Selección de estudios
+- Inclusión/Exclusión
+- Proceso de cribado (dos revisores, kappa)
+
+## 4. Extracción y calidad
+- Plantilla de extracción
+- Riesgo de sesgo (RoB 2 / ROBINS-I)
+
+## 5. Síntesis estadística
+- Efecto: RR/OR/MD/SMD con IC95%
+- Modelo: fijos/aleatorios; heterogeneidad I², τ²
+- Subgrupos y metarregresión
+
+## 6. Sesgo de publicación y sensibilidad
+- Funnel, pruebas Egger/Begg
+
+## 7. Reporte PRISMA
+- Diagrama de flujo y checklist</textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Economía del comportamiento (RCT) -->
+      <section id="detalles-beh" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <h3 class="text-xl font-bold text-brand">Protocolo de economía del comportamiento (RCT)</h3>
+            <p class="mt-2 text-slate-600">Diseño de <em>nudges</em> y ensayos controlados aleatorizados en servicios públicos y políticas.</p>
+            <ul class="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-slate-700 list-disc pl-5">
+              <li>Teoría conductual (EAST/COM-B) y hipótesis medibles.</li>
+              <li>Aleatorización (unidad, ocultamiento, balance ex-ante).</li>
+              <li>Análisis de poder y tamaños de efecto mínimos detectables.</li>
+              <li>Indicadores de resultado primarios/secundarios y <span class="italic">analysis plan</span>.</li>
+              <li>Consideraciones éticas, riesgos y consentimiento informado.</li>
+              <li>Pre-registro (OSF/AEA) y transparencia.</li>
+            </ul>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+              <button class="copy-btn px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-beh">Copiar como plantilla</button>
+              <button class="download-btn px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-beh" data-fn="protocolo-economia-comportamiento.txt">Descargar .txt</button>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-borderc p-0 overflow-hidden">
+            <textarea id="tpl-beh" class="template w-full h-60 p-3 text-xs"># Protocolo RCT (Economía del comportamiento)
+
+## 1. Contexto y teoría
+- Marco EAST/COM-B; nudge propuesto
+
+## 2. Diseño
+- Unidad de aleatorización: individuo/hogar/oficina
+- Grupos: Control vs Tratamiento(s)
+- Ocultamiento, asignación, estratificación
+
+## 3. Poder estadístico
+- Supuestos, ICC si cluster, MDE
+
+## 4. Outcomes y medición
+- Primarios, secundarios, ventanas temporales
+
+## 5. Plan de análisis
+- Especificación, covariables, manejo de attrition
+
+## 6. Ética
+- Riesgos, consentimiento, salvaguardas
+
+## 7. Prerregistro y divulgación
+- OSF/AEA ID, materiales y código</textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Observacional -->
+      <section id="detalles-obs" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <h3 class="text-xl font-bold text-brand">Protocolo observacional y de encuestas</h3>
+            <p class="mt-2 text-slate-600">De la muestra a la ponderación, con énfasis en no respuesta y calidad de medición.</p>
+            <ul class="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-slate-700 list-disc pl-5">
+              <li>Marco y diseño muestral; cálculo de <span class="italic">n</span>.</li>
+              <li>Construcción y pilotaje de cuestionarios; validez y confiabilidad.</li>
+              <li>Procedimientos de campo, control de calidad y paradata.</li>
+              <li>Ponderadores, calibración y estimación.</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-borderc p-4 overflow-hidden flex items-center justify-center">
+            <div class="text-center text-slate-500 text-sm">Incluye checklist de sesgos, guión de encuesta y plan de ponderación.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cualitativo -->
+      <section id="detalles-cual" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <h3 class="text-xl font-bold text-brand">Protocolo cualitativo</h3>
+            <p class="mt-2 text-slate-600">Diseño flexible con rigor: muestreo teórico, saturación y triangulación metodológica.</p>
+            <ul class="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-slate-700 list-disc pl-5">
+              <li>Estrategia de muestreo y acceso al campo.</li>
+              <li>Guiones de entrevista/grupos focales y pilotaje.</li>
+              <li>Procedimientos de transcripción y codificación.</li>
+              <li>Fiabilidad intercodificador y auditoría.</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-borderc p-4 overflow-hidden flex items-center justify-center">
+            <div class="text-center text-slate-500 text-sm">Plantilla de códigos iniciales y matriz de triangulación.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- PLANTILLAS DESCARGABLES / COPIABLES -->
+  <section id="plantillas" class="py-10 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-serif font-bold text-brand text-center">Plantillas rápidas</h3>
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <!-- Prerregistro -->
+        <div class="rounded-xl2 border border-borderc bg-white p-5 shadow-soft">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-brand">Prerregistro (OSF)</h4>
+            <div class="space-x-2">
+              <button class="copy-btn text-sm px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-prereg">Copiar</button>
+              <button class="download-btn text-sm px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-prereg" data-fn="prerregistro-osf.json">Descargar .txt</button>
+            </div>
+          </div>
+          <textarea id="tpl-prereg" class="template mt-3 w-full h-48 p-3 text-xs">{
+  "title": "[Título del estudio]",
+  "questions": ["P1", "P2"],
+  "hypotheses": ["H1", "H2"],
+  "design": "RCT/Observacional/Cualitativo",
+  "sample": {"frame":"", "size": 0, "power": 0.8},
+  "outcomes": ["Y1", "Y2"],
+  "analysisPlan": "Modelos previstos y criterios de inclusión",
+  "ethics": {"risk":"bajo", "consent":"sí"}
+}</textarea>
+        </div>
+        <!-- Consentimiento -->
+        <div class="rounded-xl2 border border-borderc bg-white p-5 shadow-soft">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-brand">Consentimiento informado</h4>
+            <div class="space-x-2">
+              <button class="copy-btn text-sm px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-consent">Copiar</button>
+              <button class="download-btn text-sm px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-consent" data-fn="consentimiento-informado.txt">Descargar .txt</button>
+            </div>
+          </div>
+          <textarea id="tpl-consent" class="template mt-3 w-full h-48 p-3 text-xs">Título del estudio: ...
+Responsables: ...
+Objetivo: ...
+Procedimiento: ...
+Riesgos/beneficios: ...
+Confidencialidad y tratamiento de datos: ...
+Voluntariedad y retiro: ...
+Contacto: ...
+
+Nombre del participante: __________  Firma: __________  Fecha: ____/____/_____</textarea>
+        </div>
+        <!-- Plan de Gestión de Datos -->
+        <div class="rounded-xl2 border border-borderc bg-white p-5 shadow-soft">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-brand">Plan de gestión de datos (DMP)</h4>
+            <div class="space-x-2">
+              <button class="copy-btn text-sm px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-dmp">Copiar</button>
+              <button class="download-btn text-sm px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600" data-target="#tpl-dmp" data-fn="plan-gestion-datos.txt">Descargar .txt</button>
+            </div>
+          </div>
+          <textarea id="tpl-dmp" class="template mt-3 w-full h-48 p-3 text-xs">1) Descripción de datos (formatos, volumen).
+2) Recolección y control de calidad.
+3) Estructura de carpetas y metadatos.
+4) Almacenamiento/seguridad (encriptación, backups).
+5) Acceso y compartición (licencia, repositorio).
+6) Preservación (formatos abiertos, DOIs).
+7) Roles y responsabilidades.</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉTICA Y DATOS -->
+  <section id="etica" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-serif font-bold text-brand text-center">Ética, seguridad y datos</h3>
+      <div class="mt-6 grid gap-4 lg:grid-cols-3">
+        <div class="rounded-xl2 border border-borderc bg-white p-6 shadow-soft">
+          <h4 class="font-semibold text-brand">Principios</h4>
+          <p class="mt-2 text-sm text-slate-600">Respeto, beneficencia, justicia y minimización de daño. Evaluación ética previa y monitoreo continuo.</p>
+        </div>
+        <div class="rounded-xl2 border border-borderc bg-white p-6 shadow-soft">
+          <h4 class="font-semibold text-brand">Privacidad</h4>
+          <p class="mt-2 text-sm text-slate-600">Anonimización, seudonimización, control de acceso y acuerdos de confidencialidad. DPIA cuando aplique.</p>
+        </div>
+        <div class="rounded-xl2 border border-borderc bg-white p-6 shadow-soft">
+          <h4 class="font-semibold text-brand">Transparencia</h4>
+          <p class="mt-2 text-sm text-slate-600">Prerregistros, cuadernos abiertos, repositorios de código/datos y licencias claras para reutilización.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="grid place-items-center gap-3 text-center">
+        <p>© <span id="year"></span> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p>Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · +591 67381294</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+    function openMenu(){wrap.classList.remove('hidden');document.body.style.overflow='hidden'}
+    function closeMenu(){wrap.classList.add('hidden');document.body.style.overflow=''}
+    openBtn.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    backdrop?.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e)=>{if(e.key==='Escape') closeMenu()});
+
+    // ====== UTILIDADES SEGURO-CLIPBOARD (sin navigator.clipboard) ======
+    function legacyCopy(text){
+      // Intenta copiar usando execCommand (funciona en iframes/sandboxes)
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly','');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch(_) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+    function downloadText(text, filename='plantilla.txt'){
+      const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+    function selectElementContents(el){
+      if(el.select){ el.focus(); el.select(); return; }
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+    }
+
+    // Botones COPIAR (seguro)
+    document.querySelectorAll('.copy-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const tgt = document.querySelector(btn.dataset.target);
+        if(!tgt) return;
+        const text = (tgt.value ?? tgt.textContent ?? '').toString();
+        const ok = legacyCopy(text);
+        const original = btn.textContent;
+        if(ok){
+          btn.textContent = 'Copiado';
+        }else{
+          // Fallback: seleccionar y avisar al usuario
+          selectElementContents(tgt);
+          btn.textContent = 'Seleccionado — usa Ctrl+C / ⌘+C';
+        }
+        setTimeout(()=> btn.textContent = original, 1800);
+      })
+    });
+
+    // Botones DESCARGAR
+    document.querySelectorAll('.download-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const tgt = document.querySelector(btn.dataset.target);
+        if(!tgt) return;
+        const text = (tgt.value ?? tgt.textContent ?? '').toString();
+        const fn = btn.dataset.fn || 'plantilla.txt';
+        downloadText(text, fn);
+      })
+    });
+
+    // =====================
+    // "SMOKE TESTS" mínimos
+    // =====================
+    console.assert(typeof legacyCopy === 'function', 'legacyCopy no definido');
+    console.assert(document.querySelectorAll('.copy-btn').length >= 3, 'Faltan botones de copiar');
+    ['tpl-general','tpl-metan','tpl-beh','tpl-prereg','tpl-consent','tpl-dmp']
+      .forEach(id=> console.assert(document.getElementById(id), `Falta el textarea #${id}`));
+  </script>
+</body>
+</html>
