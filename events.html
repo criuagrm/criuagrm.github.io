@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eventos — CIRCPyCS UAGRM</title>
+  <meta name="description" content="Agenda de eventos del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM. Conferencias, seminarios, talleres, webinars, ferias y más." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#003366',
+            bgbase: '#f5f7fb',
+            borderc: '#e5e7eb'
+          },
+          fontFamily: {
+            sans: ['Poppins','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'],
+            serif: ['Playfair Display','serif']
+          },
+          boxShadow: {
+            soft: '0 8px 22px rgba(2,6,23,.08)'
+          },
+          borderRadius: { xl2: '18px' }
+        }
+      }
+    }
+  </script>
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.72rem;line-height:1rem}
+    .hero-bg:before{content:"";position:absolute;inset:-30%;background:radial-gradient(60% 60% at 20% 20%,rgba(16,185,129,.25),transparent 60%),radial-gradient(60% 60% at 80% 80%,rgba(244,63,94,.25),transparent 60%)}
+    .cover-img{height: 160px}
+    @media (min-width:640px){.cover-img{height: 200px}}
+    @media (min-width:1024px){.cover-img{height: 220px}}
+  </style>
+</head>
+<body class="min-h-screen bg-bgbase text-slate-800 font-sans">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <!-- Nav escritorio -->
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#agenda" class="hover:text-sky-700">Agenda</a>
+        <a href="#filtros" class="hover:text-sky-700">Filtrar</a>
+        <a href="#pasados" class="hover:text-sky-700">Pasados</a>
+        <a href="#guias" class="hover:text-sky-700">Guías para eventos</a>
+        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
+      </nav>
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+        <span>Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <!-- Panel móvil -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-2xl p-6 overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
+            <span class="font-semibold">CIRCPyCS</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#agenda">Agenda</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#filtros">Filtrar</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#pasados">Pasados</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#guias">Guías para eventos</a></li>
+          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="relative hero-bg">
+    <div class="absolute inset-0 -z-10 opacity-30"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Eventos</span>
+      <h2 class="mt-4 font-serif text-3xl sm:text-4xl font-bold text-brand">Agenda del CIRCPyCS</h2>
+      <p class="mt-2 max-w-3xl text-slate-600">Conferencias, seminarios, talleres, webinars, mesas redondas, presentaciones, ferias y actividades institucionales. Todas las tarjetas incluyen portada e íconos rápidos a Facebook, YouTube y X.</p>
+    </div>
+  </section>
+
+  <!-- FILTROS -->
+  <section id="filtros" class="pb-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="rounded-2xl border border-borderc bg-white p-4 shadow-soft flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-wrap items-center gap-2">
+          <button data-filter="Todas" class="filter-pill chip bg-slate-900 text-white">Todas</button>
+          <button data-filter="Conferencia" class="filter-pill chip bg-sky-50 text-sky-700">Conferencia</button>
+          <button data-filter="Taller" class="filter-pill chip bg-sky-50 text-sky-700">Taller</button>
+          <button data-filter="Seminario" class="filter-pill chip bg-sky-50 text-sky-700">Seminario</button>
+          <button data-filter="Webinar" class="filter-pill chip bg-sky-50 text-sky-700">Webinar</button>
+          <button data-filter="Mesa" class="filter-pill chip bg-sky-50 text-sky-700">Mesa redonda</button>
+          <button data-filter="Presentación" class="filter-pill chip bg-sky-50 text-sky-700">Presentación</button>
+          <button data-filter="Convenio" class="filter-pill chip bg-sky-50 text-sky-700">Convenio</button>
+          <button data-filter="Feria" class="filter-pill chip bg-sky-50 text-sky-700">Feria</button>
+        </div>
+        <div class="flex items-center gap-2 w-full lg:w-auto">
+          <input id="search" type="search" placeholder="Buscar por título o descripción…" class="w-full lg:w-80 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200" />
+          <button id="clear" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDA (PRÓXIMOS) -->
+  <main id="agenda" class="pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-serif font-bold text-brand">Próximos eventos</h3>
+      <div id="events-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </main>
+
+  <!-- PASADOS -->
+  <section id="pasados" class="py-10 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-serif font-bold text-brand">Eventos pasados</h3>
+      <div id="past-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <!-- GUÍAS -->
+  <section id="guias" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-serif font-bold text-brand text-center">Guías para organizar eventos</h3>
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <div class="rounded-xl2 border border-borderc bg-white p-6 shadow-soft">
+          <h4 class="font-semibold text-brand">Protocolo de difusión</h4>
+          <p class="mt-2 text-sm text-slate-600">Checklist de comunicación: pieza de portada, copy, streaming, registro y seguimiento post-evento.</p>
+        </div>
+        <div class="rounded-xl2 border border-borderc bg-white p-6 shadow-soft">
+          <h4 class="font-semibold text-brand">Logística y streaming</h4>
+          <p class="mt-2 text-sm text-slate-600">Guía de sala, audio/video, roles del equipo y plan B técnico para sesiones híbridas.</p>
+        </div>
+        <div class="rounded-xl2 border border-borderc bg-white p-6 shadow-soft">
+          <h4 class="font-semibold text-brand">Registro y métricas</h4>
+          <p class="mt-2 text-sm text-slate-600">Plantillas de registro, encuestas de satisfacción y tablero mínimo de KPIs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="grid place-items-center gap-3 text-center">
+        <p>© <span id="year"></span> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p>Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · +591 67381294</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+    function openMenu(){wrap.classList.remove('hidden');document.body.style.overflow='hidden'}
+    function closeMenu(){wrap.classList.add('hidden');document.body.style.overflow=''}
+    openBtn.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    backdrop?.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', (e)=>{if(e.key==='Escape') closeMenu()});
+
+    // ======== Datos simulados de eventos ========
+    // type: Conferencia, Taller, Seminario, Webinar, Mesa, Presentación, Convenio, Feria
+    const EVENTS = [
+      {
+        id: 'ev1',
+        title: 'Conferencia inaugural del CIRCPyCS',
+        type: ['Conferencia'],
+        date: '2025-09-10', time: '18:30', mode: 'Presencial',
+        venue: 'Auditorio FCJPSRRII — UAGRM',
+        cover: 'https://images.unsplash.com/photo-1551836022-deb4988cc6c7?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Apertura de la agenda anual, con autoridades académicas y ponentes invitados.',
+        links: { fb: 'https://facebook.com/', yt: 'https://youtube.com/', x: 'https://x.com/' }
+      },
+      {
+        id: 'ev2',
+        title: 'Taller de metodología cualitativa aplicada',
+        type: ['Taller'],
+        date: '2025-09-18', time: '15:00', mode: 'Híbrido',
+        venue: 'Sala de Posgrado & Zoom',
+        cover: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Entrevistas, grupos focales y análisis temático con prácticas guiadas.',
+        links: { fb: 'https://facebook.com/', yt: '', x: 'https://x.com/' }
+      },
+      {
+        id: 'ev3',
+        title: 'Seminario de política pública y evidencia',
+        type: ['Seminario'],
+        date: '2025-10-02', time: '09:00', mode: 'Presencial',
+        venue: 'Aula Magna, UAGRM',
+        cover: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Casos de uso de investigación aplicada para la toma de decisiones.',
+        links: { fb: 'https://facebook.com/', yt: 'https://youtube.com/', x: '' }
+      },
+      {
+        id: 'ev4',
+        title: 'Webinar: Ciencia de datos para ciencias sociales',
+        type: ['Webinar'],
+        date: '2025-09-25', time: '19:00', mode: 'Virtual',
+        venue: 'Transmisión en vivo',
+        cover: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Modelos, scraping y visualización para análisis político.',
+        links: { fb: 'https://facebook.com/', yt: 'https://youtube.com/', x: 'https://x.com/' }
+      },
+      {
+        id: 'ev5',
+        title: 'Mesa redonda: Conflictos territoriales y gobernanza',
+        type: ['Mesa'],
+        date: '2025-09-12', time: '17:00', mode: 'Presencial',
+        venue: 'Salón Principal — FCJPSRRII',
+        cover: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Actores, agendas y soluciones institucionales.',
+        links: { fb: 'https://facebook.com/', yt: '', x: '' }
+      },
+      {
+        id: 'ev6',
+        title: 'Presentación de libro: Dossier de investigación regional',
+        type: ['Presentación'],
+        date: '2025-11-06', time: '18:00', mode: 'Presencial',
+        venue: 'Biblioteca Central UAGRM',
+        cover: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Autoras y autores conversan sobre hallazgos y agenda futura.',
+        links: { fb: 'https://facebook.com/', yt: 'https://youtube.com/', x: 'https://x.com/' }
+      },
+      {
+        id: 'ev7',
+        title: 'Firma de convenio interinstitucional',
+        type: ['Convenio'],
+        date: '2025-08-28', time: '10:30', mode: 'Presencial',
+        venue: 'Rectorado UAGRM',
+        cover: 'https://images.unsplash.com/photo-1523958203904-cdcb402031fd?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Alianza para prácticas, investigación y vinculación.',
+        links: { fb: 'https://facebook.com/', yt: '', x: 'https://x.com/' }
+      },
+      {
+        id: 'ev8',
+        title: 'Expo Investigación UAGRM',
+        type: ['Feria'],
+        date: '2025-10-20', time: '09:00', mode: 'Presencial',
+        venue: 'Pabellón de Exposiciones — UAGRM',
+        cover: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Proyectos, posters y demostraciones abiertas al público.',
+        links: { fb: 'https://facebook.com/', yt: 'https://youtube.com/', x: 'https://x.com/' }
+      },
+      // Pasados (ejemplos)
+      {
+        id: 'ev9',
+        title: 'Webinar: Ética en investigación social',
+        type: ['Webinar'],
+        date: '2025-05-30', time: '18:00', mode: 'Virtual',
+        venue: 'YouTube Live',
+        cover: 'https://images.unsplash.com/photo-1497493292307-31c376b6e479?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Principios y casos prácticos.',
+        links: { fb: 'https://facebook.com/', yt: 'https://youtube.com/', x: 'https://x.com/' }
+      },
+      {
+        id: 'ev10',
+        title: 'Seminario: Economía del comportamiento',
+        type: ['Seminario'],
+        date: '2025-04-15', time: '16:00', mode: 'Presencial',
+        venue: 'Aula Taller 2',
+        cover: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1600&auto=format&fit=crop',
+        desc: 'Nudges en servicios públicos.',
+        links: { fb: 'https://facebook.com/', yt: '', x: 'https://x.com/' }
+      }
+    ];
+
+    // Iconos SVG (Facebook, YouTube, X)
+    const ICONS = {
+      fb: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9v-2.91h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.75 8.44-4.92 8.44-9.94Z"/></svg>',
+      yt: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4.7 4.7 0 0 0-3.3-3.3C18.5 2.3 12 2.3 12 2.3s-6.5 0-8.2.6A4.7 4.7 0 0 0 .5 6.2 48.5 48.5 0 0 0 0 12a48.5 48.5 0 0 0 .5 5.8 4.7 4.7 0 0 0 3.3 3.3c1.7.6 8.2.6 8.2.6s6.5 0 8.2-.6a4.7 4.7 0 0 0 3.3-3.3A48.5 48.5 0 0 0 24 12a48.5 48.5 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.4 3.5-6.4 3.5Z"/></svg>',
+      x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21l-6.42 7.36L22 22h-6.828l-4.77-6.22L4.883 22H2.126l6.9-7.92L2 2h6.953l4.29 5.64L18.244 2Zm-1.195 18h2.04L7.05 4h-2.1l12.1 16Z"/></svg>'
+    };
+
+    function fmtDate(iso){
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('es-BO', { year:'numeric', month:'short', day:'2-digit' });
+    }
+
+    function socialIcon(href, key){
+      if(!href) return `<span title="Sin enlace" class="opacity-30">${ICONS[key]}</span>`;
+      return `<a href="${href}" target="_blank" rel="noopener" class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-slate-200 hover:border-sky-600 hover:text-sky-700" aria-label="${key}">${ICONS[key]}</a>`;
+    }
+
+    function cardHTML(ev){
+      const types = ev.type.map(t=>`<span class="chip bg-sky-50 text-sky-700">${t}</span>`).join(' ');
+      return `
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
+          <div class="relative bg-slate-100">
+            <img loading="lazy" class="w-full object-cover cover-img" src="${ev.cover}" alt="${ev.title}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'" />
+            <div class="absolute top-2 left-2 space-x-1">${types}</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col">
+            <h4 class="font-semibold text-brand">${ev.title}</h4>
+            <p class="mt-1 text-sm text-slate-600">${ev.desc}</p>
+            <div class="mt-3 text-sm text-slate-700">
+              <div><span class="font-medium">Fecha:</span> ${fmtDate(ev.date)} · ${ev.time} · ${ev.mode}</div>
+              <div class="truncate"><span class="font-medium">Lugar:</span> ${ev.venue}</div>
+            </div>
+            <div class="mt-4 flex items-center gap-2">${socialIcon(ev.links.fb,'fb')}${socialIcon(ev.links.yt,'yt')}${socialIcon(ev.links.x,'x')}</div>
+          </div>
+        </article>`;
+    }
+
+    function render(){
+      const grid = document.getElementById('events-grid');
+      const past = document.getElementById('past-grid');
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const active = document.querySelector('.filter-pill.bg-slate-900');
+      const filter = active?.dataset.filter || 'Todas';
+
+      const now = new Date();
+      const match = (ev)=>{
+        const inType = (filter==='Todas') || ev.type.some(t => t.startsWith(filter));
+        const inQuery = !q || (ev.title+ev.desc+ev.venue).toLowerCase().includes(q);
+        return inType && inQuery;
+      };
+
+      const upcoming = EVENTS.filter(e=> new Date(e.date+'T23:59:59') >= now && match(e))
+                             .sort((a,b)=> a.date.localeCompare(b.date));
+      const passed   = EVENTS.filter(e=> new Date(e.date+'T23:59:59') <  now && match(e))
+                             .sort((a,b)=> b.date.localeCompare(a.date));
+
+      grid.innerHTML = upcoming.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">No hay eventos con estos filtros.</div>`;
+      past.innerHTML = passed.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">Aún no hay eventos pasados.</div>`;
+    }
+
+    // Eventos UI
+    document.querySelectorAll('.filter-pill').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.filter-pill').forEach(b=> b.classList.remove('bg-slate-900','text-white'));
+        btn.classList.add('bg-slate-900','text-white');
+        render();
+      });
+    });
+    document.getElementById('search').addEventListener('input', render);
+    document.getElementById('clear').addEventListener('click', ()=>{ document.getElementById('search').value=''; render(); });
+
+    // Inicializa con filtros por defecto
+    render();
+
+    // =====================
+    // SMOKE TESTS mínimos
+    // =====================
+    console.assert(document.getElementById('events-grid'), 'Falta #events-grid');
+    console.assert(document.getElementById('past-grid'), 'Falta #past-grid');
+    console.assert(Array.isArray(EVENTS) && EVENTS.length >= 8, 'Se esperaban >=8 eventos');
+  </script>
+</body>
+</html>
