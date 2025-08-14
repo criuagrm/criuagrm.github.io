@@ -1,194 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boletín del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boletín — CIRCPyCS UAGRM</title>
+  <meta name="description" content="Boletín informativo del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
 
-    <style>
-        /* === VARIABLES Y RESET BÁSICO === */
-        :root {
-            --azul-principal: #003366;
-            --azul-secundario: #00509e;
-            --verde-hover: #16a085;
-            --texto-oscuro: #333;
-            --gris-suave: #f4f4f4;
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: var(--gris-suave);
-            color: var(--texto-oscuro);
-        }
-
-        /* === ENCABEZADO === */
-        header {
-            background-color: var(--azul-principal);
-            color: #fff;
-            text-align: center;
-            padding: 40px 15px;
-        }
-        header h1 { font-size: 2.5rem; margin-bottom: 0.3rem; }
-        header h2 { font-size: 1.4rem; margin-bottom: 0.6rem; font-weight: 500; }
-        header p  { font-size: 1.1rem; }
-
-        /* === NAVEGACIÓN === */
-        nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            background-color: var(--azul-secundario);
-            gap: 15px;
-            padding: 12px 10px;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: opacity 0.25s ease;
-        }
-        nav a:hover { opacity: 0.8; }
-        /* Botón estilo outline dentro del nav */
-        .btn-return {
-            border: 2px solid #fff;
-            border-radius: 6px;
-            padding: 4px 12px;
-            font-size: 0.9rem;
-        }
-        .btn-return:hover { background-color: rgba(255,255,255,0.15); }
-
-        /* === CONTENIDO PRINCIPAL === */
-        .main-container {
-            max-width: 1200px;
-            margin: 25px auto;
-            padding: 0 20px;
-        }
-        .cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-        .card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            max-width: 300px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .card img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-        }
-        .card-content { padding: 18px 20px 22px; }
-        .card-content h3 { color: var(--azul-principal); margin-bottom: 8px; font-size: 1.5rem; }
-        .card-content p  { color: #666; font-size: 1rem; }
-        .card-content a {
-            display: inline-block;
-            margin-top: 15px;
-            background-color: var(--azul-secundario);
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-        .card-content a:hover { background-color: var(--azul-principal); }
-
-        /* === PIE DE PÁGINA (heredado del otro documento) === */
-        footer {
-            background-color: var(--azul-principal);
-            color: #fff;
-            text-align: center;
-            padding: 1.2rem 0;
-            margin-top: 2.5rem;
-            font-size: 0.9rem;
-        }
-        footer a {
-            color: #fff;
-            margin: 0 0.35rem;
-            transition: color 0.3s ease;
-        }
-        footer a:hover { color: var(--verde-hover); }
-    </style>
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-    <!-- ================= ENCABEZADO ================= -->
-    <header>
-        <h2>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</h2>
-        <h1>Boletín Informativo</h1>
-        <p>Información actualizada sobre nuestras actividades, proyectos y publicaciones</p>
-    </header>
+  <!-- Header -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+        <div class="leading-tight">
+          <p class="text-sm tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
 
-    <!-- ================= MENÚ DE NAVEGACIÓN ================= -->
-    <nav>
-        <a href="#boletines">Boletines</a>
-        <a href="#archivo">Archivo</a>
-        <a href="https://cir.uagrm.edu.bo/contabol.html">Contacto</a>
-        <!-- Botón de regreso al sitio principal -->
-        <a href="https://cir.uagrm.edu.bo/"></i> Volver al Inicio</a>
-    </nav>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#boletines" class="hover:text-sky-700">Boletines</a>
+        <a href="#archivo" class="hover:text-sky-700">Archivo</a>
+        <a href="#contacto" class="hover:text-sky-700">Contacto</a>
+        <a href="https://cir.uagrm.edu.bo/" target="_blank" class="hover:text-sky-700">Volver al inicio</a>
+      </nav>
 
-    <!-- ================= CONTENIDO ================= -->
-    <main class="main-container">
-        <section id="boletines">
-            <h2 style="text-align:center;color:var(--azul-principal);margin-bottom:30px;">Últimos Boletines</h2>
-            <div class="cards-container">
-                <!-- Boletín 1 -->
-                <div class="card">
-                    <img src="https://i.imgur.com/BeAwYwD.png" alt="Boletín 5">
-                    <div class="card-content">
-                        <h3>Boletín #5</h3>
-                        <p>Explora las últimas actividades y los proyectos más recientes del Centro de Investigación Regional.</p>
-                        <a href="https://drive.google.com/file/d/1xiH2jljMPftS4pCNysV2kO-9u9Pt-mcx/view?usp=sharing" target="_blank">Leer más</a>
-                    </div>
-                </div>
-                <!-- Boletín 2 -->
-                <div class="card">
-                    <img src="https://i.imgur.com/32MEdtu.png" alt="Boletín 6">
-                    <div class="card-content">
-                        <h3>Boletín #6</h3>
-                        <p>Descubre los análisis políticos de la coyuntura electoral y la Primera Encuesta de Gestión Institucional UAGRM 2025.</p>
-                        <a href="https://drive.google.com/file/d/1ZWLSaU-XC5Wl3S0WT5e-jVLfHpp0IxjW/view?usp=sharing" target="_blank">Leer más</a>
-                    </div>
-                </div>
-                <!-- Boletín 3 -->
-                <div class="card">
-                    <img src="https://i.imgur.com/b6y8PEF.png" alt="Boletín 7">
-                    <div class="card-content">
-                        <h3>Boletín #7</h3>
-                        <p>Conoce la coyuntura política actual en Bolivia y el mundo.</p>
-                        <a href="https://drive.google.com/file/d/1KtAX9zI-Vbf9H_ktwV-xxyqKjl4UP_rO/view?usp=sharing" target="_blank">Leer más</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+        <span>Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
 
-    <!-- ================= PIE DE PÁGINA ================= -->
-    <footer>
-        <p class="mb-1">&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
-        <p class="mb-1">Contacto: <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> | <i class="fas fa-phone"></i> +591 67381294</p>
-        <p>
-            Síguenos en:
-            <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        </p>
-    </footer>
+    <!-- Panel móvil -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
+            <span class="font-semibold">CIRCPyCS</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#boletines">Boletines</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#archivo">Archivo</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank">Volver al inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</span>
+        <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Boletín Informativo</h2>
+        <p class="mt-4 text-slate-600">Información actualizada sobre nuestras actividades, proyectos y publicaciones.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Boletines -->
+  <section id="boletines" class="py-12 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <h3 class="text-2xl font-bold">Últimos Boletines</h3>
+        <a href="#archivo" class="text-sm text-sky-700 hover:underline">Ver archivo</a>
+      </div>
+
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Boletín 5 -->
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+          <img src="https://i.imgur.com/BeAwYwD.png" alt="Portada Boletín 5" class="w-full h-64 object-contain bg-slate-50" loading="lazy" />
+          <div class="p-5">
+            <h4 class="font-semibold text-lg text-slate-900">Boletín #5</h4>
+            <p class="mt-1 text-sm text-slate-600">Explora las últimas actividades y los proyectos más recientes del Centro de Investigación Regional.</p>
+            <a href="https://drive.google.com/file/d/1xiH2jljMPftS4pCNysV2kO-9u9Pt-mcx/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer más<span>→</span></a>
+          </div>
+        </article>
+
+        <!-- Boletín 6 -->
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+          <img src="https://i.imgur.com/32MEdtu.png" alt="Portada Boletín 6" class="w-full h-64 object-contain bg-slate-50" loading="lazy" />
+          <div class="p-5">
+            <h4 class="font-semibold text-lg text-slate-900">Boletín #6</h4>
+            <p class="mt-1 text-sm text-slate-600">Coyuntura electoral y resultados de la Primera Encuesta de Gestión Institucional UAGRM 2025.</p>
+            <a href="https://drive.google.com/file/d/1ZWLSaU-XC5Wl3S0WT5e-jVLfHpp0IxjW/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer más<span>→</span></a>
+          </div>
+        </article>
+
+        <!-- Boletín 7 -->
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+          <img src="https://i.imgur.com/b6y8PEF.png" alt="Portada Boletín 7" class="w-full h-64 object-contain bg-slate-50" loading="lazy" />
+          <div class="p-5">
+            <h4 class="font-semibold text-lg text-slate-900">Boletín #7</h4>
+            <p class="mt-1 text-sm text-slate-600">Análisis de coyuntura política en Bolivia y el mundo.</p>
+            <a href="https://drive.google.com/file/d/1KtAX9zI-Vbf9H_ktwV-xxyqKjl4UP_rO/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer más<span>→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archivo / Contacto -->
+  <section id="archivo" class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 items-start">
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="font-semibold text-lg">Archivo</h3>
+        <p class="mt-2 text-sm text-slate-600">En construcción. Próximamente, acceso al histórico de boletines.</p>
+      </div>
+      <div id="contacto" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h3 class="font-semibold text-lg">Contacto</h3>
+        <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Email</div>
+            <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="font-medium text-sky-700">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Teléfono</div>
+            <div class="font-medium">+591 67381294</div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Ciudad</div>
+            <div class="font-medium">Santa Cruz de la Sierra, Bolivia</div>
+          </div>
+          <div class="rounded-xl border border-slate-200 p-3">
+            <div class="text-slate-500">Sitio principal</div>
+            <a href="https://cir.uagrm.edu.bo/" target="_blank" class="font-medium text-sky-700">cir.uagrm.edu.bo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="text-slate-500">Este boletín no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+
+    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
+    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
+
+    openBtn.addEventListener('click', openMenu);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+    if(backdrop) backdrop.addEventListener('click', closeMenu);
+    if(closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+    // Cerrar al hacer click en un enlace del panel
+    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+  </script>
 </body>
 </html>
+
 
