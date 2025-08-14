@@ -1,547 +1,372 @@
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CIRCPyCS - Proyectos de Investigación Avanzados</title>
-<script src="https://unpkg.com/force-graph"></script>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-<style>
-body {
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f0f3f5;
-}
-h1, h2 {
-    color: #2c3e50;
-    text-align: center;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-.project {
-    background-color: #fff;
-    border-radius: 15px;
-    padding: 30px;
-    margin-bottom: 40px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.project:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-}
-.back-btn {
-    display: block;
-    width: 200px;
-    margin: 40px auto;
-    padding: 15px 30px;
-    background-color: #3498db;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.back-btn:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
-}
-.chart-container {
-    width: 100%;
-    height: 600px; 
-    margin-top: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-.tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 8px;
-    font: 12px sans-serif;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    pointer-events: none;
-}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — Proyectos de Investigación Avanzados</title>
+  <meta name="description" content="Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — Proyectos de investigación avanzados" />
 
-body {
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f0f3f5;
-}
-h1, h2 {
-    color: #2c3e50;
-    text-align: center;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-.project {
-    background-color: #fff;
-    border-radius: 15px;
-    padding: 30px;
-    margin-bottom: 40px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.project:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-}
-.back-btn {
-    display: block;
-    width: 100%;
-    max-width: 200px;
-    margin: 40px auto;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 1em;
-}
-.back-btn:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
-}
-.chart-container {
-    width: 100%;
-    height: 400px; /* Reducing height for smaller screens */
-    margin-top: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-.whatsapp-btn {
-    display: block;
-    width: 100%;
-    max-width: 200px;
-    margin: 40px auto;
-    padding: 10px 20px;
-    background-color: #25d366;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 1em;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-}
-.whatsapp-btn:hover {
-    background-color: #1ebc5a;
-    transform: scale(1.05);
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .project {
-        padding: 20px;
-        margin-bottom: 20px;
+  <!-- Tailwind CDN + fuente -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+        }
+      }
     }
-    .chart-container {
-        height: 300px;
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- D3 y Plotly con versiones explícitas -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.30.1.min.js"></script>
+
+  <style>
+    .chart-box { height: 360px; width: 100%; position: relative; }
+    @media (min-width: 768px) { .chart-box { height: 520px; } }
+    .tooltip{position:absolute;z-index:50;padding:8px 10px;font:12px/1.2 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fff;color:#0f172a;border:1px solid #e2e8f0;border-radius:8px;pointer-events:none;box-shadow:0 6px 18px rgba(15,23,42,.12);white-space:nowrap}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav (blanco, compacto, con botón Volver a inicio) -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain"/>
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 text-sm hover:border-sky-600 hover:text-sky-700" aria-label="Volver a inicio">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Volver a inicio</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación</span>
+      <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Proyectos de investigación avanzados</h2>
+      <p class="mt-3 max-w-3xl text-slate-600">Evidencia para políticas públicas locales y regionales. Visualizaciones interactivas y modelos aplicados para análisis de redes, predicción electoral, sentimientos, simulación social y geopolítica.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="https://wa.link/wm02nu" target="_blank" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 text-white font-medium shadow hover:opacity-95">Contrátanos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="py-14 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-2xl font-bold">Servicios</h2>
+        <span class="text-xs text-slate-500">Cifras simuladas para demostración</span>
+      </div>
+      <div class="mt-6 grid md:grid-cols-3 gap-5">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Asesoría</p>
+          <h3 class="mt-1 font-semibold">Políticas públicas y diseño institucional</h3>
+          <p class="mt-1 text-sm text-slate-600">Diagnósticos, líneas base y evaluación.</p>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">12</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Proyectos</div>
+            </div>
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">8</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Evaluaciones</div>
+            </div>
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">5</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Gobiernos</div>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Datos</p>
+          <h3 class="mt-1 font-semibold">Laboratorio y visualización</h3>
+          <p class="mt-1 text-sm text-slate-600">Dashboards, mapas y publicación de datos.</p>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">27</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Dashboards</div>
+            </div>
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">11</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Mapas</div>
+            </div>
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">14</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Datasets</div>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Sello editorial</p>
+          <h3 class="mt-1 font-semibold">CIRCPyCS — libros, boletines y dossiers</h3>
+          <p class="mt-1 text-sm text-slate-600">Catálogo editorial propio (libros, boletines y dossiers). <span class="font-medium">No incluye la revista en OJS.</span></p>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">9</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Títulos</div>
+            </div>
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">6</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Boletines</div>
+            </div>
+            <div class="rounded-xl bg-white border border-slate-200 p-2">
+              <div class="text-lg font-extrabold leading-tight">4</div>
+              <div class="text-[11px] text-slate-500 leading-tight">Dossiers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proyectos -->
+  <main id="proyectos" class="pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8">
+      <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8">
+          <h3 class="text-xl font-bold">Análisis de Redes Sociales en Movimientos Políticos</h3>
+          <p class="mt-2 text-slate-600">Ciencia de datos y análisis de redes para estudiar difusión de información y formación de opiniones en movimientos contemporáneos.</p>
+          <div id="socialNetworkGraph" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white flex items-center justify-center text-slate-500 text-sm">Cargando gráfico de red…</div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8">
+          <h3 class="text-xl font-bold">Predicción de Resultados Electorales con D3.js</h3>
+          <p class="mt-2 text-slate-600">Series temporales por candidato a partir de datos históricos, encuestas y variables socioeconómicas.</p>
+          <div id="electionPredictionChart" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white"></div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8">
+          <h3 class="text-xl font-bold">Análisis de Sentimientos en Discursos Políticos</h3>
+          <p class="mt-2 text-slate-600">Matriz de sentimiento (positivo, neutral, negativo) por discurso.</p>
+          <div id="sentimentAnalysisChart" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white"></div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8">
+          <h3 class="text-xl font-bold">Simulación de Sistemas Sociales Complejos</h3>
+          <p class="mt-2 text-slate-600">Modelos basados en agentes para evaluar el impacto de políticas sobre la cohesión social.</p>
+          <div id="socialSimulationChart" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white"></div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8">
+          <h3 class="text-xl font-bold">Visualización de Datos Geopolíticos</h3>
+          <p class="mt-2 text-slate-600">Mapa de influencia geopolítica a nivel global.</p>
+          <div id="geopoliticalMap" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white"></div>
+        </div>
+      </section>
+
+      <div class="flex flex-wrap items-center gap-3 justify-center mt-4">
+        <a href="https://wa.link/wm02nu" target="_blank" class="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 text-white font-semibold shadow hover:opacity-95">Contrátanos</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
+        <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span class="ml-2">Actualizado: Ago 2025</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // =====================
+  // Utilidades
+  // =====================
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function loadScript(src, {timeout=8000}={}){
+    return new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      let done=false;
+      s.src=src; s.async=true; s.onload=()=>{ if(!done){ done=true; resolve(); } };
+      s.onerror=()=>{ if(!done){ done=true; reject(new Error('No se pudo cargar '+src)); } };
+      document.head.appendChild(s);
+      if(timeout){ setTimeout(()=>{ if(!done){ done=true; reject(new Error('Timeout '+src)); } }, timeout); }
+    });
+  }
+
+  async function ensureForceGraph(){
+    if (typeof window.ForceGraph === 'function') return true;
+    const candidates = [
+      'https://unpkg.com/force-graph@1.45.1/dist/force-graph.min.js',
+      'https://cdn.jsdelivr.net/npm/force-graph@1.45.1/dist/force-graph.min.js'
+    ];
+    for (const url of candidates){
+      try { await loadScript(url, {timeout:8000}); if (typeof window.ForceGraph==='function') return true; } catch(e){}
     }
-    .back-btn, .whatsapp-btn {
-        width: 100%;
-        font-size: 0.9em;
-        padding: 8px 16px;
+    return false;
+  }
+
+  // =====================
+  // Inicialización segura (evita "ForceGraph is not defined")
+  // =====================
+  (async function init(){
+    // Tests de humo (no lanzan ReferenceError porque usamos typeof)
+    console.assert(typeof d3 !== 'undefined' && typeof d3.select==='function', 'D3 no cargó correctamente');
+    console.assert(typeof Plotly !== 'undefined' && (/^2\./.test(Plotly.version||Plotly.BUILD||'')), 'Plotly v2 no está disponible');
+
+    // 1) Red con ForceGraph (carga perezosa + fallback)
+    const netOk = await ensureForceGraph();
+    if (netOk){
+      try { initNetwork(); } catch(err){ showNetFallback('Error al dibujar la red: '+err.message); }
+    } else {
+      showNetFallback('No se pudo cargar la librería de red (ForceGraph).');
     }
-    h1, h2 {
-        font-size: 1.5em;
+
+    // 2) Gráfico D3 (series)
+    renderElectionChart();
+    window.addEventListener('resize', renderElectionChart);
+
+    // 3) Heatmap de sentimientos (Plotly)
+    const sentimentData = [{ z:[[1,20,30],[20,1,60],[30,60,1]], x:['Positivo','Neutral','Negativo'], y:['Discurso A','Discurso B','Discurso C'], type:'heatmap', colorscale:'Viridis' }];
+    const saEl = document.getElementById('sentimentAnalysisChart');
+    if (window.Plotly){
+      Plotly.newPlot('sentimentAnalysisChart', sentimentData, { margin:{t:36,r:12,b:36,l:48}, title:{ text:'Análisis de Sentimientos en Discursos Políticos', font:{family:'Inter',size:16}}, height: saEl.clientHeight }, {responsive:true});
     }
-}
-    
-</style></head><body>
-<h1>Centro de Investigación Regional  en Ciencia Política y Ciencias Sociales (CIRCPyCS)</h1>
-<h2>Proyectos de Investigación Avanzados</h2>
 
-<div class="project">
-    <h3>Análisis de Redes Sociales en Movimientos Políticos</h3>
-    <p>Utilizando técnicas de ciencia de datos y análisis de redes sociales, este proyecto examina la difusión de información y la formación de opiniones en movimientos políticos contemporáneos.</p>
-    <div id="socialNetworkGraph" class="chart-container"></div>
-</div>
+    // 4) Simulación social (Plotly líneas)
+    function randSeries(n, trend=0){ const out=[]; let v=50; for(let i=0;i<n;i++){ v += Math.random()*10-5 + trend; v=Math.max(0,Math.min(100,v)); out.push(v);} return out; }
+    const simData=[
+      { x:[...Array(100).keys()], y:randSeries(100, 0.10), mode:'lines', type:'scatter', name:'Escenario A' },
+      { x:[...Array(100).keys()], y:randSeries(100,-0.10), mode:'lines', type:'scatter', name:'Escenario B' },
+      { x:[...Array(100).keys()], y:randSeries(100, 0.00), mode:'lines', type:'scatter', name:'Escenario C' }
+    ];
+    const ssEl = document.getElementById('socialSimulationChart');
+    if (window.Plotly){
+      Plotly.newPlot('socialSimulationChart', simData, { margin:{t:36,r:12,b:48,l:52}, title:{ text:'Simulación de Interacciones Sociales', font:{family:'Inter',size:16}}, xaxis:{title:'Tiempo'}, yaxis:{title:'Cohesión social'}, height:ssEl.clientHeight }, {responsive:true});
+    }
 
-<div class="project">
-    <h3>Predicción de Resultados Electorales con D3.js</h3>
-    <p>Implementación de un gráfico de D3.js para predecir resultados electorales basados en datos históricos, encuestas y variables socioeconómicas.</p>
-    <div id="electionPredictionChart" class="chart-container"></div>
-</div>
+    // 5) Choropleth (Plotly mapa)
+    const geoData=[{ type:'choropleth', locationmode:'country names', locations:['United States','China','Russia','Germany','United Kingdom','France','Japan','India','Brazil','Canada'], z:[10,9,8,7,6,5,4,3,2,1], text:['Estados Unidos','China','Rusia','Alemania','Reino Unido','Francia','Japón','India','Brasil','Canadá'], colorscale:[[0,'rgb(242,240,247)'],[0.2,'rgb(218,218,235)'],[0.4,'rgb(188,189,220)'],[0.6,'rgb(158,154,200)'],[0.8,'rgb(117,107,177)'],[1,'rgb(84,39,143)']], reversescale:true, marker:{line:{color:'rgb(180,180,180)',width:.5}}, colorbar:{title:'Índice de influencia'} }];
+    const mapEl = document.getElementById('geopoliticalMap');
+    if (window.Plotly){
+      Plotly.newPlot('geopoliticalMap', geoData, { margin:{t:36,r:12,b:12,l:12}, title:{ text:'Influencia Geopolítica Global', font:{family:'Inter',size:16}}, geo:{ showframe:false, showcoastlines:true, projection:{type:'mercator'} }, height: mapEl.clientHeight }, {responsive:true});
+      window.addEventListener('resize', ()=> ['sentimentAnalysisChart','socialSimulationChart','geopoliticalMap'].forEach(id=>Plotly.Plots.resize(document.getElementById(id))));
+    }
+  })();
 
-<div class="project">
-    <h3>Análisis de Sentimientos en Discursos Políticos</h3>
-    <p>Aplicación de técnicas de procesamiento del lenguaje natural (NLP) y aprendizaje profundo para analizar el contenido emocional y la retórica en discursos políticos.</p>
-    <div id="sentimentAnalysisChart" class="chart-container"></div>
-</div>
-
-<div class="project">
-    <h3>Simulación de Sistemas Sociales Complejos</h3>
-    <p>Desarrollo de modelos basados en agentes utilizando Python para simular interacciones sociales complejas y evaluar el impacto de políticas públicas.</p>
-    <div id="socialSimulationChart" class="chart-container"></div>
-</div>
-
-<div class="project">
-    <h3>Visualización de Datos Geopolíticos</h3>
-    <p>Creación de visualizaciones interactivas de datos geopolíticos utilizando bibliotecas de Python como Plotly y Folium para representar tendencias globales y regionales.</p>
-    <div id="geopoliticalMap" class="chart-container"></div>
-</div>
-
-<a href="https://wa.link/wm02nu" 
-   class="whatsapp-btn" target="_blank">Contrátanos</a>
-
-<style>
-.whatsapp-btn {
-    display: block;
-    width: 200px;
-    margin: 40px auto;
-    padding: 15px 30px;
-    background-color: #25d366;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 1.2em;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-}
-.whatsapp-btn:hover {
-    background-color: #1ebc5a;
-    transform: scale(1.05);
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-}
-</style>
-
-    
-<a href="https://criuagrm.github.io/" class="back-btn">Volver a la página principal</a>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    const gData = {
-        nodes: [
-            { id: 1, name: "Influencer A", group: 1 },
-            { id: 2, name: "Influencer B", group: 1 },
-            { id: 3, name: "Político C", group: 2 },
-            { id: 4, name: "Activista D", group: 3 },
-            { id: 5, name: "Ciudadano E", group: 4 },
-            { id: 6, name: "Ciudadano F", group: 4 },
-            { id: 7, name: "Ciudadano G", group: 4 },
-            { id: 8, name: "Periodista H", group: 5 },
-            { id: 9, name: "ONG I", group: 6 },
-            { id: 10, name: "Empresa J", group: 7 }
-        ],
-        links: [
-            { source: 1, target: 2 },
-            { source: 1, target: 3 },
-            { source: 2, target: 4 },
-            { source: 3, target: 5 },
-            { source: 4, target: 5 },
-            { source: 4, target: 6 },
-            { source: 5, target: 6 },
-            { source: 6, target: 7 },
-            { source: 7, target: 8 },
-            { source: 8, target: 1 },
-            { source: 9, target: 4 },
-            { source: 9, target: 5 },
-            { source: 10, target: 1 },
-            { source: 10, target: 3 }
-        ]
+  // =====================
+  // Funciones específicas
+  // =====================
+  function initNetwork(){
+    const netEl = document.getElementById('socialNetworkGraph');
+    netEl.textContent='';
+    const gData={
+      nodes:[{id:1,name:'Influencer A',group:1},{id:2,name:'Influencer B',group:1},{id:3,name:'Político C',group:2},{id:4,name:'Activista D',group:3},{id:5,name:'Ciudadano E',group:4},{id:6,name:'Ciudadano F',group:4},{id:7,name:'Ciudadano G',group:4},{id:8,name:'Periodista H',group:5},{id:9,name:'ONG I',group:6},{id:10,name:'Empresa J',group:7}],
+      links:[{source:1,target:2},{source:1,target:3},{source:2,target:4},{source:3,target:5},{source:4,target:5},{source:4,target:6},{source:5,target:6},{source:6,target:7},{source:7,target:8},{source:8,target:1},{source:9,target:4},{source:9,target:5},{source:10,target:1},{source:10,target:3}]
     };
+    const palette=['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#f1c40f','#a65628'];
+    const Graph = window.ForceGraph()(netEl)
+      .graphData(gData)
+      .nodeId('id')
+      .nodeLabel('name')
+      .nodeColor(n=>palette[(n.group-1)%palette.length])
+      .linkColor(()=> '#94a3b8')
+      .linkWidth(1)
+      .linkDirectionalParticles(2)
+      .linkDirectionalParticleWidth(2)
+      .d3AlphaDecay(0.01)
+      .d3VelocityDecay(0.08)
+      .nodeCanvasObject((node,ctx,globalScale)=>{
+        const label=node.name, fs=12/globalScale, pad=fs*.2; ctx.font=`${fs}px Inter, sans-serif`; const tw=ctx.measureText(label).width; const bw=tw+pad*2, bh=fs+pad*2; ctx.fillStyle='rgba(255,255,255,.85)'; ctx.fillRect(node.x-bw/2,node.y-bh/2,bw,bh); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#0f172a'; ctx.fillText(label,node.x,node.y);
+      });
+    function size(){ const r=netEl.getBoundingClientRect(); Graph.width(r.width); Graph.height(netEl.clientHeight||r.height||400); }
+    size();
+    if (window.ResizeObserver){ new ResizeObserver(size).observe(netEl); }
+    window.addEventListener('resize', size);
+  }
 
-    const Graph = ForceGraph()
-        (document.getElementById('socialNetworkGraph'))
-        .graphData(gData)
-        .nodeId('id')
-        .nodeVal('val')
-        .nodeLabel('name')
-        .nodeColor(node => {
-            const colors = ['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628'];
-            return colors[node.group - 1];
-        })
-        .linkColor(() => '#999')
-        .linkWidth(1)
-        .linkDirectionalParticles(2)
-        .linkDirectionalParticleWidth(2)
-        .d3AlphaDecay(0.01)
-        .d3VelocityDecay(0.08)
-        .onNodeClick(node => {
-            const distance = 100;
-            const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
-            Graph.cameraPosition(
-                { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
-                node,
-                3000
-            );
-        })
-        .nodeCanvasObject((node, ctx, globalScale) => {
-            const label = node.name;
-            const fontSize = 12/globalScale;
-            ctx.font = `${fontSize}px Sans-Serif`;
-            const textWidth = ctx.measureText(label).width;
-            const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+  function showNetFallback(msg){
+    const netEl = document.getElementById('socialNetworkGraph');
+    netEl.innerHTML = `<div class="text-center p-6">
+        <div class="mx-auto h-12 w-12 rounded-full bg-rose-100 flex items-center justify-center mb-3"><span class="text-rose-600">!</span></div>
+        <p class="text-slate-600">${msg}</p>
+        <p class="text-slate-500 text-xs mt-1">Se mostrará un placeholder estático en lugar del gráfico interactivo.</p>
+      </div>`;
+  }
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
-
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = 'black';
-            ctx.fillText(label, node.x, node.y);
-        })
-        .zoom(4) 
-        .enableZoomInteraction(true)
-        .enablePanInteraction(true)
-        .width(document.getElementById('socialNetworkGraph').clientWidth)
-        .height(document.getElementById('socialNetworkGraph').clientHeight);
-
-    const data = [
-        {date: new Date(2024, 0, 1), Morales: 19, Arce: 19, Mesa: 15, ReyesVilla: 12, Nulos: 12, NSNR: 12, Otros: 11},
-        {date: new Date(2024, 1, 1), Morales: 18.5, Arce: 18.5, Mesa: 15.5, ReyesVilla: 12.5, Nulos: 12.5, NSNR: 11.5, Otros: 11},
-        {date: new Date(2024, 2, 1), Morales: 18, Arce: 18, Mesa: 16, ReyesVilla: 13, Nulos: 13, NSNR: 11, Otros: 11},
-        {date: new Date(2024, 3, 1), Morales: 17.5, Arce: 17.5, Mesa: 16.5, ReyesVilla: 13.5, Nulos: 13.5, NSNR: 10.5, Otros: 11},
-        {date: new Date(2024, 4, 1), Morales: 17, Arce: 17, Mesa: 17, ReyesVilla: 14, Nulos: 14, NSNR: 10, Otros: 11},
-        {date: new Date(2024, 5, 1), Morales: 16.5, Arce: 16.5, Mesa: 17.5, ReyesVilla: 14.5, Nulos: 14.5, NSNR: 9.5, Otros: 11},
-        {date: new Date(2024, 6, 1), Morales: 16, Arce: 16, Mesa: 18, ReyesVilla: 15, Nulos: 15, NSNR: 9, Otros: 11},
-        {date: new Date(2024, 7, 1), Morales: 15.5, Arce: 15.5, Mesa: 18.5, ReyesVilla: 15.5, Nulos: 15.5, NSNR: 8.5, Otros: 11},
-        {date: new Date(2024, 8, 1), Morales: 15, Arce: 15, Mesa: 19, ReyesVilla: 16, Nulos: 16, NSNR: 8, Otros: 11}
+  function renderElectionChart(){
+    const el = document.getElementById('electionPredictionChart');
+    el.innerHTML='';
+    const data=[
+      {date:new Date(2024,0,1), Morales:19, Arce:19, Mesa:15, ReyesVilla:12, Nulos:12, NSNR:12, Otros:11},
+      {date:new Date(2024,1,1), Morales:18.5, Arce:18.5, Mesa:15.5, ReyesVilla:12.5, Nulos:12.5, NSNR:11.5, Otros:11},
+      {date:new Date(2024,2,1), Morales:18, Arce:18, Mesa:16, ReyesVilla:13, Nulos:13, NSNR:11,   Otros:11},
+      {date:new Date(2024,3,1), Morales:17.5, Arce:17.5, Mesa:16.5, ReyesVilla:13.5, Nulos:13.5, NSNR:10.5, Otros:11},
+      {date:new Date(2024,4,1), Morales:17, Arce:17, Mesa:17, ReyesVilla:14, Nulos:14, NSNR:10,   Otros:11},
+      {date:new Date(2024,5,1), Morales:16.5, Arce:16.5, Mesa:17.5, ReyesVilla:14.5, Nulos:14.5, NSNR:9.5,  Otros:11},
+      {date:new Date(2024,6,1), Morales:16, Arce:16, Mesa:18, ReyesVilla:15, Nulos:15, NSNR:9,    Otros:11},
+      {date:new Date(2024,7,1), Morales:15.5, Arce:15.5, Mesa:18.5, ReyesVilla:15.5, Nulos:15.5, NSNR:8.5, Otros:11},
+      {date:new Date(2024,8,1), Morales:15, Arce:15, Mesa:19, ReyesVilla:16, Nulos:16, NSNR:8,    Otros:11}
     ];
+    const margin={top:16,right:80,bottom:30,left:44};
+    const width=el.clientWidth - margin.left - margin.right;
+    const height=el.clientHeight - margin.top - margin.bottom;
 
-    const margin = {top: 20, right: 80, bottom: 30, left: 50};
-    const width = document.getElementById('electionPredictionChart').clientWidth - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+    const svg=d3.select('#electionPredictionChart').append('svg')
+      .attr('width', width+margin.left+margin.right)
+      .attr('height', height+margin.top+margin.bottom)
+      .append('g').attr('transform',`translate(${margin.left},${margin.top})`);
 
-    const svg = d3.select("#electionPredictionChart")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+    const x=d3.scaleTime().domain(d3.extent(data,d=>d.date)).range([0,width]);
+    const y=d3.scaleLinear().domain([0,25]).range([height,0]);
+    const color=d3.scaleOrdinal().domain(['Morales','Arce','Mesa','ReyesVilla','Nulos','NSNR','Otros']).range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#f1c40f','#a65628']);
+    const line=d3.line().x(d=>x(d.date)).y(d=>y(d.value));
 
-    const x = d3.scaleTime()
-        .domain(d3.extent(data, d => d.date))
-        .range([0, width]);
+    svg.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x).ticks(d3.timeMonth).tickFormat(d3.timeFormat('%b %Y'))).selectAll('text').style('font-size','10px');
+    svg.append('g').call(d3.axisLeft(y)).selectAll('text').style('font-size','10px');
 
-    const y = d3.scaleLinear()
-        .domain([0, 25])
-        .range([height, 0]);
-
-    const color = d3.scaleOrdinal()
-        .domain(["Morales", "Arce", "Mesa", "ReyesVilla", "Nulos", "NSNR", "Otros"])
-        .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628"]);
-
-    const line = d3.line()
-        .x(d => x(d.date))
-        .y(d => y(d.value));
-
-    svg.append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(d3.timeMonth).tickFormat(d3.timeFormat("%b %Y")));
-
-    svg.append("g")
-        .call(d3.axisLeft(y));
-
-    const candidates = Object.keys(data[0]).filter(key => key !== "date");
-
-    candidates.forEach(candidate => {
-        const candidateData = data.map(d => ({date: d.date, value: d[candidate]}));
-        
-        svg.append("path")
-            .datum(candidateData)
-            .attr("fill", "none")
-            .attr("stroke", color(candidate))
-            .attr("stroke-width", 2)
-            .attr("d", line)
-            .attr("class", `line-${candidate}`);
-            
-        svg.append("text")
-            .attr("x", width + 5)
-            .attr("y", y(data[data.length-1][candidate]))
-            .attr("dy", "0.35em")
-            .attr("fill", color(candidate))
-            .text(candidate)
-            .attr("class", `label-${candidate}`);
+    const candidates=Object.keys(data[0]).filter(k=>k!=='date');
+    candidates.forEach(c=>{
+      const series=data.map(d=>({date:d.date,value:d[c]}));
+      svg.append('path').datum(series).attr('fill','none').attr('stroke',color(c)).attr('stroke-width',2).attr('d',line);
+      svg.append('text').attr('x',width+6).attr('y',y(series[series.length-1].value)).attr('dy','0.35em').attr('fill',color(c)).style('font-size','11px').text(c);
     });
 
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+    const tooltip=d3.select('body').append('div').attr('class','tooltip').style('opacity',0);
+    const bisect=d3.bisector(d=>d.date).left;
+    svg.append('rect').attr('width',width).attr('height',height).style('fill','none').style('pointer-events','all')
+      .on('mousemove', (event)=>{
+        const x0=x.invert(d3.pointer(event)[0]);
+        const i=bisect(data,x0,1); const d0=data[i-1]; const d1=data[i]||d0; const d=x0-d0.date>d1.date-x0?d1:d0;
+        tooltip.html(`<strong>${d3.timeFormat('%B %Y')(d.date)}</strong><br>`+['Morales','Arce','Mesa','ReyesVilla','Nulos','NSNR','Otros'].map(c=>`<span style="color:${color(c)}">${c}: ${d[c].toFixed(1)}%</span>`).join('<br>')).style('opacity',1).style('left',(event.pageX+12)+'px').style('top',(event.pageY-28)+'px');
+      })
+      .on('mouseleave',()=>tooltip.style('opacity',0));
+  }
+  </script>
+</body>
+</html>
 
-    const bisectDate = d3.bisector(d => d.date).left;
-
-    svg.append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .on("mouseover", () => tooltip.style("opacity", 1))
-        .on("mouseout", () => tooltip.style("opacity", 0))
-        .on("mousemove", mousemove);
-
-    function mousemove(event) {
-        const x0 = x.invert(d3.pointer(event)[0]);
-        const i = bisectDate(data, x0, 1);
-        const d0 = data[i - 1];
-        const d1 = data[i];
-        const d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-        tooltip.html(`
-            <strong>Fecha: ${d3.timeFormat("%B %Y")(d.date)}</strong><br>
-            ${candidates.map(c => `<span style="color:${color(c)}">${c}: ${d[c].toFixed(1)}%</span>`).join("<br>")}
-        `)
-        .style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 10) + "px");
-    }
-
-    const sentimentData = [
-        {
-            z: [[1, 20, 30], [20, 1, 60], [30, 60, 1]],
-            x: ['Positivo', 'Neutral', 'Negativo'],
-            y: ['Discurso A', 'Discurso B', 'Discurso C'],
-            type: 'heatmap',
-            colorscale: 'Viridis'
-        }
-    ];
-
-    Plotly.newPlot('sentimentAnalysisChart', sentimentData, {
-        title: 'Análisis de Sentimientos en Discursos Políticos',
-        annotations: [
-            {
-                x: 'Positivo',
-                y: 'Discurso A',
-                text: '1%',
-                showarrow: false,
-                font: {
-                    color: 'white'
-                }
-            },
-            {
-                x: 'Neutral',
-                y: 'Discurso A',
-                text: '20%',
-                showarrow: false,
-                font: {
-                    color: 'white'
-                }
-            },
-            {
-                x: 'Negativo',
-                y: 'Discurso A',
-                text: '30%',
-                showarrow: false,
-                font: {
-                    color: 'white'
-                }
-            },
-        ]
-    });
-
-    function generateRandomData(n, trend = 0) {
-        let data = [];
-        let value = 50;
-        for (let i = 0; i < n; i++) {
-            value += Math.random() * 10 - 5 + trend;
-            value = Math.max(0, Math.min(100, value));
-            data.push(value);
-        }
-        return data;
-    }
-
-    const socialSimulationData = [
-        {
-            x: Array.from({length: 100}, (_, i) => i),
-            y: generateRandomData(100, 0.1),
-            mode: 'lines',
-            type: 'scatter',
-            name: 'Escenario A'
-        },
-        {
-            x: Array.from({length: 100}, (_, i) => i),
-            y: generateRandomData(100, -0.1),
-            mode: 'lines',
-            type: 'scatter',
-            name: 'Escenario B'
-        },
-        {
-            x: Array.from({length: 100}, (_, i) => i),
-            y: generateRandomData(100),
-            mode: 'lines',
-            type: 'scatter',
-            name: 'Escenario C'
-        }
-    ];
-
-    Plotly.newPlot('socialSimulationChart', socialSimulationData, {
-        title: 'Simulación de Interacciones Sociales',
-        xaxis: {title: 'Tiempo'},
-        yaxis: {title: 'Nivel de Cohesión Social'},
-        legend: {
-            x: 0,
-            y: 1,
-            traceorder: 'normal',
-            font: {
-                family: 'sans-serif',
-                size: 12,
-                color: '#000'
-            },
-            bgcolor: '#E2E2E2',
-            bordercolor: '#FFFFFF',
-            borderwidth: 2
-        }
-    });
-
-    const geopoliticalData = [{
-        type: 'choropleth',
-        locationmode: 'country names',
-        locations: ['United States', 'China', 'Russia', 'Germany', 'United Kingdom', 'France', 'Japan', 'India', 'Brazil', 'Canada'],
-        z: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-        text: ['Estados Unidos', 'China', 'Rusia', 'Alemania', 'Reino Unido', 'Francia', 'Japón', 'India', 'Brasil', 'Canadá'],
-        colorscale: [
-            [0, 'rgb(242,240,247)'], [0.2, 'rgb(218,218,235)'],
-            [0.4, 'rgb(188,189,220)'], [0.6, 'rgb(158,154,200)'],
-            [0.8, 'rgb(117,107,177)'], [1, 'rgb(84,39,143)']
-        ],
-        autocolorscale: false,
-        reversescale: true,
-        marker: {
-            line: {
-                color: 'rgb(180,180,180)',
-                width: 0.5
-            }
-        },
-        tick0: 0,
-        zmin: 0,
-        dtick: 1000,
-        colorbar: {
-            autotic: false,
-            title: 'Índice de Influencia Geopolítica'
-        }
-    }];
-
-    const geopoliticalLayout = {
-        title: 'Influencia Geopolítica Global',
-        geo: {
-            showframe: false,
-            showcoastlines: true,
-            projection: {
-                type: 'mercator'
-            }
-        }
-    };
-
-    Plotly.newPlot("geopoliticalMap", geopoliticalData, geopoliticalLayout);
-});
-</script>
-</body></html>
