@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>José Orlando Peralta Beltrán — Analista Político e Investigador</title>
-  <meta name="description" content="Perfil académico y profesional de José Orlando Peralta Beltrán: proyectos, libros, papers, medios y contacto." />
+  <meta name="description" content="Perfil académico y profesional de José Orlando Peralta Beltrán: proyectos, libros, dossier y contacto." />
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,9 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.08)' },
+          borderRadius: { xl2: '18px' }
         }
       }
     }
@@ -21,24 +23,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .brand-chip { @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold ring-1 ring-slate-200 bg-white; }
+  </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <!-- Cinta superior -->
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header / Nav estilo CIRCPyCS -->
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
       <a href="#inicio" class="flex items-center gap-3 group">
         <img src="https://i.imgur.com/eG9yXG6.jpeg" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-200 group-hover:ring-sky-300 transition" alt="Avatar de José Orlando Peralta"/>
         <div class="leading-tight">
-          <p class="text-xs tracking-wide text-slate-500">Perfil académico</p>
-          <h1 class="font-bold text-lg">José Orlando Peralta B.</h1>
+          <p class="text-[11px] tracking-wide text-slate-500">Perfil académico</p>
+          <h1 class="font-bold text-base sm:text-lg">José Orlando Peralta B.</h1>
         </div>
       </a>
 
       <!-- Nav escritorio -->
-      <nav class="hidden md:flex items-center gap-6 text-sm">
+      <nav class="hidden md:flex items-center gap-5 text-[13.5px]">
+        <a href="#dossier" class="hover:text-sky-700 font-semibold">Dossier</a>
         <a href="#proyectos" class="hover:text-sky-700">Proyectos</a>
         <a href="#medios" class="hover:text-sky-700">Medios</a>
         <a href="#libros" class="hover:text-sky-700">Libros</a>
@@ -68,6 +74,7 @@
           </button>
         </div>
         <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dossier">Dossier</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#proyectos">Proyectos</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#medios">Medios</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#libros">Libros</a></li>
@@ -79,166 +86,188 @@
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero COMPACTO con llamada al libro -->
   <section id="inicio" class="relative overflow-hidden">
     <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
       <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
       <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10 grid lg:grid-cols-2 gap-6 items-center">
       <div class="text-center lg:text-left">
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Politólogo · Analista e investigador</span>
-        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">José Orlando Peralta Beltrán</h2>
-        <p class="mt-3 text-slate-600 max-w-prose mx-auto lg:mx-0">Investigador asociado en el CIRCPyCS-UAGRM. Análisis político, docencia y divulgación académica.</p>
-        <div class="mt-5 flex flex-wrap gap-3 justify-center lg:justify-start">
-          <a href="https://orcid.org/0000-0003-0415-5950" target="_blank" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-orcid mr-2"></i>ORCID</a>
-          <a href="https://www.academia.edu/example" target="_blank" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-university mr-2"></i>Academia.edu</a>
-          <a href="https://www.researchgate.net/example" target="_blank" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-researchgate mr-2"></i>ResearchGate</a>
-          <a href="https://scholar.google.es/citations?user=I7_X6QgAAAAJ&hl=es&oi=ao" target="_blank" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-graduation-cap mr-2"></i>Google Scholar</a>
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Politólogo · Analista e investigador</span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">José Orlando Peralta Beltrán</h2>
+        <p class="mt-2 text-slate-600 max-w-prose mx-auto lg:mx-0">Investigador asociado en el CIRCPyCS-UAGRM. Análisis político, opinión pública y procesos electorales.</p>
+        <div class="mt-4 flex flex-wrap gap-2 justify-center lg:justify-start text-[13px]">
+          <a href="https://orcid.org/0000-0003-0415-5950" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-orcid mr-2"></i>ORCID</a>
+          <a href="https://www.academia.edu/example" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-university mr-2"></i>Academia.edu</a>
+          <a href="https://www.researchgate.net/example" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-researchgate mr-2"></i>ResearchGate</a>
+          <a href="https://scholar.google.es/citations?user=I7_X6QgAAAAJ&hl=es&oi=ao" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-graduation-cap mr-2"></i>Google Scholar</a>
         </div>
-        <div class="mt-6">
-          <a href="#contacto" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105"><i class="fas fa-envelope"></i> Contáctame</a>
+        <div class="mt-4 flex gap-2 justify-center lg:justify-start">
+          <a href="#dossier" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105"><i class="fas fa-bullhorn"></i> Ver Dossier</a>
+          <a href="#contacto" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fas fa-envelope"></i> Contacto</a>
         </div>
       </div>
+      <!-- Book callout -->
       <div class="flex justify-center lg:justify-end">
-        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden max-w-sm">
-          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
-          <div class="p-6 -mt-16">
-            <img src="https://i.imgur.com/eG9yXG6.jpeg" alt="Foto" class="h-28 w-28 rounded-2xl object-cover ring-4 ring-white shadow-md"/>
-            <h3 class="mt-4 font-bold text-xl">Investigación aplicada</h3>
-            <p class="mt-1 text-slate-600 text-sm">Ciencia política, opinión pública y procesos electorales.</p>
+        <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden max-w-md w-full grid grid-cols-5">
+          <div class="col-span-2 p-3 bg-slate-50">
+            <img src="https://i.imgur.com/ZxzQOra.png" alt="Nuevo libro de Orlando Peralta" class="w-full h-44 object-cover rounded-2xl"/>
+          </div>
+          <div class="col-span-3 p-4">
+            <p class="text-[11px] uppercase tracking-wide text-slate-500">Nuevo libro</p>
+            <h3 class="mt-1 font-bold text-lg leading-snug">Proyecto editorial reciente</h3>
+            <p class="mt-1 text-slate-600 text-sm">Avance de obra y ensayos sobre coyuntura boliviana.</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="brand-chip">Ciencia política</span>
+              <span class="brand-chip">Coyuntura</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Proyectos destacados -->
-  <section id="proyectos" class="py-12 bg-white border-y border-slate-200">
+  <!-- DOSSIER DESTACADO: Giro hacia la derecha en Bolivia -->
+  <section id="dossier" class="py-10 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Proyectos destacados</h3>
-      <div class="mt-6 grid gap-5 md:grid-cols-2">
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
-          <h4 class="font-semibold text-lg">Análisis del proceso político-electoral en Bolivia 2019–2020</h4>
-          <p class="mt-1 text-slate-600">Libro <em>Rebelión y Pandemia</em>: examen de los eventos políticos y electorales del periodo.</p>
-          <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver detalles <span>→</span></a>
+      <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 lg:p-8 shadow-soft">
+        <div class="flex flex-col lg:flex-row items-start gap-6">
+          <div class="flex-1">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200">Dossier</span>
+            <h3 class="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight">Giro hacia la derecha en Bolivia</h3>
+            <p class="mt-2 text-slate-600">Cobertura y análisis publicados en medios de América Latina y Europa.</p>
+            <div id="brands" class="mt-4 flex flex-wrap gap-2"></div>
+            <div class="mt-5 flex flex-wrap gap-2">
+              <a href="#lista-medios" class="px-4 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700">Ver artículos</a>
+            </div>
+          </div>
+          <div class="w-full max-w-sm lg:max-w-md">
+            <div class="rounded-2xl border border-slate-200 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=80&w=1200&auto=format&fit=crop" class="w-full h-56 object-cover" alt="Prensa y medios"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de medios -->
+        <div id="lista-medios" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proyectos (compacto) -->
+  <section id="proyectos" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-center">Proyectos destacados</h3>
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Proceso político-electoral Bolivia 2019–2020</h4>
+          <p class="mt-1 text-slate-600 text-sm">Examen de los eventos políticos y electorales del periodo.</p>
+          <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
-          <h4 class="font-semibold text-lg">Centro de Investigación Regional — UAGRM</h4>
-          <p class="mt-1 text-slate-600">Investigador asociado del CIRCPyCS y Jefe del Área Política del Equipo de Análisis Político (EAC).</p>
-          <a href="https://criuagrm.github.io/researchers" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver detalles <span>→</span></a>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Centro de Investigación Regional — UAGRM</h4>
+          <p class="mt-1 text-slate-600 text-sm">Investigador asociado del CIRCPyCS y Jefe del Área Política del EAC.</p>
+          <a href="https://criuagrm.github.io/researchers" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver</a>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Medios -->
-  <section id="medios" class="py-12">
+  <!-- Medios (compacto) -->
+  <section id="medios" class="py-10 border-y border-slate-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Apariciones en medios</h3>
-      <div class="mt-6 grid md:grid-cols-2 gap-5">
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+      <h3 class="text-xl font-bold text-center">Apariciones en medios</h3>
+      <div class="mt-5 grid md:grid-cols-2 gap-4">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Entrevista en France 24</h4>
-          <p class="mt-1 text-slate-600">Análisis sobre bloqueos y el impacto de declaraciones de Evo Morales.</p>
+          <p class="mt-1 text-slate-600 text-sm">Análisis sobre bloqueos y el impacto de declaraciones de Evo Morales.</p>
           <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver entrevista</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Artículo en TalCual Digital</h4>
-          <p class="mt-1 text-slate-600">“Bolivia y sus eternos conflictos sociales”: fracturas estructurales del país.</p>
+          <p class="mt-1 text-slate-600 text-sm">“Bolivia y sus eternos conflictos sociales”.</p>
           <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer artículo</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
-          <h4 class="font-semibold">Colaboraciones en Latinoamérica 21</h4>
-          <p class="mt-1 text-slate-600">Radicalidad discursiva y coyuntura boliviana.</p>
-          <a href="https://latinoamerica21.com/es/autor/jose-orlando-peralta/" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer colaboraciones</a>
-        </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
-          <h4 class="font-semibold">Publicación en El Mostrador</h4>
-          <p class="mt-1 text-slate-600">“La radicalidad discursiva de Evo Morales y la nueva Convención Constitucional en Chile”.</p>
-          <a href="https://www.elmostrador.cl/dia/2021/08/14/la-radicalidad-discursiva-de-evo-morales-y-la-nueva-convencion-constitucional-en-chile/" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer artículo</a>
-        </article>
       </div>
     </div>
   </section>
 
-  <!-- Libros -->
-  <section id="libros" class="py-12 bg-white border-y border-slate-200">
+  <!-- Libros (conservado) -->
+  <section id="libros" class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Libros</h3>
-      <div class="mt-6 grid gap-5 md:grid-cols-2">
-        <article class="rounded-2xl bg-slate-900 text-white border border-slate-800 p-6 shadow-sm hover:shadow-md transition text-center">
+      <h3 class="text-xl font-bold text-center">Libros</h3>
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <article class="rounded-xl bg-slate-900 text-white border border-slate-800 p-6 shadow-sm hover:shadow-md transition text-center">
           <img src="https://i.imgur.com/NrJYpbM.png" alt="Rebelión y Pandemia" class="mx-auto h-40 w-auto rounded-lg shadow mb-3"/>
-          <h4 class="font-semibold text-lg">Rebelión y Pandemia</h4>
+          <h4 class="font-semibold">Rebelión y Pandemia</h4>
           <p class="mt-1 text-slate-300 text-sm">Análisis de los eventos políticos y electorales en Bolivia 2019–2020.</p>
-          <a href="https://drive.google.com/link_al_libro1" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-slate-900 bg-white hover:bg-slate-100">Ver detalles</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-slate-900 bg-white hover:bg-slate-100">Ver detalles</a>
         </article>
-        <article class="rounded-2xl bg-slate-900 text-white border border-slate-800 p-6 shadow-sm hover:shadow-md transition text-center">
+        <article class="rounded-xl bg-slate-900 text-white border border-slate-800 p-6 shadow-sm hover:shadow-md transition text-center">
           <img src="https://i.imgur.com/lCdPwMT.jpeg" alt="Rebelión en la Llanura" class="mx-auto h-40 w-auto rounded-lg shadow mb-3"/>
-          <h4 class="font-semibold text-lg">Rebelión en la Llanura</h4>
+          <h4 class="font-semibold">Rebelión en la Llanura</h4>
           <p class="mt-1 text-slate-300 text-sm">Politización de la clase media urbana en Santa Cruz.</p>
-          <a href="https://drive.google.com/link_al_libro2" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-slate-900 bg-white hover:bg-slate-100">Ver detalles</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-slate-900 bg-white hover:bg-slate-100">Ver detalles</a>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- CV -->
-  <section id="cv" class="py-12">
+  <!-- CV (compacto) -->
+  <section id="cv" class="py-10 border-y border-slate-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Currículum Vitae</h3>
-      <p class="text-center text-slate-600">Descarga el CV completo en el idioma de tu preferencia.</p>
-      <div class="mt-6 grid sm:grid-cols-2 gap-5">
-        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm text-center">
-          <div class="text-rose-600 text-4xl"><i class="fas fa-file-pdf"></i></div>
+      <h3 class="text-xl font-bold text-center">Currículum Vitae</h3>
+      <div class="mt-5 grid sm:grid-cols-2 gap-4">
+        <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
+          <div class="text-rose-600 text-3xl"><i class="fas fa-file-pdf"></i></div>
           <h4 class="mt-2 font-semibold">CV en Español</h4>
-          <p class="text-slate-600 text-sm">Versión detallada con formación y experiencia.</p>
-          <a href="https://drive.google.com/link_al_cv_espanol" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-rose-600 hover:bg-rose-700 w-full justify-center">Descargar</a>
+          <a href="#" target="_blank" class="mt-2 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-rose-600 hover:bg-rose-700">Descargar</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm text-center">
-          <div class="text-sky-600 text-4xl"><i class="fas fa-file-pdf"></i></div>
+        <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
+          <div class="text-sky-600 text-3xl"><i class="fas fa-file-pdf"></i></div>
           <h4 class="mt-2 font-semibold">CV in English</h4>
-          <p class="text-slate-600 text-sm">Full CV including academic and professional record.</p>
-          <a href="https://drive.google.com/link_al_cv_ingles" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full justify-center">Download</a>
+          <a href="#" target="_blank" class="mt-2 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Download</a>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Papers -->
-  <section id="papers" class="py-12 bg-white border-y border-slate-200">
+  <!-- Papers (compacto) -->
+  <section id="papers" class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Papers</h3>
-      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
+      <h3 class="text-xl font-bold text-center">Papers</h3>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
           <img src="https://i.imgur.com/0AdBgYr.jpeg" alt="Paper 1" class="mx-auto h-40 w-auto rounded-md shadow"/>
           <h4 class="mt-3 font-semibold text-[15px]">Las ciudades votan: ¿Continuidades o cambios en Santa Cruz de la Sierra?</h4>
-          <a href="https://drive.google.com/link_a_tu_articulo1" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
           <img src="https://i.imgur.com/PGA2442.jpeg" alt="Paper 2" class="mx-auto h-40 w-auto rounded-md shadow"/>
           <h4 class="mt-3 font-semibold text-[15px]">Santa Cruz: nuevo epicentro de la política 2001–2020, pero no del poder</h4>
-          <a href="https://drive.google.com/link_a_tu_articulo2" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
           <img src="https://i.imgur.com/RB6fvyF.jpeg" alt="Paper 3" class="mx-auto h-40 w-auto rounded-md shadow"/>
           <h4 class="mt-3 font-semibold text-[15px]">Democracia intercultural en perspectiva deliberativa. El caso de Bolivia</h4>
-          <a href="https://drive.google.com/link_a_tu_articulo3" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
         </article>
-        <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition text-center">
           <img src="https://i.imgur.com/V9Lmacc.jpeg" alt="Paper 4" class="mx-auto h-40 w-auto rounded-md shadow"/>
           <h4 class="mt-3 font-semibold text-[15px]">La coyuntura del debate sobre federalismo en Bolivia, 2021–2023</h4>
-          <a href="https://drive.google.com/link_a_tu_articulo4" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sky-700 border border-sky-200 hover:bg-sky-50">Descargar PDF</a>
         </article>
       </div>
     </div>
   </section>
 
   <!-- Contacto -->
-  <section id="contacto" class="py-12">
+  <section id="contacto" class="py-10 border-t border-slate-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Contáctame</h3>
-      <div class="mt-6 grid sm:grid-cols-3 gap-4">
+      <h3 class="text-xl font-bold text-center">Contáctame</h3>
+      <div class="mt-5 grid sm:grid-cols-3 gap-3">
         <a href="mailto:joseperalta@uagrm.edu.bo" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fas fa-envelope"></i> Email</a>
         <a href="https://www.linkedin.com/in/jos%C3%A9-orlando-peralta-b-9896096b/" target="_blank" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fab fa-linkedin"></i> LinkedIn</a>
         <a href="https://wa.link/lhiewr" target="_blank" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700"><i class="fab fa-whatsapp"></i> WhatsApp</a>
@@ -250,26 +279,72 @@
   <footer class="border-t border-slate-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p>© 2024 Orlando Peralta Beltrán. Todos los derechos reservados.</p>
+        <p>© <span id="year"></span> Orlando Peralta Beltrán. Todos los derechos reservados.</p>
         <p class="text-slate-500">CIRCPyCS — UAGRM</p>
       </div>
     </div>
   </footer>
 
   <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
     // Menú móvil
     const wrap = document.getElementById('mobile-wrap');
     const openBtn = document.getElementById('btn-open');
     const closeBtn = document.getElementById('btn-close');
     const backdrop = document.getElementById('backdrop');
-
     function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
     function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-
     openBtn?.addEventListener('click', openMenu);
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
     backdrop?.addEventListener('click', closeMenu);
     closeBtn?.addEventListener('click', closeMenu);
+
+    // ======== Dossier data ========
+    const dossier = [
+      { url: 'https://www.clarin.com/opinion/giro-derecha-bolivia_0_JvOGwzt7TX.html' , name: 'Clarín (AR)' },
+      { url: 'https://www.eldiario.net/portal/2025/08/12/giro-hacia-la-derecha-en-bolivia/' , name: 'El Diario (BO)' },
+      { url: 'https://www.elespectador.com/mundo/america/giro-hacia-la-derecha-en-bolivia-elecciones-entre-medina-y-velasco/' , name: 'El Espectador (CO)' },
+      { url: 'https://www.eluniversal.com.mx/opinion/latinoamerica21/giro-hacia-la-derecha-en-bolivia/' , name: 'El Universal (MX)' },
+      { url: 'https://www.elmostrador.cl/noticias/opinion/columnas/2025/08/11/giro-hacia-la-derecha-en-bolivia/' , name: 'El Mostrador (CL)' },
+      { url: 'https://www.elnacional.com/2025/08/giro-hacia-la-derecha-en-bolivia/' , name: 'El Nacional (VE)' },
+      { url: 'https://confidencial.digital/opinion/giro-hacia-la-derecha-en-bolivia/' , name: 'Confidencial (NI)' },
+      { url: 'https://www.larevista.cr/giro-hacia-la-derecha-en-bolivia/' , name: 'La Revista (CR)' },
+      { url: 'https://www.elindependiente.sv/2025/08/12/giro-hacia-la-derecha-en-bolivia/' , name: 'El Independiente (SV)' },
+      { url: 'https://3eravoz.com/2025/08/07/giro-hacia-la-derecha-en-bolivia/' , name: '3era Voz (MX)' }
+    ];
+
+    // Chips de marcas/medios
+    const brandsWrap = document.getElementById('brands');
+    dossier.forEach(item => {
+      const a = document.createElement('a');
+      a.href = item.url; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'brand-chip hover:ring-sky-300 hover:text-sky-700';
+      a.textContent = item.name;
+      brandsWrap.appendChild(a);
+    });
+
+    // Tarjetas lista de medios
+    const listWrap = document.getElementById('lista-medios');
+    dossier.forEach((item, idx) => {
+      const card = document.createElement('article');
+      card.className = 'rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition';
+      card.innerHTML = `
+        <h4 class="font-semibold text-[15px]">Giro hacia la derecha en Bolivia — ${item.name}</h4>
+        <div class="mt-2 flex flex-wrap gap-2 text-[12px] text-slate-600">
+          <span class="brand-chip">Opinión</span><span class="brand-chip">Cobertura</span>
+        </div>
+        <a class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700" target="_blank" rel="noopener" href="${item.url}">
+          Abrir enlace <span>↗</span>
+        </a>`;
+      listWrap.appendChild(card);
+    });
+
+    // ======== Smoke tests mínimos ========
+    console.assert(document.querySelector('#brands')?.children.length === 10, 'Dossier: número de medios ≠ 10');
+    console.assert(document.querySelector('#lista-medios')?.children.length === 10, 'Dossier: lista renderizada ≠ 10');
+    console.assert(document.querySelector('img[alt^="Nuevo libro"]'), 'Hero: imagen del nuevo libro no encontrada');
   </script>
 </body>
 </html>
