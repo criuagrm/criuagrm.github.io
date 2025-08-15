@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -46,7 +47,21 @@
         <a href="#medios" class="hover:text-sky-700">Medios</a>
         <a href="#libros" class="hover:text-sky-700">Libros</a>
         <a href="#papers" class="hover:text-sky-700">Papers</a>
-        <a href="#cv" class="hover:text-sky-700">CV</a>
+
+        <!-- Dropdown CV -->
+        <div class="relative">
+          <button id="cv-btn" class="inline-flex items-center gap-1.5 hover:text-sky-700">
+            <span class="font-semibold">CV</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div id="cv-dropdown" class="hidden absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+            <a href="#cv-es" class="block px-4 py-2.5 text-sm hover:bg-slate-50">CV en Español</a>
+            <a href="#cv-en" class="block px-4 py-2.5 text-sm hover:bg-slate-50">CV in English</a>
+          </div>
+        </div>
+
         <a href="#contacto" class="px-3 py-1.5 rounded-xl border border-sky-200 text-sky-700 hover:bg-sky-50">Contacto</a>
       </nav>
 
@@ -76,7 +91,10 @@
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#medios">Medios</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#libros">Libros</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#papers">Papers</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv">CV</a></li>
+          <!-- Subopciones de CV en móvil -->
+          <li class="pt-2 border-t border-slate-200 mt-2 text-slate-500 text-xs px-3">CV</li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-es">CV en Español</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-en">CV in English</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
         </ul>
       </nav>
@@ -101,17 +119,20 @@
           <a href="https://www.researchgate.net/example" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-researchgate mr-2"></i>ResearchGate</a>
           <a href="https://scholar.google.es/citations?user=I7_X6QgAAAAJ&hl=es&oi=ao" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-graduation-cap mr-2"></i>Google Scholar</a>
         </div>
+        <!-- Solo botón Contacto (se quitó 'Ver Dossier') -->
         <div class="mt-4 flex gap-2 justify-center lg:justify-start">
-          <a href="#dossier" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105"><i class="fas fa-bullhorn"></i> Ver Dossier</a>
-          <a href="#contacto" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fas fa-envelope"></i> Contacto</a>
+          <a href="#contacto" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold border border-slate-300 hover:border-sky-600 hover:text-sky-700">
+            <i class="fas fa-envelope"></i> Contacto
+          </a>
         </div>
       </div>
 
-      <!-- Book callout (más grande y responsive) -->
+      <!-- Book callout -->
       <div class="flex justify-center lg:justify-end">
         <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full max-w-lg grid grid-cols-5">
           <div class="col-span-2 p-3 bg-slate-50">
-            <img src="https://i.imgur.com/ZxzQOra.png" alt="Nuevo libro de Orlando Peralta" class="w-full h-56 sm:h-64 object-cover rounded-2xl"/>
+            <!-- Imagen actualizada del próximo lanzamiento -->
+            <img src="https://i.imgur.com/7EntBNW.png" alt="Nuevo libro de Orlando Peralta" class="w-full h-56 sm:h-64 object-cover rounded-2xl"/>
           </div>
           <div class="col-span-3 p-4 sm:p-5">
             <p class="text-[11px] uppercase tracking-wide text-slate-500">Nuevo libro</p>
@@ -127,7 +148,7 @@
     </div>
   </section>
 
-  <!-- DOSSIER (chips + foto pequeña de Orlando) -->
+  <!-- DOSSIER (chips + foto) -->
   <section id="dossier" class="py-10 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 lg:p-8 shadow-soft">
@@ -137,7 +158,6 @@
             <h3 class="mt-2 text-3xl font-extrabold leading-tight">Giro hacia la derecha en Bolivia</h3>
             <p class="mt-2 text-slate-600">Cobertura y análisis publicados en medios de América Latina y Europa.</p>
             <div id="brands" class="mt-4 flex flex-wrap gap-3"></div>
-            
           </div>
           <div class="w-full max-w-sm lg:max-w-md flex items-center justify-center">
             <div class="h-56 w-56 rounded-full overflow-hidden ring-4 ring-white border border-slate-200 shadow-soft">
@@ -149,7 +169,7 @@
     </div>
   </section>
 
-  <!-- Proyectos (compacto) -->
+  <!-- Proyectos -->
   <section id="proyectos" class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-xl font-bold text-center">Proyectos destacados</h3>
@@ -168,7 +188,7 @@
     </div>
   </section>
 
-  <!-- Medios (compacto) -->
+  <!-- Medios -->
   <section id="medios" class="py-10 border-y border-slate-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-xl font-bold text-center">Apariciones en medios</h3>
@@ -213,12 +233,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-xl font-bold text-center">Currículum Vitae</h3>
       <div class="mt-5 grid sm:grid-cols-2 gap-4">
-        <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
+        <article id="cv-es" class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
           <div class="text-rose-600 text-3xl"><i class="fas fa-file-pdf"></i></div>
           <h4 class="mt-2 font-semibold">CV en Español</h4>
           <a href="#" target="_blank" class="mt-2 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-rose-600 hover:bg-rose-700">Descargar</a>
         </article>
-        <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
+        <article id="cv-en" class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm text-center">
           <div class="text-sky-600 text-3xl"><i class="fas fa-file-pdf"></i></div>
           <h4 class="mt-2 font-semibold">CV in English</h4>
           <a href="#" target="_blank" class="mt-2 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Download</a>
@@ -294,6 +314,19 @@
     backdrop?.addEventListener('click', closeMenu);
     closeBtn?.addEventListener('click', closeMenu);
 
+    // Dropdown CV (desktop)
+    const cvBtn = document.getElementById('cv-btn');
+    const cvDropdown = document.getElementById('cv-dropdown');
+    function closeCv(){ cvDropdown?.classList.add('hidden'); }
+    cvBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cvDropdown?.classList.toggle('hidden');
+    });
+    document.addEventListener('click', (e) => {
+      if (!cvDropdown?.contains(e.target) && !cvBtn?.contains(e.target)) closeCv();
+    });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeCv(); });
+
     // ======== Dossier data ========
     const dossier = [
       { url: 'https://www.clarin.com/opinion/giro-derecha-bolivia_0_JvOGwzt7TX.html' , name: 'Clarín (AR)' },
@@ -308,7 +341,7 @@
       { url: 'https://3eravoz.com/2025/08/07/giro-hacia-la-derecha-en-bolivia/' , name: '3era Voz (MX)' }
     ];
 
-    // Chips de medios (sin repetir el título)
+    // Chips de medios
     const brandsWrap = document.getElementById('brands');
     dossier.forEach(item => {
       const a = document.createElement('a');
@@ -324,4 +357,3 @@
   </script>
 </body>
 </html>
-
