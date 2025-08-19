@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
   <title>CIRCPyCS — UAGRM</title>
   <meta name="description" content="Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
   <!-- Todas las rutas relativas apuntarán a este dominio -->
@@ -14,13 +15,19 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.08)' }
         }
       }
     }
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Que los anclajes no queden ocultos por el header fijo */
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <!-- Cinta superior -->
@@ -28,12 +35,12 @@
 
   <!-- Header / Nav -->
   <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3 group">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 min-w-0">
         <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
-        <div class="leading-tight">
-          <p class="text-sm tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        <div class="leading-tight truncate">
+          <p class="text-xs sm:text-sm tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-base sm:text-lg truncate">CIRCPyCS</h1>
         </div>
       </a>
 
@@ -88,7 +95,7 @@
 
       <!-- Botón móvil -->
       <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-controls="mobile-wrap" aria-expanded="false">
-        <span>Menú</span>
+        <span class="text-sm">Menú</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
@@ -98,7 +105,7 @@
     <!-- Panel móvil -->
     <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden" aria-hidden="true">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
@@ -175,6 +182,7 @@
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="courses.html">Cursos</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="int.html">Internacionalización</a></li>
         </ul>
+        <div class="h-[env(safe-area-inset-bottom)]"></div>
       </nav>
     </div>
   </header>
@@ -187,22 +195,22 @@
       <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20 grid lg:grid-cols-2 gap-8 items-center">
       <div>
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</span>
-        <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Bienvenidos al CIRCPyCS</h2>
-        <p class="mt-4 text-slate-600 max-w-prose">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight">Bienvenidos al CIRCPyCS</h2>
+        <p class="mt-3 text-slate-600 max-w-prose">
           Diseñamos investigación aplicada, formamos comunidad académica y abrimos datos para fortalecer la toma de decisiones en Santa Cruz y Bolivia. Nuestro trabajo integra <strong>política comparada</strong>, <strong>economía del comportamiento</strong>, <strong>análisis de datos avanzados</strong> y <strong>análisis neoinstitucional</strong>.
         </p>
-        <div class="mt-6 flex flex-wrap gap-3">
+        <div class="mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-3">
           <!-- GitHub repo -->
-          <a href="https://github.com/criuagrm" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold shadow hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 transition">
+          <a href="https://github.com/criuagrm" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold shadow hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 transition w-full sm:w-auto justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.4c0 5.27 3.42 9.73 8.17 11.31.6.11.82-.26.82-.58 0-.29-.01-1.05-.02-2.06-3.33.73-4.03-1.62-4.03-1.62-.55-1.43-1.34-1.81-1.34-1.81-1.1-.77.08-.76.08-.76 1.21.09 1.85 1.25 1.85 1.25 1.08 1.88 2.83 1.34 3.52 1.03.11-.8.42-1.34.76-1.65-2.66-.3-5.46-1.36-5.46-6.07 0-1.34.46-2.44 1.22-3.3-.12-.3-.53-1.52.12-3.17 0 0 1.01-.33 3.31 1.26.96-.27 1.98-.4 3-.41 1.02 0 2.04.14 3 .41 2.3-1.59 3.31-1.26 3.31-1.26.65 1.65.24 2.87.12 3.17.76.86 1.22 1.96 1.22 3.3 0 4.72-2.81 5.76-5.49 6.06.43.38.81 1.12.81 2.26 0 1.63-.02 2.95-.02 3.36 0 .32.22.7.83.58A11.51 11.51 0 0 0 23.5 12.4 11.5 11.5 0 0 0 12 .5Z"/></svg>
             <span>GitHub</span>
           </a>
 
           <!-- Botón Laboratorio (se mantiene llamativo) -->
-          <a href="#laboratorio" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 transition">
+          <a href="#laboratorio" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 transition w-full sm:w-auto justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M9 3h6M10 3v5l-5 9a4 4 0 003.5 6h6a4 4 0 003.5-6l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -210,7 +218,7 @@
           </a>
 
           <!-- Botón Incubadora -->
-          <a href="incubadora.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition">
+          <a href="incubadora.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition w-full sm:w-auto justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.6L12 15.8 7.1 17.3 8 11.7 4 7.8l5.5-.8L12 2Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -219,48 +227,52 @@
         </div>
 
         <!-- Marcadores -->
-        <dl class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-center">
-          <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-            <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Líneas</dt>
-            <dd class="mt-1 text-3xl font-extrabold">18</dd>
+        <dl class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-center">
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Líneas</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">18</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-            <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Seminarios</dt>
-            <dd class="mt-1 text-3xl font-extrabold">10</dd>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Seminarios</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">10</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-            <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Conferencias</dt>
-            <dd class="mt-1 text-3xl font-extrabold">6</dd>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Conferencias</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">6</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-            <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Conversatorios</dt>
-            <dd class="mt-1 text-3xl font-extrabold">3</dd>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Conversatorios</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">3</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-            <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Investigadores adscritos</dt>
-            <dd class="mt-1 text-3xl font-extrabold">50</dd>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Investigadores adscritos</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">50</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
-            <dt class="text-xs uppercase tracking-wide text-slate-500 leading-5 break-normal">Estudiantes investigadores</dt>
-            <dd class="mt-1 text-3xl font-extrabold">33</dd>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Estudiantes investigadores</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">33</dd>
           </div>
         </dl>
       </div>
 
       <!-- Tarjeta destacada -->
-      <div class="relative">
-        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden">
-          <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="w-full h-40 object-contain bg-slate-50" loading="lazy" />
-          <div class="p-6">
-            <h3 class="font-bold text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
+      <div class="relative mt-8 lg:mt-0">
+        <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
+          <div class="w-full bg-slate-50">
+            <div class="mx-auto max-w-3xl aspect-[16/9]">
+              <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="h-full w-full object-contain" loading="lazy" />
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <h3 class="font-bold text-lg sm:text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
             <p class="mt-2 text-slate-600">Acceso abierto en OJS. Lee el Número 5 (julio 2025), envía artículos y revisa nuestras normas editoriales.</p>
-            <div class="mt-4 flex gap-3">
-              <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700">Abrir en OJS</a>
-              <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Ver publicaciones</a>
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+              <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 w-full sm:w-auto text-center">Abrir en OJS</a>
+              <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700 w-full sm:w-auto text-center">Ver publicaciones</a>
             </div>
           </div>
         </div>
-        <div class="absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200">
+        <div class="hidden sm:block absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200">
           <span class="font-semibold">Actualizado:</span> Ago 2025
         </div>
       </div>
@@ -268,16 +280,16 @@
   </section>
 
   <!-- Agenda -->
-  <section id="agenda" class="py-14 bg-white border-y border-slate-200">
+  <section id="agenda" class="py-12 sm:py-14 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h2 class="text-2xl font-bold">Agenda</h2>
         <a href="#eventos" class="text-sm text-sky-700 hover:underline">Ver todos los eventos</a>
       </div>
 
-      <div class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
         <a href="#eventos" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <img src="https://i.imgur.com/9vZANJ5.png" alt="Seminario Permanente — SEPECI" class="w-full h-56 object-contain bg-slate-50" loading="lazy" />
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/9vZANJ5.png" alt="Seminario Permanente — SEPECI" class="h-full w-full object-contain" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-emerald-700 bg-emerald-50 ring-1 ring-emerald-200 inline-flex px-2 py-1 rounded-full">Seminario</p>
             <h3 class="mt-2 font-semibold">Seminario Permanente</h3>
@@ -286,7 +298,7 @@
         </a>
 
         <a href="#eventos" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <img src="https://i.imgur.com/XE755pV.png" alt="Homenaje a Isaac Sandoval Rodríguez" class="w-full h-56 object-contain bg-slate-50" loading="lazy" />
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/XE755pV.png" alt="Homenaje a Isaac Sandoval Rodríguez" class="h-full w-full object-contain" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">Homenaje</p>
             <h3 class="mt-2 font-semibold">Homenaje a Isaac Sandoval</h3>
@@ -295,7 +307,7 @@
         </a>
 
         <a href="#publicaciones" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <img src="https://i.imgur.com/6IndzXd.png" alt="Call for Papers — Conocimiento i Política" class="w-full h-56 object-contain bg-slate-50" loading="lazy" />
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/6IndzXd.png" alt="Call for Papers — Conocimiento i Política" class="h-full w-full object-contain" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Convocatoria</p>
             <h3 class="mt-2 font-semibold">Call for Papers</h3>
@@ -304,7 +316,7 @@
         </a>
 
         <a href="#eventos" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <img src="https://i.imgur.com/H8mupsa.png" alt="Conferencia crítica sobre liberalismo económico" class="w-full h-56 object-contain bg-slate-50" loading="lazy" />
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/H8mupsa.png" alt="Conferencia crítica sobre liberalismo económico" class="h-full w-full object-contain" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">Conferencia</p>
             <h3 class="mt-2 font-semibold">Crítica al liberalismo económico</h3>
@@ -316,13 +328,13 @@
   </section>
 
   <!-- Servicios -->
-  <section id="servicios" class="py-14 bg-white border-y border-slate-200">
+  <section id="servicios" class="py-12 sm:py-14 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <h2 class="text-2xl font-bold">Servicios</h2>
         <a href="#" class="text-sm text-sky-700 hover:underline">Ver catálogo completo</a>
       </div>
-      <div class="mt-6 grid md:grid-cols-3 gap-5">
+      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-3">
         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
           <p class="text-xs uppercase tracking-wide text-slate-500">Asesoría</p>
           <h3 class="mt-1 font-semibold">Políticas públicas y diseño institucional</h3>
@@ -343,11 +355,11 @@
   </section>
 
   <!-- Publicaciones -->
-  <section id="publicaciones" class="py-14 bg-white border-y border-slate-200">
+  <section id="publicaciones" class="py-12 sm:py-14 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold">Publicaciones</h2>
       <p class="mt-2 text-slate-600">Explora nuestras colecciones y series editoriales.</p>
-      <div class="mt-6 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
         <a href="libros.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
           <h3 class="font-semibold">Libros</h3>
           <p class="mt-1 text-sm text-slate-600">Monografías y compilaciones.</p>
@@ -393,24 +405,24 @@
   </section>
 
   <!-- Eventos -->
-  <section id="eventos" class="py-14">
+  <section id="eventos" class="py-12 sm:py-14">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl font-bold">Eventos</h2>
       <p class="mt-2 text-slate-600">Sigue nuestras transmisiones, repositorios de video y actualizaciones en redes.</p>
-      <div class="mt-6 grid md:grid-cols-3 gap-5">
-        <a href="https://www.youtube.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-md transition">
+      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-3">
+        <a href="https://www.youtube.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
           <div class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">YouTube</div>
           <h3 class="mt-3 font-semibold text-lg">Canal — Conversatorios, seminarios y conferencias</h3>
           <p class="mt-1 text-sm text-slate-600">Videos completos y listas de reproducción.</p>
           <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir canal <span>→</span></div>
         </a>
-        <a href="https://www.facebook.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-md transition">
+        <a href="https://www.facebook.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
           <div class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Facebook</div>
           <h3 class="mt-3 font-semibold text-lg">Página — Eventos, fotos y transmisiones</h3>
           <p class="mt-1 text-sm text-slate-600">Cobertura y anuncios en tiempo real.</p>
           <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir página <span>→</span></div>
         </a>
-        <a href="https://x.com" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-md transition">
+        <a href="https://x.com" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
           <div class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">X</div>
           <h3 class="mt-3 font-semibold text-lg">Perfil — Hilos, avisos y clips</h3>
           <p class="mt-1 text-sm text-slate-600">Actualizaciones rápidas y enlaces.</p>
@@ -421,9 +433,9 @@
   </section>
 
   <!-- Sobre -->
-  <section id="sobre" class="py-14">
+  <section id="sobre" class="py-12 sm:py-14">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="grid gap-8 md:grid-cols-2 md:gap-10 items-center">
         <div>
           <h2 class="text-2xl font-bold">Sobre el Centro</h2>
           <p class="mt-2 text-slate-600">El CIRCPyCS es una iniciativa de la UAGRM dedicada a investigación aplicada y formación en ciencia política y ciencias sociales. Promovemos datos abiertos, colaboración interdisciplinaria y transferencia de conocimiento para el desarrollo regional.</p>
@@ -433,13 +445,13 @@
             <li>Informes de actividades y transparencia.</li>
           </ul>
         </div>
-        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
           <h3 class="font-semibold">Contacto</h3>
           <p class="mt-1 text-sm text-slate-600">Escríbenos para colaboraciones, cursos o investigaciones conjuntas.</p>
-          <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
             <div class="rounded-xl border border-slate-200 p-3">
               <div class="text-slate-500">Email</div>
-              <div class="font-medium">cri.cspoliticas.fcjpsri@uagrm.edu.bo</div>
+              <div class="font-medium break-words">cri.cspoliticas.fcjpsri@uagrm.edu.bo</div>
             </div>
             <div class="rounded-xl border border-slate-200 p-3">
               <div class="text-slate-500">Ciudad</div>
