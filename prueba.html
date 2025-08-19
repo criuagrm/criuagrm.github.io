@@ -1,953 +1,423 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CIRCPyCS – Selección de Problemas de Investigación</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>José Orlando Peralta Beltrán — Analista Político e Investigador</title>
+  <meta name="description" content="Perfil académico y profesional de José Orlando Peralta Beltrán: proyectos, libros, dossier y contacto." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.08)' },
+          borderRadius: { xl2: '18px' }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
   <style>
-    :root{
-      --primary:#2c3e50;--secondary:#8e44ad;--accent:#16a085;
-      --bg:#f8f9fa;--text:#34495e;--light:#e9ecef;--dark:#6c757d;
-      --header:#2c3e50;--shadow:0 8px 18px rgba(0,0,0,.1);
-    }
-    body{font-family:"Segoe UI",sans-serif;background:var(--bg);color:var(--text);margin:0;padding-top:80px;font-size:.95rem;}
-    .navbar-custom{background:var(--header)!important;box-shadow:0 2px 10px rgba(0,0,0,.1);position:fixed;width:100%;top:0;z-index:1000;}
-    .navbar-brand{font-family:"Playfair Display",serif;font-weight:700;font-size:1.4rem;color:#fff!important;}
-    .btn-volver{border-color:#fff;color:#fff!important;font-size:.85rem;}
-    .btn-volver:hover{background:rgba(255,255,255,.1);}
-    .contenedor-principal{max-width:1200px;margin:2rem auto;padding:0 15px;}
-    .titulo-principal{text-align:center;color:var(--primary);margin-bottom:1.5rem;font-weight:700;font-size:1.8rem;}
-    .subtitulo{text-align:center;color:var(--dark);margin-bottom:2rem;font-size:1.1rem;}
-    .filtros-container{background:#fff;border-radius:15px;box-shadow:var(--shadow);padding:1.5rem;margin-bottom:2rem;}
-    .filtros-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
-    .filtros-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
-    .filtro-grupo label{font-weight:600;margin-bottom:.5rem;display:block;}
-    .filtro-grupo select,.filtro-grupo input{width:100%;padding:.5rem;border-radius:8px;border:1px solid #ced4da;}
-    .btn-filtros{background:var(--secondary);color:#fff;border:none;padding:.5rem 1.5rem;border-radius:20px;font-weight:600;transition:.3s;}
-    .btn-filtros:hover{background:#7d3c98;transform:translateY(-2px);}
-    .btn-reset{background:var(--dark);color:#fff;border:none;padding:.5rem 1.5rem;border-radius:20px;font-weight:600;transition:.3s;}
-    .btn-reset:hover{background:#5a6268;transform:translateY(-2px);}
-    .contenedor-tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:1.5rem;}
-    .tarjeta-problema{background:#fff;border-radius:15px;box-shadow:var(--shadow);padding:1.5rem;border-left:5px solid var(--secondary);display:flex;flex-direction:column;transition:.3s;}
-    .tarjeta-problema:hover{transform:translateY(-5px);box-shadow:0 12px 25px rgba(0,0,0,.15);}
-    .tarjeta-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
-    .codigo-problema{background:var(--secondary);color:#fff;padding:.3rem .8rem;border-radius:20px;font-weight:600;font-size:.9rem;}
-    .area-problema{background:var(--light);color:var(--text);padding:.3rem .8rem;border-radius:20px;font-weight:600;font-size:.9rem;}
-    .politica{background:#3498db!important;color:#fff;}
-    .economia{background:#2ecc71!important;color:#fff;}
-    .ambiental{background:#e74c3c!important;color:#fff;}
-    .social{background:#f39c12!important;color:#fff;}
-    .titulo-problema{font-weight:700;font-size:1.1rem;margin-bottom:.8rem;color:var(--primary);}
-    .linea-investigacion{background:var(--light);padding:.3rem .8rem;border-radius:20px;font-size:.85rem;display:inline-block;margin-bottom:.8rem;}
-    .pregunta-problema{font-size:.95rem;margin-bottom:1.2rem;flex-grow:1;}
-    .asignado-a{font-size:.9rem;margin-bottom:1rem;color:var(--dark);font-style:italic;}
-    .btn-detalles{background:var(--accent);color:#fff;border:none;padding:.5rem 1.2rem;border-radius:20px;font-weight:600;transition:.3s;width:100%;text-align:center;}
-    .btn-detalles:hover{background:#138a72;transform:translateY(-2px);}
-    .modal-content{border-radius:15px;}
-    .modal-header{border-bottom:none;padding-bottom:0;}
-    .modal-title{color:var(--primary);font-weight:700;}
-    .detalle-grupo{margin-bottom:1.5rem;}
-    .detalle-titulo{font-weight:600;margin-bottom:.5rem;color:var(--secondary);}
-    .detalle-contenido{background:var(--light);padding:1rem;border-radius:10px;}
-    .metodologia-badge{display:inline-block;background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:20px;margin:.3rem;font-size:.85rem;}
-    .formulario-grupo{margin-bottom:1.5rem;}
-    .formulario-grupo label{display:block;margin-bottom:.5rem;font-weight:600;}
-    .formulario-grupo input,.formulario-grupo select{width:100%;padding:.75rem;border-radius:8px;border:1px solid #ced4da;font-size:1rem;}
-    .btn-formulario{background:var(--secondary);color:#fff;border:none;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer;transition:.3s;width:100%;margin-top:1rem;}
-    .btn-formulario:hover{background:#7d3c98;transform:translateY(-2px);}
-    footer{background:var(--header);color:#fff;text-align:center;padding:1.5rem;margin-top:3rem;font-size:.9rem;}
-    footer a{color:#fff;margin:0 .3rem;transition:color .3s;}
-    footer a:hover{color:var(--accent);}
-    .footer-contacto{margin:.5rem 0;}
-    @media(max-width:768px){
-      .contenedor-tarjetas{grid-template-columns:1fr;}
-      .filtros-row{grid-template-columns:1fr;}
-      .filtros-header{flex-direction:column;align-items:flex-start;}
-      .botones-filtros{margin-top:1rem;width:100%;display:flex;gap:.5rem;}
-      .btn-filtros,.btn-reset{flex:1;}
-    }
+    /* Anclajes que respetan el header fijo */
+    section[id] { scroll-margin-top: 96px; }
+    /* Evitar saltos fuertes en móviles */
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   </style>
 </head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-    <div class="container">
-      <a class="navbar-brand" href="#">CIRCPyCS</a>
-      <a href="https://cir.uagrm.edu.bo/" class="btn btn-outline-light btn-volver">
-        <i class="fas fa-arrow-left"></i> Volver al Inicio
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 min-w-0">
+        <img src="https://i.imgur.com/eG9yXG6.jpeg" alt="Avatar de José Orlando Peralta" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-200"/>
+        <div class="leading-tight truncate">
+          <p class="text-[11px] tracking-wide text-slate-500">Perfil académico</p>
+          <h1 class="font-bold text-base sm:text-lg truncate">José Orlando Peralta B.</h1>
+        </div>
       </a>
+
+      <!-- Nav escritorio -->
+      <nav class="hidden md:flex items-center gap-5 text-[13.5px]">
+        <a href="#dossier" class="hover:text-sky-700 font-semibold">Dossier</a>
+        <a href="#proyectos" class="hover:text-sky-700">Proyectos</a>
+        <a href="#medios" class="hover:text-sky-700">Medios</a>
+        <a href="#libros" class="hover:text-sky-700">Libros</a>
+        <a href="#papers" class="hover:text-sky-700">Papers</a>
+
+        <!-- Dropdown CV -->
+        <div class="relative">
+          <button id="cv-btn" class="inline-flex items-center gap-1.5 hover:text-sky-700" aria-expanded="false">
+            <span class="font-semibold">CV</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div id="cv-dropdown" class="hidden absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+            <a href="#cv-es" class="block px-4 py-2.5 text-sm hover:bg-slate-50">CV en Español</a>
+            <a href="#cv-en" class="block px-4 py-2.5 text-sm hover:bg-slate-50">CV in English</a>
+          </div>
+        </div>
+
+        <a href="#contacto" class="px-3 py-1.5 rounded-xl border border-sky-200 text-sky-700 hover:bg-sky-50">Contacto</a>
+      </nav>
+
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-controls="mobile-wrap" aria-expanded="false">
+        <span class="text-sm">Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
     </div>
-  </nav>
-  <div class="contenedor-principal">
-    <h1 class="titulo-principal">Problemas de Investigación 2025–2026</h1>
-    <p class="subtitulo">Explora y selecciona un problema de investigación para abordar</p>
-    <div class="filtros-container">
-      <div class="filtros-header">
-        <h2><i class="fas fa-filter"></i> Filtros de Búsqueda</h2>
-        <div class="botones-filtros">
-          <button class="btn btn-filtros" id="aplicarFiltros"><i class="fas fa-check"></i> Aplicar Filtros</button>
-          <button class="btn btn-reset"  id="resetFiltros"><i class="fas fa-sync-alt"></i> Reiniciar</button>
+
+    <!-- Panel móvil (full-height)** -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/eG9yXG6.jpeg" class="h-8 w-8 rounded-full object-cover ring-1 ring-slate-200" alt="Avatar"/>
+            <span class="font-semibold">José Orlando Peralta</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <ul class="mt-6 space-y-1.5 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dossier">Dossier</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#proyectos">Proyectos</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#medios">Medios</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#libros">Libros</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#papers">Papers</a></li>
+          <li class="pt-2 border-t border-slate-200 mt-2 text-slate-500 text-xs px-3">CV</li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-es">CV en Español</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-en">CV in English</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+        </ul>
+        <div class="h-[env(safe-area-inset-bottom)]"></div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero con LIBRO (callout grande) -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10 grid lg:grid-cols-2 gap-6 items-center">
+      <div class="text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Politólogo · Analista e investigador</span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">José Orlando Peralta Beltrán</h2>
+        <p class="mt-2 text-slate-600 max-w-prose mx-auto lg:mx-0">Investigador asociado en el CIRCPyCS-UAGRM. Análisis político, opinión pública y procesos electorales.</p>
+        <div class="mt-4 flex flex-wrap gap-2 justify-center lg:justify-start text-[13px]">
+          <a href="https://orcid.org/0000-0003-0415-5950" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-orcid mr-2"></i>ORCID</a>
+          <a href="https://www.academia.edu/example" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-university mr-2"></i>Academia.edu</a>
+          <a href="https://www.researchgate.net/example" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-researchgate mr-2"></i>ResearchGate</a>
+          <a href="https://scholar.google.es/citations?user=I7_X6QgAAAAJ&hl=es&oi=ao" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-graduation-cap mr-2"></i>Google Scholar</a>
+        </div>
+        <div class="mt-4 flex gap-2 justify-center lg:justify-start">
+          <a href="#contacto" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold border border-slate-300 hover:border-sky-600 hover:text-sky-700">
+            <i class="fas fa-envelope"></i> Contacto
+          </a>
         </div>
       </div>
-      <div class="filtros-row">
-        <div class="filtro-grupo">
-          <label for="filtro-area"><i class="fas fa-layer-group"></i> Área</label>
-          <select id="filtro-area" class="form-select">
-            <option value="">Todas las áreas</option>
-            <option>Política</option><option>Economía</option><option>Ambiental</option><option>Social</option>
-          </select>
-        </div>
-        <div class="filtro-grupo">
-          <label for="filtro-linea"><i class="fas fa-stream"></i> Línea de Investigación</label>
-          <select id="filtro-linea" class="form-select">
-            <option value="">Todas</option>
-            <option>Sistema Político e Instituciones Públicas</option>
-            <option>Desarrollo, Innovación y Tecnología</option>
-            <option>Comportamiento Político y Cognición Política</option>
-            <option>Partidos y Organizaciones Políticas</option>
-            <option>Estado Plurinacional, Democracia e Interculturalidad</option>
-            <option>Ciencia Política Computacional</option>
-            <option>Desarrollo Productivo, Agroindustria y Economía</option>
-            <option>Cambio Climático y Recursos Naturales</option>
-            <option>Sociedad, Salud y Educación</option>
-          </select>
-        </div>
-        <div class="filtro-grupo">
-          <label for="filtro-estado"><i class="fas fa-tasks"></i> Estado</label>
-          <select id="filtro-estado" class="form-select">
-            <option value="">Todos</option>
-            <option value="asignado">Asignado</option>
-            <option value="disponible">Disponible</option>
-          </select>
-        </div>
-        <div class="filtro-grupo">
-          <label for="filtro-busqueda"><i class="fas fa-search"></i> Buscar</label>
-          <input type="text" id="filtro-busqueda" class="form-control" placeholder="Código, línea o tema…">
+
+      <!-- Book callout: móvil apilado, sin alturas fijas -->
+      <div class="flex justify-center lg:justify-end">
+        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full max-w-lg">
+          <div class="flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 p-3 bg-slate-50">
+              <div class="w-full aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="https://i.imgur.com/7EntBNW.png" alt="Nuevo libro de Orlando Peralta" loading="lazy" decoding="async" class="h-full w-full object-cover"/>
+              </div>
+            </div>
+            <div class="sm:w-3/5 p-4 sm:p-5">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Nuevo libro</p>
+              <h3 class="mt-1 font-bold text-xl leading-snug">Próximo lanzamiento</h3>
+              <p class="mt-1 text-slate-600 text-sm">En <em>Atrincherados</em>, José Orlando Peralta reconstruye el paro cruceño de 2022 en tres actos: raíces históricas, 36 días de conflicto y efectos del cabildo del 13/11. Con claves políticas, sociales y culturales, explica la polarización desde Santa Cruz.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Ciencia política</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Coyuntura</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOSSIER (chips + foto) -->
+  <section id="dossier" class="py-10 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 lg:p-8 shadow-soft">
+        <div class="flex flex-col lg:flex-row items-start gap-6">
+          <div class="flex-1">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200">Dossier</span>
+            <h3 class="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight">¿Giro hacia la derecha en Bolivia?</h3>
+            <p class="mt-2 text-slate-600">Cobertura y análisis publicados en medios de América Latina y Europa.</p>
+            <div id="brands" class="mt-4 flex flex-wrap gap-2"></div>
+          </div>
+          <div class="w-full max-w-sm lg:max-w-md mx-auto">
+            <div class="mx-auto h-48 w-48 sm:h-56 sm:w-56 rounded-full overflow-hidden ring-4 ring-white border border-slate-200 shadow-soft">
+              <img src="https://i.imgur.com/eG9yXG6.jpeg" loading="lazy" decoding="async" class="h-full w-full object-cover" alt="José Orlando Peralta — retrato"/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="contenedor-tarjetas" id="contenedor-problemas"></div>
-  </div>
-  <!-- Modal Detalles -->
-  <div class="modal fade" id="modalDetalles" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalTitulo"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body" id="modalCuerpo"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" id="btnSeleccionar">Seleccionar este problema</button>
-        </div>
+  </section>
+
+  <!-- Proyectos -->
+  <section id="proyectos" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-center">Proyectos destacados</h3>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2">
+        <!-- Card utilitaria -->
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Editor en Jefe — Número 6 de <em>Conocimiento i Política</em></h4>
+          <p class="mt-1 text-slate-600 text-sm">Dirección editorial del número temático: coordinación de arbitraje doble ciego, lineamientos de estilo, normalización OJS/DOI e indexación.</p>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
+        </article>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Análisis del sistema político post elecciones 2025</h4>
+          <p class="mt-1 text-slate-600 text-sm">Mapeo de coaliciones y clivajes, escenarios de gobernabilidad 2025–2030 y trayectorias de partidos mediante modelos de supervivencia y series temporales.</p>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
+        </article>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Observatorio de Opinión Pública y Comportamiento Electoral</h4>
+          <p class="mt-1 text-slate-600 text-sm">Panel de encuestas, estimación de intención de voto con modelos multinivel y nowcasting de coyuntura electoral.</p>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
+        </article>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Índice de Estabilidad Institucional Subnacional (2000–2025)</h4>
+          <p class="mt-1 text-slate-600 text-sm">Construcción de un indicador compuesto y análisis de riesgos (event-history) para alcaldías y gobernaciones; evaluación de shocks políticos y reglas del juego.</p>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
+        </article>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Cartografía de redes político-institucionales</h4>
+          <p class="mt-1 text-slate-600 text-sm">Análisis de redes (SNA) de élites, partidos y organizaciones: centralidad, brokeraje y formación de coaliciones en el ciclo 2009–2025.</p>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
+        </article>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+          <h4 class="font-semibold">Base de Datos de Élites y Partidos (BDEP)</h4>
+          <p class="mt-1 text-slate-600 text-sm">Registro longitudinal de trayectorias, cargos y vínculos: perfiles, rotación, disciplina partidaria y profesionalización.</p>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
+        </article>
       </div>
     </div>
-  </div>
-  <!-- Modal Formulario -->
-  <div class="modal fade" id="modalFormulario" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Registro de Investigador</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <div class="formulario-grupo">
-            <label for="nombre">Nombre completo</label>
-            <input type="text" id="nombre" placeholder="Ingresa tu nombre completo">
+  </section>
+
+  <!-- Medios -->
+  <section id="medios" class="py-10 border-y border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold">Apariciones en medios</h3>
+      <div class="mt-5 space-y-6">
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Entrevista en France 24</a>
+              <p class="mt-1 text-slate-600 text-sm">Análisis sobre bloqueos y el impacto de declaraciones de Evo Morales.</p>
+            </div>
+            <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center">
+              <i class="fas fa-up-right-from-square"></i> ver
+            </a>
           </div>
-          <div class="formulario-grupo">
-            <label for="email">Correo electrónico</label>
-            <input type="email" id="email" placeholder="Ingresa tu correo institucional">
+        </article>
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Artículo en TalCual Digital</a>
+              <p class="mt-1 text-slate-600 text-sm">“Bolivia y sus eternos conflictos sociales”.</p>
+            </div>
+            <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center">
+              <i class="fas fa-up-right-from-square"></i> ver
+            </a>
           </div>
-          <div class="formulario-grupo">
-            <label for="matricula">Registro</label>
-            <input type="text" id="matricula" placeholder="Número de matrícula">
-          </div>
-          <div class="formulario-grupo">
-            <label for="carrera">Carrera</label>
-            <select id="carrera">
-              <option value="">Selecciona tu carrera</option>
-              <option>Ciencia Política</option><option>Comunicación</option><option>Sociología</option><option>Economía</option><option>Derecho</option><option>Otra</option>
-            </select>
-          </div>
-          <div class="formulario-grupo">
-            <label for="semestre">Semestre</label>
-            <select id="semestre">
-              <option value="">Selecciona tu semestre</option>
-              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-            </select>
-          </div>
-          <button class="btn-formulario" id="btnRegistrar"><i class="fas fa-file-pdf"></i> Generar PDF y Registrar</button>
-        </div>
+        </article>
       </div>
     </div>
-  </div>
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS)</p>
-      <p class="footer-contacto">
-        Contacto: <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> |
-        <i class="fas fa-phone"></i> +591 67381294
-      </p>
-      <div class="footer-social">
-        Síguenos en:
-        <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.twitter.com"  target="_blank"><i class="fab fa-twitter"></i></a>
-        <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+  </section>
+
+  <!-- Libros (book callouts, sin alturas fijas) -->
+  <section id="libros" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold">Libros</h3>
+      <div class="mt-5 grid gap-6 md:grid-cols-2">
+        <!-- Rebelión y Pandemia -->
+        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full">
+          <div class="flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 p-3 bg-slate-50 flex items-center justify-center">
+              <div class="w-full aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="https://i.imgur.com/NrJYpbM.png" alt="Rebelión y Pandemia" loading="lazy" decoding="async" class="h-full w-full object-contain"/>
+              </div>
+            </div>
+            <div class="sm:w-3/5 p-4 sm:p-5">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Libro</p>
+              <h4 class="mt-1 font-bold text-xl leading-snug">Rebelión y Pandemia</h4>
+              <p class="mt-1 text-slate-600 text-sm">Análisis de los eventos políticos y electorales en Bolivia 2019–2020.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Ciencia política</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Elecciones</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Rebelión en la Llanura -->
+        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full">
+          <div class="flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 p-3 bg-slate-50 flex items-center justify-center">
+              <div class="w-full aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="https://i.imgur.com/lCdPwMT.jpeg" alt="Rebelión en la Llanura" loading="lazy" decoding="async" class="h-full w-full object-contain"/>
+              </div>
+            </div>
+            <div class="sm:w-3/5 p-4 sm:p-5">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Libro</p>
+              <h4 class="mt-1 font-bold text-xl leading-snug">Rebelión en la Llanura</h4>
+              <p class="mt-1 text-slate-600 text-sm">Libro colectivo sobre la politización de la clase media urbana en Santa Cruz.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Comportamiento político</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Santa Cruz</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Papers -->
+  <section id="papers" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold">Artículos</h3>
+      <div class="mt-5 space-y-6">
+        <!-- Ítem -->
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Las ciudades votan: ¿Continuidades o cambios en Santa Cruz de la Sierra?</a>
+              <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
+          </div>
+        </article>
+        <!-- Ítem -->
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Santa Cruz: nuevo epicentro de la política 2001–2020, pero no del poder</a>
+              <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
+          </div>
+        </article>
+        <!-- Ítem -->
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Democracia intercultural en perspectiva deliberativa. El caso de Bolivia</a>
+              <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
+          </div>
+        </article>
+        <!-- Ítem -->
+        <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">La coyuntura del debate sobre federalismo en Bolivia, 2021–2023</a>
+              <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p>© <span id="year"></span> Orlando Peralta Beltrán. Todos los derechos reservados.</p>
+        <p class="text-slate-500">CIRCPyCS — UAGRM</p>
       </div>
     </div>
   </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    // Copia aquí el array 'problemas' COMPLETO que me diste (por espacio, NO lo vuelvo a pegar)
-    // ... tu array completo ...
-    // (por ejemplo: const problemas = [ ... ];)
-    // ---- Pegado del array de problemas ----
-    // (Pega aquí tal cual el bloque que me diste en tu mensaje anterior.)
-    const problemas = [
-  /* ========== ÁREA POLÍTICA ========== */
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  /* ---------- EXISTENTES ---------- */
-  {
-    codigo: "P-01",
-    area: "Política",
-    linea: "Sistema Político e Instituciones Públicas",
-    tema: "Polarización política, afectiva e ideológica",
-    pregunta: "¿Cuáles son las características de la polarización en Bolivia entre 2019 y 2025?",
-    objetivo: "Analizar el impacto de la polarización política en Bolivia (2019-2025) y sus efectos en la estabilidad institucional.",
-    metodologia: "Análisis de redes semánticas + Modelos de opinión dinámica (Hegselmann-Krause)",
-    asignado: "Orlando Peralta",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-02",
-    area: "Política",
-    linea: "Desarrollo, Innovación y Tecnología",
-    tema: "Políticas de innovación en Bolivia 2025",
-    pregunta: "¿Qué políticas públicas fomentan los ecosistemas emprendedores en Bolivia y América Latina?",
-    objetivo: "Examinar y comparar políticas de innovación nacionales y regionales.",
-    metodologia: "Análisis de ecosistemas institucionales (IE) + Benchmarking regulatorio con QCA",
-    asignado: "Roman Cruz",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-03",
-    area: "Política",
-    linea: "Sistema Político e Instituciones Públicas",
-    tema: "Las instituciones públicas en el marco del Estado Plurinacional",
-    pregunta: "¿Cómo condicionan las decisiones políticas la evolución de las instituciones públicas plurinacionales?",
-    objetivo: "Explicar la evolución institucional y la acción estratégica de los actores políticos.",
-    metodologia: "Teoría de juegos institucional + Análisis de redes de políticas públicas",
-    asignado: "José Luis Andia",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-04",
-    area: "Política",
-    linea: "Comportamiento Político y Cognición Política",
-    tema: "El proceso político-electoral boliviano 2025",
-    pregunta: "¿Qué estrategias comunicacionales usan los candidatos presidenciales (abr-ago 2025)?",
-    objetivo: "Evaluar independencia del OEP y las estrategias mediáticas de campaña.",
-    metodologia: "Análisis de framing multimodal + Minería de datos en redes sociales (BERT)",
-    asignado: "Odín Rodríguez",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-05",
-    area: "Política",
-    linea: "Partidos y Organizaciones Políticas, Grupos de Presión y Sociedad Civil",
-    tema: "Impacto mediático de las alianzas políticas en la campaña 2025",
-    pregunta: "¿Cómo influyen las alianzas en cobertura mediática y percepción del electorado?",
-    objetivo: "Analizar influencia de alianzas en medios y opinión pública.",
-    metodologia: "Análisis de redes de atención mediática + Modelos de difusión de influencia",
-    asignado: "Orlando Peralta",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-06",
-    area: "Política",
-    linea: "Administración Pública, Descolonización y Despatriarcalización del Estado Plurinacional",
-    tema: "Avances y retrocesos de la administración pública plurinacional",
-    pregunta: "¿Cómo se caracteriza la lentitud burocrática y la descentralización en Bolivia?",
-    objetivo: "Examinar procedimientos administrativos y eficiencia organizacional.",
-    metodologia: "Análisis de procesos burocráticos (BPA) + Modelos DEA",
-    asignado: "Manfredo Bravo",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-07",
-    area: "Política",
-    linea: "Partidos y Organizaciones Políticas, Grupos de Presión y Sociedad Civil",
-    tema: "Conformación de alianzas políticas para la elección 2025",
-    pregunta: "¿Cuáles son ideología, estructura, liderazgos y base electoral de las alianzas 2024-2025?",
-    objetivo: "Caracterizar ideologías, organización y contexto socio-económico.",
-    metodologia: "Análisis de coaliciones políticas + Teoría de la elección social (Arrow)",
-    asignado: "Roger Tuero",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-08",
-    area: "Política",
-    linea: "Estado Plurinacional, Democracia e Interculturalidad",
-    tema: "Autonomías departamentales y relación Santa Cruz-Estado",
-    pregunta: "¿Cómo ha evolucionado la autonomía departamental desde 2009 y qué conflictos persisten?",
-    objetivo: "Analizar el proceso autonómico y los conflictos centro-periferia.",
-    metodologia: "Análisis de gobernanza multinivel + Path-dependence",
-    asignado: "Manfredo Bravo",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-09",
-    area: "Política",
-    linea: "Ciencia Política Computacional",
-    tema: "Beneficios de la IA en estudios politológicos",
-    pregunta: "¿Qué aplicaciones de IA usan los politólogos bolivianos y cómo combaten la desinformación?",
-    objetivo: "Identificar aplicaciones de IA en investigación política.",
-    metodologia: "Ethical AI auditing + Detección de deepfakes",
-    asignado: "Daniel Hurtado",
-    estado: "asignado"
-  },
-  {
-    codigo: "P-10",
-    area: "Política",
-    linea: "Desarrollo Productivo, Agroindustria y Economía",
-    tema: "Modelo de desarrollo cruceño: avances y límites",
-    pregunta: "¿Cuáles son avances, limitaciones y potencialidades del modelo cruceño (últimos 40 años)?",
-    objetivo: "Evaluar crecimiento y bienestar bajo el modelo cruceño.",
-    metodologia: "Análisis de regímenes de desarrollo + Modelos de crecimiento endógeno espacial",
-    asignado: "Maria Angélica Suarez",
-    estado: "asignado"
-  },
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+    const toggleMenu = (open) => {
+      wrap.classList.toggle('hidden', !open);
+      document.body.style.overflow = open ? 'hidden' : '';
+      openBtn.setAttribute('aria-expanded', String(open));
+    };
+    openBtn?.addEventListener('click', () => toggleMenu(true));
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
+    backdrop?.addEventListener('click', () => toggleMenu(false));
+    closeBtn?.addEventListener('click', () => toggleMenu(false));
 
-  /* ---------- 20 NUEVOS PROBLEMAS POLÍTICOS ---------- */
-  {
-    codigo: "P-11",
-    area: "Política",
-    linea: "Ciberseguridad Electoral",
-    tema: "Desinformación y deepfakes en la campaña 2025",
-    pregunta: "¿Qué impacto tienen los deepfakes generados con IA sobre la intención de voto y la confianza ciudadana?",
-    objetivo: "Mapear redes de desinformación y medir su influencia en la opinión pública.",
-    metodologia: "Detección automática de deepfakes + Experimentos de exposición controlada",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-12",
-    area: "Política",
-    linea: "Partidos y Organización Interna",
-    tema: "Fragmentación del MAS y crisis de liderazgo",
-    pregunta: "¿Cómo afecta la pugna Evo Morales-Luis Arce a la cohesión partidaria y al proceso electoral 2025?",
-    objetivo: "Analizar la dinámica faccional y sus derivaciones electorales.",
-    metodologia: "Análisis de redes de élites + Entrevistas semiestructuradas",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-13",
-    area: "Política",
-    linea: "Estado de Derecho y Lucha contra la Corrupción",
-    tema: "Corrupción selectiva y judicialización de la política",
-    pregunta: "¿Cómo se utilizan los procesos judiciales para neutralizar rivales políticos?",
-    objetivo: "Evaluar independencia judicial y patrones de persecución selectiva.",
-    metodologia: "Estudio de casos múltiples + Índices de independencia judicial",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-14",
-    area: "Política",
-    linea: "Reforma Institucional",
-    tema: "Justicia constitucional en transición",
-    pregunta: "¿Qué modelos comparados de tribunales constitucionales podrían fortalecer la tutela de derechos en Bolivia?",
-    objetivo: "Diseñar un esquema viable de reforma de la justicia constitucional.",
-    metodologia: "Comparación jurídico-institucional + Simulación legislativa",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-15",
-    area: "Política",
-    linea: "Seguridad y Crimen Organizado",
-    tema: "Crimen transnacional y gobernanza de fronteras",
-    pregunta: "¿Cuál es la capacidad del Estado para contener economías ilícitas en sus fronteras amazónicas y chaqueñas?",
-    objetivo: "Medir eficacia de la seguridad fronteriza e identificar brechas institucionales.",
-    metodologia: "SIG delictivo + Entrevistas a actores locales",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-16",
-    area: "Política",
-    linea: "Participación y Nuevas Ciudadanías",
-    tema: "Activismo juvenil en plataformas digitales",
-    pregunta: "¿Cómo articulan los jóvenes bolivianos sus demandas políticas vía TikTok e Instagram?",
-    objetivo: "Identificar repertorios de acción colectiva digital de la generación Z.",
-    metodologia: "Etnografía digital + Análisis de contenido multimodal",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-17",
-    area: "Política",
-    linea: "Política Energética",
-    tema: "Geopolítica del litio y transición energética",
-    pregunta: "¿Qué estrategias soberanas puede adoptar Bolivia frente a la competencia global por el litio?",
-    objetivo: "Evaluar captura de valor y riesgos de dependencia tecnológica.",
-    metodologia: "Modelado de cadenas de valor + Juegos geopolíticos",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-18",
-    area: "Política",
-    linea: "Relaciones Internacionales y Clima",
-    tema: "Diplomacia climática boliviana post-COP30",
-    pregunta: "¿Qué oportunidades tiene Bolivia para liderar negociaciones climáticas regionales?",
-    objetivo: "Mapear soft-power ambiental y alianzas estratégicas.",
-    metodologia: "Red de acuerdos multilaterales + Delphi con expertos",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-19",
-    area: "Política",
-    linea: "Gobernanza Metropolitana",
-    tema: "Gestión coordinada del Gran Santa Cruz",
-    pregunta: "¿Qué modelos de gobernanza metropolitana optimizan servicios públicos peri-urbanos?",
-    objetivo: "Diseñar marco multinivel para la región metropolitana cruceña.",
-    metodologia: "Benchmarking comparado + MCDA",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-20",
-    area: "Política",
-    linea: "Autonomías y Plurinacionalidad",
-    tema: "Derecho a la Consulta Previa",
-    pregunta: "¿Cómo se implementa la consulta previa y qué vacíos normativos persisten?",
-    objetivo: "Evaluar cumplimiento con estándares internacionales.",
-    metodologia: "Análisis jurídico-comparado + Trabajo de campo etnográfico",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-21",
-    area: "Política",
-    linea: "Financiamiento y Transparencia",
-    tema: "Big-data y control de gasto electoral",
-    pregunta: "¿Qué patrones de financiamiento opaco se detectan en la elección 2025?",
-    objetivo: "Construir un sistema de alerta temprana de gastos irregulares.",
-    metodologia: "Minería de datos financieros + Detección de outliers",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-22",
-    area: "Política",
-    linea: "Gobierno Digital",
-    tema: "Interoperabilidad y datos abiertos estatales",
-    pregunta: "¿Qué barreras técnico-normativas obstaculizan la interoperabilidad de registros públicos?",
-    objetivo: "Proponer un roadmap de gobernanza de datos abiertos 2026-2030.",
-    metodologia: "Entrevistas Delphi + Arquitectura empresarial TOGAF",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-23",
-    area: "Política",
-    linea: "Ciberseguridad Electoral",
-    tema: "Protección de infraestructura crítica",
-    pregunta: "¿Cuál es el nivel de resiliencia cibernética del OEP frente a amenazas avanzadas?",
-    objetivo: "Testear protocolos de respuesta ante intrusiones.",
-    metodologia: "Pen-testing ético + Simulación red-team",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-24",
-    area: "Política",
-    linea: "Género y Política",
-    tema: "Violencia política digital de género",
-    pregunta: "¿Cómo se manifiesta la violencia política contra candidatas en redes y qué estrategias son efectivas?",
-    objetivo: "Cuantificar acoso y diseñar estrategias de mitigación.",
-    metodologia: "PLN + Focus groups con candidatas",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-25",
-    area: "Política",
-    linea: "Medios y Opinión Pública",
-    tema: "Polarización emotiva y medios alternativos",
-    pregunta: "¿Qué rol juegan los podcasts y medios nativos digitales en la intensificación de la polarización emotiva?",
-    objetivo: "Medir efecto de narrativa emotiva sobre actitudes políticas.",
-    metodologia: "Análisis de sentimiento + Experimentos de laboratorio",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-26",
-    area: "Política",
-    linea: "Descentralización y Finanzas Públicas",
-    tema: "Resiliencia fiscal municipal post-COVID",
-    pregunta: "¿Qué estrategias de descentralización fiscal fortalecen la resiliencia de ingresos propios?",
-    objetivo: "Modelar escenarios de reforma tributaria sub-nacional.",
-    metodologia: "Equilibrio general municipal + Análisis DEA",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-27",
-    area: "Política",
-    linea: "Política Internacional",
-    tema: "Sanciones y política doméstica",
-    pregunta: "¿Cómo afectan las sanciones internacionales sobre funcionarios a la toma de decisiones políticas internas?",
-    objetivo: "Examinar efectos de sanciones selectivas en élites políticas.",
-    metodologia: "Análisis de redes de poder + Series temporales",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-28",
-    area: "Política",
-    linea: "Migración y Demografía",
-    tema: "Migración interna y reconfiguración del voto",
-    pregunta: "¿Qué patrones de migración campo-ciudad alteran la geografía electoral boliviana?",
-    objetivo: "Correlacionar flujos migratorios con cambios en comportamiento electoral.",
-    metodologia: "Datos censales + Modelos espaciales de voto",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-29",
-    area: "Política",
-    linea: "Innovación Legislativa",
-    tema: "IA generativa en deliberación parlamentaria",
-    pregunta: "¿Puede la IA generativa mejorar la calidad y la velocidad del proceso legislativo?",
-    objetivo: "Prototipar un asistente legislativo basado en LLM.",
-    metodologia: "Desarrollo de prototipo + Pruebas de usabilidad",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-  {
-    codigo: "P-30",
-    area: "Política",
-    linea: "Gobernanza Algorítmica y Derechos",
-    tema: "Vigilancia digital y libertades civiles",
-    pregunta: "¿Cómo impacta la vigilancia algorítmica estatal en la privacidad y la libertad de expresión?",
-    objetivo: "Auditar marcos legales y proponer salvaguardas democráticas.",
-    metodologia: "Auditoría de algoritmos + Encuesta de percepción ciudadana",
-    asignado: "Disponible",
-    estado: "disponible"
-  },
-
-  /* ========== ÁREA ECONOMÍA ========== */
-
-  /* ---------- EXISTENTES ---------- */
-  {
-    codigo: "E-01",
-    area: "Economía",
-    linea: "Desarrollo Productivo, Agroindustria y Economía",
-    tema: "Eficiencia económica y calidad institucional en Latinoamérica",
-    pregunta: "¿Cómo influye la calidad institucional en la eficiencia asignativa de recursos y la PTF en Bolivia?",
-    metodologia: "Análisis DEA + Modelos de panel dinámico",
-    asignado: "Julio Guzmáz",
-    estado: "asignado"
-  },
-  {
-    codigo: "E-02",
-    area: "Economía",
-    linea: "Modelos de Desarrollo, Pobreza y Cambio Social",
-    tema: "Costos de transacción y sector informal en Bolivia",
-    pregunta: "¿Hasta qué punto los elevados costos de transacción derivados de la debilidad institucional incentivan la informalidad?",
-    metodologia: "Modelos CGE + Análisis de costos institucionales",
-    asignado: "Jose Alberti",
-    estado: "asignado"
-  },
-  {
-    codigo: "E-03",
-    area: "Economía",
-    linea: "Sistema Político e Instituciones Públicas",
-    tema: "Instituciones y desigualdad en la distribución de la riqueza",
-    pregunta: "¿Cuál es la relación entre fortaleza fiscal e inequidad económica en Bolivia (última década)?",
-    metodologia: "Regresión cuantitativa + Índices de Gini institucional",
-    asignado: "Javier Hernández",
-    estado: "asignado"
-  },
-  {
-    codigo: "E-04",
-    area: "Economía",
-    linea: "Estado, Derecho y Gobierno",
-    tema: "Reformas institucionales y concentración de poder económico-político",
-    pregunta: "¿Cómo han contribuido las reformas constitucionales a la exclusión de actores emergentes?",
-    metodologia: "Análisis de poder estructural + Teoría de élites",
-    asignado: "Roman Cruz",
-    estado: "asignado"
-  },
-  {
-    codigo: "E-05",
-    area: "Economía",
-    linea: "Estado, Derecho y Gobierno",
-    tema: "Seguridad jurídica e inversión extranjera",
-    pregunta: "¿Cómo afecta la inseguridad jurídica al clima de inversiones, especialmente extractivas?",
-    metodologia: "Análisis de riesgo país + Modelos de decisión discreta",
-    asignado: "Daniel Valverde",
-    estado: "asignado"
-  },
-  {
-    codigo: "E-06",
-    area: "Economía",
-    linea: "Salud, Sociedad y Educación",
-    tema: "Políticas económicas post-COVID-19",
-    pregunta: "¿Qué rol jugó la debilidad institucional en la improvisación de políticas tras la crisis COVID-19?",
-    metodologia: "Brechas de implementación + Mapeo de actores",
-    asignado: "Javier Hernández",
-    estado: "asignado"
-  },
-  {
-    codigo: "E-07",
-    area: "Economía",
-    linea: "Sistema Político e Instituciones Públicas",
-    tema: "Crisis de representación y desinstitucionalización de partidos",
-    pregunta: "¿En qué medida la pérdida de credibilidad y financiamiento contribuye a la desinstitucionalización del sistema?",
-    metodologia: "Ciclo de vida organizacional + Modelos de fracaso institucional",
-    asignado: "Orlando Peralta",
-    estado: "asignado"
-  },
-
-  /* ---------- ECONOMÍA (ex-Econ. Polít.) ---------- */
-  {
-    codigo: "EP-01",
-    area: "Economía",
-    linea: "Medio Ambiente, Economía Verde y Recursos Naturales Estratégicos",
-    tema: "Modelo extractivista e institucionalidad ambiental",
-    pregunta: "¿Qué grado de institucionalidad ambiental existe para compatibilizar crecimiento extractivo con sostenibilidad?",
-    metodologia: "Metabolismo social + Indicadores de sostenibilidad fuerte",
-    asignado: "Maria Angélica Suarez",
-    estado: "asignado"
-  },
-  {
-    codigo: "EP-02",
-    area: "Economía",
-    linea: "Salud, Sociedad y Educación",
-    tema: "Instituciones, seguridad jurídica e inversión extranjera",
-    pregunta: "¿Qué rol tuvo la debilidad institucional en las políticas económicas post-COVID?",
-    metodologia: "Brechas de implementación + Mapeo de actores clave",
-    asignado: "Elizabeth Galarza",
-    estado: "asignado"
-  },
-  {
-    codigo: "EP-03",
-    area: "Economía",
-    linea: "Estado Plurinacional, Democracia e Interculturalidad",
-    tema: "Federalismo fiscal e institucionalidad económica sub-nacional",
-    pregunta: "¿Cómo incide el régimen de transferencias fiscales en la eficiencia del gasto sub-nacional?",
-    metodologia: "Eficiencia fiscal + Modelos de descentralización óptima",
-    asignado: "Javier Hernández",
-    estado: "asignado"
-  },
-
-  /* ========== ÁREA AMBIENTAL ========== */
-  {
-    codigo: "A-01",
-    area: "Ambiental",
-    linea: "Cambio Climático y Recursos Naturales",
-    tema: "Energías renovables y almacenamiento de energía",
-    pregunta: "¿Qué combinaciones de tecnologías renovables emergentes presentan mayor sinergia costo-eficiencia en contextos vulnerables?",
-    objetivo: "Modelizar configuraciones óptimas de sistemas híbridos renovables.",
-    metodologia: "ACV + Optimización multi-objetivo",
-    asignado: "Maria Angélica Suarez",
-    estado: "asignado"
-  },
-  {
-    codigo: "A-02",
-    area: "Ambiental",
-    linea: "Cambio Climático y Recursos Naturales",
-    tema: "Conservación de bosques y restauración de ecosistemas",
-    pregunta: "¿Qué modelos de gobernanza policéntrica optimizan restauración post-incendios?",
-    objetivo: "Diseñar un framework de financiamiento adaptativo (PSE).",
-    metodologia: "ARS + Simulación Monte Carlo",
-    asignado: "Odín Rodríguez",
-    estado: "asignado"
-  },
-  {
-    codigo: "A-03",
-    area: "Ambiental",
-    linea: "Cambio Climático y Recursos Naturales",
-    tema: "Prácticas agrícolas sostenibles bajo estrés hídrico",
-    pregunta: "¿Qué configuraciones de agro-bioeconomía circular maximizan resiliencia metabólica?",
-    objetivo: "Cuantificar umbrales de sostenibilidad crítica.",
-    metodologia: "ABM híbrido + Input-Output extendido",
-    asignado: "Maria Angélica Suarez",
-    estado: "asignado"
-  },
-  {
-    codigo: "A-04",
-    area: "Ambiental",
-    linea: "Cambio Climático y Recursos Naturales",
-    tema: "Captura y secuestro de carbono",
-    pregunta: "¿Qué mecanismos multinivel favorecen la escalabilidad de SbN para mercados de carbono?",
-    objetivo: "Diseñar modelo de gobernanza adaptativa CCS.",
-    metodologia: "Análisis institucional Ostrom + Modelos MAE",
-    asignado: "Maria Angélica Suarez",
-    estado: "asignado"
-  },
-  {
-    codigo: "A-05",
-    area: "Ambiental",
-    linea: "Cambio Climático y Recursos Naturales",
-    tema: "Agricultura sostenible y seguridad alimentaria",
-    pregunta: "¿Cómo superar el trilema productividad-sostenibilidad-equidad en sistemas agroalimentarios cruceños?",
-    objetivo: "Identificar puntos de inflexión mediante FTA.",
-    metodologia: "Coevolución técnica + Escenarios morfológicos",
-    asignado: "Berman Saucedo",
-    estado: "asignado"
-  },
-
-  /* ========== ÁREA SOCIAL ========== */
-  {
-    codigo: "S-01",
-    area: "Social",
-    linea: "Sociedad, Salud y Educación",
-    tema: "Enfermedades tropicales desatendidas",
-    pregunta: "¿Qué arquitecturas de sistemas complejos permiten anticipar puntos de inflexión epidemiológica?",
-    objetivo: "Modelizar patrones de transmisión no lineales.",
-    metodologia: "Fractales epidemiológicos + Autómatas celulares",
-    asignado: "Victor Copaz",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-02",
-    area: "Social",
-    linea: "Sociedad, Salud y Educación",
-    tema: "Calidad de atención médica en hospitales (2025)",
-    pregunta: "¿Qué configuraciones organizacionales reducen brechas de calidad con restricciones presupuestarias?",
-    objetivo: "Identificar patrones de eficiencia relativa con variables contextuales.",
-    metodologia: "DEA no paramétrico + Regresión cuantitativa",
-    asignado: "Grupo Social 2",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-03",
-    area: "Social",
-    linea: "Sociedad, Salud y Educación",
-    tema: "Desigualdad en la educación",
-    pregunta: "¿Qué mecanismos de path dependence reproducen asimetrías urbano-rurales y qué puntos de apalancamiento existen?",
-    objetivo: "Modelizar dinámica de desigualdades educativas comparadas.",
-    metodologia: "QCA + Process Tracing",
-    asignado: "Elizabeth Galarza",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-04",
-    area: "Social",
-    linea: "Sistema Político e Instituciones Públicas",
-    tema: "Relación Departamento-Estado",
-    pregunta: "¿Qué modelos de federalismo asimétrico pueden emerger de las tensiones centro-periferia?",
-    objetivo: "Diseñar escenarios de reconfiguración institucional.",
-    metodologia: "Equilibrio punctuado + Juegos evolutivos",
-    asignado: "Francisco Mendez",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-05",
-    area: "Social",
-    linea: "Desarrollo, Innovación y Tecnología",
-    tema: "Modelo de desarrollo cruceño",
-    pregunta: "¿Qué configuraciones de capitalismo regional emergen de path dependence e innovación global?",
-    objetivo: "Deconstruir matriz socio-técnica del modelo cruceño.",
-    metodologia: "Trayectorias socio-técnicas (MLP) + Cluster analysis",
-    asignado: "Paula Peña",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-06",
-    area: "Social",
-    linea: "Sistema Político e Instituciones Públicas",
-    tema: "Pensamiento político cruceño",
-    pregunta: "¿Qué marcos post-hegemónicos permiten deconstruir la formación discursiva de identidad cruceña?",
-    objetivo: "Cartografiar ecología de saberes políticos.",
-    metodologia: "Frame analysis + Teoría fundamentada",
-    asignado: "Paula Peña",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-07",
-    area: "Social",
-    linea: "Sociedad, Salud y Educación",
-    tema: "Desafíos sistémicos de Santa Cruz",
-    pregunta: "¿Qué riesgos emergen de la interacción cambio climático-digitalización-tensiones geopolíticas?",
-    objetivo: "Elaborar mapa de riesgos correlacionados.",
-    metodologia: "Redes complejas + Escenarios de fragilidad",
-    asignado: "Alejandro Mansilla",
-    estado: "asignado"
-  },
-  {
-    codigo: "S-08",
-    area: "Social",
-    linea: "Sociedad, Salud y Educación",
-    tema: "Identidad cultural cruceña",
-    pregunta: "¿Qué mecanismos de memoria cultural permiten la resemantización transgeneracional?",
-    objetivo: "Analizar transmisión cultural con modelos de difusión no lineal.",
-    metodologia: "Etnografía digital + Dinámica de memes culturales",
-    asignado: "Paula Peña",
-    estado: "asignado"
-  }
-];
-    // (LO DEMÁS NO CAMBIA)
-    let problemasFiltrados=[...problemas], problemaSeleccionado=null;
-    const modalDetalles=new bootstrap.Modal("#modalDetalles");
-    const modalFormulario=new bootstrap.Modal("#modalFormulario");
-    document.addEventListener("DOMContentLoaded",()=>{renderizarProblemas();configurarEventos();});
-    function renderizarProblemas(){
-      const cont=document.getElementById("contenedor-problemas");
-      cont.innerHTML="";
-      if(!problemasFiltrados.length){
-        cont.innerHTML=`<div class="col-12 text-center py-5">
-          <i class="fas fa-search fa-3x mb-3 text-secondary"></i>
-          <h3>No se encontraron problemas</h3>
-          <p>Intenta ajustar los filtros o términos de búsqueda.</p></div>`;
-        return;
+    // Dropdown CV (desktop)
+    const cvBtn = document.getElementById('cv-btn');
+    const cvDropdown = document.getElementById('cv-dropdown');
+    const closeCv = () => cvDropdown?.classList.add('hidden');
+    cvBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const expanded = cvBtn.getAttribute('aria-expanded') === 'true';
+      cvBtn.setAttribute('aria-expanded', String(!expanded));
+      cvDropdown?.classList.toggle('hidden');
+    });
+    document.addEventListener('click', (e) => {
+      if (!cvDropdown?.contains(e.target) && !cvBtn?.contains(e.target)) {
+        cvBtn?.setAttribute('aria-expanded','false');
+        closeCv();
       }
-      problemasFiltrados.forEach(p=>{
-        const cls=p.area.toLowerCase().replace(/[^a-záéíóúñ]/g,"");
-        const div=document.createElement("div");
-        div.className="tarjeta-problema";
-        div.innerHTML=`
-          <div class="tarjeta-header">
-            <span class="codigo-problema">${p.codigo}</span>
-            <span class="area-problema ${cls}">${p.area}</span>
-          </div>
-          <div class="titulo-problema">${p.linea}</div>
-          <span class="linea-investigacion">${p.tema}</span>
-          <div class="pregunta-problema">${p.pregunta}</div>
-          <div class="asignado-a">Asignado a: <strong>${p.asignado}</strong></div>
-          <button class="btn-detalles" data-codigo="${p.codigo}">
-            <i class="fas fa-info-circle"></i> Ver detalles
-          </button>`;
-        cont.appendChild(div);
-      });
-      document.querySelectorAll(".btn-detalles").forEach(b=>b.onclick=()=>mostrarDetallesProblema(b.dataset.codigo));
-    }
-    function mostrarDetallesProblema(codigo){
-      problemaSeleccionado=problemas.find(p=>p.codigo===codigo);
-      if(!problemaSeleccionado)return;
-      document.getElementById("modalTitulo").textContent=problemaSeleccionado.linea;
-      document.getElementById("modalCuerpo").innerHTML=`
-        <div class="detalle-grupo"><div class="detalle-titulo">Tema</div>
-          <div class="detalle-contenido">${problemaSeleccionado.tema}</div></div>
-        <div class="detalle-grupo"><div class="detalle-titulo">Área</div>
-          <div class="detalle-contenido">${problemaSeleccionado.area}</div></div>
-        <div class="detalle-grupo"><div class="detalle-titulo">Línea de Investigación</div>
-          <div class="detalle-contenido">${problemaSeleccionado.linea}</div></div>
-        <div class="detalle-grupo"><div class="detalle-titulo">Pregunta</div>
-          <div class="detalle-contenido">${problemaSeleccionado.pregunta}</div></div>
-        ${problemaSeleccionado.objetivo?`
-          <div class="detalle-grupo"><div class="detalle-titulo">Objetivo</div>
-            <div class="detalle-contenido">${problemaSeleccionado.objetivo}</div></div>`:""}
-        <div class="detalle-grupo"><div class="detalle-titulo">Metodología</div>
-          <div class="detalle-contenido">${
-            (problemaSeleccionado.metodologia||"").split("+").map(m=>`<span class="metodologia-badge">${m.trim()}</span>`).join("")
-          }</div></div>`;
-      document.getElementById("btnSeleccionar").onclick=()=>{modalDetalles.hide();setTimeout(mostrarFormularioRegistro,300);};
-      modalDetalles.show();
-    }
-    function mostrarFormularioRegistro(){
-      ["nombre","email","matricula","carrera","semestre"].forEach(id=>document.getElementById(id).value="");
-      modalFormulario.show();
-    }
-    function configurarEventos(){
-      document.getElementById("aplicarFiltros").onclick=aplicarFiltros;
-      document.getElementById("resetFiltros").onclick=resetFiltros;
-      document.getElementById("filtro-busqueda").oninput=aplicarFiltros;
-      document.getElementById("btnRegistrar").onclick=registrarProblema;
-    }
-    function aplicarFiltros(){
-      const area=document.getElementById("filtro-area").value.toLowerCase();
-      const linea=document.getElementById("filtro-linea").value.toLowerCase();
-      const estado=document.getElementById("filtro-estado").value;
-      const q=document.getElementById("filtro-busqueda").value.toLowerCase();
-      problemasFiltrados=problemas.filter(p=>{
-        const okArea=!area||p.area.toLowerCase().includes(area);
-        const okLinea=!linea||p.linea.toLowerCase().includes(linea);
-        const okEstado=!estado||(estado==="asignado"&&p.estado==="asignado")||(estado==="disponible"&&p.estado==="disponible");
-        const okQ=!q||p.codigo.toLowerCase().includes(q)||p.tema.toLowerCase().includes(q)||p.linea.toLowerCase().includes(q);
-        return okArea&&okLinea&&okEstado&&okQ;
-      });
-      renderizarProblemas();
-    }
-    function resetFiltros(){
-      ["filtro-area","filtro-linea","filtro-estado","filtro-busqueda"].forEach(id=>document.getElementById(id).value="");
-      problemasFiltrados=[...problemas];
-      renderizarProblemas();
-    }
-    async function registrarProblema(){
-      const nombre=document.getElementById("nombre").value.trim(),
-            email=document.getElementById("email").value.trim(),
-            matricula=document.getElementById("matricula").value.trim(),
-            carrera=document.getElementById("carrera").value,
-            semestre=document.getElementById("semestre").value;
-      if(!nombre||!email||!matricula||!carrera||!semestre){alert("Completa todos los campos.");return;}
-      // Pasa la pregunta seleccionada y tutor
-      await generarCertificado(
-        nombre,
-        carrera,
-        matricula,
-        problemaSeleccionado.pregunta,
-        problemaSeleccionado.asignado
-      );
-      modalFormulario.hide();alert("¡Registro exitoso! Se descargó tu certificado.");
-    }
-    async function generarCertificado(nombreInvestigador,carrera,registro,pregunta,tutor){
-      const{jsPDF}=window.jspdf;const doc=new jsPDF({format:"letter"});
-      doc.setFillColor(255,255,255);doc.rect(0,0,216,279,"F");
-      const marca=await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-      doc.setGState(new doc.GState({opacity:.15}));doc.addImage(marca,"PNG",30,90,150,150);doc.setGState(new doc.GState({opacity:1}));
-      const logo=await cargarImagen("https://i.imgur.com/R952Ljv.png");doc.addImage(logo,"PNG",60,5,90,20);
-      doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor("#B22222");
-      doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO",108,30,{align:"center"});
-      doc.setTextColor("#003366");doc.setFontSize(12);
-      doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales",108,35,{align:"center"});
-      doc.text("Carrera de Ciencia Política y Administración Pública",108,40,{align:"center"});
-      doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales",108,45,{align:"center"});
-      doc.setFontSize(20);doc.text("Certificación de Elección de Problema de Investigación",108,65,{align:"center"});
-      // Cuerpo profesional y justificado
-      doc.setFont("helvetica","normal");doc.setFontSize(12);doc.setTextColor(0,0,0);
-      let tenor =
-        `Por medio del presente, el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno certifica que el/la estudiante:\n\n` +
-        `Nombre: ${nombreInvestigador}\n` +
-        `Registro (Matrícula): ${registro}\n` +
-        `Carrera: ${carrera}\n\n` +
-        `Ha seleccionado formalmente el siguiente problema de investigación:\n\n` +
-        `Pregunta seleccionada:\n${pregunta}\n\n` +
-        `Tutor/a asignado/a: ${tutor}\n\n` +
-        `El/la investigador/a se compromete a desarrollar y culminar dicho proyecto durante el período académico 2025-2026, siguiendo las directrices metodológicas acordadas con su tutor/a y con la coordinación del CIRCPyCS.\n\n` +
-        `Esta certificación se expide a solicitud del interesado/a, para los fines académicos y administrativos que creyere convenientes.`;
-      doc.text(doc.splitTextToSize(tenor,160),25,90);
-      const y=205;
-      doc.setFontSize(10);
-      doc.text(`Santa Cruz de la Sierra, ${new Date().toLocaleDateString()}`,108,y,{align:"center"});
-      const f1=await cargarImagen("https://i.imgur.com/o9tccxV.png"),
-            f2=await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-      doc.addImage(f1,"PNG",40,y+10,40,20);doc.addImage(f2,"PNG",135,y+10,40,20);
-      doc.setFont("helvetica","bold");
-      doc.text("Francisco Méndez Égüez",60,y+35,{align:"center"});doc.text("Director Carrera",60,y+40,{align:"center"});
-      doc.text("María A. Suárez Ribera",155,y+35,{align:"center"});doc.text("Directora CIRCPyCS",155,y+40,{align:"center"});
-      doc.setDrawColor(178,34,34);doc.setLineWidth(.5);doc.line(10,265,206,265);
-      doc.setFont("helvetica","normal");doc.setFontSize(10);
-      doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja",108,272,{align:"center"});
-      doc.save(`Certificacion_${nombreInvestigador.replace(/\s+/g,"_")}.pdf`);
-    }
-    function cargarImagen(url){
-      return new Promise((ok,er)=>{
-        const i=new Image();i.crossOrigin="anonymous";
-        i.onload=()=>ok(i);i.onerror=er;i.src=url;
-      });
-    }
+    });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeCv(); });
+
+    // ======== Dossier data ========
+    const dossier = [
+      { url: 'https://www.clarin.com/opinion/giro-derecha-bolivia_0_JvOGwzt7TX.html' , name: 'Clarín (AR)' },
+      { url: 'https://www.eldiario.net/portal/2025/08/12/giro-hacia-la-derecha-en-bolivia/' , name: 'El Diario (BO)' },
+      { url: 'https://www.elespectador.com/mundo/america/giro-hacia-la-derecha-en-bolivia-elecciones-entre-medina-y-velasco/' , name: 'El Espectador (CO)' },
+      { url: 'https://www.eluniversal.com.mx/opinion/latinoamerica21/giro-hacia-la-derecha-en-bolivia/' , name: 'El Universal (MX)' },
+      { url: 'https://www.elmostrador.cl/noticias/opinion/columnas/2025/08/11/giro-hacia-la-derecha-en-bolivia/' , name: 'El Mostrador (CL)' },
+      { url: 'https://www.elnacional.com/2025/08/giro-hacia-la-derecha-en-bolivia/' , name: 'El Nacional (VE)' },
+      { url: 'https://confidencial.digital/opinion/giro-hacia-la-derecha-en-bolivia/' , name: 'Confidencial (NI)' },
+      { url: 'https://www.larevista.cr/giro-hacia-la-derecha-en-bolivia/' , name: 'La Revista (CR)' },
+      { url: 'https://www.elindependiente.sv/2025/08/12/giro-hacia-la-derecha-en-bolivia/' , name: 'El Independiente (SV)' },
+      { url: 'https://3eravoz.com/2025/08/07/giro-hacia-la-derecha-en-bolivia/' , name: '3era Voz (MX)' }
+    ];
+
+    // Chips de medios (más compactos en móvil)
+    const brandsWrap = document.getElementById('brands');
+    dossier.forEach(item => {
+      const a = document.createElement('a');
+      a.href = item.url; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold ring-1 ring-slate-200 bg-white shadow-sm hover:ring-sky-300 hover:text-sky-700 transition';
+      a.textContent = item.name;
+      brandsWrap.appendChild(a);
+    });
+
+    // Pruebas ligeras
+    console.assert(document.querySelector('#brands')?.children.length === 10, 'Dossier: número de medios ≠ 10');
   </script>
 </body>
 </html>
