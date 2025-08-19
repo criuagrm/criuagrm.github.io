@@ -27,6 +27,11 @@
     /* Que los anclajes no queden ocultos por el header fijo */
     section[id] { scroll-margin-top: 96px; }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    /* Slide-in del panel móvil controlado por aria-hidden */
+    #mobile-wrap[aria-hidden="false"] nav { transform: translateX(0); }
+    /* Toggle de iconos en el botón */
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
@@ -94,10 +99,13 @@
       </nav>
 
       <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-controls="mobile-wrap" aria-expanded="false">
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-controls="mobile-wrap" aria-expanded="false" aria-label="Abrir menú">
         <span class="text-sm">Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="block">
           <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hidden">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
@@ -105,7 +113,7 @@
     <!-- Panel móvil -->
     <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden" aria-hidden="true">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto">
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto transform translate-x-full transition-transform duration-300 will-change-transform">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
@@ -523,3 +531,4 @@
   </script>
 </body>
 </html>
+
