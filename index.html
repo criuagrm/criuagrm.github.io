@@ -31,6 +31,22 @@
     /* Toggle iconos del botón móvil */
     #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
     #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+
+    /* ----- Scroll del menú móvil ----- */
+    /* Se calcula la altura disponible: alto de la ventana - alto del header */
+    #mobile-menu{
+      /* valor por defecto por si JS no corre */
+      --header-h: 64px;
+
+      /* Fallback y variantes de viewport para móviles */
+      max-height: calc(100vh - var(--header-h));
+      max-height: calc(100svh - var(--header-h));
+      max-height: calc(100dvh - var(--header-h));
+
+      overflow-y: auto;                  /* Hace visible la “barrita” */
+      overscroll-behavior: contain;      /* Evita arrastrar el body por detrás */
+      -webkit-overflow-scrolling: touch; /* Inercia en iOS */
+    }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
@@ -450,17 +466,28 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ===== Menú móvil sencillo =====
+    // ===== Menú móvil sencillo con scroll propio =====
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
+
+    function setHeaderVar(){
+      const h = headerEl.getBoundingClientRect().height || 64;
+      mobileMenu.style.setProperty('--header-h', h + 'px');
+    }
 
     function toggleMenu(forceOpen = null) {
       const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();                 // calcula altura disponible
       mobileMenu.classList.toggle('hidden', !willOpen);
       btnOpen.setAttribute('aria-expanded', String(willOpen));
+      // Bloquea el body para que sólo se desplace el menú
       document.body.style.overflow = willOpen ? 'hidden' : '';
-      if (willOpen) setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
-      else btnOpen.focus();
+      if (willOpen) {
+        setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
+      } else {
+        btnOpen.focus();
+      }
     }
 
     btnOpen.addEventListener('click', () => toggleMenu());
@@ -474,10 +501,16 @@
       if (link) toggleMenu(false);
     });
 
+    // Recalcular al redimensionar/orientación
+    window.addEventListener('resize', () => {
+      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
+    });
+
     // Si pasa a ancho md+ mientras está abierto, ciérralo
     const mq = window.matchMedia('(min-width: 768px)');
     mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
   </script>
 </body>
 </html>
+
 
