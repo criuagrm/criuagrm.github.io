@@ -113,7 +113,7 @@
     <!-- Panel móvil -->
     <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden" aria-hidden="true">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto transform translate-x-full transition-transform duration-300 will-change-transform">
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 will-change-transform" aria-label="Navegación móvil">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
@@ -142,13 +142,14 @@
                 <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="lineas.html">Líneas de investigación</a>
                 <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="rgroups.html">Grupos de investigación</a>
                 <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="proyectos.html">Proyectos de investigación</a>
-                
                 <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="researchers.html">Investigadores</a>
                 <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="students.html">Estudiantes investigadores</a>
               </div>
             </details>
           </li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#publicaciones">Publicaciones</a></li>
+
+          <!-- Eventos (acordeón) -->
           <li class="border-t border-slate-200 pt-3 mt-3">
             <details id="m-eventos" class="group">
               <summary class="list-none flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg hover:bg-slate-50">
@@ -169,7 +170,7 @@
             </details>
           </li>
 
-          <!-- Multimedia (acordeón NUEVO) -->
+          <!-- Multimedia (acordeón) -->
           <li class="border-t border-slate-200 pt-3 mt-3">
             <details id="m-multimedia" class="group">
               <summary class="list-none flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg hover:bg-slate-50">
@@ -506,10 +507,11 @@
       document.body.style.overflow = 'hidden';
     }
     function closeMenu() {
-      wrap.classList.add('hidden');
       wrap.setAttribute('aria-hidden', 'true');
       openBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      // esperar al final de la animación para ocultar el contenedor
+      setTimeout(() => wrap.classList.add('hidden'), 300);
     }
 
     openBtn.addEventListener('click', openMenu);
