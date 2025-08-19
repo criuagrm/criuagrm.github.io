@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Líneas de investigación — CIRCPyCS UAGRM</title>
   <meta name="description" content="Líneas de investigación del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
 
@@ -33,25 +33,25 @@
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
   <!-- Header -->
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain"/>
+  <header class="sticky top-0 z-30 supports-[backdrop-filter]:backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-2 sm:gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 sm:h-9 sm:w-9 object-contain" loading="lazy"/>
         <div class="leading-tight">
-          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+          <p class="text-[10px] sm:text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-base sm:text-lg">CIRCPyCS</h1>
         </div>
       </a>
 
       <!-- Nav escritorio -->
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#multi" class="hover:text-sky-700">Multidisciplinarias</a>
-        <a href="#cpap" class="hover:text-sky-700">Ciencia Política y A.P.</a>
-        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
+      <nav class="hidden md:flex items-center gap-5 text-sm">
+        <a href="#multi" class="hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 rounded">Multidisciplinarias</a>
+        <a href="#cpap" class="hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 rounded">Ciencia Política y A.P.</a>
+        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600">Volver a Inicio</a>
       </nav>
 
       <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+      <button id="btn-open" aria-controls="mobile-wrap" aria-expanded="false" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 text-sm">
         <span>Menú</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
@@ -60,7 +60,7 @@
     <!-- Panel móvil -->
     <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+      <nav class="ml-auto h-full w-[82vw] max-w-[340px] bg-white shadow-xl p-5 sm:p-6 overflow-y-auto overscroll-contain">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-7 w-7 object-contain"/>
@@ -70,10 +70,12 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
         </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#multi">Multidisciplinarias</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cpap">Ciencia Política y A.P.</a></li>
-          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
+        <ul class="mt-5 space-y-1.5 text-[15px]">
+          <li><a data-close href="#multi" class="block px-3 py-3 rounded-lg hover:bg-slate-50">Multidisciplinarias</a></li>
+          <li><a data-close href="#cpap" class="block px-3 py-3 rounded-lg hover:bg-slate-50">Ciencia Política y A.P.</a></li>
+          <li class="pt-2 mt-2 border-t border-slate-200">
+            <a data-close href="https://cir.uagrm.edu.bo/" class="block px-3 py-3 rounded-lg hover:bg-slate-50">Volver a Inicio</a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -85,54 +87,85 @@
       <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
       <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
     </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación</span>
-      <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Líneas de investigación</h2>
-      <p class="mt-3 max-w-3xl text-slate-600">Mapa de líneas prioritarias para proyectos, publicaciones y formación, con enfoque regional y colaboraciones interdisciplinares.</p>
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación</span>
+      <h2 class="mt-3 sm:mt-4 text-2xl sm:text-4xl font-extrabold tracking-tight">Líneas de investigación</h2>
+      <p class="mt-2 sm:mt-3 max-w-3xl text-slate-600 text-sm sm:text-base">Mapa de líneas prioritarias para proyectos, publicaciones y formación, con enfoque regional y colaboraciones interdisciplinares.</p>
+
+      <!-- Botones de documentos -->
+      <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <!-- BTN 1 -->
+        <a href="https://drive.google.com/file/d/16vY5AK3tqOoEfdORcjTGuxwr1nwr37Ex/view?usp=drive_link"
+           target="_blank" rel="noopener"
+           class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-sky-600 to-emerald-600 hover:from-sky-700 hover:to-emerald-700 shadow-soft">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" class="-ml-0.5">
+            <path d="M7 11l5-5 5 5M12 6v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Líneas de investigación UAGRM 2025
+        </a>
+        <!-- BTN 2 -->
+        <a href="https://drive.google.com/file/d/1I_3pyT85aT_Lr-hcxpX_G7mmfP07_D8l/view?usp=drive_link"
+           target="_blank" rel="noopener"
+           class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 text-sm sm:text-base font-semibold border border-slate-300 hover:border-sky-600 hover:text-sky-700 bg-white">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" class="-ml-0.5">
+            <path d="M14 3H6a2 2 0 0 0-2 2v14l4-3 4 3 4-3 4 3V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Reglamento de investigación DICIT
+        </a>
+        <!-- BTN 3 -->
+        <a href="https://drive.google.com/file/d/1Mi-Fg1q3-8obOd2IBo_BsFsKYMQBpUkf/view?usp=drive_link"
+           target="_blank" rel="noopener"
+           class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 sm:px-5 sm:py-3.5 text-sm sm:text-base font-semibold border border-slate-300 hover:border-emerald-600 hover:text-emerald-700 bg-white">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" class="-ml-0.5">
+            <path d="M8 12h8M6 16h12M10 8h4M7 3h10a2 2 0 0 1 2 2v14l-4-3-4 3-4-3-4 3V5a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Compatibilidad de líneas (CIRCPyCS ↔ DICIT)
+        </a>
+      </div>
     </div>
   </section>
 
   <main class="pb-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 grid gap-8 sm:gap-10">
       <!-- Multidisciplinarias -->
       <section id="multi" class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold">Líneas de investigación multidisciplinarias — Investigadores UAGRM</h3>
-          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="p-5 sm:p-6 lg:p-8">
+          <h3 class="text-lg sm:text-xl font-bold">Líneas de investigación multidisciplinarias — Investigadores UAGRM</h3>
+          <div class="mt-5 sm:mt-6 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
             <!-- Item -->
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
               <div class="flex items-center gap-3">
                 <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">🌱</span>
-                <h4 class="font-semibold">Cambio Climático y Recursos Naturales</h4>
+                <h4 class="font-semibold text-sm sm:text-base">Cambio Climático y Recursos Naturales</h4>
               </div>
               <p class="mt-2 text-sm text-slate-600">Políticas y soluciones ambientales para la región.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
               <div class="flex items-center gap-3">
                 <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-sky-50 text-sky-700">🏛️</span>
-                <h4 class="font-semibold">Sistema Político e Instituciones Públicas</h4>
+                <h4 class="font-semibold text-sm sm:text-base">Sistema Político e Instituciones Públicas</h4>
               </div>
               <p class="mt-2 text-sm text-slate-600">Estructuras, desempeño y reformas institucionales.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
               <div class="flex items-center gap-3">
                 <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-700">⚙️</span>
-                <h4 class="font-semibold">Desarrollo, Innovación y Tecnología</h4>
+                <h4 class="font-semibold text-sm sm:text-base">Desarrollo, Innovación y Tecnología</h4>
               </div>
               <p class="mt-2 text-sm text-slate-600">Tecnología aplicada e innovación regional.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
               <div class="flex items-center gap-3">
                 <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-700">🚜</span>
-                <h4 class="font-semibold">Desarrollo Productivo, Agroindustria y Economía</h4>
+                <h4 class="font-semibold text-sm sm:text-base">Desarrollo Productivo, Agroindustria y Economía</h4>
               </div>
               <p class="mt-2 text-sm text-slate-600">Productividad, cadenas de valor y bienestar.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
               <div class="flex items-center gap-3">
                 <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-violet-50 text-violet-700">🧑‍⚕️</span>
-                <h4 class="font-semibold">Sociedad, Salud y Educación</h4>
+                <h4 class="font-semibold text-sm sm:text-base">Sociedad, Salud y Educación</h4>
               </div>
               <p class="mt-2 text-sm text-slate-600">Interacciones entre bienestar social y capital humano.</p>
             </div>
@@ -143,76 +176,71 @@
       <!-- CP + A.P. -->
       <section id="cpap" class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold">Líneas de investigación para Ciencia Política y Administración Pública</h3>
-          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">⚖️</span><h4 class="font-semibold">Estado, Derecho y Gobierno</h4></div>
+        <div class="p-5 sm:p-6 lg:p-8">
+          <h3 class="text-lg sm:text-xl font-bold">Líneas de investigación para Ciencia Política y Administración Pública</h3>
+          <div class="mt-5 sm:mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">⚖️</span><h4 class="font-semibold text-sm sm:text-base">Estado, Derecho y Gobierno</h4></div>
               <p class="mt-2 text-sm text-slate-600">Sistemas democráticos, gobernanza, regímenes competenciales y relaciones intergubernamentales.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🗳️</span><h4 class="font-semibold">Estado Plurinacional, Democracia e Interculturalidad</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🗳️</span><h4 class="font-semibold text-sm sm:text-base">Estado Plurinacional, Democracia e Interculturalidad</h4></div>
               <p class="mt-2 text-sm text-slate-600">Mecanismos de participación, representación y empoderamiento ciudadano.</p>
             </div>
             <!-- COMBINADA: Administración Pública + Descolonización/Despatriarcalización -->
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🏛️</span><h4 class="font-semibold">Administración Pública, Descolonización y Despatriarcalización</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🏛️</span><h4 class="font-semibold text-sm sm:text-base">Administración Pública, Descolonización y Despatriarcalización</h4></div>
               <p class="mt-2 text-sm text-slate-600">Gestión pública, finanzas y políticas fiscales integradas con enfoques de igualdad, reconocimiento cultural y transformación institucional en el Estado Plurinacional.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🌐</span><h4 class="font-semibold">Relaciones Internacionales</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🌐</span><h4 class="font-semibold text-sm sm:text-base">Relaciones Internacionales</h4></div>
               <p class="mt-2 text-sm text-slate-600">Alianzas, política exterior y posicionamiento regional y global.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🧭</span><h4 class="font-semibold">Migración y Nuevas Identidades</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🧭</span><h4 class="font-semibold text-sm sm:text-base">Migración y Nuevas Identidades</h4></div>
               <p class="mt-2 text-sm text-slate-600">Movilidades humanas, multiculturalidad e integración social.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">👥</span><h4 class="font-semibold">Partidos, Organizaciones y Grupos de Presión</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">👥</span><h4 class="font-semibold text-sm sm:text-base">Partidos, Organizaciones y Grupos de Presión</h4></div>
               <p class="mt-2 text-sm text-slate-600">Estructuras partidarias, influencia y comportamiento organizativo.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🚩</span><h4 class="font-semibold">Movimientos Indígenas, Territorialidad y Autodeterminación</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🚩</span><h4 class="font-semibold text-sm sm:text-base">Movimientos Indígenas, Territorialidad y Autodeterminación</h4></div>
               <p class="mt-2 text-sm text-slate-600">Derechos colectivos, gobernanza territorial y autonomías.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🥗</span><h4 class="font-semibold">Seguridad y Soberanía Alimentaria</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🥗</span><h4 class="font-semibold text-sm sm:text-base">Seguridad y Soberanía Alimentaria</h4></div>
               <p class="mt-2 text-sm text-slate-600">Políticas de acceso, disponibilidad y uso de alimentos.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">📈</span><h4 class="font-semibold">Modelos de Desarrollo, Pobreza y Cambio Social</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">📈</span><h4 class="font-semibold text-sm sm:text-base">Modelos de Desarrollo, Pobreza y Cambio Social</h4></div>
               <p class="mt-2 text-sm text-slate-600">Crecimiento, redistribución y transformaciones sociopolíticas.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🏙️</span><h4 class="font-semibold">Ciudades y Ciudadanías</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🏙️</span><h4 class="font-semibold text-sm sm:text-base">Ciudades y Ciudadanías</h4></div>
               <p class="mt-2 text-sm text-slate-600">Urbanización, gobernanza local y derechos ciudadanos.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🍃</span><h4 class="font-semibold">Medio Ambiente, Economía Verde y Recursos Estratégicos</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🍃</span><h4 class="font-semibold text-sm sm:text-base">Medio Ambiente, Economía Verde y Recursos Estratégicos</h4></div>
               <p class="mt-2 text-sm text-slate-600">Sostenibilidad, economía verde y gestión de recursos.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🧠</span><h4 class="font-semibold">Comportamiento y Cognición Política</h4></div>
-              <p class="mt-2 text-sm text-slate-600">Conducta política, psicología y toma de decisiones.</p>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">🧠</span><h4 class="font-semibold text-sm sm:text-base">Comportamiento y Cognición Política</h4></div>
+              <p class="mt-2 text-sm text-slate-600">Conducta política, cognición política y toma de decisiones.</p>
             </div>
-            <div class="rounded-xl2 border border-slate-200 p-5 shadow-soft hover:shadow transition">
-              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">💻</span><h4 class="font-semibold">Ciencia Política Computacional</h4></div>
+            <div class="rounded-xl2 border border-slate-200 p-4 sm:p-5 shadow-soft hover:shadow transition">
+              <div class="flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50">💻</span><h4 class="font-semibold text-sm sm:text-base">Ciencia Política Computacional</h4></div>
               <p class="mt-2 text-sm text-slate-600">Datos, redes, IA y métodos computacionales aplicados.</p>
             </div>
           </div>
         </div>
       </section>
-
-      <!-- CTA secundaria opcional
-      <div class="flex flex-wrap items-center gap-3 justify-center">
-        <a href="#" class="px-5 py-3 rounded-xl border border-slate-300 font-semibold hover:border-sky-600 hover:text-sky-700">Proyectos relacionados</a>
-      </div> -->
     </div>
   </main>
 
   <!-- Footer -->
   <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
       <div class="grid place-items-center gap-3 text-center">
         <p>© <span id="year"></span> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
         <p>Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · +591 67381294</p>
@@ -224,18 +252,30 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menú móvil
+    // Menú móvil accesible
     const wrap = document.getElementById('mobile-wrap');
     const openBtn = document.getElementById('btn-open');
     const closeBtn = document.getElementById('btn-close');
     const backdrop = document.getElementById('backdrop');
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
+
+    function openMenu(){
+      wrap.classList.remove('hidden');
+      document.body.style.overflow='hidden';
+      openBtn?.setAttribute('aria-expanded','true');
+    }
+    function closeMenu(){
+      wrap.classList.add('hidden');
+      document.body.style.overflow='';
+      openBtn?.setAttribute('aria-expanded','false');
+    }
     openBtn?.addEventListener('click', openMenu);
     closeBtn?.addEventListener('click', closeMenu);
     backdrop?.addEventListener('click', closeMenu);
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    wrap?.addEventListener('click', (e)=>{
+      const t = e.target;
+      if (t.tagName==='A' || t.dataset.close!==undefined) closeMenu();
+    });
   </script>
 </body>
 </html>
