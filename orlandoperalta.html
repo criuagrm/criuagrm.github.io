@@ -2,7 +2,8 @@
 <html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
   <title>José Orlando Peralta Beltrán — Analista Político e Investigador</title>
   <meta name="description" content="Perfil académico y profesional de José Orlando Peralta Beltrán: proyectos, libros, dossier y contacto." />
 
@@ -21,8 +22,14 @@
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    /* Anclajes que respetan el header fijo */
+    section[id] { scroll-margin-top: 96px; }
+    /* Evitar saltos fuertes en móviles */
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <!-- Cinta superior -->
@@ -30,12 +37,12 @@
 
   <!-- Header / Nav -->
   <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/eG9yXG6.jpeg" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-200 group-hover:ring-sky-300 transition" alt="Avatar de José Orlando Peralta"/>
-        <div class="leading-tight">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 min-w-0">
+        <img src="https://i.imgur.com/eG9yXG6.jpeg" alt="Avatar de José Orlando Peralta" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-200"/>
+        <div class="leading-tight truncate">
           <p class="text-[11px] tracking-wide text-slate-500">Perfil académico</p>
-          <h1 class="font-bold text-base sm:text-lg">José Orlando Peralta B.</h1>
+          <h1 class="font-bold text-base sm:text-lg truncate">José Orlando Peralta B.</h1>
         </div>
       </a>
 
@@ -49,7 +56,7 @@
 
         <!-- Dropdown CV -->
         <div class="relative">
-          <button id="cv-btn" class="inline-flex items-center gap-1.5 hover:text-sky-700">
+          <button id="cv-btn" class="inline-flex items-center gap-1.5 hover:text-sky-700" aria-expanded="false">
             <span class="font-semibold">CV</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -65,16 +72,16 @@
       </nav>
 
       <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
-        <span>Menú</span>
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-controls="mobile-wrap" aria-expanded="false">
+        <span class="text-sm">Menú</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
     </div>
 
-    <!-- Panel móvil -->
+    <!-- Panel móvil (full-height)** -->
     <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/eG9yXG6.jpeg" class="h-8 w-8 rounded-full object-cover ring-1 ring-slate-200" alt="Avatar"/>
@@ -84,18 +91,18 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
         </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
+        <ul class="mt-6 space-y-1.5 text-[15px]">
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dossier">Dossier</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#proyectos">Proyectos</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#medios">Medios</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#libros">Libros</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#papers">Papers</a></li>
-          <!-- Subopciones de CV en móvil -->
           <li class="pt-2 border-t border-slate-200 mt-2 text-slate-500 text-xs px-3">CV</li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-es">CV en Español</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-en">CV in English</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
         </ul>
+        <div class="h-[env(safe-area-inset-bottom)]"></div>
       </nav>
     </div>
   </header>
@@ -118,7 +125,6 @@
           <a href="https://www.researchgate.net/example" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fab fa-researchgate mr-2"></i>ResearchGate</a>
           <a href="https://scholar.google.es/citations?user=I7_X6QgAAAAJ&hl=es&oi=ao" target="_blank" class="px-3 py-1.5 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fas fa-graduation-cap mr-2"></i>Google Scholar</a>
         </div>
-        <!-- Solo botón Contacto -->
         <div class="mt-4 flex gap-2 justify-center lg:justify-start">
           <a href="#contacto" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold border border-slate-300 hover:border-sky-600 hover:text-sky-700">
             <i class="fas fa-envelope"></i> Contacto
@@ -126,22 +132,26 @@
         </div>
       </div>
 
-      <!-- Book callout -->
+      <!-- Book callout: móvil apilado, sin alturas fijas -->
       <div class="flex justify-center lg:justify-end">
-        <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full max-w-lg grid grid-cols-5">
-          <div class="col-span-2 p-3 bg-slate-50">
-            <img src="https://i.imgur.com/7EntBNW.png" alt="Nuevo libro de Orlando Peralta" class="w-full h-56 sm:h-64 object-cover rounded-2xl"/>
-          </div>
-          <div class="col-span-3 p-4 sm:p-5">
-            <p class="text-[11px] uppercase tracking-wide text-slate-500">Nuevo libro</p>
-            <h3 class="mt-1 font-bold text-xl leading-snug">Próximo lanzamiento</h3>
-            <p class="mt-1 text-slate-600 text-sm">En Atrincherados, José Orlando Peralta reconstruye el paro cruceño de 2022 en tres actos: raíces históricas, 36 días de conflicto y efectos del cabildo del 13/11. Con claves políticas, sociales y culturales, explica la polarización desde Santa Cruz.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Ciencia política</span>
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Coyuntura</span>
+        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full max-w-lg">
+          <div class="flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 p-3 bg-slate-50">
+              <div class="w-full aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="https://i.imgur.com/7EntBNW.png" alt="Nuevo libro de Orlando Peralta" loading="lazy" decoding="async" class="h-full w-full object-cover"/>
+              </div>
+            </div>
+            <div class="sm:w-3/5 p-4 sm:p-5">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Nuevo libro</p>
+              <h3 class="mt-1 font-bold text-xl leading-snug">Próximo lanzamiento</h3>
+              <p class="mt-1 text-slate-600 text-sm">En <em>Atrincherados</em>, José Orlando Peralta reconstruye el paro cruceño de 2022 en tres actos: raíces históricas, 36 días de conflicto y efectos del cabildo del 13/11. Con claves políticas, sociales y culturales, explica la polarización desde Santa Cruz.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Ciencia política</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Coyuntura</span>
+              </div>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   </section>
@@ -153,13 +163,13 @@
         <div class="flex flex-col lg:flex-row items-start gap-6">
           <div class="flex-1">
             <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200">Dossier</span>
-            <h3 class="mt-2 text-3xl font-extrabold leading-tight">¿Giro hacia la derecha en Bolivia?</h3>
+            <h3 class="mt-2 text-2xl sm:text-3xl font-extrabold leading-tight">¿Giro hacia la derecha en Bolivia?</h3>
             <p class="mt-2 text-slate-600">Cobertura y análisis publicados en medios de América Latina y Europa.</p>
-            <div id="brands" class="mt-4 flex flex-wrap gap-3"></div>
+            <div id="brands" class="mt-4 flex flex-wrap gap-2"></div>
           </div>
-          <div class="w-full max-w-sm lg:max-w-md flex items-center justify-center">
-            <div class="h-56 w-56 rounded-full overflow-hidden ring-4 ring-white border border-slate-200 shadow-soft">
-              <img src="https://i.imgur.com/eG9yXG6.jpeg" class="h-full w-full object-cover" alt="José Orlando Peralta — retrato"/>
+          <div class="w-full max-w-sm lg:max-w-md mx-auto">
+            <div class="mx-auto h-48 w-48 sm:h-56 sm:w-56 rounded-full overflow-hidden ring-4 ring-white border border-slate-200 shadow-soft">
+              <img src="https://i.imgur.com/eG9yXG6.jpeg" loading="lazy" decoding="async" class="h-full w-full object-cover" alt="José Orlando Peralta — retrato"/>
             </div>
           </div>
         </div>
@@ -171,36 +181,37 @@
   <section id="proyectos" class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-xl font-bold text-center">Proyectos destacados</h3>
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
+      <div class="mt-5 grid gap-4 sm:grid-cols-2">
+        <!-- Card utilitaria -->
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Editor en Jefe — Número 6 de <em>Conocimiento i Política</em></h4>
           <p class="mt-1 text-slate-600 text-sm">Dirección editorial del número temático: coordinación de arbitraje doble ciego, lineamientos de estilo, normalización OJS/DOI e indexación.</p>
-          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver proyecto</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
         </article>
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Análisis del sistema político post elecciones 2025</h4>
           <p class="mt-1 text-slate-600 text-sm">Mapeo de coaliciones y clivajes, escenarios de gobernabilidad 2025–2030 y trayectorias de partidos mediante modelos de supervivencia y series temporales.</p>
-          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver proyecto</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
         </article>
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Observatorio de Opinión Pública y Comportamiento Electoral</h4>
           <p class="mt-1 text-slate-600 text-sm">Panel de encuestas, estimación de intención de voto con modelos multinivel y nowcasting de coyuntura electoral.</p>
-          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver proyecto</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
         </article>
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Índice de Estabilidad Institucional Subnacional (2000–2025)</h4>
           <p class="mt-1 text-slate-600 text-sm">Construcción de un indicador compuesto y análisis de riesgos (event-history) para alcaldías y gobernaciones; evaluación de shocks políticos y reglas del juego.</p>
-          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver proyecto</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
         </article>
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Cartografía de redes político-institucionales</h4>
           <p class="mt-1 text-slate-600 text-sm">Análisis de redes (SNA) de élites, partidos y organizaciones: centralidad, brokeraje y formación de coaliciones en el ciclo 2009–2025.</p>
-          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver proyecto</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
         </article>
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition">
           <h4 class="font-semibold">Base de Datos de Élites y Partidos (BDEP)</h4>
           <p class="mt-1 text-slate-600 text-sm">Registro longitudinal de trayectorias, cargos y vínculos: perfiles, rotación, disciplina partidaria y profesionalización.</p>
-          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Ver proyecto</a>
+          <a href="#" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700 w-full sm:w-auto justify-center">Ver proyecto</a>
         </article>
       </div>
     </div>
@@ -212,23 +223,23 @@
       <h3 class="text-xl font-bold">Apariciones en medios</h3>
       <div class="mt-5 space-y-6">
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Entrevista en France 24</a>
               <p class="mt-1 text-slate-600 text-sm">Análisis sobre bloqueos y el impacto de declaraciones de Evo Morales.</p>
             </div>
-            <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300">
+            <a href="https://www.france24.com/es/video/20241104-orlando-peralta-mucha-gente-cree-que-evo-morales-va-en-contra-de-los-intereses-bolivianos" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center">
               <i class="fas fa-up-right-from-square"></i> ver
             </a>
           </div>
         </article>
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Artículo en TalCual Digital</a>
               <p class="mt-1 text-slate-600 text-sm">“Bolivia y sus eternos conflictos sociales”.</p>
             </div>
-            <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300">
+            <a href="https://talcualdigital.com/bolivia-y-sus-eternos-conflictos-sociales-por-jose-orlando-peralta/" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center">
               <i class="fas fa-up-right-from-square"></i> ver
             </a>
           </div>
@@ -236,40 +247,48 @@
       </div>
     </div>
   </section>
-  <!-- Libros (formato book callout) -->
+
+  <!-- Libros (book callouts, sin alturas fijas) -->
   <section id="libros" class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-xl font-bold">Libros</h3>
-      <!-- Ahora en dos columnas lado a lado en desktop -->
       <div class="mt-5 grid gap-6 md:grid-cols-2">
         <!-- Rebelión y Pandemia -->
-        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full grid grid-cols-5">
-          <div class="col-span-2 p-3 bg-slate-50 flex items-center justify-center">
-            <img src="https://i.imgur.com/NrJYpbM.png" alt="Rebelión y Pandemia" class="w-full h-72 object-contain rounded-2xl"/>
-          </div>
-          <div class="col-span-3 p-4 sm:p-5">
-            <p class="text-[11px] uppercase tracking-wide text-slate-500">Libro</p>
-            <h4 class="mt-1 font-bold text-xl leading-snug">Rebelión y Pandemia</h4>
-            <p class="mt-1 text-slate-600 text-sm">Análisis de los eventos políticos y electorales en Bolivia 2019–2020.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Ciencia política</span>
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Elecciones</span>
+        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full">
+          <div class="flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 p-3 bg-slate-50 flex items-center justify-center">
+              <div class="w-full aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="https://i.imgur.com/NrJYpbM.png" alt="Rebelión y Pandemia" loading="lazy" decoding="async" class="h-full w-full object-contain"/>
+              </div>
+            </div>
+            <div class="sm:w-3/5 p-4 sm:p-5">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Libro</p>
+              <h4 class="mt-1 font-bold text-xl leading-snug">Rebelión y Pandemia</h4>
+              <p class="mt-1 text-slate-600 text-sm">Análisis de los eventos políticos y electorales en Bolivia 2019–2020.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Ciencia política</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Elecciones</span>
+              </div>
             </div>
           </div>
         </article>
 
         <!-- Rebelión en la Llanura -->
-        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full grid grid-cols-5">
-          <div class="col-span-2 p-3 bg-slate-50 flex items-center justify-center">
-            <img src="https://i.imgur.com/lCdPwMT.jpeg" alt="Rebelión en la Llanura" class="w-full h-72 object-contain rounded-2xl"/>
-          </div>
-          <div class="col-span-3 p-4 sm:p-5">
-            <p class="text-[11px] uppercase tracking-wide text-slate-500">Libro</p>
-            <h4 class="mt-1 font-bold text-xl leading-snug">Rebelión en la Llanura</h4>
-            <p class="mt-1 text-slate-600 text-sm">Libro colectivo sobre la politización de la clase media urbana en Santa Cruz.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Comportamiento político</span>
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Santa Cruz</span>
+        <article class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden w-full">
+          <div class="flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 p-3 bg-slate-50 flex items-center justify-center">
+              <div class="w-full aspect-[3/4] overflow-hidden rounded-2xl">
+                <img src="https://i.imgur.com/lCdPwMT.jpeg" alt="Rebelión en la Llanura" loading="lazy" decoding="async" class="h-full w-full object-contain"/>
+              </div>
+            </div>
+            <div class="sm:w-3/5 p-4 sm:p-5">
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">Libro</p>
+              <h4 class="mt-1 font-bold text-xl leading-snug">Rebelión en la Llanura</h4>
+              <p class="mt-1 text-slate-600 text-sm">Libro colectivo sobre la politización de la clase media urbana en Santa Cruz.</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Comportamiento político</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold ring-1 ring-slate-200 bg-white">Santa Cruz</span>
+              </div>
             </div>
           </div>
         </article>
@@ -282,56 +301,44 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-xl font-bold">Artículos</h3>
       <div class="mt-5 space-y-6">
+        <!-- Ítem -->
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">
-                Las ciudades votan: ¿Continuidades o cambios en Santa Cruz de la Sierra?
-              </a>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Las ciudades votan: ¿Continuidades o cambios en Santa Cruz de la Sierra?</a>
               <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
             </div>
-            <a href="#" class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300">
-              <i class="fas fa-file-pdf"></i> pdf
-            </a>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
           </div>
         </article>
+        <!-- Ítem -->
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">
-                Santa Cruz: nuevo epicentro de la política 2001–2020, pero no del poder
-              </a>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Santa Cruz: nuevo epicentro de la política 2001–2020, pero no del poder</a>
               <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
             </div>
-            <a href="#" class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300">
-              <i class="fas fa-file-pdf"></i> pdf
-            </a>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
           </div>
         </article>
+        <!-- Ítem -->
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">
-                Democracia intercultural en perspectiva deliberativa. El caso de Bolivia
-              </a>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">Democracia intercultural en perspectiva deliberativa. El caso de Bolivia</a>
               <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
             </div>
-            <a href="#" class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300">
-              <i class="fas fa-file-pdf"></i> pdf
-            </a>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
           </div>
         </article>
+        <!-- Ítem -->
         <article class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div class="flex items-start justify-between gap-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">
-                La coyuntura del debate sobre federalismo en Bolivia, 2021–2023
-              </a>
+              <a href="#" class="block font-semibold text-sky-700 hover:text-sky-800 hover:underline">La coyuntura del debate sobre federalismo en Bolivia, 2021–2023</a>
               <p class="mt-1 text-slate-600 text-sm">José Orlando Peralta Beltrán</p>
             </div>
-            <a href="#" class="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300">
-              <i class="fas fa-file-pdf"></i> pdf
-            </a>
+            <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm ring-1 ring-slate-300 hover:ring-sky-300 w-full sm:w-auto justify-center"><i class="fas fa-file-pdf"></i> pdf</a>
           </div>
         </article>
       </div>
@@ -357,23 +364,31 @@
     const openBtn = document.getElementById('btn-open');
     const closeBtn = document.getElementById('btn-close');
     const backdrop = document.getElementById('backdrop');
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-    openBtn?.addEventListener('click', openMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    backdrop?.addEventListener('click', closeMenu);
-    closeBtn?.addEventListener('click', closeMenu);
+    const toggleMenu = (open) => {
+      wrap.classList.toggle('hidden', !open);
+      document.body.style.overflow = open ? 'hidden' : '';
+      openBtn.setAttribute('aria-expanded', String(open));
+    };
+    openBtn?.addEventListener('click', () => toggleMenu(true));
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
+    backdrop?.addEventListener('click', () => toggleMenu(false));
+    closeBtn?.addEventListener('click', () => toggleMenu(false));
 
     // Dropdown CV (desktop)
     const cvBtn = document.getElementById('cv-btn');
     const cvDropdown = document.getElementById('cv-dropdown');
-    function closeCv(){ cvDropdown?.classList.add('hidden'); }
+    const closeCv = () => cvDropdown?.classList.add('hidden');
     cvBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
+      const expanded = cvBtn.getAttribute('aria-expanded') === 'true';
+      cvBtn.setAttribute('aria-expanded', String(!expanded));
       cvDropdown?.classList.toggle('hidden');
     });
     document.addEventListener('click', (e) => {
-      if (!cvDropdown?.contains(e.target) && !cvBtn?.contains(e.target)) closeCv();
+      if (!cvDropdown?.contains(e.target) && !cvBtn?.contains(e.target)) {
+        cvBtn?.setAttribute('aria-expanded','false');
+        closeCv();
+      }
     });
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeCv(); });
 
@@ -391,23 +406,19 @@
       { url: 'https://3eravoz.com/2025/08/07/giro-hacia-la-derecha-en-bolivia/' , name: '3era Voz (MX)' }
     ];
 
-    // Chips de medios
+    // Chips de medios (más compactos en móvil)
     const brandsWrap = document.getElementById('brands');
     dossier.forEach(item => {
       const a = document.createElement('a');
       a.href = item.url; a.target = '_blank'; a.rel = 'noopener';
-      a.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold ring-1 ring-slate-200 bg-white shadow-sm hover:ring-sky-300 hover:text-sky-700 transition';
+      a.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold ring-1 ring-slate-200 bg-white shadow-sm hover:ring-sky-300 hover:text-sky-700 transition';
       a.textContent = item.name;
       brandsWrap.appendChild(a);
     });
 
-    // Smoke tests mínimos
+    // Pruebas ligeras
     console.assert(document.querySelector('#brands')?.children.length === 10, 'Dossier: número de medios ≠ 10');
-    console.assert(document.querySelector('img[alt^="Nuevo libro"]'), 'Hero: imagen del nuevo libro no encontrada');
   </script>
 </body>
 </html>
-
-
-
 
