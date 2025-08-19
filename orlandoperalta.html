@@ -56,7 +56,7 @@
 
         <!-- Dropdown CV -->
         <div class="relative">
-          <button id="cv-btn" class="inline-flex items-center gap-1.5 hover:text-sky-700" aria-expanded="false">
+          <button id="cv-btn" class="inline-flex items-center gap-1.5 hover:text-sky-700" aria-expanded="false" aria-controls="cv-dropdown">
             <span class="font-semibold">CV</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -78,10 +78,10 @@
       </button>
     </div>
 
-    <!-- Panel móvil (full-height)** -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto">
+    <!-- Panel móvil (full-height) con submenú desplegable -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden" aria-hidden="true">
+      <div id="backdrop" class="absolute inset-0 bg-slate-900/40"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 pt-safe overflow-y-auto" aria-label="Navegación móvil">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/eG9yXG6.jpeg" class="h-8 w-8 rounded-full object-cover ring-1 ring-slate-200" alt="Avatar"/>
@@ -91,16 +91,30 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
         </div>
-        <ul class="mt-6 space-y-1.5 text-[15px]">
+        <ul class="mt-6 space-y-1.5 text-[15px]" role="list">
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dossier">Dossier</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#proyectos">Proyectos</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#medios">Medios</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#libros">Libros</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#papers">Papers</a></li>
-          <li class="pt-2 border-t border-slate-200 mt-2 text-slate-500 text-xs px-3">CV</li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-es">CV en Español</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-en">CV in English</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+
+          <!-- Grupo CV con acordeón -->
+          <li class="pt-2 border-t border-slate-200 mt-2">
+            <button id="cv-mobile-btn" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-50" aria-controls="cv-mobile-panel" aria-expanded="false">
+              <span class="font-medium">CV</span>
+              <svg id="cv-mobile-caret" class="transition-transform" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div id="cv-mobile-panel" class="hidden pl-3 mt-1 space-y-1" role="region">
+              <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-es">CV en Español</a>
+              <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cv-en">CV in English</a>
+            </div>
+          </li>
+
+          <li class="pt-2 border-t border-slate-200 mt-2">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a>
+          </li>
         </ul>
         <div class="h-[env(safe-area-inset-bottom)]"></div>
       </nav>
@@ -359,22 +373,48 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menú móvil
+    // ===== Menú móvil =====
     const wrap = document.getElementById('mobile-wrap');
     const openBtn = document.getElementById('btn-open');
     const closeBtn = document.getElementById('btn-close');
     const backdrop = document.getElementById('backdrop');
     const toggleMenu = (open) => {
       wrap.classList.toggle('hidden', !open);
+      wrap.setAttribute('aria-hidden', String(!open));
       document.body.style.overflow = open ? 'hidden' : '';
-      openBtn.setAttribute('aria-expanded', String(open));
+      openBtn?.setAttribute('aria-expanded', String(open));
+      if (open) {
+        // Enfocar el primer enlace
+        setTimeout(() => {
+          const first = wrap.querySelector('a, button');
+          first?.focus();
+        }, 0);
+      } else {
+        openBtn?.focus();
+      }
     };
     openBtn?.addEventListener('click', () => toggleMenu(true));
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
     backdrop?.addEventListener('click', () => toggleMenu(false));
     closeBtn?.addEventListener('click', () => toggleMenu(false));
 
-    // Dropdown CV (desktop)
+    // Submenú CV en móvil (acordeón)
+    const cvMobileBtn = document.getElementById('cv-mobile-btn');
+    const cvMobilePanel = document.getElementById('cv-mobile-panel');
+    const cvMobileCaret = document.getElementById('cv-mobile-caret');
+    cvMobileBtn?.addEventListener('click', () => {
+      const expanded = cvMobileBtn.getAttribute('aria-expanded') === 'true';
+      cvMobileBtn.setAttribute('aria-expanded', String(!expanded));
+      cvMobilePanel.classList.toggle('hidden');
+      cvMobileCaret.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+
+    // Cerrar panel móvil al navegar por anclas
+    wrap.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', () => toggleMenu(false));
+    });
+
+    // ===== Dropdown CV (desktop) =====
     const cvBtn = document.getElementById('cv-btn');
     const cvDropdown = document.getElementById('cv-dropdown');
     const closeCv = () => cvDropdown?.classList.add('hidden');
@@ -421,4 +461,5 @@
   </script>
 </body>
 </html>
+
 
