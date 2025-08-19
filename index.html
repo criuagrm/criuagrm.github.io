@@ -6,7 +6,6 @@
   <meta name="theme-color" content="#ffffff" />
   <title>CIRCPyCS — UAGRM</title>
   <meta name="description" content="Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
-  <!-- Todas las rutas relativas apuntarán a este dominio -->
   <base href="https://cir.uagrm.edu.bo/">
 
   <!-- Tailwind CDN -->
@@ -23,13 +22,13 @@
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     /* Que los anclajes no queden ocultos por el header fijo */
     section[id] { scroll-margin-top: 96px; }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-    /* Slide-in del panel móvil controlado por aria-hidden */
-    #mobile-wrap[aria-hidden="false"] nav { transform: translateX(0); }
-    /* Toggle de iconos en el botón */
+
+    /* Toggle iconos del botón móvil */
     #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
     #btn-open[aria-expanded="true"] #icon-x{ display:block; }
   </style>
@@ -60,12 +59,16 @@
             <div class="p-2 grid gap-1 text-sm">
               <a href="lineas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Líneas de investigación</a>
               <a href="rgroups.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Grupos de investigación</a>
-              <a href="proyectos.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Proyectos de investigación</a><a href="researchers.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Investigadores</a>
+              <a href="proyectos.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Proyectos de investigación</a>
+              <a href="researchers.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Investigadores</a>
               <a href="students.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Estudiantes investigadores</a>
             </div>
           </div>
         </div>
+
         <a href="#publicaciones" class="hover:text-sky-700">Publicaciones</a>
+
+        <!-- Eventos (dropdown) -->
         <div class="relative group">
           <button class="hover:text-sky-700">Eventos</button>
           <div class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
@@ -81,7 +84,7 @@
           </div>
         </div>
 
-        <!-- Multimedia (NUEVO dropdown) -->
+        <!-- Multimedia (dropdown) -->
         <div class="relative group">
           <button class="hover:text-sky-700">Multimedia</button>
           <div class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
@@ -98,102 +101,58 @@
         <a href="int.html" class="hover:text-sky-700">Internacionalización</a>
       </nav>
 
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-controls="mobile-wrap" aria-expanded="false" aria-label="Abrir menú">
+      <!-- Botón móvil (abre/cierra dropdown sencillo) -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span class="text-sm">Menú</span>
-        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="block">
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block" aria-hidden="true">
           <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
-        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="hidden">
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
 
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden" aria-hidden="true">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 will-change-transform" aria-label="Navegación móvil">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
-            <span class="font-semibold">CIRCPyCS</span>
+    <!-- Menú móvil sencillo (dropdown bajo el header) -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-soft" aria-label="Navegación móvil">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="services.html">Servicios</a></li>
+        <li class="pt-1">
+          <div class="px-3 py-1 text-[12px] uppercase tracking-wide text-slate-500">Investigación</div>
+          <div class="grid gap-1 pl-1">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="lineas.html">Líneas de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="rgroups.html">Grupos de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="proyectos.html">Proyectos de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="researchers.html">Investigadores</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="students.html">Estudiantes investigadores</a>
           </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú" aria-controls="mobile-wrap" aria-expanded="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="services.html">Servicios</a></li>
-
-          <!-- Investigación (acordeón) -->
-          <li class="border-t border-slate-200 pt-3 mt-3">
-            <details id="m-investigacion" class="group">
-              <summary class="list-none flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg hover:bg-slate-50">
-                <span>Investigación</span>
-                <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </summary>
-              <div class="mt-1 space-y-1 pl-3">
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="lineas.html">Líneas de investigación</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="rgroups.html">Grupos de investigación</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="proyectos.html">Proyectos de investigación</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="researchers.html">Investigadores</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="students.html">Estudiantes investigadores</a>
-              </div>
-            </details>
-          </li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#publicaciones">Publicaciones</a></li>
-
-          <!-- Eventos (acordeón) -->
-          <li class="border-t border-slate-200 pt-3 mt-3">
-            <details id="m-eventos" class="group">
-              <summary class="list-none flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg hover:bg-slate-50">
-                <span>Eventos</span>
-                <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </summary>
-              <div class="mt-1 space-y-1 pl-3">
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="seminarios.html">Seminarios</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#encuentros">Encuentros</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="conversatorios.html">Conversatorios</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="conferencias.html">Conferencias</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#ciclos-dialogos">Ciclos de diálogos</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#ciclos-mesas">Ciclos de mesas</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#jornadas">Jornadas</a>
-              </div>
-            </details>
-          </li>
-
-          <!-- Multimedia (acordeón) -->
-          <li class="border-t border-slate-200 pt-3 mt-3">
-            <details id="m-multimedia" class="group">
-              <summary class="list-none flex items-center justify-between cursor-pointer px-3 py-2 rounded-lg hover:bg-slate-50">
-                <span>Multimedia</span>
-                <svg class="transition-transform group-open:rotate-180" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </summary>
-              <div class="mt-1 space-y-1 pl-3">
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="medios">En los medios</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="podcast.html">Podcast</a>
-                <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="entrevistas">Entrevistas</a>
-              </div>
-            </details>
-          </li>
-
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="organizacion.html">Organización</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="courses.html">Cursos</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="int.html">Internacionalización</a></li>
-        </ul>
-        <div class="h-[env(safe-area-inset-bottom)]"></div>
-      </nav>
-    </div>
+        </li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#publicaciones">Publicaciones</a></li>
+        <li class="pt-1">
+          <div class="px-3 py-1 text-[12px] uppercase tracking-wide text-slate-500">Eventos</div>
+          <div class="grid gap-1 pl-1">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="seminarios.html">Seminarios</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#encuentros">Encuentros</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="conversatorios.html">Conversatorios</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="conferencias.html">Conferencias</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#ciclos-dialogos">Ciclos de diálogos</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#ciclos-mesas">Ciclos de mesas</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#jornadas">Jornadas</a>
+          </div>
+        </li>
+        <li class="pt-1">
+          <div class="px-3 py-1 text-[12px] uppercase tracking-wide text-slate-500">Multimedia</div>
+          <div class="grid gap-1 pl-1">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="medios">En los medios</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="podcast.html">Podcast</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="entrevistas">Entrevistas</a>
+          </div>
+        </li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="organizacion.html">Organización</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="courses.html">Cursos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="int.html">Internacionalización</a></li>
+      </ul>
+    </nav>
   </header>
 
   <!-- Hero -->
@@ -212,13 +171,11 @@
           Diseñamos investigación aplicada, formamos comunidad académica y abrimos datos para fortalecer la toma de decisiones en Santa Cruz y Bolivia. Nuestro trabajo integra <strong>política comparada</strong>, <strong>economía del comportamiento</strong>, <strong>análisis de datos avanzados</strong> y <strong>análisis neoinstitucional</strong>.
         </p>
         <div class="mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-          <!-- GitHub repo -->
           <a href="https://github.com/criuagrm" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold shadow hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 transition w-full sm:w-auto justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.4c0 5.27 3.42 9.73 8.17 11.31.6.11.82-.26.82-.58 0-.29-.01-1.05-.02-2.06-3.33.73-4.03-1.62-4.03-1.62-.55-1.43-1.34-1.81-1.34-1.81-1.1-.77.08-.76.08-.76 1.21.09 1.85 1.25 1.85 1.25 1.08 1.88 2.83 1.34 3.52 1.03.11-.8.42-1.34.76-1.65-2.66-.3-5.46-1.36-5.46-6.07 0-1.34.46-2.44 1.22-3.3-.12-.3-.53-1.52.12-3.17 0 0 1.01-.33 3.31 1.26.96-.27 1.98-.4 3-.41 1.02 0 2.04.14 3 .41 2.3-1.59 3.31-1.26 3.31-1.26.65 1.65.24 2.87.12 3.17.76.86 1.22 1.96 1.22 3.3 0 4.72-2.81 5.76-5.49 6.06.43.38.81 1.12.81 2.26 0 1.63-.02 2.95-.02 3.36 0 .32.22.7.83.58A11.51 11.51 0 0 0 23.5 12.4 11.5 11.5 0 0 0 12 .5Z"/></svg>
             <span>GitHub</span>
           </a>
 
-          <!-- Botón Laboratorio (se mantiene llamativo) -->
           <a href="#laboratorio" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 transition w-full sm:w-auto justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M9 3h6M10 3v5l-5 9a4 4 0 003.5 6h6a4 4 0 003.5-6l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -226,7 +183,6 @@
             <span>Laboratorio</span>
           </a>
 
-          <!-- Botón Incubadora -->
           <a href="incubadora.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition w-full sm:w-auto justify-center">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.6L12 15.8 7.1 17.3 8 11.7 4 7.8l5.5-.8L12 2Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -494,42 +450,33 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menú móvil robusto
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
+    // ===== Menú móvil sencillo =====
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-    function openMenu() {
-      wrap.classList.remove('hidden');
-      wrap.setAttribute('aria-hidden', 'false');
-      openBtn.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeMenu() {
-      wrap.setAttribute('aria-hidden', 'true');
-      openBtn.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-      // esperar al final de la animación para ocultar el contenedor
-      setTimeout(() => wrap.classList.add('hidden'), 300);
+    function toggleMenu(forceOpen = null) {
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
+      else btnOpen.focus();
     }
 
-    openBtn.addEventListener('click', openMenu);
-    closeBtn.addEventListener('click', closeMenu);
-    backdrop.addEventListener('click', closeMenu);
+    btnOpen.addEventListener('click', () => toggleMenu());
 
     // Cerrar con Escape
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
 
-    // Cerrar al hacer click en cualquier enlace dentro del panel (soporta clicks en hijos)
-    wrap.addEventListener('click', (e) => {
+    // Cerrar al hacer click en cualquier enlace del menú
+    mobileMenu.addEventListener('click', (e) => {
       const link = e.target.closest('a');
-      if (link) closeMenu();
+      if (link) toggleMenu(false);
     });
 
     // Si pasa a ancho md+ mientras está abierto, ciérralo
     const mq = window.matchMedia('(min-width: 768px)');
-    mq.addEventListener('change', (ev) => { if (ev.matches) closeMenu(); });
+    mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
   </script>
 </body>
 </html>
