@@ -1,585 +1,447 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Generador de marcos — CIRCPyCS</title>
+  <title>CIRCPyCS — Visor de Imágenes</title>
+  <meta name="description" content="Galería y visor de imágenes del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
+  <meta name="color-scheme" content="dark light" />
   <style>
     :root{
-      --brand:#003366; /* azul CIRCPyCS */
-      --ink:#0f172a;   /* texto oscuro */
-      --paper:#ffffff; /* blanco */
-      --bg:#0b1220;    /* fondo app */
-      --panel:#121a2b; /* panel controles */
-      --soft:0 12px 30px rgba(2,6,23,.28);
+      --brand-blue:#313657; /* azul institucional */
+      --brand-red:#d20b18;  /* rojo institucional */
+      --brand-green:#007a3d;/* verde institucional */
+      --ink:#e6eef7;     /* texto */
+      --muted:#aab4d2;   /* secundario */
+      --bg:#0b1220;      /* fondo */
+      --panel:#0f1730;   /* tarjetas */
+      --line:rgba(255,255,255,.08);
+      --soft:0 10px 32px rgba(2,6,23,.28);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,#0b1220,#0e1526);color:#e6eef7;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .app{display:grid;grid-template-columns:360px 1fr;min-height:100%;}
-    aside{background:var(--panel);padding:18px 16px 16px;border-right:1px solid rgba(255,255,255,.06)}
-    main{display:flex;flex-direction:column}
-    header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
-    header .badge{width:36px;height:36px;border-radius:10px;background:var(--brand);display:grid;place-items:center;font-weight:800}
-    h1{font-size:16px;margin:0}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,var(--bg),#111a33 60%, var(--bg));color:var(--ink)}
+    a{color:inherit}
+    header{position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.1) blur(10px);background:linear-gradient(180deg,rgba(17,25,46,.9),rgba(17,25,46,.6));border-bottom:1px solid var(--line)}
+    .wrap{max-width:1200px;margin:0 auto;padding:14px 16px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:conic-gradient(from 210deg,var(--brand-blue), var(--brand-red) 40%, var(--brand-green) 80%, var(--brand-blue));border:1px solid var(--line)}
+    .title{font-weight:800;letter-spacing:.4px}
 
-    .controls{display:grid;gap:14px}
-    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    label{display:block;font-size:12px;color:#a5b4c7;margin:6px 0}
-    input[type="text"], select, input[type="number"]{
-      width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.04);border-radius:10px;color:#e6eef7
-    }
-    input[type="range"]{width:100%}
-    input[type="file"]{width:100%}
-    button{appearance:none;border:0;background:var(--brand);color:#fff;font-weight:700;padding:11px 12px;border-radius:12px;box-shadow:var(--soft);cursor:pointer}
-    button.secondary{background:transparent;border:1px solid rgba(255,255,255,.16);color:#d7e2f3}
-    button:disabled{opacity:.45;cursor:not-allowed}
+    .tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+    .pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+    .search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+    .search input{flex:1;background:transparent;border:0;outline:0;color:var(--ink)}
+    .select{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink)}
+    #toggleFrame{accent-color:var(--brand-red)}
+    #styleSel{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink)}
+    #overlayText{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--ink);min-width:240px}
 
-    .stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;padding:16px}
-    .canvasWrap{position:relative;background:#101827;border:1px dashed rgba(255,255,255,.2);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-    .canvasWrap .live{position:relative;overflow:hidden;border-radius:14px}
-    .hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:12px;color:#9fb3cc;background:rgba(0,0,0,.4);padding:6px 10px;border-radius:10px}
+    main{max-width:1200px;margin:16px auto 40px;padding:0 16px}
+    /* Masonry con columnas */
+    .gallery{columns:1;column-gap:14px}
+    @media(min-width:540px){.gallery{columns:2}}
+    @media(min-width:900px){.gallery{columns:3}}
+    @media(min-width:1200px){.gallery{columns:4}}
+    .card{break-inside:avoid;margin:0 0 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--soft)}
+    .thumb{display:block;width:100%;height:auto;background:#0a0f1f}
+    .meta{padding:10px 12px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .meta h3{margin:0;font-size:14px;font-weight:700;letter-spacing:.2px}
+    .tags{display:flex;gap:6px;flex-wrap:wrap}
+    .tag{font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+    .btn{cursor:pointer;border:1px solid var(--line);background:linear-gradient(180deg, var(--brand-blue), #151c33);color:var(--ink);padding:8px 10px;border-radius:10px}
+    .btn:hover{border-color:rgba(255,255,255,.25)}
 
-    .footer{display:flex;gap:10px;padding:14px 18px;border-top:1px solid rgba(255,255,255,.06)}
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(5,8,16,.8);display:none;align-items:center;justify-content:center;padding:20px;z-index:40}
+    .lightbox.open{display:flex}
+    .viewer{position:relative;max-width:96vw;max-height:86vh;background:#0a0f1f;border:1px solid var(--line);border-radius:16px;box-shadow:var(--soft);overflow:hidden}
+    .viewer img{display:block;max-width:100%;max-height:86vh}
+    .frame-overlay{pointer-events:none;position:absolute;inset:0}
+    .vbar{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(9,14,28,.0),rgba(9,14,28,.9));padding:12px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+    .vbar .info{display:flex;gap:10px;align-items:center}
+    .vbar h3{margin:0;font-size:14px}
+    .chip{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 8px;background:rgba(255,255,255,.04)}
+    .navbtn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);cursor:pointer;display:grid;place-items:center}
+    .navbtn:hover{background:rgba(255,255,255,.12)}
+    .prev{left:-62px}
+    .next{right:-62px}
+    .close{position:absolute;top:-54px;right:0}
 
-    /* Hide scrollbars on number inputs */
-    input[type=number]::-webkit-outer-spin-button,
-    input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+    footer{max-width:1200px;margin:20px auto 40px;padding:0 16px;color:var(--muted);font-size:14px}
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside>
-      <header style="padding:0 0 12px 0;border:0">
-        <div class="badge">C</div>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
         <div>
-          <h1>CIRCPyCS — Generador</h1>
-          <div style="font-size:12px;color:#9fb3cc">Sube una foto, elige marco y descarga en PNG</div>
-        </div>
-      </header>
-      <div class="controls">
-        <div class="card">
-          <label>Imagen (JPG/PNG) — arrastra o selecciona</label>
-          <input id="uploader" type="file" accept="image/*" />
-          <div class="row">
-            <div>
-              <label>Marco</label>
-              <select id="frameSel">
-                <option value="classic">Clásico</option>
-                <option value="lateral">Lateral</option>
-                <option value="sello">Sello</option>
-              </select>
-            </div>
-            <div>
-              <label>Relación</label>
-              <select id="ratioSel">
-                <option value="1:1">1:1</option>
-                <option value="4:5">4:5</option>
-                <option value="16:9">16:9</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label>Exportar a</label>
-              <select id="sizeSel" title="Resolución base">
-                <option value="auto">Sugerida</option>
-                <option value="1080">Ancho 1080 px</option>
-                <option value="1920">Ancho 1920 px</option>
-                <option value="2560">Ancho 2560 px</option>
-                <option value="3840">Ancho 3840 px (4K)</option>
-              </select>
-            </div>
-            <div>
-              <label>Escala (DPI)</label>
-              <select id="scaleSel">
-                <option value="1">1×</option>
-                <option value="2" selected>2×</option>
-                <option value="3">3×</option>
-                <option value="4">4×</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="row">
-            <div>
-              <label>Zoom (rueda del mouse)</label>
-              <input id="zoomRange" type="range" min="0.2" max="4" step="0.01" value="1" />
-            </div>
-            <div>
-              <label>Rotación</label>
-              <input id="rotRange" type="range" min="-45" max="45" step="0.1" value="0" />
-            </div>
-          </div>
-          <div class="row">
-            <button id="fitBtn" class="secondary">Ajustar a marco</button>
-            <button id="resetBtn" class="secondary">Reiniciar vista</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <label>Título</label>
-          <input id="titleInput" type="text" placeholder="Centro de Investigación Regional en Ciencia Política..." value="CIRCPyCS — UAGRM" />
-          <label>Subtítulo</label>
-          <input id="subtitleInput" type="text" placeholder="Evento · Autor/Equipo · Fecha" value="Título del evento · Autor/Equipo · Fecha" />
-          <div class="row" style="margin-top:8px">
-            <button id="dlBtn">Descargar PNG</button>
-            <button id="dlTransparentBtn" class="secondary" title="Exporta sin foto (solo marco)">Solo marco</button>
-          </div>
-        </div>
-
-        <div style="font-size:12px;color:#9fb3cc">Consejos: arrastra para mover la foto. Usa la rueda para zoom. Mantén <code>Shift</code> para zoom más fino.</div>
-      </div>
-    </aside>
-
-    <main>
-      <header>
-        <div class="badge" style="background:#15233c">🖼️</div>
-        <div>
-          <div style="font-weight:700">Vista previa</div>
-          <div style="font-size:12px;color:#9fb3cc">Lo que ves es lo que se descarga (WYSIWYG)</div>
-        </div>
-      </header>
-      <div class="stage">
-        <div class="canvasWrap">
-          <div id="live" class="live" style="width:540px;height:540px">
-            <!-- Fondo (foto) -->
-            <img id="photo" alt="foto" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(1);transform-origin:center center;will-change:transform;user-select:none;pointer-events:none;display:none" />
-            <!-- Capa de marco (SVG inyectado) -->
-            <div id="overlay" style="position:absolute;inset:0"></div>
-          </div>
-          <div class="hint">Arrastra para mover · Rueda para zoom</div>
+          <div class="title">CIRCPyCS — Visor de Imágenes</div>
+          <div style="font-size:12px;color:var(--muted)">Galería institucional (eventos, publicaciones, proyectos)</div>
         </div>
       </div>
-      <div class="footer">
-        <div style="font-size:12px;color:#9fb3cc">© CIRCPyCS · Exportación con suavizado de alta calidad</div>
+      <div class="tools" role="region" aria-label="Herramientas de filtrado y búsqueda">
+        <div class="search" style="flex:1">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/></svg>
+          <input id="q" type="search" placeholder="Buscar por título, etiqueta..." aria-label="Buscar" />
+        </div>
+        <select id="category" class="select" aria-label="Filtrar por categoría">
+          <option value="">Todas las categorías</option>
+          <option>Eventos</option>
+          <option>Publicaciones</option>
+          <option>Proyectos</option>
+          <option>Equipo</option>
+          <option>Comunicados</option>
+          <option>Multimedia</option>
+        </select>
+        <select id="sort" class="select" aria-label="Ordenar">
+          <option value="new">Más recientes</option>
+          <option value="old">Más antiguas</option>
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+        </select>
+        <label class="pill" style="cursor:pointer"><input id="toggleFrame" type="checkbox" style="margin-right:6px"> Marcos</label>
+        <select id="styleSel" aria-label="Estilo de marco">
+          <option value="clasico">Clásico (borde + esquinas)</option>
+          <option value="homenaje_bottom" selected>Homenaje — Banda inferior</option>
+          <option value="homenaje_top">Homenaje — Cinta superior</option>
+          <option value="logo_corner">Placa con logo</option>
+          <option value="lateral_verde">Lateral verde</option>
+        </select>
+        <input id="overlayText" type="text" value="Homenaje Isaac Sandoval Rodriguez" aria-label="Texto del homenaje" />
       </div>
-    </main>
+    </div>
+  </header>
+
+  <main>
+    <div id="gallery" class="gallery" aria-live="polite"></div>
+  </main>
+
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="btn close" id="close">Cerrar ✕</button>
+    <button class="navbtn prev" id="prev" aria-label="Anterior">‹</button>
+    <div class="viewer">
+      <img id="viewImg" alt="" />
+      <!-- Marco SVG superpuesto -->
+      <svg id="frameOverlay" class="frame-overlay" viewBox="0 0 1080 1080" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="vbar">
+        <div class="info">
+          <h3 id="viewTitle"></h3>
+          <span id="viewCat" class="chip"></span>
+          <span id="viewDate" class="chip"></span>
+        </div>
+        <div class="actions" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <a id="downloadOriginal" class="btn" download>Descargar original</a>
+          <button id="downloadFramed" class="btn" style="background:linear-gradient(180deg,var(--brand-green), #152a1f)">Descargar con marco (1080×1080)</button>
+          <button id="copyLink" class="btn" style="background:linear-gradient(180deg,var(--brand-red), #2a1518)">Copiar enlace</button>
+          <label class="pill" style="gap:6px"><input id="toggleLogo" type="checkbox" checked> Incluir logo</label>
+        </div>
+      </div>
+    </div>
+    <button class="navbtn next" id="next" aria-label="Siguiente">›</button>
   </div>
 
-  <!-- ===================== SVG TEMPLATES ===================== -->
-  <template id="tpl-classic-1:1"><![CDATA[
-  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+  <footer>
+    <p><strong>Nota CORS:</strong> esta demo usa imágenes de Imgur. Para que <em>Descargar con marco</em> funcione siempre, sirve las imágenes y el logo desde el <em>mismo dominio</em> o un CDN con cabeceras adecuadas.</p>
+  </footer>
+
+<script>
+// ====== Datos (tus 10 imágenes) ======
+const IMAGES = [
+  { id:'img-01', title:'Imagen 01', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/8tollmf.png', alt:'CIRCPyCS imagen 01' },
+  { id:'img-02', title:'Imagen 02', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/7r6LiSe.png', alt:'CIRCPyCS imagen 02' },
+  { id:'img-03', title:'Imagen 03', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/tQmgrdh.png', alt:'CIRCPyCS imagen 03' },
+  { id:'img-04', title:'Imagen 04', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/zOI3noF.png', alt:'CIRCPyCS imagen 04' },
+  { id:'img-05', title:'Imagen 05', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/O8foZ29.png', alt:'CIRCPyCS imagen 05' },
+  { id:'img-06', title:'Imagen 06', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/bIovVhP.png', alt:'CIRCPyCS imagen 06' },
+  { id:'img-07', title:'Imagen 07', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/hHh0f8Y.png', alt:'CIRCPyCS imagen 07' },
+  { id:'img-08', title:'Imagen 08', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/6AWeyPq.png', alt:'CIRCPyCS imagen 08' },
+  { id:'img-09', title:'Imagen 09', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/yFoCxxb.png', alt:'CIRCPyCS imagen 09' },
+  { id:'img-10', title:'Imagen 10', category:'Multimedia', date:'2025-08-22', tags:['CIRCPyCS'], src:'https://i.imgur.com/gCLtpg4.png', alt:'CIRCPyCS imagen 10' }
+];
+
+// ====== Config ======
+const LOGO_URL = 'https://i.imgur.com/EpgiEcN.png';
+
+// ====== Utilidades ======
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function formatDate(iso){
+  const d = new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('es-BO', {year:'numeric', month:'short', day:'2-digit'});
+}
+
+function slug(s){
+  const stripped = s.toLowerCase().normalize('NFD').split('').filter(ch => {
+    const code = ch.charCodeAt(0);
+    return !(code >= 0x300 && code <= 0x36f);
+  }).join('');
+  return stripped.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+
+// ====== Render de galería ======
+const gallery = $('#gallery');
+let filtered = [...IMAGES];
+
+function renderGallery(){
+  gallery.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  filtered.forEach((it, idx)=>{
+    const card = document.createElement('article');
+    card.className = 'card';
+
+    const img = document.createElement('img');
+    img.className = 'thumb';
+    img.loading = 'lazy';
+    img.alt = it.alt || it.title;
+    img.src = it.src;
+    img.addEventListener('click', ()=> openViewer(idx));
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+
+    const h3 = document.createElement('h3');
+    h3.textContent = it.title;
+
+    const tags = document.createElement('div');
+    tags.className = 'tags';
+    const t1 = document.createElement('span'); t1.className='tag'; t1.textContent = it.category; tags.appendChild(t1);
+    const t2 = document.createElement('span'); t2.className='tag'; t2.textContent = formatDate(it.date); tags.appendChild(t2);
+
+    meta.appendChild(h3); meta.appendChild(tags);
+
+    card.appendChild(img);
+    card.appendChild(meta);
+    frag.appendChild(card);
+  });
+  gallery.appendChild(frag);
+}
+
+// ====== Filtros y orden ======
+const q = $('#q');
+const category = $('#category');
+const sort = $('#sort');
+
+function applyFilters(){
+  const term = q.value.trim().toLowerCase();
+  const cat = category.value;
+  filtered = IMAGES.filter(it => {
+    const okCat = !cat || it.category === cat;
+    const haystack = `${it.title} ${(it.tags||[]).join(' ')}`.toLowerCase();
+    const okTerm = !term || haystack.includes(term);
+    return okCat && okTerm;
+  });
+  applySort();
+}
+
+function applySort(){
+  const s = sort.value;
+  filtered.sort((a,b)=>{
+    if(s==='new') return b.date.localeCompare(a.date);
+    if(s==='old') return a.date.localeCompare(b.date);
+    if(s==='az') return a.title.localeCompare(b.title);
+    if(s==='za') return b.title.localeCompare(a.title);
+    return 0;
+  });
+  renderGallery();
+}
+
+q.addEventListener('input', applyFilters);
+category.addEventListener('change', applyFilters);
+sort.addEventListener('change', applySort);
+
+// ====== Lightbox / Visor ======
+const lightbox = $('#lightbox');
+const viewImg = $('#viewImg');
+const viewTitle = $('#viewTitle');
+const viewCat = $('#viewCat');
+const viewDate = $('#viewDate');
+const downloadOriginal = $('#downloadOriginal');
+const toggleFrame = $('#toggleFrame');
+const frameOverlay = $('#frameOverlay');
+const styleSel = $('#styleSel');
+const overlayText = $('#overlayText');
+const toggleLogo = $('#toggleLogo');
+let currentIndex = 0;
+
+// ====== Marcos ======
+function overlaySVG(style, text, includeExternalLogo = true){
+  const esc = (s)=> (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const logoTag = includeExternalLogo ? `<image href="${LOGO_URL}" x="32" y="32" width="96" height="96" preserveAspectRatio="xMidYMid meet"/>` : '';
+
+  if(style==='clasico'){
+    return `
     <defs>
-      <linearGradient id="gradBottom" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--brand)" stop-opacity="0.92"/>
-        <stop offset="100%" stop-color="#00264d" stop-opacity="0.98"/>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--brand-green').trim()}"/>
+        <stop offset="1" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--brand-blue').trim()}"/>
       </linearGradient>
-      <clipPath id="clip">
-        <rect x="12" y="12" width="1056" height="1056" rx="28" ry="28"/>
-      </clipPath>
     </defs>
-    <rect x="12" y="12" width="1056" height="1056" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="8"/>
-    <g clip-path="url(#clip)">
-      <rect x="0" y="900" width="1080" height="180" fill="url(#gradBottom)"/>
-      <g>
-        <rect x="36" y="36" width="280" height="120" rx="16" fill="var(--paper)"/>
-        <rect x="52" y="52" width="88" height="88" rx="12" fill="var(--brand)"/>
-        <text x="152" y="105" font-size="36" font-weight="700" fill="var(--ink)">CIRCPyCS</text>
-      </g>
-      <text x="48" y="972" fill="#ffffff" font-size="36" font-weight="700">{{TITLE}}</text>
-      <text x="48" y="1016" fill="#e6eef7" font-size="26">{{SUBTITLE}}</text>
+    <rect x="22" y="22" width="1036" height="1036" rx="34" fill="none" stroke="url(#g1)" stroke-width="20"/>
+    <g fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--brand-red').trim()}" stroke-width="8" stroke-linecap="round">
+      <path d="M80 240 V120 H240"/>
+      <path d="M1000 240 V120 H840"/>
+      <path d="M80 840 V960 H240"/>
+      <path d="M1000 840 V960 H840"/>
     </g>
-  </svg>
-  ]]></template>
+    <text x="1040" y="1046" text-anchor="end" fill="#e6eef7" font-size="28" font-weight="700" style="letter-spacing:.8px">CIRCPyCS</text>`;
+  }
+  if(style==='homenaje_bottom'){
+    return `
+    <rect x="0" y="920" width="1080" height="160" fill="${getComputedStyle(document.documentElement).getPropertyValue('--brand-blue').trim()}"/>
+    <rect x="0" y="918" width="1080" height="3" fill="${getComputedStyle(document.documentElement).getPropertyValue('--brand-red').trim()}"/>
+    ${logoTag}
+    <text x="540" y="1000" text-anchor="middle" fill="#ffffff" font-size="44" font-weight="800">${esc(text)}</text>
+    <text x="540" y="1050" text-anchor="middle" fill="#aab4d2" font-size="26" font-weight="600">CIRCPyCS · UAGRM</text>`;
+  }
+  if(style==='homenaje_top'){
+    return `
+    <polygon points="0,0 1080,0 1080,180 0,120" fill="${getComputedStyle(document.documentElement).getPropertyValue('--brand-red').trim()}"/>
+    ${logoTag.replace('x="32"','x="952"')}
+    <text x="60" y="110" fill="#ffffff" font-size="48" font-weight="900">${esc(text)}</text>
+    <text x="60" y="150" fill="#ffe1e4" font-size="24" font-weight="700">CIRCPyCS · UAGRM</text>`;
+  }
+  if(style==='logo_corner'){
+    return `
+    <rect x="24" y="24" width="440" height="120" rx="18" fill="rgba(10,15,31,.75)" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--brand-green').trim()}"/>
+    ${logoTag}
+    <text x="140" y="86" fill="#e6eef7" font-size="34" font-weight="800">${esc(text)}</text>`;
+  }
+  if(style==='lateral_verde'){
+    return `
+    <rect x="0" y="0" width="140" height="1080" fill="${getComputedStyle(document.documentElement).getPropertyValue('--brand-green').trim()}"/>
+    ${logoTag}
+    <text transform="translate(30,1040) rotate(-90)" fill="#e6eef7" font-size="40" font-weight="900">${esc(text)}</text>
+    <text transform="translate(90,1000) rotate(-90)" fill="#cfe9d8" font-size="22" font-weight="700">CIRCPyCS · UAGRM</text>`;
+  }
+  return '';
+}
 
-  <template id="tpl-classic-4:5"><![CDATA[
-  <svg viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="gradBottom45" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--brand)" stop-opacity="0.92"/>
-        <stop offset="100%" stop-color="#00264d" stop-opacity="0.98"/>
-      </linearGradient>
-      <clipPath id="clip">
-        <rect x="12" y="12" width="1056" height="1326" rx="28" ry="28"/>
-      </clipPath>
-    </defs>
-    <rect x="12" y="12" width="1056" height="1326" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="8"/>
-    <g clip-path="url(#clip)">
-      <rect x="0" y="1150" width="1080" height="200" fill="url(#gradBottom45)"/>
-      <g>
-        <rect x="36" y="36" width="300" height="120" rx="16" fill="var(--paper)"/>
-        <rect x="52" y="52" width="88" height="88" rx="12" fill="var(--brand)"/>
-        <text x="152" y="105" font-size="36" font-weight="700" fill="var(--ink)">CIRCPyCS</text>
-      </g>
-      <text x="48" y="1216" fill="#ffffff" font-size="38" font-weight="700">{{TITLE}}</text>
-      <text x="48" y="1260" fill="#e6eef7" font-size="26">{{SUBTITLE}}</text>
-    </g>
-  </svg>
-  ]]></template>
+function updateOverlay(){
+  if(!toggleFrame.checked){ frameOverlay.style.display='none'; return; }
+  frameOverlay.style.display='block';
+  const svgInner = overlaySVG(styleSel.value, overlayText.value, toggleLogo.checked);
+  frameOverlay.innerHTML = svgInner; // contenido <g> por piezas
+}
 
-  <template id="tpl-classic-16:9"><![CDATA[
-  <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="gradBottom169" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--brand)" stop-opacity="0.92"/>
-        <stop offset="100%" stop-color="#00264d" stop-opacity="0.98"/>
-      </linearGradient>
-      <clipPath id="clip">
-        <rect x="16" y="16" width="1888" height="1048" rx="28" ry="28"/>
-      </clipPath>
-    </defs>
-    <rect x="16" y="16" width="1888" height="1048" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="8"/>
-    <g clip-path="url(#clip)">
-      <rect x="0" y="900" width="1920" height="180" fill="url(#gradBottom169)"/>
-      <g>
-        <rect x="36" y="36" width="320" height="120" rx="16" fill="var(--paper)"/>
-        <rect x="52" y="52" width="88" height="88" rx="12" fill="var(--brand)"/>
-        <text x="154" y="104" font-size="40" font-weight="700" fill="var(--ink)">CIRCPyCS</text>
-      </g>
-      <text x="48" y="972" fill="#ffffff" font-size="40" font-weight="700">{{TITLE}}</text>
-      <text x="48" y="1018" fill="#e6eef7" font-size="28">{{SUBTITLE}}</text>
-    </g>
-  </svg>
-  ]]></template>
+function openViewer(idx){
+  currentIndex = idx;
+  const it = filtered[currentIndex];
+  viewImg.src = it.src;
+  viewImg.alt = it.alt || it.title;
+  viewTitle.textContent = it.title;
+  viewCat.textContent = it.category;
+  viewDate.textContent = formatDate(it.date);
+  downloadOriginal.href = it.src;
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden','false');
+  updateOverlay();
+  // URL compartible
+  const url = new URL(location.href); url.searchParams.set('id', it.id); history.replaceState(null,'',url);
+}
 
-  <template id="tpl-lateral-1:1"><![CDATA[
-  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="gradSide" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#001a33"/>
-        <stop offset="100%" stop-color="var(--brand)"/>
-      </linearGradient>
-      <clipPath id="clip"><rect x="12" y="12" width="1056" height="1056" rx="28" ry="28"/></clipPath>
-    </defs>
-    <rect x="12" y="12" width="1056" height="1056" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="8"/>
-    <g clip-path="url(#clip)">
-      <rect x="0" y="0" width="180" height="1080" fill="url(#gradSide)"/>
-      <rect x="36" y="36" width="108" height="108" rx="14" fill="var(--paper)"/>
-      <text x="90" y="106" text-anchor="middle" font-size="28" font-weight="800" fill="var(--brand)">C</text>
-      <g transform="translate(140,540) rotate(-90)">
-        <text x="0" y="0" fill="#ffffff" font-size="40" font-weight="700" text-anchor="middle" letter-spacing="2">CIRCPyCS — UAGRM</text>
-      </g>
-      <g transform="translate(660,900)">
-        <rect width="384" height="144" rx="16" fill="rgba(255,255,255,0.92)"/>
-        <text x="24" y="58" font-size="34" font-weight="700" fill="var(--ink)">{{TITLE}}</text>
-        <text x="24" y="98" font-size="24" fill="#334155">{{SUBTITLE}}</text>
-      </g>
-    </g>
-  </svg>
-  ]]></template>
+function closeViewer(){
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden','true');
+  const url = new URL(location.href); url.searchParams.delete('id'); history.replaceState(null,'',url);
+}
 
-  <template id="tpl-lateral-4:5"><![CDATA[
-  <svg viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="gradSide45" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#001a33"/>
-        <stop offset="100%" stop-color="var(--brand)"/>
-      </linearGradient>
-      <clipPath id="clip"><rect x="12" y="12" width="1056" height="1326" rx="28" ry="28"/></clipPath>
-    </defs>
-    <rect x="12" y="12" width="1056" height="1326" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="8"/>
-    <g clip-path="url(#clip)">
-      <rect x="0" y="0" width="180" height="1350" fill="url(#gradSide45)"/>
-      <rect x="36" y="36" width="116" height="116" rx="16" fill="var(--paper)"/>
-      <text x="94" y="108" text-anchor="middle" font-size="30" font-weight="800" fill="var(--brand)">C</text>
-      <g transform="translate(140,675) rotate(-90)">
-        <text x="0" y="0" fill="#ffffff" font-size="44" font-weight="700" text-anchor="middle" letter-spacing="2">CIRCPyCS — UAGRM</text>
-      </g>
-      <g transform="translate(600,1150)">
-        <rect width="456" height="156" rx="18" fill="rgba(255,255,255,0.92)"/>
-        <text x="24" y="64" font-size="36" font-weight="700" fill="var(--ink)">{{TITLE}}</text>
-        <text x="24" y="106" font-size="26" fill="#334155">{{SUBTITLE}}</text>
-      </g>
-    </g>
-  </svg>
-  ]]></template>
+$('#close').addEventListener('click', closeViewer);
+$('#prev').addEventListener('click', ()=> navigate(-1));
+$('#next').addEventListener('click', ()=> navigate(1));
 
-  <template id="tpl-lateral-16:9"><![CDATA[
-  <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="gradSide169" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#001a33"/>
-        <stop offset="100%" stop-color="var(--brand)"/>
-      </linearGradient>
-      <clipPath id="clip"><rect x="16" y="16" width="1888" height="1048" rx="28" ry="28"/></clipPath>
-    </defs>
-    <rect x="16" y="16" width="1888" height="1048" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="8"/>
-    <g clip-path="url(#clip)">
-      <rect x="0" y="0" width="240" height="1080" fill="url(#gradSide169)"/>
-      <rect x="36" y="36" width="136" height="136" rx="18" fill="var(--paper)"/>
-      <text x="104" y="118" text-anchor="middle" font-size="32" font-weight="800" fill="var(--brand)">C</text>
-      <g transform="translate(200,540) rotate(-90)">
-        <text x="0" y="0" fill="#ffffff" font-size="48" font-weight="700" text-anchor="middle" letter-spacing="2">CIRCPyCS — UAGRM</text>
-      </g>
-      <g transform="translate(1320,880)">
-        <rect width="520" height="160" rx="18" fill="rgba(255,255,255,0.92)"/>
-        <text x="24" y="66" font-size="38" font-weight="700" fill="var(--ink)">{{TITLE}}</text>
-        <text x="24" y="110" font-size="28" fill="#334155">{{SUBTITLE}}</text>
-      </g>
-    </g>
-  </svg>
-  ]]></template>
+function navigate(step){
+  if(!filtered.length) return;
+  currentIndex = (currentIndex + step + filtered.length) % filtered.length;
+  openViewer(currentIndex);
+}
 
-  <template id="tpl-sello-1:1"><![CDATA[
-  <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <clipPath id="clip"><rect x="12" y="12" width="1056" height="1056" rx="28" ry="28"/></clipPath>
-      <filter id="shadowBadge" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#001a33" flood-opacity="0.35"/>
-      </filter>
-    </defs>
-    <rect x="16" y="16" width="1048" height="1048" rx="28" ry="28" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 10"/>
-    <rect x="12" y="12" width="1056" height="1056" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="6"/>
-    <g clip-path="url(#clip)">
-      <g transform="translate(840,84)" filter="url(#shadowBadge)">
-        <circle cx="120" cy="120" r="120" fill="var(--brand)"/>
-        <circle cx="120" cy="120" r="108" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
-        <text x="120" y="112" text-anchor="middle" font-size="40" fill="#ffffff" font-weight="800">CIRCPyCS</text>
-        <text x="120" y="152" text-anchor="middle" font-size="22" fill="#e6eef7">UAGRM</text>
-      </g>
-      <g transform="translate(36,930)">
-        <rect width="520" height="96" rx="48" fill="rgba(0,26,51,.85)"/>
-        <text x="24" y="60" font-size="30" fill="#ffffff" font-weight="700">{{TITLE}}</text>
-      </g>
-      <text x="48" y="1016" fill="#e6eef7" font-size="24">{{SUBTITLE}}</text>
-    </g>
-  </svg>
-  ]]></template>
+// Teclado
+window.addEventListener('keydown', (e)=>{
+  if(lightbox.classList.contains('open')){
+    if(e.key==='Escape') closeViewer();
+    if(e.key==='ArrowLeft') navigate(-1);
+    if(e.key==='ArrowRight') navigate(1);
+  }
+});
 
-  <template id="tpl-sello-4:5"><![CDATA[
-  <svg viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <clipPath id="clip"><rect x="12" y="12" width="1056" height="1326" rx="28" ry="28"/></clipPath>
-      <filter id="shadowBadge" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#001a33" flood-opacity="0.35"/>
-      </filter>
-    </defs>
-    <rect x="16" y="16" width="1048" height="1318" rx="28" ry="28" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 10"/>
-    <rect x="12" y="12" width="1056" height="1326" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="6"/>
-    <g clip-path="url(#clip)">
-      <g transform="translate(804,84)" filter="url(#shadowBadge)">
-        <circle cx="120" cy="120" r="120" fill="var(--brand)"/>
-        <circle cx="120" cy="120" r="108" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
-        <text x="120" y="112" text-anchor="middle" font-size="40" fill="#ffffff" font-weight="800">CIRCPyCS</text>
-        <text x="120" y="152" text-anchor="middle" font-size="22" fill="#e6eef7">UAGRM</text>
-      </g>
-      <g transform="translate(36,1170)">
-        <rect width="680" height="102" rx="50" fill="rgba(0,26,51,.85)"/>
-        <text x="24" y="64" font-size="32" fill="#ffffff" font-weight="700">{{TITLE}}</text>
-      </g>
-      <text x="48" y="1252" fill="#e6eef7" font-size="26">{{SUBTITLE}}</text>
-    </g>
-  </svg>
-  ]]></template>
+// Clic fuera para cerrar
+lightbox.addEventListener('click', (e)=>{ if(e.target===lightbox) closeViewer(); });
 
-  <template id="tpl-sello-16:9"><![CDATA[
-  <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <clipPath id="clip"><rect x="16" y="16" width="1888" height="1048" rx="28" ry="28"/></clipPath>
-      <filter id="shadowBadge" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#001a33" flood-opacity="0.35"/>
-      </filter>
-    </defs>
-    <rect x="20" y="20" width="1880" height="1040" rx="28" ry="28" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="6 10"/>
-    <rect x="16" y="16" width="1888" height="1048" rx="28" ry="28" fill="none" stroke="var(--brand)" stroke-width="6"/>
-    <g clip-path="url(#clip)">
-      <g transform="translate(1640,84)" filter="url(#shadowBadge)">
-        <circle cx="120" cy="120" r="120" fill="var(--brand)"/>
-        <circle cx="120" cy="120" r="108" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.7"/>
-        <text x="120" y="112" text-anchor="middle" font-size="40" fill="#ffffff" font-weight="800">CIRCPyCS</text>
-        <text x="120" y="152" text-anchor="middle" font-size="22" fill="#e6eef7">UAGRM</text>
-      </g>
-      <g transform="translate(36,900)">
-        <rect width="800" height="108" rx="54" fill="rgba(0,26,51,.85)"/>
-        <text x="24" y="68" font-size="34" fill="#ffffff" font-weight="700">{{TITLE}}</text>
-      </g>
-      <text x="48" y="1000" fill="#e6eef7" font-size="26">{{SUBTITLE}}</text>
-    </g>
-  </svg>
-  ]]></template>
+// Controles de marco
+[toggleFrame, styleSel, overlayText, toggleLogo].forEach(el=> el.addEventListener('change', updateOverlay));
+overlayText.addEventListener('input', updateOverlay);
 
-  <script>
-  (function(){
-    const live = document.getElementById('live');
-    const photo = document.getElementById('photo');
-    const overlay = document.getElementById('overlay');
-    const uploader = document.getElementById('uploader');
-    const frameSel = document.getElementById('frameSel');
-    const ratioSel = document.getElementById('ratioSel');
-    const sizeSel  = document.getElementById('sizeSel');
-    const scaleSel = document.getElementById('scaleSel');
-    const titleInput = document.getElementById('titleInput');
-    const subtitleInput = document.getElementById('subtitleInput');
-    const zoomRange = document.getElementById('zoomRange');
-    const rotRange  = document.getElementById('rotRange');
-    const fitBtn = document.getElementById('fitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const dlBtn = document.getElementById('dlBtn');
-    const dlTransparentBtn = document.getElementById('dlTransparentBtn');
+// Copiar enlace
+$('#copyLink').addEventListener('click', async ()=>{
+  try{ await navigator.clipboard.writeText(location.href); alert('Enlace copiado'); }
+  catch{ alert('No se pudo copiar el enlace'); }
+});
 
-    const BASE = { '1:1': {w:1080,h:1080}, '4:5': {w:1080,h:1350}, '16:9': {w:1920,h:1080} };
+// Pre-carga del logo para composiciones
+let logoImg = null;
+(function preloadLogo(){
+  logoImg = new Image();
+  logoImg.crossOrigin = 'anonymous';
+  logoImg.src = LOGO_URL;
+})();
 
-    function tplId(frame, ratio){ return `tpl-${frame}-${ratio}`; }
+// Descargar con marco (1080×1080)
+$('#downloadFramed').addEventListener('click', async ()=>{
+  const it = filtered[currentIndex];
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = it.src;
+  await img.decode().catch(()=>{});
 
-    function buildSVG(frame, ratio, title, subtitle){
-      const t = document.getElementById(tplId(frame, ratio));
-      if(!t){ console.warn('Template no encontrado', frame, ratio); return ''; }
-      let svg = t.innerHTML.trim();
-      svg = svg.replaceAll('{{TITLE}}', escapeXML(title || ''))
-               .replaceAll('{{SUBTITLE}}', escapeXML(subtitle || ''));
-      return svg;
-    }
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 1080; canvas.height = 1080;
+  ctx.clearRect(0,0,1080,1080);
 
-    function escapeXML(str){
-      return String(str).replace(/[&<>"']/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&apos;"}[s]));
-    }
+  // cover
+  const s = Math.max(1080/img.naturalWidth, 1080/img.naturalHeight);
+  const w = img.naturalWidth*s, h = img.naturalHeight*s;
+  const x = (1080 - w)/2, y = (1080 - h)/2;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, x, y, w, h);
 
-    function setRatio(r){
-      const {w,h} = BASE[r];
-      const scale = 540 / Math.max(w,h) * (r==='4:5'? (540/675) : 1); // keep preview pleasant
-      let pw, ph;
-      if(r==='1:1'){ pw=540; ph=540; }
-      else if(r==='4:5'){ pw=540; ph=675; }
-      else { pw=960; ph=540; }
-      live.style.width = pw+'px';
-      live.style.height= ph+'px';
-      overlay.innerHTML = buildSVG(frameSel.value, r, titleInput.value, subtitleInput.value);
-    }
+  // Dibuja overlay (sin logo) como SVG raster
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">${overlaySVG(styleSel.value, overlayText.value, false)}</svg>`;
+  const blob = new Blob([svg], {type:'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const overlayImg = new Image();
+  await new Promise(res=>{ overlayImg.onload=()=>res(); overlayImg.src = url; });
+  ctx.drawImage(overlayImg, 0, 0, 1080, 1080);
+  URL.revokeObjectURL(url);
 
-    function updateOverlay(){
-      overlay.innerHTML = buildSVG(frameSel.value, ratioSel.value, titleInput.value, subtitleInput.value);
-    }
+  // Dibuja logo si procede
+  if(toggleLogo.checked && logoImg && logoImg.complete){
+    const style = styleSel.value;
+    if(style==='homenaje_bottom'){ ctx.drawImage(logoImg, 32, 932, 96, 96); }
+    if(style==='homenaje_top'){ ctx.drawImage(logoImg, 952, 24, 96, 96); }
+    if(style==='logo_corner'){ ctx.drawImage(logoImg, 32, 32, 96, 96); }
+    if(style==='lateral_verde'){ ctx.drawImage(logoImg, 22, 24, 96, 96); }
+  }
 
-    // Photo state
-    const state = { scale:1, rot:0, dx:0, dy:0, img:null };
+  // descarga
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = slug(it.title)+"_CIRCPyCS_1080.png";
+  a.click();
+});
 
-    function applyTransform(){
-      if(!state.img){ photo.style.display='none'; return; }
-      photo.style.display='block';
-      photo.style.transform = `translate(calc(-50% + ${state.dx}px), calc(-50% + ${state.dy}px)) rotate(${state.rot}deg) scale(${state.scale})`;
-    }
+// Soporte para abrir por ?id=
+(function initFromURL(){
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if(id){ const idx = filtered.findIndex(it=> it.id===id); if(idx>=0){ openViewer(idx); } }
+})();
 
-    // Fit image to cover the frame
-    function fitToFrame(){
-      if(!state.img) return;
-      const r = ratioSel.value; const {w,h} = BASE[r];
-      const frameRatio = w/h;
-      const imgRatio = state.img.naturalWidth/state.img.naturalHeight;
-      if(imgRatio > frameRatio){ // image wider -> fit height
-        state.scale = (h / state.img.naturalHeight);
-      } else {
-        state.scale = (w / state.img.naturalWidth);
-      }
-      // scale down for preview dimensions
-      const prevW = live.clientWidth, prevH = live.clientHeight;
-      const kx = prevW / w, ky = prevH / h; const k = Math.max(kx,ky);
-      state.scale *= k; state.dx = 0; state.dy = 0; state.rot = 0;
-      zoomRange.value = 1; rotRange.value = 0;
-      applyTransform();
-    }
-
-    function resetView(){ if(!state.img) return; state.scale=1; state.dx=state.dy=0; state.rot=0; zoomRange.value=1; rotRange.value=0; applyTransform(); }
-
-    // Drag handling
-    let dragging=false, lastX=0, lastY=0;
-    live.addEventListener('mousedown', e=>{ dragging=true; lastX=e.clientX; lastY=e.clientY; });
-    window.addEventListener('mouseup', ()=> dragging=false);
-    window.addEventListener('mousemove', e=>{
-      if(!dragging || !state.img) return;
-      state.dx += (e.clientX-lastX); state.dy += (e.clientY-lastY);
-      lastX=e.clientX; lastY=e.clientY; applyTransform();
-    });
-
-    // Wheel zoom
-    live.addEventListener('wheel', e=>{
-      if(!state.img) return; e.preventDefault();
-      const delta = Math.sign(e.deltaY) * (e.shiftKey? 0.02 : 0.08);
-      state.scale = Math.min(4, Math.max(0.2, state.scale*(1 - delta)));
-      zoomRange.value = state.scale; applyTransform();
-    }, {passive:false});
-
-    zoomRange.addEventListener('input', ()=>{ state.scale = parseFloat(zoomRange.value); applyTransform(); });
-    rotRange.addEventListener('input', ()=>{ state.rot = parseFloat(rotRange.value); applyTransform(); });
-
-    frameSel.addEventListener('change', ()=>{ updateOverlay(); });
-    ratioSel.addEventListener('change', ()=>{ setRatio(ratioSel.value); fitToFrame(); });
-    titleInput.addEventListener('input', updateOverlay);
-    subtitleInput.addEventListener('input', updateOverlay);
-
-    fitBtn.addEventListener('click', (e)=>{ e.preventDefault(); fitToFrame(); });
-    resetBtn.addEventListener('click', (e)=>{ e.preventDefault(); resetView(); });
-
-    // Upload
-    uploader.addEventListener('change', (e)=>{
-      const f = e.target.files && e.target.files[0]; if(!f) return;
-      const url = URL.createObjectURL(f);
-      const img = new Image();
-      img.onload = ()=>{
-        URL.revokeObjectURL(url);
-        state.img = img; photo.src = img.src; applyTransform(); fitToFrame();
-      };
-      img.src = url;
-    });
-
-    // Exporter
-    async function exportPNG({transparent=false}={}){
-      const r = ratioSel.value; const {w,h} = BASE[r];
-      const scale = parseInt(scaleSel.value,10) || 1;
-      let targetW;
-      if(sizeSel.value==='auto') targetW = (r==='16:9'?1920:1080);
-      else targetW = parseInt(sizeSel.value,10);
-      const targetH = Math.round(targetW * (h/w));
-
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.round(targetW*scale);
-      canvas.height= Math.round(targetH*scale);
-      const ctx = canvas.getContext('2d');
-      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-
-      // Draw photo
-      if(!transparent && state.img){
-        // Map preview transform into output pixels
-        // Compute scale from natural to preview, then to output
-        const prevW = live.clientWidth, prevH = live.clientHeight;
-        const kx = prevW / w, ky = prevH / h; const k = Math.max(kx,ky);
-        const baseScale = k; // preview pixels per SVG unit
-        const totalScale = state.scale / baseScale; // relative to SVG units
-
-        const cx = (canvas.width)/2 + state.dx*scale*(targetW/prevW);
-        const cy = (canvas.height)/2 + state.dy*scale*(targetH/prevH);
-
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(state.rot*Math.PI/180);
-        ctx.scale(totalScale*scale*(targetW/targetW), totalScale*scale*(targetH/targetH));
-        const iw = state.img.naturalWidth, ih = state.img.naturalHeight;
-        ctx.drawImage(state.img, -iw/2, -ih/2, iw, ih);
-        ctx.restore();
-      } else {
-        // transparent background
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-      }
-
-      // Draw overlay SVG
-      const svgText = buildSVG(frameSel.value, r, titleInput.value, subtitleInput.value)
-        .replace('<svg', `<svg xmlns=\"http://www.w3.org/2000/svg\"`)
-        .replace('</svg>','</svg>');
-      const blob = new Blob([svgText], {type:'image/svg+xml'});
-      const url = URL.createObjectURL(blob);
-      await new Promise((res,rej)=>{
-        const img = new Image();
-        img.onload = ()=>{ ctx.drawImage(img, 0, 0, canvas.width, canvas.height); URL.revokeObjectURL(url); res(); };
-        img.onerror = rej; img.src = url;
-      });
-
-      const pngURL = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
-      a.download = `CIRCPyCS_${frameSel.value}_${r}_${targetW}w_${scale}x_${stamp}.png`;
-      a.href = pngURL; a.click();
-    }
-
-    dlBtn.addEventListener('click', (e)=>{ e.preventDefault(); exportPNG({transparent:false}); });
-    dlTransparentBtn.addEventListener('click', (e)=>{ e.preventDefault(); exportPNG({transparent:true}); });
-
-    // init
-    setRatio(ratioSel.value); updateOverlay();
-  })();
-  </script>
+// Inicializar
+a pplyFilters();
+</script>
 </body>
 </html>
