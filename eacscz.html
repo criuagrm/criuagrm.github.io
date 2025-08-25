@@ -45,6 +45,26 @@
     .org-branch { position:relative; }
     .org-branch::before { content:""; position:absolute; top:-12px; left:50%; transform:translateX(-50%); width:2px; height:12px; background:#003366; }
     @media (min-width:768px){ .org-children.grid::before{display:none} }
+
+    /* ===== Dropdown móvil bajo el header (modelo sencillo) ===== */
+    /* Que las anclas no queden ocultas por el header fijo */
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    /* Toggle iconos del botón móvil */
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+
+    /* Scroll propio del menú móvil (altura = viewport - header) */
+    #mobile-menu{
+      --header-h: 64px; /* fallback si JS no corre */
+      max-height: calc(100vh - var(--header-h));
+      max-height: calc(100svh - var(--header-h));
+      max-height: calc(100dvh - var(--header-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-bgbase text-textbase font-sans">
@@ -71,40 +91,31 @@
         <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
       </nav>
 
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/20">
+      <!-- Botón móvil (dropdown sencillo) -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/20"
+              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block" aria-hidden="true">
           <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
 
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white text-primary shadow-2xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
-            <span class="font-semibold">CIRCPyCS</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-zinc-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#institucion">Institución</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#organizacion">Organización</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#informes-eac">Informes EAC</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#proyectos">Proyectos</a></li>
-          <li class="pt-2 mt-2 border-t border-zinc-200"><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
-        </ul>
-      </nav>
-    </div>
+    <!-- Menú móvil sencillo (dropdown bajo el header) -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.06)]" aria-label="Navegación móvil">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#institucion">Institución</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#organizacion">Organización</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#informes-eac">Informes EAC</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="#proyectos">Proyectos</a></li>
+        <li class="pt-2 mt-2 border-t border-zinc-200">
+          <a class="block px-3 py-2 rounded-lg hover:bg-zinc-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a>
+        </li>
+      </ul>
+    </nav>
   </header>
 
   <!-- HERO -->
@@ -275,7 +286,7 @@
         </div>
         <div class="rounded-xl2 bg-white border border-borderc p-6 shadow-soft text-center">
           <h5 class="font-semibold text-brand">Coyuntura Económica</h5>
-          <p class="mt-2 text-sm text-secondary">Crisis post‑pandemia y reactivación productiva.</p>
+          <p class="mt-2 text-sm text-secondary">Crisis post-pandemia y reactivación productiva.</p>
         </div>
         <div class="rounded-xl2 bg-white border border-borderc p-6 shadow-soft text-center">
           <h5 class="font-semibold text-brand">Coyuntura Social</h5>
@@ -318,20 +329,51 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-    openBtn?.addEventListener('click', openMenu);
-    closeBtn?.addEventListener('click', closeMenu);
-    backdrop?.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    // ===== Menú móvil sencillo con scroll propio =====
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
 
-    // Carrusel simple (vanilla)
+    function setHeaderVar(){
+      const h = headerEl.getBoundingClientRect().height || 64;
+      mobileMenu.style.setProperty('--header-h', h + 'px');
+    }
+
+    function toggleMenu(forceOpen = null) {
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();                 // calcula altura disponible
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      // Bloquea el body para que sólo se desplace el menú
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) {
+        setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
+      } else {
+        btnOpen.focus();
+      }
+    }
+
+    btnOpen.addEventListener('click', () => toggleMenu());
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
+
+    // Cerrar al hacer click en cualquier enlace del menú
+    mobileMenu.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link) toggleMenu(false);
+    });
+
+    // Recalcular al redimensionar/orientación
+    window.addEventListener('resize', () => {
+      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
+    });
+
+    // Si pasa a ancho md+ mientras está abierto, ciérralo
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
+
+    // ===== Carrusel simple (vanilla) =====
     const slider = document.getElementById('slider');
     const slides = Array.from(slider.querySelectorAll('img'));
     const dotsWrap = document.getElementById('dots');
@@ -347,9 +389,7 @@
     });
 
     function render(){
-      slides.forEach((el, i)=>{
-        el.style.opacity = i===idx ? 1 : 0;
-      });
+      slides.forEach((el, i)=>{ el.style.opacity = i===idx ? 1 : 0; });
       dotsWrap.querySelectorAll('button').forEach((d, i)=>{
         d.style.opacity = i===idx ? '1' : '.6';
         d.style.transform = i===idx ? 'scale(1.1)' : 'scale(1)';
@@ -385,3 +425,4 @@
   </script>
 </body>
 </html>
+
