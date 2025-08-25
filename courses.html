@@ -20,6 +20,27 @@
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Evitar que anclas queden ocultas por el header fijo */
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    /* Toggle iconos del botón móvil */
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+
+    /* ----- Scroll del menú móvil (dropdown bajo el header) ----- */
+    #mobile-menu{
+      --header-h: 64px;
+      max-height: calc(100vh - var(--header-h));
+      max-height: calc(100svh - var(--header-h));
+      max-height: calc(100dvh - var(--header-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <!-- Cinta superior -->
@@ -43,34 +64,28 @@
         <a href="https://cir.uagrm.edu.bo/" target="_blank" class="hover:text-sky-700">Volver al inicio</a>
       </nav>
 
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+      <!-- Botón móvil (modelo sencillo) -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
+              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
       </button>
     </div>
 
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
-            <span class="font-semibold">CIRCPyCS</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cursos">Cursos</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#opciones-pago">Pago</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank">Volver al inicio</a></li>
-        </ul>
-      </nav>
-    </div>
+    <!-- Menú móvil sencillo (dropdown bajo el header) -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.08)]" aria-label="Navegación móvil">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#cursos">Cursos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#opciones-pago">Pago</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank">Volver al inicio</a></li>
+      </ul>
+    </nav>
   </header>
 
   <!-- Hero -->
@@ -81,7 +96,7 @@
     </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <div class="max-w-3xl">
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Programa de Microcredenciales</span>
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Formación continua — Ciencias Sociales</span>
         <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Cursos de Ciencias Sociales</h2>
         <p class="mt-4 text-slate-600">Descubre el poder de la tecnología en las ciencias sociales.</p>
       </div>
@@ -147,7 +162,6 @@
 
             <div class="mt-5 flex flex-wrap gap-3">
               <a href="https://forms.gle/HMs2kjA3TxTqBfEp9" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Inscríbete ahora<span>→</span></a>
-              <!-- CAMBIO ÚNICO AQUÍ -->
               <a href="https://wa.link/1z440f" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium border border-slate-300 hover:border-sky-600 hover:text-sky-700">Pagar</a>
             </div>
           </div>
@@ -238,7 +252,6 @@
 
             <div class="mt-5 flex flex-wrap gap-3">
               <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Más información<span>→</span></a>
-              <!-- CAMBIO ÚNICO AQUÍ -->
               <a href="https://wa.link/1z440f" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium border border-slate-300 hover:border-sky-600 hover:text-sky-700">Pagar</a>
             </div>
           </div>
@@ -289,22 +302,40 @@
   </footer>
 
   <script>
-    // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
+    // ===== Menú móvil sencillo con scroll propio =====
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
 
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
+    function setHeaderVar(){
+      const h = headerEl.getBoundingClientRect().height || 64;
+      mobileMenu.style.setProperty('--header-h', h + 'px');
+    }
 
-    openBtn?.addEventListener('click', openMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    backdrop?.addEventListener('click', closeMenu);
-    closeBtn?.addEventListener('click', closeMenu);
+    function toggleMenu(forceOpen = null) {
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) {
+        setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
+      } else {
+        btnOpen.focus();
+      }
+    }
 
-    // Cerrar al hacer click en un enlace del panel
-    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    btnOpen.addEventListener('click', () => toggleMenu());
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
+    mobileMenu.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link) toggleMenu(false);
+    });
+    window.addEventListener('resize', () => {
+      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
+    });
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
   </script>
 </body>
 </html>
