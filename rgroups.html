@@ -21,12 +21,8 @@
             sans: ['Poppins','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'],
             serif: ['Playfair Display','serif']
           },
-          boxShadow: {
-            soft: '0 6px 18px rgba(2,6,23,.08)'
-          },
-          borderRadius: {
-            xl2: '18px'
-          }
+          boxShadow: { soft: '0 6px 18px rgba(2,6,23,.08)' },
+          borderRadius: { xl2: '18px' }
         }
       }
     }
@@ -40,6 +36,25 @@
     .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.75rem;line-height:1rem}
     .hero-bg:before{content:"";position:absolute;inset:-30%;background:radial-gradient(60% 60% at 20% 20%,rgba(16,185,129,.25),transparent 60%),radial-gradient(60% 60% at 80% 80%,rgba(244,63,94,.25),transparent 60%)}
     .logo-img{object-fit:contain;object-position:center;background:#fff}
+
+    /* ===== Menú móvil sencillo bajo el header ===== */
+    section[id]{ scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce){ html{ scroll-behavior: auto; } }
+
+    /* Toggle iconos del botón */
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+
+    /* Altura y scroll del menú móvil = viewport - header */
+    #mobile-menu{
+      --header-h: 64px; /* fallback si JS no corre */
+      max-height: calc(100vh - var(--header-h));
+      max-height: calc(100svh - var(--header-h));
+      max-height: calc(100dvh - var(--header-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
   </style>
 </head>
 
@@ -63,33 +78,32 @@
         <a href="#participar" class="hover:text-sky-700">Cómo participar</a>
         <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
       </nav>
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+
+      <!-- Botón móvil (dropdown sencillo) -->
+      <button id="btn-open"
+              class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
+              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
       </button>
     </div>
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-2xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
-            <span class="font-semibold">CIRCPyCS</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#grupos">Grupos</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#metodologia">Metodología</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#participar">Cómo participar</a></li>
-          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
-        </ul>
-      </nav>
-    </div>
+
+    <!-- Menú móvil sencillo (dropdown bajo el header) -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.06)]" aria-label="Navegación móvil">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#grupos">Grupos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#metodologia">Metodología</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#participar">Cómo participar</a></li>
+        <li class="pt-2 mt-2 border-t border-slate-200">
+          <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a>
+        </li>
+      </ul>
+    </nav>
   </header>
 
   <!-- HERO -->
@@ -162,27 +176,27 @@
             <a href="#grupo-salud" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">Ver detalles <span aria-hidden>→</span></a>
           </div>
         </article>
-         <!-- G5: Sistema Político Boliviano -->
-<article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
-  <img referrerpolicy="no-referrer" loading="lazy"
-       src="https://i.imgur.com/gshhelE.png"
-       alt="Sistema Político Boliviano"
-       class="h-36 w-full logo-img p-2 bg-white">
-  <div class="p-4 flex-1 flex flex-col">
-    <h3 class="font-semibold text-brand">Sistema Político Boliviano</h3>
-    <p class="mt-1 text-sm text-slate-600">
-      Instituciones, partidos, dinámicas electorales y relaciones Ejecutivo-Legislativo en Bolivia.
-    </p>
-    <div class="mt-3 space-x-2">
-      <span class="chip bg-sky-50 text-sky-700">Partidos</span>
-      <span class="chip bg-emerald-50 text-emerald-700">Instituciones</span>
-      <span class="chip bg-rose-50 text-rose-700">Opinión pública</span>
-    </div>
-    <a href="#grupo-sistema-politico" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">
-      Ver detalles <span aria-hidden>→</span>
-    </a>
-  </div>
-</article>
+        <!-- G5: Sistema Político Boliviano -->
+        <article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
+          <img referrerpolicy="no-referrer" loading="lazy"
+               src="https://i.imgur.com/gshhelE.png"
+               alt="Sistema Político Boliviano"
+               class="h-36 w-full logo-img p-2 bg-white">
+          <div class="p-4 flex-1 flex flex-col">
+            <h3 class="font-semibold text-brand">Sistema Político Boliviano</h3>
+            <p class="mt-1 text-sm text-slate-600">
+              Instituciones, partidos, dinámicas electorales y relaciones Ejecutivo-Legislativo en Bolivia.
+            </p>
+            <div class="mt-3 space-x-2">
+              <span class="chip bg-sky-50 text-sky-700">Partidos</span>
+              <span class="chip bg-emerald-50 text-emerald-700">Instituciones</span>
+              <span class="chip bg-rose-50 text-rose-700">Opinión pública</span>
+            </div>
+            <a href="#grupo-sistema-politico" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-sky-700">
+              Ver detalles <span aria-hidden>→</span>
+            </a>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -276,40 +290,38 @@
           </div>
         </div>
       </section>
-  <!-- SISTEMA POLÍTICO BOLIVIANO -->
-<section id="grupo-sistema-politico" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
-  <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
-  <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
-    <div class="lg:col-span-2">
-      <h3 class="text-xl font-bold text-brand">Grupo de Investigación del Sistema Político Boliviano</h3>
-      <p class="mt-2 text-slate-600">
-        Estudiamos la arquitectura institucional del Estado, la competencia y organización de los partidos,
-        los ciclos electorales, la formulación de políticas y las relaciones entre niveles de gobierno.
-        Combinamos análisis histórico-institucional, métodos cuantitativos y trabajo con encuestas.
-      </p>
-      <ul class="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-slate-700 list-disc pl-5">
-        <li>Comportamiento electoral, voto estratégico y participación.</li>
-        <li>Partidos, facciones y coaliciones legislativas.</li>
-        <li>Gobernabilidad: Ejecutivo-Legislativo y niveles subnacionales.</li>
-        <li>Integridad electoral, financiamiento político y rendición de cuentas.</li>
-      </ul>
-      <div class="mt-4 text-sm text-slate-600">
-        Coordinador: <span class="font-semibold text-brand">José Orlando Peralta B.</span>
-      </div>
-    </div>
-    <div class="rounded-2xl border border-borderc overflow-hidden">
-      <img referrerpolicy="no-referrer"
-           src="https://i.imgur.com/gshhelE.png"
-           alt="Banner Sistema Político Boliviano"
-           class="w-full h-56 md:h-60 logo-img p-3 bg-white" />
-    </div>
-  </div>
-</section>
-      
+
+      <!-- SISTEMA POLÍTICO BOLIVIANO -->
+      <section id="grupo-sistema-politico" class="rounded-3xl bg-white border border-borderc shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+        <div class="p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+          <div class="lg:col-span-2">
+            <h3 class="text-xl font-bold text-brand">Grupo de Investigación del Sistema Político Boliviano</h3>
+            <p class="mt-2 text-slate-600">
+              Estudiamos la arquitectura institucional del Estado, la competencia y organización de los partidos,
+              los ciclos electorales, la formulación de políticas y las relaciones entre niveles de gobierno.
+              Combinamos análisis histórico-institucional, métodos cuantitativos y trabajo con encuestas.
+            </p>
+            <ul class="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-slate-700 list-disc pl-5">
+              <li>Comportamiento electoral, voto estratégico y participación.</li>
+              <li>Partidos, facciones y coaliciones legislativas.</li>
+              <li>Gobernabilidad: Ejecutivo-Legislativo y niveles subnacionales.</li>
+              <li>Integridad electoral, financiamiento político y rendición de cuentas.</li>
+            </ul>
+            <div class="mt-4 text-sm text-slate-600">
+              Coordinador: <span class="font-semibold text-brand">José Orlando Peralta B.</span>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-borderc overflow-hidden">
+            <img referrerpolicy="no-referrer"
+                 src="https://i.imgur.com/gshhelE.png"
+                 alt="Banner Sistema Político Boliviano"
+                 class="w-full h-56 md:h-60 logo-img p-3 bg-white" />
+          </div>
+        </div>
+      </section>
     </div>
   </main>
-
-
 
   <!-- METODOLOGÍA / HERRAMIENTAS -->
   <section id="metodologia" class="py-10 bg-white border-y border-slate-200">
@@ -371,17 +383,47 @@
   <script>
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
-    // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
-    function openMenu(){wrap.classList.remove('hidden');document.body.style.overflow='hidden'}
-    function closeMenu(){wrap.classList.add('hidden');document.body.style.overflow=''}
-    openBtn.addEventListener('click', openMenu);
-    closeBtn?.addEventListener('click', closeMenu);
-    backdrop?.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', (e)=>{if(e.key==='Escape') closeMenu()});
+
+    // ===== Menú móvil sencillo (dropdown bajo header) =====
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
+
+    function setHeaderVar(){
+      const h = headerEl.getBoundingClientRect().height || 64;
+      mobileMenu.style.setProperty('--header-h', h + 'px');
+    }
+
+    function toggleMenu(forceOpen = null){
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) {
+        setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
+      } else {
+        btnOpen.focus();
+      }
+    }
+
+    btnOpen.addEventListener('click', () => toggleMenu());
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
+
+    // Cerrar al hacer click en cualquier enlace del menú
+    mobileMenu.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link) toggleMenu(false);
+    });
+
+    // Recalcular al redimensionar / orientación
+    window.addEventListener('resize', () => {
+      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
+    });
+
+    // Si pasa a ancho md+ mientras está abierto, ciérralo
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
   </script>
 </body>
 </html>
