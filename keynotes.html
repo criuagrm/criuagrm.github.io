@@ -1,11 +1,10 @@
 <!doctype html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>Conferencias Magistrales — CIRCPyCS UAGRM</title>
-  <meta name="description" content="Conferencias magistrales del CIRCPyCS — UAGRM: videos, materiales y archivo por años." />
+  <title>Conferencias — CIRCPyCS UAGRM</title>
+  <meta name="description" content="Conferencias magistrales del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM." />
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,11 +12,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            brand: '#003366',
-            bgbase: '#f5f7fb',
-            borderc: '#e5e7eb'
-          },
+          colors: { brand:'#003366', bgbase:'#f5f7fb', borderc:'#e5e7eb' },
           fontFamily: {
             sans: ['Poppins','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'],
             serif: ['Playfair Display','serif']
@@ -34,14 +29,12 @@
 
   <style>
     .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.72rem;line-height:1rem}
-    .hero-bg:before{content:"";position:absolute;inset:-30%;background:
-      radial-gradient(60% 60% at 20% 20%,rgba(16,185,129,.25),transparent 60%),
-      radial-gradient(60% 60% at 80% 80%,rgba(244,63,94,.25),transparent 60%)}
-    .cover-img{height: 160px}
-    @media (min-width:640px){.cover-img{height: 200px}}
-    @media (min-width:1024px){.cover-img{height: 220px}}
+    .hero-bg:before{content:"";position:absolute;inset:-30%;background:radial-gradient(60% 60% at 20% 20%,rgba(16,185,129,.25),transparent 60%),radial-gradient(60% 60% at 80% 80%,rgba(244,63,94,.25),transparent 60%)}
+    .cover-img{height:160px}
+    @media (min-width:640px){.cover-img{height:200px}}
+    @media (min-width:1024px){.cover-img{height:220px}}
 
-    /* Menú móvil dropdown bajo el header */
+    /* Dropdown móvil sencillo bajo el header */
     section[id]{ scroll-margin-top: 96px; }
     @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
     #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
@@ -73,12 +66,12 @@
       </a>
       <!-- Nav escritorio -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#conferencias" class="hover:text-sky-700">Conferencias</a>
-        <a href="#archivo" class="hover:text-sky-700">Archivo</a>
+        <a href="#agenda" class="hover:text-sky-700">Próximas</a>
+        <a href="#pasados" class="hover:text-sky-700">Pasadas</a>
         <a href="#contacto" class="hover:text-sky-700">Contacto</a>
         <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
       </nav>
-      <!-- Botón móvil -->
+      <!-- Botón móvil (dropdown sencillo) -->
       <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
               aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span>Menú</span>
@@ -86,11 +79,11 @@
         <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <!-- Menú móvil (dropdown bajo el header) -->
+    <!-- Menú móvil dropdown -->
     <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_8px_22px_rgba(2,6,23,.08)]" aria-label="Navegación móvil">
       <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#conferencias">Conferencias</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#archivo">Archivo</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#agenda">Próximas</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#pasados">Pasadas</a></li>
         <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
         <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
       </ul>
@@ -103,41 +96,36 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
       <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Conferencias</span>
       <h2 class="mt-4 font-serif text-3xl sm:text-4xl font-bold text-brand">Conferencias Magistrales</h2>
-      <p class="mt-2 max-w-3xl text-slate-600">Selección de conferencias con líderes académicos y expertos invitados. Cada tarjeta incluye portada, descripción y accesos a redes.</p>
+      <p class="mt-2 max-w-3xl text-slate-600">Tarjetas con portada, descripción y accesos a Facebook, YouTube y X. Busca por título o ponente.</p>
     </div>
   </section>
 
-  <!-- FILTROS -->
+  <!-- BUSCADOR -->
   <section class="pb-4" id="filtros">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="rounded-2xl border border-borderc bg-white p-4 shadow-soft flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div class="flex flex-wrap items-center gap-2">
-          <button data-year="Todas" class="year-pill chip bg-slate-900 text-white">Todas</button>
-          <button data-year="2025" class="year-pill chip bg-sky-50 text-sky-700">2025</button>
-          <button data-year="2024" class="year-pill chip bg-sky-50 text-sky-700">2024</button>
-          <button data-year="2023" class="year-pill chip bg-sky-50 text-sky-700">2023</button>
-        </div>
+        <div class="text-sm text-slate-600">Listado de conferencias</div>
         <div class="flex items-center gap-2 w-full lg:w-auto">
-          <input id="search" type="search" placeholder="Buscar por título o ponente…" class="w-full lg:w-80 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200" />
+          <input id="search" type="search" placeholder="Buscar por título o ponente…" class="w-full lg:w-96 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200" />
           <button id="clear" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Limpiar</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONFERENCIAS -->
-  <main id="conferencias" class="pb-12">
+  <!-- PRÓXIMAS -->
+  <main id="agenda" class="pb-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-xl font-serif font-bold text-brand">Recientes</h3>
-      <div id="talks-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+      <h3 class="text-xl font-serif font-bold text-brand">Próximas conferencias</h3>
+      <div id="events-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
     </div>
   </main>
 
-  <!-- ARCHIVO -->
-  <section id="archivo" class="py-10 bg-white border-y border-slate-200">
+  <!-- PASADAS -->
+  <section id="pasados" class="py-10 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-xl font-serif font-bold text-brand">Archivo</h3>
-      <div id="archive" class="mt-4 space-y-6"></div>
+      <h3 class="text-xl font-serif font-bold text-brand">Conferencias pasadas</h3>
+      <div id="past-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
     </div>
   </section>
 
@@ -146,7 +134,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 items-start">
       <div class="rounded-2xl border border-borderc bg-white p-6 shadow-soft">
         <h3 class="font-semibold text-lg">Contacto</h3>
-        <p class="mt-2 text-sm text-slate-600">¿Quieres proponer una conferencia magistral?</p>
+        <p class="mt-2 text-sm text-slate-600">¿Deseas proponer una conferencia magistral?</p>
         <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
           <div class="rounded-xl border border-borderc p-3">
             <div class="text-slate-500">Email</div>
@@ -180,13 +168,14 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Menú móvil dropdown
+    // ===== Menú móvil dropdown sencillo =====
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     const headerEl = document.querySelector('header');
+
     function setHeaderVar(){
       const h = headerEl.getBoundingClientRect().height || 64;
-      mobileMenu?.style.setProperty('--header-h', h + 'px');
+      mobileMenu.style.setProperty('--header-h', h + 'px');
     }
     function toggleMenu(forceOpen = null){
       const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
@@ -194,7 +183,8 @@
       mobileMenu.classList.toggle('hidden', !willOpen);
       btnOpen.setAttribute('aria-expanded', String(willOpen));
       document.body.style.overflow = willOpen ? 'hidden' : '';
-      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
+      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0);
+      else btnOpen.focus();
     }
     btnOpen.addEventListener('click', ()=> toggleMenu());
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
@@ -202,191 +192,123 @@
     window.addEventListener('resize', ()=>{ if(!mobileMenu.classList.contains('hidden')) setHeaderVar(); });
     matchMedia('(min-width:768px)').addEventListener('change', ev=>{ if(ev.matches) toggleMenu(false); });
 
-    // ===== Datos de conferencias (con redes) =====
-    const TALKS = [
+    // ======== Datos SOLO CONFERENCIAS ========
+    const EVENTS = [
       {
         id: 'c1',
-        title: 'Crítica al liberalismo económico',
-        date: '2025-07-12', time: '19:00',
-        speaker: 'Dra. Ana Quiroga', org: 'Universidad Nacional',
+        title: 'Conferencia magistral: Crítica al liberalismo económico',
+        date: '2025-10-01', time: '19:00', mode: 'Presencial',
+        venue: 'Auditorio FCJPSRRII — UAGRM',
         cover: 'https://i.imgur.com/H8mupsa.png',
-        links: { fb: 'https://facebook.com/', yt: 'https://www.youtube.com/watch?v=XXXXXXXX', x: 'https://x.com/' },
-        video: 'https://www.youtube.com/watch?v=XXXXXXXX',
-        materials: '#',
-        desc: 'Una mirada desde la economía política contemporánea.'
+        desc: 'Una mirada desde la economía política contemporánea.',
+        links: { fb: 'https://facebook.com/', yt: 'https://www.youtube.com/watch?v=XXXXXXXX', x: 'https://x.com/' }
       },
       {
         id: 'c2',
         title: 'Instituciones y desarrollo regional',
-        date: '2025-06-05', time: '18:30',
-        speaker: 'Dr. Carlos Ibarra', org: 'PUC Chile',
+        date: '2025-09-18', time: '18:30', mode: 'Híbrido',
+        venue: 'Sala de Posgrado & Zoom',
         cover: 'https://i.imgur.com/9vZANJ5.png',
-        links: { fb: 'https://facebook.com/', yt: 'https://www.youtube.com/watch?v=YYYYYYYY', x: '' },
-        video: 'https://www.youtube.com/watch?v=YYYYYYYY',
-        materials: '#',
-        desc: 'Capacidades estatales, gobernanza y crecimiento inclusivo.'
+        desc: 'Capacidades estatales, gobernanza y crecimiento inclusivo.',
+        links: { fb: 'https://facebook.com/', yt: 'https://www.youtube.com/watch?v=YYYYYYYY', x: '' }
       },
       {
         id: 'c3',
         title: 'Estado, ciudadanía y conflicto',
-        date: '2025-05-20', time: '18:00',
-        speaker: 'Dra. Loreto Correa', org: 'ANEPE',
+        date: '2025-08-30', time: '18:00', mode: 'Presencial',
+        venue: 'Aula Magna, UAGRM',
         cover: 'https://i.imgur.com/XE755pV.png',
-        links: { fb: '', yt: 'https://www.youtube.com/watch?v=ZZZZZZZZ', x: 'https://x.com/' },
-        video: 'https://www.youtube.com/watch?v=ZZZZZZZZ',
-        materials: '#',
-        desc: 'Lecturas críticas desde la ciencia política comparada.'
+        desc: 'Lecturas críticas desde la ciencia política comparada.',
+        links: { fb: '', yt: 'https://www.youtube.com/watch?v=ZZZZZZZZ', x: 'https://x.com/' }
       },
-      // Archivo
+      // Pasadas (archivo)
       {
         id: 'c4',
         title: 'Geopolítica del litio y oportunidades',
-        date: '2024-10-18', time: '18:30',
-        speaker: 'Dr. Jaime R.',
-        org: 'Universidad Andina',
+        date: '2024-10-18', time: '18:30', mode: 'Presencial',
+        venue: 'Salón Principal — FCJPSRRII',
         cover: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop',
-        links: { fb: 'https://facebook.com/', yt: '', x: '' },
-        video: '',
-        materials: '#',
-        desc: 'Retos y alianzas estratégicas para Bolivia.'
+        desc: 'Retos y alianzas estratégicas para Bolivia.',
+        links: { fb: 'https://facebook.com/', yt: '', x: '' }
       },
       {
         id: 'c5',
         title: 'Instituciones y comportamiento político',
-        date: '2023-09-14', time: '19:00',
-        speaker: 'Dra. M. Álvarez',
-        org: 'UBA',
+        date: '2023-09-14', time: '19:00', mode: 'Presencial',
+        venue: 'Biblioteca Central UAGRM',
         cover: 'https://images.unsplash.com/photo-1520975922329-c1a23f1c7b1a?q=80&w=1600&auto=format&fit=crop',
-        links: { fb: '', yt: 'https://www.youtube.com/watch?v=AAAAAAAB', x: 'https://x.com/' },
-        video: 'https://www.youtube.com/watch?v=AAAAAAAB',
-        materials: '#',
-        desc: 'Agendas de investigación comparada en la región.'
+        desc: 'Agendas de investigación comparada en la región.',
+        links: { fb: '', yt: 'https://www.youtube.com/watch?v=AAAAAAAB', x: 'https://x.com/' }
       }
     ];
+
+    // Iconos SVG (Facebook, YouTube, X)
+    const ICONS = {
+      fb: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9v-2.91h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.75 8.44-4.92 8.44-9.94Z"/></svg>',
+      yt: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4.7 4.7 0 0 0-3.3-3.3C18.5 2.3 12 2.3 12 2.3s-6.5 0-8.2.6A4.7 4.7 0 0 0 .5 6.2 48.5 48.5 0 0 0 0 12a48.5 48.5 0 0 0 .5 5.8 4.7 4.7 0 0 0 3.3 3.3c1.7.6 8.2.6 8.2.6s6.5 0 8.2-.6a4.7 4.7 0 0 0 3.3-3.3A48.5 48.5 0 0 0 24 12a48.5 48.5 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.4 3.5-6.4 3.5Z"/></svg>',
+      x: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21l-6.42 7.36L22 22h-6.828l-4.77-6.22L4.883 22H2.126l6.9-7.92L2 2h6.953l4.29 5.64L18.244 2Zm-1.195 18h2.04L7.05 4h-2.1l12.1 16Z"/></svg>'
+    };
 
     function fmtDate(iso){
       const d = new Date(iso + 'T00:00:00');
       return d.toLocaleDateString('es-BO', { year:'numeric', month:'short', day:'2-digit' });
     }
 
-    // Iconos sociales y helper
-    const ICONS = {
-      fb: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9v-2.91h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.75 8.44-4.92 8.44-9.94Z"/></svg>',
-      yt: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4.7 4.7 0 0 0-3.3-3.3C18.5 2.3 12 2.3 12 2.3s-6.5 0-8.2.6A4.7 4.7 0 0 0 .5 6.2 48.5 48.5 0 0 0 0 12a48.5 48.5 0 0 0 .5 5.8 4.7 4.7 0 0 0 3.3 3.3c1.7.6 8.2.6 8.2.6s6.5 0 8.2-.6a4.7 4.7 0 0 0 3.3-3.3A48.5 48.5 0 0 0 24 12a48.5 48.5 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.4 3.5-6.4 3.5Z"/></svg>',
-      x:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21l-6.42 7.36L22 22h-6.828l-4.77-6.22L4.883 22H2.126l6.9-7.92L2 2h6.953l4.29 5.64L18.244 2Zm-1.195 18h2.04L7.05 4h-2.1l12.1 16Z"/></svg>'
-    };
     function socialIcon(href, key){
       if(!href) return `<span title="Sin enlace" class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-slate-200 text-slate-300">${ICONS[key]}</span>`;
       return `<a href="${href}" target="_blank" rel="noopener" class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-slate-200 hover:border-sky-600 hover:text-sky-700" aria-label="${key}">${ICONS[key]}</a>`;
     }
 
-    function cardHTML(t){
+    function cardHTML(ev){
       return `
         <article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
           <div class="relative bg-slate-100">
-            <img loading="lazy" class="w-full object-cover cover-img"
-                 src="${t.cover}"
-                 alt="${t.title}"
+            <img loading="lazy" class="w-full object-cover cover-img" src="${ev.cover}" alt="${ev.title}"
                  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'"/>
             <div class="absolute top-2 left-2 space-x-1">
               <span class="chip bg-rose-50 text-rose-700 ring-1 ring-rose-200">Magistral</span>
             </div>
           </div>
           <div class="p-5 flex-1 flex flex-col">
-            <div class="flex items-center justify-between gap-2">
-              <time class="text-xs text-slate-500">${fmtDate(t.date)} · ${t.time}</time>
-            </div>
-            <h4 class="mt-2 font-semibold text-brand">${t.title}</h4>
-            <p class="mt-1 text-sm text-slate-600">${t.desc}</p>
+            <h4 class="font-semibold text-brand">${ev.title}</h4>
+            <p class="mt-1 text-sm text-slate-600">${ev.desc}</p>
             <div class="mt-3 text-sm text-slate-700">
-              <span class="font-medium">Ponente:</span> ${t.speaker} <span class="text-slate-500">— ${t.org}</span>
+              <div><span class="font-medium">Fecha:</span> ${fmtDate(ev.date)} · ${ev.time} · ${ev.mode}</div>
+              <div class="truncate"><span class="font-medium">Lugar:</span> ${ev.venue}</div>
             </div>
-            <!-- Redes -->
-            <div class="mt-4 flex items-center gap-2">
-              ${socialIcon(t.links?.fb,'fb')}${socialIcon(t.links?.yt,'yt')}${socialIcon(t.links?.x,'x')}
-            </div>
-            <!-- Acciones -->
-            <div class="mt-3 flex flex-wrap gap-2">
-              ${t.video ? `<a href="${t.video}" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-sm">Ver video</a>` : `<span class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-400 text-sm">Video pronto</span>`}
-              ${t.materials && t.materials !== '#' ? `<a href="${t.materials}" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm hover:border-sky-600 hover:text-sky-700">Materiales</a>` : `<span class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-400 text-sm">Materiales</span>`}
-            </div>
+            <div class="mt-4 flex items-center gap-2">${socialIcon(ev.links.fb,'fb')}${socialIcon(ev.links.yt,'yt')}${socialIcon(ev.links.x,'x')}</div>
           </div>
         </article>`;
     }
 
     function render(){
-      const grid = document.getElementById('talks-grid');
-      const archive = document.getElementById('archive');
+      const grid = document.getElementById('events-grid');
+      const past = document.getElementById('past-grid');
       const q = document.getElementById('search').value.trim().toLowerCase();
-      const active = document.querySelector('.year-pill.bg-slate-900');
-      const year = active?.dataset.year || 'Todas';
-
-      const match = (t)=>{
-        const inYear = (year === 'Todas') || (new Date(t.date).getFullYear().toString() === year);
-        const inQuery = !q || (t.title + t.speaker + (t.org||'') + (t.desc||'')).toLowerCase().includes(q);
-        return inYear && inQuery;
-      };
 
       const now = new Date();
-      const recent = TALKS
-        .filter(t => new Date(t.date+'T23:59:59') >= now && match(t))
-        .sort((a,b)=> a.date.localeCompare(b.date));
-      const past = TALKS
-        .filter(t => new Date(t.date+'T23:59:59') < now && match(t))
-        .sort((a,b)=> b.date.localeCompare(a.date));
+      const match = (ev)=>{
+        const inQuery = !q || (ev.title + (ev.desc||'') + (ev.venue||'')).toLowerCase().includes(q);
+        return inQuery;
+      };
 
-      grid.innerHTML = recent.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">No hay conferencias próximas con estos filtros.</div>`;
+      const upcoming = EVENTS.filter(e=> new Date(e.date+'T23:59:59') >= now && match(e)).sort((a,b)=> a.date.localeCompare(b.date));
+      const passed   = EVENTS.filter(e=> new Date(e.date+'T23:59:59') <  now && match(e)).sort((a,b)=> b.date.localeCompare(a.date));
 
-      // Archivo agrupado por año
-      const groups = {};
-      past.forEach(t=>{
-        const y = new Date(t.date).getFullYear();
-        (groups[y] ||= []).push(t);
-      });
-      const years = Object.keys(groups).sort((a,b)=> b-a);
-      archive.innerHTML = years.length ? years.map(y=>{
-        const items = groups[y].map(t=>`
-          <li class="py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <p class="font-medium">${t.title}</p>
-              <p class="text-sm text-slate-500">${fmtDate(t.date)} — ${t.speaker}${t.org?(' · '+t.org):''}</p>
-            </div>
-            <div class="flex gap-2">
-              ${t.links?.yt ? `<a href="${t.links.yt}" target="_blank" class="text-sky-700 hover:underline text-sm">YouTube</a>` : `<span class="text-slate-400 text-sm">YouTube</span>`}
-              ${t.links?.fb ? `<a href="${t.links.fb}" target="_blank" class="text-sky-700 hover:underline text-sm">Facebook</a>` : `<span class="text-slate-400 text-sm">Facebook</span>`}
-              ${t.links?.x  ? `<a href="${t.links.x}"  target="_blank" class="text-sky-700 hover:underline text-sm">X</a>`       : `<span class="text-slate-400 text-sm">X</span>`}
-              ${t.materials && t.materials !== '#' ? `<a href="${t.materials}" target="_blank" class="text-slate-700 hover:underline text-sm">Materiales</a>` : `<span class="text-slate-400 text-sm">Materiales</span>`}
-            </div>
-          </li>`).join('');
-        return `
-          <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-            <div class="flex items-center justify-between">
-              <h4 class="font-semibold">${y}</h4>
-              <span class="text-xs text-slate-500">${groups[y].length} conferencia(s)</span>
-            </div>
-            <ul class="mt-3 divide-y divide-slate-100">${items}</ul>
-          </div>`;
-      }).join('') : `<div class="text-slate-500 text-sm">Aún no hay registro en el archivo para estos filtros.</div>`;
+      grid.innerHTML = upcoming.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">No hay conferencias con estos filtros.</div>`;
+      past.innerHTML = passed.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">Aún no hay conferencias pasadas.</div>`;
     }
 
-    // UI filtros
-    document.querySelectorAll('.year-pill').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        document.querySelectorAll('.year-pill').forEach(b=> b.classList.remove('bg-slate-900','text-white'));
-        btn.classList.add('bg-slate-900','text-white');
-        render();
-      });
-    });
     document.getElementById('search').addEventListener('input', render);
     document.getElementById('clear').addEventListener('click', ()=>{ document.getElementById('search').value=''; render(); });
 
-    // Inicializar
+    // Inicializa
     render();
 
     // Smoke tests mínimos
-    console.assert(document.getElementById('talks-grid'), 'Falta #talks-grid');
-    console.assert(document.getElementById('archive'), 'Falta #archive');
-    console.assert(Array.isArray(TALKS) && TALKS.length >= 3, 'Se esperaban >=3 conferencias');
+    console.assert(document.getElementById('events-grid'), 'Falta #events-grid');
+    console.assert(document.getElementById('past-grid'), 'Falta #past-grid');
+    console.assert(Array.isArray(EVENTS) && EVENTS.length >= 3, 'Se esperaban >=3 conferencias');
   </script>
 </body>
 </html>
