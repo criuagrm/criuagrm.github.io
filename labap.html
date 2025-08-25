@@ -23,6 +23,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <!-- Plotly -->
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+  <style>
+    /* Menú móvil sencillo bajo el header */
+    section[id]{ scroll-margin-top: 96px; }
+    #btn-open #icon-x{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+
+    #mobile-menu{
+      --header-h: 64px; /* fallback si JS no corre */
+      max-height: calc(100vh - var(--header-h));
+      max-height: calc(100svh - var(--header-h));
+      max-height: calc(100dvh - var(--header-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
   <!-- Cinta superior -->
@@ -52,38 +70,33 @@
       </nav>
 
       <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+      <button id="btn-open"
+              class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
+              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
       </button>
     </div>
 
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
-            <span class="font-semibold">LAP — CIRCPyCS</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
-        </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dashboard">Indicadores</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#visualizacion">Visualización</a></li>
-          <li class="border-t border-slate-200 pt-3 mt-3 text-slate-500 text-xs">Secciones externas</li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapsoft.html">Software</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labaproy.html">Proyectos</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapteam">Equipo</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapdata.html">Datasets</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapdashboard.html">Dashboard</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://cir.uagrm.edu.bo/">Volver al inicio</a></li>
-        </ul>
-      </nav>
-    </div>
+    <!-- Menú móvil sencillo (dropdown bajo el header) -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.06)]" aria-label="Navegación móvil">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dashboard">Indicadores</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#visualizacion">Visualización</a></li>
+        <li class="pt-2 mt-2 border-t border-slate-200 text-slate-500 text-xs px-3">Secciones externas</li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapsoft.html">Software</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labaproy.html">Proyectos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapteam">Equipo</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapdata.html">Datasets</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapdashboard.html">Dashboard</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://cir.uagrm.edu.bo/">Volver al inicio</a></li>
+      </ul>
+    </nav>
   </header>
 
   <!-- Hero -->
@@ -214,19 +227,39 @@
   </footer>
 
   <script>
-    // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
+    // ===== Menú móvil sencillo (dropdown bajo header) =====
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
 
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-
-    openBtn?.addEventListener('click', openMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    backdrop?.addEventListener('click', closeMenu);
-    closeBtn?.addEventListener('click', closeMenu);
+    function setHeaderVar(){
+      const h = headerEl.getBoundingClientRect().height || 64;
+      mobileMenu.style.setProperty('--header-h', h + 'px');
+    }
+    function toggleMenu(forceOpen = null){
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) {
+        setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0);
+      } else {
+        btnOpen.focus();
+      }
+    }
+    btnOpen?.addEventListener('click', () => toggleMenu());
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
+    mobileMenu.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link) toggleMenu(false);
+    });
+    window.addEventListener('resize', () => {
+      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
+    });
+    window.matchMedia('(min-width: 768px)').addEventListener('change', (ev) => {
+      if (ev.matches) toggleMenu(false);
+    });
 
     // ====== Plotly data ======
     const fechas = [
