@@ -29,7 +29,7 @@
   <!-- Cinta superior -->
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header / Nav -->
+  <!-- Header / Nav (con menú móvil sencillo) -->
   <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       <a href="#inicio" class="flex items-center gap-3 group">
@@ -39,12 +39,22 @@
           <h1 class="font-bold text-lg">CIRCPyCS</h1>
         </div>
       </a>
-      <nav class="flex items-center gap-3 text-sm">
+      <nav class="hidden md:flex items-center gap-3 text-sm">
         <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
           <i class="fa-solid fa-arrow-left"></i>
           Volver al inicio
         </a>
       </nav>
+      <button id="btnMobile" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-700 hover:border-sky-600 hover:text-sky-700" aria-controls="mobileMenu" aria-expanded="false">
+        <span class="sr-only">Abrir menú</span>
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+    <!-- Menú móvil desplegable (solo Volver) -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1">
+        <a href="https://criuagrm.github.io/" class="px-3 py-2 rounded-lg hover:bg-slate-50 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+      </div>
     </div>
   </header>
 
@@ -119,15 +129,15 @@
     </div>
   </section>
 
-  <!-- Grid de cuadernos -->
+  <!-- Grid de cuadernos (6 items) -->
   <section class="py-12 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div id="grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <!-- ITEM — duplica/edita según necesites -->
+        <!-- 1 -->
         <article class="cuaderno" data-year="2025" data-tipo="metodologia" data-tags="encuesta uagrm cuestionario muestreo">
           <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/7O6y9v2.png" alt="Diseño muestral y cuestionario UAGRM 2025" class="max-h-full w-auto object-contain drop-shadow"/>
+              <img src="https://i.imgur.com/kR3AXtx.png" alt="Portada del cuaderno" class="max-h-full w-auto object-contain drop-shadow"/>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -136,7 +146,7 @@
               </div>
               <h4 class="mt-3 font-semibold text-lg">Encuesta UAGRM 2025: diseño muestral, cuestionario y protocolo de campo</h4>
               <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, J. O. Peralta</div>
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
                 <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2025</div>
                 <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> muestreo, cuestionario, trabajo de campo</div>
               </div>
@@ -145,6 +155,7 @@
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Dataset</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Código</a>
+                <button class="btnCitar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
               </div>
               <div class="mt-4 text-xs text-slate-500">
                 <span class="mr-3"><b>DOI:</b> en tramitación</span>
@@ -154,10 +165,11 @@
           </div>
         </article>
 
+        <!-- 2 -->
         <article class="cuaderno" data-year="2024" data-tipo="avances" data-tags="desercion escolar santa cruz gestion publica indicadores">
           <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/1X0q0Zr.png" alt="Avances deserción escolar 2018-2024" class="max-h-full w-auto object-contain drop-shadow"/>
+              <img src="https://i.imgur.com/kR3AXtx.png" alt="Portada del cuaderno" class="max-h-full w-auto object-contain drop-shadow"/>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -166,7 +178,7 @@
               </div>
               <h4 class="mt-3 font-semibold text-lg">Deserción escolar en Santa Cruz (2018–2024): métricas, sesgos y primeras estimaciones</h4>
               <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autor:</b> D. Hurtado</div>
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
                 <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2024</div>
                 <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> educación, gestión pública, panel municipal</div>
               </div>
@@ -175,6 +187,7 @@
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Tablas CSV</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Repo</a>
+                <button class="btnCitar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-amber-600 hover:text-amber-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
               </div>
               <div class="mt-4 text-xs text-slate-500">
                 <span class="mr-3"><b>DOI:</b> en tramitación</span>
@@ -184,10 +197,11 @@
           </div>
         </article>
 
+        <!-- 3 -->
         <article class="cuaderno" data-year="2025" data-tipo="reporte" data-tags="rue geografia educativa catastro uem codigos rue">
           <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/MH6i0j1.png" alt="Estandarización RUE y catálogo UEM" class="max-h-full w-auto object-contain drop-shadow"/>
+              <img src="https://i.imgur.com/kR3AXtx.png" alt="Portada del cuaderno" class="max-h-full w-auto object-contain drop-shadow"/>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -196,7 +210,7 @@
               </div>
               <h4 class="mt-3 font-semibold text-lg">Estandarización RUE y catálogo de Unidades Educativas Municipales</h4>
               <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, Equipo GICCSS</div>
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
                 <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2025</div>
                 <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> RUE, catastro, georreferenciación</div>
               </div>
@@ -205,6 +219,7 @@
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Diccionario</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Scripts R</a>
+                <button class="btnCitar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-violet-600 hover:text-violet-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
               </div>
               <div class="mt-4 text-xs text-slate-500">
                 <span class="mr-3"><b>DOI:</b> en tramitación</span>
@@ -214,10 +229,11 @@
           </div>
         </article>
 
+        <!-- 4 -->
         <article class="cuaderno" data-year="2023" data-tipo="metodologia" data-tags="python scraping precios peluquerias mercado competencia">
           <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/8j8c4fV.png" alt="Scraping precios de servicios" class="max-h-full w-auto object-contain drop-shadow"/>
+              <img src="https://i.imgur.com/kR3AXtx.png" alt="Portada del cuaderno" class="max-h-full w-auto object-contain drop-shadow"/>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -226,7 +242,7 @@
               </div>
               <h4 class="mt-3 font-semibold text-lg">Scraping y protocolo de precios de servicios urbanos</h4>
               <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, Estudiantes UAGRM</div>
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
                 <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2023</div>
                 <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> scraping, precios, competencia</div>
               </div>
@@ -235,6 +251,7 @@
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-file-excel"></i> Plantilla XLSX</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Código</a>
+                <button class="btnCitar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
               </div>
               <div class="mt-4 text-xs text-slate-500">
                 <span class="mr-3"><b>DOI:</b> en tramitación</span>
@@ -244,10 +261,11 @@
           </div>
         </article>
 
+        <!-- 5 -->
         <article class="cuaderno" data-year="2025" data-tipo="avances" data-tags="supervivencia candidaturas mujeres cox km partidos">
           <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/FFe1v6r.png" alt="Avances análisis de supervivencia política" class="max-h-full w-auto object-contain drop-shadow"/>
+              <img src="https://i.imgur.com/kR3AXtx.png" alt="Portada del cuaderno" class="max-h-full w-auto object-contain drop-shadow"/>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -256,7 +274,7 @@
               </div>
               <h4 class="mt-3 font-semibold text-lg">Supervivencia de candidaturas femeninas: notas y estimaciones preliminares</h4>
               <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, Equipo LABAP</div>
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
                 <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2025</div>
                 <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> Kaplan-Meier, Cox, elecciones</div>
               </div>
@@ -265,6 +283,7 @@
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Datos anonimizados</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Scripts</a>
+                <button class="btnCitar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-amber-600 hover:text-amber-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
               </div>
               <div class="mt-4 text-xs text-slate-500">
                 <span class="mr-3"><b>DOI:</b> en tramitación</span>
@@ -274,10 +293,11 @@
           </div>
         </article>
 
+        <!-- 6 -->
         <article class="cuaderno" data-year="2022" data-tipo="metodologia" data-tags="mapa ucebol proximidad accesibilidad scoring python">
           <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/Wm2sQhT.png" alt="Metodología de mapeo de proximidades" class="max-h-full w-auto object-contain drop-shadow"/>
+              <img src="https://i.imgur.com/kR3AXtx.png" alt="Portada del cuaderno" class="max-h-full w-auto object-contain drop-shadow"/>
             </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-2">
@@ -286,44 +306,16 @@
               </div>
               <h4 class="mt-3 font-semibold text-lg">Mapa de proximidades: protocolo de scoring para entorno UCEBOL</h4>
               <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autor:</b> D. Hurtado</div>
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
                 <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2022</div>
                 <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> accesibilidad, scoring, geolocalización</div>
               </div>
-              <p class="mt-3 text-slate-600">Metodología manual en Python para cartografiar puntos de interés y construir índices de proximidad.</p>
+              <p class="mt-3 text-slate-600">Metodología en Python para cartografiar puntos de interés y construir índices de proximidad.</p>
               <div class="mt-4 flex flex-wrap gap-2">
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> GeoJSON</a>
                 <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Notebooks</a>
-              </div>
-              <div class="mt-4 text-xs text-slate-500">
-                <span class="mr-3"><b>DOI:</b> en tramitación</span>
-                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="cuaderno" data-year="2021" data-tipo="reporte" data-tags="instituciones politicas base documental estatutos leyes bolivia">
-          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
-            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
-              <img src="https://i.imgur.com/0Xk0t3s.png" alt="Repositorio base documental instituciones" class="max-h-full w-auto object-contain drop-shadow"/>
-            </div>
-            <div class="p-6">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 ring-1 ring-violet-200">Reporte técnico</span>
-                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2021-01</span>
-              </div>
-              <h4 class="mt-3 font-semibold text-lg">Base documental de instituciones políticas en Bolivia</h4>
-              <div class="mt-3 space-y-1 text-sm text-slate-600">
-                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
-                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2021</div>
-                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> leyes, estatutos, reglamentos</div>
-              </div>
-              <p class="mt-3 text-slate-600">Catálogo curado de normas y documentos institucionales con metadatos para análisis comparado.</p>
-              <div class="mt-4 flex flex-wrap gap-2">
-                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
-                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Catálogo</a>
+                <button class="btnCitar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
               </div>
               <div class="mt-4 text-xs text-slate-500">
                 <span class="mr-3"><b>DOI:</b> en tramitación</span>
@@ -343,7 +335,7 @@
       <h3 class="text-2xl font-bold">Cómo citar</h3>
       <p class="mt-2 text-slate-600">Usa el siguiente formato general para los Cuadernos de investigación del CIRCPyCS:</p>
       <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-        <pre id="cita" class="text-sm whitespace-pre-wrap font-mono text-slate-700">Autor(es). (Año). <Título del cuaderno>. Cuadernos de investigación — CIRCPyCS, CI-AAAA-XX. DOI (si corresponde). CC BY 4.0.</pre>
+        <pre id="cita" class="text-sm whitespace-pre-wrap font-mono text-slate-700">Autor(es). (Año). &lt;Título del cuaderno&gt;. Cuadernos de investigación — CIRCPyCS, CI-AAAA-XX. DOI (si corresponde). CC BY 4.0.</pre>
         <div class="mt-3">
           <button id="copyCita" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700">
             <i class="fa-regular fa-copy"></i> Copiar
@@ -408,7 +400,7 @@
     </div>
   </footer>
 
-  <!-- JS filtros + copiar cita -->
+  <!-- JS filtros + copiar cita + menú móvil -->
   <script>
     const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,'');
     const q = document.getElementById('q');
@@ -431,12 +423,39 @@
     [q,year,tipo].forEach(el => el.addEventListener('input', filtrar));
     limpiar.addEventListener('click', () => { q.value=''; year.value=''; tipo.value=''; filtrar(); });
 
-    // copiar cita
+    // Copiar cita individual por tarjeta (usa código CI-AAAA-XX)
+    function citaDe(card){
+      const titulo = card.querySelector('h4')?.innerText || '';
+      const codigo = Array.from(card.querySelectorAll('span')).map(x=>x.innerText).find(t=>/^CI-\d{4}-\d{2}$/.test(t)) || 'CI-AAAA-XX';
+      const anio = card.dataset.year || 'AAAA';
+      return `Equipo CIRCPyCS. (${anio}). ${titulo}. Cuadernos de investigación — CIRCPyCS, ${codigo}. CC BY 4.0.`;
+    }
+    document.querySelectorAll('.btnCitar').forEach(btn=>{
+      btn.addEventListener('click', async (e)=>{
+        const card = e.target.closest('.cuaderno');
+        const txt = citaDe(card);
+        try{ await navigator.clipboard.writeText(txt); btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiada'; setTimeout(()=>btn.innerHTML='<i class="fa-regular fa-copy"></i> Copiar cita', 1800);}catch{}
+      });
+    });
+
+    // Copiar formato general
     document.getElementById('copyCita').addEventListener('click', async () => {
       const txt = document.getElementById('cita').innerText;
       try { await navigator.clipboard.writeText(txt); alert('Cita copiada.'); }
       catch { alert('No se pudo copiar.'); }
     });
+
+    // Menú móvil accesible
+    const btnMobile = document.getElementById('btnMobile');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = () => { mobileMenu?.classList.add('hidden'); btnMobile?.setAttribute('aria-expanded','false'); };
+    btnMobile?.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      btnMobile.setAttribute('aria-expanded', String(!isHidden));
+    });
+    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('click', (e) => { if (!mobileMenu || !btnMobile) return; if (!mobileMenu.classList.contains('hidden')) { if (!mobileMenu.contains(e.target) && !btnMobile.contains(e.target)) closeMenu(); }});
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
   </script>
 </body>
 </html>
