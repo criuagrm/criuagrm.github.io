@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — Entrevistas</title>
+  <meta name="description" content="Entrevistas del CIRCPyCS: conversaciones con investigadoras e investigadores, decisores públicos y líderes sociales. Videos, audios y transcripciones." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav (solo Volver) -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <!-- Escritorio -->
+      <nav class="hidden md:flex items-center gap-3 text-sm">
+        <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
+          <i class="fa-solid fa-arrow-left"></i>
+          Volver
+        </a>
+      </nav>
+      <!-- Botón móvil -->
+      <button id="btnMobile" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-700 hover:border-sky-600 hover:text-sky-700" aria-controls="mobileMenu" aria-expanded="false">
+        <span class="sr-only">Abrir menú</span>
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+    <!-- Menú móvil: solo Volver -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1">
+        <a href="https://criuagrm.github.io/" class="px-3 py-2 rounded-lg hover:bg-slate-50 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200">Serie audiovisual</span>
+        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Entrevistas</h2>
+        <p class="mt-3 text-slate-600 max-w-prose mx-auto lg:mx-0">Conversaciones con especialistas en ciencia política, instituciones, economía, sociología y urbanismo. Videos cortos, podcasts y transcripciones.</p>
+        <div class="mt-5 flex flex-wrap gap-3 justify-center lg:justify-start">
+          <a href="#filtros" class="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Explorar entrevistas</a>
+          <a href="#grilla" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Ver últimas</a>
+        </div>
+      </div>
+
+      <div class="flex justify-center lg:justify-end">
+        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden max-w-md w-full">
+          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl">Archivo 2023–2025</h3>
+            <p class="mt-1 text-slate-600 text-sm">6 entrevistas de la colección — nuevas sesiones cada mes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtros -->
+  <section id="filtros" class="py-6 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-end">
+        <div class="grow">
+          <label class="text-sm font-semibold text-slate-700">Buscar</label>
+          <div class="mt-1 relative">
+            <input id="q" type="search" placeholder="Invitado, tema, palabra clave…" class="w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" />
+            <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+        </div>
+        <div class="w-full md:w-44">
+          <label class="text-sm font-semibold text-slate-700">Año</label>
+          <select id="year" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>2025</option>
+            <option>2024</option>
+            <option>2023</option>
+          </select>
+        </div>
+        <div class="w-full md:w-56">
+          <label class="text-sm font-semibold text-slate-700">Tema</label>
+          <select id="tema" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option value="ciencia-politica">Ciencia política</option>
+            <option value="instituciones">Instituciones</option>
+            <option value="economia">Economía</option>
+            <option value="sociologia">Sociología</option>
+            <option value="urbanismo">Urbanismo</option>
+          </select>
+        </div>
+        <div class="w-full md:w-44">
+          <label class="text-sm font-semibold text-slate-700">Formato</label>
+          <select id="formato" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option value="video">Video</option>
+            <option value="audio">Audio</option>
+            <option value="texto">Texto</option>
+          </select>
+        </div>
+        <button id="limpiar" class="h-10 md:h-auto md:self-end px-4 py-2 rounded-xl border border-slate-300 hover:border-rose-500 hover:text-rose-600">Limpiar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grilla de entrevistas -->
+  <section id="grilla" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- 1 -->
+        <article class="entrevista" data-year="2025" data-tema="instituciones" data-formato="video" data-tags="fernando barrientos presidencialismo poder ejecutivo america latina">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="bg-white flex items-center justify-center p-0 border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Instituciones</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2025</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Instituciones democráticas y poder ejecutivo</h4>
+              <p class="mt-2 text-slate-600 text-sm">Entrevista a <b>Fernando Barrientos</b> sobre presidencialismo en América Latina hoy.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <button class="btnPlay inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700" data-url="https://www.youtube.com/embed/VIDEO_ID_1?autoplay=1"><i class="fa-solid fa-play"></i> Ver entrevista</button>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+              </div>
+              <div class="mt-3 flex flex-wrap gap-2 text-sm">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-file-lines"></i> Transcripción (PDF)</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="entrevista" data-year="2025" data-tema="ciencia-politica" data-formato="video" data-tags="franz barrios suvelza regimen democratico bolivia 2012 2019">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="bg-white flex items-center justify-center p-0 border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Ciencia política</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2025</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">El (des)plome del régimen democrático en Bolivia (2012–2019)</h4>
+              <p class="mt-2 text-slate-600 text-sm">Entrevista a <b>Franz Barrios Suvelza</b> sobre transformaciones institucionales.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <button class="btnPlay inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700" data-url="https://www.youtube.com/embed/VIDEO_ID_2?autoplay=1"><i class="fa-solid fa-play"></i> Ver entrevista</button>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+              </div>
+              <div class="mt-3 flex flex-wrap gap-2 text-sm">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-file-lines"></i> Transcripción (PDF)</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="entrevista" data-year="2024" data-tema="instituciones" data-formato="audio" data-tags="maria angelica suarez transparencia gobierno local">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="bg-white flex items-center justify-center p-0 border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Instituciones</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2024</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Transparencia municipal y participación social</h4>
+              <p class="mt-2 text-slate-600 text-sm">Conversación con <b>María Angélica Suárez</b> sobre mecanismos de control ciudadano.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <button class="btnPlay inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700" data-url="https://www.youtube.com/embed/VIDEO_ID_3?autoplay=1"><i class="fa-solid fa-headphones"></i> Escuchar</button>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+              </div>
+              <div class="mt-3 flex flex-wrap gap-2 text-sm">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-file-lines"></i> Transcripción (PDF)</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4 -->
+        <article class="entrevista" data-year="2024" data-tema="urbanismo" data-formato="video" data-tags="movilidad economia urbana servicios publicos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="bg-white flex items-center justify-center p-0 border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200">Urbanismo</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2024</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Economía urbana y movilidad metropolitana</h4>
+              <p class="mt-2 text-slate-600 text-sm">Diálogo sobre transporte, servicios urbanos y productividad.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <button class="btnPlay inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700" data-url="https://www.youtube.com/embed/VIDEO_ID_4?autoplay=1"><i class="fa-solid fa-play"></i> Ver entrevista</button>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5 -->
+        <article class="entrevista" data-year="2023" data-tema="ciencia-politica" data-formato="video" data-tags="comportamiento electoral jovenes encuesta panel">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="bg-white flex items-center justify-center p-0 border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Ciencia política</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2023</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Comportamiento electoral juvenil</h4>
+              <p class="mt-2 text-slate-600 text-sm">Resultados de un panel con jóvenes votantes.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <button class="btnPlay inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700" data-url="https://www.youtube.com/embed/VIDEO_ID_5?autoplay=1"><i class="fa-solid fa-play"></i> Ver entrevista</button>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6 -->
+        <article class="entrevista" data-year="2023" data-tema="economia" data-formato="texto" data-tags="gobierno abierto datos apertura datos publicos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="bg-white flex items-center justify-center p-0 border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 ring-1 ring-violet-200">Economía</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2023</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Gobierno abierto y datos públicos</h4>
+              <p class="mt-2 text-slate-600 text-sm">Entrevista escrita sobre estándares de apertura y reutilización.</p>
+              <div class="mt-4 flex items-center gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-regular fa-file-lines"></i> Leer entrevista</a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal reproductor -->
+  <div id="modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-black/60" id="overlay"></div>
+    <div class="relative mx-auto max-w-4xl h-[70vh] mt-16 bg-white rounded-2xl shadow-lg overflow-hidden">
+      <button id="closeModal" class="absolute right-3 top-3 inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/80 border border-slate-200 hover:bg-white text-slate-700" aria-label="Cerrar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <iframe id="player" class="w-full h-full" src="" title="Reproductor" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div id="contacto" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+      <h4 class="font-bold text-lg">Contacto</h4>
+      <p class="mt-2 text-slate-600"><i class="fas fa-envelope mr-2"></i>cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+      <p class="text-slate-600"><i class="fas fa-phone mr-2"></i>+591 67381294</p>
+      <div class="mt-8 text-sm text-slate-500">
+        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="mt-1">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS: filtros, menú móvil y modal -->
+  <script>
+    // Normalizar texto para búsqueda
+    const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,'');
+    const q = document.getElementById('q');
+    const year = document.getElementById('year');
+    const tema = document.getElementById('tema');
+    const formato = document.getElementById('formato');
+    const limpiar = document.getElementById('limpiar');
+    const items = Array.from(document.querySelectorAll('.entrevista'));
+
+    function filtrar(){
+      const tq = norm(q.value); const yr = year.value; const tm = tema.value; const fm = formato.value;
+      items.forEach(card => {
+        const okQ = !tq || norm(card.innerText + ' ' + (card.dataset.tags||'')).includes(tq);
+        const okY = !yr || card.dataset.year === yr;
+        const okT = !tm || card.dataset.tema === tm;
+        const okF = !fm || card.dataset.formato === fm;
+        card.style.display = (okQ && okY && okT && okF) ? '' : 'none';
+      });
+    }
+    [q,year,tema,formato].forEach(el => el.addEventListener('input', filtrar));
+    limpiar.addEventListener('click', ()=>{ q.value=''; year.value=''; tema.value=''; formato.value=''; filtrar(); });
+
+    // Menú móvil accesible
+    const btnMobile = document.getElementById('btnMobile');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = () => { mobileMenu?.classList.add('hidden'); btnMobile?.setAttribute('aria-expanded','false'); };
+    btnMobile?.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      btnMobile.setAttribute('aria-expanded', String(!isHidden));
+    });
+    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('click', (e) => { if (!mobileMenu || !btnMobile) return; if (!mobileMenu.classList.contains('hidden')) { if (!mobileMenu.contains(e.target) && !btnMobile.contains(e.target)) closeMenu(); }});
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+    // Modal de reproducción
+    const modal = document.getElementById('modal');
+    const overlay = document.getElementById('overlay');
+    const player = document.getElementById('player');
+    const closeModal = document.getElementById('closeModal');
+
+    function openModal(url){ modal.classList.remove('hidden'); player.src = url; document.body.classList.add('overflow-hidden'); }
+    function hideModal(){ player.src = ''; modal.classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }
+
+    document.querySelectorAll('.btnPlay').forEach(btn => {
+      btn.addEventListener('click', ()=>{ const url = btn.dataset.url; if (url) openModal(url); });
+    });
+    overlay.addEventListener('click', hideModal);
+    closeModal.addEventListener('click', hideModal);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') hideModal(); });
+  </script>
+</body>
+</html>
