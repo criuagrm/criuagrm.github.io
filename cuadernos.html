@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — Cuadernos de investigación</title>
+  <meta name="description" content="Cuadernos del CIRCPyCS: notas metodológicas, avances y reportes técnicos." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          colors: {
+            brand: { azul:"#203A63", verde:"#007A3D", rojo:"#D20B18" }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <nav class="flex items-center gap-3 text-sm">
+        <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
+          <i class="fa-solid fa-arrow-left"></i>
+          Volver al inicio
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200">Serie editorial</span>
+        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Cuadernos de investigación</h2>
+        <p class="mt-3 text-slate-600 max-w-prose mx-auto lg:mx-0">
+          Notas metodológicas, avances y reportes técnicos de proyectos en marcha. Enfocados en <b>datos</b>, <b>métodos</b> y <b>resultados parciales</b>.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-3 justify-center lg:justify-start">
+          <a href="#filtros" class="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Explorar cuadernos</a>
+          <a href="#publicar" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">¿Cómo publicar?</a>
+        </div>
+      </div>
+
+      <div class="flex justify-center lg:justify-end">
+        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden max-w-md w-full">
+          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl">Colección 2020–2025</h3>
+            <p class="mt-1 text-slate-600 text-sm">Encuestas, scraping de datos públicos, R/Python reproducible, mapeo y evaluación de políticas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtros -->
+  <section id="filtros" class="py-6 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-end">
+        <div class="grow">
+          <label class="text-sm font-semibold text-slate-700">Buscar</label>
+          <div class="mt-1 relative">
+            <input id="q" type="search" placeholder="Título, autor, palabra clave…" class="w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" />
+            <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+        </div>
+        <div class="w-full md:w-44">
+          <label class="text-sm font-semibold text-slate-700">Año</label>
+          <select id="year" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>2025</option>
+            <option>2024</option>
+            <option>2023</option>
+            <option>2022</option>
+            <option>2021</option>
+            <option>2020</option>
+          </select>
+        </div>
+        <div class="w-full md:w-64">
+          <label class="text-sm font-semibold text-slate-700">Tipo</label>
+          <select id="tipo" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option value="metodologia">Metodología y datos</option>
+            <option value="avances">Avances de investigación</option>
+            <option value="reporte">Reporte técnico</option>
+          </select>
+        </div>
+        <button id="limpiar" class="h-10 md:h-auto md:self-end px-4 py-2 rounded-xl border border-slate-300 hover:border-rose-500 hover:text-rose-600">
+          Limpiar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid de cuadernos -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- ITEM — duplica/edita según necesites -->
+        <article class="cuaderno" data-year="2025" data-tipo="metodologia" data-tags="encuesta uagrm cuestionario muestreo">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/7O6y9v2.png" alt="Diseño muestral y cuestionario UAGRM 2025" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Metodología y datos</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2025-01</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Encuesta UAGRM 2025: diseño muestral, cuestionario y protocolo de campo</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, J. O. Peralta</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2025</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> muestreo, cuestionario, trabajo de campo</div>
+              </div>
+              <p class="mt-3 text-slate-600">Especificación del marco muestral, cálculo de tamaños, instrumentos y cronograma operativo. Incluye plantillas y consentimientos.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Dataset</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Código</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="cuaderno" data-year="2024" data-tipo="avances" data-tags="desercion escolar santa cruz gestion publica indicadores">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/1X0q0Zr.png" alt="Avances deserción escolar 2018-2024" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Avances de investigación</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2024-03</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Deserción escolar en Santa Cruz (2018–2024): métricas, sesgos y primeras estimaciones</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autor:</b> D. Hurtado</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2024</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> educación, gestión pública, panel municipal</div>
+              </div>
+              <p class="mt-3 text-slate-600">Consolidación de fuentes, definición de indicadores y visualizaciones iniciales para el documento mayor de tesis.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Tablas CSV</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Repo</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="cuaderno" data-year="2025" data-tipo="reporte" data-tags="rue geografia educativa catastro uem codigos rue">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/MH6i0j1.png" alt="Estandarización RUE y catálogo UEM" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 ring-1 ring-violet-200">Reporte técnico</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2025-02</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Estandarización RUE y catálogo de Unidades Educativas Municipales</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, Equipo GICCSS</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2025</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> RUE, catastro, georreferenciación</div>
+              </div>
+              <p class="mt-3 text-slate-600">Procedimiento reproducible para limpieza de códigos RUE, fusión de fuentes y diccionario de variables.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Diccionario</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Scripts R</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="cuaderno" data-year="2023" data-tipo="metodologia" data-tags="python scraping precios peluquerias mercado competencia">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/8j8c4fV.png" alt="Scraping precios de servicios" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Metodología y datos</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2023-04</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Scraping y protocolo de precios de servicios urbanos</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, Estudiantes UAGRM</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2023</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> scraping, precios, competencia</div>
+              </div>
+              <p class="mt-3 text-slate-600">Guía práctica para recolectar precios en campo y por web con plantillas de imputación y control de calidad.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-file-excel"></i> Plantilla XLSX</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Código</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="cuaderno" data-year="2025" data-tipo="avances" data-tags="supervivencia candidaturas mujeres cox km partidos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/FFe1v6r.png" alt="Avances análisis de supervivencia política" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Avances de investigación</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2025-03</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Supervivencia de candidaturas femeninas: notas y estimaciones preliminares</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> D. Hurtado, Equipo LABAP</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2025</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> Kaplan-Meier, Cox, elecciones</div>
+              </div>
+              <p class="mt-3 text-slate-600">Esquema de variables, estructura de datos evento-tiempo y primeros gráficos Kaplan-Meier con covariables.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Datos anonimizados</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Scripts</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="cuaderno" data-year="2022" data-tipo="metodologia" data-tags="mapa ucebol proximidad accesibilidad scoring python">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/Wm2sQhT.png" alt="Metodología de mapeo de proximidades" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Metodología y datos</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2022-02</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Mapa de proximidades: protocolo de scoring para entorno UCEBOL</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autor:</b> D. Hurtado</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2022</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> accesibilidad, scoring, geolocalización</div>
+              </div>
+              <p class="mt-3 text-slate-600">Metodología manual en Python para cartografiar puntos de interés y construir índices de proximidad.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> GeoJSON</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-brand-verde hover:text-brand-verde"><i class="fa-brands fa-github"></i> Notebooks</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="cuaderno" data-year="2021" data-tipo="reporte" data-tags="instituciones politicas base documental estatutos leyes bolivia">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-56 bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4 border-b border-slate-200">
+              <img src="https://i.imgur.com/0Xk0t3s.png" alt="Repositorio base documental instituciones" class="max-h-full w-auto object-contain drop-shadow"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 ring-1 ring-violet-200">Reporte técnico</span>
+                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CI-2021-01</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Base documental de instituciones políticas en Bolivia</h4>
+              <div class="mt-3 space-y-1 text-sm text-slate-600">
+                <div><i class="fa-solid fa-user-tie mr-2 text-slate-500"></i><b>Autores:</b> Equipo CIRCPyCS</div>
+                <div><i class="fa-regular fa-calendar mr-2 text-slate-500"></i><b>Año:</b> 2021</div>
+                <div><i class="fa-solid fa-hashtag mr-2 text-slate-500"></i><b>Palabras clave:</b> leyes, estatutos, reglamentos</div>
+              </div>
+              <p class="mt-3 text-slate-600">Catálogo curado de normas y documentos institucionales con metadatos para análisis comparado.</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> PDF</a>
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-database"></i> Catálogo</a>
+              </div>
+              <div class="mt-4 text-xs text-slate-500">
+                <span class="mr-3"><b>DOI:</b> en tramitación</span>
+                <span class="mr-3"><b>Licencia:</b> CC BY 4.0</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo citar -->
+  <section id="citar" class="py-10 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Cómo citar</h3>
+      <p class="mt-2 text-slate-600">Usa el siguiente formato general para los Cuadernos de investigación del CIRCPyCS:</p>
+      <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+        <pre id="cita" class="text-sm whitespace-pre-wrap font-mono text-slate-700">Autor(es). (Año). <Título del cuaderno>. Cuadernos de investigación — CIRCPyCS, CI-AAAA-XX. DOI (si corresponde). CC BY 4.0.</pre>
+        <div class="mt-3">
+          <button id="copyCita" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700">
+            <i class="fa-regular fa-copy"></i> Copiar
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publicar -->
+  <section id="publicar" class="py-12 bg-white border-t border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">¿Cómo publicar un cuaderno?</h3>
+      <ol class="mt-4 space-y-2 text-slate-700 list-decimal pl-6">
+        <li>Descarga la <a class="text-sky-700 underline" href="#">plantilla LaTeX/Overleaf</a> o <a class="text-sky-700 underline" href="#">plantilla DOCX</a>.</li>
+        <li>Incluye: resumen, palabras clave, ficha técnica de datos, repositorio (GitHub) y licencia.</li>
+        <li>Envía a <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="text-sky-700 underline">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>. Evaluación editorial ágil (máx. 2 semanas) para notas / reportes.</li>
+      </ol>
+      <p class="mt-3 text-sm text-slate-500">Todos los cuadernos se publican con <b>CC BY 4.0</b> y se promueven en el boletín y redes del centro.</p>
+    </div>
+  </section>
+
+  <!-- Otras colecciones -->
+  <section class="py-12 bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Explora otras publicaciones</h3>
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+        <a href="libros" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Libros</h4>
+          <p class="mt-1 text-sm text-slate-600">Monografías y compilaciones.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver colección <span>→</span></div>
+        </a>
+        <a href="documentos-trabajo" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Documentos de trabajo</h4>
+          <p class="mt-1 text-sm text-slate-600">Working papers del centro.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver documentos <span>→</span></div>
+        </a>
+        <a href="boletin.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Boletines</h4>
+          <p class="mt-1 text-sm text-slate-600">Actualizaciones y coyuntura.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver boletines <span>→</span></div>
+        </a>
+        <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Revistas</h4>
+          <p class="mt-1 text-sm text-slate-600">Acceso a <em>Conocimiento i Política</em> en OJS.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Abrir en OJS <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div id="contacto" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+      <h4 class="font-bold text-lg">Contacto</h4>
+      <p class="mt-2 text-slate-600"><i class="fas fa-envelope mr-2"></i>cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+      <p class="text-slate-600"><i class="fas fa-phone mr-2"></i>+591 67381294</p>
+      <div class="mt-8 text-sm text-slate-500">
+        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="mt-1">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS filtros + copiar cita -->
+  <script>
+    const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,'');
+    const q = document.getElementById('q');
+    const year = document.getElementById('year');
+    const tipo = document.getElementById('tipo');
+    const limpiar = document.getElementById('limpiar');
+    const items = Array.from(document.querySelectorAll('.cuaderno'));
+
+    function filtrar() {
+      const tq = norm(q.value);
+      const yr = year.value;
+      const tp = tipo.value;
+      items.forEach(card => {
+        const okQ = !tq || norm(card.innerText + ' ' + (card.dataset.tags||'')).includes(tq);
+        const okY = !yr || card.dataset.year === yr;
+        const okT = !tp || card.dataset.tipo === tp;
+        card.style.display = (okQ && okY && okT) ? '' : 'none';
+      });
+    }
+    [q,year,tipo].forEach(el => el.addEventListener('input', filtrar));
+    limpiar.addEventListener('click', () => { q.value=''; year.value=''; tipo.value=''; filtrar(); });
+
+    // copiar cita
+    document.getElementById('copyCita').addEventListener('click', async () => {
+      const txt = document.getElementById('cita').innerText;
+      try { await navigator.clipboard.writeText(txt); alert('Cita copiada.'); }
+      catch { alert('No se pudo copiar.'); }
+    });
+  </script>
+</body>
+</html>
