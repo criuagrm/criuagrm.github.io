@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — Cartillas web</title>
+  <meta name="description" content="Cartillas web del CIRCPyCS: guías prácticas basadas en evidencia sobre ciencia política, instituciones, economía, sociología y urbanismo." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav (responsive) -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+
+      <!-- Menú escritorio -->
+      <nav class="hidden md:flex items-center gap-1 text-sm">
+        <a href="#cartillas" class="px-3 py-2 rounded-xl hover:text-sky-700">Cartillas</a>
+        <a href="#series" class="px-3 py-2 rounded-xl hover:text-sky-700">Series</a>
+        <a href="#citar" class="px-3 py-2 rounded-xl hover:text-sky-700">Citar</a>
+        <a href="#faq" class="px-3 py-2 rounded-xl hover:text-sky-700">FAQ</a>
+        <a href="https://criuagrm.github.io/" class="ml-1 inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
+          <i class="fa-solid fa-arrow-left"></i>
+          Volver
+        </a>
+      </nav>
+
+      <!-- Botón móvil -->
+      <button id="btnMobile" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-700 hover:border-sky-600 hover:text-sky-700" aria-controls="mobileMenu" aria-expanded="false">
+        <span class="sr-only">Abrir menú</span>
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Menú móvil -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1">
+        <a href="#cartillas" class="px-3 py-2 rounded-lg hover:bg-slate-50">Cartillas</a>
+        <a href="#series" class="px-3 py-2 rounded-lg hover:bg-slate-50">Series</a>
+        <a href="#citar" class="px-3 py-2 rounded-lg hover:bg-slate-50">Citar</a>
+        <a href="#faq" class="px-3 py-2 rounded-lg hover:bg-slate-50">FAQ</a>
+        <a href="https://criuagrm.github.io/" class="px-3 py-2 rounded-lg hover:bg-slate-50 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Guías prácticas</span>
+        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Cartillas web del CIRCPyCS</h2>
+        <p class="mt-3 text-slate-600 max-w-prose mx-auto lg:mx-0">Materiales breves, claros y accionables para equipos públicos y ciudadanía. Enfocados en <b>ciencia política</b>, <b>instituciones</b>, <b>economía</b>, <b>sociología</b> y <b>urbanismo</b>.</p>
+        <div class="mt-5 flex flex-wrap gap-3 justify-center lg:justify-start">
+          <a href="#cartillas" class="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Explorar cartillas</a>
+          <a href="#series" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Ver series</a>
+        </div>
+      </div>
+
+      <div class="flex justify-center lg:justify-end">
+        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden max-w-md w-full">
+          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl">Ediciones 2024–2025</h3>
+            <p class="mt-1 text-slate-600 text-sm">Licencia <b>CC BY 4.0</b>, formatos <b>PDF</b> y <b>HTML accesible</b>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtros -->
+  <section id="filtros" class="py-6 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-end">
+        <div class="grow">
+          <label class="text-sm font-semibold text-slate-700">Buscar</label>
+          <div class="mt-1 relative">
+            <input id="q" type="search" placeholder="Ej. control social, BRT, monotributo, mediación…" class="w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" />
+            <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+        </div>
+        <div class="w-full md:w-52">
+          <label class="text-sm font-semibold text-slate-700">Ámbito</label>
+          <select id="ambito" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>Ciencia política</option>
+            <option>Instituciones</option>
+            <option>Economía</option>
+            <option>Sociología</option>
+            <option>Urbanismo</option>
+          </select>
+        </div>
+        <div class="w-full md:w-40">
+          <label class="text-sm font-semibold text-slate-700">Año</label>
+          <select id="year" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>2025</option>
+            <option>2024</option>
+            <option>2023</option>
+          </select>
+        </div>
+        <div class="w-full md:w-52">
+          <label class="text-sm font-semibold text-slate-700">Formato</label>
+          <select id="formato" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>PDF</option>
+            <option>HTML</option>
+            <option>Infografía</option>
+          </select>
+        </div>
+        <div class="w-full md:w-56">
+          <label class="text-sm font-semibold text-slate-700">Ordenar por</label>
+          <select id="orden" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="reciente">Más recientes</option>
+            <option value="alf">Título (A–Z)</option>
+            <option value="ambito">Ámbito</option>
+          </select>
+        </div>
+        <button id="limpiar" class="h-10 md:h-auto md:self-end px-4 py-2 rounded-xl border border-slate-300 hover:border-rose-500 hover:text-rose-600">Limpiar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid de cartillas -->
+  <section id="cartillas" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- 1 Ciencia política -->
+        <article class="cartilla" data-ambito="Ciencia política" data-year="2025" data-formato="PDF" data-titulo="Control político local" data-tags="rendicion de cuentas cabildos fiscalizacion concejos municipales">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="Portada Cartilla" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Ciencia política</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2025</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CW-2025-01</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">ABC del control político local</h4>
+              <p class="mt-2 text-slate-600">Herramientas simples para fiscalizar la gestión municipal: cronogramas, actas, indicadores y canales de reporte.</p>
+              <p class="mt-2 text-sm text-slate-600"><b>Autores:</b> Equipo CIRCPyCS · <b>Formato:</b> PDF · <b>Licencia:</b> CC BY 4.0</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="cta-pdf inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-download"></i> Descargar PDF</a>
+                <button class="cta-citar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
+                <button class="cta-vista inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700" data-url="#"><i class="fa-solid fa-eye"></i> Vista rápida</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 Instituciones -->
+        <article class="cartilla" data-ambito="Instituciones" data-year="2025" data-formato="HTML" data-titulo="Compras abiertas" data-tags="ocds contrataciones portal transparencia analitica riesgos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="Portada Cartilla" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Instituciones</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2025</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CW-2025-02</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Compras abiertas con estándar OCDS</h4>
+              <p class="mt-2 text-slate-600">Cómo publicar, validar y analizar datos de contratación y construir paneles e indicadores de riesgo.</p>
+              <p class="mt-2 text-sm text-slate-600"><b>Autores:</b> Equipo CIRCPyCS · <b>Formato:</b> HTML · <b>Licencia:</b> CC BY 4.0</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="cta-html inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700"><i class="fa-solid fa-globe"></i> Leer en línea</a>
+                <button class="cta-citar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-amber-600 hover:text-amber-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
+                <button class="cta-vista inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700" data-url="#"><i class="fa-solid fa-eye"></i> Vista rápida</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 Economía -->
+        <article class="cartilla" data-ambito="Economía" data-year="2024" data-formato="PDF" data-titulo="Monotributo digital" data-tags="mipymes formalizacion simplificacion tributaria pagos electronicos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="Portada Cartilla" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200">Economía</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2024</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CW-2024-03</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Monotributo digital para MIPYMES</h4>
+              <p class="mt-2 text-slate-600">Registro, declaración y pago en una sola app. Requisitos, pasos y consejos para evitar sanciones.</p>
+              <p class="mt-2 text-sm text-slate-600"><b>Autores:</b> Equipo CIRCPyCS · <b>Formato:</b> PDF · <b>Licencia:</b> CC BY 4.0</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="cta-pdf inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-700"><i class="fa-solid fa-download"></i> Descargar PDF</a>
+                <button class="cta-citar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-indigo-600 hover:text-indigo-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
+                <button class="cta-vista inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700" data-url="#"><i class="fa-solid fa-eye"></i> Vista rápida</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4 Sociología -->
+        <article class="cartilla" data-ambito="Sociología" data-year="2024" data-formato="HTML" data-titulo="Mediación comunitaria" data-tags="cohesion social barrial violencia intrafamiliar justicia de paz">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="Portada Cartilla" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200">Sociología</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2024</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CW-2024-04</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Centros de mediación comunitaria</h4>
+              <p class="mt-2 text-slate-600">Protocolos para conflictos vecinales, derivaciones seguras y registro de acuerdos.</p>
+              <p class="mt-2 text-sm text-slate-600"><b>Autores:</b> Equipo CIRCPyCS · <b>Formato:</b> HTML · <b>Licencia:</b> CC BY 4.0</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="cta-html inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700"><i class="fa-solid fa-globe"></i> Leer en línea</a>
+                <button class="cta-citar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-rose-600 hover:text-rose-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
+                <button class="cta-vista inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700" data-url="#"><i class="fa-solid fa-eye"></i> Vista rápida</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5 Urbanismo -->
+        <article class="cartilla" data-ambito="Urbanismo" data-year="2025" data-formato="Infografía" data-titulo="BRT y carriles preferenciales" data-tags="movilidad buses semaforos inteligentes brt tiempos de viaje">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="Portada Cartilla" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700 ring-1 ring-fuchsia-200">Urbanismo</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2025</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CW-2025-05</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">BRT y carriles preferenciales</h4>
+              <p class="mt-2 text-slate-600">Principios, beneficios y pasos para pilotos de alta factibilidad.</p>
+              <p class="mt-2 text-sm text-slate-600"><b>Autores:</b> Equipo CIRCPyCS · <b>Formato:</b> Infografía · <b>Licencia:</b> CC BY 4.0</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="cta-info inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-fuchsia-600 hover:bg-fuchsia-700"><i class="fa-solid fa-image"></i> Ver infografía</a>
+                <button class="cta-citar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-fuchsia-600 hover:text-fuchsia-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
+                <button class="cta-vista inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700" data-url="#"><i class="fa-solid fa-eye"></i> Vista rápida</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6 Instituciones -->
+        <article class="cartilla" data-ambito="Instituciones" data-year="2023" data-formato="PDF" data-titulo="Acceso a la información" data-tags="transparencia aip ley solicitud datos abiertos plazos recursos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="Portada Cartilla" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-lime-50 text-lime-700 ring-1 ring-lime-200">Instituciones</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2023</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">CW-2023-06</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Acceso a la información pública (AIP)</h4>
+              <p class="mt-2 text-slate-600">Cómo presentar solicitudes efectivas, plazos, recursos y buenas prácticas.</p>
+              <p class="mt-2 text-sm text-slate-600"><b>Autores:</b> Equipo CIRCPyCS · <b>Formato:</b> PDF · <b>Licencia:</b> CC BY 4.0</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="cta-pdf inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-lime-600 hover:bg-lime-700"><i class="fa-solid fa-download"></i> Descargar PDF</a>
+                <button class="cta-citar inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-lime-600 hover:text-lime-700"><i class="fa-regular fa-copy"></i> Copiar cita</button>
+                <button class="cta-vista inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700" data-url="#"><i class="fa-solid fa-eye"></i> Vista rápida</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        </div>
+    </div>
+  </section>
+
+  <!-- Series / colecciones -->
+  <section id="series" class="py-12 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Series editoriales</h3>
+      <p class="mt-2 text-slate-600">Agrupamos cartillas por temas para facilitar su uso.</p>
+
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+        <a href="#cartillas" data-filter="Ciencia política" class="serie rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-sm">
+          <h4 class="font-semibold">ABC institucional</h4>
+          <p class="mt-1 text-sm text-slate-600">Control político, cabildeo, acceso a información.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver cartillas <span>→</span></div>
+        </a>
+        <a href="#cartillas" data-filter="Urbanismo" class="serie rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Urbanismo táctico</h4>
+          <p class="mt-1 text-sm text-slate-600">LED, BRT, espacios públicos seguros.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver cartillas <span>→</span></div>
+        </a>
+        <a href="#cartillas" data-filter="Economía" class="serie rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Economía cotidiana</h4>
+          <p class="mt-1 text-sm text-slate-600">Monotributo, precios, finanzas locales.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver cartillas <span>→</span></div>
+        </a>
+        <a href="#cartillas" data-filter="Sociología" class="serie rounded-2xl border border-slate-200 bg-white p-5 hover:shadow-sm">
+          <h4 class="font-semibold">Cohesión social</h4>
+          <p class="mt-1 text-sm text-slate-600">Mediación comunitaria y convivencia.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver cartillas <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo citar -->
+  <section id="citar" class="py-12 bg-white border-t border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Cómo citar una cartilla</h3>
+      <p class="mt-2 text-slate-600">Formato sugerido (ajusta título, código y año):</p>
+      <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <pre id="plantillaCita" class="text-sm whitespace-pre-wrap font-mono text-slate-700">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS). (2025). <i>ABC del control político local</i> (Cartillas web, CW-2025-01). Universidad Autónoma Gabriel René Moreno. CC BY 4.0.</pre>
+        <button id="copyPlantilla" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-copy"></i> Copiar formato</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-12 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Preguntas frecuentes</h3>
+      <div class="mt-4 grid gap-4">
+        <details class="rounded-xl border border-slate-200 bg-white p-4">
+          <summary class="font-semibold cursor-pointer">¿Puedo reutilizar las cartillas?</summary>
+          <p class="mt-2 text-slate-600 text-sm">Sí. Están bajo licencia <b>CC BY 4.0</b>. Atribuye al CIRCPyCS y enlaza a la cartilla original.</p>
+        </details>
+        <details class="rounded-xl border border-slate-200 bg-white p-4">
+          <summary class="font-semibold cursor-pointer">¿Cómo propongo una nueva cartilla?</summary>
+          <p class="mt-2 text-slate-600 text-sm">Escríbenos a <a class="text-sky-700 underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> con el tema, público y objetivo.</p>
+        </details>
+        <details class="rounded-xl border border-slate-200 bg-white p-4">
+          <summary class="font-semibold cursor-pointer">¿Habrá versión accesible?</summary>
+          <p class="mt-2 text-slate-600 text-sm">Sí, todas las nuevas cartillas tendrán versión <b>HTML accesible</b> y <b>PDF etiquetado</b>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div id="contacto" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+      <h4 class="font-bold text-lg">Contacto</h4>
+      <p class="mt-2 text-slate-600"><i class="fas fa-envelope mr-2"></i>cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+      <p class="text-slate-600"><i class="fas fa-phone mr-2"></i>+591 67381294</p>
+      <div class="mt-8 text-sm text-slate-500">
+        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="mt-1">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal de vista rápida -->
+  <div id="modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" data-close></div>
+    <div class="relative mx-auto my-10 w-[95%] max-w-3xl rounded-2xl bg-white shadow-xl border border-slate-200 overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+        <h4 id="modalTitle" class="font-semibold">Vista rápida</h4>
+        <button class="w-9 h-9 inline-flex items-center justify-center rounded-xl border border-slate-200 text-slate-700 hover:border-rose-500 hover:text-rose-600" data-close>
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-4 max-h-[70vh] overflow-y-auto">
+        <iframe id="modalFrame" title="Vista rápida" class="w-full h-[60vh] rounded-xl border border-slate-200" srcdoc="<div style='font-family:Inter,sans-serif;padding:16px;color:#0f172a'>Vista previa no disponible.</div>"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS: filtros + orden + menú móvil + compartir + modal -->
+  <script>
+    const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,'');
+    const q = document.getElementById('q');
+    const ambito = document.getElementById('ambito');
+    const year = document.getElementById('year');
+    const formato = document.getElementById('formato');
+    const orden = document.getElementById('orden');
+    const limpiar = document.getElementById('limpiar');
+    const grid = document.getElementById('grid');
+
+    function getCards(){ return Array.from(document.querySelectorAll('.cartilla')); }
+    function filtro(card){
+      const okQ = !q.value || norm(card.dataset.titulo + ' ' + (card.dataset.tags||'') + ' ' + card.innerText).includes(norm(q.value));
+      const okA = !ambito.value || card.dataset.ambito === ambito.value;
+      const okY = !year.value || card.dataset.year === year.value;
+      const okF = !formato.value || card.dataset.formato === formato.value;
+      return okQ && okA && okY && okF;
+    }
+    function ordenar(cards){
+      const by = orden.value;
+      const copy = [...cards];
+      if(by==='alf') copy.sort((a,b)=> (a.dataset.titulo||'').localeCompare(b.dataset.titulo||''));
+      else if(by==='ambito') copy.sort((a,b)=> (a.dataset.ambito||'').localeCompare(b.dataset.ambito||''));
+      else /* reciente */ copy.sort((a,b)=> Number(b.dataset.year)-Number(a.dataset.year));
+      return copy;
+    }
+    function render(){
+      const cards = getCards();
+      const visibles = cards.filter(filtro);
+      const ordenadas = ordenar(visibles);
+      grid.innerHTML = '';
+      ordenadas.forEach(c => grid.appendChild(c));
+      cards.forEach(c => c.style.display = visibles.includes(c) ? '' : 'none');
+    }
+    [q,ambito,year,formato,orden].forEach(el=> el.addEventListener('input', render));
+    limpiar.addEventListener('click', ()=>{ q.value=''; ambito.value=''; year.value=''; formato.value=''; orden.value='reciente'; render(); });
+
+    // Series quick filter
+    document.querySelectorAll('.serie').forEach(s => s.addEventListener('click', (e)=>{
+      const v = s.getAttribute('data-filter');
+      ambito.value = v||''; render();
+    }));
+
+    // Copiar cita (genérica por tarjeta)
+    function citaDe(card){
+      const amb = card.dataset.ambito; const yr = card.dataset.year; const tit = card.querySelector('h4')?.innerText||'';
+      const code = card.querySelector('.text-slate-600.rounded-full:nth-child(3)')?.innerText || 'CW-XXXX-XX';
+      return `Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS). (${yr}). ${tit} (Cartillas web, ${code}). Universidad Autónoma Gabriel René Moreno. CC BY 4.0.`;
+    }
+    document.querySelectorAll('.cta-citar').forEach(btn => btn.addEventListener('click', async (e)=>{
+      const card = e.target.closest('.cartilla');
+      const txt = citaDe(card);
+      try{ await navigator.clipboard.writeText(txt); btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiada'; setTimeout(()=>btn.innerHTML='<i class="fa-regular fa-copy"></i> Copiar cita', 2000);}catch{}
+    }));
+
+    // Modal vista rápida
+    const modal = document.getElementById('modal');
+    const modalFrame = document.getElementById('modalFrame');
+    const modalTitle = document.getElementById('modalTitle');
+    const openModal = (title, url)=>{
+      modalTitle.textContent = title || 'Vista rápida';
+      if(url && url !== '#') modalFrame.src = url; else modalFrame.removeAttribute('src');
+      modal.classList.remove('hidden');
+    };
+    const closeModal = ()=>{ modal.classList.add('hidden'); modalFrame.removeAttribute('src'); };
+    modal.querySelectorAll('[data-close]').forEach(el=> el.addEventListener('click', closeModal));
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+    document.querySelectorAll('.cta-vista').forEach(btn=> btn.addEventListener('click', (e)=>{
+      const card = e.target.closest('.cartilla');
+      const title = card.querySelector('h4')?.innerText || '';
+      const url = btn.getAttribute('data-url') || '#';
+      openModal(title, url);
+    }));
+
+    // Menú móvil accesible
+    const btnMobile = document.getElementById('btnMobile');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = () => { mobileMenu?.classList.add('hidden'); btnMobile?.setAttribute('aria-expanded','false'); };
+    btnMobile?.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      btnMobile.setAttribute('aria-expanded', String(!isHidden));
+    });
+    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('click', (e) => { if (!mobileMenu || !btnMobile) return; if (!mobileMenu.classList.contains('hidden')) { if (!mobileMenu.contains(e.target) && !btnMobile.contains(e.target)) closeMenu(); }});
+
+    // Primera renderización
+    render();
+  </script>
+</body>
+</html>
