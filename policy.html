@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIRCPyCS — Propuestas de políticas públicas</title>
+  <meta name="description" content="Catálogo de propuestas de políticas públicas basadas en evidencia: fichas, costos, impacto y métricas de seguimiento." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          colors: {
+            brand: { azul:"#203A63", verde:"#007A3D", rojo:"#D20B18" }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav (responsive con menú móvil) -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+
+      <!-- Menú escritorio -->
+      <nav class="hidden md:flex items-center gap-1 text-sm">
+        <a href="#inicio" class="px-3 py-2 rounded-xl hover:text-sky-700">Inicio</a>
+        <a href="#filtros" class="px-3 py-2 rounded-xl hover:text-sky-700">Propuestas</a>
+        <a href="#criterios" class="px-3 py-2 rounded-xl hover:text-sky-700">Criterios</a>
+        <a href="#contacto" class="px-3 py-2 rounded-xl hover:text-sky-700">Contacto</a>
+        <a href="https://criuagrm.github.io/" class="ml-1 inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
+          <i class="fa-solid fa-arrow-left"></i>
+          Volver
+        </a>
+      </nav>
+
+      <!-- Botón móvil -->
+      <button id="btnMobile" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-700 hover:border-sky-600 hover:text-sky-700" aria-controls="mobileMenu" aria-expanded="false">
+        <span class="sr-only">Abrir menú</span>
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Menú móvil desplegable -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1">
+        <a href="#inicio" class="px-3 py-2 rounded-lg hover:bg-slate-50">Inicio</a>
+        <a href="#filtros" class="px-3 py-2 rounded-lg hover:bg-slate-50">Propuestas</a>
+        <a href="#criterios" class="px-3 py-2 rounded-lg hover:bg-slate-50">Criterios</a>
+        <a href="#contacto" class="px-3 py-2 rounded-lg hover:bg-slate-50">Contacto</a>
+        <a href="https://criuagrm.github.io/" class="px-3 py-2 rounded-lg hover:bg-slate-50 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver al inicio</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Basadas en evidencia</span>
+        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Propuestas de políticas públicas</h2>
+        <p class="mt-3 text-slate-600 max-w-prose mx-auto lg:mx-0">Fichas con diagnóstico, alternativa de política, costo estimado, impacto esperado y métricas de seguimiento. Niveles <b>municipal</b>, <b>departamental</b> y <b>nacional</b>.</p>
+        <div class="mt-5 flex flex-wrap gap-3 justify-center lg:justify-start">
+          <a href="#filtros" class="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Explorar propuestas</a>
+          <a href="#criterios" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Criterios y priorización</a>
+        </div>
+      </div>
+
+      <div class="flex justify-center lg:justify-end">
+        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden max-w-md w-full">
+          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl">Catálogo 2025</h3>
+            <p class="mt-1 text-slate-600 text-sm">Ciencia política, instituciones, economía, sociología y urbanismo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtros -->
+  <section id="filtros" class="py-6 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-end">
+        <div class="grow">
+          <label class="text-sm font-semibold text-slate-700">Buscar</label>
+          <div class="mt-1 relative">
+            <input id="q" type="search" placeholder="Ej. control político, compras abiertas, BRT, agendas…" class="w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" />
+            <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+        </div>
+        <div class="w-full md:w-52">
+          <label class="text-sm font-semibold text-slate-700">Ámbito</label>
+          <select id="ambito" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>Ciencia política</option>
+            <option>Instituciones</option>
+            <option>Economía</option>
+            <option>Sociología</option>
+            <option>Urbanismo</option>
+          </select>
+        </div>
+        <div class="w-full md:w-52">
+          <label class="text-sm font-semibold text-slate-700">Nivel</label>
+          <select id="nivel" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>Municipal</option>
+            <option>Departamental</option>
+            <option>Nacional</option>
+          </select>
+        </div>
+        <div class="w-full md:w-56">
+          <label class="text-sm font-semibold text-slate-700">Estado</label>
+          <select id="estado" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="">Todos</option>
+            <option>Propuesta</option>
+            <option>En revisión</option>
+            <option>Piloto</option>
+            <option>Implementación</option>
+          </select>
+        </div>
+        <div class="w-full md:w-60">
+          <label class="text-sm font-semibold text-slate-700">Ordenar por</label>
+          <select id="orden" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
+            <option value="score">Prioridad (automática)</option>
+            <option value="impacto">Impacto</option>
+            <option value="costo">Costo</option>
+            <option value="factibilidad">Factibilidad</option>
+          </select>
+        </div>
+        <button id="limpiar" class="h-10 md:h-auto md:self-end px-4 py-2 rounded-xl border border-slate-300 hover:border-rose-500 hover:text-rose-600">
+          Limpiar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid de propuestas (9 items) -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- 1 Ciencia política: desempeño legislativo -->
+        <article class="pp" data-ambito="Ciencia política" data-nivel="Nacional" data-estado="En revisión" data-impacto="4" data-costo="700000" data-factibilidad="4" data-tags="votacion nominal accountability parlamento asistencia productividad legislativa API datos abiertos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Ciencia política</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Nacional</span>
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">En revisión</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Votación nominal y tablero de desempeño legislativo</h4>
+              <p class="mt-2 text-slate-600">Publicación obligatoria de votaciones nominales, asistencia, productividad y trazabilidad de proyectos con API abierta.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↑ accountability y control ciudadano.</li>
+                <li><b>Costo:</b> ≈ Bs 0.7M (infraestructura + soporte).</li>
+                <li><b>Indicadores:</b> % votaciones nominales, uso de API, sesiones con quórum.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> resistencia política; datos incompletos.</p>
+                  <p><b>Mitigación:</b> sanciones por incumplimiento; estándares y auditorías de datos.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 Instituciones: compras abiertas -->
+        <article class="pp" data-ambito="Instituciones" data-nivel="Municipal" data-estado="En revisión" data-impacto="4" data-costo="900000" data-factibilidad="5" data-tags="datos abiertos compras contrataciones ocds transparencia riesgos colusion">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Instituciones</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Municipal</span>
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">En revisión</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Compras abiertas (OCDS) con analítica de riesgos</h4>
+              <p class="mt-2 text-slate-600">Portal de licitaciones, contratos y entregas en estándar OCDS; paneles de precios, proveedores y alertas de colusión.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↓ sobreprecios; ↑ concurrencia.</li>
+                <li><b>Costo:</b> ≈ Bs 0.9M setup + O&M.</li>
+                <li><b>Indicadores:</b> % procesos con datos completos; oferentes/licitación; días/etapa.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> resistencia interna; calidad de datos.</p>
+                  <p><b>Mitigación:</b> mandatos, plantillas y auditorías automáticas.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-amber-600 hover:bg-amber-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 Economía: monotributo digital -->
+        <article class="pp" data-ambito="Economía" data-nivel="Nacional" data-estado="Propuesta" data-impacto="3" data-costo="1100000" data-factibilidad="3" data-tags="mipymes formalizacion monotributo digital simplificacion tributaria caja unica pagos electronicos">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200">Economía</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Nacional</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Propuesta</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Monotributo digital y simplificación para MIPYMES</h4>
+              <p class="mt-2 text-slate-600">Régimen único bimestral, alta 100% en línea y caja única municipal para tasas; pagos electrónicos y recordatorios.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↑ formalización y recaudación sin subir tasas.</li>
+                <li><b>Costo:</b> ≈ Bs 1.1M (plataforma + soporte).</li>
+                <li><b>Indicadores:</b> altas nuevas, permanencia 12m, costo de cumplimiento.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> elusión; brecha digital.</p>
+                  <p><b>Mitigación:</b> controles cruzados, kioscos y asistencia presencial.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4 Sociología: mediación comunitaria -->
+        <article class="pp" data-ambito="Sociología" data-nivel="Municipal" data-estado="Propuesta" data-impacto="3" data-costo="600000" data-factibilidad="4" data-tags="cohesion social mediacion comunitaria justicia vecinal violencia intrafamiliar conflictos barriales">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200">Sociología</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Municipal</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Propuesta</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Centros de mediación comunitaria y convivencia</h4>
+              <p class="mt-2 text-slate-600">Red de mediadores barriales con protocolos para conflictos vecinales y violencia intrafamiliar; derivaciones y seguimiento.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↓ conflictos judicializados; ↑ cohesión social.</li>
+                <li><b>Costo:</b> ≈ Bs 0.6M/año (3 centros piloto).</li>
+                <li><b>Indicadores:</b> acuerdos logrados, reincidencia, satisfacción usuaria.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> revictimización; sesgos.</p>
+                  <p><b>Mitigación:</b> formación, protocolos de género y supervisión externa.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5 Urbanismo: carriles bus -->
+        <article class="pp" data-ambito="Urbanismo" data-nivel="Municipal" data-estado="En revisión" data-impacto="3" data-costo="2600000" data-factibilidad="3" data-tags="buses carril preferencial brt semaforos inteligentes tiempos viaje varianza">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700 ring-1 ring-fuchsia-200">Urbanismo</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Municipal</span>
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">En revisión</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Carriles preferenciales para buses + semaforización inteligente</h4>
+              <p class="mt-2 text-slate-600">Corredores con prioridad al bus y control adaptativo de semáforos para reducir tiempos de viaje y su varianza.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↓ tiempo de viaje 10–20%.</li>
+                <li><b>Costo:</b> ≈ Bs 2.6M (2 corredores piloto).</li>
+                <li><b>Indicadores:</b> velocidad comercial, regularidad, satisfacción usuaria.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> oposición de automovilistas; incumplimiento.</p>
+                  <p><b>Mitigación:</b> señalización, control electrónico y campañas.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-fuchsia-600 hover:bg-fuchsia-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6 Urbanismo: LED + táctico -->
+        <article class="pp" data-ambito="Urbanismo" data-nivel="Municipal" data-estado="Implementación" data-impacto="4" data-costo="2200000" data-factibilidad="4" data-tags="iluminacion led urbanismo tactico hotspots seguridad espacio publico">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 ring-1 ring-rose-200">Urbanismo</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Municipal</span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Implementación</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Iluminación LED y urbanismo táctico en ejes críticos</h4>
+              <p class="mt-2 text-slate-600">Reemplazo a LED, poda y mobiliario en puntos definidos por datos de delito y flujo peatonal.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↓ delitos de oportunidad 15–25%.</li>
+                <li><b>Costo:</b> ≈ Bs 2.2M (100 postes + obras ligeras).</li>
+                <li><b>Indicadores:</b> delitos/1000 hab, percepción, luminancia.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> desplazamiento del delito; vandalismo.</p>
+                  <p><b>Mitigación:</b> monitoreo continuo; mantenimiento comunitario.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 7 Instituciones: ventanilla única -->
+        <article class="pp" data-ambito="Instituciones" data-nivel="Nacional" data-estado="Propuesta" data-impacto="4" data-costo="3000000" data-factibilidad="3" data-tags="ventanilla unica digital identidad interoperabilidad pagos tramites expediente electronico">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-lime-50 text-lime-700 ring-1 ring-lime-200">Instituciones</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Nacional</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Propuesta</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Ventanilla única digital e identidad electrónica</h4>
+              <p class="mt-2 text-slate-600">Trámites en línea con identidad verificada, pagos y expediente interoperable entre entidades.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↓ tiempos de trámite 40–60%.</li>
+                <li><b>Costo:</b> ≈ Bs 3.0M (setup + licencias).</li>
+                <li><b>Indicadores:</b> tiempo medio, NPS, % trámites online.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> ciberseguridad; exclusión digital.</p>
+                  <p><b>Mitigación:</b> MFA, auditorías, kioscos y asistencia.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-lime-600 hover:bg-lime-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 8 Ciencia política: lobby y agendas -->
+        <article class="pp" data-ambito="Ciencia política" data-nivel="Departamental" data-estado="Propuesta" data-impacto="3" data-costo="500000" data-factibilidad="4" data-tags="cabildeo lobby registro agendas publicas reuniones integridad conflictos de interes">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Ciencia política</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Departamental</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Propuesta</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Registro de cabildeo y agendas públicas</h4>
+              <p class="mt-2 text-slate-600">Registro único de lobistas, huella de reuniones y publicación de agendas de autoridades con buscador y API.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↑ integridad y trazabilidad de decisiones.</li>
+                <li><b>Costo:</b> ≈ Bs 0.5M (plataforma + capacitación).</li>
+                <li><b>Indicadores:</b> % reuniones registradas, consultas públicas, reportes ciudadanos.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> subregistro; captura de regulador.</p>
+                  <p><b>Mitigación:</b> sanciones, verificaciones aleatorias y participación social.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 9 Sociología: guarderías -->
+        <article class="pp" data-ambito="Sociología" data-nivel="Municipal" data-estado="Propuesta" data-impacto="3" data-costo="1400000" data-factibilidad="4" data-tags="cuidado infantil guarderias empleo femenino corresponsabilidad social inclusion">
+          <div class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="h-48 bg-slate-50 flex items-center justify-center border-b border-slate-200">
+              <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-16 w-16 rounded-xl object-contain" loading="lazy" decoding="async"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-orange-50 text-orange-700 ring-1 ring-orange-200">Sociología</span>
+                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Municipal</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 ring-1 ring-amber-200">Propuesta</span>
+              </div>
+              <h4 class="mt-3 font-semibold text-lg">Guarderías comunitarias con horarios extendidos</h4>
+              <p class="mt-2 text-slate-600">Centros de cuidado en barrios con alta participación laboral femenina; estándares de seguridad y alimentación saludable.</p>
+              <ul class="mt-3 text-sm text-slate-600 space-y-1">
+                <li><b>Impacto esperado:</b> ↑ empleo femenino 5–8 p.p.; ↓ abandono escolar.</li>
+                <li><b>Costo:</b> ≈ Bs 1.4M/año (3 centros piloto).</li>
+                <li><b>Indicadores:</b> matrícula, asistencia, inserción laboral materna.</li>
+              </ul>
+              <details class="mt-4"><summary class="cursor-pointer text-sm text-sky-700 hover:underline">Ver detalles</summary>
+                <div class="mt-3 text-sm text-slate-600 space-y-2">
+                  <p><b>Riesgos:</b> sostenibilidad; calidad del servicio.</p>
+                  <p><b>Mitigación:</b> copagos progresivos; supervisión y certificaciones.</p>
+                </div>
+              </details>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-white bg-orange-600 hover:bg-orange-700"><i class="fa-solid fa-file-pdf"></i> Policy brief</a>
+                <button class="share inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-copy"></i> Copiar ficha</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Criterios y priorización -->
+  <section id="criterios" class="py-12 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold">Cómo priorizamos</h3>
+      <p class="mt-2 text-slate-600">Usamos una puntuación compuesta (0–100) para ordenar propuestas. Puedes cambiar el orden en el selector.</p>
+      <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-5">
+        <pre class="text-sm whitespace-pre-wrap font-mono text-slate-700">score = 40% * impacto + 30% * factibilidad + 30% * (1 - costo_normalizado)</pre>
+        <p class="mt-3 text-sm text-slate-600">Donde <em>impacto</em> y <em>factibilidad</em> ∈ [1,5] y el costo se normaliza respecto al máximo observado en el catálogo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer / Contacto -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div id="contacto" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+      <h4 class="font-bold text-lg">Contacto</h4>
+      <p class="mt-2 text-slate-600"><i class="fas fa-envelope mr-2"></i>cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
+      <p class="text-slate-600"><i class="fas fa-phone mr-2"></i>+591 67381294</p>
+      <div class="mt-8 text-sm text-slate-500">
+        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p class="mt-1">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS filtros + orden + compartir + menú móvil -->
+  <script>
+    const norm = s => (s||"").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,'');
+    const q = document.getElementById('q');
+    const ambito = document.getElementById('ambito');
+    const nivel = document.getElementById('nivel');
+    const estado = document.getElementById('estado');
+    const orden = document.getElementById('orden');
+    const limpiar = document.getElementById('limpiar');
+    const grid = document.getElementById('grid');
+
+    function getCards() { return Array.from(document.querySelectorAll('.pp')); }
+
+    function filtroPasa(card) {
+      const okQ = !q.value || norm(card.innerText + ' ' + (card.dataset.tags||'')).includes(norm(q.value));
+      const okA = !ambito.value || card.dataset.ambito === ambito.value;
+      const okN = !nivel.value || card.dataset.nivel === nivel.value;
+      const okE = !estado.value || card.dataset.estado === estado.value;
+      return okQ && okA && okN && okE;
+    }
+
+    function score(card) {
+      const impacto = Number(card.dataset.impacto||0); // 1..5
+      const fact = Number(card.dataset.factibilidad||0); // 1..5
+      const costo = Number(card.dataset.costo||0);
+      const maxCosto = Math.max(...getCards().map(c=>Number(c.dataset.costo||0)), 1);
+      const costoN = Math.min(1, costo / maxCosto);
+      const s = (0.4 * impacto/5 + 0.3 * fact/5 + 0.3 * (1 - costoN)) * 100;
+      return s;
+    }
+
+    function ordenar(cards) {
+      const by = orden.value;
+      const cardsCopy = [...cards];
+      if (by === 'impacto') cardsCopy.sort((a,b)=> Number(b.dataset.impacto)-Number(a.dataset.impacto));
+      else if (by === 'costo') cardsCopy.sort((a,b)=> Number(a.dataset.costo)-Number(b.dataset.costo));
+      else if (by === 'factibilidad') cardsCopy.sort((a,b)=> Number(b.dataset.factibilidad)-Number(a.dataset.factibilidad));
+      else /* score */ cardsCopy.sort((a,b)=> score(b)-score(a));
+      return cardsCopy;
+    }
+
+    function render() {
+      const cards = getCards();
+      const visibles = cards.filter(filtroPasa);
+      const ordenadas = ordenar(visibles);
+      grid.innerHTML = '';
+      ordenadas.forEach(c => grid.appendChild(c));
+      cards.forEach(c => c.style.display = visibles.includes(c) ? '' : 'none');
+    }
+
+    [q,ambito,nivel,estado,orden].forEach(el => el.addEventListener('input', render));
+    limpiar.addEventListener('click', () => { q.value=''; ambito.value=''; nivel.value=''; estado.value=''; orden.value='score'; render(); });
+
+    // Compartir: copia un resumen de la ficha
+    document.querySelectorAll('.pp .share').forEach(btn => btn.addEventListener('click', async (e) => {
+      const card = e.target.closest('.pp');
+      const titulo = card.querySelector('h4')?.innerText||'';
+      const amb = card.dataset.ambito, niv = card.dataset.nivel, est = card.dataset.estado;
+      const impact = card.dataset.impacto, costo = Number(card.dataset.costo).toLocaleString('es-BO');
+      const resumen = `${titulo} — ${amb} · ${niv} · ${est}\nImpacto: ${impact}/5\nCosto aprox: Bs ${costo}`;
+      try { await navigator.clipboard.writeText(resumen); btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado'; setTimeout(()=>btn.innerHTML='<i class="fa-regular fa-copy"></i> Copiar ficha', 2000);} catch {}
+    }));
+
+    // Menú móvil accesible
+    const btnMobile = document.getElementById('btnMobile');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = () => { mobileMenu?.classList.add('hidden'); btnMobile?.setAttribute('aria-expanded','false'); };
+    btnMobile?.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      btnMobile.setAttribute('aria-expanded', String(!isHidden));
+    });
+    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('click', (e) => { if (!mobileMenu || !btnMobile) return; if (!mobileMenu.classList.contains('hidden')) { if (!mobileMenu.contains(e.target) && !btnMobile.contains(e.target)) closeMenu(); }});
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+    // Primera renderización
+    render();
+  </script>
+</body>
+</html>
