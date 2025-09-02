@@ -33,19 +33,14 @@
     #btn-open[aria-expanded="true"] #icon-x{ display:block; }
 
     /* ----- Scroll del menú móvil ----- */
-    /* Se calcula la altura disponible: alto de la ventana - alto del header */
     #mobile-menu{
-      /* valor por defecto por si JS no corre */
       --header-h: 64px;
-
-      /* Fallback y variantes de viewport para móviles */
       max-height: calc(100vh - var(--header-h));
       max-height: calc(100svh - var(--header-h));
       max-height: calc(100dvh - var(--header-h));
-
-      overflow-y: auto;                  /* Hace visible la “barrita” */
-      overscroll-behavior: contain;      /* Evita arrastrar el body por detrás */
-      -webkit-overflow-scrolling: touch; /* Inercia en iOS */
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
   </style>
 </head>
@@ -64,50 +59,83 @@
         </div>
       </a>
 
-      <!-- Nav escritorio -->
+      <!-- Nav escritorio (dropdowns por click) -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="services.html" class="hover:text-sky-700">Servicios</a>
 
-        <!-- Investigación (dropdown) -->
-        <div class="relative group">
-          <button class="hover:text-sky-700">Investigación</button>
-          <div class="absolute left-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
+        <!-- Investigación -->
+        <div class="relative">
+          <button
+            class="hover:text-sky-700"
+            data-dropdown-button
+            data-target="menu-investigacion"
+            aria-expanded="false"
+            aria-controls="menu-investigacion"
+            aria-haspopup="true"
+          >Investigación</button>
+          <div
+            id="menu-investigacion"
+            class="absolute left-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white shadow-lg hidden"
+            role="menu"
+          >
             <div class="p-2 grid gap-1 text-sm">
-              <a href="lineas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Líneas de investigación</a>
-              <a href="rgroups.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Grupos de investigación</a>
-              <a href="proyectos.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Proyectos de investigación</a>
-              <a href="researchers.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Investigadores</a>
-              <a href="students.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Estudiantes investigadores</a>
+              <a href="lineas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Líneas de investigación</a>
+              <a href="rgroups.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Grupos de investigación</a>
+              <a href="proyectos.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Proyectos de investigación</a>
+              <a href="researchers.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Investigadores</a>
+              <a href="students.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Estudiantes investigadores</a>
             </div>
           </div>
         </div>
 
         <a href="#publicaciones" class="hover:text-sky-700">Publicaciones</a>
 
-        <!-- Eventos (dropdown) -->
-        <div class="relative group">
-          <button class="hover:text-sky-700">Eventos</button>
-          <div class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
+        <!-- Eventos -->
+        <div class="relative">
+          <button
+            class="hover:text-sky-700"
+            data-dropdown-button
+            data-target="menu-eventos"
+            aria-expanded="false"
+            aria-controls="menu-eventos"
+            aria-haspopup="true"
+          >Eventos</button>
+          <div
+            id="menu-eventos"
+            class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg hidden"
+            role="menu"
+          >
             <div class="p-2 grid gap-1 text-sm">
-              <a href="seminarios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Seminarios</a>
-              <a href="#encuentros" class="px-3 py-2 rounded-lg hover:bg-slate-50">Encuentros</a>
-              <a href="conversatorios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Conversatorios</a>
-              <a href="conferencias.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Conferencias</a>
-              <a href="#ciclos-dialogos" class="px-3 py-2 rounded-lg hover:bg-slate-50">Ciclos de diálogos</a>
-              <a href="#ciclos-mesas" class="px-3 py-2 rounded-lg hover:bg-slate-50">Ciclos de mesas</a>
-              <a href="#jornadas" class="px-3 py-2 rounded-lg hover:bg-slate-50">Jornadas</a>
+              <a href="seminarios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Seminarios</a>
+              <a href="#encuentros" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Encuentros</a>
+              <a href="conversatorios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Conversatorios</a>
+              <a href="conferencias.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Conferencias</a>
+              <a href="#ciclos-dialogos" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Ciclos de diálogos</a>
+              <a href="#ciclos-mesas" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Ciclos de mesas</a>
+              <a href="#jornadas" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Jornadas</a>
             </div>
           </div>
         </div>
 
-        <!-- Multimedia (dropdown) -->
-        <div class="relative group">
-          <button class="hover:text-sky-700">Multimedia</button>
-          <div class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
+        <!-- Multimedia -->
+        <div class="relative">
+          <button
+            class="hover:text-sky-700"
+            data-dropdown-button
+            data-target="menu-multimedia"
+            aria-expanded="false"
+            aria-controls="menu-multimedia"
+            aria-haspopup="true"
+          >Multimedia</button>
+          <div
+            id="menu-multimedia"
+            class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg hidden"
+            role="menu"
+          >
             <div class="p-2 grid gap-1 text-sm">
-              <a href="medios" class="px-3 py-2 rounded-lg hover:bg-slate-50">En los medios</a>
-              <a href="podcast.html" class="px-3 py-2 rounded-lg hover:bg-slate-50">Podcast</a>
-              <a href="entrevistas" class="px-3 py-2 rounded-lg hover:bg-slate-50">Entrevistas</a>
+              <a href="medios" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">En los medios</a>
+              <a href="podcast.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Podcast</a>
+              <a href="entrevistas" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Entrevistas</a>
             </div>
           </div>
         </div>
@@ -117,7 +145,7 @@
         <a href="int.html" class="hover:text-sky-700">Internacionalización</a>
       </nav>
 
-      <!-- Botón móvil (abre/cierra dropdown sencillo) -->
+      <!-- Botón móvil -->
       <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
         <span class="text-sm">Menú</span>
         <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block" aria-hidden="true">
@@ -129,7 +157,7 @@
       </button>
     </div>
 
-    <!-- Menú móvil sencillo (dropdown bajo el header) -->
+    <!-- Menú móvil -->
     <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-soft" aria-label="Navegación móvil">
       <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
         <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="services.html">Servicios</a></li>
@@ -464,7 +492,7 @@
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
         <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span class="ml-2">Actualizado: Ago 2025</span></p>
-      </div>
+</div>
     </div>
   </footer>
 
@@ -472,7 +500,7 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ===== Menú móvil sencillo con scroll propio =====
+    // ===== Menú móvil =====
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     const headerEl = document.querySelector('header');
@@ -484,39 +512,90 @@
 
     function toggleMenu(forceOpen = null) {
       const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
-      if (willOpen) setHeaderVar();                 // calcula altura disponible
+      if (willOpen) setHeaderVar();
       mobileMenu.classList.toggle('hidden', !willOpen);
       btnOpen.setAttribute('aria-expanded', String(willOpen));
-      // Bloquea el body para que sólo se desplace el menú
       document.body.style.overflow = willOpen ? 'hidden' : '';
       if (willOpen) {
         setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
       } else {
-        btnOpen.focus();
+        btnOpen?.focus?.();
       }
     }
 
-    btnOpen.addEventListener('click', () => toggleMenu());
-
-    // Cerrar con Escape
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
-
-    // Cerrar al hacer click en cualquier enlace del menú
-    mobileMenu.addEventListener('click', (e) => {
+    btnOpen?.addEventListener('click', () => toggleMenu());
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { toggleMenu(false); closeAllDropdowns(); }});
+    mobileMenu?.addEventListener('click', (e) => {
       const link = e.target.closest('a');
       if (link) toggleMenu(false);
     });
-
-    // Recalcular al redimensionar/orientación
     window.addEventListener('resize', () => {
       if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
     });
-
-    // Si pasa a ancho md+ mientras está abierto, ciérralo
     const mq = window.matchMedia('(min-width: 768px)');
     mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
+
+    // ===== Dropdowns de escritorio por CLICK =====
+    const dropdownButtons = document.querySelectorAll('[data-dropdown-button]');
+    const dropdownPanels  = document.querySelectorAll('.absolute[id^="menu-"]');
+
+    function closeAllDropdowns(exceptId = null) {
+      dropdownButtons.forEach(btn => {
+        const id = btn.getAttribute('data-target');
+        if (id !== exceptId) btn.setAttribute('aria-expanded', 'false');
+      });
+      dropdownPanels.forEach(panel => {
+        if (panel.id !== exceptId) panel.classList.add('hidden');
+      });
+    }
+
+    function openDropdown(id, buttonEl) {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      closeAllDropdowns(id);
+      panel.classList.remove('hidden');
+      buttonEl.setAttribute('aria-expanded', 'true');
+    }
+
+    function toggleDropdown(id, buttonEl) {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      const isHidden = panel.classList.contains('hidden');
+      if (isHidden) openDropdown(id, buttonEl);
+      else { panel.classList.add('hidden'); buttonEl.setAttribute('aria-expanded', 'false'); }
+    }
+
+    dropdownButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-target');
+        toggleDropdown(id, btn);
+      });
+      btn.addEventListener('keydown', (e) => {
+        const id = btn.getAttribute('data-target');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          openDropdown(id, btn);
+          document.getElementById(id)?.querySelector('a')?.focus();
+        }
+      });
+    });
+
+    // No cerrar al interactuar dentro del panel
+    dropdownPanels.forEach(panel => {
+      panel.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    // Cerrar al click fuera
+    document.addEventListener('click', () => closeAllDropdowns());
+
+    // Cerrar con Escape (ya se maneja arriba también)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllDropdowns();
+    });
   </script>
 </body>
 </html>
+
 
 
