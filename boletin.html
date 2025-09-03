@@ -42,8 +42,12 @@
         <a href="https://cir.uagrm.edu.bo/" class="hover:text-sky-700">Volver al inicio</a>
       </nav>
 
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+      <!-- Botón móvil (accesible) -->
+      <button id="btn-open"
+              class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
+              aria-controls="mobile-wrap"
+              aria-expanded="false"
+              aria-label="Abrir menú">
         <span>Menú</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -51,24 +55,31 @@
       </button>
     </div>
 
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+    <!-- Panel móvil (dialog accesible) -->
+    <div id="mobile-wrap"
+         class="md:hidden fixed inset-0 z-40 hidden"
+         role="dialog"
+         aria-modal="true"
+         aria-hidden="true"
+         tabindex="-1">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+      <nav id="mobile-panel" class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
             <span class="font-semibold">CIRCPyCS</span>
           </div>
           <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
           </button>
         </div>
         <ul class="mt-6 space-y-2 text-[15px]">
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#boletines">Boletines</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#archivo">Archivo</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank">Volver al inicio</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank" rel="noopener">Volver al inicio</a></li>
         </ul>
       </nav>
     </div>
@@ -105,7 +116,7 @@
           <div class="p-5">
             <h4 class="font-semibold text-lg text-slate-900">Boletín #8</h4>
             <p class="mt-1 text-sm text-slate-600">Edición más reciente con actividades clave, publicaciones y agenda 2025.</p>
-            <a href="https://drive.google.com/file/d/1gaK7l0UX5fABhA9J1utTr9e7ORFtAv3U/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700" title="Agregar enlace del Boletín #8">
+            <a href="https://drive.google.com/file/d/1gaK7l0UX5fABhA9J1utTr9e7ORFtAv3U/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700" title="Agregar enlace del Boletín #8" rel="noopener">
               Leer más<span>→</span>
             </a>
           </div>
@@ -117,7 +128,7 @@
           <div class="p-5">
             <h4 class="font-semibold text-lg text-slate-900">Boletín #7</h4>
             <p class="mt-1 text-sm text-slate-600">Análisis de coyuntura política en Bolivia y el mundo.</p>
-            <a href="https://drive.google.com/file/d/1KtAX9zI-Vbf9H_ktwV-xxyqKjl4UP_rO/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer más<span>→</span></a>
+            <a href="https://drive.google.com/file/d/1KtAX9zI-Vbf9H_ktwV-xxyqKjl4UP_rO/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700" rel="noopener">Leer más<span>→</span></a>
           </div>
         </article>
 
@@ -127,17 +138,17 @@
           <div class="p-5">
             <h4 class="font-semibold text-lg text-slate-900">Boletín #6</h4>
             <p class="mt-1 text-sm text-slate-600">Coyuntura electoral y resultados de la Primera Encuesta de Gestión Institucional UAGRM 2025.</p>
-            <a href="https://drive.google.com/file/d/1ZWLSaU-XC5Wl3S0WT5e-jVLfHpp0IxjW/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer más<span>→</span></a>
+            <a href="https://drive.google.com/file/d/1ZWLSaU-XC5Wl3S0WT5e-jVLfHpp0IxjW/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700" rel="noopener">Leer más<span>→</span></a>
           </div>
         </article>
 
-        <!-- Boletín 5 (más antiguo en la lista) -->
+        <!-- Boletín 5 -->
         <article class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
           <img src="https://i.imgur.com/BeAwYwD.png" alt="Portada Boletín 5" class="w-full h-64 object-contain bg-slate-50" loading="lazy" />
           <div class="p-5">
             <h4 class="font-semibold text-lg text-slate-900">Boletín #5</h4>
             <p class="mt-1 text-sm text-slate-600">Explora las últimas actividades y los proyectos más recientes del Centro de Investigación Regional.</p>
-            <a href="https://drive.google.com/file/d/1xiH2jljMPftS4pCNysV2kO-9u9Pt-mcx/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700">Leer más<span>→</span></a>
+            <a href="https://drive.google.com/file/d/1xiH2jljMPftS4pCNysV2kO-9u9Pt-mcx/view?usp=sharing" target="_blank" class="mt-3 inline-flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-white bg-sky-600 hover:bg-sky-700" rel="noopener">Leer más<span>→</span></a>
           </div>
         </article>
       </div>
@@ -168,7 +179,7 @@
           </div>
           <div class="rounded-xl border border-slate-200 p-3">
             <div class="text-slate-500">Sitio principal</div>
-            <a href="https://cir.uagrm.edu.bo/" target="_blank" class="font-medium text-sky-700">cir.uagrm.edu.bo</a>
+            <a href="https://cir.uagrm.edu.bo/" target="_blank" class="font-medium text-sky-700" rel="noopener">cir.uagrm.edu.bo</a>
           </div>
         </div>
       </div>
@@ -186,22 +197,85 @@
   </footer>
 
   <script>
-    // Menú móvil
+    // ===== Menú móvil accesible con foco atrapado =====
     const wrap = document.getElementById('mobile-wrap');
+    const panel = document.getElementById('mobile-panel');
     const openBtn = document.getElementById('btn-open');
     const closeBtn = document.getElementById('btn-close');
     const backdrop = document.getElementById('backdrop');
 
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
+    let lastFocused = null;
 
-    openBtn.addEventListener('click', openMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    if(backdrop) backdrop.addEventListener('click', closeMenu);
-    if(closeBtn) closeBtn.addEventListener('click', closeMenu);
+    const getFocusable = (root) => {
+      return root.querySelectorAll(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+    };
 
-    // Cerrar al hacer click en un enlace del panel
-    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    function openMenu(){
+      lastFocused = document.activeElement;
+      wrap.classList.remove('hidden');
+      wrap.setAttribute('aria-hidden','false');
+      openBtn.setAttribute('aria-expanded','true');
+      document.body.style.overflow = 'hidden';
+
+      // Enfocar el primer elemento enfocables del panel
+      const focusables = getFocusable(panel);
+      (focusables[0] || closeBtn || panel).focus();
+
+      // Focus trap
+      panel.addEventListener('keydown', trapFocus);
+      document.addEventListener('keydown', onEsc);
+    }
+
+    function closeMenu(){
+      wrap.classList.add('hidden');
+      wrap.setAttribute('aria-hidden','true');
+      openBtn.setAttribute('aria-expanded','false');
+      document.body.style.overflow = '';
+
+      panel.removeEventListener('keydown', trapFocus);
+      document.removeEventListener('keydown', onEsc);
+
+      // Restaurar foco
+      if (lastFocused) { lastFocused.focus(); lastFocused = null; }
+    }
+
+    function trapFocus(e){
+      if (e.key !== 'Tab') return;
+      const focusables = Array.from(getFocusable(panel));
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first){
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last){
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function onEsc(e){
+      if (e.key === 'Escape') closeMenu();
+    }
+
+    openBtn?.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    backdrop?.addEventListener('click', closeMenu);
+
+    // Cerrar al hacer click en un enlace del panel (aunque el click sea en un hijo)
+    panel?.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href]');
+      if (link) closeMenu();
+    });
+
+    // Mejor accesibilidad: cerrar si se hace clic fuera del panel
+    wrap?.addEventListener('click', (e) => {
+      if (!panel.contains(e.target) && e.target === wrap) closeMenu();
+    });
   </script>
 </body>
 </html>
