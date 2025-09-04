@@ -32,10 +32,16 @@
     .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.72rem;line-height:1rem}
     .hero-bg:before{content:"";position:absolute;inset:-30%;background:radial-gradient(60% 60% at 20% 20%,rgba(16,185,129,.25),transparent 60%),radial-gradient(60% 60% at 80% 80%,rgba(244,63,94,.25),transparent 60%)}
 
-    /* Posters verticales: más altos para legibilidad y sin recortar */
-    .poster-box{height:300px}
-    @media (min-width:640px){.poster-box{height:380px}}
-    @media (min-width:1024px){.poster-box{height:420px}}
+    /* Posters verticales: usar aspect-ratio para que SIEMPRE encaje y no se solape */
+    .poster-box{aspect-ratio:4/5;width:100%;max-width:100%;overflow:hidden}
+    @media (min-width:640px){.poster-box{aspect-ratio:3/4}}
+    @media (min-width:1024px){.poster-box{aspect-ratio:7/10}}
+    .poster-img{height:100%;width:100%;object-fit:contain;display:block;padding:8px;margin:0 auto}
+
+    /* Título en 2 líneas máx. */
+    .title-2l{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    /* Descripción en 3 líneas máx. */
+    .desc-3l{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 
     /* Anclajes compensados por el header */
     section[id]{ scroll-margin-top: var(--header-h, 96px); }
@@ -50,13 +56,11 @@
       max-height: calc(100vh - var(--header-h));
       max-height: calc(100svh - var(--header-h));
       max-height: calc(100dvh - var(--header-h));
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
+      overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     }
 
     /* Botones de redes (solo icono, colores oficiales) */
-    .social-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:9999px;color:#fff;transition:transform .12s ease, box-shadow .12s ease}
+    .social-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:9999px;color:#fff;transition:transform .12s ease, box-shadow .12s ease}
     .social-btn:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.08)}
     .social-fb{background:#1877F2}
     .social-yt{background:#FF0000}
@@ -182,7 +186,7 @@
     // Año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ===== Menú móvil dropdown mejorado =====
+    // ===== Menú móvil dropdown =====
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     const headerEl = document.querySelector('header');
@@ -217,30 +221,70 @@
     window.addEventListener('resize', ()=>{ if(!mobileMenu.classList.contains('hidden')) setHeaderVar(); });
     window.matchMedia('(min-width:768px)').addEventListener('change', ev=>{ if(ev.matches) toggleMenu(false); });
 
-    // ======== Datos de conferencias (puedes editar títulos/fechas) ========
+    // ======== Datos de conferencias ========
+    // Nota: Pasquino es 2024; el resto, 2025
     const EVENTS = [
-      { id:'c2025_1', title:'Conferencia magistral — 2025 #1', date:'2025-10-05', time:'19:00', mode:'Presencial',
-        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/Z5qXo10.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
-      { id:'c2025_2', title:'Conferencia magistral — 2025 #2', date:'2025-09-18', time:'18:30', mode:'Híbrido',
-        venue:'Sala de Posgrado & Zoom', cover:'https://i.imgur.com/QdUViuY.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
-      { id:'c2025_3', title:'Conferencia magistral — 2025 #3', date:'2025-08-15', time:'18:30', mode:'Presencial',
-        venue:'Aula Magna, UAGRM', cover:'https://i.imgur.com/ttOVFpH.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
-      { id:'c2025_4', title:'Conferencia magistral — 2025 #4', date:'2025-07-20', time:'18:30', mode:'Presencial',
-        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/2nvqeWO.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
-      { id:'c2025_5', title:'Conferencia magistral — 2025 #5', date:'2025-06-12', time:'18:30', mode:'Híbrido',
-        venue:'Sala de Posgrado & Zoom — UAGRM', cover:'https://i.imgur.com/4ZerZG9.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
-      { id:'c2025_6', title:'Conferencia magistral — 2025 #6', date:'2025-05-08', time:'18:30', mode:'Presencial',
-        venue:'Aula Magna — UAGRM', cover:'https://i.imgur.com/9dBaFRH.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
-      // 2024
-      { id:'c2024_1', title:'Conferencia magistral — 2024', date:'2024-11-20', time:'18:30', mode:'Presencial',
-        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/0l9hdFW.png',
-        desc:'Conferencia magistral CIRCPyCS.', links:{ fb:'', yt:'', x:'' } },
+      // Próximas 2025
+      { id:'u_urbina',
+        title:'El fracaso del liberalismo en explicar el desarrollo de los países',
+        date:'2025-09-18', time:'18:30', mode:'Híbrido',
+        venue:'Sala de Posgrado & Zoom — UAGRM',
+        cover:'https://i.imgur.com/QdUViuY.png',
+        desc:'Dante Urbina, doctor en Economía, autor y docente. Transmisión en vivo.',
+        links:{ fb:'', yt:'', x:'' }
+      },
+      { id:'u_meta',
+        title:'¡No es opinión, es evidencia! ¿Por qué los políticos deberían hablar de meta-análisis?',
+        date:'2025-10-05', time:'19:00', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM',
+        cover:'https://i.imgur.com/Z5qXo10.png',
+        desc:'Ricardo Fernández, investigador principal y doctorando en la UPC. Cómo usar meta-análisis para mejores políticas públicas.',
+        links:{ fb:'', yt:'', x:'' }
+      },
+
+      // Pasadas 2025
+      { id:'p_mokre',
+        title:'¿Existe evidencia de la teoría del valor-trabajo de Marx?',
+        date:'2025-08-15', time:'18:30', mode:'Presencial',
+        venue:'Aula Magna — UAGRM',
+        cover:'https://i.imgur.com/ttOVFpH.png',
+        desc:'Patrick Mokre, economista (The New School). Conferencia sobre teoría del valor-trabajo.',
+        links:{ fb:'', yt:'', x:'' }
+      },
+      { id:'p_barrientos_presidencialismo',
+        title:'Instituciones democráticas y poder ejecutivo: el presidencialismo en América Latina hoy',
+        date:'2025-07-20', time:'18:30', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM',
+        cover:'https://i.imgur.com/2nvqeWO.png',
+        desc:'Conferencia magistral CIRCPyCS (#4) a cargo de Fernando Barrientos.',
+        links:{ fb:'', yt:'', x:'' }
+      },
+      { id:'p_barrientos_regimen',
+        title:'El desapercibido desplome del régimen democrático en Bolivia (2012–2019)',
+        date:'2025-06-12', time:'18:30', mode:'Híbrido',
+        venue:'Sala de Posgrado & Zoom — UAGRM',
+        cover:'https://i.imgur.com/4ZerZG9.png',
+        desc:'Conferencia magistral CIRCPyCS (#5) por Fernando Barrientos.',
+        links:{ fb:'', yt:'', x:'' }
+      },
+      { id:'p_thomas',
+        title:'La Política de la Microeconomía y los límites del liberalismo económico',
+        date:'2025-05-08', time:'18:30', mode:'Presencial',
+        venue:'Aula Magna — UAGRM',
+        cover:'https://i.imgur.com/9dBaFRH.png',
+        desc:'Alex M. Thomas, economista. Charla con traducción automática al español.',
+        links:{ fb:'', yt:'', x:'' }
+      },
+
+      // Pasquino 2024 (única de 2024)
+      { id:'p_pasquino',
+        title:'Bobbio y Sartori: un viaje por la teoría política con el Dr. Gianfranco Pasquino',
+        date:'2024-10-16', time:'11:30', mode:'Virtual/Presencial',
+        venue:'Transmisión — Sala Gandhi / YouTube · 17:30 (Italia)',
+        cover:'https://i.imgur.com/0l9hdFW.png',
+        desc:'Lección magistral con Gianfranco Pasquino sobre Norberto Bobbio y Giovanni Sartori.',
+        links:{ fb:'', yt:'', x:'' }
+      }
     ];
 
     // Iconos SVG (currentColor)
@@ -270,8 +314,8 @@
     function cardHTML(ev){
       return `
         <article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
-          <div class="relative poster-box grid place-items-center bg-white border-b border-borderc">
-            <img loading="lazy" decoding="async" class="max-h-full max-w-full object-contain m-auto block"
+          <div class="relative poster-box grid place-items-center bg-slate-50 border-b border-borderc p-2">
+            <img loading="lazy" decoding="async" class="poster-img"
                  src="${ev.cover}" alt="Afiche: ${ev.title}"
                  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'"/>
             <div class="absolute top-2 left-2 space-x-1">
@@ -279,15 +323,13 @@
             </div>
           </div>
           <div class="p-5 flex-1 flex flex-col">
-            <h4 class="font-semibold text-brand">${ev.title}</h4>
-            <p class="mt-1 text-sm text-slate-600">${ev.desc || ''}</p>
+            <h4 class="font-semibold text-brand title-2l">${ev.title}</h4>
+            <p class="mt-1 text-sm text-slate-600 desc-3l">${ev.desc || ''}</p>
             <div class="mt-3 text-sm text-slate-700">
               <div><span class="font-medium">Fecha:</span> ${fmtDate(ev.date)} · ${ev.time} · ${ev.mode}</div>
               <div class="truncate"><span class="font-medium">Lugar:</span> ${ev.venue}</div>
             </div>
-            <div class="mt-4 flex items-center gap-2">
-              ${socialButtons(ev.links)}
-            </div>
+            <div class="mt-4 flex items-center gap-2">${socialButtons(ev.links)}</div>
           </div>
         </article>`;
     }
@@ -320,4 +362,3 @@
   </script>
 </body>
 </html>
-
