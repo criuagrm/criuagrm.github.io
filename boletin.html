@@ -39,6 +39,7 @@
         <a href="#boletines" class="hover:text-sky-700">Boletines</a>
         <a href="#archivo" class="hover:text-sky-700">Archivo</a>
         <a href="#contacto" class="hover:text-sky-700">Contacto</a>
+        <!-- Asegurado: Volver al inicio apunta al dominio pedido -->
         <a href="https://cir.uagrm.edu.bo/" class="hover:text-sky-700">Volver al inicio</a>
       </nav>
 
@@ -63,7 +64,9 @@
          aria-hidden="true"
          tabindex="-1">
       <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav id="mobile-panel" class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+      <!-- Animación: deslizar desde la derecha -->
+      <nav id="mobile-panel" aria-label="Navegación móvil"
+           class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 ease-out will-change-transform">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
@@ -79,7 +82,8 @@
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#boletines">Boletines</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#archivo">Archivo</a></li>
           <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank" rel="noopener">Volver al inicio</a></li>
+          <!-- Asegurado: sin target _blank; mismo dominio en esta pestaña -->
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver al inicio</a></li>
         </ul>
       </nav>
     </div>
@@ -197,7 +201,7 @@
   </footer>
 
   <script>
-    // ===== Menú móvil accesible con foco atrapado =====
+    // ===== Menú móvil accesible con foco atrapado + animación de deslizamiento =====
     const wrap = document.getElementById('mobile-wrap');
     const panel = document.getElementById('mobile-panel');
     const openBtn = document.getElementById('btn-open');
@@ -219,26 +223,39 @@
       openBtn.setAttribute('aria-expanded','true');
       document.body.style.overflow = 'hidden';
 
+      // Forzar reflujo y activar animación
+      requestAnimationFrame(() => {
+        panel.classList.remove('translate-x-full');
+      });
+
       // Enfocar el primer elemento enfocables del panel
       const focusables = getFocusable(panel);
       (focusables[0] || closeBtn || panel).focus();
 
-      // Focus trap
+      // Focus trap + ESC
       panel.addEventListener('keydown', trapFocus);
       document.addEventListener('keydown', onEsc);
     }
 
     function closeMenu(){
-      wrap.classList.add('hidden');
-      wrap.setAttribute('aria-hidden','true');
-      openBtn.setAttribute('aria-expanded','false');
-      document.body.style.overflow = '';
+      // Deslizar hacia fuera primero, y al terminar ocultar el wrap
+      panel.classList.add('translate-x-full');
 
-      panel.removeEventListener('keydown', trapFocus);
-      document.removeEventListener('keydown', onEsc);
+      const after = () => {
+        wrap.classList.add('hidden');
+        wrap.setAttribute('aria-hidden','true');
+        openBtn.setAttribute('aria-expanded','false');
+        document.body.style.overflow = '';
 
-      // Restaurar foco
-      if (lastFocused) { lastFocused.focus(); lastFocused = null; }
+        panel.removeEventListener('keydown', trapFocus);
+        document.removeEventListener('keydown', onEsc);
+        panel.removeEventListener('transitionend', after);
+
+        if (lastFocused) { lastFocused.focus(); lastFocused = null; }
+      };
+
+      // Esperar fin de transición para ocultar el overlay
+      panel.addEventListener('transitionend', after, { once: true });
     }
 
     function trapFocus(e){
@@ -279,5 +296,6 @@
   </script>
 </body>
 </html>
+
 
 
