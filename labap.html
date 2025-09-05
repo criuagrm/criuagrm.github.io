@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <!-- Plotly -->
+  <!-- Plotly (con defer para no bloquear) -->
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
 
   <style>
@@ -40,7 +40,11 @@
       overscroll-behavior: contain;
       -webkit-overflow-scrolling: touch;
     }
-      #plotly-intencion-voto, #bars-resultado { min-height: 320px; }
+    /* Alturas responsive para el gráfico principal */
+    #plotly-intencion-voto { height: 380px; width: 100%; }
+    @media (min-width: 640px){ #plotly-intencion-voto { height: 480px; } }
+    /* Altura mínima barras */
+    #bars-resultado { min-height: 320px; }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
@@ -207,7 +211,7 @@
       <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-lg border border-slate-800">
         <h4 class="text-center text-xl font-semibold">Tracking Poll: Intención de voto presidencial 2025</h4>
         <p class="mt-1 text-center text-slate-300 text-sm">Serie con todas las mediciones públicas (mayo–agosto 2025). Toca la leyenda para activar/desactivar candidatos.</p>
-        <div id="plotly-intencion-voto" class="mt-4" style="height:480px;width:100%;"></div>
+        <div id="plotly-intencion-voto" class="mt-4"></div>
 
         <div class="mt-6 grid gap-4 sm:grid-cols-2">
           <!-- Resultado oficial -->
@@ -217,7 +221,7 @@
               <span id="badge-res" class="text-xs px-2 py-1 rounded-full bg-slate-700 text-slate-300">oficial</span>
             </div>
             <p id="resumen-res" class="mt-1 text-slate-300 text-sm">Órgano Electoral Plurinacional</p>
-            <div id="bars-resultado" class="mt-3" style="height:300px;width:100%;"></div>
+            <div id="bars-resultado" class="mt-3" style="width:100%;"></div>
           </div>
 
           <!-- Metadatos / Fuente -->
@@ -286,7 +290,7 @@
       "Manfred Reyes Villa":  "#6D28D9", // APB SÚMATE (morado)
       "Rodrigo Paz Pereira":  "#0E7C7B", // PDC (verde azulado)
       "Andrónico Rodríguez":  "#16A34A", // AP (verde)
-      "Jhonny Fernández":    "#1E88E5"  // FP (azul)
+      "Jhonny Fernández":    "#1E88E5"   // FP (azul)
     };
 
     const ySeries = {
@@ -314,18 +318,61 @@
       }
     };
 
-    // ===== Construcción de la serie principal =====
+    // ===== Leyenda responsive (clave para móvil) =====
+    function legendLayout(){
+      if (window.innerWidth < 700){
+        // Abajo, horizontal, compacta
+        return {
+          orientation: 'h',
+          x: 0, y: -0.25, xanchor: 'left', yanchor: 'top',
+          font: { size: 10, color: '#fff' },
+          bgcolor: 'rgba(15,23,42,0.96)',
+          itemwidth: 50,
+          itemsizing: 'constant'
+        };
+      } else {
+        // Escritorio: arriba, como estaba
+        return { orientation: 'h', x: 0.01, y: 1.18, font: { size: 13, color: '#fff' } };
+      }
+    }
+
+    // ===== Layout general (márgenes y tamaños según viewport) =====
+    function makeLayout(){
+      const isMobile = window.innerWidth < 700;
+      const maxY = Math.max(32.06, ...Object.values(ySeries).flat());
+      return {
+        plot_bgcolor: '#0b1220',
+        paper_bgcolor: '#0b1220',
+        legend: legendLayout(),
+        xaxis: { title:{text:'<b>Fecha y encuestadora</b>', font:{color:'#fff', size:isMobile?14:16}}, tickfont:{color:'#fff', size:isMobile?10:12}, automargin:true, showgrid:false },
+        yaxis: { title:{text:'<b>% intención de voto</b>', font:{color:'#fff', size:isMobile?14:16}}, range:[0, Math.max(35, Math.ceil(maxY/5)*5)], gridcolor:'#334155', tickfont:{color:'#fff', size:isMobile?10:12} },
+        margin: { l:isMobile?44:50, r:isMobile?10:24, t:isMobile?28:34, b:isMobile?120:60 },
+        shapes: [{ type:'line', xref:'x', yref:'paper', x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0:0, y1:1, line:{ color:'#94a3b8', width:2, dash:'dot' } }],
+        annotations: [{ x: resultadoOficial.fecha, y:1.02, xref:'x', yref:'paper', xanchor:'center', text:'Resultado oficial', showarrow:false, font:{ size:isMobile?10:12, color:'#cbd5e1' } }],
+        font: { family: 'Inter, Segoe UI, sans-serif', size:isMobile?12:14, color:'#fff' }
+      };
+    }
+
+    // ===== Trazas (compacta nombres en móvil y baja grosor/marker) =====
     function buildTraces(includeOfficialPoint = true){
+      const isMobile = window.innerWidth < 700;
+      const compact = {
+        'Samuel Doria Medina':'Doria M.',
+        'Jorge «Tuto» Quiroga':'Tuto',
+        'Manfred Reyes Villa':'Reyes V.',
+        'Rodrigo Paz Pereira':'R. Paz',
+        'Andrónico Rodríguez':'Andrónico',
+        'Jhonny Fernández':'J. Fernández'
+      };
       const traces = [];
       for (const [nombre, ys] of Object.entries(ySeries)){
+        const display = isMobile ? (compact[nombre] || nombre) : nombre;
         const trace = {
-          x: [...x],
-          y: [...ys],
-          name: nombre,
-          mode: "lines+markers",
-          line: { color: colores[nombre], width: 4 },
-          marker: { size: 11 },
-          hovertemplate: "<b>%{trace.name}</b><br>%{y:.2f}%<br>%{x}<extra></extra>"
+          x: [...x], y: [...ys], name: display, customdata: ys.map(()=>nombre),
+          mode: 'lines+markers',
+          line: { color: colores[nombre], width: isMobile?3:4 },
+          marker: { size: isMobile?8:11 },
+          hovertemplate: `<b>${display}</b><br>%{y:.2f}%<br>%{x}<extra></extra>`
         };
         if (includeOfficialPoint && resultadoOficial.valores[nombre] !== undefined){
           trace.x.push(resultadoOficial.fecha);
@@ -334,36 +381,6 @@
         traces.push(trace);
       }
       return traces;
-    }
-
-    function legendLayout(){
-      if (window.innerWidth < 700){
-        return { orientation:'v', x:1.02, y:0.5, xanchor:'left', yanchor:'middle', font:{size:11, color:'#fff'}, bgcolor:'rgba(15,23,42,0.96)' };
-      } else {
-        return { orientation:'h', x:0.01, y:1.18, font:{size:13, color:'#fff'} };
-      }
-    }
-    function makeLayout(){
-      const hasOficial = true;
-      const maxY = Math.max(32.06, ...Object.values(ySeries).flat());
-      return {
-        plot_bgcolor: '#0b1220',
-        paper_bgcolor: '#0b1220',
-        legend: legendLayout(),
-        xaxis: { title:{text:'<b>Fecha y encuestadora</b>', font:{color:'#fff', size:16}}, tickfont:{color:'#fff', size:12}, automargin:true, showgrid:false },
-        yaxis: { title:{text:'<b>% intención de voto</b>', font:{color:'#fff', size:16}}, range:[0, Math.max(35, Math.ceil(maxY/5)*5)], gridcolor:'#334155', tickfont:{color:'#fff', size:12} },
-        margin: { l:50, r: window.innerWidth < 700 ? 120 : 24, t:34, b:60 },
-        shapes: [{
-          type: "line", xref: "x", yref: "paper",
-          x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0: 0, y1: 1,
-          line: { color: "#94a3b8", width: 2, dash: "dot" }
-        }],
-        annotations: [{
-          x: resultadoOficial.fecha, y: 1.02, xref:"x", yref:"paper", xanchor:"center",
-          text: "Resultado oficial", showarrow:false, font:{size:12, color:"#cbd5e1"}
-        }],
-        font: { family: 'Inter, Segoe UI, sans-serif', size:14, color:'#fff' }
-      };
     }
 
     function safePlotly(id, traces, layout){
@@ -393,7 +410,6 @@
       const nombres = pares.map(p => p[0]);
       const valores = pares.map(p => p[1]);
 
-      // Mapeo candidato → alianza (según OEP)
       const alianzaPorCandidato = {
         "Rodrigo Paz Pereira": "PDC",
         "Jorge «Tuto» Quiroga": "LIBRE",
@@ -405,7 +421,6 @@
         "Pavel Aracena Vargas": "LYP-ADN"
       };
 
-      // Colores por alianza (paleta aproximada a la usada en computo.oep.org.bo)
       const coloresAlianza = {
         "PDC": "#0E7C7B",
         "LIBRE": "#D32F2F",
@@ -441,65 +456,31 @@
       safePlotly('bars-resultado', barTrace, barLayout);
     }
 
-    // ===== Render inicial + responsive =====
-    function initCharts(){ renderLineChart(); renderResultado(); }
-
+    // ===== Carga fiable de Plotly y render =====
     function ensurePlotly(cb){
       if (window.Plotly) return cb();
-      // carga de respaldo si Plotly no está disponible aún
       const s = document.createElement('script');
       s.src = 'https://cdn.plot.ly/plotly-2.32.0.min.js';
-      s.async = true;
-      s.onload = cb;
+      s.async = true; s.onload = cb;
       s.onerror = () => {
         const s2 = document.createElement('script');
         s2.src = 'https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.32.0/plotly.min.js';
-        s2.async = true;
-        s2.onload = cb;
+        s2.async = true; s2.onload = cb;
         document.head.appendChild(s2);
       };
       document.head.appendChild(s);
     }
+
+    function initCharts(){ renderLineChart(); renderResultado(); }
 
     const kick = () => ensurePlotly(() => { initCharts(); });
     if (document.readyState !== 'loading') kick();
     else document.addEventListener('DOMContentLoaded', kick);
     window.addEventListener('load', kick);
 
+    // Re-render al cambiar tamaño/visibilidad
     window.addEventListener('resize', () => { renderLineChart(); renderResultado(); });
     document.addEventListener('visibilitychange', () => { if (!document.hidden) { renderLineChart(); renderResultado(); } });
-  </script>
-  <script>
-    // --- Override suave de renderLineChart para asegurar que los datos se reflejen ---
-    (function(){
-      function renderLineChart(){
-        const traces = [];
-        for (const [nombre, ys] of Object.entries(ySeries)){
-          const t = {
-            x: [...x], y: [...ys], name: nombre,
-            mode: 'lines+markers',
-            line: { color: (colores && colores[nombre]) ? colores[nombre] : '#94a3b8', width: 4 },
-            marker: { size: 11 },
-            hovertemplate: '<b>%{trace.name}</b><br>%{y:.2f}%<br>%{x}<extra></extra>'
-          };
-          if (resultadoOficial && resultadoOficial.valores && Object.prototype.hasOwnProperty.call(resultadoOficial.valores, nombre)){
-            const v = resultadoOficial.valores[nombre];
-            if (v != null){ t.x.push(resultadoOficial.fecha); t.y.push(v); }
-          }
-          traces.push(t);
-        }
-        if (window.safePlotly) safePlotly('plotly-intencion-voto', traces, makeLayout());
-        else if (window.Plotly){
-          const cfg = { responsive:true, displayModeBar:false };
-          const el = document.getElementById('plotly-intencion-voto');
-          if (!el.data) Plotly.newPlot(el, traces, makeLayout(), cfg);
-          else Plotly.react(el, traces, makeLayout(), cfg);
-        }
-      }
-      window.renderLineChart = renderLineChart; // expone el override
-      // re-render inmediato por si ya existía el gráfico
-      try { renderLineChart(); } catch(_){}
-    })();
   </script>
 </body>
 </html>
