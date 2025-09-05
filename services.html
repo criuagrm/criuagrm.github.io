@@ -9,25 +9,21 @@
   <!-- Tailwind CDN + fuente -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
-        }
-      }
-    }
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] } } } }
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- D3 y Plotly con versiones explícitas -->
+  <!-- D3 y Plotly (para las gráficas como estaban) -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-2.30.1.min.js"></script>
 
   <style>
-    .chart-box { height: 360px; width: 100%; position: relative; }
-    @media (min-width: 768px) { .chart-box { height: 520px; } }
-    .tooltip{position:absolute;z-index:50;padding:8px 10px;font:12px/1.2 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fff;color:#0f172a;border:1px solid #e2e8f0;border-radius:8px;pointer-events:none;box-shadow:0 6px 18px rgba(15,23,42,.12);white-space:nowrap}
+    .chart-box{position:relative;width:100%;height:clamp(260px,55vh,540px)}
+    @media (min-width:768px){.chart-box{height:clamp(320px,52vh,600px)}}
+    .hint{font-size:12px;color:#64748b}
+    .badge{position:absolute;right:.5rem;top:.5rem;font-size:11px;background:#0f172a;color:#fff;padding:.15rem .45rem;border-radius:.5rem;opacity:.85}
+    .btn-mini{position:absolute;right:.5rem;bottom:.5rem;font-size:12px;background:#e2e8f0;color:#0f172a;padding:.25rem .5rem;border-radius:.5rem}
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
@@ -68,7 +64,7 @@
     </div>
   </section>
 
-  <!-- Servicios -->
+  <!-- Servicios (tal cual) -->
   <section id="servicios" class="py-14 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between gap-3">
@@ -140,24 +136,43 @@
   <!-- Proyectos -->
   <main id="proyectos" class="pb-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8">
+      <!-- RED DINÁMICA (mantener este estilo) -->
       <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
         <div class="p-6 lg:p-8">
           <h3 class="text-xl font-bold">Análisis de Redes Sociales en Movimientos Políticos</h3>
-          <p class="mt-2 text-slate-600">Ciencia de datos y análisis de redes para estudiar difusión de información y formación de opiniones en movimientos contemporáneos.</p>
-          <div id="socialNetworkGraph" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white flex items-center justify-center text-slate-500 text-sm">Cargando gráfico de red…</div>
+          <p class="mt-2 text-slate-600">Red interactiva con física (arrastrar nodos, pausar/reanudar).</p>
+          <div class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white">
+            <span class="badge" id="netStatus">RUN</span>
+            <canvas id="netCanvas" style="width:100%;height:100%;display:block;touch-action:none"></canvas>
+            <button class="btn-mini" id="netToggle">Pausar</button>
+          </div>
+          <p class="mt-2 hint">Toque/arrastre un nodo para reposicionarlo. Doble toque/clic para pausar/continuar.</p>
         </div>
       </section>
 
+      <!-- LÍNEAS (D3) -->
       <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
         <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold">Predicción de Resultados Electorales con D3.js</h3>
-          <p class="mt-2 text-slate-600">Series temporales por candidato a partir de datos históricos, encuestas y variables socioeconómicas.</p>
-          <div id="electionPredictionChart" class="chart-box mt-5 rounded-2xl border border-slate-200 bg-white"></div>
+          <h3 class="text-xl font-bold">Predicción Elecciones 2025 — Escenario simulado: gana Rodrigo Paz</h3>
+<p class="mt-2 text-slate-600">Datos sintéticos para demostración. Ajusta los controles para simular tendencias mensuales (pp = puntos porcentuales).</p>
+<div class="mt-3 flex flex-wrap items-center gap-3 text-sm">
+  <label class="inline-flex items-center gap-2">Ventaja inicial RP
+    <input id="rpStart" type="range" min="0" max="10" step="0.5" value="2" class="w-36">
+    <span id="rpStartVal" class="font-medium">+2.0 pp</span>
+  </label>
+  <label class="inline-flex items-center gap-2">Tendencia mensual RP
+    <input id="rpTrend" type="range" min="0" max="1.5" step="0.05" value="0.5" class="w-36">
+    <span id="rpTrendVal" class="font-medium">+0.50 pp/mes</span>
+  </label>
+  <button id="regen" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600">Recalcular</button>
+</div>
+<div id="electionPredictionChart" class="chart-box mt-3 rounded-2xl border border-slate-200 bg-white"></div>
         </div>
       </section>
 
+      <!-- HEATMAP (Plotly) -->
       <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
         <div class="p-6 lg:p-8">
@@ -167,6 +182,7 @@
         </div>
       </section>
 
+      <!-- SIMULACIÓN (Plotly) -->
       <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
         <div class="p-6 lg:p-8">
@@ -176,6 +192,7 @@
         </div>
       </section>
 
+      <!-- CHOROPLETH (Plotly) -->
       <section class="rounded-3xl bg-white shadow border border-slate-200 overflow-hidden">
         <div class="h-2 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
         <div class="p-6 lg:p-8">
@@ -202,171 +219,245 @@
   </footer>
 
   <script>
-  // =====================
-  // Utilidades
-  // =====================
+  // ===================== Utilidades =====================
   document.getElementById('year').textContent = new Date().getFullYear();
+  const colors=['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#f1c40f','#a65628'];
+  function fitCanvas(canvas){ const dpr=Math.max(1,Math.floor(window.devicePixelRatio||1)); const rect=canvas.getBoundingClientRect(); canvas.width=Math.round(rect.width*dpr); canvas.height=Math.round(rect.height*dpr); const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); return {ctx,w:rect.width,h:rect.height,dpr}; }
 
-  function loadScript(src, {timeout=8000}={}){
-    return new Promise((resolve,reject)=>{
-      const s=document.createElement('script');
-      let done=false;
-      s.src=src; s.async=true; s.onload=()=>{ if(!done){ done=true; resolve(); } };
-      s.onerror=()=>{ if(!done){ done=true; reject(new Error('No se pudo cargar '+src)); } };
-      document.head.appendChild(s);
-      if(timeout){ setTimeout(()=>{ if(!done){ done=true; reject(new Error('Timeout '+src)); } }, timeout); }
+  // ===================== RED con física ligera (mantener estilo) =====================
+  (function(){
+    const cvs=document.getElementById('netCanvas'); const statusEl=document.getElementById('netStatus'); const toggleBtn=document.getElementById('netToggle');
+    let running=true, dragging=null, pointerId=null; let nodes, links; let ctx,w,h; let animId;
+    function initData(){
+      nodes=[{id:1,name:'Influencer A'},{id:2,name:'Influencer B'},{id:3,name:'Político C'},{id:4,name:'Activista D'},{id:5,name:'Ciudadano E'},{id:6,name:'Ciudadano F'},{id:7,name:'Ciudadano G'},{id:8,name:'Periodista H'},{id:9,name:'ONG I'},{id:10,name:'Empresa J'}].map((n,i)=>({ ...n, x:Math.random(), y:Math.random(), vx:0, vy:0, m:1, color: colors[i%colors.length] }));
+      links=[[1,2],[1,3],[2,4],[3,5],[4,5],[4,6],[5,6],[6,7],[7,8],[8,1],[9,4],[9,5],[10,1],[10,3]].map(([s,t])=>({s:nodes.find(n=>n.id===s), t:nodes.find(n=>n.id===t)}));
+    }
+    function step(){ const k=0.05, rest=0.22, rep=0.0009, damp=0.9; for(const L of links){ const dx=L.t.x-L.s.x, dy=L.t.y-L.s.y; const dist=Math.hypot(dx,dy)+1e-6; const force=k*(dist-rest); const fx=force*dx/dist, fy=force*dy/dist; if(!L.s.fixed){ L.s.vx+=fx; L.s.vy+=fy; } if(!L.t.fixed){ L.t.vx-=fx; L.t.vy-=fy; } } for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){ const a=nodes[i], b=nodes[j]; const dx=b.x-a.x, dy=b.y-a.y; const d2=dx*dx+dy*dy+1e-6; const f=rep/d2; const fx=f*dx, fy=f*dy; if(!a.fixed){ a.vx-=fx; a.vy-=fy; } if(!b.fixed){ b.vx+=fx; b.vy+=fy; } } for(const n of nodes){ if(!n.fixed){ n.x+=n.vx; n.y+=n.vy; n.vx*=0.9; n.vy*=damp; } } }
+    function draw(){ ({ctx,w,h}=fitCanvas(cvs)); ctx.clearRect(0,0,w,h); const pad=28; const X=p=> pad + p*(w-2*pad); const Y=p=> pad + p*(h-2*pad); ctx.strokeStyle='#cbd5e1'; ctx.lineWidth=1; for(const L of links){ ctx.beginPath(); ctx.moveTo(X(L.s.x),Y(L.s.y)); ctx.lineTo(X(L.t.x),Y(L.t.y)); ctx.stroke(); } ctx.textAlign='center'; ctx.textBaseline='middle'; for(const n of nodes){ ctx.fillStyle=n.color; ctx.beginPath(); ctx.arc(X(n.x),Y(n.y),6,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#0f172a'; ctx.font='12px Inter'; ctx.fillText(n.name, X(n.x), Y(n.y)-16); } }
+    function loop(){ if(running){ step(); } draw(); animId=requestAnimationFrame(loop); }
+    function findNode(px,py){ const pad=28; const Xinv=x=> (x-pad)/(w-2*pad); const Yinv=y=> (y-pad)/(h-2*pad); const x=Xinv(px), y=Yinv(py); let best=null, bd=1e9; for(const n of nodes){ const dx=x-n.x, dy=y-n.y; const d=Math.hypot(dx,dy); if(d<bd && d<0.05){ best=n; bd=d; } } return best; }
+    function onPointerDown(e){ pointerId=e.pointerId; cvs.setPointerCapture(pointerId); const rect=cvs.getBoundingClientRect(); const nx=e.clientX-rect.left, ny=e.clientY-rect.top; const hit=findNode(nx,ny); if(hit){ dragging=hit; hit.fixed=true; dragging.offset=[0,0]; } }
+    function onPointerMove(e){ if(!dragging) return; const rect=cvs.getBoundingClientRect(); const x=e.clientX-rect.left, y=e.clientY-rect.top; const pad=28; dragging.x=(x-pad)/(rect.width-2*pad); dragging.y=(y-pad)/(rect.height-2*pad); }
+    function onPointerUp(){ if(dragging){ dragging.fixed=false; dragging=null; } try{ cvs.releasePointerCapture(pointerId); }catch(_){} }
+    function toggle(){ running=!running; statusEl.textContent=running?'RUN':'PAUSE'; toggleBtn.textContent=running?'Pausar':'Reanudar'; }
+    cvs.addEventListener('dblclick', toggle);
+    cvs.addEventListener('pointerdown', onPointerDown);
+    cvs.addEventListener('pointermove', onPointerMove);
+    cvs.addEventListener('pointerup', onPointerUp);
+    toggleBtn.addEventListener('click', toggle);
+    initData(); loop(); new ResizeObserver(()=>draw()).observe(cvs);
+  })();
+
+  // ===================== Líneas (D3) =====================
+  function renderElectionChart(keepData=false){
+    const el = document.getElementById('electionPredictionChart');
+    const startCtl = document.getElementById('rpStart');
+    const trendCtl = document.getElementById('rpTrend');
+    const start = startCtl ? parseFloat(startCtl.value) : 2;
+    const trend = trendCtl ? parseFloat(trendCtl.value) : 0.5;
+
+    const candidates = ['Rodrigo Paz','Tuto Quiroga','Doria Medina','Andrónico Rodríguez','Arce','ReyesVilla','Nulos','NSNR'];
+    const color = d3.scaleOrdinal().domain(candidates).range(['#10b981','#377eb8','#f59e0b','#8b5cf6','#ef4444','#22c55e','#f97316','#f1c40f']);
+
+    function clamp(x){ return Math.max(0, x); }
+    function gen(){
+      const months = d3.range(0,8).map(m=> new Date(2025,m,1)); // Ene–Ago 1
+      months.push(new Date(2025,7,17)); // 17 de agosto (fecha final)
+
+      // Valores iniciales más plausibles (se normalizan a 100)
+      let state = {
+        'Rodrigo Paz': 12 + start,
+        'Tuto Quiroga': 10,
+        'Doria Medina': 9,
+        'Andrónico Rodríguez': 16,
+        'Arce': 9.5,
+        'ReyesVilla': 10.5,
+        'Nulos': 13,
+        'NSNR': 19
+      };
+      const candidatesOnly = ['Rodrigo Paz','Tuto Quiroga','Doria Medina','Andrónico Rodríguez','Arce','ReyesVilla','Nulos'];
+      const candidatesAll  = ['Rodrigo Paz','Tuto Quiroga','Doria Medina','Andrónico Rodríguez','Arce','ReyesVilla','Nulos','NSNR'];
+
+      // Tendencias estructurales suaves (pp/mes)
+      const drift = {
+        'Rodrigo Paz': 0,
+        'Tuto Quiroga': 0.12,
+        'Doria Medina': 0.06,
+        'Andrónico Rodríguez': -0.10,
+        'Arce': -0.06,
+        'ReyesVilla': 0.00,
+        'Nulos': 0.03,
+        'NSNR': 0
+      };
+
+      // Pesos de atracción de indecisos (más altos para Tuto/Doria/RP)
+      const indecisoPesoBase = {
+        'Tuto Quiroga': 0.33,
+        'Doria Medina': 0.27,
+        'Rodrigo Paz': 0.22,
+        'Andrónico Rodríguez': 0.06,
+        'Arce': 0.05,
+        'ReyesVilla': 0.05,
+        'Nulos': 0.02
+      };
+
+      // Normaliza estado inicial a 100
+      (function normalize(){
+        const sum = candidatesAll.reduce((a,k)=> a + state[k], 0);
+        candidatesAll.forEach(k=> state[k] = state[k] * (100/sum));
+      })();
+
+      const rows = [];
+      for (let idx = 0; idx < months.length; idx++){
+        const date = months[idx];
+
+        // 1) Decaimiento de indecisos (NSNR) más fuerte al inicio y menor al final
+        const decayAvg = 1.1; // pp/mes promedio
+        const decayVar = (Math.random()*0.6 - 0.3); // +/-0.3
+        const timeAttn = 0.7 + 0.3*(idx/(months.length-1)); // algo mayor al final
+        const nsnrDrop = Math.max(0, Math.min(state.NSNR, (decayAvg + decayVar) * timeAttn));
+        state.NSNR -= nsnrDrop;
+
+        // Reasignación de esos puntos a candidatos según pesos y "momentum" reciente
+        const momentum = {};
+        for (const k of candidatesOnly){ momentum[k] = drift[k] + (k==='Rodrigo Paz' ? trend : 0); }
+        const pesoTotal = Object.keys(indecisoPesoBase)
+          .reduce((a,k)=> a + indecisoPesoBase[k]*Math.exp(momentum[k] || 0), 0);
+        for (const k of candidatesOnly){
+          const w = indecisoPesoBase[k]*Math.exp(momentum[k] || 0) / (pesoTotal || 1);
+          state[k] += nsnrDrop * w;
+        }
+
+        // 2) Aplicar drifts + ruido decreciente (más estabilidad cerca de la elección)
+        const sigma0 = 0.45, sigma1 = 0.18; // pp
+        const sigma = sigma0 + (sigma1 - sigma0) * (idx/(months.length-1));
+        state['Rodrigo Paz'] += trend + (Math.random()*2*sigma - sigma);
+        for (const k of candidatesOnly.filter(k=>k!=='Rodrigo Paz')){
+          state[k] += drift[k] + (Math.random()*2*sigma - sigma);
+          state[k] = Math.max(0, state[k]);
+        }
+
+        // 3) Ligera regularización para evitar valores extremos y mantener sumatoria
+        const sumNow = candidatesAll.reduce((a,k)=> a + state[k], 0);
+        candidatesAll.forEach(k=> state[k] = Math.max(0, state[k] * (100/sumNow)));
+
+        // 4) Registrar fila del mes
+        const row = { date };
+        for (const k of candidatesAll){ row[k] = state[k]; }
+        rows.push(row);
+      }
+
+      // Ajuste final suave para reflejar tu orden solicitado sin saltos bruscos
+      const last = rows[rows.length-1];
+      const want = ['Rodrigo Paz','Tuto Quiroga','Doria Medina','Nulos'];
+      // Pequeños corrimientos (<= 1.2 pp) para garantizar el orden cuando no se cumple naturalmente
+      function nudge(a, b, max=1.2){ // mueve de b a a
+        const delta = Math.min(max, Math.max(0, last[b] - last[a] + 0.4));
+        last[a] += delta; last[b] -= delta;
+      }
+      if (last['Rodrigo Paz'] < Math.max(last['Tuto Quiroga'], last['Doria Medina'], last['Nulos'])){
+        const m = Math.max(last['Tuto Quiroga'], last['Doria Medina'], last['Nulos']);
+        nudge('Rodrigo Paz', last['Tuto Quiroga']===m?'Tuto Quiroga': (last['Doria Medina']===m?'Doria Medina':'Nulos'), 1.5);
+      }
+      if (last['Tuto Quiroga'] < last['Doria Medina']) nudge('Tuto Quiroga','Doria Medina');
+      if (last['Doria Medina'] < last['Nulos']) nudge('Doria Medina','Nulos');
+
+      // Renormaliza por si hubo minúsculos errores numéricos
+      const sumF = Object.keys(last).filter(k=>k!=='date').reduce((a,k)=> a + last[k], 0);
+      for (const k of Object.keys(last)) if (k!=='date') last[k] = last[k] * (100/sumF);
+
+      return rows;
+    }
+
+    if (!window.__electionCache || !keepData){ window.__electionCache = gen(); }
+    const data = window.__electionCache;
+
+    el.innerHTML='';
+    const margin={top:16,right:96,bottom:32,left:44};
+    const width=el.clientWidth - margin.left - margin.right;
+    const height=el.clientHeight - margin.top - margin.bottom;
+
+    const svg=d3.select(el).append('svg')
+      .attr('width', width+margin.left+margin.right)
+      .attr('height', height+margin.top+margin.bottom)
+      .append('g').attr('transform',`translate(${margin.left},${margin.top})`);
+
+    const x=d3.scaleTime().domain(d3.extent(data,d=>d.date)).range([0,width]);
+    const y=d3.scaleLinear().domain([0, d3.max(data,d=> d3.max(candidates,k=>d[k]))*1.1]).nice().range([height,0]);
+
+    svg.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x).ticks(d3.timeMonth).tickFormat(d3.timeFormat('%b %Y'))).selectAll('text').style('font-size','10px');
+    svg.append('g').call(d3.axisLeft(y)).selectAll('text').style('font-size','10px');
+
+    const line=d3.line().curve(d3.curveMonotoneX).x(d=>x(d.date)).y(d=>y(d.value));
+    candidates.forEach(c=>{
+      const series=data.map(d=>({date:d.date,value:d[c]}));
+      svg.append('path').datum(series)
+        .attr('fill','none').attr('stroke',color(c)).attr('stroke-width',2)
+        .attr('d', line)
+        .attr('opacity', c==='Rodrigo Paz'? 1 : 0.9);
+      svg.append('text')
+        .attr('x',width+6)
+        .attr('y',y(series[series.length-1].value))
+        .attr('dy','0.35em')
+        .attr('fill',color(c))
+        .style('font-size','11px')
+        .text(c);
     });
+
+    const tooltip=d3.select('body').append('div').attr('class','fixed px-2 py-1 rounded bg-slate-900/90 text-white text-xs pointer-events-none').style('opacity',0);
+    const bisect=d3.bisector(d=>d.date).left;
+    svg.append('rect').attr('width',width).attr('height',height).style('fill','none').style('pointer-events','all')
+      .on('mousemove', (event)=>{
+        const x0=x.invert(d3.pointer(event)[0]); const i=bisect(data,x0,1); const d0=data[i-1]; const d1=data[i]||d0; const d=x0-d0.date>d1.date-x0?d1:d0;
+        tooltip.style('opacity',1).html(`<strong>${d3.timeFormat('%b %Y')(d.date)}</strong><br>`+candidates.map(k=>`<span style=\"color:${color(k)}\">${k}: ${d[k].toFixed(1)}%`).join('<br>'))
+          .style('left',(event.pageX+12)+'px').style('top',(event.pageY-28)+'px');
+      })
+      .on('mouseleave',()=>tooltip.style('opacity',0));
   }
 
-  async function ensureForceGraph(){
-    if (typeof window.ForceGraph === 'function') return true;
-    const candidates = [
-      'https://unpkg.com/force-graph@1.45.1/dist/force-graph.min.js',
-      'https://cdn.jsdelivr.net/npm/force-graph@1.45.1/dist/force-graph.min.js'
-    ];
-    for (const url of candidates){
-      try { await loadScript(url, {timeout:8000}); if (typeof window.ForceGraph==='function') return true; } catch(e){}
-    }
-    return false;
-  }
+  // ===================== Plotly: Heatmap, Simulación, Choropleth =====================
+  function initPlotlyCharts(){
+    // Heatmap
+    const sentimentData=[{ z:[[1,20,30],[20,1,60],[30,60,1]], x:['Positivo','Neutral','Negativo'], y:['Discurso A','Discurso B','Discurso C'], type:'heatmap', colorscale:'Viridis' }];
+    const saEl=document.getElementById('sentimentAnalysisChart');
+    Plotly.newPlot('sentimentAnalysisChart', sentimentData, { margin:{t:36,r:12,b:36,l:48}, title:{ text:'Análisis de Sentimientos en Discursos Políticos', font:{family:'Inter',size:16}}, height: saEl.clientHeight }, {responsive:true});
 
-  // =====================
-  // Inicialización segura (evita "ForceGraph is not defined")
-  // =====================
-  (async function init(){
-    // Tests de humo (no lanzan ReferenceError porque usamos typeof)
-    console.assert(typeof d3 !== 'undefined' && typeof d3.select==='function', 'D3 no cargó correctamente');
-    console.assert(typeof Plotly !== 'undefined' && (/^2\./.test(Plotly.version||Plotly.BUILD||'')), 'Plotly v2 no está disponible');
-
-    // 1) Red con ForceGraph (carga perezosa + fallback)
-    const netOk = await ensureForceGraph();
-    if (netOk){
-      try { initNetwork(); } catch(err){ showNetFallback('Error al dibujar la red: '+err.message); }
-    } else {
-      showNetFallback('No se pudo cargar la librería de red (ForceGraph).');
-    }
-
-    // 2) Gráfico D3 (series)
-    renderElectionChart();
-    window.addEventListener('resize', renderElectionChart);
-
-    // 3) Heatmap de sentimientos (Plotly)
-    const sentimentData = [{ z:[[1,20,30],[20,1,60],[30,60,1]], x:['Positivo','Neutral','Negativo'], y:['Discurso A','Discurso B','Discurso C'], type:'heatmap', colorscale:'Viridis' }];
-    const saEl = document.getElementById('sentimentAnalysisChart');
-    if (window.Plotly){
-      Plotly.newPlot('sentimentAnalysisChart', sentimentData, { margin:{t:36,r:12,b:36,l:48}, title:{ text:'Análisis de Sentimientos en Discursos Políticos', font:{family:'Inter',size:16}}, height: saEl.clientHeight }, {responsive:true});
-    }
-
-    // 4) Simulación social (Plotly líneas)
+    // Simulación (líneas)
     function randSeries(n, trend=0){ const out=[]; let v=50; for(let i=0;i<n;i++){ v += Math.random()*10-5 + trend; v=Math.max(0,Math.min(100,v)); out.push(v);} return out; }
     const simData=[
       { x:[...Array(100).keys()], y:randSeries(100, 0.10), mode:'lines', type:'scatter', name:'Escenario A' },
       { x:[...Array(100).keys()], y:randSeries(100,-0.10), mode:'lines', type:'scatter', name:'Escenario B' },
       { x:[...Array(100).keys()], y:randSeries(100, 0.00), mode:'lines', type:'scatter', name:'Escenario C' }
     ];
-    const ssEl = document.getElementById('socialSimulationChart');
-    if (window.Plotly){
-      Plotly.newPlot('socialSimulationChart', simData, { margin:{t:36,r:12,b:48,l:52}, title:{ text:'Simulación de Interacciones Sociales', font:{family:'Inter',size:16}}, xaxis:{title:'Tiempo'}, yaxis:{title:'Cohesión social'}, height:ssEl.clientHeight }, {responsive:true});
-    }
+    const ssEl=document.getElementById('socialSimulationChart');
+    Plotly.newPlot('socialSimulationChart', simData, { margin:{t:36,r:12,b:48,l:52}, title:{ text:'Simulación de Interacciones Sociales', font:{family:'Inter',size:16}}, xaxis:{title:'Tiempo'}, yaxis:{title:'Cohesión social'}, height:ssEl.clientHeight }, {responsive:true});
 
-    // 5) Choropleth (Plotly mapa)
+    // Mapa coroplético
     const geoData=[{ type:'choropleth', locationmode:'country names', locations:['United States','China','Russia','Germany','United Kingdom','France','Japan','India','Brazil','Canada'], z:[10,9,8,7,6,5,4,3,2,1], text:['Estados Unidos','China','Rusia','Alemania','Reino Unido','Francia','Japón','India','Brasil','Canadá'], colorscale:[[0,'rgb(242,240,247)'],[0.2,'rgb(218,218,235)'],[0.4,'rgb(188,189,220)'],[0.6,'rgb(158,154,200)'],[0.8,'rgb(117,107,177)'],[1,'rgb(84,39,143)']], reversescale:true, marker:{line:{color:'rgb(180,180,180)',width:.5}}, colorbar:{title:'Índice de influencia'} }];
-    const mapEl = document.getElementById('geopoliticalMap');
-    if (window.Plotly){
-      Plotly.newPlot('geopoliticalMap', geoData, { margin:{t:36,r:12,b:12,l:12}, title:{ text:'Influencia Geopolítica Global', font:{family:'Inter',size:16}}, geo:{ showframe:false, showcoastlines:true, projection:{type:'mercator'} }, height: mapEl.clientHeight }, {responsive:true});
-      window.addEventListener('resize', ()=> ['sentimentAnalysisChart','socialSimulationChart','geopoliticalMap'].forEach(id=>Plotly.Plots.resize(document.getElementById(id))));
-    }
-  })();
+    const mapEl=document.getElementById('geopoliticalMap');
+    Plotly.newPlot('geopoliticalMap', geoData, { margin:{t:36,r:12,b:12,l:12}, title:{ text:'Influencia Geopolítica Global', font:{family:'Inter',size:16}}, geo:{ showframe:false, showcoastlines:true, projection:{type:'mercator'} }, height: mapEl.clientHeight }, {responsive:true});
 
-  // =====================
-  // Funciones específicas
-  // =====================
-  function initNetwork(){
-    const netEl = document.getElementById('socialNetworkGraph');
-    netEl.textContent='';
-    const gData={
-      nodes:[{id:1,name:'Influencer A',group:1},{id:2,name:'Influencer B',group:1},{id:3,name:'Político C',group:2},{id:4,name:'Activista D',group:3},{id:5,name:'Ciudadano E',group:4},{id:6,name:'Ciudadano F',group:4},{id:7,name:'Ciudadano G',group:4},{id:8,name:'Periodista H',group:5},{id:9,name:'ONG I',group:6},{id:10,name:'Empresa J',group:7}],
-      links:[{source:1,target:2},{source:1,target:3},{source:2,target:4},{source:3,target:5},{source:4,target:5},{source:4,target:6},{source:5,target:6},{source:6,target:7},{source:7,target:8},{source:8,target:1},{source:9,target:4},{source:9,target:5},{source:10,target:1},{source:10,target:3}]
-    };
-    const palette=['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#f1c40f','#a65628'];
-    const Graph = window.ForceGraph()(netEl)
-      .graphData(gData)
-      .nodeId('id')
-      .nodeLabel('name')
-      .nodeColor(n=>palette[(n.group-1)%palette.length])
-      .linkColor(()=> '#94a3b8')
-      .linkWidth(1)
-      .linkDirectionalParticles(2)
-      .linkDirectionalParticleWidth(2)
-      .d3AlphaDecay(0.01)
-      .d3VelocityDecay(0.08)
-      .nodeCanvasObject((node,ctx,globalScale)=>{
-        const label=node.name, fs=12/globalScale, pad=fs*.2; ctx.font=`${fs}px Inter, sans-serif`; const tw=ctx.measureText(label).width; const bw=tw+pad*2, bh=fs+pad*2; ctx.fillStyle='rgba(255,255,255,.85)'; ctx.fillRect(node.x-bw/2,node.y-bh/2,bw,bh); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle='#0f172a'; ctx.fillText(label,node.x,node.y);
-      });
-    function size(){ const r=netEl.getBoundingClientRect(); Graph.width(r.width); Graph.height(netEl.clientHeight||r.height||400); }
-    size();
-    if (window.ResizeObserver){ new ResizeObserver(size).observe(netEl); }
-    window.addEventListener('resize', size);
+    window.addEventListener('resize', ()=> ['sentimentAnalysisChart','socialSimulationChart','geopoliticalMap'].forEach(id=>Plotly.Plots.resize(document.getElementById(id))));
   }
 
-  function showNetFallback(msg){
-    const netEl = document.getElementById('socialNetworkGraph');
-    netEl.innerHTML = `<div class="text-center p-6">
-        <div class="mx-auto h-12 w-12 rounded-full bg-rose-100 flex items-center justify-center mb-3"><span class="text-rose-600">!</span></div>
-        <p class="text-slate-600">${msg}</p>
-        <p class="text-slate-500 text-xs mt-1">Se mostrará un placeholder estático en lugar del gráfico interactivo.</p>
-      </div>`;
-  }
+  // ===================== Inicio =====================
+  renderElectionChart(true);
+window.addEventListener('resize', ()=>renderElectionChart(true));
 
-  function renderElectionChart(){
-    const el = document.getElementById('electionPredictionChart');
-    el.innerHTML='';
-    const data=[
-      {date:new Date(2024,0,1), Morales:19, Arce:19, Mesa:15, ReyesVilla:12, Nulos:12, NSNR:12, Otros:11},
-      {date:new Date(2024,1,1), Morales:18.5, Arce:18.5, Mesa:15.5, ReyesVilla:12.5, Nulos:12.5, NSNR:11.5, Otros:11},
-      {date:new Date(2024,2,1), Morales:18, Arce:18, Mesa:16, ReyesVilla:13, Nulos:13, NSNR:11,   Otros:11},
-      {date:new Date(2024,3,1), Morales:17.5, Arce:17.5, Mesa:16.5, ReyesVilla:13.5, Nulos:13.5, NSNR:10.5, Otros:11},
-      {date:new Date(2024,4,1), Morales:17, Arce:17, Mesa:17, ReyesVilla:14, Nulos:14, NSNR:10,   Otros:11},
-      {date:new Date(2024,5,1), Morales:16.5, Arce:16.5, Mesa:17.5, ReyesVilla:14.5, Nulos:14.5, NSNR:9.5,  Otros:11},
-      {date:new Date(2024,6,1), Morales:16, Arce:16, Mesa:18, ReyesVilla:15, Nulos:15, NSNR:9,    Otros:11},
-      {date:new Date(2024,7,1), Morales:15.5, Arce:15.5, Mesa:18.5, ReyesVilla:15.5, Nulos:15.5, NSNR:8.5, Otros:11},
-      {date:new Date(2024,8,1), Morales:15, Arce:15, Mesa:19, ReyesVilla:16, Nulos:16, NSNR:8,    Otros:11}
-    ];
-    const margin={top:16,right:80,bottom:30,left:44};
-    const width=el.clientWidth - margin.left - margin.right;
-    const height=el.clientHeight - margin.top - margin.bottom;
+// Controles dinámicos (si existen)
+(function(){
+  const s=document.getElementById('rpStart');
+  const t=document.getElementById('rpTrend');
+  const sv=document.getElementById('rpStartVal');
+  const tv=document.getElementById('rpTrendVal');
+  const g=document.getElementById('regen');
+  function updateLabels(){ if(sv) sv.textContent = `+${Number(s.value).toFixed(1)} pp`; if(tv) tv.textContent = `+${Number(t.value).toFixed(2)} pp/mes`; }
+  if(s&&t){ s.addEventListener('input', ()=>{ updateLabels(); renderElectionChart(false); }); t.addEventListener('input', ()=>{ updateLabels(); renderElectionChart(false); }); updateLabels(); }
+  if(g){ g.addEventListener('click', ()=>{ renderElectionChart(false); }); }
+})();
+  if (window.Plotly) { initPlotlyCharts(); }
+  else { console.error('Plotly no cargó'); }
 
-    const svg=d3.select('#electionPredictionChart').append('svg')
-      .attr('width', width+margin.left+margin.right)
-      .attr('height', height+margin.top+margin.bottom)
-      .append('g').attr('transform',`translate(${margin.left},${margin.top})`);
-
-    const x=d3.scaleTime().domain(d3.extent(data,d=>d.date)).range([0,width]);
-    const y=d3.scaleLinear().domain([0,25]).range([height,0]);
-    const color=d3.scaleOrdinal().domain(['Morales','Arce','Mesa','ReyesVilla','Nulos','NSNR','Otros']).range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#f1c40f','#a65628']);
-    const line=d3.line().x(d=>x(d.date)).y(d=>y(d.value));
-
-    svg.append('g').attr('transform',`translate(0,${height})`).call(d3.axisBottom(x).ticks(d3.timeMonth).tickFormat(d3.timeFormat('%b %Y'))).selectAll('text').style('font-size','10px');
-    svg.append('g').call(d3.axisLeft(y)).selectAll('text').style('font-size','10px');
-
-    const candidates=Object.keys(data[0]).filter(k=>k!=='date');
-    candidates.forEach(c=>{
-      const series=data.map(d=>({date:d.date,value:d[c]}));
-      svg.append('path').datum(series).attr('fill','none').attr('stroke',color(c)).attr('stroke-width',2).attr('d',line);
-      svg.append('text').attr('x',width+6).attr('y',y(series[series.length-1].value)).attr('dy','0.35em').attr('fill',color(c)).style('font-size','11px').text(c);
-    });
-
-    const tooltip=d3.select('body').append('div').attr('class','tooltip').style('opacity',0);
-    const bisect=d3.bisector(d=>d.date).left;
-    svg.append('rect').attr('width',width).attr('height',height).style('fill','none').style('pointer-events','all')
-      .on('mousemove', (event)=>{
-        const x0=x.invert(d3.pointer(event)[0]);
-        const i=bisect(data,x0,1); const d0=data[i-1]; const d1=data[i]||d0; const d=x0-d0.date>d1.date-x0?d1:d0;
-        tooltip.html(`<strong>${d3.timeFormat('%B %Y')(d.date)}</strong><br>`+['Morales','Arce','Mesa','ReyesVilla','Nulos','NSNR','Otros'].map(c=>`<span style="color:${color(c)}">${c}: ${d[c].toFixed(1)}%</span>`).join('<br>')).style('opacity',1).style('left',(event.pageX+12)+'px').style('top',(event.pageY-28)+'px');
-      })
-      .on('mouseleave',()=>tooltip.style('opacity',0));
-  }
   </script>
 </body>
 </html>
-
