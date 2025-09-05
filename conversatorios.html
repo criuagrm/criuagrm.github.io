@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Conversatorios — CIRCPyCS UAGRM</title>
+  <meta name="description" content="Conversatorios del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand:'#0E7C7B', borderc:'#e5e7eb', ink:'#0f172a' },
+          fontFamily: { sans:['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'] },
+          boxShadow: { soft:'0 8px 22px rgba(2,6,23,.08)' },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{ --header-h: 96px; }
+    /* Alturas de poster controladas (más pequeñas en móvil) */
+    .poster-box{height:220px}
+    @media (min-width:640px){.poster-box{height:260px}}
+    @media (min-width:1024px){.poster-box{height:300px}}
+
+    /* Asegura que la imagen JAMÁS invada el texto */
+    .poster-box img{max-height:100%;max-width:100%;object-fit:contain;display:block;margin:auto}
+
+    /* Anclajes compensados por el header pegajoso */
+    section[id]{ scroll-margin-top: var(--header-h, 96px); }
+
+    /* Menú móvil: bars ↔ X */
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+
+    /* Dropdown móvil bajo header, con altura segura */
+    #mobile-menu{ max-height: calc(100dvh - var(--header-h,96px)); overflow-y:auto; -webkit-overflow-scrolling:touch; }
+
+    /* Chips */
+    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.72rem;line-height:1rem}
+
+    /* Botones sociales redondos */
+    .social-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:9999px;color:#fff;transition:transform .12s ease, box-shadow .12s ease}
+    .social-btn:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.08)}
+    .social-fb{background:#1877F2}
+    .social-yt{background:#FF0000}
+    .social-x{background:#000}
+    .social-disabled{background:#e5e7eb; color:#94a3b8}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <!-- Nav escritorio -->
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#agenda" class="hover:text-brand">Próximos</a>
+        <a href="#pasados" class="hover:text-brand">Pasados</a>
+        <a href="#contacto" class="hover:text-brand">Contacto</a>
+        <a href="https://cir.uagrm.edu.bo/" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-brand hover:text-brand" rel="noopener">Volver al inicio</a>
+      </nav>
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span>Menú</span>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <!-- Menú móvil dropdown -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_8px_22px_rgba(2,6,23,.08)]" aria-label="Navegación móvil" aria-hidden="true">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#agenda">Próximos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#pasados">Pasados</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+        <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank" rel="noopener">Volver al inicio</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="relative hero-bg">
+    <div class="absolute inset-0 -z-10 opacity-30" aria-hidden="true"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Conversatorios</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-ink">Ciclo de Conversatorios CIRCPyCS</h2>
+      <p class="mt-2 max-w-3xl text-slate-600">Registro de los últimos conversatorios, con afiche oficial, descripción, modalidad y enlaces. Diseño 100% móvil y accesible.</p>
+    </div>
+  </section>
+
+  <!-- BUSCADOR -->
+  <section class="pb-4" id="filtros">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="rounded-2xl border border-borderc bg-white p-4 shadow-soft flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="text-sm text-slate-600">Listado de conversatorios (usa el buscador)</div>
+        <div class="flex items-center gap-2 w-full lg:w-auto">
+          <input id="search" type="search" placeholder="Buscar por título, tema o ponente…" class="w-full lg:w-96 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200" />
+          <button id="clear" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÓXIMOS -->
+  <main id="agenda" class="pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-ink">Próximos conversatorios</h3>
+      <div id="events-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </main>
+
+  <!-- PASADOS -->
+  <section id="pasados" class="py-10 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold text-ink">Conversatorios pasados</h3>
+      <div id="past-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 items-start">
+      <div class="rounded-2xl border border-borderc bg-white p-6 shadow-soft">
+        <h3 class="font-semibold text-lg">Contacto</h3>
+        <p class="mt-2 text-sm text-slate-600">¿Deseas proponer un conversatorio?</p>
+        <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl border border-borderc p-3">
+            <div class="text-slate-500">Email</div>
+            <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="font-medium text-sky-700">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+          </div>
+          <div class="rounded-xl border border-borderc p-3">
+            <div class="text-slate-500">Teléfono</div>
+            <div class="font-medium">+591 67381294</div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-borderc bg-white p-6 shadow-soft">
+        <h3 class="font-semibold text-lg">Enviar propuesta</h3>
+        <p class="mt-2 text-sm text-slate-600">Incluye título, resumen, ponente(s), fecha tentativa y requerimientos.</p>
+        <a href="https://forms.gle/" target="_blank" class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800" rel="noopener">Formulario<span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="grid place-items-center gap-3 text-center">
+        <p>© <span id="year"></span> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
+        <p>Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · +591 67381294</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Menú móvil dropdown =====
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
+    function setHeaderVar(){ const h = Math.round(headerEl.getBoundingClientRect().height || 64); document.documentElement.style.setProperty('--header-h', h + 'px'); mobileMenu.style.setProperty('--header-h', h + 'px'); }
+    function toggleMenu(forceOpen = null){
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      mobileMenu.setAttribute('aria-hidden', String(!willOpen));
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
+    }
+    btnOpen?.addEventListener('click', ()=> toggleMenu());
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
+    mobileMenu.addEventListener('click', (e)=>{ if(e.target.closest('a')) toggleMenu(false); });
+    window.addEventListener('resize', ()=>{ if(!mobileMenu.classList.contains('hidden')) setHeaderVar(); });
+    window.matchMedia('(min-width:768px)').addEventListener('change', ev=>{ if(ev.matches) toggleMenu(false); });
+
+    // ======== Datos de conversatorios (3 eventos) ========
+    const CONVERS = [
+      { id:'conv_2025_09_ai', title:'Conversatorio — IA y Política Pública', date:'2025-09-20', time:'19:00', mode:'Híbrido',
+        venue:'Sala de Posgrado & Zoom — UAGRM', cover:'https://i.imgur.com/fbtH8Ko.png',
+        desc:'Impactos y oportunidades de la IA en el ciclo de políticas públicas y la administración local.',
+        speakers:['Dra. M. Roca','Ing. L. Cárdenas'],
+        links:{ fb:'', yt:'', x:'' } },
+
+      { id:'conv_2025_10_desinfo', title:'Conversatorio — Desinformación y Elecciones 2025', date:'2025-10-08', time:'18:30', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/9x1R3sU.png',
+        desc:'Estrategias de alfabetización mediática y monitoreo de narrativas durante campañas.',
+        speakers:['Lic. V. Gómez','MSc. J. Salvatierra'],
+        links:{ fb:'', yt:'', x:'' } },
+
+      { id:'conv_2025_07_juventud', title:'Conversatorio — Juventud y Participación', date:'2025-07-25', time:'18:30', mode:'Presencial',
+        venue:'Aula Magna — UAGRM', cover:'https://i.imgur.com/s1nZ7Bg.png',
+        desc:'Hallazgos recientes sobre participación juvenil y organización en redes sociales.',
+        speakers:['Soc. A. Mercado'],
+        links:{ fb:'', yt:'', x:'' } },
+    ];
+
+    // Iconos SVG (currentColor)
+    const ICONS = {
+      fb: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.49 17.52 2 12 2S2 6.49 2 12.06c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9v-2.91h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.75 8.44-4.92 8.44-9.94Z"/></svg>',
+      yt: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a4.7 4.7 0 0 0-3.3-3.3C18.5 2.3 12 2.3 12 2.3s-6.5 0-8.2.6A4.7 4.7 0 0 0 .5 6.2 48.5 48.5 0 0 0 0 12a48.5 48.5 0 0 0 .5 5.8 4.7 4.7 0 0 0 3.3 3.3c1.7.6 8.2.6 8.2.6s6.5 0 8.2-.6a4.7 4.7 0 0 0 3.3-3.3A48.5 48.5 0 0 0 24 12a48.5 48.5 0 0 0-.5-5.8ZM9.6 15.5V8.5l6.4 3.5-6.4 3.5Z"/></svg>',
+      x:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21l-6.42 7.36L22 22h-6.828l-4.77-6.22L4.883 22H2.126l6.9-7.92L2 2h6.953l4.29 5.64L18.244 2Zm-1.195 18h2.04L7.05 4h-2.1l12.1 16Z"/></svg>'
+    };
+
+    const fmtDate = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('es-BO',{ year:'numeric', month:'short', day:'2-digit' });
+
+    function socialButtons(links){
+      const list = [
+        {href:links.fb, key:'fb', cls:'social-fb', label:'Facebook'},
+        {href:links.yt, key:'yt', cls:'social-yt', label:'YouTube'},
+        {href:links.x,  key:'x',  cls:'social-x',  label:'X (Twitter)'}
+      ];
+      return list.map(({href,key,cls,label})=>{
+        if(!href) return `<span title="Sin enlace" class="social-btn social-disabled" aria-disabled="true">${ICONS[key]}</span>`;
+        return `<a href="${href}" target="_blank" rel="noopener" class="social-btn ${cls}" aria-label="${label}">${ICONS[key]}</a>`;
+      }).join('');
+    }
+
+    function speakersLine(arr){ return (arr && arr.length) ? `<span class="font-medium">Ponente(s):</span> ${arr.join(', ')}` : ''; }
+
+    function cardHTML(ev){
+      return `
+      <article class="rounded-2xl bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
+        <div class="relative poster-box grid place-items-center bg-white border-b border-borderc">
+          <img loading="lazy" decoding="async" src="${ev.cover}" alt="Afiche: ${ev.title}"
+               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'"/>
+          <div class="absolute top-2 left-2 space-x-1">
+            <span class="chip bg-sky-50 text-sky-700 ring-1 ring-sky-200">Conversatorio</span>
+          </div>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <h4 class="font-semibold text-ink">${ev.title}</h4>
+          <p class="mt-1 text-sm text-slate-600">${ev.desc || ''}</p>
+          <div class="mt-3 text-sm text-slate-700 space-y-1">
+            <div><span class="font-medium">Fecha:</span> ${fmtDate(ev.date)} · ${ev.time} · ${ev.mode}</div>
+            <div class="truncate"><span class="font-medium">Lugar:</span> ${ev.venue}</div>
+            ${ev.speakers? `<div class="truncate">${speakersLine(ev.speakers)}</div>`:''}
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            ${socialButtons(ev.links)}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function render(){
+      const grid = document.getElementById('events-grid');
+      const past = document.getElementById('past-grid');
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const now = new Date();
+      const match = (ev)=> !q || (ev.title + (ev.desc||'') + (ev.venue||'') + (ev.speakers||'').toString()).toLowerCase().includes(q);
+
+      const upcoming = CONVERS.filter(e=> new Date(e.date+'T23:59:59') >= now && match(e)).sort((a,b)=> a.date.localeCompare(b.date));
+      const passed   = CONVERS.filter(e=> new Date(e.date+'T23:59:59') <  now && match(e)).sort((a,b)=> b.date.localeCompare(a.date));
+
+      grid.innerHTML = upcoming.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">No hay conversatorios con estos filtros.</div>`;
+      past.innerHTML = passed.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">Aún no hay conversatorios pasados.</div>`;
+    }
+
+    document.getElementById('search').addEventListener('input', render);
+    document.getElementById('clear').addEventListener('click', ()=>{ document.getElementById('search').value=''; render(); });
+
+    // Inicializa
+    (function init(){
+      const h = Math.round(document.querySelector('header').getBoundingClientRect().height || 64);
+      document.documentElement.style.setProperty('--header-h', h + 'px');
+      render();
+      // Checks mínimos
+      console.assert(document.getElementById('events-grid'), 'Falta #events-grid');
+      console.assert(document.getElementById('past-grid'), 'Falta #past-grid');
+      console.assert(Array.isArray(CONVERS) && CONVERS.length === 3, 'Se esperaban 3 conversatorios');
+    })();
+  </script>
+</body>
+</html>
