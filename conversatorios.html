@@ -25,12 +25,12 @@
   <style>
     :root{ --header-h: 96px; }
     /* Alturas de poster controladas (más pequeñas en móvil) */
-    .poster-box{height:220px}
-    @media (min-width:640px){.poster-box{height:260px}}
-    @media (min-width:1024px){.poster-box{height:300px}}
+    .poster-box{height:320px;overflow:hidden;display:grid;place-items:center;background:#fff}
+    @media (min-width:640px){.poster-box{height:400px}}
+    @media (min-width:1024px){.poster-box{height:520px}}
 
     /* Asegura que la imagen JAMÁS invada el texto */
-    .poster-box img{max-height:100%;max-width:100%;object-fit:contain;display:block;margin:auto}
+    .poster-box img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;margin:auto}
 
     /* Anclajes compensados por el header pegajoso */
     section[id]{ scroll-margin-top: var(--header-h, 96px); }
@@ -70,8 +70,7 @@
       </a>
       <!-- Nav escritorio -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#agenda" class="hover:text-brand">Próximos</a>
-        <a href="#pasados" class="hover:text-brand">Pasados</a>
+        <a href="#pasados" class="hover:text-brand">Conversatorios</a>
         <a href="#contacto" class="hover:text-brand">Contacto</a>
         <a href="https://cir.uagrm.edu.bo/" target="_blank" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-brand hover:text-brand" rel="noopener">Volver al inicio</a>
       </nav>
@@ -85,10 +84,9 @@
     <!-- Menú móvil dropdown -->
     <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_8px_22px_rgba(2,6,23,.08)]" aria-label="Navegación móvil" aria-hidden="true">
       <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#agenda">Próximos</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#pasados">Pasados</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#pasados">Conversatorios</a></li>
         <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
-        <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank" rel="noopener">Volver al inicio</a></li>
+        <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https:\/\/cir.uagrm.edu.bo\/" target="_blank" rel="noopener">Volver al inicio</a></li>
       </ul>
     </nav>
   </header>
@@ -99,7 +97,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
       <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Conversatorios</span>
       <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-ink">Ciclo de Conversatorios CIRCPyCS</h2>
-      <p class="mt-2 max-w-3xl text-slate-600">Registro de los últimos conversatorios, con afiche oficial, descripción, modalidad y enlaces. Diseño 100% móvil y accesible.</p>
+      <p class="mt-2 max-w-3xl text-slate-600">Registro de los últimos conversatorios, con afiche oficial, descripción, modalidad y enlaces.</p>
     </div>
   </section>
 
@@ -117,18 +115,13 @@
   </section>
 
   <!-- PRÓXIMOS -->
-  <main id="agenda" class="pb-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-xl font-bold text-ink">Próximos conversatorios</h3>
-      <div id="events-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
-    </div>
-  </main>
+  
 
   <!-- PASADOS -->
   <section id="pasados" class="py-10 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-xl font-bold text-ink">Conversatorios pasados</h3>
-      <div id="past-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+      <h3 class="text-xl font-bold text-ink">Conversatorios</h3>
+      <div id="past-grid" class="mt-4 grid grid-flow-col auto-cols-[minmax(280px,1fr)] gap-6 overflow-x-auto snap-x snap-mandatory pb-2"></div>
     </div>
   </section>
 
@@ -193,22 +186,22 @@
 
     // ======== Datos de conversatorios (3 eventos) ========
     const CONVERS = [
-      { id:'conv_2025_09_ai', title:'Conversatorio — IA y Política Pública', date:'2025-09-20', time:'19:00', mode:'Híbrido',
-        venue:'Sala de Posgrado & Zoom — UAGRM', cover:'https://i.imgur.com/fbtH8Ko.png',
-        desc:'Impactos y oportunidades de la IA en el ciclo de políticas públicas y la administración local.',
-        speakers:['Dra. M. Roca','Ing. L. Cárdenas'],
+      { id:'conv_2025_10_lib3', title:'3er Conversatorio Crítico sobre Liberalismo Económico', date:'2025-10-25', time:'18:30', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/j08OAIX.png',
+        desc:'Análisis de la situación actual de Argentina y el giro hacia una intervención estatal más directa; desafíos económicos, políticos y sociales en clave crítica.',
+        speakers:['Ricardo Alonzo Fernández Salguero','Matías Suárez Holze'],
         links:{ fb:'', yt:'', x:'' } },
 
-      { id:'conv_2025_10_desinfo', title:'Conversatorio — Desinformación y Elecciones 2025', date:'2025-10-08', time:'18:30', mode:'Presencial',
-        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/9x1R3sU.png',
-        desc:'Estrategias de alfabetización mediática y monitoreo de narrativas durante campañas.',
-        speakers:['Lic. V. Gómez','MSc. J. Salvatierra'],
+      { id:'conv_2025_10_desinfo', title:'2do Conversatorio Crítico sobre Liberalismo Económico', date:'2025-10-08', time:'18:30', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM', cover:'https://i.imgur.com/5Kg6aDu.png',
+        desc:'Inflación, deuda y reformas en Argentina: apertura de mercados, rol del Banco Central y alcance de las políticas sociales, con enfoque comparado.',
+        speakers:['Nicolás Di Paola','Ricardo Alonzo Fernández Salguero'],
         links:{ fb:'', yt:'', x:'' } },
 
-      { id:'conv_2025_07_juventud', title:'Conversatorio — Juventud y Participación', date:'2025-07-25', time:'18:30', mode:'Presencial',
-        venue:'Aula Magna — UAGRM', cover:'https://i.imgur.com/s1nZ7Bg.png',
-        desc:'Hallazgos recientes sobre participación juvenil y organización en redes sociales.',
-        speakers:['Soc. A. Mercado'],
+      { id:'conv_2025_09_liberalismo', title:'Conversatorio crítico sobre el liberalismo económico', date:'2025-09-20', time:'19:00', mode:'Híbrido',
+        venue:'Sala de Posgrado & Zoom — UAGRM', cover:'https://i.imgur.com/nhffCet.png',
+        desc:'Diálogo con Eduardo Garzón y Ricardo Alonzo Fernández. Ejes: experimentos libertarios, Índice de Libertad Económica (mitos), balance Milei y efectos para Bolivia.',
+        speakers:['Eduardo Garzón','Ricardo Alonzo Fernández'],
         links:{ fb:'', yt:'', x:'' } },
     ];
 
@@ -237,8 +230,8 @@
 
     function cardHTML(ev){
       return `
-      <article class="rounded-2xl bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
-        <div class="relative poster-box grid place-items-center bg-white border-b border-borderc">
+      <article class="snap-start rounded-2xl bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
+        <div class="relative poster-box grid place-items-center bg-white border-b border-borderc p-2 sm:p-3">
           <img loading="lazy" decoding="async" src="${ev.cover}" alt="Afiche: ${ev.title}"
                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'"/>
           <div class="absolute top-2 left-2 space-x-1">
@@ -261,17 +254,11 @@
     }
 
     function render(){
-      const grid = document.getElementById('events-grid');
       const past = document.getElementById('past-grid');
       const q = document.getElementById('search').value.trim().toLowerCase();
-      const now = new Date();
       const match = (ev)=> !q || (ev.title + (ev.desc||'') + (ev.venue||'') + (ev.speakers||'').toString()).toLowerCase().includes(q);
-
-      const upcoming = CONVERS.filter(e=> new Date(e.date+'T23:59:59') >= now && match(e)).sort((a,b)=> a.date.localeCompare(b.date));
-      const passed   = CONVERS.filter(e=> new Date(e.date+'T23:59:59') <  now && match(e)).sort((a,b)=> b.date.localeCompare(a.date));
-
-      grid.innerHTML = upcoming.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">No hay conversatorios con estos filtros.</div>`;
-      past.innerHTML = passed.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">Aún no hay conversatorios pasados.</div>`;
+      const ordered = CONVERS.filter(match).sort((a,b)=> b.date.localeCompare(a.date));
+      past.innerHTML = ordered.map(cardHTML).join('') || `<div class="text-slate-500 text-sm">Sin eventos con estos filtros.</div>`;
     }
 
     document.getElementById('search').addEventListener('input', render);
@@ -283,10 +270,10 @@
       document.documentElement.style.setProperty('--header-h', h + 'px');
       render();
       // Checks mínimos
-      console.assert(document.getElementById('events-grid'), 'Falta #events-grid');
       console.assert(document.getElementById('past-grid'), 'Falta #past-grid');
       console.assert(Array.isArray(CONVERS) && CONVERS.length === 3, 'Se esperaban 3 conversatorios');
     })();
   </script>
 </body>
 </html>
+
