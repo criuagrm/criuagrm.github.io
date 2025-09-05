@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Serie Crítica al Liberalismo Económico — CIRCPyCS</title>
+  <meta name="description" content="Sitio de la serie 'Crítica al liberalismo económico' del CIRCPyCS: conversatorios, conferencias y publicaciones de Conocimiento y Política." />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand:'#0E7C7B', ink:'#0f172a', borderc:'#e5e7eb', bg:'#f6f7fb' },
+          fontFamily: { sans:['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'] },
+          boxShadow: { soft:'0 10px 24px rgba(2,6,23,.08)' },
+          borderRadius: { xl2:'18px' }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{ --header-h: 96px; }
+    section[id]{ scroll-margin-top: var(--header-h, 96px); }
+
+    /* Afiches contenidos: nunca sobreponen texto */
+    .poster-box{height:300px;display:grid;place-items:center;background:#fff;overflow:hidden}
+    @media (min-width:640px){.poster-box{height:380px}}
+    @media (min-width:1024px){.poster-box{height:460px}}
+    .poster-box img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;margin:auto}
+
+    /* Posters más grandes para conferencias (desktop) */
+    .poster-box--lg{height:360px}
+    @media (min-width:640px){.poster-box--lg{height:480px}}
+    @media (min-width:1024px){.poster-box--lg{height:600px}}
+
+    /* Menú móvil */
+    #btn-open[aria-expanded="true"] #icon-bars{display:none}
+    #btn-open[aria-expanded="true"] #icon-x{display:block}
+    #mobile-menu{ max-height: calc(100dvh - var(--header-h)); overflow:auto; -webkit-overflow-scrolling:touch; }
+
+    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.72rem;line-height:1rem}
+  </style>
+</head>
+<body class="min-h-screen bg-bg text-slate-800 font-sans">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a class="hover:text-brand" href="#conversatorios">Conversatorios</a>
+        <a class="hover:text-brand" href="#conferencias">Conferencias</a>
+        <a class="hover:text-brand" href="#revista">Conocimiento y Política #5</a>
+        <a class="hover:text-brand" href="#contacto">Contacto</a>
+        <a class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-brand hover:text-brand" href="https://cir.uagrm.edu.bo/" target="_blank" rel="noopener">Volver a inicio</a>
+      </nav>
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span>Menú</span>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_8px_22px_rgba(2,6,23,.08)]" aria-label="Navegación móvil">
+      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#conversatorios">Conversatorios</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#conferencias">Conferencias</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#revista">Conocimiento y Política #5</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+        <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" target="_blank" rel="noopener">Volver a inicio</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="relative">
+    <div class="absolute inset-0 -z-10 opacity-20">
+      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Serie académica</span>
+      <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold text-ink">Crítica al liberalismo económico</h2>
+      <p class="mt-2 max-w-3xl text-slate-600">Colección de actividades del CIRCPyCS en torno a debates contemporáneos sobre economía política: conversatorios, conferencias y publicaciones.</p>
+
+      <!-- Buscador global -->
+      <div class="mt-5 rounded-2xl border border-borderc bg-white p-4 shadow-soft flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="text-sm text-slate-600">Usa el buscador para filtrar por ponente, título o tema</div>
+        <div class="flex items-center gap-2 w-full lg:w-auto">
+          <input id="search" type="search" placeholder="Buscar…" class="w-full lg:w-96 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200" />
+          <button id="clear" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONVERSATORIOS -->
+  <section id="conversatorios" class="py-10 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-bold text-ink">Conversatorios (3)</h3>
+        <span class="text-xs text-slate-500">Ordenados del más reciente al más antiguo</span>
+      </div>
+      <div id="conv-grid" class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <!-- CONFERENCIAS -->
+  <section id="conferencias" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-bold text-ink">Conferencias (5)</h3>
+        <span class="text-xs text-slate-500">Serie 2025</span>
+      </div>
+      <div id="conf-grid" class="mt-4 grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"></div>
+    </div>
+  </section>
+
+  <!-- REVISTA / PUBLICACIÓN -->
+  <section id="revista" class="py-12 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-6 items-center">
+        <div class="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-6 lg:p-8 shadow-soft">
+          <span class="chip bg-sky-50 text-sky-700 ring-1 ring-sky-200">Publicación</span>
+          <h4 class="mt-2 text-2xl font-extrabold">Conocimiento y Política — N.º 5</h4>
+          <p class="mt-2 text-slate-600">Número especial con textos y debates de la serie. Disponible en versión digital para libre descarga. Formato PDF/ISSN. Diseño accesible para lectura en móvil.</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-ink text-white font-semibold hover:opacity-95">Abrir en OJS</a>
+            <a href="https://cir.uagrm.edu.bo/#publicaciones" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl border border-slate-300 hover:border-brand hover:text-brand">Ver publicaciones</a>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-soft poster-box">
+          <!-- Portada simulada (sigue reglas de contención) -->
+          <img src="https://i.imgur.com/boTniYE.png" alt="Portada Conocimiento y Política — N.º 5" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 items-start">
+      <div class="rounded-2xl border border-borderc bg-white p-6 shadow-soft">
+        <h3 class="font-semibold text-lg">Contacto</h3>
+        <p class="mt-2 text-sm text-slate-600">¿Deseas proponer una actividad para la serie?</p>
+        <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <div class="rounded-xl border border-borderc p-3">
+            <div class="text-slate-500">Email</div>
+            <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="font-medium text-sky-700">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+          </div>
+          <div class="rounded-xl border border-borderc p-3">
+            <div class="text-slate-500">Teléfono</div>
+            <div class="font-medium">+591 67381294</div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-borderc bg-white p-6 shadow-soft">
+        <h3 class="font-semibold text-lg">Enviar propuesta</h3>
+        <p class="mt-2 text-sm text-slate-600">Incluye título, ponente(s), fecha tentativa y requerimientos técnicos.</p>
+        <a href="https://forms.gle/" target="_blank" class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800" rel="noopener">Formulario<span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="grid place-items-center gap-3 text-center">
+        <p>© <span id="year"></span> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM (CIRCPyCS).</p>
+        <p>Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · +591 67381294</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil simple
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const headerEl = document.querySelector('header');
+    function setHeaderVar(){ const h = Math.round(headerEl.getBoundingClientRect().height || 64); document.documentElement.style.setProperty('--header-h', h + 'px'); }
+    function toggleMenu(forceOpen = null){
+      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
+      if (willOpen) setHeaderVar();
+      mobileMenu.classList.toggle('hidden', !willOpen);
+      btnOpen.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
+    }
+    btnOpen?.addEventListener('click', ()=> toggleMenu());
+    window.matchMedia('(min-width:768px)').addEventListener('change', ev=>{ if(ev.matches) toggleMenu(false); });
+
+    // ====== Datos ======
+    const CONVERSATORIOS = [
+      {
+        id:'conv_2025_10_3', title:'3er Conversatorio Crítico sobre Liberalismo Económico', date:'2025-10-25', time:'18:30', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM',
+        cover:'https://i.imgur.com/j08OAIX.png',
+        desc:'Argentina y el giro hacia mayor intervención estatal: implicaciones económicas, políticas y sociales en clave crítica.',
+        speakers:['Ricardo Alonzo Fernández Salguero','Matías Suárez Holze']
+      },
+      {
+        id:'conv_2025_10_2', title:'2do Conversatorio Crítico sobre Liberalismo Económico', date:'2025-10-08', time:'18:30', mode:'Presencial',
+        venue:'Auditorio FCJPSRRII — UAGRM',
+        cover:'https://i.imgur.com/5Kg6aDu.png',
+        desc:'Inflación, deuda y reformas en Argentina: apertura de mercados, rol del BCRA y alcance de las políticas sociales.',
+        speakers:['Nicolás Di Paola','Ricardo Alonzo Fernández Salguero']
+      },
+      {
+        id:'conv_2025_09_1', title:'Conversatorio crítico sobre el liberalismo económico', date:'2025-09-20', time:'19:00', mode:'Híbrido',
+        venue:'Sala de Posgrado & Zoom — UAGRM',
+        cover:'https://i.imgur.com/nhffCet.png',
+        desc:'Experimentos libertarios, mitos del Índice de Libertad Económica y balance de la administración Milei; efectos para Bolivia.',
+        speakers:['Eduardo Garzón','Ricardo Alonzo Fernández']
+      }
+    ];
+
+    // 5 conferencias (4 del 2025 + 1 de 2024)
+    const CONFERENCIAS = [
+      { id:'conf_2025_urbina', date:'2025-09-18', time:'18:30', mode:'Híbrido', venue:'Sala de Posgrado & Zoom — UAGRM',
+        title:'El fracaso del liberalismo en explicar el desarrollo de los países',
+        cover:'https://i.imgur.com/QdUViuY.png',
+        speakers:['Dante Urbina'] },
+      { id:'conf_2025_meta', date:'2025-10-05', time:'19:00', mode:'Presencial', venue:'Auditorio FCJPSRRII — UAGRM',
+        title:'¿No es opinión, es evidencia? Por qué los políticos deben hablar de meta-análisis',
+        cover:'https://i.imgur.com/Z5qXo10.png',
+        speakers:['Ricardo Alonzo Fernández'] },
+      { id:'conf_2025_mokre', date:'2025-08-15', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
+        title:'¿Existe evidencia de la teoría del valor-trabajo de Marx?',
+        cover:'https://i.imgur.com/ttOVFpH.png',
+        speakers:['Patrick Mokre'] },
+      { id:'conf_2025_thomas', date:'2025-05-08', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
+        title:'La política de la microeconomía y los límites del liberalismo económico',
+        cover:'https://i.imgur.com/9dBaFRH.png',
+        speakers:['Alex M. Thomas'] },
+      { id:'conf_2025_montoya', date:'2025-09-30', time:'13:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
+        title:'¿Más desigualdad es menor democracia?',
+        cover:'https://i.imgur.com/JCwxUXh.png',
+        desc:'Cómo la percepción de la desigualdad impacta en la calidad democrática, actitudes sociopolíticas y cooperación.',
+        speakers:['Dra. Mar Montoya Lozano'] }
+    ];
+
+    // ====== Render helpers ======
+    const fmtDate = (iso) => new Date(iso+'T00:00:00').toLocaleDateString('es-BO',{year:'numeric',month:'short',day:'2-digit'});
+
+    const card = (type, ev) => `
+      <article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col">
+        <div class="relative ${type==='conf'?'poster-box poster-box--lg':'poster-box'} border-b border-borderc p-2 sm:p-3">
+          <img loading="lazy" decoding="async" src="${ev.cover}" alt="Afiche: ${ev.title}"
+               onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'"/>
+          <div class="absolute top-2 left-2 space-x-1">
+            <span class="chip ${type==='conv'?'bg-sky-50 text-sky-700 ring-1 ring-sky-200':'bg-rose-50 text-rose-700 ring-1 ring-rose-200'}">${type==='conv'?'Conversatorio':'Conferencia'}</span>
+          </div>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <h4 class="font-semibold text-ink">${ev.title}</h4>
+          ${ev.desc?`<p class=\"mt-1 text-sm text-slate-600\">${ev.desc}</p>`:''}
+          <div class="mt-3 text-sm text-slate-700 space-y-1">
+            <div><span class="font-medium">Fecha:</span> ${fmtDate(ev.date)} · ${ev.time} · ${ev.mode}</div>
+            <div class="truncate"><span class="font-medium">Lugar:</span> ${ev.venue}</div>
+            ${ev.speakers?`<div class=\"truncate\"><span class=\"font-medium\">Ponente(s):</span> ${ev.speakers.join(', ')}</div>`:''}
+          </div>
+        </div>
+      </article>`;
+
+    function render(){
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const match = (ev)=> !q || (ev.title + (ev.desc||'') + (ev.venue||'') + (ev.speakers||'').toString()).toLowerCase().includes(q);
+      const conv = CONVERSATORIOS.filter(match).sort((a,b)=> b.date.localeCompare(a.date));
+      const conf = CONFERENCIAS.filter(match).sort((a,b)=> b.date.localeCompare(a.date));
+      document.getElementById('conv-grid').innerHTML = conv.map(ev=>card('conv',ev)).join('') || `<div class="text-sm text-slate-500">Sin resultados.</div>`;
+      document.getElementById('conf-grid').innerHTML = conf.map(ev=>card('conf',ev)).join('') || `<div class="text-sm text-slate-500">Sin resultados.</div>`;
+    }
+
+    document.getElementById('search').addEventListener('input', render);
+    document.getElementById('clear').addEventListener('click', ()=>{ document.getElementById('search').value=''; render(); });
+
+    // Init
+    (function(){ setHeaderVar(); render(); })();
+    function setHeaderVar(){ const h = Math.round(document.querySelector('header').getBoundingClientRect().height || 64); document.documentElement.style.setProperty('--header-h', h + 'px'); }
+    window.addEventListener('resize', ()=>{ setHeaderVar(); });
+  </script>
+</body>
+</html>
