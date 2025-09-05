@@ -22,7 +22,7 @@
   <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <!-- Plotly -->
-  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
 
   <style>
     /* Menú móvil sencillo bajo el header */
@@ -40,6 +40,7 @@
       overscroll-behavior: contain;
       -webkit-overflow-scrolling: touch;
     }
+      #plotly-intencion-voto, #bars-resultado { min-height: 320px; }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
@@ -121,7 +122,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-2xl font-bold text-center">Mega Dashboard Internacional Bolivia 2025</h3>
       <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-        <!-- KPI Cards -->
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
           <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-gavel mr-2"></i>Rule of Law (WJP 2024)</div>
           <div class="mt-1 text-3xl font-extrabold text-slate-900">0.37</div>
@@ -206,11 +206,31 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-lg border border-slate-800">
         <h4 class="text-center text-xl font-semibold">Tracking Poll: Intención de voto presidencial 2025</h4>
-        <p class="mt-1 text-center text-slate-300 text-sm">Candidatos según las últimas encuestas nacionales públicas (junio 2025)</p>
-        <div id="plotly-intencion-voto" class="mt-4" style="height:460px;width:100%;"></div>
-        <div class="mt-3 text-center text-slate-300 text-sm">
-          <strong>Fuente:</strong> Encuestas UNITEL (1/junio) y EL DEBER (18/junio).<br>
-          <span class="text-sky-400">Haz click en los candidatos para activar/desactivar líneas. Toca los puntos para ver el detalle.</span>
+        <p class="mt-1 text-center text-slate-300 text-sm">Serie con todas las mediciones públicas (mayo–agosto 2025). Toca la leyenda para activar/desactivar candidatos.</p>
+        <div id="plotly-intencion-voto" class="mt-4" style="height:480px;width:100%;"></div>
+
+        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          <!-- Resultado oficial -->
+          <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
+            <div class="flex items-center justify-between">
+              <h5 class="font-semibold">Resultado oficial — Primera vuelta</h5>
+              <span id="badge-res" class="text-xs px-2 py-1 rounded-full bg-slate-700 text-slate-300">oficial</span>
+            </div>
+            <p id="resumen-res" class="mt-1 text-slate-300 text-sm">Órgano Electoral Plurinacional</p>
+            <div id="bars-resultado" class="mt-3" style="height:300px;width:100%;"></div>
+          </div>
+
+          <!-- Metadatos / Fuente -->
+          <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
+            <h5 class="font-semibold">Cobertura y fuentes</h5>
+            <ul class="mt-2 text-sm text-slate-300 space-y-1.5">
+              <li>• <span class="font-medium">Ciemcorp</span> (Unitel): 22–26 mayo, 5–7 julio.</li>
+              <li>• <span class="font-medium">SPIE</span> (El Deber): 7–14 junio, 5–10 julio, 25–28 julio, 31 jul–4 ago.</li>
+              <li>• <span class="font-medium">Captura Consulting</span> (Red Uno): 10–20 junio, 27 jul–3 ago.</li>
+              <li>• <span class="font-medium">Ipsos Ciesmori</span> (Unitel): 25–27 julio, 2–6 agosto.</li>
+            </ul>
+            <p class="mt-2 text-xs text-slate-400">Eje Y: % intención de voto. Eje X: fecha de cierre del trabajo de campo. Líneas y puntos grandes para lectura móvil.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -227,95 +247,260 @@
   </footer>
 
   <script>
-    // ===== Menú móvil sencillo (dropdown bajo header) =====
+    // ===== Menú móvil simple =====
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     const headerEl = document.querySelector('header');
-
-    function setHeaderVar(){
-      const h = headerEl.getBoundingClientRect().height || 64;
-      mobileMenu.style.setProperty('--header-h', h + 'px');
-    }
+    function setHeaderVar(){ const h = headerEl.getBoundingClientRect().height || 64; mobileMenu.style.setProperty('--header-h', h + 'px'); }
     function toggleMenu(forceOpen = null){
       const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
       if (willOpen) setHeaderVar();
       mobileMenu.classList.toggle('hidden', !willOpen);
       btnOpen.setAttribute('aria-expanded', String(willOpen));
       document.body.style.overflow = willOpen ? 'hidden' : '';
-      if (willOpen) {
-        setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0);
-      } else {
-        btnOpen.focus();
-      }
+      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
     }
     btnOpen?.addEventListener('click', () => toggleMenu());
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
-    mobileMenu.addEventListener('click', (e) => {
-      const link = e.target.closest('a');
-      if (link) toggleMenu(false);
-    });
-    window.addEventListener('resize', () => {
-      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
-    });
-    window.matchMedia('(min-width: 768px)').addEventListener('change', (ev) => {
-      if (ev.matches) toggleMenu(false);
-    });
+    mobileMenu.addEventListener('click', (e) => { const link = e.target.closest('a'); if (link) toggleMenu(false); });
+    window.addEventListener('resize', () => { if (!mobileMenu.classList.contains('hidden')) setHeaderVar(); });
+    window.matchMedia('(min-width: 768px)').addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
 
-    // ====== Plotly data ======
-    const fechas = [
-      "2025-06-01<br>UNITEL",
-      "2025-06-14<br>EL DEBER",
-      "2025-06-20<br>RED UNO"
+    // ===== Datos de encuestas (ordenados por fecha de CIERRE) =====
+    const x = [
+      "26/05 Ciemcorp<br><span style='font-size:11px'>Unitel</span>",
+      "14/06 SPIE<br><span style='font-size:11px'>El Deber</span>",
+      "20/06 Captura<br><span style='font-size:11px'>Red Uno</span>",
+      "07/07 Ciemcorp<br><span style='font-size:11px'>Unitel</span>",
+      "10/07 SPIE<br><span style='font-size:11px'>El Deber</span>",
+      "27/07 Ipsos<br><span style='font-size:11px'>Unitel</span>",
+      "28/07 SPIE<br><span style='font-size:11px'>El Deber</span>",
+      "03/08 Captura<br><span style='font-size:11px'>Red Uno</span>",
+      "04/08 SPIE<br><span style='font-size:11px'>El Deber</span>",
+      "06/08 Ipsos<br><span style='font-size:11px'>Unitel</span>"
     ];
 
-    const series = [
-      { name: "Samuel Doria Medina", y:[19.1,24.0,19.6], line:{color:"#e67e22", width:4}, mode:"lines+markers" },
-      { name: "Jorge Tuto Quiroga", y:[18.4,22.1,16.6], line:{color:"#ff9800", width:4, dash:'dot'}, mode:"lines+markers" },
-      { name: "Andrónico Rodríguez", y:[14.2,14.7,13.7], line:{color:"#009688", width:4, dash:'dash'}, mode:"lines+markers" },
-      { name: "Manfred Reyes Villa", y:[7.9,9.4,8.8], line:{color:"#8e44ad", width:4}, mode:"lines+markers" },
-      { name: "Rodrigo Paz Pereira", y:[4.3,5.6,6.4], line:{color:"#388e3c", width:4, dash:'dot'}, mode:"lines+markers" },
-      { name: "Jhonny Fernández", y:[3.7,2.6,3.8], line:{color:"#00bcd4", width:4, dash:'dot'}, mode:"lines+markers" },
-      { name: "Eduardo del Castillo", y:[2.3,1.7,1.4], line:{color:"#1976d2", width:4, dash:'dashdot'}, mode:"lines+markers" },
-      { name: "Eva Copa", y:[1.7,1.4,1.1], line:{color:"#c0392b", width:4}, mode:"lines+markers" }
-    ].map(s => ({
-      x: fechas,
-      y: s.y,
-      name: s.name,
-      mode: s.mode,
-      line: s.line,
-      marker: { size: 12 },
-      hoverinfo: 'y+name+x',
-      hovertemplate: '<b>%{name}</b><br>%{y}%<br><i>%{x}</i><extra></extra>'
-    }));
+    const colores = {
+      "Samuel Doria Medina": "#F4B400",  // UNIDAD (dorado)
+      "Jorge «Tuto» Quiroga": "#D32F2F", // LIBRE (rojo)
+      "Manfred Reyes Villa":  "#6D28D9", // APB SÚMATE (morado)
+      "Rodrigo Paz Pereira":  "#0E7C7B", // PDC (verde azulado)
+      "Andrónico Rodríguez":  "#16A34A", // AP (verde)
+      "Jhonny Fernández":    "#1E88E5"  // FP (azul)
+    };
+
+    const ySeries = {
+      "Samuel Doria Medina": [19.1, 24.02, 19.6, 18.7, 21.76, 21.5, 24.5, 21.6, 23.64, 21.2],
+      "Jorge «Tuto» Quiroga": [18.4, 22.07, 16.6, 18.1, 20.70, 19.6, 22.9, 20.0, 24.45, 20.0],
+      "Manfred Reyes Villa":  [7.9,  9.39,  8.8,  8.2, 10.01,  8.3,  7.2,  9.7,  8.79,  7.7],
+      "Rodrigo Paz Pereira":  [4.3,  5.56,  6.4,  3.2,  4.04,  5.8,  7.6,  6.4,  9.10,  8.3],
+      "Andrónico Rodríguez":  [14.2, 14.69, 13.7, 11.8,  8.26,  6.1,  7.4,  7.2,  8.46,  5.5],
+      "Jhonny Fernández":    [3.7,  2.56,  3.8,  2.5,  2.45,  1.8,  2.1,  2.0,  2.44,  2.0]
+    };
+
+    // ===== Resultado oficial (valores provistos) =====
+    const resultadoOficial = {
+      fecha: "Elección<br><span style='font-size:11px'>Primera vuelta</span>",
+      fuente: "Órgano Electoral Plurinacional",
+      valores: {
+        "Rodrigo Paz Pereira": 32.06,
+        "Jorge «Tuto» Quiroga": 26.70,
+        "Samuel Doria Medina": 19.69,
+        "Andrónico Rodríguez": 8.51,
+        "Manfred Reyes Villa": 6.75,
+        "Eduardo Del Castillo": 3.17,
+        "Jhonny Fernández": 1.67,
+        "Pavel Aracena Vargas": 1.45
+      }
+    };
+
+    // ===== Construcción de la serie principal =====
+    function buildTraces(includeOfficialPoint = true){
+      const traces = [];
+      for (const [nombre, ys] of Object.entries(ySeries)){
+        const trace = {
+          x: [...x],
+          y: [...ys],
+          name: nombre,
+          mode: "lines+markers",
+          line: { color: colores[nombre], width: 4 },
+          marker: { size: 11 },
+          hovertemplate: "<b>%{trace.name}</b><br>%{y:.2f}%<br>%{x}<extra></extra>"
+        };
+        if (includeOfficialPoint && resultadoOficial.valores[nombre] !== undefined){
+          trace.x.push(resultadoOficial.fecha);
+          trace.y.push(resultadoOficial.valores[nombre]);
+        }
+        traces.push(trace);
+      }
+      return traces;
+    }
 
     function legendLayout(){
       if (window.innerWidth < 700){
-        return { orientation:'v', x:1.05, y:0.5, xanchor:'left', yanchor:'middle', font:{size:11, color:'#fff'}, bgcolor:'rgba(15,23,42,0.95)' };
+        return { orientation:'v', x:1.02, y:0.5, xanchor:'left', yanchor:'middle', font:{size:11, color:'#fff'}, bgcolor:'rgba(15,23,42,0.96)' };
       } else {
         return { orientation:'h', x:0.01, y:1.18, font:{size:13, color:'#fff'} };
       }
     }
-
     function makeLayout(){
+      const hasOficial = true;
+      const maxY = Math.max(32.06, ...Object.values(ySeries).flat());
       return {
         plot_bgcolor: '#0b1220',
         paper_bgcolor: '#0b1220',
         legend: legendLayout(),
         xaxis: { title:{text:'<b>Fecha y encuestadora</b>', font:{color:'#fff', size:16}}, tickfont:{color:'#fff', size:12}, automargin:true, showgrid:false },
-        yaxis: { title:{text:'<b>% intención de voto</b>', font:{color:'#fff', size:16}}, range:[0,28], gridcolor:'#334155', tickfont:{color:'#fff', size:12} },
-        margin: { l:48, r: window.innerWidth < 700 ? 110 : 20, t:30, b:56 },
+        yaxis: { title:{text:'<b>% intención de voto</b>', font:{color:'#fff', size:16}}, range:[0, Math.max(35, Math.ceil(maxY/5)*5)], gridcolor:'#334155', tickfont:{color:'#fff', size:12} },
+        margin: { l:50, r: window.innerWidth < 700 ? 120 : 24, t:34, b:60 },
+        shapes: [{
+          type: "line", xref: "x", yref: "paper",
+          x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0: 0, y1: 1,
+          line: { color: "#94a3b8", width: 2, dash: "dot" }
+        }],
+        annotations: [{
+          x: resultadoOficial.fecha, y: 1.02, xref:"x", yref:"paper", xanchor:"center",
+          text: "Resultado oficial", showarrow:false, font:{size:12, color:"#cbd5e1"}
+        }],
         font: { family: 'Inter, Segoe UI, sans-serif', size:14, color:'#fff' }
       };
     }
 
-    function renderPlot(){
-      Plotly.react('plotly-intencion-voto', series, makeLayout(), {responsive:true, displayModeBar:false});
+    function safePlotly(id, traces, layout){
+      const el = document.getElementById(id);
+      if (!el) return;
+      const config = { responsive: true, displayModeBar: false };
+      try {
+        if (!el.data) {
+          Plotly.newPlot(id, traces, layout, config);
+        } else {
+          Plotly.react(id, traces, layout, config);
+        }
+      } catch (e) {
+        // Reintento simple por si el contenedor aún no está listo
+        setTimeout(() => Plotly.newPlot(id, traces, layout, config), 50);
+      }
     }
 
-    renderPlot();
-    window.addEventListener('resize', renderPlot);
+    function renderLineChart(){
+      safePlotly('plotly-intencion-voto', buildTraces(true), makeLayout());
+    }
+
+    // ===== Resultado oficial: barras (ordenadas de mayor a menor) =====
+    function renderResultado(){
+      const pares = Object.entries(resultadoOficial.valores).filter(([,v]) => v !== null && v !== undefined);
+      pares.sort((a,b) => b[1] - a[1]);
+      const nombres = pares.map(p => p[0]);
+      const valores = pares.map(p => p[1]);
+
+      // Mapeo candidato → alianza (según OEP)
+      const alianzaPorCandidato = {
+        "Rodrigo Paz Pereira": "PDC",
+        "Jorge «Tuto» Quiroga": "LIBRE",
+        "Samuel Doria Medina": "UNIDAD",
+        "Andrónico Rodríguez": "AP",
+        "Manfred Reyes Villa": "APB SÚMATE",
+        "Eduardo Del Castillo": "MAS-IPSP",
+        "Jhonny Fernández": "FP",
+        "Pavel Aracena Vargas": "LYP-ADN"
+      };
+
+      // Colores por alianza (paleta aproximada a la usada en computo.oep.org.bo)
+      const coloresAlianza = {
+        "PDC": "#0E7C7B",
+        "LIBRE": "#D32F2F",
+        "UNIDAD": "#F4B400",
+        "AP": "#16A34A",
+        "APB SÚMATE": "#6D28D9",
+        "MAS-IPSP": "#0D47A1",
+        "FP": "#1E88E5",
+        "LYP-ADN": "#111111"
+      };
+      const coloresBarras = nombres.map(n => coloresAlianza[alianzaPorCandidato[n]] || "#64748B");
+
+      const barTrace = [{
+        type: 'bar',
+        x: valores,
+        y: nombres,
+        orientation: 'h',
+        marker: { color: coloresBarras, line: { width: 0 } },
+        hovertemplate: "<b>%{y}</b>: %{x:.2f}%<extra></extra>"
+      }];
+
+      const dynLeft = Math.min(260, Math.max(160, Math.max(...nombres.map(n => n.length))*7));
+
+      const barLayout = {
+        plot_bgcolor: '#0b1220',
+        paper_bgcolor: '#0b1220',
+        margin: { l: dynLeft, r: 20, t: 8, b: 40 },
+        xaxis: { range: [0, Math.max(35, Math.ceil(Math.max(...valores) / 5) * 5)], gridcolor:'#334155', tickfont:{color:'#fff'} },
+        yaxis: { tickfont:{color:'#fff'} },
+        font: { family: 'Inter, Segoe UI, sans-serif', color:'#fff' }
+      };
+
+      safePlotly('bars-resultado', barTrace, barLayout);
+    }
+
+    // ===== Render inicial + responsive =====
+    function initCharts(){ renderLineChart(); renderResultado(); }
+
+    function ensurePlotly(cb){
+      if (window.Plotly) return cb();
+      // carga de respaldo si Plotly no está disponible aún
+      const s = document.createElement('script');
+      s.src = 'https://cdn.plot.ly/plotly-2.32.0.min.js';
+      s.async = true;
+      s.onload = cb;
+      s.onerror = () => {
+        const s2 = document.createElement('script');
+        s2.src = 'https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.32.0/plotly.min.js';
+        s2.async = true;
+        s2.onload = cb;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s);
+    }
+
+    const kick = () => ensurePlotly(() => { initCharts(); });
+    if (document.readyState !== 'loading') kick();
+    else document.addEventListener('DOMContentLoaded', kick);
+    window.addEventListener('load', kick);
+
+    window.addEventListener('resize', () => { renderLineChart(); renderResultado(); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { renderLineChart(); renderResultado(); } });
+  </script>
+  <script>
+    // --- Override suave de renderLineChart para asegurar que los datos se reflejen ---
+    (function(){
+      function renderLineChart(){
+        const traces = [];
+        for (const [nombre, ys] of Object.entries(ySeries)){
+          const t = {
+            x: [...x], y: [...ys], name: nombre,
+            mode: 'lines+markers',
+            line: { color: (colores && colores[nombre]) ? colores[nombre] : '#94a3b8', width: 4 },
+            marker: { size: 11 },
+            hovertemplate: '<b>%{trace.name}</b><br>%{y:.2f}%<br>%{x}<extra></extra>'
+          };
+          if (resultadoOficial && resultadoOficial.valores && Object.prototype.hasOwnProperty.call(resultadoOficial.valores, nombre)){
+            const v = resultadoOficial.valores[nombre];
+            if (v != null){ t.x.push(resultadoOficial.fecha); t.y.push(v); }
+          }
+          traces.push(t);
+        }
+        if (window.safePlotly) safePlotly('plotly-intencion-voto', traces, makeLayout());
+        else if (window.Plotly){
+          const cfg = { responsive:true, displayModeBar:false };
+          const el = document.getElementById('plotly-intencion-voto');
+          if (!el.data) Plotly.newPlot(el, traces, makeLayout(), cfg);
+          else Plotly.react(el, traces, makeLayout(), cfg);
+        }
+      }
+      window.renderLineChart = renderLineChart; // expone el override
+      // re-render inmediato por si ya existía el gráfico
+      try { renderLineChart(); } catch(_){}
+    })();
   </script>
 </body>
 </html>
-
 
