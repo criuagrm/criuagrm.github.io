@@ -191,7 +191,12 @@
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     const headerEl = document.querySelector('header');
-    function setHeaderVar(){ const h = Math.round(headerEl.getBoundingClientRect().height || 64); document.documentElement.style.setProperty('--header-h', h + 'px'); }
+    
+    function setHeaderVar(){ 
+      const h = Math.round(headerEl.getBoundingClientRect().height || 64); 
+      document.documentElement.style.setProperty('--header-h', h + 'px'); 
+    }
+    
     function toggleMenu(forceOpen = null){
       const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
       if (willOpen) setHeaderVar();
@@ -200,6 +205,7 @@
       document.body.style.overflow = willOpen ? 'hidden' : '';
       if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
     }
+    
     btnOpen?.addEventListener('click', ()=> toggleMenu());
     window.matchMedia('(min-width:768px)').addEventListener('change', ev=>{ if(ev.matches) toggleMenu(false); });
 
@@ -228,39 +234,53 @@
       }
     ];
 
-    // 5 conferencias (4 del 2025 + 1 de 2024)
+    // 5 conferencias (4 del 2025 + 1 de 2024) - CORREGIDO: Añadidas comas faltantes y IDs únicos
     const CONFERENCIAS = [
-      { id:'conf_2025_urbina', date:'2025-06-23', time:'18:30', mode:'Híbrido', venue:'Sala de Posgrado & Zoom — UAGRM',
+      { 
+        id:'conf_2025_urbina', date:'2025-06-23', time:'18:30', mode:'Híbrido', venue:'Sala de Posgrado & Zoom — UAGRM',
         title:'El fracaso del liberalismo en explicar el desarrollo de los países',
         cover:'https://i.imgur.com/QdUViuY.png',
-        speakers:['Dante Urbina'] },
-      { id:'conf_2025_meta', date:'2025-05-15', time:'19:00', mode:'Presencial', venue:'Auditorio FCJPSRRII — UAGRM',
+        speakers:['Dante Urbina'] 
+      },
+      { 
+        id:'conf_2025_meta', date:'2025-05-15', time:'19:00', mode:'Presencial', venue:'Auditorio FCJPSRRII — UAGRM',
         title:'¿No es opinión, es evidencia? Por qué los políticos deben hablar de meta-análisis',
         cover:'https://i.imgur.com/Z5qXo10.png',
-        speakers:['Ricardo Alonzo Fernández'] },
-      { id:'conf_2025_mokre', date:'2025-08-15', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
+        speakers:['Ricardo Alonzo Fernández'] 
+      },
+      { 
+        id:'conf_2025_mokre', date:'2025-08-15', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
         title:'¿Existe evidencia de la teoría del valor-trabajo de Marx?',
         cover:'https://i.imgur.com/ttOVFpH.png',
-        speakers:['Patrick Mokre'] },
-      { id:'conf_2025_thomas', date:'2025-08-28', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
+        speakers:['Patrick Mokre'] 
+      },
+      { 
+        id:'conf_2025_thomas', date:'2025-08-28', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
         title:'La política de la microeconomía y los límites del liberalismo económico',
         cover:'https://i.imgur.com/9dBaFRH.png',
-        speakers:['Alex M. Thomas'] },
-      { id:'conf_2025_montoya', date:'2025-09-30', time:'13:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
+        speakers:['Alex M. Thomas'] 
+      },
+      { 
+        id:'conf_2025_montoya', date:'2025-09-30', time:'13:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
         title:'¿Más desigualdad es menor democracia?',
         cover:'https://i.imgur.com/JCwxUXh.png',
         desc:'Cómo la percepción de la desigualdad impacta en la calidad democrática, actitudes sociopolíticas y cooperación.',
-        speakers:['Dra. Mar Montoya Lozano'] }
-      { id:'conf_2025_cockshott', date:'2025-11-05', time:'11:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
+        speakers:['Dra. Mar Montoya Lozano'] 
+      },
+      { 
+        id:'conf_2025_cockshott_1', date:'2025-11-05', time:'11:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
         title:'Una Crítica a Hayek',
         cover:'https://i.imgur.com/2TCvz2C.png',
         desc:'Crítica a la imposibilidad de la planificación',
-        speakers:['Dr. Paul Cockshott'] }
-      { id:'conf_2025_barroso', date:'2025-10-24', time:'12:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
+        speakers:['Dr. Paul Cockshott'] 
+      },
+      { 
+        id:'conf_2025_cockshott_2', date:'2025-10-24', time:'12:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
         title:'Defensa ante Críticas Comunes al Marxismo',
         cover:'https://i.imgur.com/mTzbptb.png',
         desc:'Crítica a la imposibilidad de la planificación',
-        speakers:['Dr. Paul Cockshott'] }
+        speakers:['Dr. Paul Cockshott'] 
+      }
     ];
 
     // ====== Render helpers ======
@@ -296,11 +316,18 @@
     }
 
     document.getElementById('search').addEventListener('input', render);
-    document.getElementById('clear').addEventListener('click', ()=>{ document.getElementById('search').value=''; render(); });
+    document.getElementById('clear').addEventListener('click', ()=>{ 
+      document.getElementById('search').value=''; 
+      render(); 
+      document.getElementById('search').focus();
+    });
 
     // Init
-    (function(){ setHeaderVar(); render(); })();
-    function setHeaderVar(){ const h = Math.round(document.querySelector('header').getBoundingClientRect().height || 64); document.documentElement.style.setProperty('--header-h', h + 'px'); }
+    (function(){ 
+      setHeaderVar(); 
+      render(); 
+    })();
+    
     window.addEventListener('resize', ()=>{ setHeaderVar(); });
   </script>
 </body>
