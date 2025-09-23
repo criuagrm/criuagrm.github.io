@@ -1,392 +1,394 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nolan Bolivia — Quiz (One-File)</title>
+import React, { useMemo, useState, useRef } from "react";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+// === Utilidades ===
+const LIKERT = [
+  { label: "Muy en desacuerdo", value: -2 },
+  { label: "En desacuerdo", value: -1 },
+  { label: "Neutral", value: 0 },
+  { label: "De acuerdo", value: 1 },
+  { label: "Muy de acuerdo", value: 2 },
+];
 
-  <!-- React + ReactDOM UMD -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+// Cada pregunta: id, texto, pista (humor), pesos {x, y}
+// x = economía (derecha +), y = libertades personales (arriba +)
+// value respuesta (-2..+2) * peso
+const QUESTIONS = [
+  {
+    id: "subsidios",
+    text:
+      "Los subsidios a gasolina y diésel deben mantenerse tal cual. (Nada de 'sinceramientos' que hagan llorar al surtidor)",
+    hint: "Subvención sostenida y precios congelados",
+    weight: { x: -1, y: -0.2 }, // mantener subsidio = más Estado → x negativo si estás de acuerdo
+  },
+  {
+    id: "cambio",
+    text:
+      "El tipo de cambio debe liberalizarse (flotación/dual), aunque duela al principio. (Adiós, 6,96 mítico)",
+    hint: "Brecha dólar paralelo vs oficial",
+    weight: { x: +1, y: +0.1 },
+  },
+  {
+    id: "litio51",
+    text:
+      "El Estado debe conservar control mayoritario (51%+) en el litio y priorizar 'socios estratégicos' públicos. (Selfies con salar opcionales)",
+    hint: "Modelo estatal y control de proyectos",
+    weight: { x: -1, y: -0.1 },
+  },
+  {
+    id: "litioapertura",
+    text:
+      "Hay que abrir el litio a licitaciones amplias y competencia internacional, con reglas claras y regalías fijas. (Menos romanticismo, más subastas)",
+    hint: "Apertura/competencia",
+    weight: { x: +1, y: +0.1 },
+  },
+  {
+    id: "soes",
+    text:
+      "Las empresas estatales (YPFB, ENDE, BOA, etc.) necesitan más presupuesto y protección, no 'restructuración' (esa palabra da alergia).",
+    hint: "Rol del Estado empresario",
+    weight: { x: -1, y: -0.1 },
+  },
+  {
+    id: "bonos",
+    text:
+      "Los bonos sociales (Juancito Pinto, Renta Dignidad) deben ampliarse universalmente. (Que no quede nadie sin su 'bonus')",
+    hint: "Transferencias amplias vs focalización",
+    weight: { x: -1, y: -0.1 },
+  },
+  {
+    id: "formalizacion",
+    text:
+      "Bajar trámites e impuestos a MYPES e informales para formalizar masivamente, aunque el fisco se resienta al inicio. (Trámite killer no more)",
+    hint: "Simplificación y presión fiscal",
+    weight: { x: +1, y: +0.1 },
+  },
+  // Libertades personales (eje Y)
+  {
+    id: "antidrogas",
+    text:
+      "Bolivia debe permitir cooperación internacional robusta contra el narcotráfico. (Sí, incluso si a algunos les incomoda)",
+    hint: "Seguridad y crimen organizado",
+    weight: { x: +0.1, y: -1 },
+  },
+  {
+    id: "consumoDrogas",
+    text:
+      "El consumo de drogas debe ser descriminalizado y tratado como salud pública, no como delito. (Menos cárcel, más terapia)",
+    hint: "Enfoque salud vs punitivo",
+    weight: { x: +0.1, y: +1 },
+  },
+  {
+    id: "chutos",
+    text:
+      "Regularizar ('amnistiar') los autos chutos porque 'de algo hay que vivir', aunque golpee al mercado formal y la recaudación.",
+    hint: "Vehículos indocumentados, aduana y propuestas en campaña",
+    weight: { x: -0.2, y: +1 },
+  },
+  {
+    id: "judicial",
+    text:
+      "Las altas autoridades judiciales deben elegirse por mérito y concursos independientes, no por voto popular. (Menos padrinos, más CV)",
+    hint: "Reforma judicial y profesionalización",
+    weight: { x: +0.1, y: +1 },
+  },
+  {
+    id: "expresion",
+    text:
+      "Cualquier ley 'antidesinformación' es peligrosa: prefiero libertad de expresión incluso para memes horribles (sí, esos).",
+    hint: "Regulación de contenidos",
+    weight: { x: +0.1, y: +1 },
+  },
+  {
+    id: "protesta",
+    text:
+      "Los bloqueos y marchas deben limitarse estrictamente; el orden ante todo (el meme después).",
+    hint: "Protesta social vs orden público",
+    weight: { x: +0.1, y: -1 },
+  },
+  {
+    id: "autonomia",
+    text:
+      "Profundizar autonomías departamentales y municipales (más competencias y menos peregrinaje a La Paz).",
+    hint: "Redistribución de escaños y descentralización",
+    weight: { x: +0.2, y: +1 }, // leve impacto económico (competencia fiscal)
+  },
+  {
+    id: "derechos",
+    text:
+      "Ampliar derechos civiles (p.ej., matrimonio igualitario, salud sexual y reproductiva) es prioridad. (El Estado no es tu tutor)",
+    hint: "Agenda de libertades",
+    weight: { x: +0.05, y: +1 },
+  },
+];
 
-  <!-- Babel (para transformar JSX en el navegador) -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- jsPDF + html2canvas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-</head>
-<body class="bg-slate-50 text-slate-800">
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useMemo, useState, useRef } = React;
-    const { jsPDF } = window.jspdf;
-    const html2canvas = window.html2canvas;
-
-    // ===== Opciones Likert (compactas) =====
-    const LIKERT = [
-      { label: "Muy en desacuerdo", value: -2 },
-      { label: "En desacuerdo", value: -1 },
-      { label: "Neutral", value: 0 },
-      { label: "De acuerdo", value: 1 },
-      { label: "Muy de acuerdo", value: 2 }
-    ];
-
-    // ===== Preguntas contextualizadas a Bolivia (2024–2025) =====
-    // x = libertad económica (derecha +), y = libertades personales (arriba +)
-    const QUESTIONS = [
-      {
-        id: "subsidios",
-        text:
-          "Los subsidios a gasolina y diésel deben mantenerse tal cual. (Nada de 'sinceramientos' que hagan llorar al surtidor)",
-        hint: "Subvención sostenida y precios congelados",
-        weight: { x: -1, y: 0 }
-      },
-      {
-        id: "cambio",
-        text:
-          "El tipo de cambio debe liberalizarse (flotación/dual), aunque duela al principio. (Adiós, 6,96 mítico)",
-        hint: "Brecha dólar paralelo vs oficial",
-        weight: { x: +1, y: 0 }
-      },
-      {
-        id: "litio51",
-        text:
-          "El Estado debe conservar control mayoritario (51%+) en el litio y priorizar 'socios estratégicos' públicos. (Selfies con salar opcionales)",
-        hint: "Modelo estatal y control de proyectos",
-        weight: { x: -1, y: 0 }
-      },
-      {
-        id: "litioapertura",
-        text:
-          "Hay que abrir el litio a licitaciones amplias y competencia internacional, con reglas claras y regalías fijas. (Menos romanticismo, más subastas)",
-        hint: "Apertura/competencia",
-        weight: { x: +1, y: 0 }
-      },
-      {
-        id: "soes",
-        text:
-          "Las empresas estatales (YPFB, ENDE, BOA, etc.) necesitan más presupuesto y protección, no 'restructuración' (esa palabra da alergia).",
-        hint: "Rol del Estado empresario",
-        weight: { x: -1, y: 0 }
-      },
-      {
-        id: "bonos",
-        text:
-          "Los bonos sociales (Juancito Pinto, Renta Dignidad) deben ampliarse universalmente. (Que no quede nadie sin su 'bonus')",
-        hint: "Transferencias amplias vs focalización",
-        weight: { x: -1, y: 0 }
-      },
-      {
-        id: "formalizacion",
-        text:
-          "Bajar trámites e impuestos a MYPES e informales para formalizar masivamente, aunque el fisco se resienta al inicio. (Trámite killer no more)",
-        hint: "Simplificación y presión fiscal",
-        weight: { x: +1, y: 0 }
-      },
-      // Libertades personales (eje Y)
-      {
-        id: "antidrogas",
-        text:
-          "Bolivia debe permitir cooperación internacional robusta contra el narcotráfico. (Sí, incluso si a algunos les incomoda)",
-        hint: "Seguridad y crimen organizado",
-        weight: { x: 0, y: -1 }
-      },
-      {
-        id: "consumoDrogas",
-        text:
-          "El consumo de drogas debe ser descriminalizado y tratado como salud pública, no como delito. (Menos cárcel, más terapia)",
-        hint: "Enfoque salud vs punitivo",
-        weight: { x: 0, y: +1 }
-      },
-      {
-        id: "chutos",
-        text:
-          "Regularizar ('amnistiar') los autos chutos porque 'de algo hay que vivir', aunque golpee al mercado formal y la recaudación.",
-        hint: "Vehículos indocumentados, aduana y propuestas en campaña",
-        weight: { x: 0, y: +1 } // tolerancia individual → +Y
-      },
-      {
-        id: "judicial",
-        text:
-          "Las altas autoridades judiciales deben elegirse por mérito y concursos independientes, no por voto popular. (Menos padrinos, más CV)",
-        hint: "Reforma judicial y profesionalización",
-        weight: { x: 0, y: +1 }
-      },
-      {
-        id: "expresion",
-        text:
-          "Cualquier ley 'antidesinformación' es peligrosa: prefiero libertad de expresión incluso para memes horribles (sí, esos).",
-        hint: "Regulación de contenidos",
-        weight: { x: 0, y: +1 }
-      },
-      {
-        id: "protesta",
-        text:
-          "Los bloqueos y marchas deben limitarse estrictamente; el orden ante todo (el meme después).",
-        hint: "Protesta social vs orden público",
-        weight: { x: 0, y: -1 }
-      },
-      {
-        id: "autonomia",
-        text:
-          "Profundizar autonomías departamentales y municipales (más competencias y menos peregrinaje a La Paz).",
-        hint: "Redistribución de escaños y descentralización",
-        weight: { x: +0.2, y: +1 } // leve impacto económico por competencia fiscal
-      },
-      {
-        id: "derechos",
-        text:
-          "Ampliar derechos civiles (p.ej., matrimonio igualitario, salud sexual y reproductiva) es prioridad. (El Estado no es tu tutor)",
-        hint: "Agenda de libertades",
-        weight: { x: 0, y: +1 }
-      }
-    ];
-
-    function computeScores(answers) {
-      let sx = 0, sy = 0, wx = 0, wy = 0;
-      QUESTIONS.forEach((q) => {
-        const v = answers[q.id];
-        if (typeof v !== "number") return;
-        if (q.weight.x !== 0) { sx += v * q.weight.x; wx += Math.abs(q.weight.x); }
-        if (q.weight.y !== 0) { sy += v * q.weight.y; wy += Math.abs(q.weight.y); }
-      });
-      const nx = wx ? (sx / (2 * wx)) * 100 : 0;
-      const ny = wy ? (sy / (2 * wy)) * 100 : 0;
-      return {
-        nx: Math.max(-100, Math.min(100, nx)),
-        ny: Math.max(-100, Math.min(100, ny))
-      };
+function computeScores(answers) {
+  // Suma ponderada
+  let sx = 0, sy = 0, wx = 0, wy = 0;
+  QUESTIONS.forEach((q) => {
+    const v = answers[q.id];
+    if (typeof v !== "number") return;
+    if (q.weight.x !== 0) {
+      sx += v * q.weight.x;
+      wx += Math.abs(q.weight.x);
     }
-
-    function quadrantLabel(nx, ny) {
-      if (ny >= 0 && nx >= 0) return "Libertario";
-      if (ny >= 0 && nx < 0) return "Progresista";
-      if (ny < 0 && nx < 0) return "Estatista/Autoritario";
-      return "Conservador";
+    if (q.weight.y !== 0) {
+      sy += v * q.weight.y;
+      wy += Math.abs(q.weight.y);
     }
+  });
+  // Normaliza a -100..100 por eje
+  const nx = wx ? (sx / (2 * wx)) * 100 : 0; // como max |v|=2
+  const ny = wy ? (sy / (2 * wy)) * 100 : 0;
+  return { nx: Math.max(-100, Math.min(100, nx)), ny: Math.max(-100, Math.min(100, ny)) };
+}
 
-    function NolanChart({ nx, ny }) {
-      const size = 360;
-      const center = size / 2;
-      const scale = (size * 0.4) / 100; // 40% del tamaño para 100 unidades
-      const px = center + nx * scale;
-      const py = center - ny * scale;
+function quadrantLabel(nx, ny) {
+  if (ny >= 0 && nx >= 0) return "Libertario";
+  if (ny >= 0 && nx < 0) return "Progresista";
+  if (ny < 0 && nx < 0) return "Estatista/Autoritario";
+  return "Conservador";
+}
 
-      return (
-        <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-auto">
-          {/* Fondo */}
-          <rect x="0" y="0" width={size} height={size} className="fill-white" />
-          {/* Cuadrícula ligera */}
-          {[...Array(9)].map((_, i) => (
-            <g key={i}>
-              <line x1={20} x2={size - 20} y1={20 + i * 40} y2={20 + i * 40} className="stroke-slate-200" />
-              <line x1={20 + i * 40} x2={20 + i * 40} y1={20} y2={size - 20} className="stroke-slate-200" />
-            </g>
-          ))}
-          {/* Ejes */}
-          <line x1={20} x2={size - 20} y1={center} y2={center} className="stroke-slate-500" />
-          <line x1={center} x2={center} y1={20} y2={size - 20} className="stroke-slate-500" />
+// ===== Avatares por cuadrante (puedes cambiar las URLs) =====
+// ===== Avatares por cuadrante (puedes cambiar las URLs) =====
+const AVATARS: Record<string, string> = {
+  progresista: "https://i.imgur.com/hO8mYTZ.png",   // Wokes
+  libertario:  "https://i.imgur.com/ohgxXMr.png",   // Enríquez
+  conservador: "https://i.imgur.com/3T5vL8F.png",   // Pinto
+  estatista:   "https://i.imgur.com/YNAUHio.png"    // Alonzo
+};
 
-          {/* Etiquetas de ejes */}
-          <text x={size - 8} y={center - 6} textAnchor="end" className="fill-slate-700 text-[10px]">Economía ➜</text>
-          <text x={center + 6} y={12} className="fill-slate-700 text-[10px]">Libertades ↑</text>
+function quadrantKey(nx: number, ny: number): string {
+  if (ny >= 0 && nx >= 0) return "libertario";
+  if (ny >= 0 && nx < 0) return "progresista";
+  if (ny < 0 && nx < 0) return "estatista";
+  return "conservador";
+}
 
-          {/* Cuadrantes + sub-etiquetas (mini) satíricas */}
-          <text x={center + 70} y={center - 70} className="fill-emerald-600 text-[12px]">Libertario</text>
-          <text x={center + 70} y={center - 56} className="fill-slate-500 text-[9px]">Enríquez (¡viva Milei, viva Vox!)</text>
+function NolanChart({ nx, ny }) {
+  // lienzo 360x360, centro 180,180
+  const size = 360;
+  const center = size / 2;
+  const scale = (size * 0.4) / 100; // 40% del tamaño para 100 unidades
+  const px = center + nx * scale;
+  const py = center - ny * scale;
+  const key = quadrantKey(nx, ny);
+  const avatar = AVATARS[key];
 
-          <text x={center - 150} y={center - 70} className="fill-indigo-600 text-[12px]">Progresista</text>
-          <text x={center - 150} y={center - 56} className="fill-slate-500 text-[9px]">Flores / Carlitos (wokes)</text>
+  return (
+    <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-auto">
+      {/* Fondo */}
+      <rect x="0" y="0" width={size} height={size} className="fill-white" />
+      {/* Cuadrícula ligera */}
+      {[...Array(9)].map((_, i) => (
+        <g key={i}>
+          <line x1={20} x2={size - 20} y1={20 + i * 40} y2={20 + i * 40} className="stroke-slate-200" />
+          <line x1={20 + i * 40} x2={20 + i * 40} y1={20} y2={size - 20} className="stroke-slate-200" />
+        </g>
+      ))}
+      {/* Ejes */}
+      <line x1={20} x2={size - 20} y1={center} y2={center} className="stroke-slate-500" />
+      <line x1={center} x2={center} y1={20} y2={size - 20} className="stroke-slate-500" />
+      {/* Etiquetas */}
+      <text x={size - 8} y={center - 6} textAnchor="end" className="fill-slate-700 text-[10px]">Economía ➜</text>
+      <text x={center + 6} y={12} className="fill-slate-700 text-[10px]">Libertades ↑</text>
+      {/* Cuadrantes + sub-etiquetas humorísticas (según tu pedido) */}
+      <text x={center + 70} y={center - 70} className="fill-emerald-600 text-[12px]">Libertario</text>
+      <text x={center + 70} y={center - 56} className="fill-slate-500 text-[9px]">Enríquez (¡viva Milei, viva Vox!)</text>
 
-          <text x={center - 150} y={center + 90} className="fill-rose-600 text-[12px]">Estatista/Autoritario</text>
-          <text x={center - 150} y={center + 104} className="fill-slate-500 text-[9px]">Alonzo / Tankie</text>
+      <text x={center - 150} y={center - 70} className="fill-indigo-600 text-[12px]">Progresista</text>
+      <text x={center - 150} y={center - 56} className="fill-slate-500 text-[9px]">Flores / Carlitos (wokes)</text>
 
-          <text x={center + 70} y={center + 90} className="fill-amber-600 text-[12px]">Conservador</text>
-          <text x={center + 70} y={center + 104} className="fill-slate-500 text-[9px]">Pinto</text>
+      <text x={center - 150} y={center + 90} className="fill-rose-600 text-[12px]">Estatista/Autoritario</text>
+      <text x={center - 150} y={center + 104} className="fill-slate-500 text-[9px]">Alonzo / Tankie</text>
 
-          {/* Punto del usuario */}
+      <text x={center + 70} y={center + 90} className="fill-amber-600 text-[12px]">Conservador</text>
+      <text x={center + 70} y={center + 104} className="fill-slate-500 text-[9px]">Pinto</text>
+
+      {/* Avatar o punto */}
+      {avatar ? (
+        <>
+          <image href={avatar} x={px - 18} y={py - 18} width={36} height={36} crossOrigin="anonymous" />
+          <circle cx={px} cy={py} r={20} className="fill-transparent stroke-sky-600" />
+        </>
+      ) : (
+        <>
           <circle cx={px} cy={py} r={6} className="fill-sky-600 stroke-white" />
           <circle cx={px} cy={py} r={10} className="fill-transparent stroke-sky-600" />
-        </svg>
-      );
+        </>
+      )}
+    </svg>
+  );
+}
+
+export default function App() {
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [name, setName] = useState("");
+  const [step, setStep] = useState(0); // índice de pregunta actual
+  const resultRef = useRef<HTMLDivElement | null>(null);
+
+  const { nx, ny } = useMemo(() => computeScores(answers), [answers]);
+  const label = quadrantLabel(nx, ny);
+
+  const allAnswered = useMemo(
+    () => QUESTIONS.every((q) => typeof answers[q.id] === "number"),
+    [answers]
+  );
+
+  const reset = () => {
+    setAnswers({});
+    setStep(0);
+  };
+
+  const handleSelect = (qid: string, val: number) => {
+    setAnswers((a) => ({ ...a, [qid]: val }));
+    if (step < QUESTIONS.length - 1) {
+      // pequeño delay para que el usuario vea el check
+      setTimeout(() => setStep((s) => s + 1), 120);
     }
+  };
 
-    function App() {
-      const [answers, setAnswers] = useState({});
-      const [name, setName] = useState("");
-      const [step, setStep] = useState(0); // índice de pregunta actual
-      const resultRef = useRef(null);
+  const exportPDF = async () => {
+    if (!resultRef.current) return;
+    const el = resultRef.current as HTMLDivElement;
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+    const img = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
 
-      const { nx, ny } = useMemo(() => computeScores(answers), [answers]);
-      const label = quadrantLabel(nx, ny);
-      const total = QUESTIONS.length;
-      const q = QUESTIONS[step];
+    // Encabezado
+    pdf.setFontSize(16);
+    pdf.text("Nolan Bolivia — Resultado", 40, 40);
+    pdf.setFontSize(10);
+    pdf.text(`Nombre: ${name || "(anónimo)"}`, 40, 58);
+    pdf.text(`Coordenadas: X ${nx.toFixed(1)}, Y ${ny.toFixed(1)} — ${label}`, 40, 72);
 
-      const allAnswered = useMemo(
-        () => QUESTIONS.every((qq) => typeof answers[qq.id] === "number"),
-        [answers]
-      );
+    // Gráfico / tarjeta
+    const imgWidth = pageWidth - 80;
+    const ratio = canvas.height / canvas.width;
+    const imgHeight = imgWidth * ratio;
+    pdf.addImage(img, "PNG", 40, 90, imgWidth, Math.min(imgHeight, pageHeight - 130));
 
-      const reset = () => { setAnswers({}); setStep(0); };
+    // Pie
+    pdf.setFontSize(8);
+    pdf.text("Preguntas contextualizadas a Bolivia (2024–2025). Humor responsable. Las sub-etiquetas de cuadrantes son satíricas a pedido del usuario.", 40, pageHeight - 24);
 
-      const handleSelect = (qid, val) => {
-        setAnswers((a) => ({ ...a, [qid]: val }));
-        if (step < QUESTIONS.length - 1) {
-          setTimeout(() => setStep((s) => s + 1), 120);
-        }
-      };
+    pdf.save(`Nolan_Bolivia_${Date.now()}.pdf`);
+  };
 
-      const exportPDF = async () => {
-        if (!resultRef.current) return;
-        const el = resultRef.current;
-        const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff" });
-        const img = canvas.toDataURL("image/png");
-        const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
+  const total = QUESTIONS.length;
+  const q = QUESTIONS[step];
 
-        pdf.setFontSize(16);
-        pdf.text("Nolan Bolivia — Resultado", 40, 40);
-        pdf.setFontSize(10);
-        pdf.text(`Nombre: ${name || "(anónimo)"}`, 40, 58);
-        pdf.text(`Coordenadas: X ${nx.toFixed(1)}, Y ${ny.toFixed(1)} — ${label}`, 40, 72);
-
-        const imgWidth = pageWidth - 80;
-        const ratio = canvas.height / canvas.width;
-        const imgHeight = imgWidth * ratio;
-        pdf.addImage(img, "PNG", 40, 90, imgWidth, Math.min(imgHeight, pageHeight - 130));
-
-        pdf.setFontSize(8);
-        pdf.text(
-          "Preguntas contextualizadas a Bolivia (2024–2025). Humor responsable. Sub-etiquetas satíricas a pedido del usuario.",
-          40,
-          pageHeight - 24
-        );
-
-        pdf.save(`Nolan_Bolivia_${Date.now()}.pdf`);
-      };
-
-      return (
-        <div className="min-h-screen">
-          <div className="max-w-5xl mx-auto p-6 md:p-10">
-            <header className="mb-6">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Nolan Bolivia 🧭</h1>
-              <p className="text-slate-600 mt-2 max-w-3xl">
-                Responde con honestidad brutal (y una pizca de sarcasmo). Al final verás tu ubicación en el diagrama y podrás descargar un PDF.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-3 items-center">
-                <label className="text-sm">Tu nombre (opcional):</label>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Ej. Daniela, Juan, Anónimo"
-                  className="px-3 py-2 rounded-xl border border-slate-300 bg-white"
-                />
-              </div>
-            </header>
-
-            <main className="grid md:grid-cols-2 gap-8 items-start">
-              {/* Wizard de preguntas (una por vez) */}
-              <section>
-                <div className="mb-3 text-xs text-slate-600">Pregunta {step + 1} / {total}</div>
-                <div className="h-2 w-full bg-slate-200/60 rounded-full overflow-hidden mb-4">
-                  <div
-                    className="h-full bg-sky-600 transition-all"
-                    style={{ width: `${((step + (answers[q?.id] !== undefined ? 1 : 0)) / total) * 100}%` }}
-                  />
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-5">
-                  <h3 className="font-semibold mb-1">{q.text}</h3>
-                  {q.hint && <p className="text-xs text-slate-500 mb-3">{q.hint}</p>}
-
-                  <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-2">
-                    {LIKERT.map((opt) => (
-                      <label
-                        key={opt.value}
-                        className="flex items-center gap-1 text-xs cursor-pointer select-none px-2 py-1 rounded-md border border-slate-200"
-                      >
-                        <input
-                          className="w-3 h-3"
-                          type="radio"
-                          name={q.id}
-                          value={opt.value}
-                          checked={answers[q.id] === opt.value}
-                          onChange={() => handleSelect(q.id, opt.value)}
-                        />
-                        <span className="leading-tight">{opt.label}</span>
-                      </label>
-                    ))}
-                  </div>
-
-                  <div className="mt-5 flex gap-3">
-                    <button
-                      onClick={() => setStep((s) => Math.max(0, s - 1))}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 disabled:opacity-50"
-                      disabled={step === 0}
-                    >
-                      Anterior
-                    </button>
-                    <button
-                      onClick={() => setStep((s) => Math.min(total - 1, s + 1))}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100"
-                    >
-                      Siguiente
-                    </button>
-                    <button
-                      onClick={() => { setAnswers({}); setStep(0); }}
-                      className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100"
-                    >
-                      Reiniciar
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <button
-                    onClick={exportPDF}
-                    disabled={!allAnswered}
-                    className={`px-4 py-2 rounded-xl text-white ${allAnswered ? "bg-sky-600 hover:bg-sky-700" : "bg-slate-400 cursor-not-allowed"}`}
-                  >
-                    Descargar PDF
-                  </button>
-                </div>
-              </section>
-
-              {/* Resultado */}
-              <section ref={resultRef} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
-                <div className="flex items-baseline justify-between mb-3">
-                  <h2 className="font-semibold">Tu ubicación</h2>
-                  <div className="text-xs text-slate-500">X {nx.toFixed(1)} · Y {ny.toFixed(1)}</div>
-                </div>
-                <NolanChart nx={nx} ny={ny} />
-                <div className="mt-3 text-center">
-                  <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 bg-slate-100 text-slate-700">
-                    <span className="text-sm">Resultado:</span>
-                    <strong className="text-sm">{label}</strong>
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 mt-4">
-                  Nota: eje X = libertad económica (mercado ⇄ Estado). Eje Y = libertades personales (autonomía ⇄ orden). Es un mapa, no un destino.
-                </p>
-              </section>
-            </main>
-
-            <footer className="mt-10 text-xs text-slate-500">
-              Hecho con React + Tailwind (CDN). Preguntas adaptadas a Bolivia 2024–2025. Humor responsable.
-              Las sub-etiquetas con nombres son satíricas y fueron solicitadas por el usuario.
-            </footer>
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800">
+      <div className="max-w-5xl mx-auto p-6 md:p-10">
+        <header className="mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Nolan Bolivia 🧭</h1>
+          <p className="text-slate-600 mt-2 max-w-3xl">
+            Responde con honestidad brutal (y una pizca de sarcasmo). Al final verás tu ubicación en el diagrama y podrás descargar un PDF.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3 items-center">
+            <label className="text-sm">Tu nombre (opcional):</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ej. Daniela, Juan, Anónimo"
+              className="px-3 py-2 rounded-xl border border-slate-300 bg-white"
+            />
           </div>
-        </div>
-      );
-    }
+        </header>
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
-</body>
+        <main className="grid md:grid-cols-2 gap-8 items-start">
+          {/* Wizard de preguntas (una por vez) */}
+          <section>
+            <div className="mb-3 text-xs text-slate-600">Pregunta {step + 1} / {total}</div>
+            <div className="h-2 w-full bg-slate-200/60 rounded-full overflow-hidden mb-4">
+              <div
+                className="h-full bg-sky-600 transition-all"
+                style={{ width: `${((step + (answers[q?.id] !== undefined ? 1 : 0)) / total) * 100}%` }}
+              />
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-5">
+              <h3 className="font-semibold mb-1">{q.text}</h3>
+              {q.hint && <p className="text-xs text-slate-500 mb-3">{q.hint}</p>}
+
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-2">
+                {LIKERT.map((opt) => (
+                  <label key={opt.value} className="flex items-center gap-1 text-xs cursor-pointer select-none px-2 py-1 rounded-md border border-slate-200">
+                    <input className="w-3 h-3" type="radio"
+                      name={q.id}
+                      value={opt.value}
+                      checked={answers[q.id] === opt.value}
+                      onChange={() => handleSelect(q.id, opt.value)}
+                    />
+                    <span className="leading-tight">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+
+              <div className="mt-5 flex gap-3">
+                <button
+                  onClick={() => setStep((s) => Math.max(0, s - 1))}
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 disabled:opacity-50"
+                  disabled={step === 0}
+                >
+                  Anterior
+                </button>
+                <button
+                  onClick={() => setStep((s) => Math.min(total - 1, s + 1))}
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100"
+                >
+                  Siguiente
+                </button>
+                <button
+                  onClick={reset}
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100"
+                >
+                  Reiniciar
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <button
+                onClick={exportPDF}
+                disabled={!allAnswered}
+                className={`px-4 py-2 rounded-xl text-white ${allAnswered ? "bg-sky-600 hover:bg-sky-700" : "bg-slate-400 cursor-not-allowed"}`}
+              >
+                Descargar PDF
+              </button>
+            </div>
+          </section>
+
+          {/* Resultado */}
+          <section ref={resultRef} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6">
+            <div className="flex items-baseline justify-between mb-3">
+              <h2 className="font-semibold">Tu ubicación</h2>
+              <div className="text-xs text-slate-500">X {nx.toFixed(1)} · Y {ny.toFixed(1)}</div>
+            </div>
+            <NolanChart nx={nx} ny={ny} />
+            <div className="mt-3 text-center">
+              <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 bg-slate-100 text-slate-700">
+                <span className="text-sm">Resultado:</span>
+                <strong className="text-sm">{label}</strong>
+              </div>
+            </div>
+            <p className="text-xs text-slate-500 mt-4">
+              Nota: eje X = libertad económica (mercado ⇄ Estado). Eje Y = libertades personales (autonomía ⇄ orden). Es un mapa, no un destino.
+            </p>
+          </section>
+        </main>
+
+        <footer className="mt-10 text-xs text-slate-500">
+          Hecho con React + Tailwind. Preguntas adaptadas a Bolivia 2024–2025. Humor responsable. Las sub-etiquetas con nombres son satíricas y fueron solicitadas por el usuario.
+        </footer>
+      </div>
+    </div>
+  );
+}
+
 </html>
