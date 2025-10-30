@@ -63,27 +63,22 @@
     .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:9999px;font-size:.72rem;line-height:1rem}
     
     /* Efectos de hover para tarjetas */
-    .event-card {
-      transition: all 0.3s ease;
-    }
-    .event-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(2,6,23,.15);
-    }
+    .event-card { transition: all 0.3s ease; }
+    .event-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(2,6,23,.15); }
     
     /* Mejoras de accesibilidad */
-    @media (prefers-reduced-motion: reduce) {
-      .event-card {
-        transition: none;
-      }
-    }
+    @media (prefers-reduced-motion: reduce) { .event-card { transition: none; } }
     
     /* Mejora para el buscador */
-    .search-highlight {
-      background-color: #FEF08A;
-      padding: 0 2px;
-      border-radius: 3px;
-    }
+    .search-highlight { background-color: #FEF08A; padding: 0 2px; border-radius: 3px; }
+
+    /* Botones sociales */
+    .social-row{display:flex;flex-wrap:wrap;gap:.5rem}
+    .social-btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9999px;border:1px solid #e5e7eb;background:#fff;transition:all .2s}
+    .social-btn:hover{background:#f8fafc;border-color:#0E7C7B;color:#0E7C7B}
+    .social-btn svg{width:18px;height:18px}
+    .social-btn.is-active{background:#ecfdf5;border-color:#0E7C7B;color:#0E7C7B;box-shadow:0 0 0 2px rgba(14,124,123,.12) inset}
+    .social-btn.is-disabled{opacity:.45;pointer-events:none}
   </style>
 </head>
 <body class="min-h-screen bg-bg text-slate-800 font-sans">
@@ -263,14 +258,16 @@
         venue:'Auditorio FCJPSRRII — UAGRM',
         cover:'https://i.imgur.com/5Kg6aDu.png',
         desc:'Inflación, deuda y reformas en Argentina: apertura de mercados, rol del BCRA y alcance de las políticas sociales.',
-        speakers:['Nicolás Di Paola','Ricardo Alonzo Fernández Salguero']
-      },
+        speakers:['Nicolás Di Paola','Ricardo Alonzo Fernández Salguero'],
+        fb:'https://www.facebook.com/share/v/1CjsbfFgDQ/'},
       {
         id:'conv_2025_09_1', title:'1er Conversatorio crítico sobre el liberalismo económico', date:'2025-09-20', time:'19:00', mode:'Híbrido',
         venue:'Sala de Posgrado & Zoom — UAGRM',
         cover:'https://i.imgur.com/nhffCet.png',
         desc:'Experimentos libertarios, mitos del Índice de Libertad Económica y balance de la administración Milei; efectos para Bolivia.',
-        speakers:['Eduardo Garzón','Ricardo Alonzo Fernández']
+        speakers:['Eduardo Garzón','Ricardo Alonzo Fernández'],
+        yt:'https://youtu.be/7UTjLsrbuWY?si=Zhd_bhP_G-WOMKrf',
+        fb:'https://www.facebook.com/share/v/17RFwViTbB/'
       }
     ];
 
@@ -280,26 +277,30 @@
         id:'conf_2025_urbina', date:'2025-06-23', time:'18:30', mode:'Híbrido', venue:'Sala de Posgrado & Zoom — UAGRM',
         title:'El fracaso del liberalismo en explicar el desarrollo de los países',
         cover:'https://i.imgur.com/QdUViuY.png',
-        speakers:['Dante Urbina'] 
-      },
+        speakers:['Dante Urbina'],
+        yt:'https://youtu.be/yUCQ1M2qiJI?si=YfkpnfXq55d6Ge5-',
+        fb:'https://www.facebook.com/share/v/17TJyiJjEk/'},
       { 
         id:'conf_2025_meta', date:'2025-05-15', time:'19:00', mode:'Presencial', venue:'Auditorio FCJPSRRII — UAGRM',
         title:'¿No es opinión, es evidencia? Por qué los políticos deben hablar de meta-análisis',
         cover:'https://i.imgur.com/Z5qXo10.png',
-        speakers:['Ricardo Alonzo Fernández'] 
+        speakers:['Ricardo Alonzo Fernández'],
+        yt:'https://youtu.be/81n5IhLifm0?si=A7Q3pibn7ALTOtC_',
+        fb:'https://www.facebook.com/share/v/1K4YoM5N8W/'
       },
       { 
         id:'conf_2025_mokre', date:'2025-08-15', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
         title:'¿Existe evidencia de la teoría del valor-trabajo de Marx?',
         cover:'https://i.imgur.com/ttOVFpH.png',
-        speakers:['Patrick Mokre'] 
-      },
+        speakers:['Patrick Mokre'],
+        yt:'https://youtu.be/t4rHp6G2YJs?si=yD9mlLEIVXGA4FMs',
+        fb:'https://www.facebook.com/share/v/1HVEP6Cvj3/'},
       { 
         id:'conf_2025_thomas', date:'2025-08-28', time:'18:30', mode:'Presencial', venue:'Aula Magna — UAGRM',
         title:'La política de la microeconomía y los límites del liberalismo económico',
         cover:'https://i.imgur.com/9dBaFRH.png',
-        speakers:['Alex M. Thomas'] 
-      },
+        speakers:['Alex M. Thomas'],
+        fb:'https://www.facebook.com/share/v/14Tzi9K1rHb/'},
       { 
         id:'conf_2025_montoya', date:'2025-09-30', time:'13:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
         title:'¿Más desigualdad es menor democracia?',
@@ -313,6 +314,26 @@
         cover:'https://i.imgur.com/2TCvz2C.png',
         desc:'Crítica a la imposibilidad de la planificación',
         speakers:['Dr. Paul Cockshott'] 
+      },
+            {
+        id:'conf_2025_bel',
+        date:'2025-11-05',
+        time:'12:30',
+        mode:'Virtual',
+        venue:'Transmisión en vivo — UAGRM',
+        title:'Germà Bel — título por confirmar',
+        cover:'https://i.imgur.com/30zzUVj.png',
+        speakers:['Germà Bel (UB)']
+      },
+      {
+        id:'conf_2025_pozo',
+        date:'2025-11-05',
+        time:'12:10',
+        mode:'Virtual',
+        venue:'Transmisión en vivo — UAGRM',
+        title:'Antony Pozo — título por confirmar',
+        cover:'https://i.imgur.com/qKZUErn.png',
+        speakers:['Antony Pozo']
       },
       { 
         id:'conf_2025_cockshott_2', date:'2025-10-24', time:'12:00', mode:'Virtual', venue:'Transmisión en vivo — UAGRM',
@@ -329,19 +350,48 @@
     // Función para resaltar texto de búsqueda
     function highlightText(text, searchTerm) {
       if (!searchTerm) return text;
-      
       const regex = new RegExp(`(${searchTerm})`, 'gi');
       return text.replace(regex, '<span class="search-highlight">$1</span>');
     }
+
+    // Copiar enlace al portapapeles
+    function copyLink(url, btn){
+      navigator.clipboard.writeText(url).then(()=>{
+        const old = btn.innerHTML;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Copiado';
+        setTimeout(()=> btn.innerHTML = old, 1400);
+      }).catch(()=>{
+        alert('No se pudo copiar el enlace.');
+      });
+    }
+
+    const socialIcons = {
+      x:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2"/></svg>`,
+      ig:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>`,
+      fb:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 21v-8h3l1-4h-4V7a1 1 0 011-1h3V2h-3a5 5 0 00-5 5v2H6v4h3v8h4z" fill="currentColor"/></svg>`,
+      yt:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M10 10l5 3-5 3v-6z" fill="currentColor"/></svg>`,
+      drive:`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17l5-9 5 9H7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 17l-3 5h6l3-5H7zm10 0l3 5h-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`
+    };
 
     const card = (type, ev, searchTerm = '') => {
       const titleHighlighted = highlightText(ev.title, searchTerm);
       const descHighlighted = ev.desc ? highlightText(ev.desc, searchTerm) : '';
       const speakersHighlighted = ev.speakers ? highlightText(ev.speakers.join(', '), searchTerm) : '';
       const venueHighlighted = highlightText(ev.venue, searchTerm);
-      
+      const shareUrl = (typeof location !== 'undefined' ? (location.origin + location.pathname + '#' + ev.id) : ('#' + ev.id));
+      const xUrl = ev.x || `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(ev.title)}`;
+      const fbUrl = ev.fb || `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+      const igUrl = ev.ig || '#';
+      const ytUrl = ev.yt || '#';
+      const driveUrl = ev.drive || '#';
+      const clsX = 'social-btn' + (ev.x ? ' is-active' : '');
+      const clsIG = 'social-btn' + (ev.ig ? ' is-active' : ' is-disabled');
+      const clsFB = 'social-btn' + (ev.fb ? ' is-active' : '');
+      const clsYT = 'social-btn' + (ev.yt ? ' is-active' : ' is-disabled');
+      const clsDrive = 'social-btn' + (ev.drive ? ' is-active' : ' is-disabled');
+
       return `
-      <article class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col event-card h-full">
+      <article id="${ev.id}" class="rounded-xl2 bg-white border border-borderc shadow-soft overflow-hidden flex flex-col event-card h-full">
         <div class="relative ${type==='conf'?'poster-box poster-box--lg':'poster-box'} border-b border-borderc p-2 sm:p-3">
           <img loading="lazy" decoding="async" src="${ev.cover}" alt="Afiche: ${ev.title}"
                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop'"/>
@@ -357,6 +407,15 @@
             <div class="truncate"><span class="font-medium">Lugar:</span> ${venueHighlighted}</div>
             ${ev.speakers?`<div class="truncate"><span class="font-medium">Ponente(s):</span> ${speakersHighlighted}</div>`:''}
           </div>
+          <div class="mt-4 pt-3 border-t border-slate-200">
+            <div class="social-row" aria-label="Enlaces oficiales">
+              <a class="${clsX}" target="_blank" rel="noopener" aria-label="X" href="${xUrl}">${socialIcons.x}</a>
+              <a class="${clsIG}" target="_blank" rel="noopener" aria-label="Instagram" href="${igUrl}">${socialIcons.ig}</a>
+              <a class="${clsFB}" target="_blank" rel="noopener" aria-label="Facebook" href="${fbUrl}">${socialIcons.fb}</a>
+              <a class="${clsYT}" target="_blank" rel="noopener" aria-label="YouTube" href="${ytUrl}">${socialIcons.yt}</a>
+              <a class="${clsDrive}" target="_blank" rel="noopener" aria-label="Descargar en Drive" href="${driveUrl}">${socialIcons.drive}</a>
+            </div>
+          </div>
         </div>
       </article>`;
     };
@@ -365,7 +424,7 @@
       const q = document.getElementById('search').value.trim().toLowerCase();
       const match = (ev)=> !q || (ev.title + (ev.desc||'') + (ev.venue||'') + (ev.speakers||'').toString()).toLowerCase().includes(q);
       const conv = CONVERSATORIOS.filter(match).sort((a,b)=> b.date.localeCompare(a.date));
-      const conf = CONFERENCIAS.filter(match).sort((a,b)=> b.date.localeCompare(a.date));
+      const conf = CONFERENCIAS.filter(match).sort((a,b)=> b.date.localeCompare(a.date) || (({conf_2025_bel:3,conf_2025_pozo:2,conf_2025_cockshott_1:1}[b.id]||0)-({conf_2025_bel:3,conf_2025_pozo:2,conf_2025_cockshott_1:1}[a.id]||0)));
       document.getElementById('conv-grid').innerHTML = conv.map(ev=>card('conv',ev,q)).join('') || `<div class="text-sm text-slate-500 col-span-full py-10 text-center">No se encontraron conversatorios que coincidan con la búsqueda.</div>`;
       document.getElementById('conf-grid').innerHTML = conf.map(ev=>card('conf',ev,q)).join('') || `<div class="text-sm text-slate-500 col-span-full py-10 text-center">No se encontraron conferencias que coincidan con la búsqueda.</div>`;
     }
