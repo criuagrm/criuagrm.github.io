@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultores Estratégicos del Oriente</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandGreen: '#00994A', // aproximación al verde del logo
+            brandDark: '#333333'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-brandDark">
+  <!-- Navegación -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <!-- Logo + nombre -->
+      <a href="#inicio" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/k0VjDdZ.png" alt="Logo Consultores Estratégicos del Oriente" class="h-10 w-10 object-contain" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-[0.2em] uppercase text-slate-500">Consultores</p>
+          <p class="font-semibold text-sm sm:text-base text-brandDark">Consultores Estratégicos del Oriente</p>
+        </div>
+      </a>
+
+      <!-- Menú desktop -->
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a href="#servicios" class="hover:text-brandGreen transition-colors" data-lang="es">Servicios</a>
+        <a href="#servicios" class="hover:text-brandGreen transition-colors hidden" data-lang="en">Services</a>
+
+        <a href="#nosotros" class="hover:text-brandGreen transition-colors" data-lang="es">Quiénes somos</a>
+        <a href="#nosotros" class="hover:text-brandGreen transition-colors hidden" data-lang="en">About us</a>
+
+        <a href="#experiencia" class="hover:text-brandGreen transition-colors" data-lang="es">Experiencia</a>
+        <a href="#experiencia" class="hover:text-brandGreen transition-colors hidden" data-lang="en">Experience</a>
+
+        <a href="#contacto" class="hover:text-brandGreen transition-colors" data-lang="es">Contacto</a>
+        <a href="#contacto" class="hover:text-brandGreen transition-colors hidden" data-lang="en">Contact</a>
+
+        <!-- Selector de idioma -->
+        <div class="flex items-center gap-1 border border-slate-200 rounded-full p-1">
+          <button id="btn-es" class="px-3 py-1 text-xs rounded-full bg-brandGreen text-white font-semibold">ES</button>
+          <button id="btn-en" class="px-3 py-1 text-xs rounded-full text-slate-700 hover:bg-slate-100 font-semibold">EN</button>
+        </div>
+      </div>
+
+      <!-- Botón mobile -->
+      <button id="burger" class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-slate-600 hover:bg-slate-100" aria-label="Abrir menú">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Menú mobile -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white">
+      <div class="max-w-6xl mx-auto px-4 py-4 space-y-3 text-sm font-medium">
+        <a href="#servicios" class="block hover:text-brandGreen" data-lang="es">Servicios</a>
+        <a href="#servicios" class="block hover:text-brandGreen hidden" data-lang="en">Services</a>
+
+        <a href="#nosotros" class="block hover:text-brandGreen" data-lang="es">Quiénes somos</a>
+        <a href="#nosotros" class="block hover:text-brandGreen hidden" data-lang="en">About us</a>
+
+        <a href="#experiencia" class="block hover:text-brandGreen" data-lang="es">Experiencia</a>
+        <a href="#experiencia" class="block hover:text-brandGreen hidden" data-lang="en">Experience</a>
+
+        <a href="#contacto" class="block hover:text-brandGreen" data-lang="es">Contacto</a>
+        <a href="#contacto" class="block hover:text-brandGreen hidden" data-lang="en">Contact</a>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100 mt-2">
+          <span class="text-xs text-slate-500" data-lang="es">Idioma</span>
+          <span class="text-xs text-slate-500 hidden" data-lang="en">Language</span>
+          <div class="flex items-center gap-1 border border-slate-200 rounded-full p-1 ml-auto">
+            <button class="px-3 py-1 text-xs rounded-full bg-brandGreen text-white font-semibold" data-mobile-lang="es">ES</button>
+            <button class="px-3 py-1 text-xs rounded-full text-slate-700 hover:bg-slate-100 font-semibold" data-mobile-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="inicio">
+    <section class="bg-gradient-to-b from-white to-slate-100">
+      <div class="max-w-6xl mx-auto px-4 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
+        <!-- Texto principal -->
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 mb-4">
+            <span data-lang="es">Estrategia política · Datos · Territorio</span>
+            <span data-lang="en" class="hidden">Political strategy · Data · Territory</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-brandDark mb-4">
+            <span data-lang="es">Estrategia y datos para ganar las elecciones subnacionales en Santa Cruz.</span>
+            <span data-lang="en" class="hidden">Strategy and data to win subnational elections in Santa Cruz.</span>
+          </h1>
+
+          <p class="text-slate-600 text-base sm:text-lg mb-6 max-w-xl">
+            <span data-lang="es">Acompañamos a candidatos, gobiernos locales, empresas y organizaciones del oriente boliviano con consultoría estratégica basada en evidencia, análisis territorial y comunicación efectiva.</span>
+            <span data-lang="en" class="hidden">We support candidates, local governments, companies and organizations in Bolivia’s eastern region with evidence-based strategic consulting, territorial analysis and effective communication.</span>
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <a href="#contacto" class="inline-flex items-center justify-center rounded-full bg-brandGreen px-6 py-2.5 text-sm font-semibold text-white shadow hover:bg-emerald-700 transition-colors">
+              <span data-lang="es">Agendar una reunión</span>
+              <span data-lang="en" class="hidden">Schedule a meeting</span>
+            </a>
+            <a href="#contacto" class="inline-flex items-center justify-center rounded-full border border-brandGreen px-6 py-2.5 text-sm font-semibold text-brandGreen hover:bg-emerald-50 transition-colors">
+              <span data-lang="es">Escríbenos por WhatsApp</span>
+              <span data-lang="en" class="hidden">Write to us on WhatsApp</span>
+            </a>
+          </div>
+
+          <p class="text-xs text-slate-500 max-w-md">
+            <span data-lang="es">Consultoría política, planificación estratégica y gestión de campañas para el Departamento de Santa Cruz y el oriente boliviano.</span>
+            <span data-lang="en" class="hidden">Political consulting, strategic planning and campaign management for the Department of Santa Cruz and Bolivia’s eastern region.</span>
+          </p>
+        </div>
+
+        <!-- Imagen / Logo -->
+        <div class="flex justify-center lg:justify-end">
+          <div class="relative">
+            <div class="absolute -inset-4 bg-emerald-100 rounded-full blur-2xl opacity-60"></div>
+            <div class="relative bg-white rounded-3xl shadow-lg p-6 sm:p-8 flex flex-col items-center">
+              <img src="https://i.imgur.com/k0VjDdZ.png" alt="Logo Consultores Estratégicos del Oriente" class="h-36 w-36 sm:h-44 sm:w-44 object-contain mb-4" />
+              <p class="text-xs text-center text-slate-500 max-w-xs">
+                <span data-lang="es">Inspirados en la cruz oriental y en la dinámica propia de Santa Cruz, conectamos análisis, territorio y decisión política.</span>
+                <span data-lang="en" class="hidden">Inspired by the eastern cross and Santa Cruz’s unique dynamics, we connect analysis, territory and political decision-making.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Servicios -->
+    <section id="servicios" class="py-16 lg:py-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-2">
+              <span data-lang="es">Servicios estratégicos para campañas y gestión pública</span>
+              <span data-lang="en" class="hidden">Strategic services for campaigns and public management</span>
+            </h2>
+            <p class="text-slate-600 max-w-2xl text-sm sm:text-base">
+              <span data-lang="es">Diseñamos soluciones a medida para elecciones subnacionales, gobiernos municipales y departamentales, empresas y organizaciones que necesitan comprender y comunicar mejor en Santa Cruz.</span>
+              <span data-lang="en" class="hidden">We design tailored solutions for subnational elections, municipal and departmental governments, companies and organizations that need to better understand and communicate in Santa Cruz.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Servicio 1 -->
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col">
+            <h3 class="font-semibold text-base mb-2 text-brandDark">
+              <span data-lang="es">Consultoría política y electoral</span>
+              <span data-lang="en" class="hidden">Political and electoral consulting</span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4 flex-1">
+              <span data-lang="es">Diseño de estrategia de campaña, narrativa, segmentación del electorado, mapa de actores y acompañamiento integral a candidatos y equipos para elecciones subnacionales.</span>
+              <span data-lang="en" class="hidden">Campaign strategy design, narrative building, voter segmentation, stakeholder mapping and comprehensive support for candidates and teams in subnational elections.</span>
+            </p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">
+              <span data-lang="es">Subnacionales · Alcaldías · Gobernación</span>
+              <span data-lang="en" class="hidden">Subnational level · Mayors · Governorship</span>
+            </p>
+          </article>
+
+          <!-- Servicio 2 -->
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col">
+            <h3 class="font-semibold text-base mb-2 text-brandDark">
+              <span data-lang="es">Estudios de opinión y diagnósticos territoriales</span>
+              <span data-lang="en" class="hidden">Opinion studies and territorial diagnostics</span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4 flex-1">
+              <span data-lang="es">Encuestas, grupos focales, análisis de redes y monitoreo de clima de opinión para comprender el comportamiento político y social en barrios, distritos y municipios.</span>
+              <span data-lang="en" class="hidden">Surveys, focus groups, network analysis and opinion climate monitoring to understand political and social behavior in neighborhoods, districts and municipalities.</span>
+            </p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">
+              <span data-lang="es">Datos · Mapa territorial · Segmentos clave</span>
+              <span data-lang="en" class="hidden">Data · Territorial map · Key segments</span>
+            </p>
+          </article>
+
+          <!-- Servicio 3 -->
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col">
+            <h3 class="font-semibold text-base mb-2 text-brandDark">
+              <span data-lang="es">Planeación estratégica para gobiernos locales</span>
+              <span data-lang="en" class="hidden">Strategic planning for local governments</span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4 flex-1">
+              <span data-lang="es">Apoyo en planes de gobierno, agendas de gestión, indicadores de seguimiento y articulación entre campaña, programa y gobierno.</span>
+              <span data-lang="en" class="hidden">Support in government plans, management agendas, monitoring indicators and alignment between campaign, program and government.</span>
+            </p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">
+              <span data-lang="es">Municipios · Gobernación · Secretarías</span>
+              <span data-lang="en" class="hidden">Municipalities · Governorship · Secretariats</span>
+            </p>
+          </article>
+
+          <!-- Servicio 4 -->
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col">
+            <h3 class="font-semibold text-base mb-2 text-brandDark">
+              <span data-lang="es">Comunicación política y gestión de crisis</span>
+              <span data-lang="en" class="hidden">Political communication and crisis management</span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4 flex-1">
+              <span data-lang="es">Diseño de mensaje, relato de campaña, vocería, media training y protocolos de crisis adaptados al contexto mediático y digital de Santa Cruz.</span>
+              <span data-lang="en" class="hidden">Message design, campaign storytelling, spokesperson training and crisis protocols adapted to Santa Cruz’s media and digital context.</span>
+            </p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">
+              <span data-lang="es">Medios · Redes · Territorio</span>
+              <span data-lang="en" class="hidden">Media · Networks · Territory</span>
+            </p>
+          </article>
+
+          <!-- Servicio 5 -->
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col">
+            <h3 class="font-semibold text-base mb-2 text-brandDark">
+              <span data-lang="es">Relación con actores y construcción de coaliciones</span>
+              <span data-lang="en" class="hidden">Stakeholder relations and coalition-building</span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4 flex-1">
+              <span data-lang="es">Mapeo de actores, mediación y diseño de acuerdos políticos, sociales y empresariales para impulsar proyectos y gobernar con estabilidad.</span>
+              <span data-lang="en" class="hidden">Stakeholder mapping, mediation and design of political, social and business agreements to drive projects and govern with stability.</span>
+            </p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">
+              <span data-lang="es">Coaliciones · Diálogo · Gobernabilidad</span>
+              <span data-lang="en" class="hidden">Coalitions · Dialogue · Governability</span>
+            </p>
+          </article>
+
+          <!-- Servicio 6 -->
+          <article class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col">
+            <h3 class="font-semibold text-base mb-2 text-brandDark">
+              <span data-lang="es">Formación y capacitación</span>
+              <span data-lang="en" class="hidden">Training and capacity-building</span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4 flex-1">
+              <span data-lang="es">Talleres, cursos y acompañamiento a equipos de campaña, gabinetes y organizaciones sobre estrategia, análisis de datos, comunicación y gestión pública.</span>
+              <span data-lang="en" class="hidden">Workshops, courses and coaching for campaign teams, cabinets and organizations on strategy, data analysis, communication and public management.</span>
+            </p>
+            <p class="text-[11px] text-slate-400 uppercase tracking-wide">
+              <span data-lang="es">Equipos · Liderazgo · Metodología</span>
+              <span data-lang="en" class="hidden">Teams · Leadership · Methodology</span>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Quiénes somos -->
+    <section id="nosotros" class="py-16 lg:py-20 bg-white border-y border-slate-100">
+      <div class="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-10 items-start">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-4">
+            <span data-lang="es">Somos aliados estratégicos del oriente boliviano.</span>
+            <span data-lang="en" class="hidden">We are strategic allies for Bolivia’s eastern region.</span>
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base mb-4">
+            <span data-lang="es">Consultores Estratégicos del Oriente es una consultora con base en Santa Cruz de la Sierra que combina experiencia académica, trabajo de campo y conocimiento del territorio para acompañar procesos políticos, institucionales y organizacionales.</span>
+            <span data-lang="en" class="hidden">Consultores Estratégicos del Oriente is a Santa Cruz-based consulting firm that combines academic experience, fieldwork and territorial knowledge to support political, institutional and organizational processes.</span>
+          </p>
+          <p class="text-slate-600 text-sm sm:text-base mb-4">
+            <span data-lang="es">Trabajamos con campañas subnacionales, gobiernos locales, empresas, organizaciones sociales y universidades que necesitan tomar decisiones informadas y construir estrategias sólidas en un entorno competitivo y polarizado.</span>
+            <span data-lang="en" class="hidden">We work with subnational campaigns, local governments, companies, social organizations and universities that need to make informed decisions and build solid strategies in a competitive and polarized environment.</span>
+          </p>
+          <p class="text-slate-600 text-sm sm:text-base mb-6">
+            <span data-lang="es">Nuestro enfoque es cercano, profesional y orientado a resultados: escuchamos, analizamos, proponemos rutas estratégicas y acompañamos la ejecución.</span>
+            <span data-lang="en" class="hidden">Our approach is close, professional and result-oriented: we listen, analyze, propose strategic paths and support implementation.</span>
+          </p>
+        </div>
+
+        <!-- Datos / highlights -->
+        <div class="bg-slate-50 rounded-3xl border border-slate-100 p-6 sm:p-8 flex flex-col gap-6">
+          <div class="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p class="text-2xl font-bold text-brandGreen">10+</p>
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">
+                <span data-lang="es">Años de experiencia combinada</span>
+                <span data-lang="en" class="hidden">Years of combined experience</span>
+              </p>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-brandGreen">3</p>
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">
+                <span data-lang="es">Niveles de gobierno</span>
+                <span data-lang="en" class="hidden">Levels of government</span>
+              </p>
+            </div>
+            <div>
+              <p class="text-2xl font-bold text-brandGreen">100%</p>
+              <p class="text-[11px] uppercase tracking-wide text-slate-500">
+                <span data-lang="es">Foco en Santa Cruz</span>
+                <span data-lang="en" class="hidden">Focus on Santa Cruz</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-sm text-slate-600">
+            <div class="flex gap-3">
+              <div class="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-brandGreen/10 text-brandGreen text-xs font-bold">1</div>
+              <p>
+                <span data-lang="es"><strong>Conocimiento del territorio:</strong> experiencia en distritos urbanos, áreas periurbanas y municipios rurales del oriente.</span>
+                <span data-lang="en" class="hidden"><strong>Territorial expertise:</strong> experience in urban districts, peri-urban areas and rural municipalities across the eastern region.</span>
+              </p>
+            </div>
+            <div class="flex gap-3">
+              <div class="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-brandGreen/10 text-brandGreen text-xs font-bold">2</div>
+              <p>
+                <span data-lang="es"><strong>Metodología basada en datos:</strong> combinamos estadística, análisis cualitativo y herramientas digitales.</span>
+                <span data-lang="en" class="hidden"><strong>Data-driven methods:</strong> we combine statistics, qualitative analysis and digital tools.</span>
+              </p>
+            </div>
+            <div class="flex gap-3">
+              <div class="mt-1 h-5 w-5 flex items-center justify-center rounded-full bg-brandGreen/10 text-brandGreen text-xs font-bold">3</div>
+              <p>
+                <span data-lang="es"><strong>Acompañamiento cercano:</strong> trabajamos como parte de tu equipo, no solo como proveedores externos.</span>
+                <span data-lang="en" class="hidden"><strong>Close support:</strong> we work as part of your team, not just as external providers.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Experiencia / Casos -->
+    <section id="experiencia" class="py-16 lg:py-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+          <div class="max-w-xl">
+            <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-3">
+              <span data-lang="es">Experiencia en campañas, gobierno y sector privado.</span>
+              <span data-lang="en" class="hidden">Experience in campaigns, government and the private sector.</span>
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base">
+              <span data-lang="es">Hemos acompañado procesos en el ámbito municipal, departamental y nacional, así como proyectos de organizaciones y empresas que necesitan entender mejor la política y el territorio cruceño.</span>
+              <span data-lang="en" class="hidden">We have supported processes at the municipal, departmental and national levels, as well as projects of organizations and companies that need to better understand politics and the territorial dynamics of Santa Cruz.</span>
+            </p>
+          </div>
+          <div class="text-xs text-slate-500 bg-slate-50 border border-slate-100 rounded-full px-4 py-2 inline-flex items-center gap-2">
+            <span class="inline-block h-2 w-2 rounded-full bg-brandGreen"></span>
+            <span data-lang="es">Confidencialidad y trabajo bajo acuerdo de reserva de información.</span>
+            <span data-lang="en" class="hidden">Confidentiality and work under non-disclosure agreements.</span>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+            <p class="text-xs font-semibold uppercase tracking-wide text-brandGreen mb-2">
+              <span data-lang="es">Campañas subnacionales</span>
+              <span data-lang="en" class="hidden">Subnational campaigns</span>
+            </p>
+            <p class="text-sm text-slate-600">
+              <span data-lang="es">Diseño de estrategia, segmentación del voto y acompañamiento a equipos en distintas provincias y municipios de Santa Cruz.</span>
+              <span data-lang="en" class="hidden">Strategy design, vote segmentation and support for teams in several provinces and municipalities of Santa Cruz.</span>
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+            <p class="text-xs font-semibold uppercase tracking-wide text-brandGreen mb-2">
+              <span data-lang="es">Gobiernos locales</span>
+              <span data-lang="en" class="hidden">Local governments</span>
+            </p>
+            <p class="text-sm text-slate-600">
+              <span data-lang="es">Apoyo en planes de desarrollo, agendas de prioridad ciudadana y procesos de participación y diálogo.</span>
+              <span data-lang="en" class="hidden">Support in development plans, citizen priority agendas and participation and dialogue processes.</span>
+            </p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+            <p class="text-xs font-semibold uppercase tracking-wide text-brandGreen mb-2">
+              <span data-lang="es">Empresas y organizaciones</span>
+              <span data-lang="en" class="hidden">Companies and organizations</span>
+            </p>
+            <p class="text-sm text-slate-600">
+              <span data-lang="es">Análisis de entorno político y social, mapas de actores clave y diseño de estrategias de relacionamiento.</span>
+              <span data-lang="en" class="hidden">Analysis of the political and social context, key stakeholder mapping and relationship strategies.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Equipo -->
+    <section id="equipo" class="py-16 lg:py-20 bg-slate-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-2">
+              <span data-lang="es">Equipo multidisciplinario con raíces cruceñas.</span>
+              <span data-lang="en" class="hidden">A multidisciplinary team rooted in Santa Cruz.</span>
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base max-w-2xl">
+              <span data-lang="es">Politólogos, analistas, comunicadores y especialistas en gestión pública que combinan experiencia académica y práctica en terreno.</span>
+              <span data-lang="en" class="hidden">Political scientists, analysts, communicators and public management specialists combining academic experience with field practice.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Miembro 1 -->
+          <article class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col items-start">
+            <div class="h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
+              <span class="text-brandGreen font-semibold text-xl">DH</span>
+            </div>
+            <h3 class="font-semibold text-brandDark mb-1">Nombre referente 1</h3>
+            <p class="text-[13px] text-slate-500 mb-2">
+              <span data-lang="es">Director · Consultor en estrategia política y análisis institucional.</span>
+              <span data-lang="en" class="hidden">Director · Consultant in political strategy and institutional analysis.</span>
+            </p>
+            <p class="text-xs text-slate-500">
+              <span data-lang="es">Especializado en campañas subnacionales, comportamiento político y diseño institucional en Santa Cruz.</span>
+              <span data-lang="en" class="hidden">Specialized in subnational campaigns, political behavior and institutional design in Santa Cruz.</span>
+            </p>
+          </article>
+
+          <!-- Miembro 2 -->
+          <article class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col items-start">
+            <div class="h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
+              <span class="text-brandGreen font-semibold text-xl">AC</span>
+            </div>
+            <h3 class="font-semibold text-brandDark mb-1">Nombre referente 2</h3>
+            <p class="text-[13px] text-slate-500 mb-2">
+              <span data-lang="es">Coordinación de datos y estudios de opinión.</span>
+              <span data-lang="en" class="hidden">Head of data and opinion research.</span>
+            </p>
+            <p class="text-xs text-slate-500">
+              <span data-lang="es">Experiencia en encuestas, análisis estadístico y estudios territoriales.</span>
+              <span data-lang="en" class="hidden">Experience in surveys, statistical analysis and territorial studies.</span>
+            </p>
+          </article>
+
+          <!-- Miembro 3 -->
+          <article class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col items-start">
+            <div class="h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
+              <span class="text-brandGreen font-semibold text-xl">CC</span>
+            </div>
+            <h3 class="font-semibold text-brandDark mb-1">Nombre referente 3</h3>
+            <p class="text-[13px] text-slate-500 mb-2">
+              <span data-lang="es">Comunicación política y gestión de crisis.</span>
+              <span data-lang="en" class="hidden">Political communication and crisis management.</span>
+            </p>
+            <p class="text-xs text-slate-500">
+              <span data-lang="es">Experiencia en medios, redes sociales y entrenamiento de vocerías.</span>
+              <span data-lang="en" class="hidden">Experience in media, social networks and spokesperson training.</span>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Testimonios -->
+    <section class="py-16 lg:py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-2">
+              <span data-lang="es">Qué dicen quienes han trabajado con nosotros.</span>
+              <span data-lang="en" class="hidden">What our partners say about us.</span>
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base max-w-2xl">
+              <span data-lang="es">Por la naturaleza de nuestro trabajo político, resguardamos la identidad de nuestros clientes, pero compartimos algunas valoraciones generales.</span>
+              <span data-lang="en" class="hidden">Due to the political nature of our work, we protect our clients’ identities, but we share some general assessments.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <article class="bg-slate-50 rounded-2xl border border-slate-100 p-6">
+            <p class="text-sm text-slate-700 mb-3 italic">
+              <span data-lang="es">"El equipo nos ayudó a ordenar la campaña, priorizar territorios y afinar el mensaje. Sentimos que cada decisión estaba respaldada en datos y conocimiento del contexto cruceño."</span>
+              <span data-lang="en" class="hidden">"The team helped us organize the campaign, prioritize territories and refine our message. We felt every decision was backed by data and a deep understanding of Santa Cruz’s context."</span>
+            </p>
+            <p class="text-xs font-semibold text-brandGreen">
+              <span data-lang="es">Candidato municipal · Provincia del Departamento de Santa Cruz</span>
+              <span data-lang="en" class="hidden">Municipal candidate · Province in the Department of Santa Cruz</span>
+            </p>
+          </article>
+
+          <article class="bg-slate-50 rounded-2xl border border-slate-100 p-6">
+            <p class="text-sm text-slate-700 mb-3 italic">
+              <span data-lang="es">"El diagnóstico territorial y el mapa de actores que elaboraron fue clave para negociar acuerdos y construir una agenda compartida con distintos sectores."</span>
+              <span data-lang="en" class="hidden">"The territorial diagnosis and stakeholder map they prepared were key to negotiating agreements and building a shared agenda with different sectors."</span>
+            </p>
+            <p class="text-xs font-semibold text-brandGreen">
+              <span data-lang="es">Gestor público · Gobierno local</span>
+              <span data-lang="en" class="hidden">Public manager · Local government</span>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Blog / Noticias -->
+    <section class="py-16 lg:py-20 bg-slate-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-2">
+              <span data-lang="es">Crónicas, análisis y actualizaciones.</span>
+              <span data-lang="en" class="hidden">Chronicles, analysis and updates.</span>
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base max-w-2xl">
+              <span data-lang="es">Muy pronto compartiremos artículos breves sobre campañas, gestión pública y comportamiento político en Santa Cruz.</span>
+              <span data-lang="en" class="hidden">Soon we will share brief articles on campaigns, public management and political behavior in Santa Cruz.</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 opacity-80">
+          <article class="bg-white rounded-2xl border border-dashed border-slate-200 p-5 flex flex-col justify-between">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2" data-lang="es">Próximamente</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2 hidden" data-lang="en">Coming soon</p>
+            <p class="text-sm text-slate-600">
+              <span data-lang="es">Tendencias de voto urbano y periurbano en el Área Metropolitana de Santa Cruz.</span>
+              <span data-lang="en" class="hidden">Voting trends in urban and peri-urban areas of the Santa Cruz metropolitan region.</span>
+            </p>
+          </article>
+
+          <article class="bg-white rounded-2xl border border-dashed border-slate-200 p-5 flex flex-col justify-between">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2" data-lang="es">Próximamente</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2 hidden" data-lang="en">Coming soon</p>
+            <p class="text-sm text-slate-600">
+              <span data-lang="es">Construcción de narrativas de campaña en contextos polarizados.</span>
+              <span data-lang="en" class="hidden">Building campaign narratives in polarized contexts.</span>
+            </p>
+          </article>
+
+          <article class="bg-white rounded-2xl border border-dashed border-slate-200 p-5 flex flex-col justify-between">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2" data-lang="es">Próximamente</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2 hidden" data-lang="en">Coming soon</p>
+            <p class="text-sm text-slate-600">
+              <span data-lang="es">Del programa de gobierno a la hoja de ruta de gestión local.</span>
+              <span data-lang="en" class="hidden">From the government platform to the local management roadmap.</span>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Contacto -->
+    <section id="contacto" class="py-16 lg:py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-10 items-start">
+        <!-- Formulario -->
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-brandDark mb-3">
+            <span data-lang="es">Conversemos sobre tu próximo desafío.</span>
+            <span data-lang="en" class="hidden">Let’s talk about your next challenge.</span>
+          </h2>
+          <p class="text-slate-600 text-sm sm:t
