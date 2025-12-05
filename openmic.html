@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OPEN MIC — Podcast · CIRCPyCS UAGRM</title>
+  <meta name="description" content="Open Mic: el podcast del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) — UAGRM." />
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          colors: {
+            brand: {
+              50:  '#eef2ff', 100:'#e0e7ff', 200:'#c7d2fe', 300:'#a5b4fc', 400:'#818cf8',
+              500:'#6366f1', 600:'#4f46e5', 700:'#4338ca', 800:'#3730a3', 900:'#312e81'
+            }
+          },
+          boxShadow: { soft: '0 6px 24px rgba(2,6,23,.08)' },
+          borderRadius: { xl2: '18px' }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Alturas base de secciones visuales */
+    .hero-blur:before { content:""; position:absolute; inset:-20%; background:radial-gradient(60% 60% at 20% 10%, rgba(16,185,129,.20), transparent 60%), radial-gradient(60% 60% at 80% 90%, rgba(244,63,94,.20), transparent 60%); filter: blur(40px); z-index:-1; }
+    .grid-autofill { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .btn-grad { background-image: linear-gradient(to right, #10b981, #0284c7, #f43f5e); }
+    .btn-grad:hover { filter: brightness(0.95); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain"/>
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-lg">CIRCPyCS · Open Mic</h1>
+        </div>
+      </a>
+
+      <!-- Nav escritorio -->
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#episodios" class="hover:text-sky-700">Episodios</a>
+        <a href="#suscribete" class="hover:text-sky-700">Suscríbete</a>
+        <a href="#detalles" class="hover:text-sky-700">Detrás del micrófono</a>
+        <a href="#participa" class="hover:text-sky-700">Participa</a>
+        <a href="#contacto" class="hover:text-sky-700">Contacto</a>
+        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
+      </nav>
+
+      <!-- Botón móvil -->
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
+        <span>Menú</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Panel móvil -->
+    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
+      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
+      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-7 w-7 object-contain"/>
+            <span class="font-semibold">Open Mic</span>
+          </div>
+          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <ul class="mt-6 space-y-2 text-[15px]">
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#episodios">Episodios</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#suscribete">Suscríbete</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#detalles">Detrás del micrófono</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#participa">Participa</a></li>
+          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
+          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="relative overflow-hidden hero-blur">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Podcast</span>
+      <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">OPEN MIC</h2>
+      <p class="mt-3 max-w-3xl text-slate-600">Conversaciones claras y basadas en evidencia sobre política, sociedad y datos. Episodios con investigadores, gestores públicos y actores clave.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#episodios" class="px-4 py-2 rounded-xl btn-grad text-white font-medium shadow">Escuchar episodios</a>
+        <a href="#suscribete" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700">Suscríbete</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Suscríbete / Plataformas -->
+  <section id="suscribete" class="py-8 bg-white border-y border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold">Suscríbete</h3>
+      <p class="text-slate-600 mt-1">Síguenos en tu plataforma favorita o agrega el feed RSS a tu app de podcasts.</p>
+
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black text-white shadow">
+          <!-- Spotify -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.39 14.56a.75.75 0 01-1.03.25 8.97 8.97 0 00-8.72-.5.75.75 0 11-.64-1.36 10.48 10.48 0 019.69.59.75.75 0 01.25 1.02zm1.41-3.11a.95.95 0 01-1.31.32 11.86 11.86 0 00-11.52-.66.95.95 0 11-.78-1.73 13.76 13.76 0 0113.37.77c.45.26.6.84.24 1.3zm.12-3.24c-.34.5-1.01.64-1.53.33a14.97 14.97 0 00-14.54-.83 1.1 1.1 0 11-.86-2.02 17.16 17.16 0 0116.64.95c.52.3.69.98.3 1.57z"/></svg>
+          Spotify</a>
+        <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:border-sky-600">
+          <!-- Apple -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.36 1.64a4.3 4.3 0 01-1.1 3.1 3.7 3.7 0 01-2.84 1.4 4.2 4.2 0 011.1-3.06A3.92 3.92 0 0116.36 1.64zM20.3 17.7c-.4.95-.88 1.82-1.46 2.61-.77 1.05-1.39 1.78-1.87 2.18-.72.66-1.49 1-2.31 1-.57 0-1.26-.16-2.05-.48-.8-.32-1.53-.48-2.2-.48-.72 0-1.47.16-2.25.48-.78.32-1.44.48-1.98.48-.86 0-1.66-.31-2.4-.94-.51-.43-1.16-1.17-1.97-2.24A13.2 13.2 0 01.7 15.46c-.45-1.17-.68-2.3-.68-3.36 0-1.24.27-2.31.82-3.2a5.7 5.7 0 012.1-2.02 6.1 6.1 0 013.09-.87c.61 0 1.41.18 2.38.53.97.36 1.58.54 1.82.54.2 0 .85-.2 1.96-.59 1.05-.36 1.94-.51 2.68-.46a5.8 5.8 0 014.56 2.37 5 5 0 001.02 1.16 5.6 5.6 0 01-1.34 2.07 4.9 4.9 0 00-1.2 3.15c0 1.25.33 2.34.98 3.29z"/></svg>
+          Apple Podcasts</a>
+        <a href="https://youtube.com/playlist?list=PL4kf8_D7Z1UjKU19QiS-4SkSg9ygEbfcX&si=a0P1vGBF5RAeNYHx" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:border-sky-600">
+          <!-- YouTube -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.4.6A3 3 0 00.5 6.2 31 31 0 000 12a31 31 0 00.6 5.8 3 3 0 002.1 2.1c2.1.6 9.4.6 9.4.6s7.3 0 9.4-.6a3 3 0 002.1-2.1 31 31 0 00.6-5.8 31 31 0 00-.6-5.8zM9.8 15.5v-7l6.2 3.5-6.2 3.5z"/></svg>
+          YouTube</a>
+        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300">
+          <span class="text-sm text-slate-600">RSS:</span>
+          <input id="rssInput" class="w-64 max-w-[55vw] text-sm bg-transparent outline-none" value="https://cir.uagrm.edu.bo/podcast/open-mic.rss" readonly onclick="this.select(); this.title='Presiona Ctrl/Cmd+C para copiar'">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Episodios -->
+  <main id="episodios" class="py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold">Episodios</h3>
+          <p class="text-slate-600">Busca por título, invitado o etiqueta. Filtra por tema.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <input id="search" type="search" placeholder="Buscar…" class="px-3 py-2 rounded-lg border border-slate-300 w-72 max-w-[80vw]" />
+          <select id="seasonSel" class="px-3 py-2 rounded-lg border border-slate-300">
+            <option value="all">Todas las temporadas</option>
+            <option value="T1">Temporada 1</option>
+            <option value="T2">Temporada 2</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Chips de filtros -->
+      <div id="chips" class="mt-4 flex flex-wrap gap-2 text-sm"></div>
+
+      <!-- Grid de tarjetas -->
+      <div id="episodesGrid" class="mt-6 grid grid-autofill gap-5"></div>
+
+      <!-- Pagination simple (si crece la lista) -->
+      <div class="mt-6 flex justify-center gap-2" id="pager" hidden>
+        <button id="prevBtn" class="px-3 py-2 rounded-lg border border-slate-300">Anterior</button>
+        <span id="pageInfo" class="px-3 py-2 text-slate-600"></span>
+        <button id="nextBtn" class="px-3 py-2 rounded-lg border border-slate-300">Siguiente</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Detrás del micrófono / Equipo -->
+  <section id="detalles" class="py-10 bg-white border-y border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold">Detrás del micrófono</h3>
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="rounded-xl2 bg-white border border-slate-200 p-5 shadow-soft">
+          <div class="flex items-center gap-4">
+            <img class="w-16 h-16 rounded-full object-cover ring-2 ring-brand-200" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=300&auto=format&fit=crop" alt="Host 1" loading="lazy"/>
+            <div>
+              <h4 class="font-semibold">Host — CIRCPyCS</h4>
+              <p class="text-sm text-slate-600">Conducción y curaduría de episodios.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl2 bg-white border border-slate-200 p-5 shadow-soft">
+          <div class="flex items-center gap-4">
+            <img class="w-16 h-16 rounded-full object-cover ring-2 ring-brand-200" src="https://images.unsplash.com/photo-1513569771920-c9e1d31714af?q=80&w=300&auto=format&fit=crop" alt="Producción" loading="lazy"/>
+            <div>
+              <h4 class="font-semibold">Producción</h4>
+              <p class="text-sm text-slate-600">Guion, sonido y publicación.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl2 bg-white border border-slate-200 p-5 shadow-soft">
+          <div class="flex items-center gap-4">
+            <img class="w-16 h-16 rounded-full object-cover ring-2 ring-brand-200" src="https://images.unsplash.com/photo-1541753866388-0b3c701627d3?q=80&w=300&auto=format&fit=crop" alt="Postproducción" loading="lazy"/>
+            <div>
+              <h4 class="font-semibold">Postproducción</h4>
+              <p class="text-sm text-slate-600">Edición, transcripciones y notas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Participa / propuesta de tema o invitado -->
+  <section id="participa" class="py-10">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-xl font-bold">¿Quieres proponer un tema o invitado/a?</h3>
+      <p class="text-slate-600">Envíanos tu propuesta. Revisamos semanalmente y te contactamos si calza con la agenda editorial.</p>
+
+      <form id="formPropuesta" class="mt-5 grid gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input required class="px-3 py-2 rounded-lg border border-slate-300" type="text" placeholder="Tu nombre" name="nombre"/>
+          <input required class="px-3 py-2 rounded-lg border border-slate-300" type="email" placeholder="Correo" name="correo"/>
+        </div>
+        <input class="px-3 py-2 rounded-lg border border-slate-300" type="text" placeholder="Tema propuesto" name="tema"/>
+        <textarea class="px-3 py-2 rounded-lg border border-slate-300 min-h-[120px]" placeholder="Describe brevemente la idea o el/la invitado/a…" name="detalle"></textarea>
+        <div class="flex items-center gap-3">
+          <button class="px-4 py-2 rounded-xl btn-grad text-white font-medium shadow" type="submit">Enviar propuesta</button>
+          <span id="formMsg" class="text-sm text-emerald-700" hidden>¡Gracias! Recibimos tu propuesta.</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Contacto / redes -->
+  <section id="contacto" class="py-10 bg-white border-t border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between">
+        <div>
+          <h3 class="text-xl font-bold">Contacto y redes</h3>
+          <p class="text-slate-600">Escríbenos a <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a></p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600">
+            <!-- Facebook -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 10-11.6 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.16 1.8.16v2h-1c-1 0-1.3.62-1.3 1.26V12h2.2l-.35 3h-1.85v7A10 10 0 0022 12z"/></svg>
+            Facebook
+          </a>
+          <a href="#" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600">
+            <!-- X -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h4.6l4.3 6.2L16.8 3H21l-6.8 9.3L21 21h-4.6l-4.6-6.6L7.2 21H3l7-9.7L3 3z"/></svg>
+            X
+          </a>
+          <a href="https://youtube.com/playlist?list=PL4kf8_D7Z1UjKU19QiS-4SkSg9ygEbfcX&si=a0P1vGBF5RAeNYHx" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 hover:border-sky-600">
+            <!-- YouTube -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.4.6A3 3 0 00.5 6.2 31 31 0 000 12a31 31 0 00.6 5.8 3 3 0 002.1 2.1c2.1.6 9.4.6 9.4.6s7.3 0 9.4-.6a3 3 0 002.1-2.1 31 31 0 00.6-5.8 31 31 0 00-.6-5.8zM9.8 15.5v-7l6.2 3.5-6.2 3.5z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="grid place-items-center gap-3 text-center">
+        <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
+        <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal Notas (nativo) -->
+  <dialog id="modalNotas" class="rounded-xl2 p-0 w-[min(90vw,720px)]">
+    <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+      <h4 id="modalTitle" class="font-semibold">Notas del episodio</h4>
+      <button id="modalClose" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar">✕</button>
+    </div>
+    <article id="modalBody" class="p-5 space-y-3 text-slate-700"></article>
+  </dialog>
+
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
+    const wrap = document.getElementById('mobile-wrap');
+    const openBtn = document.getElementById('btn-open');
+    const closeBtn = document.getElementById('btn-close');
+    const backdrop = document.getElementById('backdrop');
+    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
+    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
+    openBtn?.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    backdrop?.addEventListener('click', closeMenu);
+
+    // ===== Datos de episodios (2 publicados en YouTube + próximos) =====
+    const TAGS = ['Política','Sociedad','Economía','Tecnología','Internacional'];
+    const EPISODIOS = [
+      {
+        id:'ep02', season:'T1', numero:2, fecha:'2025-11-30', duracion:'--:--',
+        titulo:'OPEN MIC: CAP 2 "¿Se puede ser un politólogo exitoso y ético en la política?"',
+        invitado:'Invitada/o · CIRCPyCS',
+        portada:'https://images.unsplash.com/photo-1496753480864-3e5883ef5a1f?q=80&w=1200&auto=format&fit=crop',
+        youtube:'https://www.youtube.com/embed/WcMXvTJtFsY?si=8LNN61MJ6I0W29Xp',
+        tags:['Política','Sociedad'],
+        notas:['Notas del episodio 2. Ajusta este texto según el contenido real.']
+      },
+      {
+        id:'ep01', season:'T1', numero:1, fecha:'2025-11-15', duracion:'--:--',
+        titulo:'OPEN MIC: CAP 1 "Importancia de la visibilidad de la Carrera de Ciencia Política y Adm. Pública"',
+        invitado:'Invitada/o · CIRCPyCS',
+        portada:'https://images.unsplash.com/photo-1515536765-9c64539db97d?q=80&w=1200&auto=format&fit=crop',
+        youtube:'https://www.youtube.com/embed/Dv37Cd9daPU?si=lXQftNPHICfOuq0J',
+        tags:['Política'],
+        notas:['Notas del episodio 1. Ajusta este texto según el contenido real.']
+      },
+      {
+        id:'ep03', season:'T1', numero:3, fecha:'2026-01-10', duracion:'Próximamente',
+        titulo:'Gobernabilidad y diálogo en contextos polarizados',
+        invitado:'Gestores públicos locales',
+        portada:'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop',
+        tags:['Política','Sociedad'],
+        notas:['Episodio en preparación.'],
+        comingSoon:true
+      },
+      {
+        id:'ep04', season:'T1', numero:4, fecha:'2026-02-05', duracion:'Próximamente',
+        titulo:'IA y Ciencia Política Computacional',
+        invitado:'Equipo CIRCPyCS',
+        portada:'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop',
+        tags:['Tecnología','Política'],
+        notas:['Episodio en preparación.'],
+        comingSoon:true
+      },
+      {
+        id:'ep05', season:'T2', numero:5, fecha:'2026-03-01', duracion:'Próximamente',
+        titulo:'Economía del comportamiento en políticas públicas',
+        invitado:'Invitada/o UAGRM',
+        portada:'https://images.unsplash.com/photo-1451188502541-13943edb6acb?q=80&w=1200&auto=format&fit=crop',
+        tags:['Economía'],
+        notas:['Episodio en preparación.'],
+        comingSoon:true
+      },
+      {
+        id:'ep06', season:'T2', numero:6, fecha:'2026-04-01', duracion:'Próximamente',
+        titulo:'Crisis climática y gobernanza territorial',
+        invitado:'Equipo Tierra · UAGRM',
+        portada:'https://images.unsplash.com/photo-1502784444185-909c5d6c1407?q=80&w=1200&auto=format&fit=crop',
+        tags:['Sociedad','Internacional'],
+        notas:['Episodio en preparación.'],
+        comingSoon:true
+      }
+    ];
+
+    // SVG dataURL de fallback por si la portada falla (offline/blocked)
+    const FALLBACK = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1">
+            <stop offset="0%" stop-color="#10b981"/>
+            <stop offset="50%" stop-color="#0284c7"/>
+            <stop offset="100%" stop-color="#f43f5e"/>
+          </linearGradient>
+        </defs>
+        <rect width="640" height="360" fill="url(#g)"/>
+        <g fill="#fff" font-family="Inter,Arial" font-size="40" font-weight="700">
+          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">OPEN MIC</text>
+        </g>
+      </svg>`);
+
+    // Render chips de tags
+    const chipsEl = document.getElementById('chips');
+    let activeTag = 'Todas';
+    function renderChips(){
+      chipsEl.innerHTML = '';
+      const all = document.createElement('button');
+      all.className = `px-3 py-1.5 rounded-full border ${activeTag==='Todas'?'bg-slate-900 text-white border-slate-900':'border-slate-300 hover:border-sky-600'}`;
+      all.textContent = 'Todas';
+      all.onclick = () => { activeTag='Todas'; render(); };
+      chipsEl.appendChild(all);
+      TAGS.forEach(t => {
+        const b = document.createElement('button');
+        b.className = `px-3 py-1.5 rounded-full border ${activeTag===t?'bg-slate-900 text-white border-slate-900':'border-slate-300 hover:border-sky-600'}`;
+        b.textContent = t; b.onclick = ()=>{ activeTag=t; render(); };
+        chipsEl.appendChild(b);
+      });
+    }
+
+    // Render episodios con filtros
+    const grid = document.getElementById('episodesGrid');
+    const q = document.getElementById('search');
+    const seasonSel = document.getElementById('seasonSel');
+
+    function matchText(ep, term){
+      const t = (term||'').toLowerCase();
+      return !t || [ep.titulo, ep.invitado, (ep.tags||[]).join(' ')].some(x => x.toLowerCase().includes(t));
+    }
+
+    function matchTag(ep){ return activeTag==='Todas' || (ep.tags||[]).includes(activeTag); }
+    function matchSeason(ep){ return seasonSel.value==='all' || ep.season===seasonSel.value; }
+
+    function card(ep){
+      const el = document.createElement('article');
+      el.className = 'rounded-xl2 bg-white border border-slate-200 overflow-hidden shadow-soft flex flex-col';
+
+      const fechaFmt = ep.fecha ? new Date(ep.fecha).toLocaleDateString() : '';
+
+      const topMedia = ep.youtube
+        ? `
+          <div class="relative aspect-video bg-black">
+            <iframe class="absolute inset-0 w-full h-full" src="${ep.youtube}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold bg-black/60 text-white">${ep.season} · Ep${ep.numero}</div>
+            ${fechaFmt ? `<div class="absolute bottom-2 right-2 px-2 py-1 rounded-md text-xs bg-white/90 text-slate-700">${fechaFmt}</div>` : ''}
+          </div>`
+        : `
+          <div class="relative aspect-video bg-slate-100">
+            <img class="absolute inset-0 w-full h-full object-cover" data-portada="1" alt="Portada ${ep.titulo}" loading="lazy" />
+            <div class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold bg-black/60 text-white">${ep.season} · Ep${ep.numero}</div>
+            ${fechaFmt ? `<div class="absolute bottom-2 right-2 px-2 py-1 rounded-md text-xs bg-white/90 text-slate-700">${fechaFmt}</div>` : ''}
+          </div>`;
+
+      let controlsHtml = '';
+      if (ep.youtube) {
+        controlsHtml = `
+          <div class="mt-3 flex items-center gap-3">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 text-sm" data-notas="${ep.id}">Notas</button>
+            ${ep.duracion ? `<span class="text-xs text-slate-500 ml-auto">${ep.duracion}</span>` : ''}
+          </div>`;
+      } else if (ep.comingSoon) {
+        controlsHtml = `
+          <div class="mt-3 flex items-center gap-3">
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+              Próximamente
+            </span>
+            <span class="text-xs text-slate-500 ml-auto">${ep.duracion || 'En producción'}</span>
+          </div>`;
+      } else {
+        controlsHtml = `
+          <audio class="mt-3 w-full" controls preload="none">
+            <source src="${ep.audio}" type="audio/mpeg">
+          </audio>
+          <div class="mt-3 flex items-center gap-3">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 text-sm" data-notas="${ep.id}">Notas</button>
+            ${ep.duracion ? `<span class="text-xs text-slate-500 ml-auto">${ep.duracion}</span>` : ''}
+          </div>`;
+      }
+
+      el.innerHTML = `
+        ${topMedia}
+        <div class="p-4 flex-1 flex flex-col">
+          <h4 class="font-semibold">${ep.titulo}</h4>
+          <p class="text-sm text-slate-600 mt-1">${ep.invitado || ''}</p>
+          <div class="mt-2 flex flex-wrap gap-1">
+            ${(ep.tags||[]).map(t => `<span class='text-[11px] px-2 py-1 rounded-full bg-slate-100 border border-slate-200'>${t}</span>`).join('')}
+          </div>
+          ${controlsHtml}
+        </div>`;
+
+      const img = el.querySelector('[data-portada]');
+      if (img) {
+        img.src = ep.portada || FALLBACK;
+        img.onerror = () => { img.src = FALLBACK; };
+      }
+
+      const notasBtn = el.querySelector('[data-notas]');
+      if (notasBtn) {
+        notasBtn.addEventListener('click', () => openNotas(ep));
+      }
+
+      return el;
+    }
+
+    function render(){
+      const term = q.value;
+      grid.innerHTML='';
+      EPISODIOS.filter(ep => matchText(ep, term) && matchTag(ep) && matchSeason(ep))
+        .sort((a,b) => new Date(b.fecha)-new Date(a.fecha))
+        .forEach(ep => grid.appendChild(card(ep)));
+      if (!grid.children.length){
+        const empty = document.createElement('div');
+        empty.className='text-slate-600';
+        empty.textContent='No se encontraron episodios con esos filtros.';
+        grid.appendChild(empty);
+      }
+    }
+
+    q.addEventListener('input', render);
+    seasonSel.addEventListener('change', render);
+
+    renderChips();
+    render();
+
+    // Modal de notas
+    const modal = document.getElementById('modalNotas');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    document.getElementById('modalClose').addEventListener('click', () => modal.close());
+
+    function openNotas(ep){
+      modalTitle.textContent = `Notas — ${ep.titulo}`;
+      modalBody.innerHTML = `<ul class='list-disc pl-5 space-y-1'>${(ep.notas||[]).map(n=>`<li>${n}</li>`).join('')}</ul>`;
+      modal.showModal();
+    }
+
+    // Form propuesta (demo)
+    const form = document.getElementById('formPropuesta');
+    form.addEventListener('submit', (e)=>{ e.preventDefault(); document.getElementById('formMsg').hidden=false; form.reset(); setTimeout(()=>{document.getElementById('formMsg').hidden=true}, 3500); });
+
+    // ===== "Tests" mínimos (smoke) =====
+    console.assert(document.getElementById('episodesGrid'), 'Falta #episodesGrid');
+    console.assert(EPISODIOS.length >= 3, 'Se esperaban al menos 3 episodios');
+  </script>
+</body>
+</html>
