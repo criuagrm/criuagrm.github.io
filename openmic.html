@@ -31,7 +31,13 @@
   <style>
     /* Alturas base de secciones visuales */
     .hero-blur:before { content:""; position:absolute; inset:-20%; background:radial-gradient(60% 60% at 20% 10%, rgba(16,185,129,.20), transparent 60%), radial-gradient(60% 60% at 80% 90%, rgba(244,63,94,.20), transparent 60%); filter: blur(40px); z-index:-1; }
-    .grid-autofill { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .grid-autofill { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+    @media (min-width: 768px) {
+      .grid-autofill { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+      .grid-autofill { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
     .btn-grad { background-image: linear-gradient(to right, #10b981, #0284c7, #f43f5e); }
     .btn-grad:hover { filter: brightness(0.95); }
   </style>
@@ -179,8 +185,8 @@
           <div class="flex items-center gap-4">
             <img class="w-16 h-16 rounded-full object-cover ring-2 ring-brand-200" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=300&auto=format&fit=crop" alt="Host 1" loading="lazy"/>
             <div>
-              <h4 class="font-semibold">Host — CIRCPyCS</h4>
-              <p class="text-sm text-slate-600">Conducción y curaduría de episodios.</p>
+              <h4 class="font-semibold">Conducción</h4>
+              <p class="text-sm text-slate-600">A cargo de María René.</p>
             </div>
           </div>
         </div>
@@ -189,7 +195,7 @@
             <img class="w-16 h-16 rounded-full object-cover ring-2 ring-brand-200" src="https://images.unsplash.com/photo-1513569771920-c9e1d31714af?q=80&w=300&auto=format&fit=crop" alt="Producción" loading="lazy"/>
             <div>
               <h4 class="font-semibold">Producción</h4>
-              <p class="text-sm text-slate-600">Guion, sonido y publicación.</p>
+              <p class="text-sm text-slate-600">A cargo de Kelly Rivera.</p>
             </div>
           </div>
         </div>
@@ -198,7 +204,7 @@
             <img class="w-16 h-16 rounded-full object-cover ring-2 ring-brand-200" src="https://images.unsplash.com/photo-1541753866388-0b3c701627d3?q=80&w=300&auto=format&fit=crop" alt="Postproducción" loading="lazy"/>
             <div>
               <h4 class="font-semibold">Postproducción</h4>
-              <p class="text-sm text-slate-600">Edición, transcripciones y notas.</p>
+              <p class="text-sm text-slate-600">A cargo de Carmen.</p>
             </div>
           </div>
         </div>
@@ -510,3 +516,4 @@
   </script>
 </body>
 </html>
+
