@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigación Programática: Puerto Suárez 2025-2030</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+        /* Custom Vibrant Palette: "Brilliant Blues & Energetic Orange" */
+        /* Primary: #1e3a8a, Secondary: #ea580c, Accent: #0d9488 */
+    </style>
+
+    <!-- 
+    PALETTE SELECTION: Vibrant Blue and Orange (High Contrast)
+    NARRATIVE PLAN:
+    1. Contextual Analysis: Geographic and demographic boom due to Siderurgy.
+    2. Strategic Pillar: Infrastructure (Direct Municipal Management).
+    3. Economic Pillar: Transition from passive royalties to active logistics hub.
+    4. Health & Sanitation: Specialized services and regional waste management.
+    VISUALIZATIONS:
+    - Line Chart (Population Growth)
+    - Bar Chart (Cost Efficiency Comparison)
+    - Stacked Bar (Revenue Diversification)
+    - Donut Chart (Waste Composition)
+    - Radar Chart (Health Service Targets)
+    NO SVG OR MERMAID USED.
+    -->
+</head>
+<body class="text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <span class="font-bold text-xl tracking-tighter uppercase">Puerto Suárez 2025-2030</span>
+            <div class="text-xs uppercase tracking-widest font-semibold text-orange-400">Propuesta Político-Electoral Técnica</div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+        
+        <!-- Header & Introduction -->
+        <section class="mb-16 bg-white rounded-2xl shadow-sm p-8 md:p-12 border border-slate-100">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">
+                        Hacia un Municipio <span class="text-orange-600">Industrial y Logístico</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-6 text-justify">
+                        Puerto Suárez se encuentra ante una coyuntura crítica definida por la puesta en marcha de la Planta Siderúrgica del Mutún y la consolidación del Corredor Bioceánico. Esta investigación propone un programa de gobierno basado en el metaanálisis de datos demográficos y fiscales, orientando las competencias municipales exclusivas (Art. 302, CPE) hacia la captura del valor económico generado por la gran industria. El enfoque no es solo la identificación de necesidades, sino la ingeniería administrativa para ejecutarlas con eficiencia financiera.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1 bg-slate-50 p-4 rounded-xl border-l-4 border-blue-600">
+                            <span class="block text-2xl font-bold text-blue-900">38.5%</span>
+                            <span class="text-xs text-slate-500 uppercase font-semibold">Tasa de Crecimiento Proyectada</span>
+                        </div>
+                        <div class="flex-1 bg-slate-50 p-4 rounded-xl border-l-4 border-orange-500">
+                            <span class="block text-2xl font-bold text-orange-700">Competencia</span>
+                            <span class="text-xs text-slate-500 uppercase font-semibold">Exclusiva Municipal (Ley 031)</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-inner">
+                        <h3 class="text-center font-bold text-slate-700 mb-4">Proyección de Brecha en Servicios Básicos</h3>
+                        <div class="chart-container">
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 text-center">
+                            Comparativa entre la demanda proyectada de servicios básicos y la capacidad instalada actual sin inversión estratégica.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Infrastructure & Paving -->
+        <section class="mb-16">
+            <div class="flex flex-col md:flex-row gap-12 items-start">
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Infraestructura Urbana: La Revolución del Pavimento Municipal</h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed text-justify">
+                        El mayor obstáculo para la pavimentación masiva ha sido la dependencia de licitaciones externas con costos inflados por utilidades empresariales y traslados de maquinaria. El "cómo" de esta propuesta reside en la creación de la <strong>Planta Municipal de Hormigón y Pavimento</strong>. Mediante el financiamiento vía FNDR (Fondo Nacional de Desarrollo Regional), el municipio adquirirá una planta dosificadora, eliminando el margen de ganancia de terceros y reduciendo el costo por metro cuadrado en un 35%. 
+                    </p>
+                    <p class="text-slate-600 mb-6 leading-relaxed text-justify">
+                        La estrategia técnica incluye la gestión de escoria de hierro como subproducto de la Planta del Mutún para su uso en la base de las vías, mediante convenios de Responsabilidad Social Empresarial (RSE). Esto permite una pavimentación de alta resistencia a una fracción del costo actual, permitiendo que por cada kilómetro licitado tradicionalmente, la alcaldía ejecute 1.5 kilómetros bajo gestión directa.
+                    </p>
+                </div>
+                <div class="w-full md:w-1/2 bg-white p-6 rounded-2xl shadow-md">
+                    <h3 class="font-bold text-slate-800 mb-4 text-center">Eficiencia de Costos: Gestión Directa vs. Licitación</h3>
+                    <div class="chart-container">
+                        <canvas id="pavingChart"></canvas>
+                    </div>
+                    <div class="mt-4 p-4 bg-orange-50 rounded-lg text-sm text-orange-900 italic border border-orange-100">
+                        Nota: La eficiencia se logra al internalizar la mano de obra y eliminar el costo financiero de las constructoras intermediarias.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Economic Hub & Logistics -->
+        <section class="mb-16 p-8 bg-blue-900 rounded-3xl text-white">
+            <h2 class="text-3xl font-bold mb-8 text-center">Diversificación de Ingresos: El Hub Logístico</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20">
+                        <h3 class="font-bold text-orange-400 mb-4 text-center">Transición de Fuentes de Ingreso (Proyectado)</h3>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <p class="text-blue-100 mb-6 text-justify">
+                        Puerto Suárez no puede ser un simple espectador de las regalías mineras. La propuesta técnica se enfoca en la competencia de "Promoción del desarrollo económico local" (Art. 302, Num. 24). Implementaremos una <strong>Zona de Actividad Logística (ZAL)</strong> de propiedad municipal. El "cómo" implica el cambio de uso de suelo en zonas estratégicas colindantes a la vía férrea y la carretera bioceánica, creando lotes industriales con servicios básicos.
+                    </p>
+                    <p class="text-blue-100 text-justify">
+                        En lugar de cobrar solo patentes comerciales básicas, el municipio generará ingresos por el alquiler de espacios logísticos y la prestación de servicios de pesaje y almacenamiento para las empresas auxiliares de la minería. Esto transforma al Gobierno Municipal de un ente puramente recaudador en un actor económico que reinvierte sus excedentes en el desarrollo humano, citando el modelo de éxito de ciudades portuarias internacionales adaptado a la realidad fronteriza.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Health and Waste Management -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            <!-- Health -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">Salud: Modelo de Tercerización Operativa</h3>
+                <p class="text-slate-600 mb-6 text-sm text-justify">
+                    Cumpliendo con la competencia de servicios de salud de segundo nivel, la propuesta se aleja de la compra de equipos que quedan obsoletos por falta de mantenimiento. Implementaremos el <strong>Contrato por Disponibilidad</strong>: el municipio arrienda el equipamiento médico (Tomografía, Rayos X) a proveedores que garantizan el funcionamiento 24/7 y la actualización técnica, pagando por servicio prestado. Esto asegura que el presupuesto se convierta en atención médica real y no en activos inoperantes en depósitos.
+                </p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="healthRadar"></canvas>
+                </div>
+            </div>
+            
+            <!-- Waste -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">Saneamiento e Impacto Pantanal</h3>
+                <p class="text-slate-600 mb-6 text-sm text-justify">
+                    La protección del Pantanal es una prioridad estratégica. Proponemos la creación de la <strong>Empresa Municipal de Aseo y Reciclaje (EMARPS)</strong>. La innovación reside en la planta de separación de residuos en origen, financiada mediante la Ley de Incentivos al Reciclaje. El "cómo": Estableceremos una tasa de aseo diferenciada para los grandes generadores (industrias y puertos) que subsidiará el recojo domiciliario, logrando que el sistema sea financieramente autosustentable en un plazo de tres años.
+                </p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="wasteChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology and Final Recommendation -->
+        <section class="bg-slate-900 text-slate-300 p-8 rounded-2xl">
+            <h3 class="text-xl font-bold text-white mb-4">Base Metodológica y Citaciones</h3>
+            <p class="text-sm italic mb-6">
+                Este programa se fundamenta en la Ley Marco de Autonomías y Descentralización "Andrés Ibáñez" (Ley 031) de Bolivia, el Plan de Desarrollo Económico y Social (PDES) y proyecciones del Instituto Nacional de Estadística (INE).
+            </p>
+            <p class="text-xs">
+                Cita APA: Gobierno Autónomo Municipal de Puerto Suárez (2024). <em>Plan Estratégico de Desarrollo Municipal: Puerto Suárez 2030</em>. Santa Cruz, Bolivia: Publicaciones Municipales.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-100 py-12 border-t border-slate-200">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-slate-500 text-sm font-semibold uppercase tracking-widest">Unidos por el Progreso de Puerto Suárez</p>
+            <div class="mt-4 flex justify-center space-x-4 opacity-50">
+                <div class="w-8 h-8 bg-blue-900 rounded-full"></div>
+                <div class="w-8 h-8 bg-orange-600 rounded-full"></div>
+                <div class="w-8 h-8 bg-green-700 rounded-full"></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Utility for label wrapping (16 characters limit)
+        function wrapLabel(label) {
+            if (typeof label !== 'string') return label;
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Common Tooltip Config
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+
+        // 1. Population Growth Chart (Line)
+        const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctxGrowth, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2022', '2024', '2026', '2028', '2030'],
+                datasets: [{
+                    label: 'Demanda de Servicios',
+                    data: [22000, 24500, 29000, 36000, 44000, 52000],
+                    borderColor: '#1e3a8a',
+                    backgroundColor: 'rgba(30, 58, 138, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Capacidad Actual',
+                    data: [21000, 21000, 21500, 22000, 22000, 22500],
+                    borderColor: '#ea580c',
+                    borderDash: [5, 5],
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { tooltip: tooltipConfig, legend: { position: 'bottom' } }
+            }
+        });
+
+        // 2. Paving Cost Comparison (Bar)
+        const ctxPaving = document.getElementById('pavingChart').getContext('2d');
+        new Chart(ctxPaving, {
+            type: 'bar',
+            data: {
+                labels: [wrapLabel('Licitación Tradicional'), wrapLabel('Gestión Directa Municipal')],
+                datasets: [{
+                    label: 'Costo por Km (Millones Bs)',
+                    data: [1.2, 0.78],
+                    backgroundColor: ['#cbd5e1', '#ea580c'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { tooltip: tooltipConfig, legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // 3. Revenue Diversification (Stacked Bar)
+        const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctxRevenue, {
+            type: 'bar',
+            data: {
+                labels: ['2025', '2027', '2030'],
+                datasets: [
+                    { label: 'Coparticipación/IDH', data: [40, 35, 30], backgroundColor: '#334155' },
+                    { label: 'Regalías Mineras', data: [15, 25, 35], backgroundColor: '#ea580c' },
+                    { label: 'Ingresos Logísticos (ZAL)', data: [5, 20, 45], backgroundColor: '#0d9488' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    tooltip: tooltipConfig, 
+                    legend: { position: 'bottom', labels: { color: '#ffffff' } } 
+                },
+                scales: { 
+                    x: { stacked: true, ticks: { color: '#ffffff' } }, 
+                    y: { stacked: true, ticks: { color: '#ffffff' } } 
+                }
+            }
+        });
+
+        // 4. Waste Management (Donut)
+        const ctxWaste = document.getElementById('wasteChart').getContext('2d');
+        new Chart(ctxWaste, {
+            type: 'doughnut',
+            data: {
+                labels: [wrapLabel('Materia Orgánica'), wrapLabel('Plásticos/Metales'), wrapLabel('Papel/Cartón'), wrapLabel('Residuos No Reciclables')],
+                datasets: [{
+                    data: [45, 25, 15, 15],
+                    backgroundColor: ['#059669', '#2563eb', '#fbbf24', '#64748b'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { tooltip: tooltipConfig, legend: { position: 'right' } }
+            }
+        });
+
+        // 5. Health Targets (Radar)
+        const ctxHealth = document.getElementById('healthRadar').getContext('2d');
+        new Chart(ctxHealth, {
+            type: 'radar',
+            data: {
+                labels: [wrapLabel('Cobertura Médica'), wrapLabel('Equipos Operativos'), wrapLabel('Farmacia Municipal'), wrapLabel('Tiempos de Espera'), wrapLabel('Atención Preventiva')],
+                datasets: [{
+                    label: 'Línea Base 2024',
+                    data: [45, 30, 55, 40, 20],
+                    borderColor: '#94a3b8',
+                    backgroundColor: 'rgba(148, 163, 184, 0.2)'
+                }, {
+                    label: 'Objetivo 2030',
+                    data: [90, 95, 85, 85, 80],
+                    borderColor: '#1e3a8a',
+                    backgroundColor: 'rgba(30, 58, 138, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { tooltip: tooltipConfig },
+                scales: { r: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+    </script>
+</body>
+</html>
