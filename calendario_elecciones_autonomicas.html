@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Monitor Electoral 2026 | CIRCPyCS — UAGRM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "sans-serif"] },
+          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.08)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Ajustes para móvil y scroll */
+    section[id] { scroll-margin-top: 100px; }
+    .timeline-line {
+        position: absolute; left: 23px; top: 30px; bottom: -30px; width: 2px; background-color: #e2e8f0; z-index: 0;
+    }
+    .group:last-child .timeline-line { display: none; }
+    .active-row .timeline-line { background-color: #f43f5e; } /* Rose-500 */
+    
+    /* Animación de pulso para el hito actual */
+    @keyframes pulse-ring {
+        0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+        100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+    }
+    .pulse-dot { animation: pulse-ring 2s infinite; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo UAGRM" class="h-10 w-auto" />
+        <div class="leading-tight">
+          <p class="text-xs tracking-wide text-slate-500 uppercase">UAGRM</p>
+          <h1 class="font-bold text-lg text-slate-900">CIRCPyCS</h1>
+        </div>
+      </div>
+      <div class="text-right hidden sm:block">
+        <p class="text-xs font-bold text-rose-600 uppercase tracking-wider">Monitor Electoral</p>
+        <p class="text-sm font-medium text-slate-600">Elecciones Autonómicas 2026</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="bg-white border-b border-slate-200 py-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-8 items-center justify-between">
+                <div>
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-rose-50 text-rose-600 border border-rose-100 mb-4">
+                        <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span> En Vivo
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-2">Calendario Electoral 2026</h2>
+                    <p class="text-slate-500 text-lg">Seguimiento oficial a las 110 actividades del TSE.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 w-full md:w-auto">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-xs text-slate-400 uppercase font-bold">Fecha de Hoy</p>
+                        <p class="text-xl font-bold text-slate-800 mt-1" id="display-date">--</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
+                        <p class="text-xs text-slate-400 uppercase font-bold">Días para Votar</p>
+                        <p class="text-xl font-bold text-rose-600 mt-1" id="days-left">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <div class="flex justify-between text-xs font-semibold text-slate-400 mb-2 uppercase">
+                    <span>Inicio (Nov 2025)</span>
+                    <span id="progress-text">0% Completado</span>
+                    <span>Final (May 2026)</span>
+                </div>
+                <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-sky-500 w-0 transition-all duration-1000"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="py-12 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            
+            <div class="sticky top-24 z-30 mb-8">
+                <div class="bg-white p-2 rounded-xl shadow-soft border border-slate-200 flex gap-2">
+                    <div class="relative flex-grow">
+                        <svg class="absolute left-3 top-3 text-slate-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" id="search" placeholder="Buscar actividad (ej: jurados, inhabilitados)..." 
+                        class="w-full pl-10 pr-4 py-2 bg-transparent focus:outline-none text-sm font-medium text-slate-700 placeholder:text-slate-400">
+                    </div>
+                    <button onclick="jumpToCurrent()" class="hidden sm:block px-4 py-2 bg-rose-50 text-rose-700 text-xs font-bold rounded-lg border border-rose-100 hover:bg-rose-100 transition">
+                        Ir al día de hoy
+                    </button>
+                </div>
+            </div>
+
+            <div id="list-container" class="space-y-0 relative">
+                </div>
+            
+            <p id="no-results" class="hidden text-center py-10 text-slate-500">No se encontraron resultados.</p>
+        </div>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+    <p>© 2026 CIRCPyCS — UAGRM. Datos basados en Resolución TSE-RSP-ADM N° 0510/2025.</p>
+  </footer>
+
+ <script>
+    // ==========================================
+    // BASE DE DATOS: 110 HITOS (Fiel al PDF TSE-RSP-ADM N° 0510/2025)
+    // ==========================================
+    const activities = [
+        {id: 1, t: "Convocatoria a la Elección de Autoridades Políticas Departamentales, Regionales y Municipales (Elecciones Subnacionales 2026) por el Tribunal Supremo Electoral.", start: "2025-11-20", end: "2025-11-20", ref: "Ley N° 026. Art. 94. Ley N° 1160"},
+        {id: 2, t: "Presentación del balance actualizado del patrimonio y los estados financieros de las organizaciones políticas y/o alianzas políticas habilitadas ante el Tribunal Supremo Electoral, con fecha de corte contable al día de la convocatoria.", start: "2025-11-21", end: "2025-12-05", ref: "Ley N° 026. Art. 265."},
+        {id: 3, t: "Registro e inscripción de medios de comunicación para difundir propaganda electoral.", start: "2025-11-21", end: "2026-02-05", ref: "Ley N° 026. Art. 117."},
+        {id: 4, t: "Registro y habilitación de empresas, medios de comunicación, instituciones académicas y cualquier otra entidad que realice y/o difunda estudios de opinión en materia electoral (encuestas, boca de urna o conteos rápidos) ante los tribunales electorales departamentales.", start: "2025-11-21", end: "2025-12-20", ref: "Ley N° 026. Art. 132."},
+        {id: 5, t: "Publicación de la convocatoria a la Elección de Autoridades Políticas Departamentales, Regionales y Municipales en el portal web del Órgano Electoral Plurinacional.", start: "2025-11-23", end: "2025-11-23", ref: "-"},
+        {id: 6, t: "Aprobación del Calendario Electoral para la Elección de Autoridades Políticas Departamentales, Regionales y Municipales 2026.", start: "2025-11-26", end: "2025-11-26", ref: "Ley N° 026. Art. 97."},
+        {id: 7, t: "Publicación del Calendario Electoral en un medio de prensa escrito de alcance nacional.", start: "2025-11-30", end: "2025-11-30", ref: "Ley N° 026. Art. 95."},
+        {id: 8, t: "Publicación del Calendario Electoral en el portal web del Órgano Electoral Plurinacional.", start: "2025-11-30", end: "2025-11-30", ref: "Ley N° 026. Art. 95."},
+        {id: 9, t: "Designación de jueces electorales por los tribunales electorales departamentales.", start: "2025-12-01", end: "2025-12-10", ref: "Ley N° 018. Art. 51."},
+        {id: 10, t: "Registro de las naciones y pueblos indígena originario campesinos ante el Tribunal Electoral Departamental correspondiente, para la elección directa de sus asambleístas departamentales, regionales y concejales municipales, mediante normas y procedimientos propios.", start: "2025-12-01", end: "2025-12-15", ref: "Ley N° 026. Art. 106. Reglamento para la elección directa de representantes de las naciones y pueblos indígena originario campesinos."},
+        {id: 11, t: "Empadronamiento biométrico masivo para la Elección de Autoridades Políticas Departamentales, Regionales y Municipales 2026.", start: "2025-12-04", end: "2025-12-16", ref: "Ley N° 018. Art. 71."},
+        {id: 12, t: "Solicitud de registro de alianzas electorales ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2025-12-12", end: "2025-12-15", ref: "Ley N° 1096. Art. 48. Reglamento de alianzas."},
+        {id: 13, t: "Registro y/o actualización de los delegados de las organizaciones políticas y alianzas acreditadas ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2025-12-16", end: "2025-12-17", ref: "Ley N° 026. Art. 151-II."},
+        {id: 14, t: "Comunicación formal de las organizaciones políticas y alianzas ante el Tribunal Supremo Electoral o Tribunal Electoral Departamental, haciendo conocer su participación en la elección.", start: "2025-12-12", end: "2025-12-15", ref: "-"},
+        {id: 15, t: "Presentación de las actas de elección interna de candidatos de las organizaciones políticas y alianzas ante el Tribunal Supremo Electoral o Tribunal Electoral Departamental.", start: "2025-12-16", end: "2025-12-22", ref: "Ley N° 1096. Art. 28."},
+        {id: 16, t: "Presentación de Programas de Gobierno de las organizaciones políticas y alianzas ante el Tribunal Supremo Electoral o Tribunal Electoral Departamental.", start: "2025-12-16", end: "2025-12-22", ref: "Ley N° 1096. Art. 21."},
+        {id: 17, t: "Consolidación de la información de registros de ciudadanas y ciudadanos en el Sistema Biométrico, por el Servicio de Registro Cívico (Serecí).", start: "2025-12-17", end: "2025-12-19", ref: "Reglamento para la actualización del Padrón Electoral Biométrico."},
+        {id: 18, t: "Inscripción de las candidaturas de las organizaciones políticas y/o alianzas ante el Tribunal Supremo Electoral o tribunales electorales departamentales, a través del sistema informático.", start: "2025-12-17", end: "2025-12-22", ref: "Ley N° 026. Art. 106."},
+        {id: 19, t: "Procesamiento de datos para la conformación del Padrón Electoral Biométrico por el Servicio de Registro Cívico (Serecí).", start: "2025-12-20", end: "2026-02-02", ref: "Reglamento para la actualización del Padrón Electoral Biométrico."},
+        {id: 20, t: "Difusión de propaganda electoral en actos públicos de campaña.", start: "2025-12-22", end: "2026-03-18", ref: "Ley N° 026. Art. 116. Reglamento de Propaganda y Campaña Electoral."},
+        {id: 21, t: "Renuncia de las autoridades electas, designadas y de libre nombramiento que postulen a cargos electivos diferentes a los que ejercen, a excepción de las autoridades políticas departamentales, regionales y municipales que postulen a la reelección.", start: "2025-12-22", end: "2025-12-22", ref: "CPE Art. 238. numeral 3."},
+        {id: 22, t: "Presentación de formularios de rehabilitación de las ciudadanas y ciudadanos inhabilitados, ante los tribunales electorales departamentales y el Serecí.", start: "2025-12-22", end: "2026-01-20", ref: "Reglamento para la actualización del Padrón Electoral Biométrico."},
+        {id: 23, t: "Presentación de declaraciones juradas de familiares para la depuración de fallecidos en el Padrón Electoral Biométrico, ante los tribunales electorales departamentales y el Serecí.", start: "2025-12-22", end: "2026-01-20", ref: "Reglamento para la actualización del Padrón Electoral Biométrico."},
+        {id: 24, t: "Publicación de la lista de empresas, medios de comunicación y entidades habilitadas para realizar estudios de opinión en materia electoral, en el portal web del Órgano Electoral Plurinacional.", start: "2025-12-21", end: "2025-12-21", ref: "Ley N° 026. Art. 132."},
+        {id: 25, t: "Difusión de estudios de opinión en materia electoral.", start: "2025-12-22", end: "2026-03-15", ref: "Ley N° 026. Art. 130."},
+        {id: 26, t: "Sustitución de candidatas y candidatos por causa de renuncia ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2025-12-23", end: "2026-02-05", ref: "Ley N° 026. Art. 108."},
+        {id: 27, t: "Verificación de requisitos y causales de inelegibilidad de las candidaturas, por el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2025-12-23", end: "2025-12-28", ref: "Ley N° 026. Art. 105."},
+        {id: 28, t: "Publicación de los Programas de Gobierno de las organizaciones políticas y alianzas en el portal web del Órgano Electoral Plurinacional.", start: "2025-12-28", end: "2025-12-28", ref: "Ley N° 1096. Art. 21."},
+        {id: 29, t: "Verificación del cumplimiento de criterios de paridad y alternancia de género en las listas de candidatas y candidatos, por el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2025-12-29", end: "2026-01-02", ref: "Ley N° 026. Art. 107."},
+        {id: 30, t: "Informe técnico de secretaría de cámara sobre el cumplimiento de requisitos, causales de inelegibilidad, paridad y alternancia de las candidaturas.", start: "2026-01-03", end: "2026-01-03", ref: "Ley N° 026. Art. 105."},
+        {id: 31, t: "Publicación de las listas de candidaturas habilitadas de las organizaciones políticas y alianzas, en el portal web del Órgano Electoral Plurinacional.", start: "2026-01-09", end: "2026-01-09", ref: "Ley N° 026. Art. 108."},
+        {id: 32, t: "Presentación de diseños de franjas de las organizaciones políticas y alianzas para la papeleta de sufragio, ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2026-01-10", end: "2026-01-12", ref: "Ley N° 026. Art. 139."},
+        {id: 33, t: "Presentación de demandas de inhabilitación de candidaturas por las causales establecidas en la ley, ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2026-01-10", end: "2026-03-07", ref: "Ley N° 026. Art. 209."},
+        {id: 34, t: "Supervisión al cumplimiento de las normas y procedimientos propios de las naciones y pueblos indígena originario campesinos para la elección de sus representantes.", start: "2026-01-15", end: "2026-04-10", ref: "Ley N° 026. Art. 91."},
+        {id: 35, t: "Sorteo público de ubicación de las franjas de candidatos en la papeleta de sufragio.", start: "2026-01-16", end: "2026-01-16", ref: "Ley N° 026. Art. 139."},
+        {id: 36, t: "Aprobación del diseño de la papeleta de sufragio por el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2026-01-21", end: "2026-01-21", ref: "Ley N° 026. Art. 139."},
+        {id: 37, t: "Publicación del mapa de circunscripciones electorales, recintos y asientos electorales en el portal web del Órgano Electoral Plurinacional.", start: "2026-01-25", end: "2026-01-25", ref: "Ley N° 026. Art. 102."},
+        {id: 38, t: "Verificación visual de los diseños de la papeleta de sufragio por los delegados de las organizaciones políticas y alianzas.", start: "2026-01-26", end: "2026-01-27", ref: "Ley N° 026. Art. 139."},
+        {id: 39, t: "Remisión de la lista de ciudadanos inhabilitados por el Serecí a los tribunales electorales departamentales.", start: "2026-02-03", end: "2026-02-03", ref: "Ley N° 018. Art. 71."},
+        {id: 40, t: "Habilitación del aplicativo \"Yo Participo\" para consulta de datos del padrón electoral.", start: "2026-02-03", end: "2026-02-04", ref: "Ley N° 018. Art. 77."},
+        {id: 41, t: "Publicación de la lista de ciudadanos inhabilitados del Padrón Electoral Biométrico en medios de prensa escrita y en el portal web del Órgano Electoral Plurinacional.", start: "2026-02-05", end: "2026-02-05", ref: "Ley N° 018. Art. 77."},
+        {id: 42, t: "Presentación de reclamos de los ciudadanos inhabilitados, ante los tribunales electorales departamentales y el Serecí.", start: "2026-02-05", end: "2026-02-08", ref: "Ley N° 018. Art. 77."},
+        {id: 43, t: "Sustitución de candidaturas por causa de inhabilitación, fallecimiento, impedimento permanente o incapacidad total, ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2026-02-06", end: "2026-03-18", ref: "Ley N° 026. Art. 108."},
+        {id: 44, t: "Remisión de las resoluciones de reclamos de ciudadanos inhabilitados a la Dirección Nacional del Serecí.", start: "2026-02-09", end: "2026-02-09", ref: "Ley N° 018. Art. 77."},
+        {id: 45, t: "Procesamiento de reclamos para la habilitación de ciudadanos en el Padrón Electoral Biométrico.", start: "2026-02-10", end: "2026-02-13", ref: "Reglamento para la actualización del Padrón Electoral Biométrico."},
+        {id: 46, t: "Publicación de medios de comunicación habilitados para la difusión de propaganda electoral pagada, en el portal web del Órgano Electoral Plurinacional.", start: "2026-02-10", end: "2026-02-10", ref: "Ley N° 026. Art. 117."},
+        {id: 47, t: "Entrega del Padrón Electoral Biométrico Oficial por la Dirección Nacional del Serecí al Tribunal Supremo Electoral y a los tribunales electorales departamentales.", start: "2026-02-14", end: "2026-02-14", ref: "Reglamento para la actualización del Padrón Electoral Biométrico."},
+        {id: 48, t: "Publicación de las listas de candidaturas sustituidas por renuncia en el portal web del Órgano Electoral Plurinacional.", start: "2026-02-15", end: "2026-02-15", ref: "Ley N° 026. Art. 108."},
+        {id: 49, t: "Publicación de la convocatoria al sorteo público de jurados de las mesas de sufragio.", start: "2026-02-17", end: "2026-02-17", ref: "Ley N° 018. Art. 57."},
+        {id: 50, t: "Entrega de copias digitales del Padrón Electoral Biométrico a las organizaciones políticas y alianzas.", start: "2026-02-18", end: "2026-02-18", ref: "Ley N° 026. Art. 98."},
+        {id: 51, t: "Designación de notarios electorales por los tribunales electorales departamentales.", start: "2026-02-19", end: "2026-02-19", ref: "Ley N° 018. Art. 67."},
+        {id: 52, t: "Sorteo público para la selección de jurados de las mesas de sufragio por los tribunales electorales departamentales.", start: "2026-02-20", end: "2026-02-20", ref: "Ley N° 018. Art. 57."},
+        {id: 53, t: "Difusión de propaganda electoral en medios de comunicación.", start: "2026-02-20", end: "2026-03-18", ref: "Ley N° 026. Art. 116."},
+        {id: 54, t: "Notificación a jurados de mesas de sufragio.", start: "2026-02-21", end: "2026-03-22", ref: "Ley N° 018. Art. 58."},
+        {id: 55, t: "Publicación de la nómina de jurados de las mesas de sufragio en medios de prensa escrita y en el portal web del Órgano Electoral Plurinacional.", start: "2026-02-22", end: "2026-02-22", ref: "Ley N° 018. Art. 59."},
+        {id: 56, t: "Presentación de excusas para el ejercicio de jurado de mesa de sufragio ante los tribunales electorales departamentales.", start: "2026-02-23", end: "2026-03-01", ref: "Ley N° 018. Art. 65."},
+        {id: 57, t: "Conformación de directivas de mesas de sufragio y capacitación de jurados electorales.", start: "2026-03-01", end: "2026-03-22", ref: "Ley N° 018. Art. 56."},
+        {id: 58, t: "Sustitución de candidaturas por causa de fallecimiento, ante el Tribunal Supremo Electoral o tribunales electorales departamentales.", start: "2026-03-07", end: "2026-03-18", ref: "Ley N° 026. Art. 83."},
+        {id: 59, t: "Publicación de la ubicación de los recintos electorales y de las mesas de sufragio.", start: "2026-03-15", end: "2026-03-15", ref: "Ley N° 018. Art. 38."},
+        {id: 60, t: "Publicación del lugar donde funcionará la Sala Plena de los tribunales electorales departamentales para el cómputo departamental.", start: "2026-03-19", end: "2026-03-19", ref: "Ley N° 026. Art. 175."},
+        {id: 61, t: "Periodo de silencio electoral.", start: "2026-03-20", end: "2026-03-22", ref: "Ley N° 026. Art. 122."},
+        {id: 62, t: "Publicación de las listas finales de candidaturas habilitadas en el portal web del Órgano Electoral Plurinacional.", start: "2026-03-21", end: "2026-03-21", ref: "Ley N° 026. Art. 108."},
+        {id: 63, t: "Los tribunales electorales departamentales asumen el mando de la fuerza pública.", start: "2026-03-22", end: "2026-03-22", ref: "Ley N° 026. Art. 148."},
+        {id: 64, t: "ELECCIÓN DE AUTORIDADES POLÍTICAS DEPARTAMENTALES, REGIONALES Y MUNICIPALES.", start: "2026-03-22", end: "2026-03-22", ref: "CPE. Art. 156. CPE. Art. 170. Ley N° 026. Art. 94."},
+        {id: 65, t: "Entrega de certificados de impedimento de sufragio por los notarios electorales.", start: "2026-03-22", end: "2026-03-22", ref: "Ley N° 026. Art. 145."},
+        {id: 66, t: "Instalación de la Sala Plena de los tribunales electorales departamentales para el inicio del cómputo departamental (18:00 horas).", start: "2026-03-22", end: "2026-03-22", ref: "Ley N° 026. Art. 175."},
+        {id: 67, t: "Difusión de resultados de boca de urna y conteos rápidos (desde las 20:00 horas).", start: "2026-03-22", end: "2026-03-22", ref: "Ley N° 026. Art. 130."},
+        {id: 68, t: "Difusión de Resultados Preliminares de la Elección de Autoridades Políticas Departamentales, Regionales y Municipales (DIREPRE).", start: "2026-03-22", end: "2026-03-22", ref: "Ley N° 1632."},
+        {id: 69, t: "Cómputo oficial departamental y proclamación de resultados por los tribunales electorales departamentales.", start: "2026-03-22", end: "2026-03-29", ref: "Ley N° 026. Art. 175."},
+        {id: 70, t: "Entrega de certificados de exención de sufragio en los tribunales electorales departamentales.", start: "2026-03-23", end: "2026-04-21", ref: "Ley N° 026. Art. 145."},
+        {id: 71, t: "Difusión de propaganda electoral en actos públicos de campaña y en medios de comunicación (repetición de votación).", start: "2026-03-29", end: "2026-04-01", ref: "Reglamento de Propaganda y Campaña Electoral."},
+        {id: 72, t: "Sorteo público de jurados de mesas de sufragio (repetición de votación).", start: "2026-03-30", end: "2026-03-30", ref: "Ley N° 018. Art. 57."},
+        {id: 73, t: "Notificación a jurados de mesas de sufragio (repetición de votación).", start: "2026-03-30", end: "2026-04-05", ref: "Ley N° 018. Art. 58."},
+        {id: 74, t: "Conformación de directivas de mesas de sufragio y capacitación de jurados electorales (repetición de votación).", start: "2026-03-30", end: "2026-04-05", ref: "Ley N° 018. Art. 56."},
+        {id: 75, t: "Publicación de la ubicación de los recintos electorales y mesas de sufragio; y del lugar donde funcionará la Sala Plena de los tribunales electorales departamentales para el cómputo departamental (repetición de votación).", start: "2026-04-01", end: "2026-04-01", ref: "Ley N° 026. Art. 175."},
+        {id: 76, t: "Los tribunales electorales departamentales asumen el mando de la fuerza pública (repetición de votación).", start: "2026-04-05", end: "2026-04-05", ref: "Ley N° 026. Art. 148."},
+        {id: 77, t: "REPETICIÓN DE VOTACIÓN (Cierre de mesas y cómputo).", start: "2026-04-05", end: "2026-04-05", ref: "Ley N° 026. Art. 177."},
+        {id: 78, t: "Cómputo oficial departamental y proclamación de resultados por los tribunales electorales departamentales (repetición de votación).", start: "2026-04-05", end: "2026-04-05", ref: "Ley N° 026. Art. 175."},
+        {id: 79, t: "Proclamación de resultados finales en acto público por los tribunales electorales departamentales.", start: "2026-04-05", end: "2026-04-06", ref: "Ley N° 026. Art. 182."},
+        {id: 80, t: "Convocatoria a Segunda Vuelta para Gobernadores (si corresponde).", start: "2026-04-06", end: "2026-04-06", ref: "Ley N° 026. Art. 53."},
+        {id: 81, t: "Sorteo público de ubicación de las franjas de candidatos en la papeleta de sufragio para Segunda Vuelta.", start: "2026-04-06", end: "2026-04-06", ref: "Ley N° 026. Art. 139."},
+        {id: 82, t: "Difusión de propaganda electoral en actos públicos de campaña y en medios de comunicación para Segunda Vuelta.", start: "2026-04-06", end: "2026-04-15", ref: "Ley N° 026. Art. 116."},
+        {id: 83, t: "Difusión de estudios de opinión en materia electoral para Segunda Vuelta.", start: "2026-04-07", end: "2026-04-12", ref: "Ley N° 026. Art. 130."},
+        {id: 84, t: "Sorteo público de jurados de mesas de sufragio para Segunda Vuelta.", start: "2026-04-07", end: "2026-04-07", ref: "Ley N° 018. Art. 57."},
+        {id: 85, t: "Publicación de la nómina de jurados de las mesas de sufragio para Segunda Vuelta.", start: "2026-04-07", end: "2026-04-07", ref: "Ley N° 018. Art. 59."},
+        {id: 86, t: "Notificación a jurados de mesas de sufragio para Segunda Vuelta.", start: "2026-04-08", end: "2026-04-19", ref: "Ley N° 018. Art. 58."},
+        {id: 87, t: "Presentación de excusas para el ejercicio de jurado de mesa de sufragio para Segunda Vuelta.", start: "2026-04-08", end: "2026-04-10", ref: "Ley N° 018. Art. 65."},
+        {id: 88, t: "Conformación de directivas de mesas de sufragio y capacitación de jurados electorales para Segunda Vuelta.", start: "2026-04-08", end: "2026-04-19", ref: "Ley N° 018. Art. 56."},
+        {id: 89, t: "Publicación de la ubicación de los recintos electorales y mesas de sufragio; y del lugar donde funcionará la Sala Plena para el cómputo departamental para Segunda Vuelta.", start: "2026-04-15", end: "2026-04-15", ref: "Ley N° 026. Art. 175."},
+        {id: 90, t: "Periodo de silencio electoral para Segunda Vuelta.", start: "2026-04-17", end: "2026-04-19", ref: "Ley N° 026. Art. 122."},
+        {id: 91, t: "Los tribunales electorales departamentales asumen el mando de la fuerza pública para Segunda Vuelta.", start: "2026-04-19", end: "2026-04-19", ref: "Ley N° 026. Art. 148."},
+        {id: 92, t: "SEGUNDA VUELTA DE ELECCIÓN DE GOBERNADORES (VOTACIÓN).", start: "2026-04-19", end: "2026-04-19", ref: "Ley N° 026. Art. 53."},
+        {id: 93, t: "Instalación de la Sala Plena de los tribunales electorales departamentales para el inicio del cómputo departamental de Segunda Vuelta (18:00 horas).", start: "2026-04-19", end: "2026-04-19", ref: "Ley N° 026. Art. 175."},
+        {id: 94, t: "Difusión de resultados de boca de urna y conteos rápidos de Segunda Vuelta (desde las 20:00 horas).", start: "2026-04-19", end: "2026-04-19", ref: "Ley N° 026. Art. 130."},
+        {id: 95, t: "Difusión de Resultados Preliminares de Segunda Vuelta (DIREPRE).", start: "2026-04-19", end: "2026-04-19", ref: "Ley N° 1632."},
+        {id: 96, t: "Cómputo oficial departamental y proclamación de resultados de Segunda Vuelta.", start: "2026-04-19", end: "2026-04-22", ref: "Ley N° 026. Art. 175."},
+        {id: 97, t: "Difusión de propaganda electoral en actos públicos de campaña y en medios de comunicación (repetición de votación de Segunda Vuelta).", start: "2026-04-22", end: "2026-04-22", ref: "Reglamento de Propaganda y Campaña Electoral."},
+        {id: 98, t: "Publicación de la ubicación de los recintos electorales y mesas de sufragio; y del lugar donde funcionará la Sala Plena para el cómputo departamental (repetición de votación de Segunda Vuelta).", start: "2026-04-22", end: "2026-04-22", ref: "Ley N° 026. Art. 175."},
+        {id: 99, t: "Sorteo público de jurados de mesas de sufragio (repetición de votación de Segunda Vuelta).", start: "2026-04-23", end: "2026-04-23", ref: "Ley N° 018. Art. 57."},
+        {id: 100, t: "Notificación a jurados de mesas de sufragio (repetición de votación de Segunda Vuelta).", start: "2026-04-23", end: "2026-04-26", ref: "Ley N° 018. Art. 58."},
+        {id: 101, t: "Conformación de directivas de mesas de sufragio y capacitación de jurados electorales (repetición de votación de Segunda Vuelta).", start: "2026-04-23", end: "2026-04-26", ref: "Ley N° 018. Art. 56."},
+        {id: 102, t: "Los tribunales electorales departamentales asumen el mando de la fuerza pública (repetición de votación de Segunda Vuelta).", start: "2026-04-26", end: "2026-04-26", ref: "Ley N° 026. Art. 148."},
+        {id: 103, t: "REPETICIÓN DE VOTACIÓN DE SEGUNDA VUELTA.", start: "2026-04-26", end: "2026-04-26", ref: "Ley N° 026. Art. 177."},
+        {id: 104, t: "Cómputo oficial departamental y proclamación de resultados (repetición de votación de Segunda Vuelta).", start: "2026-04-26", end: "2026-04-26", ref: "Ley N° 026. Art. 175."},
+        {id: 105, t: "Proclamación de resultados finales de Segunda Vuelta en acto público.", start: "2026-04-26", end: "2026-04-27", ref: "Ley N° 026. Art. 182."},
+        {id: 106, t: "Remisión de resultados oficiales al Tribunal Supremo Electoral, mediante vía electrónica (repetición de votación).", start: "2026-04-27", end: "2026-04-27", ref: "Ley N° 026. Art. 175."},
+        {id: 107, t: "Entrega del acta de cómputo departamental de los tribunales electorales departamentales al Tribunal Supremo Electoral (repetición de votación).", start: "2026-04-27", end: "2026-04-28", ref: "Ley N° 026. Art. 183."},
+        {id: 108, t: "Entrega de credenciales a autoridades electas (repetición de votación).", start: "2026-04-30", end: "2026-04-30", ref: "Ley N° 026. Art. 192-I."},
+        {id: 109, t: "Publicación de los resultados en medio de prensa escrito y en el portal web del Órgano Electoral Plurinacional, por los tribunales electorales departamentales (repetición de votación).", start: "2026-05-03", end: "2026-05-08", ref: "Ley N° 026, Art. 191."},
+        {id: 110, t: "Entrega del informe del proceso de los tribunales electorales departamentales al Tribunal Supremo Electoral (repetición de votación).", start: "2026-05-12", end: "2026-05-12", ref: "Ley N° 026. Art. 182."}
+    ];
+
+    // ==========================================
+    // LÓGICA DE RENDERIZADO
+    // ==========================================
+    
+    // Configuración fecha actual
+    const today = new Date(); // Usa fecha del sistema
+    // const today = new Date("2025-12-30"); // Descomentar para probar visualización
+    
+    document.getElementById('display-date').innerText = today.toLocaleDateString('es-BO', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    // Cuenta regresiva (22 Marzo)
+    const electionDate = new Date("2026-03-22");
+    const diffTime = electionDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById('days-left').innerText = diffDays > 0 ? diffDays : "¡Hoy!";
+
+    // Barra de progreso
+    const startDate = new Date("2025-11-20");
+    const totalDuration = new Date("2026-05-12") - startDate;
+    const elapsed = today - startDate;
+    let percent = Math.floor((elapsed / totalDuration) * 100);
+    percent = Math.max(0, Math.min(100, percent));
+    
+    document.getElementById('progress-bar').style.width = percent + "%";
+    document.getElementById('progress-text').innerText = percent + "% Completado";
+
+    // Renderizar Lista
+    const listContainer = document.getElementById('list-container');
+    const searchInput = document.getElementById('search');
+    const noResults = document.getElementById('no-results');
+    let currentId = null;
+
+    function renderList(filter = "") {
+        listContainer.innerHTML = "";
+        let found = false;
+
+        // Línea vertical continua (fondo)
+        const verticalLine = document.createElement('div');
+        verticalLine.className = "absolute left-[23px] top-4 bottom-4 w-0.5 bg-slate-200 -z-10";
+        listContainer.appendChild(verticalLine);
+
+        activities.forEach(item => {
+            if(filter && !item.t.toLowerCase().includes(filter.toLowerCase()) && !item.ref.toLowerCase().includes(filter.toLowerCase())) return;
+            found = true;
+
+            const start = new Date(item.start); start.setHours(0,0,0,0);
+            const end = new Date(item.end); end.setHours(23,59,59,999);
+            
+            // Determinar estado
+            let status = "future"; // futuro
+            if (today > end) status = "past"; // pasado
+            else if (today >= start && today <= end) { status = "current"; currentId = item.id; } // actual
+
+            // Estilos dinámicos
+            let dotClass = "bg-white border-slate-300";
+            let rowClass = "";
+            let textClass = "text-slate-700";
+            let dateClass = "text-slate-500 bg-slate-100";
+            let statusBadge = "";
+
+            if (status === "past") {
+                dotClass = "bg-emerald-500 border-emerald-500";
+                rowClass = "opacity-60 hover:opacity-100 transition-opacity";
+                textClass = "text-slate-500 line-through";
+                statusBadge = `<span class="ml-auto text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">COMPLETADO</span>`;
+            } else if (status === "current") {
+                dotClass = "bg-rose-500 border-rose-500 pulse-dot shadow-lg shadow-rose-200";
+                rowClass = "active-row bg-white rounded-xl shadow-soft -mx-2 px-2 py-4 border-l-4 border-rose-500 relative z-10 transform scale-[1.02]";
+                textClass = "text-slate-900 font-bold text-lg";
+                dateClass = "text-rose-700 bg-rose-50 font-bold border border-rose-100";
+                statusBadge = `<span class="ml-auto text-[10px] font-bold text-white bg-rose-600 px-2 py-1 rounded animate-pulse">EN CURSO</span>`;
+            }
+
+            // Formato fechas
+            const dateStr = start.toLocaleDateString('es-BO', {day:'numeric', month:'short'}) + 
+                           (item.start !== item.end ? ` - ${end.toLocaleDateString('es-BO', {day:'numeric', month:'short'})}` : "");
+
+            const html = `
+                <div id="hito-${item.id}" class="relative flex gap-4 py-3 group ${rowClass}">
+                    <div class="flex-shrink-0 w-12 flex justify-center pt-1">
+                        <div class="w-4 h-4 rounded-full border-2 ${dotClass} z-10 bg-white"></div>
+                    </div>
+                    
+                    <div class="flex-grow pb-4 border-b border-slate-100 group-last:border-0">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+                            <span class="text-xs font-mono text-slate-400 mr-1">#${item.id}</span>
+                            <span class="text-xs px-2 py-0.5 rounded ${dateClass} w-fit">${dateStr}</span>
+                            ${statusBadge}
+                        </div>
+                        <h3 class="${textClass}">${item.t}</h3>
+                        <p class="text-xs text-slate-400 mt-1 font-mono uppercase">Ref: ${item.ref}</p>
+                    </div>
+                </div>
+            `;
+            listContainer.insertAdjacentHTML('beforeend', html);
+        });
+
+        if(!found) noResults.classList.remove('hidden');
+        else noResults.classList.add('hidden');
+    }
+
+    // Inicializar
+    renderList();
+
+    // Búsqueda
+    searchInput.addEventListener('input', (e) => renderList(e.target.value));
+
+    // Botón para saltar al día actual
+    function jumpToCurrent() {
+        if(currentId) {
+            const el = document.getElementById(`hito-${currentId}`);
+            el.scrollIntoView({behavior: "smooth", block: "center"});
+            // Efecto visual extra
+            el.classList.add('ring-2', 'ring-rose-200', 'ring-offset-2');
+            setTimeout(() => el.classList.remove('ring-2', 'ring-rose-200', 'ring-offset-2'), 2000);
+        }
+    }
+
+    // Auto-scroll al cargar si hay un evento activo
+    window.onload = () => {
+        setTimeout(jumpToCurrent, 500);
+    };
+
+  </script>
+</body>
+</html>
