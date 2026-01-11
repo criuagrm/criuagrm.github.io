@@ -42,7 +42,7 @@
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     
     /* Prevenir scroll horizontal indeseado globalmente */
-    body { overflow-x: hidden; }
+    body, html { overflow-x: hidden; width: 100%; max-width: 100%; }
     
     canvas { transition: opacity 0.5s ease-in-out; }
     
@@ -60,7 +60,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
+<body class="min-h-screen bg-slate-50 text-slate-800 flex flex-col w-full overflow-x-hidden">
 
   <!-- Cinta superior -->
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
@@ -87,11 +87,11 @@
   </header>
 
   <!-- Contenido Principal -->
-  <main class="flex-grow w-full overflow-hidden">
+  <main class="flex-grow w-full max-w-[100vw] overflow-hidden">
       
     <!-- Hero / Intro -->
-    <section class="relative overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-6 w-full">
-       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="relative overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-6 w-full px-4">
+       <div class="max-w-7xl mx-auto">
           <div class="text-center max-w-2xl mx-auto">
              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200 mb-4">Herramienta de Análisis Político</span>
              <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">Simulador de Escaños</h2>
@@ -104,11 +104,11 @@
     </section>
 
     <!-- Simulador UI -->
-    <section class="py-4 sm:py-8 w-full">
-       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-6 sm:gap-8">
+    <section class="py-4 sm:py-8 w-full px-4">
+       <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-6 sm:gap-8">
           
           <!-- PANEL IZQUIERDO: CONFIGURACIÓN -->
-          <div class="lg:col-span-4 space-y-4 sm:space-y-6 min-w-0">
+          <div class="lg:col-span-4 space-y-4 sm:space-y-6 w-full min-w-0">
              
              <!-- 1. Tipo de Elección -->
              <div class="card-base relative overflow-hidden">
@@ -175,7 +175,7 @@
                     </div>
                 </div>
 
-                <!-- FORMULARIO INPUT RESPONSIVE (CORREGIDO CON TRANSFORMS PARA NO ROMPER LAYOUT) -->
+                <!-- FORMULARIO INPUT RESPONSIVE -->
                 <div class="flex flex-col sm:flex-row gap-3 mb-4 items-end relative z-0">
                    <!-- Campo Nombre -->
                    <div class="w-full sm:flex-1">
@@ -190,9 +190,8 @@
                            <input type="number" id="cand-percent" placeholder="0.0" class="input-field text-right font-mono font-bold" onkeydown="if(event.key==='Enter') addCandidate()">
                        </div>
                        <div>
-                           <!-- Botón con TRANSFORM para moverlo sin romper layout -->
-                           <!-- -translate-x-32 es aprox "10 espacios a la izquierda" -->
-                           <!-- -translate-y-16 es "2 veces más arriba" (bastante elevado) -->
+                           <label class="block text-[10px] uppercase font-bold text-transparent mb-1 select-none">&nbsp;</label>
+                           <!-- Botón con posición flotante -->
                            <button onclick="addCandidate()" class="h-[46px] w-[46px] sm:w-12 flex items-center justify-center rounded-xl bg-black text-white hover:bg-gray-800 hover:scale-105 active:scale-95 transition shadow-2xl border-2 border-black transform -translate-x-32 -translate-y-16 relative z-50" aria-label="Añadir candidato">
                               <i class="fa-solid fa-plus text-lg"></i>
                            </button>
@@ -232,7 +231,6 @@
                         Indica cuántas de las <strong>15 provincias</strong> ganó cada partido (Mayoría Simple).
                     </p>
                     <div id="territorial-inputs" class="space-y-2">
-                       <!-- Dinámico: Se llena con renderTerritorialInputs() -->
                        <p class="text-xs italic text-slate-400">1. Agrega organizaciones políticas arriba.<br>2. Aparecerán aquí para asignar provincias.</p>
                     </div>
                     <div id="terr-sum-display" class="mt-3 pt-2 border-t border-slate-100 text-right text-xs font-bold text-sky-600">
@@ -241,7 +239,7 @@
                 </div>
              </div>
 
-             <!-- Botón Acción Centrado - FONDO NEGRO -->
+             <!-- Botón Acción Centrado -->
              <div class="flex justify-center mt-6 sm:mt-8">
                  <button onclick="simulate()" class="btn-simular">
                     <span>SIMULAR</span>
@@ -255,7 +253,7 @@
           <div class="lg:col-span-8 space-y-6 min-w-0">
              
              <!-- Tarjeta Gráfico -->
-             <div class="card-base relative flex flex-col justify-center items-center bg-white overflow-hidden p-0 sm:p-6 min-h-[350px] sm:min-h-[500px]">
+             <div class="card-base relative flex flex-col justify-center items-center bg-white overflow-hidden p-0 sm:p-6 min-h-[300px] sm:min-h-[500px]">
                 <!-- Header interno -->
                 <div class="w-full px-4 pt-4 pb-2 sm:p-0 sm:absolute sm:top-6 sm:left-6 flex flex-col z-10">
                    <h3 class="font-bold text-lg sm:text-xl text-slate-900">Composición Proyectada</h3>
@@ -263,30 +261,29 @@
                 </div>
                 
                 <!-- Contenedor del Canvas Responsive -->
-                <div class="w-full relative flex justify-center items-end max-w-full overflow-hidden" style="min-height: 300px; height: 40vh; sm:min-height: 400px; sm:height: 50vh; max-height: 600px;">
-                    <!-- Canvas de Alta Resolución -->
+                <!-- IMPORTANTE: max-w-full y overflow-hidden para prevenir desbordes -->
+                <div class="w-full relative flex justify-center items-end max-w-full overflow-hidden" style="height: 35vh; min-height: 250px; sm:min-height: 400px; sm:height: 50vh; max-height: 600px;">
                     <canvas id="parliamentCanvas" class="w-full h-full object-contain z-10"></canvas>
                     
-                    <!-- Centro de Información (Overlay) -->
-                    <div id="center-info" class="absolute bottom-4 sm:bottom-10 text-center z-0 opacity-0 transition-opacity duration-500 pointer-events-none">
-                        <div id="total-seats-number" class="text-4xl sm:text-5xl font-extrabold text-slate-800 tracking-tighter">0</div>
+                    <div id="center-info" class="absolute bottom-2 sm:bottom-10 text-center z-0 opacity-0 transition-opacity duration-500 pointer-events-none">
+                        <div id="total-seats-number" class="text-3xl sm:text-5xl font-extrabold text-slate-800 tracking-tighter">0</div>
                         <div class="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Escaños Totales</div>
-                        <div id="majority-indicator" class="mt-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] sm:text-xs font-medium text-slate-600 inline-block shadow-sm">Sin mayoría</div>
+                        <div id="majority-indicator" class="mt-2 px-2 py-1 rounded-full bg-slate-100 text-[9px] sm:text-[10px] sm:text-xs font-medium text-slate-600 inline-block shadow-sm">Sin mayoría</div>
                     </div>
                 </div>
 
                 <!-- Placeholder state -->
                 <div id="placeholder-state" class="absolute inset-0 flex flex-col items-center justify-center bg-white/95 z-20 backdrop-blur-sm">
-                    <div class="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-slate-50 flex items-center justify-center mb-4 sm:mb-6 ring-1 ring-slate-200 shadow-sm">
-                        <i class="fa-solid fa-chart-pie text-3xl sm:text-4xl text-slate-300"></i>
+                    <div class="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-slate-50 flex items-center justify-center mb-4 sm:mb-6 ring-1 ring-slate-200 shadow-sm">
+                        <i class="fa-solid fa-chart-pie text-2xl sm:text-4xl text-slate-300"></i>
                     </div>
-                    <p class="text-slate-600 font-semibold px-4 text-center text-sm sm:text-base">Configura los datos y presiona "Simular"</p>
-                    <p class="text-slate-400 text-xs sm:text-sm mt-1">El gráfico se generará automáticamente</p>
+                    <p class="text-slate-600 font-semibold px-4 text-center text-xs sm:text-base">Configura los datos y presiona "Simular"</p>
+                    <p class="text-slate-400 text-[10px] sm:text-sm mt-1">El gráfico se generará automáticamente</p>
                 </div>
              </div>
 
              <!-- Tabla Detallada -->
-             <div id="results-card" class="card-base hidden animate-fade-in w-full overflow-hidden">
+             <div id="results-card" class="card-base hidden animate-fade-in w-full overflow-x-hidden">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-lg text-slate-800">Detalle de Asignación</h3>
                     <button onclick="document.getElementById('results-card').scrollIntoView({behavior: 'smooth'})" class="text-xs text-indigo-600 hover:underline">Ver detalle completo</button>
@@ -295,12 +292,12 @@
                    <table class="min-w-full text-sm text-left">
                       <thead class="bg-slate-50 text-slate-500 font-semibold text-xs uppercase">
                          <tr>
-                            <th class="px-4 py-3">Partido</th>
-                            <th class="px-4 py-3 text-right" id="th-votos-col">Votos</th>
-                            <th class="px-4 py-3 text-right">Poblacionales</th>
-                            <th class="px-4 py-3 text-right" id="th-terr">Territoriales</th>
-                            <th class="px-4 py-3 text-right text-slate-800">Total</th>
-                            <th class="px-4 py-3 text-center">Color</th>
+                            <th class="px-3 py-2 sm:px-4 sm:py-3 whitespace-nowrap">Partido</th>
+                            <th class="px-3 py-2 sm:px-4 sm:py-3 text-right" id="th-votos-col">Votos</th>
+                            <th class="px-3 py-2 sm:px-4 sm:py-3 text-right">Poblacionales</th>
+                            <th class="px-3 py-2 sm:px-4 sm:py-3 text-right" id="th-terr">Territoriales</th>
+                            <th class="px-3 py-2 sm:px-4 sm:py-3 text-right text-slate-800">Total</th>
+                            <th class="px-3 py-2 sm:px-4 sm:py-3 text-center">Color</th>
                          </tr>
                       </thead>
                       <tbody id="results-body" class="divide-y divide-slate-100">
@@ -316,7 +313,6 @@
 
   </main>
 
-  <!-- Footer -->
   <footer class="border-t border-slate-200 bg-white mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -331,22 +327,18 @@
     </div>
   </footer>
 
-  <!-- LÓGICA DEL SIMULADOR -->
   <script>
     document.getElementById('year').innerText = new Date().getFullYear();
 
-    // --- State Management ---
     const state = {
-        mode: 'municipio', // 'municipio' | 'gobernacion'
-        candidates: [], // Array of objects
+        mode: 'municipio', 
+        candidates: [], 
         colors: [
             '#1E40AF', '#B91C1C', '#15803D', '#F59E0B', '#6B21A8', 
             '#0F766E', '#BE123C', '#374151', '#854D0E',
         ],
         colorIdx: 0
     };
-
-    // --- Core Functions ---
 
     function setMode(mode) {
         state.mode = mode;
@@ -522,8 +514,6 @@
         disp.className = sum > 15 ? "mt-3 pt-2 border-t border-slate-100 text-right text-xs font-bold text-rose-600" : "mt-3 pt-2 border-t border-slate-100 text-right text-xs font-bold text-sky-600";
     }
 
-    // --- Simulation Logic ---
-
     function dhondt(candidates, seats) {
         let allocation = {};
         let currentVotes = {};
@@ -587,7 +577,6 @@
             totalSeats = 28; 
         }
 
-        // --- Render UI ---
         document.getElementById('placeholder-state').classList.add('hidden');
         document.getElementById('center-info').classList.remove('opacity-0');
         document.getElementById('results-card').classList.remove('hidden');
@@ -606,15 +595,14 @@
         
         if(winner.total >= majority) {
             ind.innerText = `Mayoría: ${winner.name}`;
-            ind.className = "mt-2 px-3 py-1 rounded-full bg-emerald-100 text-[10px] sm:text-xs font-medium text-emerald-700 inline-block shadow-sm";
+            ind.className = "mt-2 px-2 py-1 rounded-full bg-emerald-100 text-[9px] sm:text-xs font-medium text-emerald-700 inline-block shadow-sm";
         } else {
             ind.innerText = "Sin mayoría absoluta";
-            ind.className = "mt-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] sm:text-xs font-medium text-slate-600 inline-block shadow-sm";
+            ind.className = "mt-2 px-2 py-1 rounded-full bg-slate-100 text-[9px] sm:text-xs font-medium text-slate-600 inline-block shadow-sm";
         }
 
         renderResultsTable(results);
 
-        // --- Generate Plot Data ---
         let seatList = [];
         
         if(state.mode === 'gobernacion') {
@@ -650,12 +638,12 @@
         if(state.mode === 'gobernacion') {
              tbody.innerHTML += `
                 <tr>
-                    <td class="px-4 py-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Pueblos Indígenas</td>
-                    <td class="px-4 py-3 text-right text-slate-400 font-mono">-</td>
-                    <td class="px-4 py-3 text-right text-slate-400 font-mono">-</td>
-                    <td class="px-4 py-3 text-right text-slate-400 font-mono">-</td>
-                    <td class="px-4 py-3 text-right font-bold text-slate-800">2</td>
-                    <td class="px-4 py-3 flex justify-center"><span class="w-3 h-3 rounded-full bg-slate-400 mt-1"></span></td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Pueblos Indígenas</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right text-slate-400 font-mono">-</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right text-slate-400 font-mono">-</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right text-slate-400 font-mono">-</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right font-bold text-slate-800">2</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 flex justify-center"><span class="w-3 h-3 rounded-full bg-slate-400 mt-1"></span></td>
                 </tr>
              `;
         }
@@ -666,13 +654,13 @@
              
              tbody.innerHTML += `
                 <tr>
-                    <td class="px-4 py-3 font-bold text-slate-800">${r.name}</td>
-                    <td class="px-4 py-3 text-right text-slate-500 font-mono text-xs">${r.percent}%</td>
-                    <td class="px-4 py-3 text-right text-slate-600 font-mono">${popVal}</td>
-                    ${state.mode === 'gobernacion' ? `<td class="px-4 py-3 text-right font-mono">${terrVal}</td>` : '<td class="hidden"></td>'}
-                    <td class="px-4 py-3 text-right font-bold text-lg text-slate-900">${r.total}</td>
-                    <td class="px-4 py-3 flex justify-center">
-                        <span class="w-3 h-3 rounded-full shadow-sm mt-2" style="background-color:${r.color}"></span>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 font-bold text-slate-800 whitespace-nowrap text-xs sm:text-sm">${r.name}</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right text-slate-500 font-mono text-xs">${r.percent}%</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right text-slate-600 font-mono text-xs sm:text-sm">${popVal}</td>
+                    ${state.mode === 'gobernacion' ? `<td class="px-3 py-2 sm:px-4 sm:py-3 text-right font-mono text-xs sm:text-sm">${terrVal}</td>` : '<td class="hidden"></td>'}
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 text-right font-bold text-base sm:text-lg text-slate-900">${r.total}</td>
+                    <td class="px-3 py-2 sm:px-4 sm:py-3 flex justify-center">
+                        <span class="w-3 h-3 rounded-full shadow-sm mt-1" style="background-color:${r.color}"></span>
                     </td>
                 </tr>
              `;
@@ -697,10 +685,16 @@
         
         if(seatList.length === 0) return;
 
+        // SAFE MARGINS FOR MOBILE
+        const margin = W < 400 ? 10 : 20;
+        
         const cx = W / 2;
-        const cy = H * 0.95; 
-        const availableW = W * 0.9;
-        const availableH = H * 0.9;
+        const cy = H * 0.90; // Higher bottom margin
+        
+        // Ensure max width is respected strictly
+        const availableW = W - (margin * 2);
+        const availableH = H * 0.85; 
+        
         const maxRadius = Math.min(availableW / 2, availableH); 
         const minRadius = maxRadius * 0.4; 
         
@@ -710,14 +704,8 @@
         if(rows > 8) rows = 8;
         
         const radiusStep = (maxRadius - minRadius) / (rows - 1);
-        const midR = (maxRadius + minRadius) / 2;
-        const midArc = Math.PI * midR;
-        const avgSeatsPerRow = count / rows;
-        let dotRadius = (midArc / avgSeatsPerRow) / 2.5; 
         
-        if(dotRadius < 4) dotRadius = 4;
-        if(dotRadius > 14) dotRadius = 14;
-
+        // Calculate standard row capacities
         let rowRadii = [];
         let totalArcLen = 0;
         for(let i=0; i<rows; i++) {
@@ -732,12 +720,32 @@
         let diff = count - allocated;
         if(diff !== 0) seatsPerRow[seatsPerRow.length - 1] += diff;
 
+        // DYNAMIC DOT SIZE - Prevent giant dots on mobile
+        // Calculate average space available per seat on the middle arc
+        const midR = (maxRadius + minRadius) / 2;
+        const midArcLength = Math.PI * midR;
+        const avgSeats = count / rows;
+        // Ideal size
+        let dotRadius = (midArcLength / avgSeats) / 2.5; 
+        
+        // Mobile Constraints
+        if (W < 400) {
+            // Force smaller dots on mobile
+            if(dotRadius > 8) dotRadius = 8;
+            if(dotRadius < 3) dotRadius = 3;
+        } else {
+            if(dotRadius < 4) dotRadius = 4;
+            if(dotRadius > 14) dotRadius = 14;
+        }
+
         let currentSeat = 0;
         for(let i=0; i<rows; i++) {
             const r = rowRadii[i];
             const n = seatsPerRow[i];
             if(n <= 0) continue;
-            const anglePadding = (dotRadius * 1.5) / r;
+            
+            // Adjust padding based on dot radius to avoid edge clipping
+            const anglePadding = (dotRadius * 1.8) / r;
             const availableAngle = Math.PI - 2*anglePadding;
             const angleStep = n > 1 ? availableAngle / (n - 1) : 0;
             
