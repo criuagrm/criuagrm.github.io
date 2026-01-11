@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Simulador Electoral — CIRCPyCS</title>
+  <meta name="description" content="Simulador de Escaños - Centro de Investigación Regional en Ciencia Política y Ciencias Sociales" />
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.08)' },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both'
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0', transform: 'translateY(-10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            shake: {
+              '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+              '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+              '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+              '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    
+    canvas { transition: opacity 0.5s ease-in-out; }
+    
+    /* Input más robusto */
+    .input-field {
+        @apply w-full rounded-xl border-slate-300 shadow-sm focus:border-black focus:ring-black sm:text-sm px-4 py-3 border bg-white transition-colors placeholder:text-slate-400;
+    }
+    .card-base {
+        @apply rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-soft;
+    }
+    
+    /* Botón simular con fondo negro sólido */
+    .btn-simular {
+        @apply px-12 py-4 rounded-xl text-base font-bold text-white bg-black border-2 border-black shadow-lg transition-all transform hover:scale-105 flex justify-center items-center gap-3 hover:bg-gray-900 min-w-[200px] hover:shadow-xl cursor-pointer;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
+
+  <!-- Cinta superior -->
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 min-w-0">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+        <div class="leading-tight truncate">
+          <p class="text-xs sm:text-sm tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-base sm:text-lg truncate">CIRCPyCS</h1>
+        </div>
+      </a>
+      
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+        <span class="text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Simulador Electoral</span>
+      </nav>
+      
+      <button onclick="resetApp()" class="text-sm text-slate-500 hover:text-rose-600 transition flex items-center gap-2 group">
+         <i class="fa-solid fa-rotate-right group-hover:rotate-180 transition-transform duration-500"></i> Reiniciar
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-grow">
+      
+    <!-- Hero / Intro -->
+    <section class="relative overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-6">
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-2xl mx-auto">
+             <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-sky-50 text-sky-700 ring-1 ring-sky-200 mb-4">Herramienta de Análisis Político</span>
+             <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">Simulador de Escaños</h2>
+             <p class="mt-3 text-sm sm:text-base text-slate-600">
+                Proyección de conformación legislativa basada en el sistema electoral boliviano.
+                Soporte para <strong>Concejos Municipales</strong> (D'Hondt puro) y <strong>Asamblea Legislativa Departamental de Santa Cruz</strong> (Sistema Mixto).
+             </p>
+          </div>
+       </div>
+    </section>
+
+    <!-- Simulador UI -->
+    <section class="py-4 sm:py-8">
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-6 sm:gap-8">
+          
+          <!-- PANEL IZQUIERDO: CONFIGURACIÓN -->
+          <div class="lg:col-span-4 space-y-4 sm:space-y-6">
+             
+             <!-- 1. Tipo de Elección -->
+             <div class="card-base relative overflow-hidden">
+                <div class="flex items-center gap-2 mb-4">
+                   <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">1</div>
+                   <h3 class="font-bold text-lg">Configuración</h3>
+                </div>
+                
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Nivel de Gobierno</label>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                   <button onclick="setMode('municipio')" id="btn-mun" class="px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200">
+                      Municipal
+                   </button>
+                   <button onclick="setMode('gobernacion')" id="btn-gob" class="px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200">
+                      Gobernación
+                   </button>
+                </div>
+
+                <!-- Selector Escaños (Solo Municipio) -->
+                <div id="seats-selector" class="transition-all duration-300">
+                   <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tamaño del Concejo</label>
+                   <select id="total-seats" class="input-field">
+                      <option value="5">5 Concejalías</option>
+                      <option value="7">7 Concejalías</option>
+                      <option value="9">9 Concejalías</option>
+                      <option value="11" selected>11 Concejalías</option>
+                   </select>
+                </div>
+
+                <!-- Info Municipio (Disclaimer) -->
+                <div id="mun-info" class="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900 mt-4 shadow-sm">
+                    <p class="font-bold mb-2 text-xs uppercase flex items-center gap-2 text-amber-700">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Nota para el operador
+                    </p>
+                    <p class="text-xs text-amber-900/90 leading-relaxed font-medium">
+                        Asegúrese de ingresar los porcentajes correspondientes a la <strong>franja de concejales</strong> (lista inferior de la papeleta), no a la del alcalde. Los votos del ejecutivo no se suman para los escaños.
+                    </p>
+                </div>
+
+                <!-- Info Gobernación -->
+                <div id="gob-info" class="hidden rounded-xl bg-sky-50 border border-sky-100 p-4 text-sm text-sky-900 mt-4">
+                   <p class="font-bold mb-1 text-xs uppercase">Sistema Santa Cruz (28):</p>
+                   <ul class="list-disc list-inside space-y-1 text-sky-800/80 text-xs">
+                      <li><strong>11 Poblacionales:</strong> Se asignan según el <strong>Voto Gobernador</strong> (D'Hondt).</li>
+                      <li><strong>15 Territoriales:</strong> Se eligen por mayoría simple en las provincias (asignar manualmente abajo).</li>
+                      <li><strong>2 Indígenas:</strong> Escaños reservados fijos.</li>
+                   </ul>
+                </div>
+             </div>
+
+             <!-- 2. Candidatos -->
+             <div class="card-base">
+                <div class="flex items-center gap-2 mb-4">
+                   <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">2</div>
+                   <h3 class="font-bold text-lg">Datos de Votación</h3>
+                </div>
+
+                <!-- Mensaje de Error Visual -->
+                <div id="input-error" class="hidden animate-shake mb-3 rounded-lg bg-rose-50 border border-rose-200 p-3 flex items-start gap-2">
+                    <i class="fa-solid fa-circle-xmark text-rose-500 mt-0.5"></i>
+                    <div class="text-xs text-rose-700">
+                        <span class="font-bold block">Límite excedido</span>
+                        La suma total no puede superar el 100%. <span id="error-detail"></span>
+                    </div>
+                </div>
+
+                <!-- FORMULARIO INPUT RESPONSIVE (CORREGIDO ALINEACIÓN Y POSICIÓN BOTÓN) -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                   <!-- Campo Nombre -->
+                   <div class="w-full sm:flex-1">
+                       <label id="lbl-name" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1">Organización Política</label>
+                       <input type="text" id="cand-name" placeholder="AÑADIR ORG. POLÍTICA" class="input-field uppercase font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-normal" style="text-transform:uppercase">
+                   </div>
+                   
+                   <!-- Contenedor Porcentaje + Botón -->
+                   <div class="flex gap-3 w-full sm:w-auto relative">
+                       <div class="flex-1 sm:w-24">
+                           <label id="lbl-percent" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1 text-right">% Voto</label>
+                           <input type="number" id="cand-percent" placeholder="0.0" class="input-field text-right font-mono font-bold" onkeydown="if(event.key==='Enter') addCandidate()">
+                       </div>
+                       <div>
+                           <!-- Label invisible para forzar la misma altura y alineación que los inputs -->
+                           <label class="block text-[10px] uppercase font-bold text-transparent mb-1 select-none">&nbsp;</label>
+                           <!-- Botón elevado con mb-24 y desplazado muy a la izquierda con -ml-36 y z-index para no ser tapado -->
+                           <button onclick="addCandidate()" class="h-[46px] w-[46px] sm:w-12 flex items-center justify-center rounded-xl bg-black text-white hover:bg-gray-800 hover:scale-105 active:scale-95 transition shadow-md border-2 border-black mb-24 -ml-36 relative z-10" aria-label="Añadir candidato">
+                              <i class="fa-solid fa-plus text-lg"></i>
+                           </button>
+                       </div>
+                   </div>
+                </div>
+
+                <!-- Tabla Lista -->
+                <div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50/50">
+                   <table class="min-w-full text-sm">
+                      <thead class="bg-slate-100 text-slate-500 font-semibold text-xs uppercase">
+                         <tr>
+                            <th class="px-3 py-2 text-left">Sigla</th>
+                            <th class="px-3 py-2 text-right" id="th-percent-col">% Voto</th>
+                            <th class="px-3 py-2"></th>
+                         </tr>
+                      </thead>
+                      <tbody id="candidates-list" class="divide-y divide-slate-200 bg-white">
+                         <tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs italic">Añade partidos para comenzar</td></tr>
+                      </tbody>
+                   </table>
+                </div>
+                <div class="flex justify-between items-center mt-2 px-1">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider">Acumulado</span>
+                    <div id="total-percent-display" class="text-xs font-bold text-slate-400 transition-colors duration-300">0%</div>
+                </div>
+             </div>
+
+             <!-- 3. Territoriales (Gobernación) -->
+             <div id="territorial-section" class="card-base hidden border-l-4 border-l-sky-500">
+                <div class="flex items-center gap-2 mb-2">
+                   <div class="h-8 w-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 font-bold text-sm">3</div>
+                   <h3 class="font-bold text-lg text-slate-800">Escaños Territoriales</h3>
+                </div>
+                <div class="ml-0 sm:ml-10">
+                    <p class="text-xs text-slate-500 mb-3">
+                        Indica cuántas de las <strong>15 provincias</strong> ganó cada partido (Mayoría Simple).
+                    </p>
+                    <div id="territorial-inputs" class="space-y-2">
+                       <!-- Dinámico: Se llena con renderTerritorialInputs() -->
+                       <p class="text-xs italic text-slate-400">1. Agrega organizaciones políticas arriba.<br>2. Aparecerán aquí para asignar provincias.</p>
+                    </div>
+                    <div id="terr-sum-display" class="mt-3 pt-2 border-t border-slate-100 text-right text-xs font-bold text-sky-600">
+                        0 / 15 Provincias Asignadas
+                    </div>
+                </div>
+             </div>
+
+             <!-- Botón Acción Centrado - FONDO NEGRO -->
+             <div class="flex justify-center mt-6 sm:mt-8">
+                 <button onclick="simulate()" class="btn-simular">
+                    <span>SIMULAR</span>
+                    <i class="fa-solid fa-chart-simple text-sm opacity-90"></i>
+                 </button>
+             </div>
+
+          </div>
+
+          <!-- PANEL DERECHO: VISUALIZACIÓN -->
+          <div class="lg:col-span-8 space-y-6">
+             
+             <!-- Tarjeta Gráfico -->
+             <div class="card-base relative flex flex-col justify-center items-center bg-white overflow-hidden p-0 sm:p-6 min-h-[350px] sm:min-h-[500px]">
+                <!-- Header interno -->
+                <div class="w-full px-4 pt-4 pb-2 sm:p-0 sm:absolute sm:top-6 sm:left-6 flex flex-col z-10">
+                   <h3 class="font-bold text-lg sm:text-xl text-slate-900">Composición Proyectada</h3>
+                   <span class="text-xs text-slate-500 uppercase tracking-wide">Resultados Estimados</span>
+                </div>
+                
+                <!-- Contenedor del Canvas Responsive -->
+                <div class="w-full relative flex justify-center items-end" style="min-height: 300px; height: 40vh; sm:min-height: 400px; sm:height: 50vh; max-height: 600px;">
+                    <!-- Canvas de Alta Resolución -->
+                    <canvas id="parliamentCanvas" class="w-full h-full object-contain z-10"></canvas>
+                    
+                    <!-- Centro de Información (Overlay) -->
+                    <div id="center-info" class="absolute bottom-4 sm:bottom-10 text-center z-0 opacity-0 transition-opacity duration-500 pointer-events-none">
+                        <div id="total-seats-number" class="text-4xl sm:text-5xl font-extrabold text-slate-800 tracking-tighter">0</div>
+                        <div class="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Escaños Totales</div>
+                        <div id="majority-indicator" class="mt-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] sm:text-xs font-medium text-slate-600 inline-block shadow-sm">Sin mayoría</div>
+                    </div>
+                </div>
+
+                <!-- Placeholder state -->
+                <div id="placeholder-state" class="absolute inset-0 flex flex-col items-center justify-center bg-white/95 z-20 backdrop-blur-sm">
+                    <div class="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-slate-50 flex items-center justify-center mb-4 sm:mb-6 ring-1 ring-slate-200 shadow-sm">
+                        <i class="fa-solid fa-chart-pie text-3xl sm:text-4xl text-slate-300"></i>
+                    </div>
+                    <p class="text-slate-600 font-semibold px-4 text-center text-sm sm:text-base">Configura los datos y presiona "Simular"</p>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">El gráfico se generará automáticamente</p>
+                </div>
+             </div>
+
+             <!-- Tabla Detallada -->
+             <div id="results-card" class="card-base hidden animate-fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-slate-800">Detalle de Asignación</h3>
+                    <button onclick="document.getElementById('results-card').scrollIntoView({behavior: 'smooth'})" class="text-xs text-indigo-600 hover:underline">Ver detalle completo</button>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                   <table class="min-w-full text-sm text-left">
+                      <thead class="bg-slate-50 text-slate-500 font-semibold text-xs uppercase">
+                         <tr>
+                            <th class="px-4 py-3">Partido</th>
+                            <th class="px-4 py-3 text-right" id="th-votos-col">Votos</th>
+                            <th class="px-4 py-3 text-right">Poblacionales</th>
+                            <th class="px-4 py-3 text-right" id="th-terr">Territoriales</th>
+                            <th class="px-4 py-3 text-right text-slate-800">Total</th>
+                            <th class="px-4 py-3 text-center">Color</th>
+                         </tr>
+                      </thead>
+                      <tbody id="results-body" class="divide-y divide-slate-100">
+                         <!-- JS -->
+                      </tbody>
+                   </table>
+                </div>
+             </div>
+
+          </div>
+       </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
+        <div class="flex items-center gap-4">
+             <p class="text-slate-500 flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                Sistema Operativo
+            </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LÓGICA DEL SIMULADOR -->
+  <script>
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    // --- State Management ---
+    const state = {
+        mode: 'municipio', // 'municipio' | 'gobernacion'
+        candidates: [], // Array of objects
+        colors: [
+            '#1E40AF', '#B91C1C', '#15803D', '#F59E0B', '#6B21A8', 
+            '#0F766E', '#BE123C', '#374151', '#854D0E',
+        ],
+        colorIdx: 0
+    };
+
+    // --- Core Functions ---
+
+    function setMode(mode) {
+        state.mode = mode;
+        const btnMun = document.getElementById('btn-mun');
+        const btnGob = document.getElementById('btn-gob');
+        
+        const lblPercent = document.getElementById('lbl-percent');
+        const thPercent = document.getElementById('th-percent-col');
+        const thVotos = document.getElementById('th-votos-col');
+
+        const activeClass = "bg-slate-800 text-white border-slate-800 shadow-md transform scale-105 ring-2 ring-slate-200";
+        const inactiveClass = "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900";
+
+        if(mode === 'municipio') {
+            btnMun.className = `px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 ${activeClass}`;
+            btnGob.className = `px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 ${inactiveClass}`;
+            
+            document.getElementById('seats-selector').classList.remove('hidden');
+            document.getElementById('mun-info').classList.remove('hidden');
+            document.getElementById('gob-info').classList.add('hidden');
+            document.getElementById('territorial-section').classList.add('hidden');
+            document.getElementById('th-terr').classList.add('hidden');
+            
+            lblPercent.innerText = "% Voto";
+            thPercent.innerText = "% Voto";
+            thVotos.innerText = "Voto Concejal";
+        } else {
+            btnMun.className = `px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 ${inactiveClass}`;
+            btnGob.className = `px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 ${activeClass}`;
+            
+            document.getElementById('seats-selector').classList.add('hidden');
+            document.getElementById('mun-info').classList.add('hidden');
+            document.getElementById('gob-info').classList.remove('hidden');
+            document.getElementById('territorial-section').classList.remove('hidden');
+            document.getElementById('th-terr').classList.remove('hidden');
+            renderTerritorialInputs();
+            
+            lblPercent.innerText = "% Gobernador";
+            thPercent.innerText = "% Gobernador";
+            thVotos.innerText = "Voto Gob/Pob";
+        }
+    }
+
+    function addCandidate() {
+        document.getElementById('input-error').classList.add('hidden');
+
+        const nameInput = document.getElementById('cand-name');
+        const percentInput = document.getElementById('cand-percent');
+        
+        const name = nameInput.value.trim().toUpperCase();
+        const percent = parseFloat(percentInput.value);
+
+        if(!name) { nameInput.focus(); return; }
+        if(isNaN(percent) || percent <= 0) { percentInput.focus(); return; }
+
+        const currentSum = state.candidates.reduce((a,b)=>a+b.percent,0);
+        
+        if(currentSum + percent > 100) {
+            const disponible = (100 - currentSum).toFixed(2);
+            const exceed = ((currentSum + percent) - 100).toFixed(2);
+            const errorDiv = document.getElementById('input-error');
+            const errorDetail = document.getElementById('error-detail');
+            errorDetail.innerHTML = `Espacio disponible: <strong>${disponible}%</strong>. Estás excediendo por <strong>${exceed}%</strong>.`;
+            errorDiv.classList.remove('hidden');
+            errorDiv.classList.remove('animate-shake');
+            void errorDiv.offsetWidth; 
+            errorDiv.classList.add('animate-shake');
+            return;
+        }
+
+        state.candidates.push({
+            id: Date.now(),
+            name,
+            percent,
+            color: state.colors[state.colorIdx % state.colors.length],
+            terr_wins: 0
+        });
+        state.colorIdx++;
+
+        nameInput.value = '';
+        percentInput.value = '';
+        nameInput.focus();
+        
+        renderList();
+        if(state.mode === 'gobernacion') renderTerritorialInputs();
+    }
+
+    function removeCandidate(id) {
+        state.candidates = state.candidates.filter(c => c.id !== id);
+        document.getElementById('input-error').classList.add('hidden');
+        renderList();
+        if(state.mode === 'gobernacion') renderTerritorialInputs();
+    }
+
+    function renderList() {
+        const tbody = document.getElementById('candidates-list');
+        const totalDisplay = document.getElementById('total-percent-display');
+        tbody.innerHTML = '';
+        let sum = 0;
+
+        if(state.candidates.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs italic">Añade partidos para comenzar</td></tr>`;
+        } else {
+            state.candidates.forEach(c => {
+                sum += c.percent;
+                tbody.innerHTML += `
+                    <tr class="group hover:bg-slate-50 transition">
+                        <td class="px-3 py-3 text-xs font-bold text-slate-700 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full shadow-sm" style="background-color:${c.color}"></span>
+                            ${c.name}
+                        </td>
+                        <td class="px-3 py-3 text-xs text-right text-slate-600 font-mono">${c.percent}%</td>
+                        <td class="px-3 py-3 text-right">
+                            <button onclick="removeCandidate(${c.id})" class="text-slate-300 hover:text-rose-500 transition">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        const formattedSum = sum % 1 === 0 ? sum : sum.toFixed(2);
+        totalDisplay.innerText = `${formattedSum}%`;
+        
+        if(sum > 100) {
+            totalDisplay.className = "text-xs font-bold text-rose-600 animate-pulse";
+        } else if(sum === 100) {
+            totalDisplay.className = "text-xs font-bold text-emerald-600";
+        } else {
+            totalDisplay.className = "text-xs font-bold text-slate-500";
+        }
+    }
+
+    function renderTerritorialInputs() {
+        const container = document.getElementById('territorial-inputs');
+        container.innerHTML = '';
+        
+        if(state.candidates.length === 0) {
+            container.innerHTML = '<p class="text-xs italic text-slate-400 border border-dashed border-slate-300 p-2 rounded bg-slate-50 text-center">1. Agrega organizaciones políticas arriba.<br>2. Aparecerán aquí para asignar provincias.</p>';
+            return;
+        }
+
+        state.candidates.forEach(c => {
+            container.innerHTML += `
+                <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-slate-700 truncate w-1/2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full" style="background-color:${c.color}"></span>
+                        ${c.name}
+                    </span>
+                    <div class="flex items-center gap-2">
+                         <span class="text-[10px] uppercase text-slate-400 font-bold">Prov.</span>
+                         <input type="number" min="0" max="15" value="${c.terr_wins}" 
+                           onchange="updateTerrWins(${c.id}, this.value)"
+                           class="w-16 text-sm p-1 border rounded text-right focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none bg-slate-50 font-bold text-slate-800">
+                    </div>
+                </div>
+            `;
+        });
+        updateTerrSum();
+    }
+
+    function updateTerrWins(id, val) {
+        const c = state.candidates.find(x => x.id === id);
+        if(c) c.terr_wins = parseInt(val) || 0;
+        updateTerrSum();
+    }
+
+    function updateTerrSum() {
+        const sum = state.candidates.reduce((a,b)=>a+(b.terr_wins||0),0);
+        const disp = document.getElementById('terr-sum-display');
+        disp.innerText = `${sum} / 15 Provincias Asignadas`;
+        disp.className = sum > 15 ? "mt-3 pt-2 border-t border-slate-100 text-right text-xs font-bold text-rose-600" : "mt-3 pt-2 border-t border-slate-100 text-right text-xs font-bold text-sky-600";
+    }
+
+    // --- Simulation Logic ---
+
+    function dhondt(candidates, seats) {
+        let allocation = {};
+        let currentVotes = {};
+        candidates.forEach(c => {
+            allocation[c.id] = 0;
+            currentVotes[c.id] = c.percent;
+        });
+
+        for(let i=0; i<seats; i++) {
+            let winnerId = null;
+            let maxV = -1;
+            candidates.forEach(c => {
+                if(currentVotes[c.id] > maxV) {
+                    maxV = currentVotes[c.id];
+                    winnerId = c.id;
+                }
+            });
+            if(winnerId !== null) {
+                allocation[winnerId]++;
+                const original = candidates.find(x => x.id === winnerId).percent;
+                currentVotes[winnerId] = original / (allocation[winnerId] + 1);
+            }
+        }
+        return allocation;
+    }
+
+    function simulate() {
+        if(state.candidates.length === 0) return;
+
+        document.getElementById('input-error').classList.add('hidden');
+        let results = [];
+        let totalSeats = 0;
+
+        if(state.mode === 'municipio') {
+            const seats = parseInt(document.getElementById('total-seats').value);
+            const distrib = dhondt(state.candidates, seats);
+            
+            results = state.candidates.map(c => ({
+                ...c,
+                pop: distrib[c.id],
+                terr: 0,
+                total: distrib[c.id]
+            }));
+            totalSeats = seats;
+        } else {
+            const terrSum = state.candidates.reduce((a,b)=>a+(b.terr_wins||0),0);
+            if(terrSum > 15) { 
+                alert("Error: Se han asignado más de 15 escaños territoriales."); 
+                return; 
+            }
+
+            const distrib = dhondt(state.candidates, 11);
+            
+            results = state.candidates.map(c => ({
+                ...c,
+                pop: distrib[c.id],
+                terr: c.terr_wins || 0,
+                total: distrib[c.id] + (c.terr_wins || 0)
+            }));
+            
+            totalSeats = 28; 
+        }
+
+        // --- Render UI ---
+        document.getElementById('placeholder-state').classList.add('hidden');
+        document.getElementById('center-info').classList.remove('opacity-0');
+        document.getElementById('results-card').classList.remove('hidden');
+        
+        const totalEl = document.getElementById('total-seats-number');
+        let currentCount = 0;
+        const interval = setInterval(() => {
+            currentCount++;
+            totalEl.innerText = currentCount;
+            if(currentCount >= totalSeats) clearInterval(interval);
+        }, 30);
+        
+        const majority = Math.floor(totalSeats/2) + 1;
+        const winner = results.reduce((prev, curr) => (prev.total > curr.total) ? prev : curr);
+        const ind = document.getElementById('majority-indicator');
+        
+        if(winner.total >= majority) {
+            ind.innerText = `Mayoría: ${winner.name}`;
+            ind.className = "mt-2 px-3 py-1 rounded-full bg-emerald-100 text-[10px] sm:text-xs font-medium text-emerald-700 inline-block shadow-sm";
+        } else {
+            ind.innerText = "Sin mayoría absoluta";
+            ind.className = "mt-2 px-3 py-1 rounded-full bg-slate-100 text-[10px] sm:text-xs font-medium text-slate-600 inline-block shadow-sm";
+        }
+
+        renderResultsTable(results);
+
+        // --- Generate Plot Data ---
+        let seatList = [];
+        
+        if(state.mode === 'gobernacion') {
+             seatList.push({color: '#94a3b8', name: 'Indígena'});
+             seatList.push({color: '#94a3b8', name: 'Indígena'});
+        }
+
+        results.forEach(r => {
+            for(let i=0; i<r.total; i++) {
+                seatList.push({color: r.color, name: r.name});
+            }
+        });
+        
+        while(seatList.length < totalSeats) {
+             seatList.push({color: '#e2e8f0', name: 'Vacante'});
+        }
+
+        seatList.sort((a,b) => {
+             if(a.name === 'Indígena') return -1;
+             if(b.name === 'Indígena') return 1;
+             if(a.name === 'Vacante') return 1;
+             if(b.name === 'Vacante') return -1;
+             return a.name.localeCompare(b.name); 
+        });
+
+        drawParliamentResponsive(seatList);
+    }
+
+    function renderResultsTable(results) {
+        const tbody = document.getElementById('results-body');
+        tbody.innerHTML = '';
+        
+        if(state.mode === 'gobernacion') {
+             tbody.innerHTML += `
+                <tr>
+                    <td class="px-4 py-3 font-medium text-slate-600 text-xs uppercase tracking-wide">Pueblos Indígenas</td>
+                    <td class="px-4 py-3 text-right text-slate-400 font-mono">-</td>
+                    <td class="px-4 py-3 text-right text-slate-400 font-mono">-</td>
+                    <td class="px-4 py-3 text-right text-slate-400 font-mono">-</td>
+                    <td class="px-4 py-3 text-right font-bold text-slate-800">2</td>
+                    <td class="px-4 py-3 flex justify-center"><span class="w-3 h-3 rounded-full bg-slate-400 mt-1"></span></td>
+                </tr>
+             `;
+        }
+
+        results.sort((a,b) => b.total - a.total).forEach(r => {
+             const terrVal = state.mode === 'gobernacion' ? `<span class="text-sky-600 font-semibold">${r.terr}</span>` : '<span class="hidden"></span>';
+             const popVal = state.mode === 'gobernacion' ? r.pop : r.total;
+             
+             tbody.innerHTML += `
+                <tr>
+                    <td class="px-4 py-3 font-bold text-slate-800">${r.name}</td>
+                    <td class="px-4 py-3 text-right text-slate-500 font-mono text-xs">${r.percent}%</td>
+                    <td class="px-4 py-3 text-right text-slate-600 font-mono">${popVal}</td>
+                    ${state.mode === 'gobernacion' ? `<td class="px-4 py-3 text-right font-mono">${terrVal}</td>` : '<td class="hidden"></td>'}
+                    <td class="px-4 py-3 text-right font-bold text-lg text-slate-900">${r.total}</td>
+                    <td class="px-4 py-3 flex justify-center">
+                        <span class="w-3 h-3 rounded-full shadow-sm mt-2" style="background-color:${r.color}"></span>
+                    </td>
+                </tr>
+             `;
+        });
+    }
+
+    function drawParliamentResponsive(seatList) {
+        const canvas = document.getElementById('parliamentCanvas');
+        const container = canvas.parentElement;
+        const dpi = window.devicePixelRatio || 1;
+        const rect = container.getBoundingClientRect();
+        
+        canvas.width = rect.width * dpi;
+        canvas.height = rect.height * dpi;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpi, dpi); 
+        
+        const W = rect.width;
+        const H = rect.height;
+        ctx.clearRect(0,0,W,H);
+        
+        if(seatList.length === 0) return;
+
+        const cx = W / 2;
+        const cy = H * 0.95; 
+        const availableW = W * 0.9;
+        const availableH = H * 0.9;
+        const maxRadius = Math.min(availableW / 2, availableH); 
+        const minRadius = maxRadius * 0.4; 
+        
+        const count = seatList.length;
+        let rows = Math.ceil(Math.sqrt(count / 2.5)); 
+        if(rows < 3) rows = 3;
+        if(rows > 8) rows = 8;
+        
+        const radiusStep = (maxRadius - minRadius) / (rows - 1);
+        const midR = (maxRadius + minRadius) / 2;
+        const midArc = Math.PI * midR;
+        const avgSeatsPerRow = count / rows;
+        let dotRadius = (midArc / avgSeatsPerRow) / 2.5; 
+        
+        if(dotRadius < 4) dotRadius = 4;
+        if(dotRadius > 14) dotRadius = 14;
+
+        let rowRadii = [];
+        let totalArcLen = 0;
+        for(let i=0; i<rows; i++) {
+            const r = minRadius + i * radiusStep;
+            rowRadii.push(r);
+            totalArcLen += r;
+        }
+        
+        let seatsPerRow = rowRadii.map(r => (r / totalArcLen) * count);
+        seatsPerRow = seatsPerRow.map(n => Math.round(n));
+        let allocated = seatsPerRow.reduce((a,b)=>a+b, 0);
+        let diff = count - allocated;
+        if(diff !== 0) seatsPerRow[seatsPerRow.length - 1] += diff;
+
+        let currentSeat = 0;
+        for(let i=0; i<rows; i++) {
+            const r = rowRadii[i];
+            const n = seatsPerRow[i];
+            if(n <= 0) continue;
+            const anglePadding = (dotRadius * 1.5) / r;
+            const availableAngle = Math.PI - 2*anglePadding;
+            const angleStep = n > 1 ? availableAngle / (n - 1) : 0;
+            
+            for(let j=0; j<n; j++) {
+                if(currentSeat >= count) break;
+                const angle = Math.PI - anglePadding - (j * angleStep);
+                const x = cx + r * Math.cos(angle);
+                const y = cy - r * Math.sin(angle);
+                const color = seatList[currentSeat].color;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, dotRadius, 0, Math.PI*2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = '#ffffff';
+                ctx.stroke();
+
+                currentSeat++;
+            }
+        }
+    }
+
+    function resetApp(askConfirm = true) {
+        if(askConfirm && !confirm("¿Reiniciar el simulador?")) return;
+
+        state.candidates = [];
+        state.colorIdx = 0;
+        renderList();
+        renderTerritorialInputs();
+        document.getElementById('input-error').classList.add('hidden');
+        document.getElementById('results-card').classList.add('hidden');
+        document.getElementById('placeholder-state').classList.remove('hidden');
+        document.getElementById('center-info').classList.add('opacity-0');
+        const canvas = document.getElementById('parliamentCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+    
+    window.addEventListener('resize', () => {
+        if(!document.getElementById('results-card').classList.contains('hidden')) {
+            simulate(); 
+        }
+    });
+
+    setMode('municipio');
+
+  </script>
+</body>
+</html>
