@@ -172,29 +172,29 @@
                     </div>
                 </div>
 
-                <!-- FORMULARIO INPUT RESPONSIVE (CORREGIDO ALINEACIÓN Y POSICIÓN BOTÓN) -->
-                <div class="flex flex-col sm:flex-row gap-3 mb-4">
-                   <!-- Campo Nombre -->
-                   <div class="w-full sm:flex-1">
-                       <label id="lbl-name" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1">Organización Política</label>
-                       <input type="text" id="cand-name" placeholder="AÑADIR ORG. POLÍTICA" class="input-field uppercase font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-normal" style="text-transform:uppercase">
-                   </div>
-                   
-                   <!-- Contenedor Porcentaje + Botón -->
-                   <div class="flex gap-3 w-full sm:w-auto relative">
-                       <div class="flex-1 sm:w-24">
-                           <label id="lbl-percent" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1 text-right">% Voto</label>
-                           <input type="number" id="cand-percent" placeholder="0.0" class="input-field text-right font-mono font-bold" onkeydown="if(event.key==='Enter') addCandidate()">
-                       </div>
-                       <div>
-                           <!-- Label invisible para forzar la misma altura y alineación que los inputs -->
-                           <label class="block text-[10px] uppercase font-bold text-transparent mb-1 select-none">&nbsp;</label>
-                           <!-- Botón elevado con mb-24 y desplazado muy a la izquierda con -ml-36 y z-index para no ser tapado -->
-                           <button onclick="addCandidate()" class="h-[46px] w-[46px] sm:w-12 flex items-center justify-center rounded-xl bg-black text-white hover:bg-gray-800 hover:scale-105 active:scale-95 transition shadow-md border-2 border-black mb-24 -ml-36 relative z-10" aria-label="Añadir candidato">
-                              <i class="fa-solid fa-plus text-lg"></i>
-                           </button>
-                       </div>
-                   </div>
+                <!-- FORMULARIO INPUT RESPONSIVE (CORREGIDO GRID SYSTEM) -->
+                <div class="bg-slate-50/50 p-3 rounded-xl border border-slate-100 mb-4">
+                    <div class="grid grid-cols-12 gap-3">
+                        <!-- Campo Nombre: Full en móvil, 7 cols en PC -->
+                        <div class="col-span-12 sm:col-span-7">
+                            <label id="lbl-name" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1">Organización Política</label>
+                            <input type="text" id="cand-name" placeholder="AÑADIR ORG. POLÍTICA" class="input-field uppercase font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-normal" style="text-transform:uppercase">
+                        </div>
+                        
+                        <!-- Campo Porcentaje: Mitad en móvil, 3 cols en PC -->
+                        <div class="col-span-6 sm:col-span-3">
+                            <label id="lbl-percent" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1 text-center">% Voto</label>
+                            <input type="number" id="cand-percent" placeholder="0.0" class="input-field text-center font-mono font-bold" onkeydown="if(event.key==='Enter') addCandidate()">
+                        </div>
+
+                        <!-- Botón Añadir: Mitad en móvil, 2 cols en PC -->
+                        <div class="col-span-6 sm:col-span-2 flex items-end">
+                            <button onclick="addCandidate()" class="w-full h-[46px] rounded-xl bg-black text-white hover:bg-gray-800 transition shadow-md border-2 border-black flex items-center justify-center gap-2 active:scale-95" aria-label="Añadir candidato">
+                                <i class="fa-solid fa-plus text-lg"></i>
+                                <span class="sm:hidden font-bold text-xs">AÑADIR</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tabla Lista -->
