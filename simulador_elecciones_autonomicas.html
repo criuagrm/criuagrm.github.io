@@ -56,7 +56,7 @@
     
     /* Botón simular con fondo negro sólido */
     .btn-simular {
-        @apply px-12 py-4 rounded-xl text-base font-bold text-white bg-black border-2 border-black shadow-lg transition-all transform hover:scale-105 flex justify-center items-center gap-3 hover:bg-gray-900 min-w-[200px] hover:shadow-xl cursor-pointer;
+        @apply w-full py-4 rounded-xl text-base font-bold text-white bg-black border-2 border-black shadow-lg transition-all transform hover:scale-[1.02] flex justify-center items-center gap-3 hover:bg-gray-900 hover:shadow-xl cursor-pointer;
     }
   </style>
 </head>
@@ -80,9 +80,12 @@
         <span class="text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Simulador Electoral</span>
       </nav>
       
-      <button onclick="resetApp()" class="text-sm text-slate-500 hover:text-rose-600 transition flex items-center gap-2 group">
-         <i class="fa-solid fa-rotate-right group-hover:rotate-180 transition-transform duration-500"></i> Reiniciar
-      </button>
+      <!-- BOTÓN VER CANDIDATOS (Reemplaza a Reiniciar en Header) -->
+      <a href="https://criuagrm.github.io/candidatoscz_elecciones_autonomicas.html" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition flex items-center gap-2 group bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 shadow-sm">
+         <i class="fa-solid fa-users-viewfinder group-hover:scale-110 transition-transform text-emerald-500"></i>
+         <span class="hidden sm:inline">Ver Candidatos</span>
+         <span class="sm:hidden">Candidatos</span>
+      </a>
     </div>
   </header>
 
@@ -175,21 +178,23 @@
                     </div>
                 </div>
 
-                <!-- FORMULARIO INPUT RESPONSIVE (Alineación correcta con Flex Items-End) -->
+                <!-- FORMULARIO INPUT RESPONSIVE (Alineación Mejorada) -->
+                <!-- sm:flex-row pone todo en una linea en PC. items-end alinea abajo -->
                 <div class="flex flex-col sm:flex-row gap-3 mb-4 items-end">
-                   <!-- Campo Nombre -->
+                   <!-- Campo Nombre: Ocupa todo el ancho en móvil, se expande en PC -->
                    <div class="w-full sm:flex-1">
                        <label id="lbl-name" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1">Organización Política</label>
                        <input type="text" id="cand-name" placeholder="AÑADIR ORG. POLÍTICA" class="input-field uppercase font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-normal" style="text-transform:uppercase">
                    </div>
                    
                    <!-- Contenedor Porcentaje + Botón -->
+                   <!-- En móvil ocupa 100% ancho con flex, en PC se adapta al contenido -->
                    <div class="flex gap-3 w-full sm:w-auto items-end">
                        <div class="flex-1 sm:w-24">
                            <label id="lbl-percent" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1 text-right">% Voto</label>
                            <input type="number" id="cand-percent" placeholder="0.0" class="input-field text-right font-mono font-bold" onkeydown="if(event.key==='Enter') addCandidate()">
                        </div>
-                       <!-- Botón añadido con alineación estándar Flex para consistencia -->
+                       <!-- Botón sin márgenes raros, alineado por flexbox -->
                        <div class="shrink-0">
                            <button onclick="addCandidate()" class="h-[46px] w-[46px] sm:w-12 flex items-center justify-center rounded-xl bg-black text-white hover:bg-gray-800 hover:scale-105 active:scale-95 transition shadow-md border-2 border-black" aria-label="Añadir candidato">
                               <i class="fa-solid fa-plus text-lg"></i>
@@ -238,11 +243,16 @@
                 </div>
              </div>
 
-             <!-- Botón Acción Centrado -->
-             <div class="flex justify-center mt-6 sm:mt-8">
+             <!-- Botones Acción Centrados -->
+             <div class="flex flex-col gap-3 mt-6 sm:mt-8">
                  <button onclick="simulate()" class="btn-simular">
-                    <span>SIMULAR</span>
-                    <i class="fa-solid fa-chart-simple text-sm opacity-90"></i>
+                    <span>SIMULAR RESULTADOS</span>
+                    <i class="fa-solid fa-chart-simple text-sm opacity-80"></i>
+                 </button>
+                 
+                 <!-- BOTÓN REINICIAR (Movido aquí) -->
+                 <button onclick="resetApp()" class="w-full py-3 rounded-xl text-sm font-semibold text-slate-500 hover:text-rose-600 border border-transparent hover:border-rose-200 hover:bg-rose-50 transition flex justify-center items-center gap-2">
+                    <i class="fa-solid fa-trash-can"></i> Reiniciar datos
                  </button>
              </div>
 
@@ -320,18 +330,22 @@
     </div>
   </footer>
 
+  <!-- LÓGICA DEL SIMULADOR -->
   <script>
     document.getElementById('year').innerText = new Date().getFullYear();
 
+    // --- State Management ---
     const state = {
-        mode: 'municipio', 
-        candidates: [], 
+        mode: 'municipio', // 'municipio' | 'gobernacion'
+        candidates: [], // Array of objects
         colors: [
             '#1E40AF', '#B91C1C', '#15803D', '#F59E0B', '#6B21A8', 
             '#0F766E', '#BE123C', '#374151', '#854D0E',
         ],
         colorIdx: 0
     };
+
+    // --- Core Functions ---
 
     function setMode(mode) {
         // Reinicio automático al cambiar de pestaña
