@@ -6,8 +6,7 @@
   <meta name="theme-color" content="#ffffff" />
   <title>Simulador Electoral — CIRCPyCS</title>
   <meta name="description" content="Simulador de Escaños - Centro de Investigación Regional en Ciencia Política y Ciencias Sociales" />
-  
-  <!-- Tailwind CDN -->
+   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,7 +33,6 @@
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
   <style>
@@ -62,10 +60,8 @@
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 flex flex-col w-full overflow-x-hidden">
 
-  <!-- Cinta superior -->
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header / Nav -->
   <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200 w-full">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
       <a href="#" class="flex items-center gap-3 min-w-0">
@@ -80,19 +76,27 @@
         <span class="text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Simulador Electoral</span>
       </nav>
       
-      <!-- BOTÓN VER CANDIDATOS (Reemplaza a Reiniciar en Header) -->
-      <a href="https://criuagrm.github.io/candidatoscz_elecciones_autonomicas.html" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition flex items-center gap-2 group bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 shadow-sm">
-         <i class="fa-solid fa-users-viewfinder group-hover:scale-110 transition-transform text-emerald-500"></i>
-         <span class="hidden sm:inline">Ver Candidatos</span>
-         <span class="sm:hidden">Candidatos</span>
-      </a>
+      <div class="flex items-center gap-2">
+          
+          <a href="https://criuagrm.github.io/atlaselectoral_scz_mun" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition flex items-center gap-2 group bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 shadow-sm">
+             <i class="fa-solid fa-map-location-dot group-hover:scale-110 transition-transform text-emerald-500"></i>
+             <span class="hidden sm:inline">Atlas Electoral</span>
+             <span class="sm:hidden">Atlas</span>
+          </a>
+
+          <a href="https://criuagrm.github.io/candidatoscz_elecciones_autonomicas.html" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition flex items-center gap-2 group bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:border-emerald-200 shadow-sm">
+             <i class="fa-solid fa-users-viewfinder group-hover:scale-110 transition-transform text-emerald-500"></i>
+             <span class="hidden sm:inline">Ver Candidatos</span>
+             <span class="sm:hidden">Candidatos</span>
+          </a>
+
+      </div>
+
     </div>
   </header>
 
-  <!-- Contenido Principal -->
   <main class="flex-grow w-full max-w-[100vw] overflow-hidden">
-      
-    <!-- Hero / Intro -->
+       
     <section class="relative overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-6 w-full px-4">
        <div class="max-w-7xl mx-auto">
           <div class="text-center max-w-2xl mx-auto">
@@ -106,14 +110,11 @@
        </div>
     </section>
 
-    <!-- Simulador UI -->
     <section class="py-4 sm:py-8 w-full px-4">
        <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-6 sm:gap-8">
           
-          <!-- PANEL IZQUIERDO: CONFIGURACIÓN -->
           <div class="lg:col-span-4 space-y-4 sm:space-y-6 w-full min-w-0">
              
-             <!-- 1. Tipo de Elección -->
              <div class="card-base relative overflow-hidden">
                 <div class="flex items-center gap-2 mb-4">
                    <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">1</div>
@@ -130,7 +131,6 @@
                    </button>
                 </div>
 
-                <!-- Selector Escaños (Solo Municipio) -->
                 <div id="seats-selector" class="transition-all duration-300">
                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tamaño del Concejo</label>
                    <select id="total-seats" class="input-field">
@@ -141,7 +141,6 @@
                    </select>
                 </div>
 
-                <!-- Info Municipio (Disclaimer) -->
                 <div id="mun-info" class="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900 mt-4 shadow-sm">
                     <p class="font-bold mb-2 text-xs uppercase flex items-center gap-2 text-amber-700">
                         <i class="fa-solid fa-triangle-exclamation"></i> Nota para el operador
@@ -151,7 +150,6 @@
                     </p>
                 </div>
 
-                <!-- Info Gobernación -->
                 <div id="gob-info" class="hidden rounded-xl bg-sky-50 border border-sky-100 p-4 text-sm text-sky-900 mt-4">
                    <p class="font-bold mb-1 text-xs uppercase">Sistema Santa Cruz (28):</p>
                    <ul class="list-disc list-inside space-y-1 text-sky-800/80 text-xs">
@@ -162,14 +160,12 @@
                 </div>
              </div>
 
-             <!-- 2. Candidatos -->
              <div class="card-base">
                 <div class="flex items-center gap-2 mb-4">
                    <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">2</div>
                    <h3 class="font-bold text-lg">Datos de Votación</h3>
                 </div>
 
-                <!-- Mensaje de Error Visual -->
                 <div id="input-error" class="hidden animate-shake mb-3 rounded-lg bg-rose-50 border border-rose-200 p-3 flex items-start gap-2">
                     <i class="fa-solid fa-circle-xmark text-rose-500 mt-0.5"></i>
                     <div class="text-xs text-rose-700">
@@ -178,23 +174,17 @@
                     </div>
                 </div>
 
-                <!-- FORMULARIO INPUT RESPONSIVE (Alineación Mejorada) -->
-                <!-- sm:flex-row pone todo en una linea en PC. items-end alinea abajo -->
                 <div class="flex flex-col sm:flex-row gap-3 mb-4 items-end">
-                   <!-- Campo Nombre: Ocupa todo el ancho en móvil, se expande en PC -->
                    <div class="w-full sm:flex-1">
                        <label id="lbl-name" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1">Organización Política</label>
                        <input type="text" id="cand-name" placeholder="AÑADIR ORG. POLÍTICA" class="input-field uppercase font-bold text-slate-800 placeholder:text-slate-300 placeholder:font-normal" style="text-transform:uppercase">
                    </div>
                    
-                   <!-- Contenedor Porcentaje + Botón -->
-                   <!-- En móvil ocupa 100% ancho con flex, en PC se adapta al contenido -->
                    <div class="flex gap-3 w-full sm:w-auto items-end">
                        <div class="flex-1 sm:w-24">
                            <label id="lbl-percent" class="block text-[10px] uppercase font-bold text-slate-400 mb-1 ml-1 text-right">% Voto</label>
                            <input type="number" id="cand-percent" placeholder="0.0" class="input-field text-right font-mono font-bold" onkeydown="if(event.key==='Enter') addCandidate()">
                        </div>
-                       <!-- Botón sin márgenes raros, alineado por flexbox -->
                        <div class="shrink-0">
                            <button onclick="addCandidate()" class="h-[46px] w-[46px] sm:w-12 flex items-center justify-center rounded-xl bg-black text-white hover:bg-gray-800 hover:scale-105 active:scale-95 transition shadow-md border-2 border-black" aria-label="Añadir candidato">
                               <i class="fa-solid fa-plus text-lg"></i>
@@ -203,7 +193,6 @@
                    </div>
                 </div>
 
-                <!-- Tabla Lista -->
                 <div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50/50">
                    <table class="min-w-full text-sm">
                       <thead class="bg-slate-100 text-slate-500 font-semibold text-xs uppercase">
@@ -224,7 +213,6 @@
                 </div>
              </div>
 
-             <!-- 3. Territoriales (Gobernación) -->
              <div id="territorial-section" class="card-base hidden border-l-4 border-l-sky-500">
                 <div class="flex items-center gap-2 mb-2">
                    <div class="h-8 w-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 font-bold text-sm">3</div>
@@ -243,14 +231,12 @@
                 </div>
              </div>
 
-             <!-- Botones Acción Centrados -->
              <div class="flex flex-col gap-3 mt-6 sm:mt-8">
                  <button onclick="simulate()" class="btn-simular">
                     <span>SIMULAR RESULTADOS</span>
                     <i class="fa-solid fa-chart-simple text-sm opacity-80"></i>
                  </button>
                  
-                 <!-- BOTÓN REINICIAR (Movido aquí) -->
                  <button onclick="resetApp()" class="w-full py-3 rounded-xl text-sm font-semibold text-slate-500 hover:text-rose-600 border border-transparent hover:border-rose-200 hover:bg-rose-50 transition flex justify-center items-center gap-2">
                     <i class="fa-solid fa-trash-can"></i> Reiniciar datos
                  </button>
@@ -258,19 +244,14 @@
 
           </div>
 
-          <!-- PANEL DERECHO: VISUALIZACIÓN -->
           <div class="lg:col-span-8 space-y-6 min-w-0">
              
-             <!-- Tarjeta Gráfico -->
              <div class="card-base relative flex flex-col justify-center items-center bg-white overflow-hidden p-0 sm:p-6 min-h-[300px] sm:min-h-[500px]">
-                <!-- Header interno -->
                 <div class="w-full px-4 pt-4 pb-2 sm:p-0 sm:absolute sm:top-6 sm:left-6 flex flex-col z-10">
                    <h3 class="font-bold text-lg sm:text-xl text-slate-900">Composición Proyectada</h3>
                    <span class="text-xs text-slate-500 uppercase tracking-wide">Resultados Estimados</span>
                 </div>
                 
-                <!-- Contenedor del Canvas Responsive -->
-                <!-- IMPORTANTE: max-w-full y overflow-hidden para prevenir desbordes -->
                 <div class="w-full relative flex justify-center items-end max-w-full overflow-hidden" style="height: 35vh; min-height: 250px; sm:min-height: 400px; sm:height: 50vh; max-height: 600px;">
                     <canvas id="parliamentCanvas" class="w-full h-full object-contain z-10"></canvas>
                     
@@ -281,7 +262,6 @@
                     </div>
                 </div>
 
-                <!-- Placeholder state -->
                 <div id="placeholder-state" class="absolute inset-0 flex flex-col items-center justify-center bg-white/95 z-20 backdrop-blur-sm">
                     <div class="h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-slate-50 flex items-center justify-center mb-4 sm:mb-6 ring-1 ring-slate-200 shadow-sm">
                         <i class="fa-solid fa-chart-pie text-2xl sm:text-4xl text-slate-300"></i>
@@ -291,7 +271,6 @@
                 </div>
              </div>
 
-             <!-- Tabla Detallada -->
              <div id="results-card" class="card-base hidden animate-fade-in w-full overflow-x-hidden">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-bold text-lg text-slate-800">Detalle de Asignación</h3>
@@ -310,8 +289,7 @@
                          </tr>
                       </thead>
                       <tbody id="results-body" class="divide-y divide-slate-100">
-                         <!-- JS -->
-                      </tbody>
+                         </tbody>
                    </table>
                 </div>
              </div>
@@ -330,7 +308,6 @@
     </div>
   </footer>
 
-  <!-- LÓGICA DEL SIMULADOR -->
   <script>
     document.getElementById('year').innerText = new Date().getFullYear();
 
