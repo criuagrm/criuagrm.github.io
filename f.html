@@ -2,221 +2,514 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Examen de Filosofía</title>
-    <!-- Tailwind CSS para Estilos --> 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React y ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel para JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionarios de Filosofía</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    </style>
-</head>
-<body class="bg-slate-50">
-    <div id="root"></div>
-
-    <script type="text/babel">
-        const { useState, useEffect, useCallback } = React;
-
-        // Componentes de Iconos (Simulando lucide-react)
-        const TimerIcon = () => <i data-lucide="timer" className="w-5 h-5"></i>;
-        const CheckIcon = () => <i data-lucide="check-circle" className="w-5 h-5"></i>;
-        const RefreshIcon = () => <i data-lucide="refresh-cw" className="w-5 h-5"></i>;
-        const ChevronIcon = () => <i data-lucide="chevron-right" className="w-5 h-5"></i>;
-        const AwardIcon = () => <i data-lucide="award" className="w-12 h-12"></i>;
-        const InfoIcon = () => <i data-lucide="info" className="w-5 h-5"></i>;
-
-        const ALL_QUESTIONS = [
-            { id: 1, question: "¿Qué es un proyecto de transformación social?", options: ["Un plan para mejorar la calidad de vida y estructuras de una comunidad.", "Un método exclusivo para generar ingresos económicos individuales.", "Una teoría abstracta sobre la política antigua.", "Un manual de instrucciones para maquinaria industrial.", "Un registro histórico de eventos pasados sin aplicación actual."], answer: 0 },
-            { id: 2, question: "¿Cuál es el fin principal de la transformación productiva?", options: ["Aumentar el consumo de productos importados.", "Diversificar la economía y mejorar procesos de creación de valor.", "Eliminar por completo el uso de tecnología en el campo.", "Mantener las técnicas de producción obsoletas por tradición.", "Reducir la participación comunitaria en el trabajo."], answer: 1 },
-            { id: 3, question: "En un proyecto comunitario, ¿qué actor es fundamental para la sostenibilidad?", options: ["Empresas extranjeras que no conocen el territorio.", "La comunidad local y su participación activa.", "Solo el gobierno central sin consulta previa.", "Organizaciones que solo donan dinero sin seguimiento.", "Turistas ocasionales que visitan la zona."], answer: 1 },
-            { id: 4, question: "¿Qué significa que un proyecto sea 'sostenible'?", options: ["Que depende siempre de ayuda externa para funcionar.", "Que se agota después de la primera intervención.", "Que puede mantenerse en el tiempo con recursos propios o gestionados.", "Que solo funciona durante el periodo de elecciones.", "Que no requiere ningún tipo de evaluación posterior."], answer: 2 },
-            { id: 5, question: "¿Qué metodología se usa comúnmente para la intervención social?", options: ["Diagnóstico participativo.", "Imposición de reglas desde el exterior.", "Ignorar las necesidades de los beneficiarios.", "Decisiones tomadas por una sola persona sin debate.", "Selección al azar de problemas a resolver."], answer: 0 },
-            { id: 6, question: "¿Cuál es una fase del ciclo de vida de un proyecto comunitario?", options: ["El olvido de las metas propuestas.", "La improvisación de recursos financieros.", "Diseño y planificación.", "La exclusión de las minorías.", "El cierre sin informe final."], answer: 2 },
-            { id: 7, question: "¿Qué busca la transformación comunitaria a nivel social?", options: ["Fomentar el individualismo extremo.", "Fortalecer el tejido social y la solidaridad.", "Dividir a los vecinos por ideologías.", "Aumentar la brecha entre ricos y pobres.", "Evitar que la gente se organice."], answer: 1 },
-            { id: 8, question: "¿Qué es el impacto social de un proyecto?", options: ["El ruido que hacen las máquinas durante la construcción.", "El cambio neto positivo o negativo en la vida de las personas.", "La cantidad de folletos impresos para la publicidad.", "El costo total del proyecto en dólares.", "La duración del contrato de los trabajadores."], answer: 1 },
-            { id: 9, question: "¿Cuál es un reto común en los proyectos comunitarios?", options: ["Tener demasiada participación de la gente.", "La falta de recursos o la resistencia al cambio.", "Que el clima sea siempre perfecto.", "Que todas las personas estén de acuerdo siempre.", "La ausencia total de problemas logísticos."], answer: 1 },
-            { id: 10, question: "La 'transformación productiva' se enfoca principalmente en:", options: ["El cambio de la moneda nacional.", "La mejora de habilidades y herramientas para el trabajo.", "El estudio de la gramática española.", "La construcción de monumentos históricos.", "La decoración de oficinas públicas."], answer: 1 },
-            { id: 11, question: "¿Qué es el diagnóstico participativo?", options: ["Un examen médico individual.", "Un proceso donde la comunidad identifica sus propios problemas.", "Una lista de leyes dictadas por el parlamento.", "Un sorteo para elegir líderes vecinales.", "Una encuesta que nadie responde."], answer: 1 },
-            { id: 12, question: "¿Qué rol cumplen las metodologías de intervención?", options: ["Hacer el proceso más confuso y lento.", "Guiar de forma estructurada las acciones del proyecto.", "Asegurar que nadie entienda lo que se está haciendo.", "Limitar la creatividad de los participantes.", "Garantizar que el proyecto fracase rápido."], answer: 1 },
-            { id: 13, question: "Un fundamento de la transformación social es:", options: ["La equidad y la justicia social.", "La represión de las ideas nuevas.", "El mantenimiento del status quo.", "La discriminación por origen étnico.", "El beneficio exclusivo de los líderes."], answer: 0 },
-            { id: 14, question: "¿Cuál es la última etapa del ciclo de un proyecto?", options: ["La inauguración sin evaluación.", "Evaluación de resultados y cierre.", "La pérdida de todos los documentos.", "El inicio de un conflicto interno.", "La solicitud de más préstamos."], answer: 1 },
-            { id: 15, question: "¿A qué se refiere la transformación 'comunitaria'?", options: ["A cambios que solo afectan a una familia.", "A procesos que involucran y benefician a un colectivo local.", "A la compra masiva de computadoras para el hogar.", "A la reforma de las leyes de aviación civil.", "A la pintura de fachadas en centros comerciales."], answer: 1 },
-            { id: 16, question: "¿Por qué es importante evaluar el impacto?", options: ["Para justificar el gasto sin importar el resultado.", "Para aprender de errores y medir la efectividad real.", "Para castigar a quienes no trabajaron bien.", "Para llenar expedientes que nadie leerá.", "Para que el proyecto duren para siempre sin cambios."], answer: 1 },
-            { id: 17, question: "¿Qué factor puede detener un proyecto de transformación?", options: ["El exceso de entusiasmo comunitario.", "Conflictos de intereses o falta de transparencia.", "El cumplimiento estricto de los cronogramas.", "Tener una visión clara del futuro.", "La abundancia de materiales de construcción."], answer: 1 },
-            { id: 18, question: "¿Qué promueven los proyectos de transformación productiva?", options: ["La dependencia de un solo producto básico.", "La innovación y el valor agregado.", "La reducción de la jornada laboral a cero.", "La exportación de materias primas sin procesar.", "La eliminación de toda industria nacional."], answer: 1 },
-            { id: 19, question: "¿Quiénes son los beneficiarios directos de un proyecto comunitario?", options: ["Los inversionistas que viven en otros países.", "Los miembros de la comunidad donde se aplica el proyecto.", "Solo los funcionarios que lo aprueban.", "Los fabricantes de las máquinas utilizadas.", "Los historiadores del futuro."], answer: 1 },
-            { id: 20, question: "¿Qué es la 'intervención social'?", options: ["Una charla informal entre amigos.", "Acción organizada para influir en una realidad social.", "Un programa de televisión sobre leyes.", "La invasión de un país por otro.", "La venta de productos en la calle."], answer: 1 },
-            { id: 21, question: "¿Qué rol tiene el Estado en estos proyectos?", options: ["Debe ser un facilitador y garante de derechos.", "Debe ignorar cualquier iniciativa ciudadana.", "Debe cobrar impuestos sin dar nada a cambio.", "Debe prohibir que la gente se organice.", "Debe ser el único dueño de todas las ideas."], answer: 0 },
-            { id: 22, question: "Un proyecto es exitoso socialmente si:", options: ["Sobró mucho dinero al final.", "Se resolvieron necesidades reales y se empoderó a la gente.", "Salió en todas las portadas de los periódicos.", "Nadie se quejó durante el proceso.", "Se construyó el edificio más alto."], answer: 1 },
-            { id: 23, question: "¿Qué motiva la transformación social?", options: ["El deseo de poder absoluto.", "La búsqueda de mejores condiciones de vida para todos.", "La envidia entre comunidades vecinas.", "El aburrimiento de los líderes sociales.", "La necesidad de gastar fondos públicos."], answer: 1 },
-            { id: 24, question: "¿Cómo se definen las metas de un proyecto?", options: ["Deben ser claras, medibles y realistas.", "Deben ser imposibles de alcanzar para motivar.", "Se deciden al azar el último día.", "No deben escribirse nunca.", "Cambian cada semana sin aviso."], answer: 0 },
-            { id: 25, question: "¿Cuál es la base de la transformación productiva comunitaria?", options: ["El aprovechamiento responsable de recursos locales.", "La explotación desmedida de la naturaleza.", "La compra de tecnología que nadie sabe usar.", "El abandono de las tierras de cultivo.", "La migración masiva a las ciudades."], answer: 0 }
-        ];
-
-        function App() {
-            const [quizStarted, setQuizStarted] = useState(false);
-            const [questions, setQuestions] = useState([]);
-            const [currentIndex, setCurrentIndex] = useState(0);
-            const [selectedAnswers, setSelectedAnswers] = useState({});
-            const [timeLeft, setTimeLeft] = useState(300);
-            const [quizFinished, setQuizFinished] = useState(false);
-            const [score, setScore] = useState(0);
-
-            useEffect(() => {
-                lucide.createIcons();
-            });
-
-            const startQuiz = () => {
-                const shuffled = [...ALL_QUESTIONS].sort(() => 0.5 - Math.random());
-                setQuestions(shuffled.slice(0, 10));
-                setQuizStarted(true);
-                setCurrentIndex(0);
-                setSelectedAnswers({});
-                setTimeLeft(300);
-                setQuizFinished(false);
-            };
-
-            const finishQuiz = useCallback(() => {
-                let finalScore = 0;
-                questions.forEach((q, idx) => {
-                    if (selectedAnswers[idx] === q.answer) finalScore += 1;
-                });
-                setScore(finalScore);
-                setQuizFinished(true);
-                setQuizStarted(false);
-            }, [questions, selectedAnswers]);
-
-            useEffect(() => {
-                let timer;
-                if (quizStarted && timeLeft > 0) {
-                    timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
-                } else if (timeLeft === 0 && quizStarted) {
-                    finishQuiz();
-                }
-                return () => clearInterval(timer);
-            }, [quizStarted, timeLeft, finishQuiz]);
-
-            const handleAnswer = (optionIdx) => {
-                setSelectedAnswers({ ...selectedAnswers, [currentIndex]: optionIdx });
-            };
-
-            const formatTime = (seconds) => {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            };
-
-            if (quizFinished) {
-                return (
-                    <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
-                        <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden">
-                            <div className="bg-indigo-600 p-10 text-center text-white">
-                                <div className="flex justify-center mb-4"><AwardIcon /></div>
-                                <h2 className="text-3xl font-extrabold mb-1">¡Completado!</h2>
-                                <p className="opacity-80">Tema: Transformación Social</p>
-                            </div>
-                            <div className="p-8 text-center">
-                                <div className="text-7xl font-black text-indigo-600 mb-4">{score}/10</div>
-                                <p className="text-slate-500 mb-8 font-medium">
-                                    {score >= 7 ? "¡Excelente! Estás listo para el examen." : "Sigue practicando un poco más."}
-                                </p>
-                                <button onClick={startQuiz} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 rounded-2xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-3">
-                                    <RefreshIcon /> Intentar de Nuevo
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
-            if (!quizStarted) {
-                return (
-                    <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
-                        <div className="bg-white w-full max-w-md rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
-                            <div className="h-56 bg-indigo-600 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent scale-150"></div>
-                                <h1 className="text-white text-6xl font-black tracking-tighter">FILOSOFÍA</h1>
-                            </div>
-                            <div className="p-10">
-                                <h2 className="text-2xl font-bold text-slate-800 mb-6 text-center">Examen Preparatorio</h2>
-                                <div className="space-y-4 mb-10">
-                                    <div className="flex items-center gap-4 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
-                                        <div className="bg-indigo-600 p-2 rounded-xl text-white"><InfoIcon /></div>
-                                        <p className="text-slate-700 text-sm font-semibold leading-tight">Preguntas del Tema 1</p>
-                                    </div>
-                                    <div className="flex items-center gap-4 p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                                        <div className="bg-amber-500 p-2 rounded-xl text-white"><TimerIcon /></div>
-                                        <p className="text-slate-700 text-sm font-semibold">Tiempo: 5 Minutos</p>
-                                    </div>
-                                </div>
-                                <button onClick={startQuiz} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-5 rounded-3xl shadow-xl shadow-indigo-100 transition-all active:scale-95 text-2xl uppercase tracking-widest">
-                                    COMENZAR
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
-            const currentQ = questions[currentIndex];
-
-            return (
-                <div className="min-h-screen pb-24">
-                    <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-10 px-6 py-4 flex items-center justify-between shadow-sm">
-                        <div className="bg-indigo-600 text-white font-black px-4 py-1.5 rounded-full text-sm">
-                            PREGUNTA {currentIndex + 1}
-                        </div>
-                        <div className={`flex items-center gap-2 font-mono font-bold text-xl px-4 py-1.5 rounded-full ${timeLeft < 60 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-700'}`}>
-                            <TimerIcon /> {formatTime(timeLeft)}
-                        </div>
-                    </header>
-
-                    <main className="max-w-md mx-auto p-6 pt-8">
-                        <div className="w-full h-2 bg-slate-200 rounded-full mb-10 overflow-hidden">
-                            <div className="h-full bg-indigo-600 transition-all duration-500" style={{ width: `${((currentIndex + 1) / 10) * 100}%` }} />
-                        </div>
-
-                        <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8">
-                            <h2 className="text-xl font-bold text-slate-800 leading-snug">{currentQ.question}</h2>
-                        </div>
-
-                        <div className="space-y-4">
-                            {currentQ.options.map((opt, idx) => (
-                                <button key={idx} onClick={() => handleAnswer(idx)} className={`w-full p-5 text-left rounded-2xl border-2 transition-all flex items-center justify-between group ${selectedAnswers[currentIndex] === idx ? 'border-indigo-600 bg-indigo-50 text-indigo-900 shadow-md scale-[1.02]' : 'border-white bg-white text-slate-700 shadow-sm hover:border-slate-200'}`}>
-                                    <span className="text-[15px] font-semibold pr-4 leading-tight">{opt}</span>
-                                    <div className={`w-6 h-6 rounded-full border-2 flex-shrink-0 transition-colors flex items-center justify-center ${selectedAnswers[currentIndex] === idx ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300'}`}>
-                                        {selectedAnswers[currentIndex] === idx && <div className="w-2 h-2 bg-white rounded-full" />}
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                    </main>
-
-                    <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 p-6">
-                        <div className="max-w-md mx-auto flex gap-4">
-                            <button onClick={() => setCurrentIndex(p => Math.max(0, p - 1))} className={`flex-1 py-4 font-bold rounded-2xl transition-all ${currentIndex === 0 ? 'invisible' : 'bg-slate-100 text-slate-500'}`}>Anterior</button>
-                            {currentIndex === 9 ? (
-                                <button onClick={finishQuiz} disabled={selectedAnswers[currentIndex] === undefined} className="flex-[2] py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-lg disabled:opacity-50 flex items-center justify-center gap-2">Finalizar <CheckIcon /></button>
-                            ) : (
-                                <button onClick={() => setCurrentIndex(p => Math.min(9, p + 1))} disabled={selectedAnswers[currentIndex] === undefined} className="flex-[2] py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg disabled:bg-slate-300 flex items-center justify-center gap-2">Siguiente <ChevronIcon /></button>
-                            )}
-                        </div>
-                    </footer>
-                </div>
-            );
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            max-width: 800px;
+            width: 90%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+        }
+
+        /* Pantalla de Menú */
+        .menu-screen {
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            flex: 1;
+        }
+
+        .menu-screen h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .menu-screen p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .theme-btn {
+            background: white;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .theme-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Pantalla de Quiz */
+        .quiz-screen {
+            display: none;
+            padding: 30px;
+            flex: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 15px;
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        #timer {
+            font-weight: bold;
+            color: var(--error);
+            font-size: 1.2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            color: #555;
+            position: relative;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--accent);
+            background: #f8fbff;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+        }
+
+        /* Pantalla de Resultados */
+        .result-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            flex: 1;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px auto;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            border: none;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2c3e50;
+        }
+
+        #next-btn {
+            margin-top: 20px;
+            width: 100%;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .menu-screen { padding: 20px; }
+            .theme-btn { font-size: 1rem; padding: 15px; }
+            .score-circle { width: 120px; height: 120px; font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="menu-area" class="menu-screen">
+        <h1>Filosofía y Antropología</h1>
+        <p>Selecciona un tema para iniciar el cuestionario (10 preguntas aleatorias)</p>
+        
+        <button class="theme-btn" onclick="startQuiz(1)">
+            Tema 1: Proyectos de Transformación
+        </button>
+        
+        <button class="theme-btn" onclick="startQuiz(2)">
+            Tema 2: Antropología y Filosofía
+        </button>
+    </div>
+
+    <div id="quiz-area" class="quiz-screen">
+        <div class="header">
+            <div class="badge" id="topic-badge">Tema 1</div>
+            <div id="progress">1 / 10</div>
+            <div id="timer">05:00</div>
+        </div>
+
+        <div id="question-text" class="question-text"></div>
+        <div id="options" class="options-grid"></div>
+
+        <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <div id="result-area" class="result-screen">
+        <h2>Resultados</h2>
+        <p id="result-message">¡Has completado el cuestionario!</p>
+        
+        <div class="score-circle" id="final-score">0/10</div>
+        
+        <div class="actions">
+            <button class="btn btn-primary" onclick="restartQuiz()">Reintentar este Tema</button>
+            <button class="btn btn-secondary" onclick="goToMenu()">Volver al Menú</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* =========================================
+       BANCO DE PREGUNTAS (FIEL AL ORIGINAL)
+       ========================================= */
+    
+    // TEMA 1: PROYECTOS DE TRANSFORMACIÓN SOCIAL, PRODUCTIVA Y COMUNITARIA
+    const bancoTema1 = [
+        { q: "¿Cuál es el propósito central de los proyectos de transformación social, productiva y comunitaria?", options: ["Generar beneficios individuales a corto plazo", "Producir cambios profundos, sostenibles y positivos en la comunidad", "Implementar políticas gubernamentales exclusivamente", "Incrementar el control externo sobre la comunidad"], a: 1 },
+        { q: "La transformación social implica principalmente:", options: ["Mejorar únicamente las condiciones económicas", "Sustituir la organización comunitaria existente", "Fortalecer la autonomía, organización y conciencia crítica", "Aplicar modelos externos sin adaptación local"], a: 2 },
+        { q: "¿Cuál de los siguientes enfoques caracteriza a los proyectos comunitarios?", options: ["Centralización de decisiones", "Procesos participativos", "Exclusión de actores locales", "Dependencia institucional permanente"], a: 1 },
+        { q: "Un principio fundamental de la transformación social es:", options: ["Competencia entre actores comunitarios", "Equidad e inclusión social", "Prioridad del beneficio privado", "Homogeneización cultural"], a: 1 },
+        { q: "¿Qué se entiende por sostenibilidad en proyectos comunitarios?", options: ["Continuidad solo mientras exista financiamiento externo", "Capacidad de mantener beneficios en el tiempo", "Finalización rápida del proyecto", "Repetición exacta del modelo inicial"], a: 1 },
+        { q: "La transformación productiva se orienta principalmente a:", options: ["La asistencia social directa", "El fortalecimiento de capacidades económicas comunitarias", "La eliminación del comercio local", "El control estatal de la producción"], a: 1 },
+        { q: "¿Cuál de los siguientes es un ejemplo de proyecto productivo comunitario?", options: ["Construcción de edificios administrativos", "Agricultura ecológica comunitaria", "Campañas políticas", "Centralización industrial"], a: 1 },
+        { q: "La diversificación productiva busca:", options: ["Reducir la participación comunitaria", "Ampliar las fuentes de ingreso y producción", "Limitar el acceso a mercados", "Eliminar prácticas tradicionales"], a: 1 },
+        { q: "La transformación comunitaria se enfoca principalmente en:", options: ["Incrementar la competitividad empresarial", "Fortalecer el tejido social y organizativo", "Reducir la interacción social", "Sustituir liderazgos locales"], a: 1 },
+        { q: "¿Cuál es un aspecto central de la transformación comunitaria?", options: ["Organización vecinal", "Privatización de espacios públicos", "Dependencia de ONG", "Exclusión cultural"], a: 0 },
+        { q: "La recuperación de espacios públicos contribuye principalmente a:", options: ["El aislamiento social", "El fortalecimiento del sentido de pertenencia", "La reducción de actividades comunitarias", "El control externo del territorio"], a: 1 },
+        { q: "El diagnóstico participativo se caracteriza por:", options: ["Ser elaborado solo por expertos externos", "Identificar problemas desde la visión comunitaria", "Excluir a los actores locales", "Aplicarse solo al final del proyecto"], a: 1 },
+        { q: "La Investigación Acción Participativa (IAP) combina:", options: ["Investigación teórica y análisis estadístico", "Investigación, acción y reflexión colectiva", "Observación pasiva y evaluación externa", "Diagnóstico técnico y planificación estatal"], a: 1 },
+        { q: "La planificación estratégica comunitaria permite:", options: ["Definir objetivos, metas y recursos", "Eliminar la participación ciudadana", "Centralizar decisiones en expertos", "Evitar la evaluación del proyecto"], a: 0 },
+        { q: "El enfoque de Marco Lógico se utiliza para:", options: ["Formular proyectos de manera desordenada", "Analizar conflictos políticos", "Estructurar y organizar proyectos", "Sustituir la planificación comunitaria"], a: 2 },
+        { q: "¿Cuál es la primera etapa del ciclo de vida de un proyecto comunitario?", options: ["Ejecución", "Evaluación", "Identificación del problema", "Gestión de recursos"], a: 2 },
+        { q: "La evaluación y seguimiento permiten:", options: ["Cerrar el proyecto sin análisis", "Medir resultados y mejorar procesos", "Eliminar la retroalimentación", "Evitar ajustes al proyecto"], a: 1 },
+        { q: "La retroalimentación y mejora continua buscan:", options: ["Repetir errores", "Ajustar y fortalecer futuras intervenciones", "Finalizar definitivamente el proyecto", "Reducir la participación comunitaria"], a: 1 },
+        { q: "¿Quién es el actor principal en los proyectos comunitarios?", options: ["El sector privado", "La comunidad local", "Organismos internacionales", "Gobiernos centrales"], a: 1 },
+        { q: "Las ONG suelen participar en los proyectos como:", options: ["Sustitutas de la comunidad", "Autoridades decisoras permanentes", "Únicas responsables del proyecto", "Apoyo técnico y organizativo"], a: 3 },
+        { q: "El impacto social de los proyectos comunitarios incluye:", options: ["Aumento de la desigualdad", "Empoderamiento comunitario", "Dependencia económica", "Fragmentación social"], a: 1 },
+        { q: "El empoderamiento comunitario se relaciona con:", options: ["Mayor dependencia externa", "Fortalecimiento del liderazgo local", "Reducción de la participación", "Pérdida de autonomía"], a: 1 },
+        { q: "¿Cuál es un reto común en los proyectos comunitarios?", options: ["Exceso de participación social", "Abundancia de recursos", "Falta de financiamiento", "Continuidad asegurada"], a: 2 },
+        { q: "Los conflictos internos en la comunidad pueden afectar:", options: ["La ejecución y sostenibilidad", "Positivamente el proyecto", "Solo a los actores externos", "Únicamente la planificación inicial"], a: 0 },
+        { q: "La dependencia de ayuda externa puede generar:", options: ["Autogestión comunitaria", "Pérdida de autonomía", "Liderazgo local fortalecido", "Mayor sostenibilidad"], a: 1 },
+        { q: "Un proyecto pierde continuidad cuando:", options: ["Existe liderazgo comunitario", "No se fortalecen capacidades locales", "Se promueve la autogestión", "Hay planificación participativa"], a: 1 },
+        { q: "La sostenibilidad social se fortalece principalmente mediante:", options: ["Financiamiento externo permanente", "Formación y liderazgo comunitario", "Centralización institucional", "Control privado"], a: 1 },
+        { q: "La sostenibilidad económica implica:", options: ["Dependencia total de donaciones", "Reducción de actividades productivas", "Eliminación de emprendimientos", "Capacidad de generar recursos propios"], a: 3 },
+        { q: "El respeto a la identidad comunitaria implica:", options: ["Imposición cultural externa", "Homogeneización social", "Valoración de saberes y prácticas locales", "Eliminación de tradiciones"], a: 2 },
+        { q: "Un proyecto de transformación exitoso se caracteriza por:", options: ["Cambios sostenibles y autogestionados", "Baja participación social", "Control exclusivo de actores externos", "Beneficios limitados en el tiempo"], a: 0 }
+    ];
+
+    // TEMA 2: INTRODUCCIÓN A LA ANTROPOLOGÍA Y ANTROPOLOGÍA FILOSÓFICA
+    const bancoTema2 = [
+        { q: "La antropología estudia al ser humano de manera integral porque:", options: ["Se centra solo en su dimensión biológica", "Analiza únicamente su conducta social", "Considera sus dimensiones biológica, social, cultural, histórica y simbólica", "Se limita a la reflexión filosófica"], a: 2 },
+        { q: "El principal objetivo de la antropología es:", options: ["Clasificar culturas superiores e inferiores", "Comprender cómo los seres humanos construyen sociedades y significan su mundo", "Explicar únicamente la evolución biológica", "Sustituir a la sociología y la historia"], a: 1 },
+        { q: "La antropología filosófica pertenece principalmente al campo de:", options: ["Las ciencias naturales", "Las ciencias exactas", "La filosofía", "La biología humana"], a: 2 },
+        { q: "Mientras la antropología describe y analiza, la antropología filosófica se encarga de:", options: ["Medir variables culturales", "Interpretar y profundizar en la esencia del ser humano", "Registrar datos estadísticos", "Estudiar restos arqueológicos"], a: 1 },
+        { q: "La antropología surge como ciencia formal en:", options: ["El siglo XV", "El siglo XVII", "El siglo XIX", "El siglo XXI"], a: 2 },
+        { q: "El interés temprano por la diversidad humana se observa en pensadores como:", options: ["Kant y Heidegger", "Lévi-Strauss y Ricoeur", "Heródoto, Ibn Jaldún y Montaigne", "Morgan y Tylor"], a: 2 },
+        { q: "El colonialismo europeo del siglo XIX influyó en la antropología porque:", options: ["Eliminó las culturas tradicionales", "Permitió recopilar gran cantidad de datos culturales", "Impidió el desarrollo científico", "Reemplazó la filosofía"], a: 1 },
+        { q: "La antropología evolucionista clásica se caracteriza por:", options: ["Negar el cambio cultural", "Proponer que todas las culturas evolucionan de manera lineal", "Rechazar la comparación cultural", "Centrarse en el simbolismo"], a: 1 },
+        { q: "¿Quiénes son representantes de la antropología evolucionista?", options: ["Boas y Malinowski", "Morgan, Tylor y Frazer", "Heidegger y Cassirer", "Radcliffe-Brown y Ricoeur"], a: 1 },
+        { q: "La antropología cultural o social estudia principalmente:", options: ["La genética humana", "Los restos materiales antiguos", "Costumbres, normas, instituciones y formas de vida", "El cerebro humano"], a: 2 },
+        { q: "La antropología biológica se enfoca en:", options: ["El lenguaje y los símbolos", "La evolución, adaptación y variación biológica", "La ética y la moral", "Las creencias religiosas"], a: 1 },
+        { q: "El lenguaje es objeto de estudio de la:", options: ["Antropología arqueológica", "Antropología biológica", "Antropología lingüística", "Antropología filosófica"], a: 2 },
+        { q: "La antropología arqueológica permite conocer:", options: ["El pensamiento filosófico moderno", "Las emociones humanas", "Sociedades antiguas a través de restos materiales", "La psicología individual"], a: 2 },
+        { q: "Todas las ramas de la antropología contribuyen a:", options: ["Un enfoque fragmentado del ser humano", "Un enfoque integral del ser humano", "Un análisis exclusivamente biológico", "La negación de la cultura"], a: 1 },
+        { q: "La antropología filosófica se pregunta fundamentalmente:", options: ["¿Cuántas culturas existen?", "¿Qué es el ser humano?", "¿Cómo excavar un sitio arqueológico?", "¿Qué idioma es más antiguo?"], a: 1 },
+        { q: "Conceptos como conciencia, libertad y dignidad humana son centrales en:", options: ["Antropología cultural", "Antropología lingüística", "Antropología filosófica", "Antropología arqueológica"], a: 2 },
+        { q: "Kant, Scheler y Heidegger son representantes de:", options: ["Antropología biológica", "Antropología filosófica", "Antropología evolucionista", "Antropología arqueológica"], a: 1 },
+        { q: "La relación entre antropología y filosofía se basa en que ambas:", options: ["Rechazan el estudio empírico", "Buscan comprender al ser humano", "Se oponen metodológicamente", "Tienen el mismo objeto y método"], a: 2 }, // Fiel al documento: Clave 18 C
+        { q: "La antropología aporta principalmente:", options: ["Preguntas abstractas sin datos", "Evidencia empírica y análisis comparativo", "Argumentos matemáticos", "Leyes universales inmutables"], a: 1 },
+        { q: "La importancia de la antropología en el mundo actual radica en que:", options: ["Homogeneiza las culturas", "Refuerza estereotipos", "Ayuda a comprender la diversidad cultural", "Elimina las diferencias sociales"], a: 2 },
+        { q: "La antropología contribuye a evitar:", options: ["El diálogo intercultural", "El análisis social", "Prejuicios y discriminación", "El pensamiento crítico"], a: 2 },
+        { q: "La antropología filosófica es clave para reflexionar sobre:", options: ["Tecnología, ética y derechos humanos", "Agricultura y comercio", "Climatología", "Estadística social"], a: 0 },
+        { q: "El ser humano como ser biológico implica:", options: ["Que carece de cultura", "Que posee cuerpo y necesidades fisiológicas", "Que solo actúa por instinto", "Que no es racional"], a: 1 },
+        { q: "El ser humano como ser psicológico se relaciona con:", options: ["Genes y herencia", "Emociones, cognición y motivaciones", "Instituciones sociales", "Normas jurídicas"], a: 1 },
+        { q: "El ser humano como ser social significa que:", options: ["Vive aislado", "Es independiente de la cultura", "Se desarrolla dentro de una comunidad y un lenguaje", "Carece de identidad"], a: 2 },
+        { q: "La observación participante consiste en:", options: ["Analizar datos desde la distancia", "Participar en la vida del grupo estudiado", "Evitar el contacto humano", "Usar únicamente cuestionarios cerrados"], a: 1 },
+        { q: "La etnografía es:", options: ["Un método experimental", "Una técnica matemática", "La descripción profunda de una cultura", "Un tipo de encuesta estadística"], a: 2 },
+        { q: "El trabajo de campo es fundamental porque:", options: ["Sustituye la teoría", "Permite comprender la experiencia humana directa", "Elimina la subjetividad", "Evita el contacto cultural"], a: 1 },
+        { q: "Una pregunta propia de la antropología filosófica es:", options: ["¿Qué herramientas usaban las sociedades antiguas?", "¿Qué idioma se habla en una región?", "¿Cuál es el sentido de la existencia?", "¿Qué normas sociales existen?"], a: 2 },
+        { q: "La pregunta “¿Cuál es la relación entre el cuerpo y la mente?” pertenece a:", options: ["Antropología arqueológica", "Antropología cultural", "Antropología filosófica", "Antropología lingüística"], a: 2 }
+    ];
+
+    /* =========================================
+       LÓGICA DE LA APP
+       ========================================= */
+
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timeLeft = 300; // 5 minutos
+    let timerInterval;
+    let currentThemeId = 1;
+
+    // Referencias al DOM
+    const menuArea = document.getElementById('menu-area');
+    const quizArea = document.getElementById('quiz-area');
+    const resultArea = document.getElementById('result-area');
+    const topicBadge = document.getElementById('topic-badge');
+    
+    function startQuiz(themeId) {
+        currentThemeId = themeId;
+        
+        // Seleccionar banco según tema
+        let fullBank = (themeId === 1) ? bancoTema1 : bancoTema2;
+        let themeName = (themeId === 1) ? "Tema 1: Proyectos" : "Tema 2: Antropología";
+        
+        topicBadge.innerText = themeName;
+        topicBadge.style.background = (themeId === 1) ? "var(--accent)" : "var(--success)";
+
+        // Seleccionar 10 preguntas aleatorias del banco de 30
+        // Clonamos para no afectar el original
+        let shuffled = [...fullBank].sort(() => 0.5 - Math.random());
+        currentQuestions = shuffled.slice(0, 10);
+
+        // Reset variables
+        currentQuestionIndex = 0;
+        score = 0;
+        timeLeft = 300;
+
+        // Mostrar pantalla Quiz
+        menuArea.style.display = 'none';
+        resultArea.style.display = 'none';
+        quizArea.style.display = 'block';
+
+        // Iniciar Timer
+        clearInterval(timerInterval);
+        startTimer();
+
+        // Mostrar primera pregunta
+        showQuestion();
+    }
+
+    function showQuestion() {
+        // Actualizar UI
+        document.getElementById('progress').innerText = `${currentQuestionIndex + 1} / 10`;
+        document.getElementById('next-btn').style.display = 'none';
+
+        let qData = currentQuestions[currentQuestionIndex];
+        
+        // Texto pregunta
+        document.getElementById('question-text').innerText = qData.q;
+
+        // Opciones
+        let optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+
+        // Crear botones de opciones
+        // Mantenemos el orden A, B, C, D visualmente, pero verificamos el índice correcto
+        qData.options.forEach((optText, idx) => {
+            let btn = document.createElement('div');
+            btn.className = 'option-btn';
+            btn.innerText = getLetter(idx) + ") " + optText;
+            btn.onclick = () => checkAnswer(btn, idx, qData.a);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function getLetter(idx) {
+        return ["A", "B", "C", "D"][idx];
+    }
+
+    function checkAnswer(selectedBtn, selectedIdx, correctIdx) {
+        // Bloquear todos los botones
+        let allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.classList.add('disabled'));
+        allBtns.forEach(b => b.onclick = null);
+
+        // Verificar
+        if (selectedIdx === correctIdx) {
+            selectedBtn.classList.add('correct');
+            score++;
+        } else {
+            selectedBtn.classList.add('wrong');
+            // Mostrar la correcta
+            allBtns[correctIdx].classList.add('correct');
+        }
+
+        // Mostrar botón siguiente
+        let nextBtn = document.getElementById('next-btn');
+        nextBtn.style.display = 'block';
+        nextBtn.innerText = (currentQuestionIndex === 9) ? "Ver Nota Final" : "Siguiente Pregunta";
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < 10) {
+            showQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function startTimer() {
+        const timerDisplay = document.getElementById('timer');
+        timerDisplay.innerText = "05:00";
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
+            timerDisplay.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                finishQuiz(true);
+            }
+        }, 1000);
+    }
+
+    function finishQuiz(timeout = false) {
+        clearInterval(timerInterval);
+        quizArea.style.display = 'none';
+        resultArea.style.display = 'flex';
+
+        let scoreText = document.getElementById('final-score');
+        scoreText.innerText = `${score}/10`;
+
+        let msg = document.getElementById('result-message');
+        if (timeout) {
+            msg.innerText = "¡Se acabó el tiempo!";
+            msg.style.color = "var(--error)";
+        } else {
+            if (score === 10) {
+                msg.innerText = "¡Excelente! Puntuación perfecta.";
+                msg.style.color = "var(--success)";
+            } else if (score >= 6) {
+                msg.innerText = "¡Buen trabajo! Aprobado.";
+                msg.style.color = "var(--accent)";
+            } else {
+                msg.innerText = "Puedes mejorar. ¡Inténtalo de nuevo!";
+                msg.style.color = "var(--primary)";
+            }
+        }
+    }
+
+    function restartQuiz() {
+        startQuiz(currentThemeId);
+    }
+
+    function goToMenu() {
+        resultArea.style.display = 'none';
+        menuArea.style.display = 'flex'; // flex para centrar contenido
+    }
+
+</script>
+
 </body>
 </html>
