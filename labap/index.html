@@ -32,7 +32,7 @@
     .kpi-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.06); }
     /* Altura gráficos */
     #plotly-intencion-voto { height: 450px; width: 100%; }
-    #bars-resultado, #pie-balotaje { height: 350px; width: 100%; }
+    #bars-resultado, #bar-balotaje { height: 350px; width: 100%; }
   </style>
 </head>
 <body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
@@ -174,10 +174,10 @@
             
             <div class="mb-6">
                 <h5 class="font-serif font-bold text-lg text-slate-900">Segunda Vuelta (Balotaje)</h5>
-                <p class="text-xs text-slate-500 mt-1">Proyección basada en transferencia de votos de terceros.</p>
+                <p class="text-xs text-slate-500 mt-1">Proyección de transferencia de votos (Barras).</p>
             </div>
             
-            <div id="pie-balotaje"></div>
+            <div id="bar-balotaje"></div>
             
             <div class="mt-4 flex justify-around text-center border-t border-slate-100 pt-4">
                 <div>
@@ -288,7 +288,6 @@
         xaxis: { tickfont: { family:'Inter', size: 10, color: '#64748b' }, gridcolor: '#f1f5f9' },
         yaxis: { title: '% Voto', gridcolor: '#e2e8f0', tickfont: { family:'Inter', color: '#64748b' } },
         margin: { l:40, r:20, t:60, b:40 },
-        // Línea vertical final
         shapes: [{ type:'line', xref:'x', yref:'paper', x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0:0, y1:1, line:{ color:'#94a3b8', width:1, dash:'dash' } }],
         font: { family: 'Inter, sans-serif' }
       };
@@ -319,32 +318,27 @@
       Plotly.newPlot('bars-resultado', [trace], layout, { responsive: true, displayModeBar: false });
     }
 
+    // FUNCIÓN MODIFICADA: BARRAS PARA BALOTAJE (No Pie)
     function renderBalotaje(){
         const trace = {
-            type: 'pie',
-            labels: datosBalotaje.labels,
-            values: datosBalotaje.values,
-            marker: { colors: datosBalotaje.colors },
-            textinfo: 'label+percent',
-            textposition: 'inside',
-            hole: 0.4, // Donut style
-            hoverinfo: 'label+percent+value',
-            textfont: { family: 'Inter', color: '#ffffff', weight: 'bold' }
+            type: 'bar',
+            x: datosBalotaje.labels, // Nombres abajo
+            y: datosBalotaje.values, // Porcentajes alto
+            marker: { color: datosBalotaje.colors, opacity: 0.9 },
+            text: datosBalotaje.values.map(v => v + '%'),
+            textposition: 'auto',
+            hovertemplate: "<b>%{x}</b><br>%{y:.1f}%<extra></extra>"
         };
 
         const layout = {
             plot_bgcolor: '#ffffff', paper_bgcolor: '#ffffff',
-            margin: { l: 20, r: 20, t: 20, b: 20 },
-            showlegend: false,
-            annotations: [
-                {
-                    font: { size: 12, family: 'Inter', color: '#64748b' },
-                    showarrow: false, text: 'Segunda<br>Vuelta', x: 0.5, y: 0.5
-                }
-            ]
+            margin: { l: 40, r: 20, t: 20, b: 30 },
+            xaxis: { showgrid: false, tickfont: { family:'Inter', size: 11, color: '#334155' } },
+            yaxis: { showgrid: true, gridcolor: '#f1f5f9', range: [0, 60] },
+            font: { family: 'Inter, sans-serif' }
         };
 
-        Plotly.newPlot('pie-balotaje', [trace], layout, { responsive: true, displayModeBar: false });
+        Plotly.newPlot('bar-balotaje', [trace], layout, { responsive: true, displayModeBar: false });
     }
 
     // Inicialización
@@ -359,7 +353,7 @@
     window.addEventListener('resize', () => {
         Plotly.Plots.resize('plotly-intencion-voto');
         Plotly.Plots.resize('bars-resultado');
-        Plotly.Plots.resize('pie-balotaje');
+        Plotly.Plots.resize('bar-balotaje');
     });
   </script>
 
