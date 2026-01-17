@@ -1,0 +1,279 @@
+---
+---
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Proyectos en Curso — LEPC</title>
+  <meta name="description" content="Laboratorios activos de economía política: simulación fiscal, auditoría de tierras y restricción externa." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Lato", "sans-serif"], 
+            serif: ["Playfair Display", "serif"],
+            mono: ["Fira Code", "monospace"]
+          },
+          colors: {
+            'paper-bg': '#f4f1ea',      
+            'ink-dark': '#2d3748',      
+            'accent-red': '#9b2c2c',    
+            'accent-teal': '#2c7a7b',
+            'accent-gold': '#d69e2e',
+            'accent-navy': '#1a365d'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    body { background-color: #f4f1ea; }
+    /* Estilo de "Expediente" */
+    .project-card { 
+        border-top: 4px solid #2d3748; 
+        background: white;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .project-card:hover { 
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    .method-tag { font-family: 'Fira Code', monospace; font-size: 0.7rem; }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
+    Centro de Investigación Regional (CIRCPyCS) — UAGRM
+  </div>
+
+  <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <a href="index.html" class="flex flex-col leading-none group">
+        <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Proyectos Activos</span>
+      </a>
+      <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
+        <a href="#" class="text-accent-red border-b-2 border-accent-red">Proyectos</a>
+        <a href="monitor.html" class="hover:text-accent-red transition">Monitor</a>
+        <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
+        <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
+      </nav>
+      <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <section class="border-b border-stone-300">
+    <div class="max-w-6xl mx-auto px-6 py-16">
+        <div class="max-w-3xl">
+            <span class="text-accent-navy font-bold text-xs uppercase tracking-widest mb-3 block">Nuestra Metodología</span>
+            <h1 class="font-serif font-black text-4xl sm:text-5xl text-stone-900 mb-6 leading-tight">
+                Ingeniería Inversa de las Instituciones.
+            </h1>
+            <p class="text-lg text-stone-700 font-light leading-relaxed mb-8 font-serif italic">
+                "No asumimos que la ley funciona; medimos a quién beneficia cuando falla."
+            </p>
+            <p class="text-stone-700 mb-0 leading-relaxed text-sm">
+                En el LEPC no hacemos consultoría tradicional. Realizamos <strong>auditorías forenses</strong> de la estructura económica, <strong>simulaciones distributivas</strong> contrafactuales y <strong>mapeo de flujos de renta</strong>. Buscamos revelar las relaciones de poder ocultas tras los agregados macroeconómicos.
+            </p>
+        </div>
+    </div>
+  </section>
+
+  <main class="flex-grow py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <article class="project-card p-8 shadow-sm border-t-accent-teal">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-accent-teal bg-teal-50 px-2 py-1">Simulación Distributiva</span>
+                    <span class="text-xs font-serif italic text-stone-400">LAB-01</span>
+                </div>
+                <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-4">
+                    El Observatorio del Pacto Fiscal
+                </h3>
+                <p class="text-stone-600 font-light mb-6 text-sm leading-relaxed">
+                    Un modelo de microsimulación en Python que recalcula la distribución de la coparticipación tributaria bajo 5 escenarios distintos (desde el actual hasta el federalismo fiscal pleno).
+                </p>
+                
+                <div class="bg-stone-50 border border-stone-200 p-4 mb-6 text-xs text-stone-600 font-mono space-y-2">
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">INPUT:</span>
+                        <span>Microdatos Censo 2024, Ejecución Presupuestaria MEFP.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">PROCESO:</span>
+                        <span>Algoritmo de redistribución con ponderadores variables (Población vs IHD).</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">OBJETIVO:</span>
+                        <span>Cuantificar la "brecha fiscal vertical" del nivel central.</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-2 border-t border-stone-100">
+                    <button onclick="openModal('simulador')" class="text-xs font-bold uppercase tracking-widest text-accent-teal hover:underline">
+                        <i class="fa-solid fa-calculator mr-1"></i> Ver Simulador
+                    </button>
+                    <a href="monitor.html" class="text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-900 hover:underline">
+                        <i class="fa-solid fa-chart-pie mr-1"></i> Resultados
+                    </a>
+                </div>
+            </article>
+
+            <article class="project-card p-8 shadow-sm border-t-accent-red">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-accent-red bg-red-50 px-2 py-1">Economía Política Agraria</span>
+                    <span class="text-xs font-serif italic text-stone-400">LAB-02</span>
+                </div>
+                <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-4">
+                    Monitor de Propiedad y Renta de la Tierra
+                </h3>
+                <p class="text-stone-600 font-light mb-6 text-sm leading-relaxed">
+                    Auditoría espacial (GIS) sobre la titulación del INRA. Cruzamos datos de propiedad con imágenes satelitales de productividad para medir la especulación de tierras y la captura de rentas agrarias.
+                </p>
+                
+                <div class="bg-stone-50 border border-stone-200 p-4 mb-6 text-xs text-stone-600 font-mono space-y-2">
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">INPUT:</span>
+                        <span>Polígonos INRA, NASA FIRMS (Focos calor), Índices de Vegetación (NDVI).</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">PROCESO:</span>
+                        <span>Correlación espacial entre titulación política y desmonte ilegal.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">OBJETIVO:</span>
+                        <span>Demostrar la ineficiencia de la FES como herramienta regulatoria.</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-2 border-t border-stone-100">
+                    <button onclick="openModal('mapa')" class="text-xs font-bold uppercase tracking-widest text-accent-red hover:underline">
+                        <i class="fa-solid fa-map mr-1"></i> Ver Mapas
+                    </button>
+                </div>
+            </article>
+
+            <article class="project-card p-8 shadow-sm border-t-accent-navy">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-accent-navy bg-blue-50 px-2 py-1">Macro Estructuralista</span>
+                    <span class="text-xs font-serif italic text-stone-400">LAB-03</span>
+                </div>
+                <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-4">
+                    Auditoría de la Restricción Externa (BOP)
+                </h3>
+                <p class="text-stone-600 font-light mb-6 text-sm leading-relaxed">
+                    Aplicación de la Ley de Thirlwall a la economía boliviana. Calculamos la elasticidad ingreso de las importaciones para demostrar que la industrialización fallida acelera, no reduce, la escasez de dólares.
+                </p>
+                
+                <div class="bg-stone-50 border border-stone-200 p-4 mb-6 text-xs text-stone-600 font-mono space-y-2">
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">INPUT:</span>
+                        <span>Series de tiempo BCB (1990-2024), Balanza Comercial, Términos de Intercambio.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">PROCESO:</span>
+                        <span>Regresión de cointegración (VECM) para estimar elasticidades.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">OBJETIVO:</span>
+                        <span>Refutar la tesis monetarista de la crisis de divisas.</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-2 border-t border-stone-100">
+                    <a href="analysis.html" class="text-xs font-bold uppercase tracking-widest text-accent-navy hover:underline">
+                        <i class="fa-solid fa-file-invoice mr-1"></i> Leer Paper
+                    </a>
+                </div>
+            </article>
+
+            <article class="project-card p-8 shadow-sm border-t-accent-gold">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-accent-gold bg-yellow-50 px-2 py-1">Ingeniería Institucional</span>
+                    <span class="text-xs font-serif italic text-stone-400">LAB-04</span>
+                </div>
+                <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-4">
+                    Trace the Money: Flujos de la Renta Petrolera
+                </h3>
+                <p class="text-stone-600 font-light mb-6 text-sm leading-relaxed">
+                    Diagramas de flujo (Sankey) que rastrean cada boliviano del IDH desde el pozo hasta el gasto corriente municipal. Identificamos los "puntos de veto" burocráticos y la ineficiencia asignativa centralizada.
+                </p>
+                
+                <div class="bg-stone-50 border border-stone-200 p-4 mb-6 text-xs text-stone-600 font-mono space-y-2">
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">INPUT:</span>
+                        <span>Ley 3058, Estatutos Autonómicos, Ejecución SIGEP.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">PROCESO:</span>
+                        <span>Mapeo normativo y validación de flujos financieros reales vs. teóricos.</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="font-bold text-stone-900">OBJETIVO:</span>
+                        <span>Diseñar un nuevo esquema de competencias concurrentes.</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-2 border-t border-stone-100">
+                    <button onclick="openModal('sankey')" class="text-xs font-bold uppercase tracking-widest text-accent-gold hover:underline">
+                        <i class="fa-solid fa-project-diagram mr-1"></i> Ver Flujograma
+                    </button>
+                </div>
+            </article>
+
+        </div>
+    </div>
+  </main>
+
+  <div id="projectModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-stone-900/80 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+    <div class="flex min-h-full items-center justify-center p-4">
+      <div class="relative transform overflow-hidden bg-[#f4f1ea] text-left shadow-2xl transition-all w-full max-w-lg border border-stone-300 p-8">
+        
+        <h3 class="font-serif text-2xl font-bold text-stone-900 mb-4" id="modalTitle">Acceso a Laboratorio</h3>
+        <p class="text-sm text-stone-700 mb-6 font-light">
+            Está solicitando acceso a una herramienta de simulación o visualización de datos en desarrollo. Los resultados son preliminares y de uso académico.
+        </p>
+        
+        <div class="bg-white border border-stone-200 p-4 mb-6 text-xs font-mono">
+            <p class="mb-2 font-bold">Estado del Proyecto:</p>
+            <p>Status: <span class="text-accent-teal">Beta Activa</span></p>
+            <p>Última actualización: 2025-08-15</p>
+            <p>Licencia: CC-BY-NC-SA 4.0</p>
+        </div>
+
+        <div class="flex justify-end gap-4">
+            <button onclick="closeModal()" class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-800 transition">Cerrar</button>
+            <a href="#" class="px-6 py-2 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-accent-red transition">Acceder</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {% include footer.html %}
+
+  <script>
+    function openModal(type) {
+        document.getElementById('projectModal').classList.remove('hidden');
+        // Aquí podrías cambiar el título dinámicamente según el tipo
+    }
+    function closeModal() {
+        document.getElementById('projectModal').classList.add('hidden');
+    }
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+  </script>
+
+</body>
+</html>
