@@ -1,0 +1,284 @@
+---
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Infraestructura Digital — LABAP • CIRCPyCS</title>
+  <meta name="description" content="Toolkit computacional para ciencias sociales. Scripts, algoritmos y software desarrollado por el LABAP." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
+          colors: {
+            'academic-slate': '#1e293b', 
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    .tool-card { transition: all 0.2s ease; border: 1px solid #f1f5f9; }
+    .tool-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .tech-badge { font-size: 0.7rem; font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 4px; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
+        <div class="leading-tight">
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Digital</h1>
+        </div>
+      </a>
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="index.html" class="hover:text-black transition">Dashboard</a>
+        <a href="proyectos.html" class="hover:text-black transition">Investigación</a>
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Toolkit</a>
+        <a href="data.html" class="hover:text-black transition">Datos</a>
+        <a href="../index.html" class="hover:text-black transition">Inicio</a>
+      </nav>
+      <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-b border-slate-100">
+    <div class="max-w-4xl">
+        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Digital Infrastructure</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Herramientas Computacionales para el Análisis Político.
+        </h2>
+        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
+            Repositorio de algoritmos, scripts de scraping, modelos de ML y plataformas de visualización desarrolladas o curadas por el LABAP para la investigación empírica.
+        </p>
+    </div>
+  </div>
+
+  <div class="sticky top-[73px] z-30 bg-white/95 border-b border-slate-200 backdrop-blur shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full sm:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                <input type="text" id="toolSearch" placeholder="Buscar herramienta (ej: Scraping, Python, Redes)..." 
+                    class="w-full pl-8 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm focus:ring-1 focus:ring-slate-400 focus:border-slate-400 outline-none transition placeholder:text-slate-400 font-sans">
+            </div>
+            <div class="flex gap-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest overflow-x-auto whitespace-nowrap">
+                <button class="hover:text-black transition" onclick="filterType('all')">Todos</button>
+                <button class="hover:text-blue-600 transition" onclick="filterType('scraping')">Data Mining</button>
+                <button class="hover:text-emerald-600 transition" onclick="filterType('analysis')">Análisis/ML</button>
+                <button class="hover:text-purple-600 transition" onclick="filterType('viz')">Visualización</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <main class="bg-slate-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="toolsGrid">
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="scraping noticias python prensa medios">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-newspaper"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Scraper</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">Monitor de Prensa Nacional</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Algoritmo en Python para extracción diaria de titulares de El Deber, La Razón y Erbol.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">BS4</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">GitHub <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="redes networkx gephi grafos sna">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600"><i class="fa-solid fa-circle-nodes"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">SNA</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">Political Network Analyzer</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Calculadora de centralidad y detección de comunidades para alianzas políticas.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">NetworkX</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Script <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="gis qgis mapas shapefile python">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-map"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">GIS</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">GeoScraper Bolivia</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Suite para descarga masiva de capas geográficas (SHP) de servidores públicos.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">QGIS</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Code <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="nlp ia sentimiento opinion machine learning">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-rose-50 flex items-center justify-center text-rose-600"><i class="fa-solid fa-brain"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">AI / ML</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">Bolivia Sentiment Model</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Modelo NLP entrenado con léxico político boliviano para clasificación de opiniones.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">PyTorch</span><span class="tech-badge">SpaCy</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Notebook <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="sicoes contratos licitaciones auditoria">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-amber-50 flex items-center justify-center text-amber-600"><i class="fa-solid fa-file-contract"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Auditoría</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">SICOES Watchdog</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Bot de monitoreo de nuevas licitaciones públicas y detección de fraccionamiento.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Scrapy</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Dashboard <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="legal leyes nlp normas python">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-scale-balanced"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">LegalTech</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">Gaceta Parser</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Estructuración automática de leyes y decretos supremos en formato JSON leíble.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Regex</span><span class="tech-badge">JSON</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Repo <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="elecciones simulador shiny r dash">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-chart-pie"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Simulación</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">R Shiny Election Sim</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Aplicación interactiva para proyectar escaños parlamentarios según D'Hondt.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">R</span><span class="tech-badge">Shiny</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">App <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="api electoral rest json datos">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-server"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Backend</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">Bolivia Elections API</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Endpoints RESTful para consultar resultados históricos por recinto (1997-2025).
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">REST</span><span class="tech-badge">JSON</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Docs <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="metaanalisis r estadistica paquete">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-layer-group"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Estadística</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">PolSci Meta-Analysis</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Paquete en R para síntesis de evidencia y metarregresión en ciencias políticas.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">R-Project</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">CRAN <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="latex pdf reporte automatico">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-file-pdf"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Reporting</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2">Auto-Report LaTeX</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Pipeline para generar informes institucionales en PDF directamente desde Dataframes.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">LaTeX</span><span class="tech-badge">Pandas</span></div>
+                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Demo <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+
+      </div> </div>
+  </main>
+
+  {% include footer.html %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('toolSearch');
+        const cards = document.querySelectorAll('.tool-card');
+        
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const keywords = card.getAttribute('data-search') || '';
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                const text = card.querySelector('p').innerText.toLowerCase();
+                
+                if (keywords.includes(term) || title.includes(term) || text.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    function filterType(type) {
+        const cards = document.querySelectorAll('.tool-card');
+        cards.forEach(card => {
+            if (type === 'all') {
+                card.style.display = 'flex';
+            } else if (card.classList.contains('type-' + type)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+  </script>
+
+</body>
+</html>
