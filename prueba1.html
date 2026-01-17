@@ -2,37 +2,39 @@
 <html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Laboratorio de Análisis Político • CIRCPyCS</title>
-  <meta name="description" content="LAP-CIRCPyCS: análisis electoral, indicadores institucionales y visualización interactiva para Bolivia 2025." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>CIRCPyCS — UAGRM</title>
+  <meta name="description" content="Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM" />
+  <base href="https://cir.uagrm.edu.bo/">
 
-  <!-- Tailwind -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.08)' }
         }
       }
     }
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <!-- Plotly -->
-  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 
   <style>
-    /* Menú móvil sencillo bajo el header */
-    section[id]{ scroll-margin-top: 96px; }
-    #btn-open #icon-x{ display:none; }
+    /* Que los anclajes no queden ocultos por el header fijo */
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    /* Toggle iconos del botón móvil */
     #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
     #btn-open[aria-expanded="true"] #icon-x{ display:block; }
 
+    /* ----- Scroll del menú móvil ----- */
     #mobile-menu{
-      --header-h: 64px; /* fallback si JS no corre */
+      --header-h: 64px;
       max-height: calc(100vh - var(--header-h));
       max-height: calc(100svh - var(--header-h));
       max-height: calc(100dvh - var(--header-h));
@@ -48,187 +50,463 @@
 
   <!-- Header / Nav -->
   <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 sm:h-10 sm:w-10 object-contain" />
-        <div class="leading-tight">
-          <p class="text-sm tracking-wide text-slate-500">LAP — CIRCPyCS</p>
-          <h1 class="font-bold text-lg">Laboratorio de Análisis Político</h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between">
+      <a href="#inicio" class="flex items-center gap-3 min-w-0">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+        <div class="leading-tight truncate">
+          <p class="text-xs sm:text-sm tracking-wide text-slate-500">UAGRM</p>
+          <h1 class="font-bold text-base sm:text-lg truncate">CIRCPyCS</h1>
         </div>
       </a>
 
-      <!-- Nav escritorio -->
+      <!-- Nav escritorio (dropdowns por click) -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#dashboard" class="hover:text-sky-700">Indicadores</a>
-        <a href="#visualizacion" class="hover:text-sky-700">Visualización</a>
-        <a href="https://criuagrm.github.io/labapsoft.html" target="_blank" class="hover:text-sky-700">Software</a>
-        <a href="https://criuagrm.github.io/labaproy.html" target="_blank" class="hover:text-sky-700">Proyectos</a>
-        <a href="https://criuagrm.github.io/labapteam" target="_blank" class="hover:text-sky-700">Equipo</a>
-        <a href="https://criuagrm.github.io/labapdata.html" target="_blank" class="hover:text-sky-700">Datasets</a>
-        <a href="https://criuagrm.github.io/labapdashboard.html" target="_blank" class="hover:text-sky-700">Dashboard</a>
-        <a href="https://cir.uagrm.edu.bo/" target="_blank" class="px-3 py-1.5 rounded-xl border border-sky-200 text-sky-700 hover:bg-sky-50">Volver al inicio</a>
+        <a href="services.html" class="hover:text-sky-700">Servicios</a>
+
+        <!-- Investigación -->
+        <div class="relative">
+          <button
+            class="hover:text-sky-700"
+            data-dropdown-button
+            data-target="menu-investigacion"
+            aria-expanded="false"
+            aria-controls="menu-investigacion"
+            aria-haspopup="true"
+          >Investigación</button>
+          <div
+            id="menu-investigacion"
+            class="absolute left-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white shadow-lg hidden"
+            role="menu"
+          >
+            <div class="p-2 grid gap-1 text-sm">
+              <a href="lineas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Líneas de investigación</a>
+              <a href="rgroups.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Grupos de investigación</a>
+              <a href="projects.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Proyectos de investigación</a>
+              <a href="rprotocol.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Protocolos de investigación</a>
+              <a href="problemas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Problemas de investigación</a>
+              <a href="researchers.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Investigadores</a>
+              <a href="students.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Estudiantes investigadores</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="#publicaciones" class="hover:text-sky-700">Publicaciones</a>
+
+        <!-- Eventos -->
+        <div class="relative">
+          <button
+            class="hover:text-sky-700"
+            data-dropdown-button
+            data-target="menu-eventos"
+            aria-expanded="false"
+            aria-controls="menu-eventos"
+            aria-haspopup="true"
+          >Eventos</button>
+          <div
+            id="menu-eventos"
+            class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg hidden"
+            role="menu"
+          >
+            <div class="p-2 grid gap-1 text-sm">
+              <a href="seminarios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Seminarios</a>
+              <a href="encuentros.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Encuentros</a>
+              <a href="conversatorios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Conversatorios</a>
+              <a href="conferencias.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Conferencias</a>
+              <a href="dialogos.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Ciclos de diálogos</a>
+              <a href="mesas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Ciclos de mesas</a>
+              <a href="jornadas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Jornadas</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multimedia -->
+        <div class="relative">
+          <button
+            class="hover:text-sky-700"
+            data-dropdown-button
+            data-target="menu-multimedia"
+            aria-expanded="false"
+            aria-controls="menu-multimedia"
+            aria-haspopup="true"
+          >Multimedia</button>
+          <div
+            id="menu-multimedia"
+            class="absolute left-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white shadow-lg hidden"
+            role="menu"
+          >
+            <div class="p-2 grid gap-1 text-sm">
+              <a href="medios.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">En los medios</a>
+              <a href="podcast.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Podcast</a>
+              <a href="entrevistas.html" class="px-3 py-2 rounded-lg hover:bg-slate-50" role="menuitem">Entrevistas</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="organizacion.html" class="hover:text-sky-700">Organización</a>
+        <a href="courses.html" class="hover:text-sky-700">Cursos</a>
+        <a href="int.html" class="hover:text-sky-700">Internacionalización</a>
       </nav>
 
       <!-- Botón móvil -->
-      <button id="btn-open"
-              class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
-              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
-        <span>Menú</span>
-        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span class="text-sm">Menú</span>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block" aria-hidden="true">
           <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
-        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
 
-    <!-- Menú móvil sencillo (dropdown bajo el header) -->
-    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.06)]" aria-label="Navegación móvil">
+    <!-- Menú móvil -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-soft" aria-label="Navegación móvil">
       <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dashboard">Indicadores</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#visualizacion">Visualización</a></li>
-        <li class="pt-2 mt-2 border-t border-slate-200 text-slate-500 text-xs px-3">Secciones externas</li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapsoft.html">Software</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labaproy.html">Proyectos</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapteam">Equipo</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapdata.html">Datasets</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://criuagrm.github.io/labapdashboard.html">Dashboard</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" target="_blank" href="https://cir.uagrm.edu.bo/">Volver al inicio</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="services.html">Servicios</a></li>
+        <li class="pt-1">
+          <div class="px-3 py-1 text-[12px] uppercase tracking-wide text-slate-500">Investigación</div>
+          <div class="grid gap-1 pl-1">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="lineas.html">Líneas de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="rgroups.html">Grupos de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="projects.html">Proyectos de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="rprotocol.html">Protocolos de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="problemas.html">Problemas de investigación</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="researchers.html">Investigadores</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="students.html">Estudiantes investigadores</a>
+          </div>
+        </li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#publicaciones">Publicaciones</a></li>
+        <li class="pt-1">
+          <div class="px-3 py-1 text-[12px] uppercase tracking-wide text-slate-500">Eventos</div>
+          <div class="grid gap-1 pl-1">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="seminarios.html">Seminarios</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="encuentros.html">Encuentros</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="conversatorios.html">Conversatorios</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="conferencias.html">Conferencias</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="dialogos.html">Ciclos de diálogos</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="mesas.html">Ciclos de mesas</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="jornadas.html">Jornadas</a>
+          </div>
+        </li>
+        <li class="pt-1">
+          <div class="px-3 py-1 text-[12px] uppercase tracking-wide text-slate-500">Multimedia</div>
+          <div class="grid gap-1 pl-1">
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="medios.html">En los medios</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="podcast.html">Podcast</a>
+            <a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="entrevistas.html">Entrevistas</a>
+          </div>
+        </li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="organizacion.html">Organización</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="courses.html">Cursos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="int.html">Internacionalización</a></li>
       </ul>
     </nav>
   </header>
 
   <!-- Hero -->
   <section id="inicio" class="relative overflow-hidden">
+    <span id="repositorio" class="sr-only"></span>
     <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
       <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
       <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20 text-center">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación avanzada · Visualización interactiva</span>
-      <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Laboratorio de Análisis Político</h2>
-      <p class="mt-3 max-w-2xl mx-auto text-slate-600">Análisis electoral, indicadores institucionales y prospectiva para Bolivia 2025.</p>
-      <div class="mt-6 flex justify-center">
-        <a href="#visualizacion" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105">Elecciones nacionales 2025 <span>→</span></a>
-      </div>
-    </div>
-  </section>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20 grid lg:grid-cols-2 gap-8 items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</span>
+        <h2 class="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight">Bienvenidos al CIRCPyCS</h2>
+        <p class="mt-3 text-slate-600 max-w-prose">
+          Diseñamos investigación aplicada, formamos comunidad académica y abrimos datos para fortalecer la toma de decisiones en Santa Cruz y Bolivia. Nuestro trabajo integra <strong>política comparada</strong>, <strong>economía del comportamiento</strong>, <strong>análisis de datos avanzados</strong> y <strong>análisis neoinstitucional</strong>.
+        </p>
 
-  <!-- Indicadores / KPIs -->
-  <section id="dashboard" class="py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Mega Dashboard Internacional Bolivia 2025</h3>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-gavel mr-2"></i>Rule of Law (WJP 2024)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">0.37</div>
-          <div class="text-slate-600 text-sm">Puesto 131/142</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-globe mr-2"></i>Democracy Index (EIU 2023)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">4.20/10</div>
-          <div class="text-slate-600 text-sm">Régimen híbrido</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-university mr-2"></i>CPI Transparencia Intl.</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">28/100</div>
-          <div class="text-slate-600 text-sm">Puesto 133/180</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-shield-alt mr-2"></i>Riesgo País (EMBI)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">2,190 pb</div>
-          <div class="text-slate-600 text-sm">2º más alto LatAm</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-chart-bar mr-2"></i>PIB per cápita (USD, 2023)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">$3,680</div>
-          <div class="text-slate-600 text-sm">Por debajo LatAm</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-users mr-2"></i>Población (2024)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">12,318,000</div>
-          <div class="text-slate-600 text-sm">Fuente: INE</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-thumbs-up mr-2"></i>Aprobación presidencial</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">24.1%</div>
-          <div class="text-slate-600 text-sm">Mayo 2024</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-poll mr-2"></i>Confianza en elecciones</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">29%</div>
-          <div class="text-slate-600 text-sm">Latinobarómetro 2023 (LatAm: 37%)</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-scale-balanced mr-2"></i>Confianza en justicia</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">15%</div>
-          <div class="text-slate-600 text-sm">Latinobarómetro 2023 (LatAm: 21%)</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-user-friends mr-2"></i>Satisfacción democracia</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">19%</div>
-          <div class="text-slate-600 text-sm">Latinobarómetro 2023</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-chart-area mr-2"></i>Pobreza monetaria</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">36.3%</div>
-          <div class="text-slate-600 text-sm">INE 2023</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-graduation-cap mr-2"></i>Gasto educación (%PIB)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">6.5%</div>
-          <div class="text-slate-600 text-sm">Banco Mundial</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-heartbeat mr-2"></i>Esperanza de vida</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">70.8 años</div>
-          <div class="text-slate-600 text-sm">OMS, 2024</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-briefcase mr-2"></i>Desempleo urbano</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">6.8%</div>
-          <div class="text-slate-600 text-sm">INE 2024</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-scale-balanced mr-2"></i>V-Dem democracia</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">0.38</div>
-          <div class="text-slate-600 text-sm">Escala 0–1 (2024)</div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- Botones de Laboratorios y Unidades (Organigrama) -->
+        <div class="mt-6 flex flex-wrap gap-3">
 
-  <!-- Visualización avanzada -->
-  <section id="visualizacion" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-lg border border-slate-800">
-        <h4 class="text-center text-xl font-semibold">Tracking Poll: Intención de voto presidencial 2025</h4>
-        <p class="mt-1 text-center text-slate-300 text-sm">Serie con todas las mediciones públicas (mayo–agosto 2025). Toca la leyenda para activar/desactivar candidatos.</p>
-        <div id="plotly-intencion-voto" class="mt-4" style="height:480px;width:100%;"></div>
+          <!-- 1. Lab. Análisis Político (Principal) -->
+          <a href="labap.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 transition">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 3h6M10 3v5l-5 9a4 4 0 003.5 6h6a4 4 0 003.5-6l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Lab. Análisis Político</span>
+          </a>
 
-        <div class="mt-6 grid gap-4 sm:grid-cols-2">
-          <!-- Resultado oficial -->
-          <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
-            <div class="flex items-center justify-between">
-              <h5 class="font-semibold">Resultado oficial — Primera vuelta</h5>
-              <span id="badge-res" class="text-xs px-2 py-1 rounded-full bg-slate-700 text-slate-300">oficial</span>
-            </div>
-            <p id="resumen-res" class="mt-1 text-slate-300 text-sm">Órgano Electoral Plurinacional</p>
-            <div id="bars-resultado" class="mt-3" style="height:300px;width:100%;"></div>
+          <!-- 2. Lab. Economía Política Constitucional -->
+          <a href="labepc.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-slate-700 shadow hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 transition">
+             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+               <path d="M12 2l-9 4v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+               <path d="M12 22V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Lab. Economía Pol. Const.</span>
+          </a>
+
+          <!-- 3. Lab. Experimentación Política -->
+          <a href="labexp.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-sky-600 shadow hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 transition">
+             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+               <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.18a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Lab. Experimentación</span>
+          </a>
+
+           <!-- 4. Lab. Innovación Pública -->
+           <a href="labinn.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-teal-600 shadow hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-600 transition">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 01-2 2H10a2 2 0 01-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 21h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+           </svg>
+           <span>Lab. Innovación</span>
+         </a>
+
+         <!-- 5. Escuela de Gobierno (Ex EAC) -->
+         <a href="eacscz.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-600 transition">
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+           <path d="M4 7h16M4 12h10M4 17h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+           <span>Escuela de Gobierno</span>
+          </a>
+
+          <!-- 6. Incubadora de Liderazgo -->
+          <a href="incubadora.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.6L12 15.8 7.1 17.3 8 11.7 4 7.8l5.5-.8L12 2Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Incubadora</span>
+          </a>
+        </div>
+
+        <!-- Marcadores -->
+        <dl class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-center">
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Líneas</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">18</dd>
           </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Seminarios</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">10</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Conferencias</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">6</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Conversatorios</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">3</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Investigadores adscritos</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">50</dd>
+          </div>
+          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Estudiantes investigadores</dt>
+            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">33</dd>
+          </div>
+        </dl>
+      </div>
 
-          <!-- Metadatos / Fuente -->
-          <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
-            <h5 class="font-semibold">Cobertura y fuentes</h5>
-            <ul class="mt-2 text-sm text-slate-300 space-y-1.5">
-              <li>• <span class="font-medium">Ciemcorp</span> (Unitel): 22–26 mayo, 5–7 julio.</li>
-              <li>• <span class="font-medium">SPIE</span> (El Deber): 7–14 junio, 5–10 julio, 25–28 julio, 31 jul–4 ago.</li>
-              <li>• <span class="font-medium">Captura Consulting</span> (Red Uno): 10–20 junio, 27 jul–3 ago.</li>
-              <li>• <span class="font-medium">Ipsos Ciesmori</span> (Unitel): 25–27 julio, 2–6 agosto.</li>
-            </ul>
-            <p class="mt-2 text-xs text-slate-400">Eje Y: % intención de voto. Eje X: fecha de cierre del trabajo de campo. Líneas y puntos grandes para lectura móvil.</p>
+      <!-- Tarjeta destacada -->
+      <div class="relative mt-8 lg:mt-0">
+        <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
+          <div class="w-full bg-slate-50">
+            <div class="mx-auto max-w-3xl aspect-[16/9]">
+              <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="h-full w-full object-contain" loading="lazy" />
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <h3 class="font-bold text-lg sm:text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
+            <p class="mt-2 text-slate-600">Acceso abierto en OJS. Lee el <strong>Número 6 (diciembre 2025)</strong>, envía artículos y revisa nuestras normas editoriales.</p>
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+              <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 w-full sm:w-auto text-center">Abrir en OJS</a>
+              <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700 w-full sm:w-auto text-center">Ver publicaciones</a>
+            </div>
+          </div>
+        </div>
+        <div class="hidden sm:block absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200">
+          <span class="font-semibold">Actualizado:</span> Ene 2026
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agenda -->
+  <section id="agenda" class="py-12 sm:py-14 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h2 class="text-2xl font-bold">Agenda</h2>
+      </div>
+
+      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <a href="seminarios.html" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/9vZANJ5.png" alt="Seminario Permanente — SEPECI" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="p-4">
+            <p class="text-xs uppercase tracking-wide text-emerald-700 bg-emerald-50 ring-1 ring-emerald-200 inline-flex px-2 py-1 rounded-full">Seminario</p>
+            <h3 class="mt-2 font-semibold">Seminario Permanente</h3>
+            <p class="mt-1 text-sm text-slate-600">Conversaciones continuas sobre instituciones y comportamiento político.</p>
+          </div>
+        </a>
+
+        <a href="https://www.facebook.com/share/p/18kLj9WUtG/" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/XE755pV.png" alt="Homenaje a Isaac Sandoval Rodríguez" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="p-4">
+            <p class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">Homenaje</p>
+            <h3 class="mt-2 font-semibold">Homenaje a Isaac Sandoval</h3>
+            <p class="mt-1 text-sm text-slate-600">Faceta literaria y legado intelectual.</p>
+          </div>
+        </a>
+
+        <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica/announcement" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/6IndzXd.png" alt="Call for Papers — Conocimiento i Política" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="p-4">
+            <p class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Convocatoria</p>
+            <h3 class="mt-2 font-semibold">Call for Papers</h3>
+            <p class="mt-1 text-sm text-slate-600">Revista <em>Conocimiento i Política</em> — Nueva Época.</p>
+          </div>
+        </a>
+
+        <a href="seriecle.html" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/tchdSpI.png" alt="Conferencia crítica sobre liberalismo económico" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="p-4">
+            <p class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">Serie</p>
+            <h3 class="mt-2 font-semibold">Crítica al liberalismo económico</h3>
+            <p class="mt-1 text-sm text-slate-600">Serie de conferencias, conversatorios y entrevistas para el debate contemporáneo.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="py-12 sm:py-14 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h2 class="text-2xl font-bold">Servicios</h2>
+        <a href="services.html" class="text-sm text-sky-700 hover:underline">Ver catálogo completo</a>
+      </div>
+      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-3">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Asesoría</p>
+          <h3 class="mt-1 font-semibold">Políticas públicas y diseño institucional</h3>
+          <p class="mt-1 text-sm text-slate-600">Diagnósticos, líneas base y evaluación.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Datos</p>
+          <h3 class="mt-1 font-semibold">Laboratorio y visualización</h3>
+          <p class="mt-1 text-sm text-slate-600">Dashboards, mapas, meta-análisis y publicación de datos.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Difusión</p>
+          <h3 class="mt-1 font-semibold">Sello editorial CIRCPyCS</h3>
+          <p class="mt-1 text-sm text-slate-600">Libros, working papers y reseñas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publicaciones -->
+  <section id="publicaciones" class="py-12 sm:py-14 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold">Publicaciones</h2>
+      <p class="mt-2 text-slate-600">Explora nuestras colecciones y series editoriales.</p>
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+        <a href="libros.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Libros</h3>
+          <p class="mt-1 text-sm text-slate-600">Monografías y compilaciones.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver colección <span>→</span></div>
+        </a>
+        <a href="cuadernos.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Cuadernos de investigación</h3>
+          <p class="mt-1 text-sm text-slate-600">Notas metodológicas y avances.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver serie <span>→</span></div>
+        </a>
+        <a href="memorias.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Memorias institucionales</h3>
+          <p class="mt-1 text-sm text-slate-600">Informes y resultados anuales.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Consultar <span>→</span></div>
+        </a>
+        <a href="cartillas.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Cartillas</h3>
+          <p class="mt-1 text-sm text-slate-600">Guías prácticas y divulgación.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Abrir <span>→</span></div>
+        </a>
+        <a href="boletin.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Boletines</h3>
+          <p class="mt-1 text-sm text-slate-600">Actualizaciones y coyuntura.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver boletines <span>→</span></div>
+        </a>
+        <a href="workingpapers.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Documentos de trabajo</h3>
+          <p class="mt-1 text-sm text-slate-600">Working papers del centro.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver documentos <span>→</span></div>
+        </a>
+        <a href="papers.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Artículos científicos</h3>
+          <p class="mt-1 text-sm text-slate-600">Publicaciones indexadas.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Ver artículos <span>→</span></div>
+        </a>
+        <a href="policy.html" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:shadow-sm">
+          <h3 class="font-semibold">Propuestas para políticas públicas</h3>
+          <p class="mt-1 text-sm text-slate-600">Recomendaciones y policy briefs.</p>
+          <div class="mt-3 inline-flex items-center gap-2 text-sm text-sky-700">Explorar <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eventos -->
+  <section id="eventos" class="py-12 sm:py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold">Eventos</h2>
+      <p class="mt-2 text-slate-600">Sigue nuestras transmisiones, repositorios de video y actualizaciones en redes.</p>
+      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-3">
+        <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">YouTube</div>
+          <h3 class="mt-3 font-semibold text-lg">Canal — Conversatorios, seminarios y conferencias</h3>
+          <p class="mt-1 text-sm text-slate-600">Videos completos y listas de reproducción.</p>
+          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir canal <span>→</span></div>
+        </a>
+        <a href="https://www.facebook.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Facebook</div>
+          <h3 class="mt-3 font-semibold text-lg">Página — Eventos, fotos y transmisiones</h3>
+          <p class="mt-1 text-sm text-slate-600">Cobertura y anuncios en tiempo real.</p>
+          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir página <span>→</span></div>
+        </a>
+        <a href="https://x.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
+          <div class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">X</div>
+          <h3 class="mt-3 font-semibold text-lg">Perfil — Hilos, avisos y clips</h3>
+          <p class="mt-1 text-sm text-slate-600">Actualizaciones rápidas y enlaces.</p>
+          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir perfil <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section id="sobre" class="py-12 sm:py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-8 md:grid-cols-2 md:gap-10 items-center">
+        <div>
+          <h2 class="text-2xl font-bold">Sobre el Centro</h2>
+          <p class="mt-2 text-slate-600">El CIRCPyCS es una iniciativa de la UAGRM dedicada a investigación aplicada y formación en ciencia política y ciencias sociales. Promovemos datos abiertos, colaboración interdisciplinaria y transferencia de conocimiento para el desarrollo regional.</p>
+          <ul class="mt-4 space-y-2 text-slate-700 list-disc list-inside">
+            <li>Consejo asesor y equipo de investigación.</li>
+            <li>Metodología y lineamientos éticos.</li>
+            <li>Informes de actividades y transparencia.</li>
+          </ul>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+          <h3 class="font-semibold">Contacto</h3>
+          <p class="mt-1 text-sm text-slate-600">Escríbenos para colaboraciones, cursos o investigaciones conjuntas.</p>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">Email</div>
+              <div class="font-medium break-words">cri.cspoliticas.fcjpsri@uagrm.edu.bo</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">Ciudad</div>
+              <div class="font-medium">Santa Cruz de la Sierra, Bolivia</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 p-3">
+              <div class="text-slate-500">OJS</div>
+              <a class="font-medium text-sky-700 hover:underline" target="_blank" rel="noopener" href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica">Revista Conocimiento i Política</a>
+            </div>
           </div>
         </div>
       </div>
@@ -237,202 +515,139 @@
 
   <!-- Footer -->
   <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
-        <p class="text-slate-500">Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · <i class="fas fa-phone"></i> +591 67381294</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+        <!-- Texto Footer -->
+        <div class="text-sm text-slate-600 text-center md:text-left">
+           <p class="mb-2">© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
+           <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span class="ml-1">Actualizado: Ene 2026</span></p>
+        </div>
+
+        <!-- Iconos Redes Sociales (Incluido GitHub) -->
+        <div class="flex items-center gap-4">
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/circpycs" target="_blank" rel="noopener" class="text-slate-400 hover:text-sky-700 transition" aria-label="Facebook">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+          </a>
+
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" rel="noopener" class="text-slate-400 hover:text-rose-600 transition" aria-label="YouTube">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.419-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" /></svg>
+          </a>
+
+          <!-- X / Twitter -->
+          <a href="https://x.com/circpycs" target="_blank" rel="noopener" class="text-slate-400 hover:text-slate-800 transition" aria-label="X (Twitter)">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z" /></svg>
+          </a>
+
+          <!-- GitHub (Movido desde Hero) -->
+          <a href="https://github.com/criuagrm" target="_blank" rel="noopener" class="text-slate-400 hover:text-slate-900 transition" aria-label="GitHub">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+          </a>
+
+        </div>
       </div>
     </div>
   </footer>
 
   <script>
-    // ===== Menú móvil simple =====
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Menú móvil =====
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     const headerEl = document.querySelector('header');
-    function setHeaderVar(){ const h = headerEl.getBoundingClientRect().height || 64; mobileMenu.style.setProperty('--header-h', h + 'px'); }
-    function toggleMenu(forceOpen = null){
+
+    function setHeaderVar(){
+      const h = headerEl.getBoundingClientRect().height || 64;
+      mobileMenu.style.setProperty('--header-h', h + 'px');
+    }
+
+    function toggleMenu(forceOpen = null) {
       const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
       if (willOpen) setHeaderVar();
       mobileMenu.classList.toggle('hidden', !willOpen);
       btnOpen.setAttribute('aria-expanded', String(willOpen));
       document.body.style.overflow = willOpen ? 'hidden' : '';
-      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
-    }
-    btnOpen?.addEventListener('click', () => toggleMenu());
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
-    mobileMenu.addEventListener('click', (e) => { const link = e.target.closest('a'); if (link) toggleMenu(false); });
-    window.addEventListener('resize', () => { if (!mobileMenu.classList.contains('hidden')) setHeaderVar(); });
-    window.matchMedia('(min-width: 768px)').addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
-
-    // ===== Datos de encuestas (ordenados por fecha de CIERRE) =====
-    const x = [
-      "26/05 Ciemcorp<br><span style='font-size:11px'>Unitel</span>",
-      "14/06 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "20/06 Captura<br><span style='font-size:11px'>Red Uno</span>",
-      "07/07 Ciemcorp<br><span style='font-size:11px'>Unitel</span>",
-      "10/07 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "27/07 Ipsos<br><span style='font-size:11px'>Unitel</span>",
-      "28/07 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "03/08 Captura<br><span style='font-size:11px'>Red Uno</span>",
-      "04/08 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "06/08 Ipsos<br><span style='font-size:11px'>Unitel</span>"
-    ];
-
-    const colores = {
-      "Samuel Doria Medina": "#F4B400",  // UNIDAD (dorado)
-      "Jorge «Tuto» Quiroga": "#D32F2F", // LIBRE (rojo)
-      "Manfred Reyes Villa":  "#6D28D9", // APB SÚMATE (morado)
-      "Rodrigo Paz Pereira":  "#0E7C7B", // PDC (verde azulado)
-      "Andrónico Rodríguez":  "#16A34A", // AP (verde)
-      "Jhonny Fernández":    "#1E88E5"  // FP (azul)
-    };
-
-    const ySeries = {
-      "Samuel Doria Medina": [19.1, 24.02, 19.6, 18.7, 21.76, 21.5, 24.5, 21.6, 23.64, 21.2],
-      "Jorge «Tuto» Quiroga": [18.4, 22.07, 16.6, 18.1, 20.70, 19.6, 22.9, 20.0, 24.45, 20.0],
-      "Manfred Reyes Villa":  [7.9,  9.39,  8.8,  8.2, 10.01,  8.3,  7.2,  9.7,  8.79,  7.7],
-      "Rodrigo Paz Pereira":  [4.3,  5.56,  6.4,  3.2,  4.04,  5.8,  7.6,  6.4,  9.10,  8.3],
-      "Andrónico Rodríguez":  [14.2, 14.69, 13.7, 11.8,  8.26,  6.1,  7.4,  7.2,  8.46,  5.5],
-      "Jhonny Fernández":    [3.7,  2.56,  3.8,  2.5,  2.45,  1.8,  2.1,  2.0,  2.44,  2.0]
-    };
-
-    // ===== Resultado oficial (valores provistos) =====
-    const resultadoOficial = {
-      fecha: "Elección<br><span style='font-size:11px'>Primera vuelta</span>",
-      fuente: "Órgano Electoral Plurinacional",
-      valores: {
-        "Rodrigo Paz Pereira": 32.06,
-        "Jorge «Tuto» Quiroga": 26.70,
-        "Samuel Doria Medina": 19.69,
-        "Andrónico Rodríguez": 8.51,
-        "Manfred Reyes Villa": 6.75,
-        "Eduardo Del Castillo": 3.17,
-        "Jhonny Fernández": 1.67,
-        "Pavel Aracena Vargas": 1.45
-      }
-    };
-
-    // ===== Construcción de la serie principal =====
-    function buildTraces(includeOfficialPoint = true){
-      const traces = [];
-      for (const [nombre, ys] of Object.entries(ySeries)){
-        const trace = {
-          x: [...x],
-          y: [...ys],
-          name: nombre,
-          mode: "lines+markers",
-          line: { color: colores[nombre], width: 4 },
-          marker: { size: 11 },
-          hovertemplate: "<b>%{trace.name}</b><br>%{y:.2f}%<br>%{x}<extra></extra>"
-        };
-        if (includeOfficialPoint && resultadoOficial.valores[nombre] !== undefined){
-          trace.x.push(resultadoOficial.fecha);
-          trace.y.push(resultadoOficial.valores[nombre]);
-        }
-        traces.push(trace);
-      }
-      return traces;
-    }
-
-    function legendLayout(){
-      if (window.innerWidth < 700){
-        return { orientation:'v', x:1.02, y:0.5, xanchor:'left', yanchor:'middle', font:{size:11, color:'#fff'}, bgcolor:'rgba(15,23,42,0.96)' };
+      if (willOpen) {
+        setTimeout(() => mobileMenu.querySelector('a')?.focus(), 0);
       } else {
-        return { orientation:'h', x:0.01, y:1.18, font:{size:13, color:'#fff'} };
+        btnOpen?.focus?.();
       }
     }
-    function makeLayout(){
-      const hasOficial = true;
-      const maxY = Math.max(32.06, ...Object.values(ySeries).flat());
-      return {
-        plot_bgcolor: '#0b1220',
-        paper_bgcolor: '#0b1220',
-        legend: legendLayout(),
-        xaxis: { title:{text:'<b>Fecha y encuestadora</b>', font:{color:'#fff', size:16}}, tickfont:{color:'#fff', size:12}, automargin:true, showgrid:false },
-        yaxis: { title:{text:'<b>% intención de voto</b>', font:{color:'#fff', size:16}}, range:[0, Math.max(35, Math.ceil(maxY/5)*5)], gridcolor:'#334155', tickfont:{color:'#fff', size:12} },
-        margin: { l:50, r: window.innerWidth < 700 ? 120 : 24, t:34, b:60 },
-        shapes: [{
-          type: "line", xref: "x", yref: "paper",
-          x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0: 0, y1: 1,
-          line: { color: "#94a3b8", width: 2, dash: "dot" }
-        }],
-        annotations: [{
-          x: resultadoOficial.fecha, y: 1.02, xref:"x", yref:"paper", xanchor:"center",
-          text: "Resultado oficial", showarrow:false, font:{size:12, color:"#cbd5e1"}
-        }],
-        font: { family: 'Inter, Segoe UI, sans-serif', size:14, color:'#fff' }
-      };
+
+    btnOpen?.addEventListener('click', () => toggleMenu());
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { toggleMenu(false); closeAllDropdowns(); }});
+    mobileMenu?.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link) toggleMenu(false);
+    });
+    window.addEventListener('resize', () => {
+      if (!mobileMenu.classList.contains('hidden')) setHeaderVar();
+    });
+    const mq = window.matchMedia('(min-width: 768px)');
+    mq.addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
+
+    // ===== Dropdowns de escritorio por CLICK =====
+    const dropdownButtons = document.querySelectorAll('[data-dropdown-button]');
+    const dropdownPanels  = document.querySelectorAll('.absolute[id^="menu-"]');
+
+    function closeAllDropdowns(exceptId = null) {
+      dropdownButtons.forEach(btn => {
+        const id = btn.getAttribute('data-target');
+        if (id !== exceptId) btn.setAttribute('aria-expanded', 'false');
+      });
+      dropdownPanels.forEach(panel => {
+        if (panel.id !== exceptId) panel.classList.add('hidden');
+      });
     }
 
-    function renderLineChart(){
-      Plotly.react('plotly-intencion-voto', buildTraces(true), makeLayout(), {responsive:true, displayModeBar:false});
+    function openDropdown(id, buttonEl) {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      closeAllDropdowns(id);
+      panel.classList.remove('hidden');
+      buttonEl.setAttribute('aria-expanded', 'true');
     }
 
-    // ===== Resultado oficial: barras (ordenadas de mayor a menor) =====
-    function renderResultado(){
-      const pares = Object.entries(resultadoOficial.valores).filter(([,v]) => v !== null && v !== undefined);
-      pares.sort((a,b) => b[1] - a[1]);
-      const nombres = pares.map(p => p[0]);
-      const valores = pares.map(p => p[1]);
-
-      // Mapeo candidato → alianza (según OEP)
-      const alianzaPorCandidato = {
-        "Rodrigo Paz Pereira": "PDC",
-        "Jorge «Tuto» Quiroga": "LIBRE",
-        "Samuel Doria Medina": "UNIDAD",
-        "Andrónico Rodríguez": "AP",
-        "Manfred Reyes Villa": "APB SÚMATE",
-        "Eduardo Del Castillo": "MAS-IPSP",
-        "Jhonny Fernández": "FP",
-        "Pavel Aracena Vargas": "LYP-ADN"
-      };
-
-      // Colores por alianza (paleta aproximada a la usada en computo.oep.org.bo)
-      const coloresAlianza = {
-        "PDC": "#0E7C7B",
-        "LIBRE": "#D32F2F",
-        "UNIDAD": "#F4B400",
-        "AP": "#16A34A",
-        "APB SÚMATE": "#6D28D9",
-        "MAS-IPSP": "#0D47A1",
-        "FP": "#1E88E5",
-        "LYP-ADN": "#111111"
-      };
-      const coloresBarras = nombres.map(n => coloresAlianza[alianzaPorCandidato[n]] || "#64748B");
-
-      const barTrace = [{
-        type: 'bar',
-        x: valores,
-        y: nombres,
-        orientation: 'h',
-        marker: { color: coloresBarras, line: { width: 0 } },
-        hovertemplate: "<b>%{y}</b>: %{x:.2f}%<extra></extra>"
-      }];
-
-      const dynLeft = Math.min(260, Math.max(160, Math.max(...nombres.map(n => n.length))*7));
-
-      const barLayout = {
-        plot_bgcolor: '#0b1220',
-        paper_bgcolor: '#0b1220',
-        margin: { l: dynLeft, r: 20, t: 8, b: 40 },
-        xaxis: { range: [0, Math.max(35, Math.ceil(Math.max(...valores) / 5) * 5)], gridcolor:'#334155', tickfont:{color:'#fff'} },
-        yaxis: { tickfont:{color:'#fff'} },
-        font: { family: 'Inter, Segoe UI, sans-serif', color:'#fff' }
-      };
-
-      Plotly.react('bars-resultado', barTrace, barLayout, {responsive:true, displayModeBar:false});
-    }
-      };
-
-      Plotly.react('bars-resultado', barTrace, barLayout, {responsive:true, displayModeBar:false});
+    function toggleDropdown(id, buttonEl) {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      const isHidden = panel.classList.contains('hidden');
+      if (isHidden) openDropdown(id, buttonEl);
+      else { panel.classList.add('hidden'); buttonEl.setAttribute('aria-expanded', 'false'); }
     }
 
-    // ===== Render inicial + responsive =====
-    renderLineChart();
-    renderResultado();
-    window.addEventListener('resize', () => { renderLineChart(); renderResultado(); });
+    dropdownButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-target');
+        toggleDropdown(id, btn);
+      });
+      btn.addEventListener('keydown', (e) => {
+        const id = btn.getAttribute('data-target');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          openDropdown(id, btn);
+          document.getElementById(id)?.querySelector('a')?.focus();
+        }
+      });
+    });
+
+    // No cerrar al interactuar dentro del panel
+    dropdownPanels.forEach(panel => {
+      panel.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    // Cerrar al click fuera
+    document.addEventListener('click', () => closeAllDropdowns());
+
+    // Cerrar con Escape (ya se maneja arriba también)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllDropdowns();
+    });
   </script>
 </body>
 </html>
-
