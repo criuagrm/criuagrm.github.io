@@ -42,9 +42,20 @@
       overscroll-behavior: contain;
       -webkit-overflow-scrolling: touch;
     }
+
+    /* Lightbox Styles */
+    #lightbox {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800">
+<body class="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
   <!-- Cinta superior -->
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
@@ -218,58 +229,102 @@
         <p class="mt-3 text-slate-600 max-w-prose">
           Diseñamos investigación aplicada, formamos comunidad académica y abrimos datos para fortalecer la toma de decisiones en Santa Cruz y Bolivia. Nuestro trabajo integra <strong>política comparada</strong>, <strong>economía del comportamiento</strong>, <strong>análisis de datos avanzados</strong> y <strong>análisis neoinstitucional</strong>.
         </p>
-        <div class="mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-          <a href="https://github.com/criuagrm" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold shadow hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-600 transition w-full sm:w-auto justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12.4c0 5.27 3.42 9.73 8.17 11.31.6.11.82-.26.82-.58 0-.29-.01-1.05-.02-2.06-3.33.73-4.03-1.62-4.03-1.62-.55-1.43-1.34-1.81-1.34-1.81-1.1-.77.08-.76.08-.76 1.21.09 1.85 1.25 1.85 1.25 1.08 1.88 2.83 1.34 3.52 1.03.11-.8.42-1.34.76-1.65-2.66-.3-5.46-1.36-5.46-6.07 0-1.34.46-2.44 1.22-3.3-.12-.3-.53-1.52.12-3.17 0 0 1.01-.33 3.31 1.26.96-.27 1.98-.4 3-.41 1.02 0 2.04.14 3 .41 2.3-1.59 3.31-1.26 3.31-1.26.65 1.65.24 2.87.12 3.17.76.86 1.22 1.96 1.22 3.3 0 4.72-2.81 5.76-5.49 6.06.43.38.81 1.12.81 2.26 0 1.63-.02 2.95-.02 3.36 0 .32.22.7.83.58A11.51 11.51 0 0 0 23.5 12.4 11.5 11.5 0 0 0 12 .5Z"/></svg>
-            <span>GitHub</span>
+
+        <!-- Botones de Laboratorios y Unidades (Nuevos Nombres) -->
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          
+          <!-- 1. Lab. Análisis Político (Se mantiene como el principal según organigrama anterior, pero el usuario no pidió cambio) -->
+          <a href="labap.html" class="group flex items-center p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-md transition">
+            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-sky-50 text-sky-600 group-hover:bg-sky-600 group-hover:text-white transition">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5l-5 9a4 4 0 003.5 6h6a4 4 0 003.5-6l-5-9V3"/></svg>
+            </div>
+            <div class="ml-3">
+               <div class="font-semibold text-slate-800 group-hover:text-sky-700 transition">Lab. Análisis Político</div>
+               <div class="text-[11px] text-slate-500">Opinión Pública</div>
+            </div>
           </a>
 
-          <a href="labap.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600 transition w-full sm:w-auto justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M9 3h6M10 3v5l-5 9a4 4 0 003.5 6h6a4 4 0 003.5-6l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Laboratorio</span>
-          </a>
-         <a href="eacscz.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 shadow hover:shadow-lg hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-600 transition w-full sm:w-auto justify-center">
-           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-           <path d="M4 7h16M4 12h10M4 17h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-           <span>EAC</span>
+          <!-- 2. Lab. Economía Política Constitucional (Actualizado) -->
+          <a href="labepc.html" class="group flex items-center p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-md transition">
+            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-slate-700 group-hover:text-white transition">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l-9 4v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z"/></svg>
+            </div>
+            <div class="ml-3">
+               <div class="font-semibold text-slate-800 group-hover:text-slate-700 transition leading-tight">Lab. Economía Política Constitucional</div>
+               <div class="text-[11px] text-slate-500">Instituciones</div>
+            </div>
           </a>
 
-          <a href="incubadora.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-emerald-300 text-emerald-700 font-semibold bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition w-full sm:w-auto justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.6L12 15.8 7.1 17.3 8 11.7 4 7.8l5.5-.8L12 2Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span>Incubadora</span>
+          <!-- 3. Lab. Experimentación Política (Actualizado) -->
+          <a href="labexp.html" class="group flex items-center p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-md transition">
+            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.18a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            </div>
+            <div class="ml-3">
+               <div class="font-semibold text-slate-800 group-hover:text-indigo-700 transition">Lab. Experimentación Política</div>
+               <div class="text-[11px] text-slate-500">Comportamiento</div>
+            </div>
+          </a>
+
+           <!-- 4. Lab. Innovación Pública (Actualizado) -->
+           <a href="labinn.html" class="group flex items-center p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-md transition">
+            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 01-2 2H10a2 2 0 01-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/><path d="M9 21h6"/></svg>
+            </div>
+            <div class="ml-3">
+               <div class="font-semibold text-slate-800 group-hover:text-teal-700 transition">Lab. Innovación Pública</div>
+               <div class="text-[11px] text-slate-500">Gestión Pública</div>
+            </div>
+         </a>
+
+         <!-- 5. Escuela de Gobierno (Sin cambios) -->
+         <a href="eacscz.html" class="group flex items-center p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-md transition">
+            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-violet-50 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
+            </div>
+            <div class="ml-3">
+               <div class="font-semibold text-slate-800 group-hover:text-violet-700 transition">Escuela de Gobierno</div>
+               <div class="text-[11px] text-slate-500">Formación</div>
+            </div>
+          </a>
+
+          <!-- 6. Incubadora de Consultores Jr (Actualizado) -->
+          <a href="incubadora.html" class="group flex items-center p-2.5 rounded-xl border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-md transition">
+            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition">
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.6L12 15.8 7.1 17.3 8 11.7 4 7.8l5.5-.8L12 2Z"/></svg>
+            </div>
+            <div class="ml-3">
+               <div class="font-semibold text-slate-800 group-hover:text-emerald-700 transition">Incubadora de Consultores Jr.</div>
+               <div class="text-[11px] text-slate-500">Prácticas</div>
+            </div>
           </a>
         </div>
 
-        <!-- Marcadores -->
-        <dl class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-center">
-          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Líneas</dt>
-            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">18</dd>
+        <!-- Marcadores (Cards pequeñas) -->
+        <dl class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3 text-center">
+          <div class="rounded-xl bg-white border border-slate-200 p-3 sm:p-4 shadow-sm">
+            <dt class="text-[10px] uppercase tracking-wide text-slate-500 leading-4">Líneas</dt>
+            <dd class="mt-0.5 text-xl sm:text-2xl font-extrabold text-slate-800">18</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Seminarios</dt>
-            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">10</dd>
+          <div class="rounded-xl bg-white border border-slate-200 p-3 sm:p-4 shadow-sm">
+            <dt class="text-[10px] uppercase tracking-wide text-slate-500 leading-4">Seminarios</dt>
+            <dd class="mt-0.5 text-xl sm:text-2xl font-extrabold text-slate-800">10</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Conferencias</dt>
-            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">6</dd>
+          <div class="rounded-xl bg-white border border-slate-200 p-3 sm:p-4 shadow-sm">
+            <dt class="text-[10px] uppercase tracking-wide text-slate-500 leading-4">Conferencias</dt>
+            <dd class="mt-0.5 text-xl sm:text-2xl font-extrabold text-slate-800">6</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Conversatorios</dt>
-            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">3</dd>
+          <div class="rounded-xl bg-white border border-slate-200 p-3 sm:p-4 shadow-sm">
+            <dt class="text-[10px] uppercase tracking-wide text-slate-500 leading-4">Conversatorios</dt>
+            <dd class="mt-0.5 text-xl sm:text-2xl font-extrabold text-slate-800">3</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Investigadores adscritos</dt>
-            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">50</dd>
+          <div class="rounded-xl bg-white border border-slate-200 p-3 sm:p-4 shadow-sm">
+            <dt class="text-[10px] uppercase tracking-wide text-slate-500 leading-4">Investigadores</dt>
+            <dd class="mt-0.5 text-xl sm:text-2xl font-extrabold text-slate-800">50</dd>
           </div>
-          <div class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <dt class="text-[11px] uppercase tracking-wide text-slate-500 leading-5 break-normal">Estudiantes investigadores</dt>
-            <dd class="mt-1 text-2xl sm:text-3xl font-extrabold">33</dd>
+          <div class="rounded-xl bg-white border border-slate-200 p-3 sm:p-4 shadow-sm">
+            <dt class="text-[10px] uppercase tracking-wide text-slate-500 leading-4">Estudiantes</dt>
+            <dd class="mt-0.5 text-xl sm:text-2xl font-extrabold text-slate-800">33</dd>
           </div>
         </dl>
       </div>
@@ -279,12 +334,12 @@
         <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
           <div class="w-full bg-slate-50">
             <div class="mx-auto max-w-3xl aspect-[16/9]">
-              <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="h-full w-full object-contain" loading="lazy" />
+              <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="h-full w-full object-contain cursor-zoom-in" onclick="openLightbox(this.src)" loading="lazy" />
             </div>
           </div>
           <div class="p-5 sm:p-6">
             <h3 class="font-bold text-lg sm:text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
-            <p class="mt-2 text-slate-600">Acceso abierto en OJS. Lee el Número 5 (julio 2025), envía artículos y revisa nuestras normas editoriales.</p>
+            <p class="mt-2 text-slate-600">Acceso abierto en OJS. Lee el <strong>Número 6 (diciembre 2025)</strong>, envía artículos y revisa nuestras normas editoriales.</p>
             <div class="mt-4 flex flex-col sm:flex-row gap-3">
               <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 w-full sm:w-auto text-center">Abrir en OJS</a>
               <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700 w-full sm:w-auto text-center">Ver publicaciones</a>
@@ -292,7 +347,7 @@
           </div>
         </div>
         <div class="hidden sm:block absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200">
-          <span class="font-semibold">Actualizado:</span> Sept 2025
+          <span class="font-semibold">Actualizado:</span> Ene 2026
         </div>
       </div>
     </div>
@@ -307,7 +362,7 @@
 
       <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
         <a href="seminarios.html" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/9vZANJ5.png" alt="Seminario Permanente — SEPECI" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/9vZANJ5.png" alt="Seminario Permanente — SEPECI" class="h-full w-full object-contain cursor-zoom-in" onclick="event.preventDefault(); openLightbox(this.src)" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-emerald-700 bg-emerald-50 ring-1 ring-emerald-200 inline-flex px-2 py-1 rounded-full">Seminario</p>
             <h3 class="mt-2 font-semibold">Seminario Permanente</h3>
@@ -315,17 +370,23 @@
           </div>
         </a>
 
-        <a href="https://www.facebook.com/share/p/18kLj9WUtG/" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/XE755pV.png" alt="Homenaje a Isaac Sandoval Rodríguez" class="h-full w-full object-contain" loading="lazy" /></div></div>
+        <!-- Nuevo evento: Encuentro de Investigadores (Con imagen) -->
+        <a href="encuentro2026.html" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
+          <div class="w-full bg-slate-50">
+            <div class="aspect-[16/9] relative bg-slate-200">
+              <!-- Imagen placeholder de investigadores -->
+              <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Grupo de investigadores en conferencia" class="h-full w-full object-cover cursor-zoom-in" onclick="event.preventDefault(); openLightbox(this.src)" loading="lazy" />
+            </div>
+          </div>
           <div class="p-4">
-            <p class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">Homenaje</p>
-            <h3 class="mt-2 font-semibold">Homenaje a Isaac Sandoval</h3>
-            <p class="mt-1 text-sm text-slate-600">Faceta literaria y legado intelectual.</p>
+            <p class="text-xs uppercase tracking-wide text-indigo-700 bg-indigo-50 ring-1 ring-indigo-200 inline-flex px-2 py-1 rounded-full">Encuentro 2026</p>
+            <h3 class="mt-2 font-semibold">Encuentro de Investigadores</h3>
+            <p class="mt-1 text-sm text-slate-600">Espacio de intercambio, networking académico y presentación de avances.</p>
           </div>
         </a>
 
         <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica/announcement" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/6IndzXd.png" alt="Call for Papers — Conocimiento i Política" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/lFi7rG7.png" alt="Call for Papers — Conocimiento i Política" class="h-full w-full object-contain cursor-zoom-in" onclick="event.preventDefault(); openLightbox(this.src)" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Convocatoria</p>
             <h3 class="mt-2 font-semibold">Call for Papers</h3>
@@ -334,7 +395,7 @@
         </a>
 
         <a href="seriecle.html" class="group rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-md transition">
-          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/tchdSpI.png" alt="Conferencia crítica sobre liberalismo económico" class="h-full w-full object-contain" loading="lazy" /></div></div>
+          <div class="w-full bg-slate-50"><div class="aspect-[16/9]"><img src="https://i.imgur.com/tchdSpI.png" alt="Conferencia crítica sobre liberalismo económico" class="h-full w-full object-contain cursor-zoom-in" onclick="event.preventDefault(); openLightbox(this.src)" loading="lazy" /></div></div>
           <div class="p-4">
             <p class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">Serie</p>
             <h3 class="mt-2 font-semibold">Crítica al liberalismo económico</h3>
@@ -422,82 +483,117 @@
     </div>
   </section>
 
-  <!-- Eventos -->
-  <section id="eventos" class="py-12 sm:py-14">
+  <!-- Footer Profesional y Detallado (Multi-columna) -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl font-bold">Eventos</h2>
-      <p class="mt-2 text-slate-600">Sigue nuestras transmisiones, repositorios de video y actualizaciones en redes.</p>
-      <div class="mt-6 grid gap-4 sm:gap-5 md:grid-cols-3">
-        <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
-          <div class="text-xs uppercase tracking-wide text-rose-700 bg-rose-50 ring-1 ring-rose-200 inline-flex px-2 py-1 rounded-full">YouTube</div>
-          <h3 class="mt-3 font-semibold text-lg">Canal — Conversatorios, seminarios y conferencias</h3>
-          <p class="mt-1 text-sm text-slate-600">Videos completos y listas de reproducción.</p>
-          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir canal <span>→</span></div>
-        </a>
-        <a href="https://www.facebook.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
-          <div class="text-xs uppercase tracking-wide text-sky-700 bg-sky-50 ring-1 ring-sky-200 inline-flex px-2 py-1 rounded-full">Facebook</div>
-          <h3 class="mt-3 font-semibold text-lg">Página — Eventos, fotos y transmisiones</h3>
-          <p class="mt-1 text-sm text-slate-600">Cobertura y anuncios en tiempo real.</p>
-          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir página <span>→</span></div>
-        </a>
-        <a href="https://x.com/circpycs" target="_blank" rel="noopener" class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 hover:shadow-md transition">
-          <div class="text-xs uppercase tracking-wide text-slate-700 bg-slate-100 ring-1 ring-slate-300 inline-flex px-2 py-1 rounded-full">X</div>
-          <h3 class="mt-3 font-semibold text-lg">Perfil — Hilos, avisos y clips</h3>
-          <p class="mt-1 text-sm text-slate-600">Actualizaciones rápidas y enlaces.</p>
-          <div class="mt-3 text-sky-700 inline-flex items-center gap-2">Abrir perfil <span>→</span></div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sobre -->
-  <section id="sobre" class="py-12 sm:py-14">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid gap-8 md:grid-cols-2 md:gap-10 items-center">
+      
+      <!-- Grid de 4 columnas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Col 1: Identidad -->
         <div>
-          <h2 class="text-2xl font-bold">Sobre el Centro</h2>
-          <p class="mt-2 text-slate-600">El CIRCPyCS es una iniciativa de la UAGRM dedicada a investigación aplicada y formación en ciencia política y ciencias sociales. Promovemos datos abiertos, colaboración interdisciplinaria y transferencia de conocimiento para el desarrollo regional.</p>
-          <ul class="mt-4 space-y-2 text-slate-700 list-disc list-inside">
-            <li>Consejo asesor y equipo de investigación.</li>
-            <li>Metodología y lineamientos éticos.</li>
-            <li>Informes de actividades y transparencia.</li>
+          <div class="flex items-center gap-3 mb-4">
+             <!-- Logo Real (IMG) -->
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+
+        <!-- Col 2: Enlaces Rápidos -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#inicio" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
           </ul>
         </div>
-        <div class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-          <h3 class="font-semibold">Contacto</h3>
-          <p class="mt-1 text-sm text-slate-600">Escríbenos para colaboraciones, cursos o investigaciones conjuntas.</p>
-          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">Email</div>
-              <div class="font-medium break-words">cri.cspoliticas.fcjpsri@uagrm.edu.bo</div>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">Ciudad</div>
-              <div class="font-medium">Santa Cruz de la Sierra, Bolivia</div>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">Redes</div>
-              <div class="font-medium">YouTube • Facebook • X</div>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">OJS</div>
-              <a class="font-medium text-sky-700 hover:underline" target="_blank" rel="noopener" href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica">Revista Conocimiento i Política</a>
-            </div>
+
+        <!-- Col 3: Contacto -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Ciudad Universitaria, Módulo 244<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Redes Sociales (Detallado) -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+            </a>
+
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+            </a>
+            
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+            </a>
           </div>
+        </div>
+
+      </div>
+      
+      <!-- Línea Divisoria -->
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <!-- Links legales opcionales -->
+           <a href="#" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="#" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
-        <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span class="ml-2">Actualizado: Sept 2025</span></p>
-</div>
-    </div>
   </footer>
+
+  <!-- Lightbox Element -->
+  <div id="lightbox" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onclick="closeLightbox()">
+    <button class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none" aria-label="Cerrar">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="Imagen ampliada" class="max-h-full max-w-full object-contain rounded shadow-2xl" onclick="event.stopPropagation()" />
+  </div>
 
   <script>
     // Año dinámico
@@ -527,7 +623,7 @@
     }
 
     btnOpen?.addEventListener('click', () => toggleMenu());
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { toggleMenu(false); closeAllDropdowns(); }});
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { toggleMenu(false); closeAllDropdowns(); closeLightbox(); }});
     mobileMenu?.addEventListener('click', (e) => {
       const link = e.target.closest('a');
       if (link) toggleMenu(false);
@@ -596,9 +692,31 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAllDropdowns();
     });
+
+    // ===== Lightbox Functions =====
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.remove('hidden');
+      // Trigger reflow to enable transition
+      void lightbox.offsetWidth; 
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = ''; // Restore scrolling
+      setTimeout(() => {
+        lightbox.classList.add('hidden');
+        lightboxImg.src = '';
+      }, 300); // Match transition duration
+    }
+    
+    // Initialize lightbox state
+    lightbox.classList.add('hidden');
   </script>
 </body>
 </html>
-
-
-
