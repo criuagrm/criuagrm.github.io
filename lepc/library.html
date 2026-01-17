@@ -4,101 +4,269 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Biblioteca — LEPC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Biblioteca Crítica — LEPC</title>
+  <meta name="description" content="Archivo de pensamiento económico heterodoxo y análisis constitucional." />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Work Sans"], serif: ["Libre Baskerville"] }, colors: { 'lepc-paper': '#F9F8F4', 'lepc-navy': '#0f172a', 'lepc-accent': '#b45309' } } } }
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Lato", "sans-serif"], 
+            serif: ["Playfair Display", "serif"] 
+          },
+          colors: {
+            'paper-bg': '#f4f1ea',      /* Color Hueso/Papel cálido */
+            'ink-dark': '#2d3748',      /* Gris plomo oscuro */
+            'accent-red': '#9b2c2c',    /* Rojo sangre (Crítico) */
+            'accent-teal': '#2c7a7b',   /* Verde azulado (Estructuralismo) */
+            'accent-gold': '#d69e2e',   /* Dorado (Institucionalismo) */
+          },
+          boxShadow: {
+            'paper': '2px 4px 12px rgba(0,0,0,0.08)',
+          }
+        }
+      }
+    }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-</head>
-<body class="bg-lepc-paper text-stone-900 font-sans">
 
-  <header class="border-b border-stone-300 py-6 px-8 flex justify-between items-center bg-[#F9F8F4]">
-    <a href="index.html" class="font-serif font-bold text-xl text-lepc-navy">L.E.P.C. <span class="text-stone-500 font-sans italic font-normal text-sm">/ Biblioteca</span></a>
-    <a href="index.html" class="text-xs font-bold uppercase tracking-wide hover:text-lepc-accent">Volver</a>
+  <style>
+    body { background-color: #f4f1ea; }
+    /* Estilo de la ficha de biblioteca */
+    .lib-card { 
+        background: white; 
+        border-left: 4px solid transparent; 
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lib-card:hover { 
+        transform: translateX(4px); 
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.1); /* Sombra dura estilo retro */
+    }
+    /* Bordes por categoría */
+    .cat-structural { border-left-color: #2c7a7b; }
+    .cat-critical { border-left-color: #9b2c2c; }
+    .cat-institutional { border-left-color: #d69e2e; }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased min-h-screen flex flex-col">
+
+  <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
+    Centro de Investigación Regional (CIRCPyCS) — UAGRM
+  </div>
+
+  <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <a href="index.html" class="flex flex-col leading-none group">
+        <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Biblioteca</span>
+      </a>
+      <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
+        <a href="monitor.html" class="hover:text-accent-red transition">Monitor</a>
+        <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
+        <a href="#" class="text-accent-red border-b-2 border-accent-red">Archivo</a>
+      </nav>
+      <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
+    </div>
   </header>
 
-  <div class="max-w-6xl mx-auto px-6 py-12">
-    
-    <div class="mb-12 border-b border-stone-300 pb-8">
-        <div class="relative max-w-xl">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-stone-400"></i>
-            <input type="text" placeholder="Buscar por título, autor o tema (ej: Federalismo)..." class="w-full pl-10 pr-4 py-3 bg-white border border-stone-300 focus:outline-none focus:border-lepc-navy font-serif text-sm">
-        </div>
-        <div class="mt-4 flex gap-4 text-xs font-bold uppercase text-stone-500">
-            <button class="hover:text-lepc-accent">Working Papers</button>
-            <button class="hover:text-lepc-accent">Legislación</button>
-            <button class="hover:text-lepc-accent">Estadísticas</button>
+  <div class="border-b border-stone-300 bg-white">
+    <div class="max-w-6xl mx-auto px-6 py-8">
+        <h2 class="font-serif text-3xl italic text-stone-800 mb-6">Archivo de Pensamiento Económico</h2>
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="relative flex-grow">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-stone-400"></i>
+                <input type="text" id="libSearch" placeholder="Buscar por título, autor, año o palabra clave..." 
+                    class="w-full pl-10 pr-4 py-3 bg-paper-bg border border-stone-300 focus:border-accent-red focus:outline-none font-serif text-stone-700">
+            </div>
+            <div class="flex gap-2 overflow-x-auto">
+                <select class="bg-paper-bg border border-stone-300 px-4 py-3 text-sm font-bold text-stone-600 focus:outline-none cursor-pointer">
+                    <option value="all">Todas las Corrientes</option>
+                    <option value="cat-structural">Estructuralismo</option>
+                    <option value="cat-critical">Ec. Crítica / Marxista</option>
+                    <option value="cat-institutional">Institucionalismo</option>
+                </select>
+                <select class="bg-paper-bg border border-stone-300 px-4 py-3 text-sm font-bold text-stone-600 focus:outline-none cursor-pointer">
+                    <option>Año: Todos</option>
+                    <option>2025</option>
+                    <option>2024</option>
+                    <option>Histórico</option>
+                </select>
+            </div>
         </div>
     </div>
+  </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="text-xs font-bold text-lepc-navy uppercase tracking-widest border-b-2 border-lepc-navy">
-                    <th class="py-4 w-1/2">Título del Documento</th>
-                    <th class="py-4">Autor(es)</th>
-                    <th class="py-4">Año</th>
-                    <th class="py-4 text-right">Acceso</th>
-                </tr>
-            </thead>
-            <tbody class="text-sm font-light text-stone-800 divide-y divide-stone-200">
-                
-                <tr class="hover:bg-stone-100 transition">
-                    <td class="py-4 pr-6">
-                        <span class="block font-serif font-bold text-base text-lepc-navy">Hacia un Federalismo Fiscal en Bolivia</span>
-                        <span class="text-xs text-stone-500">Serie: Reformas Estructurales Nº 12</span>
-                    </td>
-                    <td class="py-4">J. Peralta, D. Hurtado</td>
-                    <td class="py-4">2025</td>
-                    <td class="py-4 text-right">
-                        <a href="#" class="text-lepc-accent hover:underline font-bold">PDF <i class="fa-solid fa-arrow-down ml-1"></i></a>
-                    </td>
-                </tr>
+  <main class="flex-grow py-12 px-6">
+    <div class="max-w-4xl mx-auto space-y-6" id="libraryList">
 
-                <tr class="hover:bg-stone-100 transition">
-                    <td class="py-4 pr-6">
-                        <span class="block font-serif font-bold text-base text-lepc-navy">Censo 2024: Proyecciones de Redistribución</span>
-                        <span class="text-xs text-stone-500">Dataset (.xlsx) + Informe Técnico</span>
-                    </td>
-                    <td class="py-4">Equipo LEPC</td>
-                    <td class="py-4">2024</td>
-                    <td class="py-4 text-right">
-                        <a href="#" class="text-lepc-accent hover:underline font-bold">ZIP <i class="fa-solid fa-arrow-down ml-1"></i></a>
-                    </td>
-                </tr>
+        <article class="lib-card cat-structural p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-teal-700 bg-teal-50 px-2 py-1">Estructuralismo Latinoamericano</span>
+                <span class="text-xs font-serif text-stone-500 italic">Working Paper #42 • 2025</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-teal-800 transition">
+                Restricción Externa y Ciclos Constitucionales en Bolivia
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed">
+                Un análisis de cómo la escasez de divisas (restricción externa) ha precipitado históricamente las crisis de legitimidad estatal y las reformas constitucionales. Revisión de datos 1952-2024.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">J. Peralta</span></div>
+                <div class="flex gap-3">
+                    <button onclick="openModal('download', 'Restricción Externa PDF', '#', 'Peralta, J. (2025). Restricción Externa. LEPC.')" class="text-xs font-bold uppercase tracking-wide text-teal-700 hover:underline">
+                        <i class="fa-solid fa-file-pdf mr-1"></i> PDF
+                    </button>
+                    <button onclick="openModal('code', 'Dataset Balanza Pagos', '#', '')" class="text-xs font-bold uppercase tracking-wide text-stone-500 hover:text-stone-800 hover:underline">
+                        <i class="fa-solid fa-table mr-1"></i> Datos
+                    </button>
+                </div>
+            </div>
+        </article>
 
-                <tr class="hover:bg-stone-100 transition">
-                    <td class="py-4 pr-6">
-                        <span class="block font-serif font-bold text-base text-lepc-navy">Análisis de la Ley del Presupuesto General 2025</span>
-                        <span class="text-xs text-stone-500">Brief Legislativo</span>
-                    </td>
-                    <td class="py-4">Y. Pedraza</td>
-                    <td class="py-4">2024</td>
-                    <td class="py-4 text-right">
-                        <a href="#" class="text-lepc-accent hover:underline font-bold">PDF <i class="fa-solid fa-arrow-down ml-1"></i></a>
-                    </td>
-                </tr>
+        <article class="lib-card cat-critical p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-red-800 bg-red-50 px-2 py-1">Economía Política Crítica</span>
+                <span class="text-xs font-serif text-stone-500 italic">Journal Article • 2024</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-red-900 transition">
+                La Inflación como Conflicto Distributivo: Una refutación monetarista
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed">
+                Desafiando la tesis de que la inflación es "siempre un fenómeno monetario". Este paper demuestra econométricamente que la inflación en Bolivia responde a pugnas por el excedente entre sectores oligopólicos y trabajo.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">D. Hurtado, C. Escobar</span></div>
+                <div class="flex gap-3">
+                    <button onclick="openModal('download', 'Inflación Conflicto PDF', '#', 'Hurtado, D. (2024). Inflación. LEPC.')" class="text-xs font-bold uppercase tracking-wide text-red-800 hover:underline">
+                        <i class="fa-solid fa-file-pdf mr-1"></i> PDF
+                    </button>
+                </div>
+            </div>
+        </article>
 
-                <tr class="hover:bg-stone-100 transition">
-                    <td class="py-4 pr-6">
-                        <span class="block font-serif font-bold text-base text-lepc-navy">Libertad Económica y Derechos de Propiedad en el Oriente</span>
-                        <span class="text-xs text-stone-500">Paper Académico (Draft)</span>
-                    </td>
-                    <td class="py-4">C. Escobar</td>
-                    <td class="py-4">2023</td>
-                    <td class="py-4 text-right">
-                        <a href="#" class="text-lepc-accent hover:underline font-bold">PDF <i class="fa-solid fa-arrow-down ml-1"></i></a>
-                    </td>
-                </tr>
+        <article class="lib-card cat-institutional p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-amber-700 bg-amber-50 px-2 py-1">Neoinstitucionalismo</span>
+                <span class="text-xs font-serif text-stone-500 italic">Policy Brief • 2024</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-amber-800 transition">
+                Costos de Transacción en la Titulación de Tierras (INRA)
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed">
+                Medición de los costos ocultos y la burocracia en el saneamiento de tierras. Cómo la inseguridad institucional afecta la inversión de largo plazo en el agro cruceño.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">Y. Pedraza</span></div>
+                <div class="flex gap-3">
+                    <button onclick="openModal('download', 'Tierras INRA PDF', '#', 'Pedraza, Y. (2024). Costos INRA. LEPC.')" class="text-xs font-bold uppercase tracking-wide text-amber-700 hover:underline">
+                        <i class="fa-solid fa-file-pdf mr-1"></i> Brief
+                    </button>
+                </div>
+            </div>
+        </article>
 
-            </tbody>
-        </table>
+        <article class="lib-card cat-structural p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-teal-700 bg-teal-50 px-2 py-1">Historia Económica</span>
+                <span class="text-xs font-serif text-stone-500 italic">Capítulo de Libro • 2023</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-teal-800 transition">
+                La "Maldición de los Recursos" Revisitada: Santa Cruz y el Gas
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed">
+                Análisis histórico-comparado. ¿Generó el IDH una enfermedad holandesa subnacional? Estudio sobre la desindustrialización relativa y la terciarización de la economía departamental.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">Equipo LEPC</span></div>
+                <div class="flex gap-3">
+                    <button onclick="openModal('restricted', 'Capítulo Gas PDF', '#', '')" class="text-xs font-bold uppercase tracking-wide text-stone-500 hover:text-stone-800 hover:underline">
+                        <i class="fa-solid fa-lock mr-1"></i> Solicitar
+                    </button>
+                </div>
+            </div>
+        </article>
+
     </div>
+  </main>
 
+  <div id="libModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-stone-900/80 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+    <div class="flex min-h-full items-center justify-center p-4">
+      <div class="relative transform overflow-hidden bg-[#f4f1ea] text-left shadow-2xl transition-all w-full max-w-lg border border-stone-300">
+        <div class="p-8">
+            <h3 class="font-serif text-2xl font-bold text-stone-900 mb-2" id="modalTitle">Título Documento</h3>
+            <div class="h-1 w-12 bg-accent-red mb-6"></div>
+            
+            <div id="modalContent" class="text-sm text-stone-700 font-light space-y-4">
+                </div>
+
+            <div class="mt-8 flex justify-end gap-4">
+                <button onclick="closeModal()" class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-800 transition">Cerrar</button>
+                <a href="#" id="modalAction" class="px-6 py-2 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-accent-red transition">Descargar</a>
+            </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   {% include footer.html %}
+
+  <script>
+    // Buscador en tiempo real
+    const searchInput = document.getElementById('libSearch');
+    const items = document.querySelectorAll('.lib-card');
+
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = text.includes(term) ? 'block' : 'none';
+        });
+    });
+
+    // Lógica del Modal
+    function openModal(type, title, link, citation) {
+        const modal = document.getElementById('libModal');
+        const mTitle = document.getElementById('modalTitle');
+        const mContent = document.getElementById('modalContent');
+        const mBtn = document.getElementById('modalAction');
+
+        mTitle.textContent = title;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        if (type === 'download') {
+            mContent.innerHTML = `
+                <p>Está a punto de descargar un documento académico. Por favor, utilice la siguiente referencia para citar este trabajo:</p>
+                <div class="bg-white border border-stone-300 p-3 font-mono text-xs select-all">${citation}</div>
+            `;
+            mBtn.textContent = "Descargar Archivo";
+            mBtn.href = link;
+            mBtn.style.display = 'inline-block';
+        } else if (type === 'restricted') {
+            mContent.innerHTML = `<p>Este documento se encuentra bajo embargo o restricción de derechos de autor. Debe solicitar acceso directo a los autores.</p>`;
+            mBtn.textContent = "Solicitar por Email";
+            mBtn.href = "mailto:contacto@lepc.uagrm.edu.bo";
+            mBtn.style.display = 'inline-block';
+        } else if (type === 'code') {
+            mContent.innerHTML = `<p>Script de replicación para Stata/R:</p><div class="bg-stone-800 text-white p-3 font-mono text-xs overflow-x-auto">use "data_balanza_pagos.dta", clear<br>regress log_res log_terms</div>`;
+            mBtn.style.display = 'none';
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('libModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+  </script>
+
 </body>
 </html>
