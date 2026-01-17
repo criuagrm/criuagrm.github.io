@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard Electoral — LABAP • CIRCPyCS</title>
-  <meta name="description" content="LAP-CIRCPyCS: análisis electoral, indicadores institucionales y visualización interactiva para Bolivia 2025." />
+  <title>Laboratorio de Análisis Político • CIRCPyCS</title>
+  <meta name="description" content="Plataforma de inteligencia de datos electorales y análisis institucional del CIRCPyCS UAGRM." />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -27,13 +27,12 @@
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
 
   <style>
-    /* Estilos Elite */
-    .kpi-card { transition: all 0.2s ease; border: 1px solid #e2e8f0; }
-    .kpi-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05); }
-    /* Ajuste altura gráficos */
-    #plotly-intencion-voto { height: 400px; width: 100%; }
-    @media (min-width: 640px){ #plotly-intencion-voto { height: 500px; } }
-    #bars-resultado { min-height: 320px; }
+    /* Estilos Académicos */
+    .kpi-card { transition: all 0.2s ease; border: 1px solid #f1f5f9; }
+    .kpi-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.06); }
+    /* Altura gráficos */
+    #plotly-intencion-voto { height: 450px; width: 100%; }
+    #bars-resultado, #pie-balotaje { height: 350px; width: 100%; }
   </style>
 </head>
 <body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
@@ -46,23 +45,26 @@
         <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
           <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
-          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Analytics</h1>
+          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Center</h1>
         </div>
       </a>
+      
       <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Indicadores</a>
-        <a href="proyectos.html" class="hover:text-black transition">Investigación</a>
-        <a href="software.html" class="hover:text-black transition">Toolkit</a>
-        <a href="data.html" class="hover:text-black transition">Datos</a>
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Dashboard</a>
+        <a href="data.html" class="hover:text-black transition">Datasets</a>
+        <a href="proyectos.html" class="hover:text-black transition">Proyectos</a>
+        <a href="software.html" class="hover:text-black transition">Software</a>
         <a href="../index.html" class="hover:text-black transition">Inicio</a>
       </nav>
+      
       <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
     </div>
     
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
         <div class="grid gap-3 text-sm">
-            <a href="proyectos.html" class="block py-2">Investigación</a>
-            <a href="data.html" class="block py-2">Datos</a>
+            <a href="data.html" class="block py-2">Datasets</a>
+            <a href="proyectos.html" class="block py-2">Proyectos</a>
+            <a href="software.html" class="block py-2">Software</a>
             <a href="../index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
         </div>
     </div>
@@ -83,7 +85,7 @@
   <main class="bg-slate-50 min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
-      <section id="dashboard">
+      <section id="indicadores">
         <div class="flex items-center justify-between mb-6">
             <h3 class="font-serif text-xl font-bold text-slate-900">Mega Dashboard Internacional</h3>
             <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Bolivia 2025</span>
@@ -143,41 +145,66 @@
         </div>
       </section>
 
-      <section id="visualizacion" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <section id="tracking">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+            <div class="mb-6 border-b border-slate-100 pb-4">
+                <h4 class="font-serif text-xl font-bold text-slate-900">Tracking Poll: Intención de Voto 2025</h4>
+                <p class="text-sm text-slate-500 mt-1 font-light">Serie temporal de todas las mediciones públicas autorizadas (Mayo–Agosto 2025).</p>
+            </div>
+            <div id="plotly-intencion-voto"></div>
+        </div>
+      </section>
+
+      <section id="resultados" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 h-full">
-                <div class="mb-6">
-                    <h4 class="font-serif text-xl font-bold text-slate-900">Tracking Poll: Intención de Voto 2025</h4>
-                    <p class="text-sm text-slate-500 mt-1 font-light">Serie temporal de mediciones públicas (Mayo–Agosto 2025). Datos normalizados.</p>
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 h-full">
+            <div class="flex justify-between items-center mb-6">
+                <h5 class="font-serif font-bold text-lg text-slate-900">Primera Vuelta (Oficial)</h5>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded uppercase">OEP Computo</span>
+            </div>
+            <div id="bars-resultado"></div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 h-full relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4">
+                <span class="bg-amber-50 text-amber-700 border border-amber-100 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">
+                    Simulación
+                </span>
+            </div>
+            
+            <div class="mb-6">
+                <h5 class="font-serif font-bold text-lg text-slate-900">Segunda Vuelta (Balotaje)</h5>
+                <p class="text-xs text-slate-500 mt-1">Proyección basada en transferencia de votos de terceros.</p>
+            </div>
+            
+            <div id="pie-balotaje"></div>
+            
+            <div class="mt-4 flex justify-around text-center border-t border-slate-100 pt-4">
+                <div>
+                    <span class="block text-2xl font-bold text-teal-700">52.4%</span>
+                    <span class="text-xs text-slate-500 font-bold uppercase">R. Paz</span>
                 </div>
-                <div id="plotly-intencion-voto"></div>
+                <div class="h-10 border-r border-slate-200"></div>
+                <div>
+                    <span class="block text-2xl font-bold text-red-600">47.6%</span>
+                    <span class="text-xs text-slate-500 font-bold uppercase">Tuto Q.</span>
+                </div>
             </div>
         </div>
 
-        <div class="space-y-6">
-            
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h5 class="font-bold text-sm text-slate-900 uppercase tracking-wide">Primera Vuelta (Oficial)</h5>
-                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded">OEP</span>
-                </div>
-                <div id="bars-resultado"></div>
-            </div>
+      </section>
 
-            <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 text-sm text-slate-600">
-                <h5 class="font-bold text-slate-900 mb-3">Fuentes de Datos</h5>
-                <ul class="space-y-2 font-light">
-                    <li><strong class="text-slate-800">Ciemcorp:</strong> 22-26 Mayo, 5-7 Julio.</li>
-                    <li><strong class="text-slate-800">SPIE:</strong> Múltiples mediciones (Jun-Ago).</li>
-                    <li><strong class="text-slate-800">Captura:</strong> 10-20 Jun, 27 Jul-3 Ago.</li>
-                    <li><strong class="text-slate-800">Ipsos:</strong> 25-27 Jul, 2-6 Ago.</li>
-                </ul>
-                <div class="mt-4 pt-4 border-t border-slate-200 text-xs text-slate-400">
-                    * Línea punteada indica fecha de elección oficial.
-                </div>
-            </div>
-
+      <section class="bg-slate-100 rounded-lg p-6 border border-slate-200 text-sm text-slate-600">
+        <h5 class="font-bold text-slate-900 mb-2">Ficha Técnica Agregada</h5>
+        <div class="grid md:grid-cols-2 gap-4 font-light text-xs">
+            <ul class="space-y-1">
+                <li>• <strong>Ciemcorp (Unitel):</strong> Encuestas del 22-26 Mayo y 5-7 Julio.</li>
+                <li>• <strong>SPIE (El Deber):</strong> Mediciones quincenales Junio-Agosto.</li>
+            </ul>
+            <ul class="space-y-1">
+                <li>• <strong>Captura (Red Uno):</strong> 10-20 Jun, 27 Jul-3 Ago.</li>
+                <li>• <strong>Ipsos:</strong> 25-27 Jul, 2-6 Ago.</li>
+            </ul>
         </div>
       </section>
 
@@ -194,40 +221,28 @@
 
     // --- DATOS Y GRÁFICOS --- //
 
-    // Datos de encuestas
-    const x = [
-      "26/05 Ciemcorp<br><span style='font-size:10px'>Unitel</span>",
-      "14/06 SPIE<br><span style='font-size:10px'>El Deber</span>",
-      "20/06 Captura<br><span style='font-size:10px'>Red Uno</span>",
-      "07/07 Ciemcorp<br><span style='font-size:10px'>Unitel</span>",
-      "10/07 SPIE<br><span style='font-size:10px'>El Deber</span>",
-      "27/07 Ipsos<br><span style='font-size:10px'>Unitel</span>",
-      "28/07 SPIE<br><span style='font-size:10px'>El Deber</span>",
-      "03/08 Captura<br><span style='font-size:10px'>Red Uno</span>",
-      "04/08 SPIE<br><span style='font-size:10px'>El Deber</span>",
-      "06/08 Ipsos<br><span style='font-size:10px'>Unitel</span>"
-    ];
-
+    // 1. Datos Tracking
+    const x = [ "26/05 Ciemcorp", "14/06 SPIE", "20/06 Captura", "07/07 Ciemcorp", "10/07 SPIE", "27/07 Ipsos", "28/07 SPIE", "03/08 Captura", "04/08 SPIE", "06/08 Ipsos" ];
     const colores = {
-      "Samuel Doria Medina": "#eab308",  // Yellow-500
-      "Jorge «Tuto» Quiroga": "#ef4444", // Red-500
-      "Manfred Reyes Villa":  "#8b5cf6", // Violet-500
-      "Rodrigo Paz Pereira":  "#0d9488", // Teal-600
-      "Andrónico Rodríguez":  "#16a34a", // Green-600
-      "Jhonny Fernández":    "#2563eb"   // Blue-600
+      "Samuel Doria Medina": "#eab308",
+      "Jorge «Tuto» Quiroga": "#ef4444",
+      "Manfred Reyes Villa":  "#8b5cf6",
+      "Rodrigo Paz Pereira":  "#0d9488",
+      "Andrónico Rodríguez":  "#16a34a",
+      "Jhonny Fernández":    "#2563eb"
     };
-
     const ySeries = {
-      "Samuel Doria Medina": [19.1, 24.02, 19.6, 18.7, 21.76, 21.5, 24.5, 21.6, 23.64, 21.2],
-      "Jorge «Tuto» Quiroga": [18.4, 22.07, 16.6, 18.1, 20.70, 19.6, 22.9, 20.0, 24.45, 20.0],
-      "Manfred Reyes Villa":  [7.9,  9.39,  8.8,  8.2, 10.01,  8.3,  7.2,  9.7,  8.79,  7.7],
-      "Rodrigo Paz Pereira":  [4.3,  5.56,  6.4,  3.2,  4.04,  5.8,  7.6,  6.4,  9.10,  8.3],
-      "Andrónico Rodríguez":  [14.2, 14.69, 13.7, 11.8,  8.26,  6.1,  7.4,  7.2,  8.46,  5.5],
-      "Jhonny Fernández":    [3.7,  2.56,  3.8,  2.5,  2.45,  1.8,  2.1,  2.0,  2.44,  2.0]
+      "Samuel Doria Medina": [19.1, 24.0, 19.6, 18.7, 21.7, 21.5, 24.5, 21.6, 23.6, 21.2],
+      "Jorge «Tuto» Quiroga": [18.4, 22.0, 16.6, 18.1, 20.7, 19.6, 22.9, 20.0, 24.4, 20.0],
+      "Manfred Reyes Villa":  [7.9,  9.3,  8.8,  8.2, 10.0,  8.3,  7.2,  9.7,  8.7,  7.7],
+      "Rodrigo Paz Pereira":  [4.3,  5.5,  6.4,  3.2,  4.0,  5.8,  7.6,  6.4,  9.1,  8.3],
+      "Andrónico Rodríguez":  [14.2, 14.6, 13.7, 11.8,  8.2,  6.1,  7.4,  7.2,  8.4,  5.5],
+      "Jhonny Fernández":    [3.7,  2.5,  3.8,  2.5,  2.4,  1.8,  2.1,  2.0,  2.4,  2.0]
     };
 
+    // 2. Datos Oficiales 1ra Vuelta
     const resultadoOficial = {
-      fecha: "Elección<br><span style='font-size:10px'>Oficial</span>",
+      fecha: "Oficial",
       valores: {
         "Rodrigo Paz Pereira": 32.06,
         "Jorge «Tuto» Quiroga": 26.70,
@@ -240,103 +255,111 @@
       }
     };
 
-    // --- RENDERIZADO PLOTLY (TEMA CLARO) ---
+    // 3. Datos Proyección 2da Vuelta (Simulados)
+    const datosBalotaje = {
+        labels: ["Rodrigo Paz Pereira (PDC)", "Jorge «Tuto» Quiroga (LIBRE)"],
+        values: [52.4, 47.6],
+        colors: ["#0d9488", "#ef4444"] // Teal vs Red
+    };
 
-    function makeLayout(){
-      const isMobile = window.innerWidth < 700;
-      return {
-        // Fondo Blanco para estética académica
-        plot_bgcolor: '#ffffff',
-        paper_bgcolor: '#ffffff',
-        legend: { orientation: 'h', x: 0, y: 1.15, font: { family:'Inter', size: 11, color: '#475569' } },
-        xaxis: { 
-            title: null, 
-            tickfont: { family:'Inter', size: 10, color: '#64748b' }, 
-            gridcolor: '#f1f5f9',
-            automargin: true 
-        },
-        yaxis: { 
-            title: { text: '% Intención', font: { family:'Inter', size: 12, color: '#64748b' } },
-            gridcolor: '#e2e8f0', 
-            tickfont: { family:'Inter', color: '#64748b' },
-            zerolinecolor: '#e2e8f0'
-        },
-        margin: { l:40, r:20, t:60, b:60 },
-        // Línea vertical de elección
-        shapes: [{ type:'line', xref:'x', yref:'paper', x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0:0, y1:1, line:{ color:'#94a3b8', width:1, dash:'dash' } }],
-        font: { family: 'Inter, sans-serif' }
-      };
-    }
+    // --- RENDERIZADO PLOTLY ---
 
-    function buildTraces(){
+    function renderTracking(){
       const traces = [];
       for (const [nombre, ys] of Object.entries(ySeries)){
         const trace = {
           x: [...x], y: [...ys], name: nombre,
           mode: 'lines+markers',
           line: { color: colores[nombre], width: 2, shape: 'spline' },
-          marker: { size: 6, symbol: 'circle' },
+          marker: { size: 6 },
           hovertemplate: `<b>${nombre}</b><br>%{y:.1f}%<extra></extra>`
         };
-        // Añadir punto oficial si existe
+        // Agregar punto oficial
         if (resultadoOficial.valores[nombre]) {
             trace.x.push(resultadoOficial.fecha);
             trace.y.push(resultadoOficial.valores[nombre]);
         }
         traces.push(trace);
       }
-      return traces;
+
+      const layout = {
+        plot_bgcolor: '#ffffff', paper_bgcolor: '#ffffff',
+        legend: { orientation: 'h', x: 0, y: 1.15, font: { family:'Inter', size: 11, color: '#475569' } },
+        xaxis: { tickfont: { family:'Inter', size: 10, color: '#64748b' }, gridcolor: '#f1f5f9' },
+        yaxis: { title: '% Voto', gridcolor: '#e2e8f0', tickfont: { family:'Inter', color: '#64748b' } },
+        margin: { l:40, r:20, t:60, b:40 },
+        // Línea vertical final
+        shapes: [{ type:'line', xref:'x', yref:'paper', x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0:0, y1:1, line:{ color:'#94a3b8', width:1, dash:'dash' } }],
+        font: { family: 'Inter, sans-serif' }
+      };
+      
+      Plotly.newPlot('plotly-intencion-voto', traces, layout, { responsive: true, displayModeBar: false });
     }
 
-    function renderLineChart(){
-      Plotly.newPlot('plotly-intencion-voto', buildTraces(), makeLayout(), { responsive: true, displayModeBar: false });
-    }
-
-    function renderResultado(){
+    function renderPrimeraVuelta(){
       const pares = Object.entries(resultadoOficial.valores).filter(([,v]) => v).sort((a,b) => b[1] - a[1]);
       const nombres = pares.map(p => p[0]);
       const valores = pares.map(p => p[1]);
-      
-      // Colores mapeados o gris por defecto
       const barColors = nombres.map(n => colores[n] || '#94a3b8');
 
       const trace = {
-        type: 'bar',
-        x: valores,
-        y: nombres,
-        orientation: 'h',
+        type: 'bar', x: valores, y: nombres, orientation: 'h',
         marker: { color: barColors, opacity: 0.9 },
-        text: valores.map(v => v + '%'),
-        textposition: 'auto',
+        text: valores.map(v => v + '%'), textposition: 'auto',
         hovertemplate: "%{x:.2f}%<extra></extra>"
       };
 
       const layout = {
-        plot_bgcolor: '#ffffff',
-        paper_bgcolor: '#ffffff',
-        margin: { l: 120, r: 20, t: 10, b: 30 },
-        xaxis: { showgrid: true, gridcolor: '#f1f5f9', zeroline: false },
-        yaxis: { tickfont: { family:'Inter', size: 10, color: '#334155' } },
+        plot_bgcolor: '#ffffff', paper_bgcolor: '#ffffff',
+        margin: { l: 130, r: 20, t: 10, b: 30 },
+        xaxis: { showgrid: true, gridcolor: '#f1f5f9' },
         font: { family: 'Inter, sans-serif' }
       };
 
       Plotly.newPlot('bars-resultado', [trace], layout, { responsive: true, displayModeBar: false });
     }
 
+    function renderBalotaje(){
+        const trace = {
+            type: 'pie',
+            labels: datosBalotaje.labels,
+            values: datosBalotaje.values,
+            marker: { colors: datosBalotaje.colors },
+            textinfo: 'label+percent',
+            textposition: 'inside',
+            hole: 0.4, // Donut style
+            hoverinfo: 'label+percent+value',
+            textfont: { family: 'Inter', color: '#ffffff', weight: 'bold' }
+        };
+
+        const layout = {
+            plot_bgcolor: '#ffffff', paper_bgcolor: '#ffffff',
+            margin: { l: 20, r: 20, t: 20, b: 20 },
+            showlegend: false,
+            annotations: [
+                {
+                    font: { size: 12, family: 'Inter', color: '#64748b' },
+                    showarrow: false, text: 'Segunda<br>Vuelta', x: 0.5, y: 0.5
+                }
+            ]
+        };
+
+        Plotly.newPlot('pie-balotaje', [trace], layout, { responsive: true, displayModeBar: false });
+    }
+
     // Inicialización
     window.onload = function() {
         if(window.Plotly) {
-            renderLineChart();
-            renderResultado();
-        } else {
-            // Fallback simple si Plotly tarda
-            setTimeout(() => { renderLineChart(); renderResultado(); }, 1000);
+            renderTracking();
+            renderPrimeraVuelta();
+            renderBalotaje();
         }
     };
     
     window.addEventListener('resize', () => {
         Plotly.Plots.resize('plotly-intencion-voto');
         Plotly.Plots.resize('bars-resultado');
+        Plotly.Plots.resize('pie-balotaje');
     });
   </script>
 
