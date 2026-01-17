@@ -1,11 +1,11 @@
 ---
 ---
 <!doctype html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboards — LABAP • CIRCPyCS UAGRM</title>
+  <title>Dashboards — LABAP • CIRCPyCS</title>
   <meta name="description" content="Laboratorio de Análisis de Datos para Administración Pública (LABAP) — Tableros y visualizaciones del CIRCPyCS UAGRM" />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,201 +13,169 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
-          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.10)' }
+          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
+          colors: {
+            'academic-slate': '#1e293b', 
+          }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
     .card-minh{ min-height: 168px; }
     section[id] { scroll-margin-top: 100px; }
+    /* Estilos Elite */
+    .dashboard-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
+    .dashboard-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08); }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col">
+<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain"/>
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
-          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg">LABAP — CIRCPyCS</h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Center</h1>
         </div>
       </a>
-
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#autonomicas" class="hover:text-emerald-700 font-bold text-emerald-700">Monitor 2025</a>
-        <a href="#nacionales" class="hover:text-sky-700">Nacionales</a>
-        <a href="#mapas" class="hover:text-sky-700">Mapas</a>
-        <a href="../index.html" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Dashboard</a>
+        <a href="proyectos.html" class="hover:text-black transition">Investigación</a>
+        <a href="software.html" class="hover:text-black transition">Toolkit</a>
+        <a href="data.html" class="hover:text-black transition">Datos</a>
+        <a href="../index.html" class="hover:text-black transition">Inicio</a>
       </nav>
-
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
-        <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </button>
+      <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
     </div>
-
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-7 w-7 object-contain"/>
-            <span class="font-semibold">LABAP</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </button>
+    
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg">
+        <div class="grid gap-3 text-sm">
+            <a href="proyectos.html" class="block py-2">Investigación</a>
+            <a href="data.html" class="block py-2">Datos</a>
+            <a href="../index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
         </div>
-
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50 font-medium text-emerald-700" href="#autonomicas">Monitor Autonómico</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#nacionales">Nacionales 2025</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#mapas">Mapas y Datos</a></li>
-          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="../index.html">Volver a Inicio</a></li>
-        </ul>
-      </nav>
     </div>
   </header>
 
-  <section id="inicio" class="relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
-      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
-      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-slate-100">
+    <div class="max-w-4xl">
+        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Data Visualization Hub</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Monitores y Dashboards Interactivos.
+        </h2>
+        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
+            Centro de visualización de datos para el seguimiento de la coyuntura política, procesos electorales y análisis institucional en tiempo real.
+        </p>
     </div>
+  </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 text-center">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">LABAP</span>
-      <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">DASHBOARDS</h2>
-      <p class="mt-3 max-w-3xl mx-auto text-slate-600">Acceso centralizado a los monitores electorales y dashboards de análisis político.</p>
-    </div>
-  </section>
-
-  <main class="pb-14 flex-grow">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-10">
+  <main class="bg-slate-50 min-h-screen py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12">
 
       <section id="autonomicas">
-        <h3 class="text-xl font-bold flex items-center gap-2 mb-6 px-1">
-          <i class="fa-solid fa-star text-emerald-500"></i> Elecciones Autonómicas
+        <h3 class="font-serif text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+            <span class="w-2 h-8 bg-emerald-600 rounded-full"></span>
+            Elecciones Autonómicas
         </h3>
 
         <a href="../elecciones_autonomicas_2026/index.html" class="group relative block w-full">
+          <div class="absolute -inset-0.5 bg-gradient-to-r from-emerald-100 to-sky-100 rounded-2xl opacity-50 group-hover:opacity-100 transition duration-500"></div>
           
-          <div class="absolute -inset-1 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 rounded-[24px] opacity-25 group-hover:opacity-70 transition duration-500 blur-md"></div>
-          
-          <div class="relative flex flex-col md:flex-row bg-white rounded-[20px] border border-slate-100 shadow-xl overflow-hidden">
+          <div class="relative bg-white rounded-xl border border-slate-200 p-8 md:p-10 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row gap-8 items-center">
             
-            <div class="p-6 sm:p-8 md:w-2/3 flex flex-col justify-center">
-              
-              <div class="mb-4">
-                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white shadow-sm">
-                  <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  En Vivo 2025
-                </span>
-              </div>
-
-              <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-sky-600 transition-all duration-300">
-                Monitor de Elecciones Autonómicas
-              </h3>
-              
-              <p class="mt-4 text-slate-600 text-lg leading-relaxed">
-                Plataforma integral de seguimiento. Accede al <strong>Atlas Electoral</strong>, usa el <strong>Simulador de Escaños D'Hondt</strong> y consulta la base de datos de <strong>Candidatos</strong>.
-              </p>
-
-              <div class="mt-8 flex items-center text-base font-bold text-slate-900 group-hover:text-emerald-700 transition">
-                Ingresar al Monitor 
-                <svg class="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </div>
+            <div class="md:w-2/3">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">Live Monitor</span>
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                </div>
+                <h3 class="text-3xl font-serif font-bold text-slate-900 group-hover:text-emerald-800 transition mb-4">
+                    Monitor de Elecciones Autonómicas 2025
+                </h3>
+                <p class="text-slate-600 text-lg font-light leading-relaxed mb-6">
+                    Plataforma integral de seguimiento electoral. Incluye el <strong>Atlas Electoral</strong> geo-referenciado, <strong>Simulador D'Hondt</strong> y base de datos de <strong>Candidatos</strong>.
+                </p>
+                <div class="flex items-center text-sm font-bold text-slate-900 border-b-2 border-transparent group-hover:border-emerald-600 w-fit pb-0.5 transition">
+                    Acceder a la Plataforma <i class="fa-solid fa-arrow-right ml-2 text-emerald-600"></i>
+                </div>
             </div>
 
-            <div class="bg-slate-50 p-6 sm:p-8 md:w-1/3 border-t md:border-t-0 md:border-l border-slate-100 flex flex-col justify-center gap-4">
-               
-               <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-sm group-hover:border-emerald-200 transition">
-                <div class="h-8 w-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
-                  <i class="fa-solid fa-map"></i>
+            <div class="md:w-1/3 w-full flex flex-col gap-3">
+                <div class="flex items-center gap-4 p-4 rounded-lg bg-slate-50 border border-slate-100 group-hover:bg-white group-hover:shadow-sm transition">
+                    <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-map"></i></div>
+                    <span class="font-serif font-medium text-slate-700">Atlas Electoral</span>
                 </div>
-                <div class="text-sm font-semibold text-slate-700">Atlas Electoral</div>
-               </div>
-
-               <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-sm group-hover:border-sky-200 transition">
-                <div class="h-8 w-8 rounded-full bg-sky-50 flex items-center justify-center text-sky-600">
-                  <i class="fa-solid fa-calculator"></i>
+                <div class="flex items-center gap-4 p-4 rounded-lg bg-slate-50 border border-slate-100 group-hover:bg-white group-hover:shadow-sm transition">
+                    <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-sky-600"><i class="fa-solid fa-calculator"></i></div>
+                    <span class="font-serif font-medium text-slate-700">Simulador D'Hondt</span>
                 </div>
-                <div class="text-sm font-semibold text-slate-700">Simulador</div>
-               </div>
-
-               <div class="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 shadow-sm group-hover:border-rose-200 transition">
-                <div class="h-8 w-8 rounded-full bg-rose-50 flex items-center justify-center text-rose-600">
-                  <i class="fa-solid fa-users"></i>
+                <div class="flex items-center gap-4 p-4 rounded-lg bg-slate-50 border border-slate-100 group-hover:bg-white group-hover:shadow-sm transition">
+                    <div class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-rose-600"><i class="fa-solid fa-users"></i></div>
+                    <span class="font-serif font-medium text-slate-700">Perfiles Candidatos</span>
                 </div>
-                <div class="text-sm font-semibold text-slate-700">Candidatos</div>
-               </div>
-
             </div>
 
           </div>
         </a>
       </section>
 
-      <section id="nacionales" class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
-        <div class="h-2 bg-gradient-to-r from-sky-500 to-blue-600" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-globe text-sky-700"></i> Nacionales 2025</h3>
-          <p class="mt-2 text-slate-600">Seguimiento a la coyuntura nacional y encuestas presidenciales.</p>
-          <div class="mt-5 grid gap-4 sm:grid-cols-2">
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition card-minh">
-              <h4 class="font-semibold">Tracking Poll 2025</h4>
-              <p class="mt-1 text-sm text-slate-600">Visualizador interactivo de intención de voto (Datos oficiales y encuestas).</p>
-              <div class="mt-3">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700" href="index.html#visualizacion">
-                  Ver Gráficos <span aria-hidden>→</span>
-                </a>
-              </div>
-            </article>
+      <section id="nacionales">
+        <h3 class="font-serif text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+            <span class="w-2 h-8 bg-sky-600 rounded-full"></span>
+            Nacionales 2025
+        </h3>
+        <div class="grid md:grid-cols-2 gap-6">
             
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition card-minh">
-              <h4 class="font-semibold">Resultados Oficiales • OEP</h4>
-              <p class="mt-1 text-sm text-slate-600">Enlace directo al portal del Órgano Electoral Plurinacional.</p>
-              <div class="mt-3">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700" href="https://www.oep.org.bo/" target="_blank" rel="noopener">
-                  Portal OEP <span aria-hidden>↗</span>
-                </a>
-              </div>
+            <article class="dashboard-card bg-white p-8 rounded-xl flex flex-col h-full">
+                <h4 class="font-serif text-xl font-bold text-slate-900 mb-2">Tracking Poll 2025</h4>
+                <p class="text-sm text-slate-600 font-light mb-6 flex-grow leading-relaxed">
+                    Visualizador interactivo de intención de voto agregada. Series de tiempo de todas las encuestadoras autorizadas y datos oficiales.
+                </p>
+                <div class="mt-auto">
+                    <a href="index.html#visualizacion" class="text-sm font-bold text-sky-700 hover:underline">Ver Gráficos <i class="fa-solid fa-chart-line ml-1"></i></a>
+                </div>
             </article>
-          </div>
+
+            <article class="dashboard-card bg-white p-8 rounded-xl flex flex-col h-full">
+                <h4 class="font-serif text-xl font-bold text-slate-900 mb-2">Resultados Oficiales • OEP</h4>
+                <p class="text-sm text-slate-600 font-light mb-6 flex-grow leading-relaxed">
+                    Acceso directo al portal de computo del Órgano Electoral Plurinacional para verificación de actas y resultados consolidados.
+                </p>
+                <div class="mt-auto">
+                    <a href="https://www.oep.org.bo/" target="_blank" rel="noopener" class="text-sm font-bold text-sky-700 hover:underline">Ir al Portal <i class="fa-solid fa-external-link-alt ml-1"></i></a>
+                </div>
+            </article>
+
         </div>
       </section>
 
-      <section id="mapas" class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
-        <div class="h-2 bg-gradient-to-r from-slate-500 to-slate-700" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-slate-700"></i> Mapas Municipales</h3>
-          <p class="mt-2 text-slate-600">Análisis territorial específico por municipio.</p>
-          <div class="mt-5 grid gap-4 sm:grid-cols-2">
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition card-minh">
-              <h4 class="font-semibold">Geodatos Santa Cruz</h4>
-              <p class="mt-1 text-sm text-slate-600">Repositorio de mapas y análisis territorial municipal.</p>
-              <div class="mt-3">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700" href="../elecciones/atlas.html">
-                  Ver Repositorio <span aria-hidden>→</span>
-                </a>
-              </div>
+      <section id="mapas">
+        <h3 class="font-serif text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+            <span class="w-2 h-8 bg-slate-600 rounded-full"></span>
+            Mapas & Territorio
+        </h3>
+        <div class="grid md:grid-cols-2 gap-6">
+            
+            <article class="dashboard-card bg-white p-8 rounded-xl flex flex-col h-full">
+                <h4 class="font-serif text-xl font-bold text-slate-900 mb-2">Geodatos Santa Cruz</h4>
+                <p class="text-sm text-slate-600 font-light mb-6 flex-grow leading-relaxed">
+                    Repositorio de análisis territorial municipal. Mapas de calor de participación, voto histórico y demografía electoral por recintos.
+                </p>
+                <div class="mt-auto">
+                    <a href="../elecciones/atlas.html" class="text-sm font-bold text-slate-700 hover:underline">Explorar Repositorio <i class="fa-solid fa-map ml-1"></i></a>
+                </div>
             </article>
-          </div>
+
         </div>
       </section>
 
@@ -218,17 +186,12 @@
 
   <script>
     // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-    openBtn?.addEventListener('click', openMenu);
-    closeBtn?.addEventListener('click', closeMenu);
-    backdrop?.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    btnOpen.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
   </script>
+
 </body>
 </html>
