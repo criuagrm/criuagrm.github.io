@@ -1,3 +1,5 @@
+---
+---
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -6,7 +8,6 @@
   <title>Laboratorio de Análisis Político • CIRCPyCS</title>
   <meta name="description" content="LAP-CIRCPyCS: análisis electoral, indicadores institucionales y visualización interactiva para Bolivia 2025." />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -19,9 +20,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <!-- Plotly (con defer para no bloquear) -->
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
 
   <style>
@@ -48,10 +47,8 @@
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
-  <!-- Cinta superior -->
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header / Nav -->
   <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       <a href="#inicio" class="flex items-center gap-3">
@@ -62,7 +59,6 @@
         </div>
       </a>
 
-      <!-- Nav escritorio -->
       <nav class="hidden md:flex items-center gap-6 text-sm">
         <a href="#dashboard" class="hover:text-sky-700">Indicadores</a>
         <a href="#visualizacion" class="hover:text-sky-700">Visualización</a>
@@ -74,7 +70,6 @@
         <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-xl border border-sky-200 text-sky-700 hover:bg-sky-50">Volver al inicio</a>
       </nav>
 
-      <!-- Botón móvil -->
       <button id="btn-open"
               class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
               aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
@@ -88,23 +83,21 @@
       </button>
     </div>
 
-    <!-- Menú móvil sencillo (dropdown bajo el header) -->
     <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.06)]" aria-label="Navegación móvil">
       <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
         <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dashboard">Indicadores</a></li>
         <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#visualizacion">Visualización</a></li>
         <li class="pt-2 mt-2 border-t border-slate-200 text-slate-500 text-xs px-3">Secciones externas</li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labapsoft.html">Software</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labaproy.html">Proyectos</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/labapteam">Equipo</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labapdata.html">Datasets</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labapdashboard.html">Dashboard</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/software.html">Software</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/proyectos.html">Proyectos</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/labap/team">Equipo</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/datasets.html">Datasets</a></li>
+        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/dashboard.html">Dashboard</a></li>
         <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver al inicio</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Hero -->
   <section id="inicio" class="relative overflow-hidden">
     <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
       <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
@@ -121,7 +114,6 @@
     </div>
   </section>
 
-  <!-- Indicadores / KPIs -->
   <section id="dashboard" class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-2xl font-bold text-center">Mega Dashboard Internacional Bolivia 2025</h3>
@@ -205,7 +197,6 @@
     </div>
   </section>
 
-  <!-- Visualización avanzada -->
   <section id="visualizacion" class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-lg border border-slate-800">
@@ -214,7 +205,6 @@
         <div id="plotly-intencion-voto" class="mt-4"></div>
 
         <div class="mt-6 grid gap-4 sm:grid-cols-2">
-          <!-- Resultado oficial -->
           <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
             <div class="flex items-center justify-between">
               <h5 class="font-semibold">Resultado oficial — Primera vuelta</h5>
@@ -224,7 +214,6 @@
             <div id="bars-resultado" class="mt-3" style="width:100%;"></div>
           </div>
 
-          <!-- Metadatos / Fuente -->
           <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
             <h5 class="font-semibold">Cobertura y fuentes</h5>
             <ul class="mt-2 text-sm text-slate-300 space-y-1.5">
@@ -240,15 +229,7 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
-        <p class="text-slate-500">Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · <i class="fas fa-phone"></i> +591 67381294</p>
-      </div>
-    </div>
-  </footer>
+  {% include footer.html %}
 
   <script>
     // ===== Menú móvil simple =====
@@ -484,5 +465,3 @@
   </script>
 </body>
 </html>
-
-
