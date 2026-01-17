@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Laboratorio de Economía Política Constitucional — UAGRM</title>
-  <meta name="description" content="Análisis del diseño constitucional, pacto fiscal y libertad económica en Bolivia." />
+  <title>Laboratorio de Economía Política Constitucional — LEPC</title>
+  <meta name="description" content="Enfoque heterodoxo sobre el diseño institucional y la economía política de la Constitución Boliviana." />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -14,212 +14,150 @@
       theme: {
         extend: {
           fontFamily: { 
-            sans: ["Work Sans", "sans-serif"], 
-            serif: ["Libre Baskerville", "serif"] 
+            sans: ["Lato", "sans-serif"], 
+            serif: ["Playfair Display", "serif"] 
           },
           colors: {
-            'lepc-paper': '#F9F8F4',      /* Fondo tipo papel periódico */
-            'lepc-ink': '#1c1917',        /* Negro tinta */
-            'lepc-navy': '#0f172a',       /* Azul institucional oscuro */
-            'lepc-accent': '#b45309',     /* Dorado/Terracota serio */
-            'lepc-border': '#e7e5e4',     /* Bordes sutiles */
+            'paper-bg': '#f4f1ea',      
+            'ink-dark': '#2d3748',      
+            'accent-red': '#9b2c2c',    
+            'accent-teal': '#2c7a7b',
+            'accent-gold': '#d69e2e',
           }
         }
       }
     }
   </script>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
-    body { background-color: #F9F8F4; }
-    /* Efecto de línea fina típica de The Economist */
-    .fine-line-top { border-top: 2px solid #b45309; }
-    .news-card:hover h3 { text-decoration: underline; text-decoration-color: #b45309; text-decoration-thickness: 2px; }
+    body { background-color: #f4f1ea; }
+    .hero-line { border-top: 1px solid #2d3748; margin-top: 0.5rem; margin-bottom: 0.5rem; width: 100%; }
+    .article-card:hover h3 { text-decoration: underline; text-decoration-color: #9b2c2c; text-decoration-thickness: 2px; }
   </style>
 </head>
-<body class="text-stone-900 font-sans antialiased">
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
 
-  <div class="bg-lepc-navy text-white text-xs py-2 px-4 border-b border-stone-800">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <span class="font-serif italic tracking-wider">Centro de Investigación Regional (CIRCPyCS)</span>
-        <div class="flex gap-4">
-            <a href="../index.html" class="hover:text-stone-300">Hub Principal</a>
-            <span class="text-stone-600">|</span>
-            <a href="#" class="hover:text-stone-300">Suscribirse al Boletín</a>
-        </div>
-    </div>
+  <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
+    Centro de Investigación Regional (CIRCPyCS) — UAGRM
   </div>
 
-  <header class="sticky top-0 z-40 bg-[#F9F8F4]/95 backdrop-blur border-b border-stone-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="py-5 flex items-center justify-between">
-            <a href="#" class="group">
-                <h1 class="font-serif font-bold text-2xl sm:text-3xl text-lepc-navy leading-none">
-                    L.E.P.C.
-                </h1>
-                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-lepc-accent mt-1">
-                    Economía Política Constitucional
-                </p>
-            </a>
-
-            <nav class="hidden md:flex gap-8 text-sm font-medium text-stone-600">
-                <a href="#" class="text-lepc-navy font-bold border-b-2 border-lepc-accent pb-1">Inicio</a>
-                <a href="monitor.html" class="hover:text-lepc-accent transition">Monitor Fiscal</a>
-                <a href="analysis.html" class="hover:text-lepc-accent transition">Análisis Constitucional</a>
-                <a href="reports.html" class="hover:text-lepc-accent transition">Reportes</a>
-                <a href="library.html" class="hover:text-lepc-accent transition">Biblioteca</a>
-            </nav>
-
-            <button class="md:hidden text-lepc-navy"><i class="fa-solid fa-bars text-xl"></i></button>
-        </div>
+  <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <a href="#" class="flex flex-col leading-none group">
+        <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Economía Política</span>
+      </a>
+      <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
+        <a href="#" class="text-accent-red border-b-2 border-accent-red">Inicio</a>
+        <a href="monitor.html" class="hover:text-accent-red transition">Monitor</a>
+        <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
+        <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
+      </nav>
+      <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
     </div>
   </header>
 
   <section class="border-b border-stone-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-6 py-16">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             <div class="lg:col-span-8">
-                <span class="block text-lepc-accent font-bold text-xs uppercase tracking-widest mb-3">Tema Central: Pacto Fiscal</span>
-                <h2 class="font-serif font-bold text-4xl sm:text-5xl text-lepc-navy mb-6 leading-tight">
-                    El Federalismo Fiscal en la Encrucijada: <br>
-                    <span class="italic font-normal text-stone-600">Modelando el Censo 2024.</span>
-                </h2>
-                <p class="text-lg text-stone-700 font-light leading-relaxed mb-8 font-serif">
-                    Un análisis profundo sobre las implicaciones económicas de la redistribución de escaños y recursos. ¿Es posible un nuevo pacto fiscal sin una reforma constitucional profunda? Exploramos los datos y las reglas de juego.
+                <span class="text-accent-red font-bold text-xs uppercase tracking-widest mb-2 block">Debate Central</span>
+                <h1 class="font-serif font-black text-4xl sm:text-5xl text-stone-900 mb-6 leading-tight">
+                    Constitución Económica y Heterogeneidad Estructural
+                </h1>
+                <div class="hero-line"></div>
+                <p class="text-lg text-stone-700 font-light leading-relaxed mb-8 font-serif italic">
+                    "La trampa de la renta no es un error de gestión, es una característica de diseño institucional."
                 </p>
-                
+                <p class="text-stone-700 mb-8 leading-relaxed">
+                    Un metaanálisis sobre cómo el diseño constitucional de 2009 cristalizó un modelo de acumulación extractivista. Analizamos las rigideces que impiden la diversificación productiva, desafiando la visión neoclásica de la "maldición de los recursos" desde una perspectiva estructuralista latinoamericana.
+                </p>
                 <div class="flex gap-4">
-                    <a href="monitor.html" class="px-6 py-3 bg-lepc-navy text-white text-sm font-medium hover:bg-stone-800 transition">
-                        Leer Informe Completo
+                    <a href="analysis.html" class="px-6 py-3 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-accent-red transition">
+                        Leer Metaanálisis
                     </a>
-                    <a href="analysis.html" class="px-6 py-3 border border-stone-300 text-stone-700 text-sm font-medium hover:border-lepc-accent hover:text-lepc-accent transition">
-                        Ver Datos
+                    <a href="monitor.html" class="px-6 py-3 border border-stone-400 text-stone-800 text-xs font-bold uppercase tracking-widest hover:border-accent-red hover:text-accent-red transition">
+                        Ver Datos Estructurales
                     </a>
                 </div>
             </div>
 
-            <div class="lg:col-span-4 border-l border-stone-200 pl-0 lg:pl-12">
-                <h3 class="font-sans font-bold text-sm uppercase text-stone-400 mb-6 tracking-widest">Indicadores Clave</h3>
+            <div class="lg:col-span-4 border-l border-stone-300 pl-0 lg:pl-10 space-y-10">
                 
-                <div class="space-y-8">
-                    <div>
-                        <div class="flex justify-between items-end mb-1">
-                            <span class="font-serif text-2xl font-bold text-lepc-navy">8.2%</span>
-                            <span class="text-xs font-bold text-red-600"><i class="fa-solid fa-arrow-up"></i> Déficit</span>
-                        </div>
-                        <div class="w-full bg-stone-200 h-1 mt-2">
-                            <div class="bg-red-600 h-1" style="width: 82%"></div>
-                        </div>
-                        <p class="text-xs text-stone-500 mt-2">Déficit Fiscal (% PIB) - Proyección 2025</p>
+                <div>
+                    <h4 class="font-sans font-bold text-xs uppercase text-stone-500 mb-2 tracking-widest">Participación Salarial (Wage Share)</h4>
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-serif text-3xl font-bold text-stone-900">32.4%</span>
+                        <span class="text-xs font-bold text-accent-red"><i class="fa-solid fa-arrow-down"></i> Estancado</span>
                     </div>
-
-                    <div>
-                        <div class="flex justify-between items-end mb-1">
-                            <span class="font-serif text-2xl font-bold text-lepc-navy">$3.8MM</span>
-                            <span class="text-xs font-bold text-amber-600"><i class="fa-solid fa-minus"></i> Reservas</span>
-                        </div>
-                        <div class="w-full bg-stone-200 h-1 mt-2">
-                            <div class="bg-amber-600 h-1" style="width: 40%"></div>
-                        </div>
-                        <p class="text-xs text-stone-500 mt-2">Reservas Internacionales Netas</p>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-end mb-1">
-                            <span class="font-serif text-2xl font-bold text-lepc-navy">48.6</span>
-                            <span class="text-xs font-bold text-stone-500">Libertad Econ.</span>
-                        </div>
-                        <div class="w-full bg-stone-200 h-1 mt-2">
-                            <div class="bg-lepc-navy h-1" style="width: 48%"></div>
-                        </div>
-                        <p class="text-xs text-stone-500 mt-2">Índice Heritage (Reprimido)</p>
-                    </div>
+                    <p class="text-xs text-stone-600 mt-1 italic">La distribución funcional del ingreso favorece al capital extractivo, no al trabajo.</p>
                 </div>
-            </div>
 
+                <div class="border-t border-stone-200 pt-6">
+                    <h4 class="font-sans font-bold text-xs uppercase text-stone-500 mb-2 tracking-widest">Complejidad Económica (ECI)</h4>
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-serif text-3xl font-bold text-stone-900">-0.84</span>
+                        <span class="text-xs font-bold text-stone-400">Ranking 98</span>
+                    </div>
+                    <p class="text-xs text-stone-600 mt-1 italic">Primarización exportadora pese al auge de precios internacionales.</p>
+                </div>
+
+                <div class="border-t border-stone-200 pt-6">
+                    <h4 class="font-sans font-bold text-xs uppercase text-stone-500 mb-2 tracking-widest">Informalidad Estructural</h4>
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-serif text-3xl font-bold text-stone-900">84.9%</span>
+                    </div>
+                    <p class="text-xs text-stone-600 mt-1 italic">Reflejo de la heterogeneidad productiva, no solo de "rigidez laboral".</p>
+                </div>
+
+            </div>
         </div>
     </div>
   </section>
 
-  <main class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <main class="flex-grow py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+        <h3 class="font-serif text-2xl italic text-stone-800 mb-10 border-b border-stone-300 pb-4">Investigación Crítica Reciente</h3>
         
-        <div class="flex items-center justify-between mb-10 border-b border-stone-300 pb-4">
-            <h3 class="font-serif text-2xl font-bold text-lepc-navy">Líneas de Investigación</h3>
-            <a href="analysis.html" class="text-sm font-bold text-lepc-accent hover:underline">Ver todo <i class="fa-solid fa-arrow-right ml-1"></i></a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             
-            <article class="news-card group cursor-pointer">
-                <div class="h-48 bg-stone-200 mb-4 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-stone-800 opacity-10 pattern-grid-lg"></div>
-                    <div class="absolute bottom-0 left-0 bg-white px-3 py-1 text-xs font-bold border-t border-r border-stone-300">MACRO</div>
-                </div>
-                <h3 class="font-serif text-xl font-bold text-lepc-navy leading-snug mb-3 group-hover:text-lepc-accent transition-colors">
-                    Sostenibilidad de la Deuda y Reglas Fiscales
+            <article class="article-card group cursor-pointer">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-accent-teal mb-2 block">Estructuralismo</span>
+                <h3 class="font-serif text-xl font-bold text-stone-900 leading-tight mb-3">
+                    Restricción Externa y Ciclos Constitucionales
                 </h3>
-                <p class="text-sm text-stone-600 font-light leading-relaxed mb-4">
-                    Análisis de la solvencia intertemporal del Estado boliviano. Propuestas para una regla fiscal constitucional.
+                <p class="text-sm text-stone-600 font-light leading-relaxed">
+                    Un análisis histórico sobre cómo la escasez de divisas precipita las crisis de legitimidad estatal en Bolivia (1952-2024).
                 </p>
-                <div class="text-xs font-bold text-stone-400 uppercase tracking-wide">
-                    Hace 2 días • <i class="fa-solid fa-file-pdf ml-1"></i> Paper
-                </div>
             </article>
 
-            <article class="news-card group cursor-pointer">
-                <div class="h-48 bg-stone-200 mb-4 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-stone-800 opacity-10 pattern-diagonal-lines"></div>
-                    <div class="absolute bottom-0 left-0 bg-white px-3 py-1 text-xs font-bold border-t border-r border-stone-300">INSTITUCIONAL</div>
-                </div>
-                <h3 class="font-serif text-xl font-bold text-lepc-navy leading-snug mb-3 group-hover:text-lepc-accent transition-colors">
-                    Derechos de Propiedad y Seguridad Jurídica
+            <article class="article-card group cursor-pointer">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-accent-red mb-2 block">Ecología Política</span>
+                <h3 class="font-serif text-xl font-bold text-stone-900 leading-tight mb-3">
+                    El Metabolismo Social del Agronegocio
                 </h3>
-                <p class="text-sm text-stone-600 font-light leading-relaxed mb-4">
-                    Monitor de avasallamientos y su impacto en la inversión extranjera directa (IED) en el sector agroindustrial.
+                <p class="text-sm text-stone-600 font-light leading-relaxed">
+                    Crítica a la medición del PIB agrícola que ignora la depreciación del capital natural y los conflictos distributivos por la tierra.
                 </p>
-                <div class="text-xs font-bold text-stone-400 uppercase tracking-wide">
-                    Hace 1 semana • <i class="fa-solid fa-chart-line ml-1"></i> Monitor
-                </div>
             </article>
 
-            <article class="news-card group cursor-pointer">
-                <div class="h-48 bg-stone-200 mb-4 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-stone-800 opacity-10 pattern-dots"></div>
-                    <div class="absolute bottom-0 left-0 bg-white px-3 py-1 text-xs font-bold border-t border-r border-stone-300">REGULACIÓN</div>
-                </div>
-                <h3 class="font-serif text-xl font-bold text-lepc-navy leading-snug mb-3 group-hover:text-lepc-accent transition-colors">
-                    El Costo de la Burocracia: Doing Business SCZ
+            <article class="article-card group cursor-pointer">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-accent-gold mb-2 block">Teoría Monetaria</span>
+                <h3 class="font-serif text-xl font-bold text-stone-900 leading-tight mb-3">
+                    La ilusión de la Independencia del BCB
                 </h3>
-                <p class="text-sm text-stone-600 font-light leading-relaxed mb-4">
-                    Evaluación subnacional de las barreras regulatorias para la creación de empresas formales en Santa Cruz.
+                <p class="text-sm text-stone-600 font-light leading-relaxed">
+                    Perspectiva post-keynesiana: el dinero como institución social endógena y el rol del BCB en el desarrollo.
                 </p>
-                <div class="text-xs font-bold text-stone-400 uppercase tracking-wide">
-                    Hace 2 semanas • <i class="fa-solid fa-table ml-1"></i> Dataset
-                </div>
             </article>
 
         </div>
     </div>
   </main>
 
-  <section class="bg-lepc-navy text-white py-16 border-t-4 border-lepc-accent">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-        <h2 class="font-serif text-3xl font-bold mb-4">Weekly Fiscal Monitor</h2>
-        <p class="text-stone-300 mb-8 font-light max-w-xl mx-auto">
-            Reciba cada lunes un análisis conciso sobre las variables macroeconómicas y cambios regulatorios que afectan el clima de negocios.
-        </p>
-        <form class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-            <input type="email" placeholder="Su correo electrónico corporativo" class="w-full px-4 py-3 text-stone-900 bg-white border-none focus:ring-2 focus:ring-lepc-accent outline-none font-sans">
-            <button type="button" class="px-6 py-3 bg-lepc-accent text-white font-bold tracking-wide hover:bg-amber-700 transition">SUSCRIBIRSE</button>
-        </form>
-    </div>
-  </section>
-
   {% include footer.html %}
-
 </body>
 </html>
