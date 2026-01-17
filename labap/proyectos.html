@@ -1,0 +1,271 @@
+---
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Investigación — LABAP • CIRCPyCS</title>
+  <meta name="description" content="Portafolio de investigación del Laboratorio de Análisis Político. Ciencia de datos, territorio y gobernanza en Bolivia." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
+          colors: {
+            'academic-slate': '#1e293b', 
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    /* Estilo sutil y limpio */
+    .project-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; }
+    .project-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); border-color: #cbd5e1; }
+    .status-badge { font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; }
+    .tag-pill { font-size: 0.75rem; color: #64748b; background: #f8fafc; padding: 0.1rem 0.5rem; border-radius: 4px; border: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+
+  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
+        <div class="leading-tight">
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Research</h1>
+        </div>
+      </a>
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="index.html" class="hover:text-black transition">Dashboard</a>
+        <a href="data.html" class="hover:text-black transition">Datos</a>
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Proyectos</a>
+        <a href="team.html" class="hover:text-black transition">Equipo</a>
+        <a href="../index.html" class="hover:text-black transition">Inicio</a>
+      </nav>
+      <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
+    </div>
+    
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full">
+        <div class="grid gap-3 text-sm">
+            <a href="index.html" class="block py-2">Dashboard</a>
+            <a href="data.html" class="block py-2">Datos</a>
+            <a href="../index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
+        </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-slate-100">
+    <div class="max-w-4xl">
+        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Líneas de Investigación</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Arquitectura del Poder y <br>Dinámicas Territoriales.
+        </h2>
+        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
+            El LABAP investiga la intersección entre diseño institucional, geografía humana y comportamiento político en Bolivia. Aplicamos métodos computacionales para auditar la gobernanza contemporánea.
+        </p>
+    </div>
+  </div>
+
+  <div class="sticky top-[73px] z-30 bg-white/95 border-b border-slate-200 backdrop-blur shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            
+            <div class="relative w-full sm:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                <input type="text" id="projectSearch" placeholder="Filtrar por tema (ej: Incendios, Redes, Tierras)..." 
+                    class="w-full pl-8 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm focus:ring-1 focus:ring-slate-400 focus:border-slate-400 outline-none transition placeholder:text-slate-400 font-sans">
+            </div>
+
+            <div class="flex gap-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                <button class="hover:text-black transition" onclick="filterStatus('all')">Todos</button>
+                <button class="hover:text-emerald-600 transition" onclick="filterStatus('active')">En Curso</button>
+                <button class="hover:text-blue-600 transition" onclick="filterStatus('published')">Publicado</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <main class="bg-slate-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projectsGrid">
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-published" data-search="carreteras infraestructura geopolitica corredor bioceanico territorio">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Territorio & Poder</span>
+                <span class="status-badge border border-blue-200 text-blue-700 bg-blue-50">Publicado</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Geopolítica de la Infraestructura: El Corredor Bioceánico
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Análisis espacial sobre cómo la planificación de carreteras reconfigura las lealtades políticas y la economía extractiva en la Chiquitanía. ¿Infraestructura para el desarrollo o para el control territorial?
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">QGIS</span>
+                <span class="tag-pill">Geopolítica</span>
+            </div>
+        </article>
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-active" data-search="incendios ecologia politica medio ambiente tierras agrarismo">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ecología Política</span>
+                <span class="status-badge border border-emerald-200 text-emerald-700 bg-emerald-50">En Curso</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Ecología Política de los Incendios y Legislación Agraria
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Correlación estadística entre focos de calor (NASA FIRMS) y los ciclos de aprobación de leyes de "perdonazo" de desmontes. Un estudio sobre la economía política del fuego en Santa Cruz.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">Remote Sensing</span>
+                <span class="tag-pill">Legislación</span>
+            </div>
+        </article>
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-published" data-search="redes elites corporativo logias santa cruz network analysis">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sociología de Elites</span>
+                <span class="status-badge border border-blue-200 text-blue-700 bg-blue-50">Paper</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Morfología de las Coaliciones Distributivas en el Oriente
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Análisis de redes sociales (SNA) aplicado a directorios institucionales y gremios empresariales. Mapeo de la estructura de capital social y toma de decisiones corporativas.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">NetworkX</span>
+                <span class="tag-pill">Grafos</span>
+            </div>
+        </article>
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-active" data-search="urbanismo area metropolitana santa cruz mancha urbana datos">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estudios Urbanos</span>
+                <span class="status-badge border border-emerald-200 text-emerald-700 bg-emerald-50">Activo</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Metabolismo Urbano y Segregación Espacial
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Evaluación del crecimiento de la mancha urbana metropolitana mediante imágenes satelitales históricas. Impacto en la provisión de servicios públicos y fragmentación social.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">Urban Data</span>
+                <span class="tag-pill">Segregación</span>
+            </div>
+        </article>
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-active" data-search="fiscalizacion municipal contratos sicoes python algoritmo">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Gobernanza Digital</span>
+                <span class="status-badge border border-emerald-200 text-emerald-700 bg-emerald-50">Beta</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Auditoría Algorítmica de la Contratación Municipal
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Implementación de scripts en Python para la detección automatizada de anomalías en el SICOES. Identificación de patrones de fraccionamiento de contratos en alcaldías.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">Scraping</span>
+                <span class="tag-pill">Auditoría</span>
+            </div>
+        </article>
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-published" data-search="simulacion netlogo agentes comportamiento electoral">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sistemas Complejos</span>
+                <span class="status-badge border border-blue-200 text-blue-700 bg-blue-50">Dataset</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Dinámica de Sistemas: Volatilidad Electoral
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Modelado Basado en Agentes (ABM) para simular escenarios de transferencia de votos y volatilidad en elecciones subnacionales bajo distintas reglas institucionales.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">NetLogo</span>
+                <span class="tag-pill">ABM</span>
+            </div>
+        </article>
+
+        <article class="project-card bg-white p-7 rounded-lg flex flex-col h-full status-active" data-search="tierra inra agrario conflicto propiedad">
+            <div class="mb-5 flex justify-between items-start">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Economía Política</span>
+                <span class="status-badge border border-emerald-200 text-emerald-700 bg-emerald-50">En Curso</span>
+            </div>
+            <h3 class="text-lg font-serif font-bold text-slate-900 mb-3 leading-tight">
+                Institucionalismo de la Tierra y Frontera Agrícola
+            </h3>
+            <p class="text-sm text-slate-600 mb-6 flex-grow leading-relaxed font-light">
+                Análisis longitudinal de la titulación de tierras por el INRA y su correlación con conflictos sociopolíticos en zonas de expansión agrícola.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+                <span class="tag-pill">INRA</span>
+                <span class="tag-pill">Conflicto</span>
+            </div>
+        </article>
+
+      </div> </div>
+  </main>
+
+  {% include footer.html %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Búsqueda
+        const searchInput = document.getElementById('projectSearch');
+        const cards = document.querySelectorAll('.project-card');
+        
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            cards.forEach(card => {
+                const keywords = card.getAttribute('data-search') || '';
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                if (keywords.includes(term) || title.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Menú móvil
+        const btnOpen = document.getElementById('btn-open');
+        const mobileMenu = document.getElementById('mobile-menu');
+        btnOpen.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    });
+
+    // Filtros por estado
+    function filterStatus(status) {
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach(card => {
+            if (status === 'all') {
+                card.style.display = 'flex';
+            } else if (card.classList.contains('status-' + status)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+  </script>
+
+</body>
+</html>
