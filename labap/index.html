@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Laboratorio de Análisis Político • CIRCPyCS</title>
+  <title>Dashboard Electoral — LABAP • CIRCPyCS</title>
   <meta name="description" content="LAP-CIRCPyCS: análisis electoral, indicadores institucionales y visualización interactiva para Bolivia 2025." />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,265 +13,208 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
+          colors: {
+            'academic-slate': '#1e293b', 
+          }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
 
   <style>
-    /* Menú móvil sencillo bajo el header */
-    section[id]{ scroll-margin-top: 96px; }
-    #btn-open #icon-x{ display:none; }
-    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
-    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
-
-    #mobile-menu{
-      --header-h: 64px; /* fallback si JS no corre */
-      max-height: calc(100vh - var(--header-h));
-      max-height: calc(100svh - var(--header-h));
-      max-height: calc(100dvh - var(--header-h));
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch;
-    }
-    /* Alturas responsive para el gráfico principal */
-    #plotly-intencion-voto { height: 380px; width: 100%; }
-    @media (min-width: 640px){ #plotly-intencion-voto { height: 480px; } }
-    /* Altura mínima barras */
+    /* Estilos Elite */
+    .kpi-card { transition: all 0.2s ease; border: 1px solid #e2e8f0; }
+    .kpi-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05); }
+    /* Ajuste altura gráficos */
+    #plotly-intencion-voto { height: 400px; width: 100%; }
+    @media (min-width: 640px){ #plotly-intencion-voto { height: 500px; } }
     #bars-resultado { min-height: 320px; }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800">
+<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 sm:h-10 sm:w-10 object-contain" />
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
-          <p class="text-sm tracking-wide text-slate-500">LABAP — CIRCPyCS</p>
-          <h1 class="font-bold text-lg">Laboratorio de Análisis Político</h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Analytics</h1>
         </div>
       </a>
-
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#dashboard" class="hover:text-sky-700">Indicadores</a>
-        <a href="#visualizacion" class="hover:text-sky-700">Visualización</a>
-        <a href="https://cir.uagrm.edu.bo/labapsoft.html" class="hover:text-sky-700">Software</a>
-        <a href="https://cir.uagrm.edu.bo/labaproy.html" class="hover:text-sky-700">Proyectos</a>
-        <a href="https://cir.uagrm.edu.bo/labapteam" class="hover:text-sky-700">Equipo</a>
-        <a href="https://cir.uagrm.edu.bo/labapdata.html"  class="hover:text-sky-700">Datasets</a>
-        <a href="https://cir.uagrm.edu.bo/labapdashboard.html"  class="hover:text-sky-700">Dashboard</a>
-        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-xl border border-sky-200 text-sky-700 hover:bg-sky-50">Volver al inicio</a>
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Indicadores</a>
+        <a href="proyectos.html" class="hover:text-black transition">Investigación</a>
+        <a href="software.html" class="hover:text-black transition">Toolkit</a>
+        <a href="data.html" class="hover:text-black transition">Datos</a>
+        <a href="../index.html" class="hover:text-black transition">Inicio</a>
       </nav>
-
-      <button id="btn-open"
-              class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
-              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
-        <span>Menú</span>
-        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </button>
+      <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
     </div>
-
-    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_6px_22px_rgba(2,6,23,.06)]" aria-label="Navegación móvil">
-      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#dashboard">Indicadores</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#visualizacion">Visualización</a></li>
-        <li class="pt-2 mt-2 border-t border-slate-200 text-slate-500 text-xs px-3">Secciones externas</li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/software.html">Software</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/proyectos.html">Proyectos</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/labap/team">Equipo</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/datasets.html">Datasets</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50"  href="https://cir.uagrm.edu.bo/labap/dashboard.html">Dashboard</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver al inicio</a></li>
-      </ul>
-    </nav>
+    
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
+        <div class="grid gap-3 text-sm">
+            <a href="proyectos.html" class="block py-2">Investigación</a>
+            <a href="data.html" class="block py-2">Datos</a>
+            <a href="../index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
+        </div>
+    </div>
   </header>
 
-  <section id="inicio" class="relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
-      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
-      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-b border-slate-100">
+    <div class="max-w-4xl">
+        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Political Intelligence Unit</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Laboratorio de Análisis Político.
+        </h2>
+        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
+            Plataforma de inteligencia de datos para el seguimiento electoral, evaluación de indicadores institucionales y prospectiva política para Bolivia 2025.
+        </p>
     </div>
+  </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20 text-center">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación avanzada · Visualización interactiva</span>
-      <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Laboratorio de Análisis Político</h2>
-      <p class="mt-3 max-w-2xl mx-auto text-slate-600">Análisis electoral, indicadores institucionales y prospectiva para Bolivia 2025.</p>
-      <div class="mt-6 flex justify-center">
-        <a href="#visualizacion" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105">Elecciones nacionales 2025 <span>→</span></a>
-      </div>
-    </div>
-  </section>
+  <main class="bg-slate-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
-  <section id="dashboard" class="py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Mega Dashboard Internacional Bolivia 2025</h3>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-gavel mr-2"></i>Rule of Law (WJP 2024)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">0.37</div>
-          <div class="text-slate-600 text-sm">Puesto 131/142</div>
+      <section id="dashboard">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="font-serif text-xl font-bold text-slate-900">Mega Dashboard Internacional</h3>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Bolivia 2025</span>
         </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-globe mr-2"></i>Democracy Index (EIU 2023)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">4.20/10</div>
-          <div class="text-slate-600 text-sm">Régimen híbrido</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-university mr-2"></i>CPI Transparencia Intl.</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">28/100</div>
-          <div class="text-slate-600 text-sm">Puesto 133/180</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-shield-alt mr-2"></i>Riesgo País (EMBI)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">2,190 pb</div>
-          <div class="text-slate-600 text-sm">2º más alto LatAm</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-chart-bar mr-2"></i>PIB per cápita (USD, 2023)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">$3,680</div>
-          <div class="text-slate-600 text-sm">Por debajo LatAm</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-users mr-2"></i>Población (2024)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">12,318,000</div>
-          <div class="text-slate-600 text-sm">Fuente: INE</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-thumbs-up mr-2"></i>Aprobación presidencial</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">24.1%</div>
-          <div class="text-slate-600 text-sm">Mayo 2024</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-poll mr-2"></i>Confianza en elecciones</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">29%</div>
-          <div class="text-slate-600 text-sm">Latinobarómetro 2023 (LatAm: 37%)</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-scale-balanced mr-2"></i>Confianza en justicia</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">15%</div>
-          <div class="text-slate-600 text-sm">Latinobarómetro 2023 (LatAm: 21%)</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-user-friends mr-2"></i>Satisfacción democracia</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">19%</div>
-          <div class="text-slate-600 text-sm">Latinobarómetro 2023</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-chart-area mr-2"></i>Pobreza monetaria</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">36.3%</div>
-          <div class="text-slate-600 text-sm">INE 2023</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-graduation-cap mr-2"></i>Gasto educación (%PIB)</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">6.5%</div>
-          <div class="text-slate-600 text-sm">Banco Mundial</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-heartbeat mr-2"></i>Esperanza de vida</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">70.8 años</div>
-          <div class="text-slate-600 text-sm">OMS, 2024</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-briefcase mr-2"></i>Desempleo urbano</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">6.8%</div>
-          <div class="text-slate-600 text-sm">INE 2024</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition">
-          <div class="text-sky-700 text-sm font-semibold"><i class="fas fa-scale-balanced mr-2"></i>V-Dem democracia</div>
-          <div class="mt-1 text-3xl font-extrabold text-slate-900">0.38</div>
-          <div class="text-slate-600 text-sm">Escala 0–1 (2024)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="visualizacion" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-lg border border-slate-800">
-        <h4 class="text-center text-xl font-semibold">Tracking Poll: Intención de voto presidencial 2025</h4>
-        <p class="mt-1 text-center text-slate-300 text-sm">Serie con todas las mediciones públicas (mayo–agosto 2025). Toca la leyenda para activar/desactivar candidatos.</p>
-        <div id="plotly-intencion-voto" class="mt-4"></div>
-
-        <div class="mt-6 grid gap-4 sm:grid-cols-2">
-          <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
-            <div class="flex items-center justify-between">
-              <h5 class="font-semibold">Resultado oficial — Primera vuelta</h5>
-              <span id="badge-res" class="text-xs px-2 py-1 rounded-full bg-slate-700 text-slate-300">oficial</span>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-gavel text-sky-600"></i> Rule of Law</div>
+                <div class="text-3xl font-serif font-black text-slate-900">0.37</div>
+                <div class="text-xs text-slate-400 mt-1">WJP 2024 (131/142)</div>
             </div>
-            <p id="resumen-res" class="mt-1 text-slate-300 text-sm">Órgano Electoral Plurinacional</p>
-            <div id="bars-resultado" class="mt-3" style="width:100%;"></div>
-          </div>
-
-          <div class="rounded-2xl bg-slate-800/60 p-4 border border-slate-700">
-            <h5 class="font-semibold">Cobertura y fuentes</h5>
-            <ul class="mt-2 text-sm text-slate-300 space-y-1.5">
-              <li>• <span class="font-medium">Ciemcorp</span> (Unitel): 22–26 mayo, 5–7 julio.</li>
-              <li>• <span class="font-medium">SPIE</span> (El Deber): 7–14 junio, 5–10 julio, 25–28 julio, 31 jul–4 ago.</li>
-              <li>• <span class="font-medium">Captura Consulting</span> (Red Uno): 10–20 junio, 27 jul–3 ago.</li>
-              <li>• <span class="font-medium">Ipsos Ciesmori</span> (Unitel): 25–27 julio, 2–6 agosto.</li>
-            </ul>
-            <p class="mt-2 text-xs text-slate-400">Eje Y: % intención de voto. Eje X: fecha de cierre del trabajo de campo. Líneas y puntos grandes para lectura móvil.</p>
-          </div>
+            <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-globe text-emerald-600"></i> Democracy Index</div>
+                <div class="text-3xl font-serif font-black text-slate-900">4.20<span class="text-lg text-slate-400">/10</span></div>
+                <div class="text-xs text-slate-400 mt-1">EIU (Híbrido)</div>
+            </div>
+            <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-shield-alt text-rose-600"></i> Riesgo País</div>
+                <div class="text-3xl font-serif font-black text-slate-900">2,190</div>
+                <div class="text-xs text-slate-400 mt-1">EMBI (pb)</div>
+            </div>
+            <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-thumbs-up text-blue-600"></i> Aprobación Pres.</div>
+                <div class="text-3xl font-serif font-black text-slate-900">24.1%</div>
+                <div class="text-xs text-slate-400 mt-1">Mayo 2024</div>
+            </div>
+            <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-university text-amber-600"></i> Transparencia</div>
+                <div class="text-3xl font-serif font-black text-slate-900">28<span class="text-lg text-slate-400">/100</span></div>
+                <div class="text-xs text-slate-400 mt-1">CPI (133/180)</div>
+            </div>
+             <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-chart-bar text-indigo-600"></i> PIB Per Cápita</div>
+                <div class="text-3xl font-serif font-black text-slate-900">$3,680</div>
+                <div class="text-xs text-slate-400 mt-1">USD (2023)</div>
+            </div>
+             <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-users text-teal-600"></i> Población</div>
+                <div class="text-3xl font-serif font-black text-slate-900">12.3M</div>
+                <div class="text-xs text-slate-400 mt-1">Censo 2024</div>
+            </div>
+             <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-chart-area text-red-600"></i> Pobreza</div>
+                <div class="text-3xl font-serif font-black text-slate-900">36.3%</div>
+                <div class="text-xs text-slate-400 mt-1">Monetaria (INE)</div>
+            </div>
+             <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-graduation-cap text-sky-600"></i> Educ. Gasto</div>
+                <div class="text-3xl font-serif font-black text-slate-900">6.5%</div>
+                <div class="text-xs text-slate-400 mt-1">% del PIB</div>
+            </div>
+             <div class="kpi-card bg-white p-5 rounded-lg">
+                <div class="text-xs font-bold text-slate-500 uppercase mb-2 flex items-center gap-2"><i class="fas fa-poll text-purple-600"></i> Confianza Elec.</div>
+                <div class="text-3xl font-serif font-black text-slate-900">29%</div>
+                <div class="text-xs text-slate-400 mt-1">Latinobarómetro</div>
+            </div>
         </div>
-      </div>
+      </section>
+
+      <section id="visualizacion" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 h-full">
+                <div class="mb-6">
+                    <h4 class="font-serif text-xl font-bold text-slate-900">Tracking Poll: Intención de Voto 2025</h4>
+                    <p class="text-sm text-slate-500 mt-1 font-light">Serie temporal de mediciones públicas (Mayo–Agosto 2025). Datos normalizados.</p>
+                </div>
+                <div id="plotly-intencion-voto"></div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h5 class="font-bold text-sm text-slate-900 uppercase tracking-wide">Primera Vuelta (Oficial)</h5>
+                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded">OEP</span>
+                </div>
+                <div id="bars-resultado"></div>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl border border-slate-200 p-6 text-sm text-slate-600">
+                <h5 class="font-bold text-slate-900 mb-3">Fuentes de Datos</h5>
+                <ul class="space-y-2 font-light">
+                    <li><strong class="text-slate-800">Ciemcorp:</strong> 22-26 Mayo, 5-7 Julio.</li>
+                    <li><strong class="text-slate-800">SPIE:</strong> Múltiples mediciones (Jun-Ago).</li>
+                    <li><strong class="text-slate-800">Captura:</strong> 10-20 Jun, 27 Jul-3 Ago.</li>
+                    <li><strong class="text-slate-800">Ipsos:</strong> 25-27 Jul, 2-6 Ago.</li>
+                </ul>
+                <div class="mt-4 pt-4 border-t border-slate-200 text-xs text-slate-400">
+                    * Línea punteada indica fecha de elección oficial.
+                </div>
+            </div>
+
+        </div>
+      </section>
+
     </div>
-  </section>
+  </main>
 
   {% include footer.html %}
 
   <script>
-    // ===== Menú móvil simple =====
+    // Configuración de Menú Móvil
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
-    const headerEl = document.querySelector('header');
-    function setHeaderVar(){ const h = headerEl.getBoundingClientRect().height || 64; mobileMenu.style.setProperty('--header-h', h + 'px'); }
-    function toggleMenu(forceOpen = null){
-      const willOpen = forceOpen !== null ? forceOpen : mobileMenu.classList.contains('hidden');
-      if (willOpen) setHeaderVar();
-      mobileMenu.classList.toggle('hidden', !willOpen);
-      btnOpen.setAttribute('aria-expanded', String(willOpen));
-      document.body.style.overflow = willOpen ? 'hidden' : '';
-      if (willOpen) setTimeout(()=> mobileMenu.querySelector('a')?.focus(), 0); else btnOpen.focus();
-    }
-    btnOpen?.addEventListener('click', () => toggleMenu());
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') toggleMenu(false); });
-    mobileMenu.addEventListener('click', (e) => { const link = e.target.closest('a'); if (link) toggleMenu(false); });
-    window.addEventListener('resize', () => { if (!mobileMenu.classList.contains('hidden')) setHeaderVar(); });
-    window.matchMedia('(min-width: 768px)').addEventListener('change', (ev) => { if (ev.matches) toggleMenu(false); });
+    btnOpen.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
 
-    // ===== Datos de encuestas (ordenados por fecha de CIERRE) =====
+    // --- DATOS Y GRÁFICOS --- //
+
+    // Datos de encuestas
     const x = [
-      "26/05 Ciemcorp<br><span style='font-size:11px'>Unitel</span>",
-      "14/06 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "20/06 Captura<br><span style='font-size:11px'>Red Uno</span>",
-      "07/07 Ciemcorp<br><span style='font-size:11px'>Unitel</span>",
-      "10/07 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "27/07 Ipsos<br><span style='font-size:11px'>Unitel</span>",
-      "28/07 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "03/08 Captura<br><span style='font-size:11px'>Red Uno</span>",
-      "04/08 SPIE<br><span style='font-size:11px'>El Deber</span>",
-      "06/08 Ipsos<br><span style='font-size:11px'>Unitel</span>"
+      "26/05 Ciemcorp<br><span style='font-size:10px'>Unitel</span>",
+      "14/06 SPIE<br><span style='font-size:10px'>El Deber</span>",
+      "20/06 Captura<br><span style='font-size:10px'>Red Uno</span>",
+      "07/07 Ciemcorp<br><span style='font-size:10px'>Unitel</span>",
+      "10/07 SPIE<br><span style='font-size:10px'>El Deber</span>",
+      "27/07 Ipsos<br><span style='font-size:10px'>Unitel</span>",
+      "28/07 SPIE<br><span style='font-size:10px'>El Deber</span>",
+      "03/08 Captura<br><span style='font-size:10px'>Red Uno</span>",
+      "04/08 SPIE<br><span style='font-size:10px'>El Deber</span>",
+      "06/08 Ipsos<br><span style='font-size:10px'>Unitel</span>"
     ];
 
     const colores = {
-      "Samuel Doria Medina": "#F4B400",  // UNIDAD (dorado)
-      "Jorge «Tuto» Quiroga": "#D32F2F", // LIBRE (rojo)
-      "Manfred Reyes Villa":  "#6D28D9", // APB SÚMATE (morado)
-      "Rodrigo Paz Pereira":  "#0E7C7B", // PDC (verde azulado)
-      "Andrónico Rodríguez":  "#16A34A", // AP (verde)
-      "Jhonny Fernández":    "#1E88E5"   // FP (azul)
+      "Samuel Doria Medina": "#eab308",  // Yellow-500
+      "Jorge «Tuto» Quiroga": "#ef4444", // Red-500
+      "Manfred Reyes Villa":  "#8b5cf6", // Violet-500
+      "Rodrigo Paz Pereira":  "#0d9488", // Teal-600
+      "Andrónico Rodríguez":  "#16a34a", // Green-600
+      "Jhonny Fernández":    "#2563eb"   // Blue-600
     };
 
     const ySeries = {
@@ -283,10 +226,8 @@
       "Jhonny Fernández":    [3.7,  2.56,  3.8,  2.5,  2.45,  1.8,  2.1,  2.0,  2.44,  2.0]
     };
 
-    // ===== Resultado oficial (valores provistos) =====
     const resultadoOficial = {
-      fecha: "Elección<br><span style='font-size:11px'>Primera vuelta</span>",
-      fuente: "Órgano Electoral Plurinacional",
+      fecha: "Elección<br><span style='font-size:10px'>Oficial</span>",
       valores: {
         "Rodrigo Paz Pereira": 32.06,
         "Jorge «Tuto» Quiroga": 26.70,
@@ -299,169 +240,105 @@
       }
     };
 
-    // ===== Leyenda responsive (clave para móvil) =====
-    function legendLayout(){
-      if (window.innerWidth < 700){
-        // Abajo, horizontal, compacta
-        return {
-          orientation: 'h',
-          x: 0, y: -0.25, xanchor: 'left', yanchor: 'top',
-          font: { size: 10, color: '#fff' },
-          bgcolor: 'rgba(15,23,42,0.96)',
-          itemwidth: 50,
-          itemsizing: 'constant'
-        };
-      } else {
-        // Escritorio: arriba, como estaba
-        return { orientation: 'h', x: 0.01, y: 1.18, font: { size: 13, color: '#fff' } };
-      }
-    }
+    // --- RENDERIZADO PLOTLY (TEMA CLARO) ---
 
-    // ===== Layout general (márgenes y tamaños según viewport) =====
     function makeLayout(){
       const isMobile = window.innerWidth < 700;
-      const maxY = Math.max(32.06, ...Object.values(ySeries).flat());
       return {
-        plot_bgcolor: '#0b1220',
-        paper_bgcolor: '#0b1220',
-        legend: legendLayout(),
-        xaxis: { title:{text:'<b>Fecha y encuestadora</b>', font:{color:'#fff', size:isMobile?14:16}}, tickfont:{color:'#fff', size:isMobile?10:12}, automargin:true, showgrid:false },
-        yaxis: { title:{text:'<b>% intención de voto</b>', font:{color:'#fff', size:isMobile?14:16}}, range:[0, Math.max(35, Math.ceil(maxY/5)*5)], gridcolor:'#334155', tickfont:{color:'#fff', size:isMobile?10:12} },
-        margin: { l:isMobile?44:50, r:isMobile?10:24, t:isMobile?28:34, b:isMobile?120:60 },
-        shapes: [{ type:'line', xref:'x', yref:'paper', x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0:0, y1:1, line:{ color:'#94a3b8', width:2, dash:'dot' } }],
-        annotations: [{ x: resultadoOficial.fecha, y:1.02, xref:'x', yref:'paper', xanchor:'center', text:'Resultado oficial', showarrow:false, font:{ size:isMobile?10:12, color:'#cbd5e1' } }],
-        font: { family: 'Inter, Segoe UI, sans-serif', size:isMobile?12:14, color:'#fff' }
+        // Fondo Blanco para estética académica
+        plot_bgcolor: '#ffffff',
+        paper_bgcolor: '#ffffff',
+        legend: { orientation: 'h', x: 0, y: 1.15, font: { family:'Inter', size: 11, color: '#475569' } },
+        xaxis: { 
+            title: null, 
+            tickfont: { family:'Inter', size: 10, color: '#64748b' }, 
+            gridcolor: '#f1f5f9',
+            automargin: true 
+        },
+        yaxis: { 
+            title: { text: '% Intención', font: { family:'Inter', size: 12, color: '#64748b' } },
+            gridcolor: '#e2e8f0', 
+            tickfont: { family:'Inter', color: '#64748b' },
+            zerolinecolor: '#e2e8f0'
+        },
+        margin: { l:40, r:20, t:60, b:60 },
+        // Línea vertical de elección
+        shapes: [{ type:'line', xref:'x', yref:'paper', x0: resultadoOficial.fecha, x1: resultadoOficial.fecha, y0:0, y1:1, line:{ color:'#94a3b8', width:1, dash:'dash' } }],
+        font: { family: 'Inter, sans-serif' }
       };
     }
 
-    // ===== Trazas (compacta nombres en móvil y baja grosor/marker) =====
-    function buildTraces(includeOfficialPoint = true){
-      const isMobile = window.innerWidth < 700;
-      const compact = {
-        'Samuel Doria Medina':'Doria M.',
-        'Jorge «Tuto» Quiroga':'Tuto',
-        'Manfred Reyes Villa':'Reyes V.',
-        'Rodrigo Paz Pereira':'R. Paz',
-        'Andrónico Rodríguez':'Andrónico',
-        'Jhonny Fernández':'J. Fernández'
-      };
+    function buildTraces(){
       const traces = [];
       for (const [nombre, ys] of Object.entries(ySeries)){
-        const display = isMobile ? (compact[nombre] || nombre) : nombre;
         const trace = {
-          x: [...x], y: [...ys], name: display, customdata: ys.map(()=>nombre),
+          x: [...x], y: [...ys], name: nombre,
           mode: 'lines+markers',
-          line: { color: colores[nombre], width: isMobile?3:4 },
-          marker: { size: isMobile?8:11 },
-          hovertemplate: `<b>${display}</b><br>%{y:.2f}%<br>%{x}<extra></extra>`
+          line: { color: colores[nombre], width: 2, shape: 'spline' },
+          marker: { size: 6, symbol: 'circle' },
+          hovertemplate: `<b>${nombre}</b><br>%{y:.1f}%<extra></extra>`
         };
-        if (includeOfficialPoint && resultadoOficial.valores[nombre] !== undefined){
-          trace.x.push(resultadoOficial.fecha);
-          trace.y.push(resultadoOficial.valores[nombre]);
+        // Añadir punto oficial si existe
+        if (resultadoOficial.valores[nombre]) {
+            trace.x.push(resultadoOficial.fecha);
+            trace.y.push(resultadoOficial.valores[nombre]);
         }
         traces.push(trace);
       }
       return traces;
     }
 
-    function safePlotly(id, traces, layout){
-      const el = document.getElementById(id);
-      if (!el) return;
-      const config = { responsive: true, displayModeBar: false };
-      try {
-        if (!el.data) {
-          Plotly.newPlot(id, traces, layout, config);
-        } else {
-          Plotly.react(id, traces, layout, config);
-        }
-      } catch (e) {
-        // Reintento simple por si el contenedor aún no está listo
-        setTimeout(() => Plotly.newPlot(id, traces, layout, config), 50);
-      }
-    }
-
     function renderLineChart(){
-      safePlotly('plotly-intencion-voto', buildTraces(true), makeLayout());
+      Plotly.newPlot('plotly-intencion-voto', buildTraces(), makeLayout(), { responsive: true, displayModeBar: false });
     }
 
-    // ===== Resultado oficial: barras (ordenadas de mayor a menor) =====
     function renderResultado(){
-      const pares = Object.entries(resultadoOficial.valores).filter(([,v]) => v !== null && v !== undefined);
-      pares.sort((a,b) => b[1] - a[1]);
+      const pares = Object.entries(resultadoOficial.valores).filter(([,v]) => v).sort((a,b) => b[1] - a[1]);
       const nombres = pares.map(p => p[0]);
       const valores = pares.map(p => p[1]);
+      
+      // Colores mapeados o gris por defecto
+      const barColors = nombres.map(n => colores[n] || '#94a3b8');
 
-      const alianzaPorCandidato = {
-        "Rodrigo Paz Pereira": "PDC",
-        "Jorge «Tuto» Quiroga": "LIBRE",
-        "Samuel Doria Medina": "UNIDAD",
-        "Andrónico Rodríguez": "AP",
-        "Manfred Reyes Villa": "APB SÚMATE",
-        "Eduardo Del Castillo": "MAS-IPSP",
-        "Jhonny Fernández": "FP",
-        "Pavel Aracena Vargas": "LYP-ADN"
-      };
-
-      const coloresAlianza = {
-        "PDC": "#0E7C7B",
-        "LIBRE": "#D32F2F",
-        "UNIDAD": "#F4B400",
-        "AP": "#16A34A",
-        "APB SÚMATE": "#6D28D9",
-        "MAS-IPSP": "#0D47A1",
-        "FP": "#1E88E5",
-        "LYP-ADN": "#111111"
-      };
-      const coloresBarras = nombres.map(n => coloresAlianza[alianzaPorCandidato[n]] || "#64748B");
-
-      const barTrace = [{
+      const trace = {
         type: 'bar',
         x: valores,
         y: nombres,
         orientation: 'h',
-        marker: { color: coloresBarras, line: { width: 0 } },
-        hovertemplate: "<b>%{y}</b>: %{x:.2f}%<extra></extra>"
-      }];
-
-      const dynLeft = Math.min(260, Math.max(160, Math.max(...nombres.map(n => n.length))*7));
-
-      const barLayout = {
-        plot_bgcolor: '#0b1220',
-        paper_bgcolor: '#0b1220',
-        margin: { l: dynLeft, r: 20, t: 8, b: 40 },
-        xaxis: { range: [0, Math.max(35, Math.ceil(Math.max(...valores) / 5) * 5)], gridcolor:'#334155', tickfont:{color:'#fff'} },
-        yaxis: { tickfont:{color:'#fff'} },
-        font: { family: 'Inter, Segoe UI, sans-serif', color:'#fff' }
+        marker: { color: barColors, opacity: 0.9 },
+        text: valores.map(v => v + '%'),
+        textposition: 'auto',
+        hovertemplate: "%{x:.2f}%<extra></extra>"
       };
 
-      safePlotly('bars-resultado', barTrace, barLayout);
-    }
-
-    // ===== Carga fiable de Plotly y render =====
-    function ensurePlotly(cb){
-      if (window.Plotly) return cb();
-      const s = document.createElement('script');
-      s.src = 'https://cdn.plot.ly/plotly-2.32.0.min.js';
-      s.async = true; s.onload = cb;
-      s.onerror = () => {
-        const s2 = document.createElement('script');
-        s2.src = 'https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.32.0/plotly.min.js';
-        s2.async = true; s2.onload = cb;
-        document.head.appendChild(s2);
+      const layout = {
+        plot_bgcolor: '#ffffff',
+        paper_bgcolor: '#ffffff',
+        margin: { l: 120, r: 20, t: 10, b: 30 },
+        xaxis: { showgrid: true, gridcolor: '#f1f5f9', zeroline: false },
+        yaxis: { tickfont: { family:'Inter', size: 10, color: '#334155' } },
+        font: { family: 'Inter, sans-serif' }
       };
-      document.head.appendChild(s);
+
+      Plotly.newPlot('bars-resultado', [trace], layout, { responsive: true, displayModeBar: false });
     }
 
-    function initCharts(){ renderLineChart(); renderResultado(); }
-
-    const kick = () => ensurePlotly(() => { initCharts(); });
-    if (document.readyState !== 'loading') kick();
-    else document.addEventListener('DOMContentLoaded', kick);
-    window.addEventListener('load', kick);
-
-    // Re-render al cambiar tamaño/visibilidad
-    window.addEventListener('resize', () => { renderLineChart(); renderResultado(); });
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) { renderLineChart(); renderResultado(); } });
+    // Inicialización
+    window.onload = function() {
+        if(window.Plotly) {
+            renderLineChart();
+            renderResultado();
+        } else {
+            // Fallback simple si Plotly tarda
+            setTimeout(() => { renderLineChart(); renderResultado(); }, 1000);
+        }
+    };
+    
+    window.addEventListener('resize', () => {
+        Plotly.Plots.resize('plotly-intencion-voto');
+        Plotly.Plots.resize('bars-resultado');
+    });
   </script>
+
 </body>
 </html>
