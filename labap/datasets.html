@@ -54,9 +54,18 @@
       </nav>
       <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
     </div>
+    
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
+        <div class="grid gap-3 text-sm">
+            <a href="index.html" class="block py-2">Dashboard</a>
+            <a href="proyectos.html" class="block py-2">Investigación</a>
+            <a href="software.html" class="block py-2">Toolkit</a>
+            <a href="../index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
+        </div>
+    </div>
   </header>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-b border-slate-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-slate-100">
     <div class="max-w-4xl">
         <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Open Data Repository</span>
         <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
@@ -101,14 +110,23 @@
             <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">
                 Límites Geográficos del Departamento de Santa Cruz
             </h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">CIRCPyCS Data Team • Geospatial</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
                 Archivo vectorial oficial con la delimitación de municipios y provincias. Incluye códigos INE y metadatos topológicos para mapeo en R/QGIS.
             </p>
             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
                 <span class="text-xs text-slate-400 font-medium">2.4 MB</span>
-                <a href="datasets/limites_scz.json" download class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
-                    Descargar <i class="fa-solid fa-download"></i>
-                </a>
+                <div class="flex gap-2">
+                    <details class="relative">
+                        <summary class="cursor-pointer text-slate-400 hover:text-slate-600"><i class="fa-solid fa-quote-right"></i></summary>
+                        <div class="absolute bottom-full right-0 w-64 p-3 bg-white border border-slate-200 shadow-lg rounded mb-2 text-xs z-50">
+                            <strong>Cita:</strong> CIRCPyCS (2025). Límites SCZ [Data set].
+                        </div>
+                    </details>
+                    <a href="datasets/limites_scz.json" download class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                        Descargar <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -122,14 +140,18 @@
             <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">
                 Nómina Oficial de Candidatos Habilitados 2026
             </h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">OEP / CIRCPyCS • Elections</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
                 Base de datos tabular estructurada con la lista de candidatos a Gobernación, Asamblea y Alcaldías. Variables: Partido, Cargo, Estado.
             </p>
             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
                 <span class="text-xs text-slate-400 font-medium">UTF-8</span>
-                <a href="datasets/candidatos_2026.csv" download class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
-                    Descargar <i class="fa-solid fa-file-csv"></i>
-                </a>
+                <div class="flex gap-3">
+                    <a href="../elecciones/candidatos.html" class="text-xs font-bold text-slate-500 hover:text-black transition">Ver Online</a>
+                    <a href="datasets/candidatos_2026.csv" download class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                        Descargar <i class="fa-solid fa-file-csv"></i>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -143,6 +165,7 @@
             <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">
                 Resultados Electorales Municipales SCZ (1987-2026)
             </h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">LABAP Research • Time Series</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
                 Compendio de series temporales de votación por municipio. Carpeta comprimida con archivos anuales para análisis longitudinal de volatilidad.
             </p>
@@ -164,6 +187,7 @@
             <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">
                 Consolidado Nacional: Elecciones Municipales Bolivia
             </h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">OEP • National Data</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
                 Agregado de resultados de los 339 municipios del país. Distribución de votos válidos, blancos y nulos por sigla política.
             </p>
@@ -199,6 +223,13 @@
                     card.style.display = 'none';
                 }
             });
+        });
+
+        // Menú móvil
+        const btnOpen = document.getElementById('btn-open');
+        const mobileMenu = document.getElementById('mobile-menu');
+        btnOpen.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
     });
 
