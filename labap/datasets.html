@@ -5,255 +5,306 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Datos — LABAP • CIRCPyCS UAGRM</title>
-  <meta name="description" content="LABAP CIRCPyCS — Datos abiertos y recursos para investigación política y social" />
+  <title>Repositorio de Datos — LABAP • CIRCPyCS</title>
+  <meta name="description" content="Repositorio de datos abiertos del Laboratorio de Análisis Político (LABAP). Datasets electorales, geográficos y políticos de Bolivia." />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
-          boxShadow: { soft: '0 6px 22px rgba(2,6,23,.10)' }
+          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
+          colors: {
+            'dataverse-blue': '#0069d9', // Azul académico estilo Dataverse
+            'dataverse-bg': '#f3f4f6',
+          }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
-    .card-minh{min-height:168px}
-    section[id] { scroll-margin-top: 100px; }
+    /* Estilos específicos para imitar Dataverse */
+    .dataset-title { color: #c53030; font-family: 'Inter', sans-serif; font-weight: 600; }
+    .dataset-title:hover { text-decoration: underline; color: #9b2c2c; }
+    .facet-link { color: #0069d9; }
+    .facet-link:hover { text-decoration: underline; }
+    .metadata-label { color: #555; font-weight: 600; font-size: 0.85rem; }
+    .metadata-value { color: #333; font-size: 0.85rem; }
+    
+    /* Animación simple para el modal de cita */
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain"/>
+      <a href="../index.html" class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-10 object-contain"/>
         <div class="leading-tight">
-          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg">LABAP — CIRCPyCS</h1>
+          <p class="text-xs uppercase tracking-wider text-slate-500 font-semibold">UAGRM</p>
+          <h1 class="font-bold text-lg text-slate-800">LABAP Dataverse</h1>
         </div>
       </a>
-
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#internacionales" class="hover:text-sky-700">Internacionales</a>
-        <a href="#nacionales" class="hover:text-sky-700">Nacionales</a>
-        <a href="#departamentales" class="hover:text-sky-700">Departamentales</a>
-        <a href="#labap" class="hover:text-emerald-700 font-bold">CIRCPyCS Data</a>
-        <a href="../index.html" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
-      </nav>
-
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
-        <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-7 w-7 object-contain"/>
-            <span class="font-semibold">LABAP</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#internacionales">Internacionales</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#nacionales">Nacionales</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#departamentales">Departamentales</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50 font-bold text-emerald-700" href="#labap">CIRCPyCS Data</a></li>
-          <li class="pt-2 mt-2 border-t border-slate-200"><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="../index.html">Volver a Inicio</a></li>
-        </ul>
+      <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-600">
+        <a href="../index.html" class="hover:text-emerald-700">Inicio</a>
+        <a href="../labap/index.html" class="hover:text-emerald-700">Dashboard</a>
+        <a href="#" class="text-emerald-700 font-bold">Datasets</a>
+        <a href="#" class="hover:text-emerald-700">Acerca de</a>
       </nav>
     </div>
   </header>
 
-  <section id="inicio" class="relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
-      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
-      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 text-center">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">LABAP</span>
-      <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Datos Abiertos</h2>
-      <p class="mt-3 max-w-3xl mx-auto text-slate-600">Explora, descarga y analiza bases de datos para investigación política y social en Bolivia y el mundo.</p>
-      <div class="mt-6 flex flex-wrap gap-3 justify-center text-sm">
-        <a href="#labap" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 shadow-sm"><i class="fa-solid fa-flask"></i> Datos CIRCPyCS</a>
-        <a href="#internacionales" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fa-solid fa-globe"></i> Internacionales</a>
-        <a href="#nacionales" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700"><i class="fa-solid fa-flag"></i> Nacionales</a>
+  <div class="bg-slate-50 border-b border-slate-200 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="text-xs text-blue-700 mb-2 font-medium">
+        <a href="#" class="hover:underline">UAGRM</a> <span class="text-slate-400">/</span> 
+        <a href="#" class="hover:underline">CIRCPyCS</a> <span class="text-slate-400">/</span> 
+        <span class="text-slate-600">LABAP Repository</span>
+      </nav>
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h2 class="text-3xl font-serif text-slate-900">Repositorio de Datos Políticos</h2>
+            <p class="text-slate-600 mt-1 text-sm">Colección oficial de datos electorales, geoespaciales y sociopolíticos de Santa Cruz y Bolivia.</p>
+        </div>
+        <div class="flex gap-2">
+            <span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-semibold text-slate-600 shadow-sm">
+                <i class="fa-solid fa-database text-emerald-600 mr-1"></i> 4 Datasets
+            </span>
+            <span class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-semibold text-slate-600 shadow-sm">
+                <i class="fa-solid fa-download text-sky-600 mr-1"></i> Acceso Abierto
+            </span>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <main class="pb-14">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8">
-
-      <section id="labap" class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
-        <div class="h-2 bg-gradient-to-r from-emerald-500 to-teal-500" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-flask text-emerald-600"></i> Producidos por LABAP — CIRCPyCS</h3>
-          <p class="mt-2 text-slate-600">Datasets originales y recopilaciones exclusivas del laboratorio.</p>
-          
-          <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-            
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition flex flex-col justify-between">
-              <div>
-                <h4 class="font-semibold flex items-center gap-2 text-lg"><i class="fa-solid fa-map text-emerald-600"></i> Límites Geográficos Santa Cruz</h4>
-                <p class="mt-2 text-sm text-slate-600">Archivos geoespaciales (JSON) con los límites oficiales del departamento y sus municipios.</p>
-                <div class="mt-2 flex gap-2">
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">.json</span>
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">geo</span>
-                </div>
-              </div>
-              <div class="mt-4">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 font-medium hover:bg-emerald-100 transition" href="datasets/limites_scz.json" download>
-                    Descargar GeoJSON <i class="fa-solid fa-download"></i>
-                </a>
-              </div>
-            </article>
-
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition flex flex-col justify-between">
-              <div>
-                <h4 class="font-semibold flex items-center gap-2 text-lg"><i class="fa-solid fa-users-viewfinder text-sky-600"></i> Candidatos Autonómicos 2026</h4>
-                <p class="mt-2 text-sm text-slate-600">Base de datos completa de candidatos habilitados para las elecciones autonómicas.</p>
-                <div class="mt-2 flex gap-2">
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">.csv</span>
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">elecciones</span>
-                </div>
-              </div>
-              <div class="mt-4">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-sky-50 text-sky-700 font-medium hover:bg-sky-100 transition" href="datasets/candidatos_2026.csv" download>
-                    Descargar CSV <i class="fa-solid fa-file-csv"></i>
-                </a>
-              </div>
-            </article>
-
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition flex flex-col justify-between">
-              <div>
-                <h4 class="font-semibold flex items-center gap-2 text-lg"><i class="fa-solid fa-clock-rotate-left text-slate-700"></i> Histórico Municipal SCZ (1987-2026)</h4>
-                <p class="mt-2 text-sm text-slate-600">Resultados electorales consolidados de todos los municipios de Santa Cruz.</p>
-                <div class="mt-2 flex gap-2">
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">carpeta</span>
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">series</span>
-                </div>
-              </div>
-              <div class="mt-4">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 hover:border-slate-400 text-slate-700 transition" href="../elecciones/atlas.html">
-                    Explorar Datos <i class="fa-solid fa-folder-open"></i>
-                </a>
-              </div>
-            </article>
-
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition flex flex-col justify-between">
-              <div>
-                <h4 class="font-semibold flex items-center gap-2 text-lg"><i class="fa-solid fa-flag text-rose-600"></i> Elecciones Municipales Bolivia</h4>
-                <p class="mt-2 text-sm text-slate-600">Resultados generales de elecciones municipales a nivel nacional.</p>
-                <div class="mt-2 flex gap-2">
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">nacional</span>
-                    <span class="text-xs font-mono bg-slate-100 px-2 py-1 rounded">data</span>
-                </div>
-              </div>
-              <div class="mt-4">
-                <a class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 hover:border-slate-400 text-slate-700 transition" href="#">
-                    Acceder <i class="fa-solid fa-arrow-right"></i>
-                </a>
-              </div>
-            </article>
-
-          </div>
+  <div class="bg-slate-100 border-b border-slate-200 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative max-w-3xl">
+            <input type="text" id="searchInput" placeholder="Buscar en este dataverse (ej: municipios, 2026, shapefile)..." 
+                class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
         </div>
-      </section>
-
-      <section id="internacionales" class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
-        <div class="h-2 bg-gradient-to-r from-slate-400 to-slate-600" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-globe text-slate-700"></i> Referencias Internacionales</h3>
-          <p class="mt-2 text-slate-600">Fuentes externas esenciales para investigación comparada.</p>
-          <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition card-minh">
-              <h4 class="font-semibold flex items-center gap-2"><i class="fa-solid fa-database text-sky-700"></i> Latinobarómetro</h4>
-              <p class="mt-1 text-sm text-slate-600">Encuestas de opinión (1995–2023).</p>
-              <div class="mt-3">
-                <a class="inline-flex items-center gap-2 text-sm font-medium text-sky-700 hover:underline" href="https://www.latinobarometro.org/latContents.jsp" target="_blank" rel="noopener">Ir al sitio <i class="fa-solid fa-up-right-from-square text-xs"></i></a>
-              </div>
-            </article>
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition card-minh">
-              <h4 class="font-semibold flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-sky-700"></i> V‑Dem Dataset</h4>
-              <p class="mt-1 text-sm text-slate-600">Índices de democracia global.</p>
-              <div class="mt-3">
-                <a class="inline-flex items-center gap-2 text-sm font-medium text-sky-700 hover:underline" href="https://v-dem.net/data/the-v-dem-dataset/" target="_blank" rel="noopener">Ir al sitio <i class="fa-solid fa-up-right-from-square text-xs"></i></a>
-              </div>
-            </article>
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition card-minh">
-              <h4 class="font-semibold flex items-center gap-2"><i class="fa-solid fa-database text-sky-700"></i> Banco Mundial</h4>
-              <p class="mt-1 text-sm text-slate-600">Indicadores de desarrollo WDI.</p>
-              <div class="mt-3">
-                <a class="inline-flex items-center gap-2 text-sm font-medium text-sky-700 hover:underline" href="https://data.worldbank.org/country/bolivia" target="_blank" rel="noopener">Ir al sitio <i class="fa-solid fa-up-right-from-square text-xs"></i></a>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="nacionales" class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
-        <div class="h-2 bg-gradient-to-r from-slate-400 to-slate-600" aria-hidden="true"></div>
-        <div class="p-6 lg:p-8">
-          <h3 class="text-xl font-bold flex items-center gap-2"><i class="fa-solid fa-building-columns text-slate-700"></i> Fuentes Oficiales Bolivia</h3>
-          <p class="mt-2 text-slate-600">Portales gubernamentales de datos abiertos.</p>
-          <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
-              <h4 class="font-semibold text-sm">OEP / TSE Datos</h4>
-              <a class="text-xs text-sky-700 hover:underline mt-1 block" href="https://www.oep.org.bo/" target="_blank">Visitar portal</a>
-            </article>
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
-              <h4 class="font-semibold text-sm">INE Estadística</h4>
-              <a class="text-xs text-sky-700 hover:underline mt-1 block" href="https://www.ine.gob.bo/" target="_blank">Visitar portal</a>
-            </article>
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
-              <h4 class="font-semibold text-sm">UDAPE Microdatos</h4>
-              <a class="text-xs text-sky-700 hover:underline mt-1 block" href="https://www.udape.gob.bo/" target="_blank">Visitar portal</a>
-            </article>
-            <article class="rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
-              <h4 class="font-semibold text-sm">GeoBolivia (IDE-EPB)</h4>
-              <a class="text-xs text-sky-700 hover:underline mt-1 block" href="https://geo.gob.bo/" target="_blank">Visitar portal</a>
-            </article>
-          </div>
-        </div>
-      </section>
-
     </div>
-  </main>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+    
+    <aside class="w-full md:w-1/4 space-y-6">
+        
+        <div class="border-b border-slate-200 pb-4">
+            <h4 class="font-bold text-slate-800 mb-2 text-sm">Tipo de Dato</h4>
+            <ul class="text-sm space-y-1">
+                <li><a href="#" class="facet-link flex justify-between"><span>Geospatial</span> <span class="text-slate-400 text-xs">(1)</span></a></li>
+                <li><a href="#" class="facet-link flex justify-between"><span>Tabular Data</span> <span class="text-slate-400 text-xs">(2)</span></a></li>
+                <li><a href="#" class="facet-link flex justify-between"><span>Time Series</span> <span class="text-slate-400 text-xs">(1)</span></a></li>
+            </ul>
+        </div>
+
+        <div class="border-b border-slate-200 pb-4">
+            <h4 class="font-bold text-slate-800 mb-2 text-sm">Cobertura</h4>
+            <ul class="text-sm space-y-1">
+                <li><a href="#" class="facet-link flex justify-between"><span>Santa Cruz</span> <span class="text-slate-400 text-xs">(3)</span></a></li>
+                <li><a href="#" class="facet-link flex justify-between"><span>Nacional (Bolivia)</span> <span class="text-slate-400 text-xs">(1)</span></a></li>
+            </ul>
+        </div>
+
+        <div class="border-b border-slate-200 pb-4">
+            <h4 class="font-bold text-slate-800 mb-2 text-sm">Formato</h4>
+            <ul class="text-sm space-y-1">
+                <li><a href="#" class="facet-link">JSON / GeoJSON</a></li>
+                <li><a href="#" class="facet-link">CSV / Excel</a></li>
+                <li><a href="#" class="facet-link">Carpeta / ZIP</a></li>
+            </ul>
+        </div>
+
+        <div class="bg-blue-50 p-4 rounded border border-blue-100 text-xs text-blue-800">
+            <p><strong>Nota:</strong> Este es un repositorio estático. Los filtros son visuales para navegación rápida.</p>
+        </div>
+    </aside>
+
+    <main class="w-full md:w-3/4">
+        
+        <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-2">
+            <div class="text-sm text-slate-600">
+                Mostrando <span class="font-bold" id="resultCount">4</span> resultados
+            </div>
+            <div class="flex items-center gap-2 text-sm">
+                <span class="text-slate-500">Ordenar por:</span>
+                <select class="border-none bg-transparent font-medium text-blue-700 focus:ring-0 cursor-pointer">
+                    <option>Más reciente</option>
+                    <option>Nombre (A-Z)</option>
+                    <option>Descargas</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="space-y-6" id="datasetList">
+
+            <div class="dataset-item flex gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition group bg-white">
+                <div class="hidden sm:flex flex-shrink-0 w-16 h-16 bg-emerald-50 text-emerald-600 items-center justify-center rounded border border-emerald-100">
+                    <i class="fa-solid fa-map-location-dot text-2xl"></i>
+                </div>
+                
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start">
+                        <a href="datasets/limites_scz.json" download class="text-lg dataset-title text-blue-700">
+                            Límites Geográficos del Departamento de Santa Cruz (Oficial)
+                        </a>
+                        <span class="bg-emerald-100 text-emerald-800 text-[10px] uppercase font-bold px-2 py-1 rounded">GeoJSON</span>
+                    </div>
+                    
+                    <div class="text-xs text-slate-500 mt-1 mb-2">
+                        <span>CIRCPyCS Data Team</span> &bull; <span>2025-01-10</span> &bull; <span>Geospatial</span>
+                    </div>
+                    
+                    <p class="text-sm text-slate-700 mb-3 line-clamp-2">
+                        Archivo vectorial (GeoJSON) que contiene la delimitación oficial de los municipios y provincias del departamento de Santa Cruz. Incluye metadatos de códigos INE y nombres normalizados. Ideal para mapeo en R, Python o QGIS.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 mt-auto">
+                        <a href="datasets/limites_scz.json" download class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition">
+                            <i class="fa-solid fa-download mr-2"></i> Descargar (2.4 MB)
+                        </a>
+                        
+                        <details class="relative">
+                            <summary class="inline-flex items-center px-3 py-1 border border-slate-300 text-slate-700 text-xs font-medium rounded hover:bg-slate-100 transition select-none">
+                                <i class="fa-solid fa-quote-right mr-2"></i> Citar
+                            </summary>
+                            <div class="absolute top-full mt-2 left-0 w-64 p-3 bg-white border border-slate-300 shadow-lg rounded z-10 text-xs text-slate-600">
+                                <strong>APA:</strong> CIRCPyCS (2025). Límites Geográficos Santa Cruz [Data set]. LABAP Repository.
+                            </div>
+                        </details>
+                        
+                        <a href="../elecciones/atlas.html" class="inline-flex items-center px-3 py-1 border border-slate-300 text-slate-700 text-xs font-medium rounded hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-eye mr-2"></i> Ver en Mapa
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dataset-item flex gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition group bg-white">
+                <div class="hidden sm:flex flex-shrink-0 w-16 h-16 bg-sky-50 text-sky-600 items-center justify-center rounded border border-sky-100">
+                    <i class="fa-solid fa-table text-2xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start">
+                        <a href="datasets/candidatos_2026.csv" download class="text-lg dataset-title text-blue-700">
+                            Nómina de Candidatos Habilitados - Elecciones Autonómicas 2026
+                        </a>
+                        <span class="bg-sky-100 text-sky-800 text-[10px] uppercase font-bold px-2 py-1 rounded">CSV</span>
+                    </div>
+                    <div class="text-xs text-slate-500 mt-1 mb-2">
+                        <span>OEP / CIRCPyCS</span> &bull; <span>2026-01-15</span> &bull; <span>Elections</span>
+                    </div>
+                    <p class="text-sm text-slate-700 mb-3">
+                        Base de datos tabular (.csv) con la lista completa de candidatos a Gobernador, Asambleístas y Alcaldes. Incluye variables: Partido, Agrupación, Nombre, Cargo y Estado de Habilitación. Codificación UTF-8.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="datasets/candidatos_2026.csv" download class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition">
+                            <i class="fa-solid fa-download mr-2"></i> Descargar CSV
+                        </a>
+                        <a href="../elecciones/candidatos.html" class="inline-flex items-center px-3 py-1 border border-slate-300 text-slate-700 text-xs font-medium rounded hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-magnifying-glass mr-2"></i> Explorar Online
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dataset-item flex gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition group bg-white">
+                <div class="hidden sm:flex flex-shrink-0 w-16 h-16 bg-amber-50 text-amber-600 items-center justify-center rounded border border-amber-100">
+                    <i class="fa-solid fa-folder-open text-2xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start">
+                        <a href="#" class="text-lg dataset-title text-blue-700">
+                            Resultados Electorales Municipales SCZ (Serie Histórica 1987-2026)
+                        </a>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] uppercase font-bold px-2 py-1 rounded">Series</span>
+                    </div>
+                    <div class="text-xs text-slate-500 mt-1 mb-2">
+                        <span>LABAP Research</span> &bull; <span>1987-2026</span> &bull; <span>Time Series</span>
+                    </div>
+                    <p class="text-sm text-slate-700 mb-3">
+                        Compendio histórico de resultados electorales a nivel municipal en Santa Cruz. Carpeta comprimida que contiene archivos por año electoral. Útil para análisis de volatilidad y tendencias de largo plazo.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="inline-flex items-center px-3 py-1 bg-slate-100 text-slate-500 text-xs font-medium rounded cursor-not-allowed">
+                            <i class="fa-solid fa-lock mr-2"></i> Acceso Restringido (Solicitar)
+                        </button>
+                        <a href="../elecciones/atlas.html" class="inline-flex items-center px-3 py-1 border border-slate-300 text-slate-700 text-xs font-medium rounded hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-chart-line mr-2"></i> Ver Análisis
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dataset-item flex gap-4 p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition group bg-white">
+                <div class="hidden sm:flex flex-shrink-0 w-16 h-16 bg-rose-50 text-rose-600 items-center justify-center rounded border border-rose-100">
+                    <i class="fa-solid fa-flag text-2xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start">
+                        <a href="#" class="text-lg dataset-title text-blue-700">
+                            Elecciones Municipales Bolivia (Consolidado Nacional)
+                        </a>
+                        <span class="bg-rose-100 text-rose-800 text-[10px] uppercase font-bold px-2 py-1 rounded">Nacional</span>
+                    </div>
+                    <div class="text-xs text-slate-500 mt-1 mb-2">
+                        <span>OEP</span> &bull; <span>2021-2026</span> &bull; <span>National Data</span>
+                    </div>
+                    <p class="text-sm text-slate-700 mb-3">
+                        Agregado nacional de resultados de elecciones municipales. Contiene datos de los 339 municipios de Bolivia. Variables: Votos válidos, nulos, blancos y distribución por siglas políticas.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#" class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition">
+                            <i class="fa-solid fa-download mr-2"></i> Descargar ZIP
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </main>
+  </div>
 
   {% include footer.html %}
 
   <script>
-    // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-    openBtn?.addEventListener('click', openMenu);
-    closeBtn?.addEventListener('click', closeMenu);
-    backdrop?.addEventListener('click', closeMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    wrap?.addEventListener('click', (e)=>{ if(e.target.tagName==='A') closeMenu(); });
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('searchInput');
+        const datasetList = document.getElementById('datasetList');
+        const items = datasetList.querySelectorAll('.dataset-item');
+        const countSpan = document.getElementById('resultCount');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                // Buscamos en título, fecha, tags y descripción
+                const textContent = item.innerText.toLowerCase();
+                
+                if (textContent.includes(term)) {
+                    item.style.display = 'flex'; // Restaurar display flex
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            countSpan.textContent = visibleCount;
+        });
+    });
   </script>
+
 </body>
 </html>
