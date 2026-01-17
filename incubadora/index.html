@@ -1,258 +1,323 @@
+---
+---
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
-  <base href="https://cir.uagrm.edu.bo/">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Incubadora de Consultores Jr. — CIRCPyCS 2026</title>
-  <meta name="description" content="Incubadora de Consultores Jr. del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM. Cohorte 2026." />
+  <title>Incubadora de Consultores Jr. — CIRCPyCS</title>
+  <meta name="description" content="Formando la próxima generación de consultores políticos con rigor científico y ética profesional." />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+          fontFamily: { 
+            sans: ["Inter", "sans-serif"], 
+            serif: ["Playfair Display", "serif"] 
+          },
+          colors: {
+            'firm-navy': '#0f172a',   /* Azul corporativo oscuro */
+            'firm-teal': '#0f766e',   /* Verde crecimiento serio */
+            'firm-paper': '#f8fafc',  /* Fondo muy suave */
+          }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Font Awesome (para iconos) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-</head>
-<body class="min-h-screen bg-slate-50 text-slate-800">
-  <!-- Cinta superior -->
-  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+  <style>
+    /* Estilo de tarjeta corporativa */
+    .consulting-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+    .consulting-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.1);
+        border-color: #0f766e;
+    }
+    .step-number {
+        font-family: 'Playfair Display', serif;
+        -webkit-text-stroke: 1px #cbd5e1;
+        color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+  <div class="h-1.5 w-full bg-gradient-to-r from-firm-navy via-firm-teal to-emerald-400"></div>
+
+  <header class="border-b border-slate-200 bg-white/95 sticky top-0 z-50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="../index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
-          <p class="text-sm tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-firm-navy">Incubadora Jr.</h1>
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="https://drive.google.com/file/d/1Ycigs9pwm_4RnDUReuDz80uFszxd_ktD/view?usp=sharing" class="hover:text-sky-700">Modelo</a>
-        <a href="#servicios" class="hover:text-sky-700">Servicios</a>
-        <a href="#areas" class="hover:text-sky-700">Áreas</a>
-        <a href="#consultores" class="hover:text-sky-700">Consultores</a>
-        <a href="#mentores" class="hover:text-sky-700">Mentores</a>
-        <a href="#postula" class="hover:text-sky-700">Postula</a>
-        <a href="https://cir.uagrm.edu.bo/" class="hover:text-sky-700">Volver al inicio</a>
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="#modelo" class="hover:text-firm-teal transition">El Modelo</a>
+        <a href="#servicios" class="hover:text-firm-teal transition">Servicios</a>
+        <a href="#areas" class="hover:text-firm-teal transition">Áreas</a>
+        <a href="#mentores" class="hover:text-firm-teal transition">Mentores</a>
+        <a href="../index.html" class="hover:text-firm-navy transition">Inicio</a>
       </nav>
 
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200">
-        <span>Menú</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </button>
+      <a href="https://forms.gle/STNwwoMncswXamNL8" target="_blank" class="hidden md:inline-flex items-center px-5 py-2.5 bg-firm-navy text-white text-xs font-bold uppercase tracking-widest hover:bg-firm-teal transition shadow-sm rounded-sm">
+        Postular 2026
+      </a>
+
+      <button id="btn-open" class="md:hidden text-firm-navy"><i class="fa-solid fa-bars text-xl"></i></button>
     </div>
 
-    <!-- Panel móvil -->
-    <div id="mobile-wrap" class="md:hidden fixed inset-0 z-40 hidden">
-      <div id="backdrop" class="absolute inset-0 bg-slate-900/40" aria-hidden="true"></div>
-      <nav class="ml-auto h-full w-80 max-w-[85vw] bg-white shadow-xl p-6 overflow-y-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-8 w-8 object-contain" />
-            <span class="font-semibold">CIRCPyCS</span>
-          </div>
-          <button id="btn-close" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Cerrar menú">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </button>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
+        <div class="grid gap-3 text-sm">
+            <a href="#modelo" class="block py-2">Modelo</a>
+            <a href="#servicios" class="block py-2">Servicios</a>
+            <a href="#mentores" class="block py-2">Mentores</a>
+            <a href="https://forms.gle/STNwwoMncswXamNL8" class="block py-2 font-bold text-firm-teal">Postular Ahora</a>
+            <a href="../index.html" class="block py-2 text-slate-400">Volver a Inicio</a>
         </div>
-        <ul class="mt-6 space-y-2 text-[15px]">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://drive.google.com/file/d/1Ycigs9pwm_4RnDUReuDz80uFszxd_ktD/view?usp=sharing">Modelo</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#servicios">Servicios</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#areas">Áreas</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#consultores">Consultores</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#mentores">Mentores</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#postula">Postula</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/" >Volver al inicio</a></li>
-        </ul>
-      </nav>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section id="inicio" class="relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
-      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
-      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20">
-      <div class="max-w-3xl">
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Cohorte 2026</span>
-        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Incubadora de Consultores Jr.</h2>
-        <p class="mt-4 text-slate-600">Puente entre la formación avanzada y el impacto profesional. Consultoría real, mentoría, tecnología y ética en acción. <span class="text-slate-500">#TransformandoTalento</span></p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="https://forms.gle/STNwwoMncswXamNL8" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105">Postula aquí <span>→</span></a>
-          <a href="https://drive.google.com/file/d/1Ycigs9pwm_4RnDUReuDz80uFszxd_ktD/view?usp=sharing" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-sky-600 hover:text-sky-700">Ver modelo</a>
+  <section class="bg-firm-paper border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-6 py-20 lg:py-28 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+            <span class="inline-block py-1 px-3 bg-white border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest text-firm-teal mb-6 shadow-sm">
+                Cohorte 2026 Abierta
+            </span>
+            <h1 class="font-serif font-black text-5xl md:text-6xl text-firm-navy mb-6 leading-tight">
+                El puente entre la academia y la <span class="text-firm-teal italic">consultoría real.</span>
+            </h1>
+            <p class="text-lg text-slate-600 font-light leading-relaxed mb-8 max-w-lg">
+                No es una pasantía, es una aceleradora de talento. Formamos consultores políticos con rigor científico, dominio de datos y ética profesional.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="https://forms.gle/STNwwoMncswXamNL8" class="px-8 py-3 bg-firm-navy text-white font-bold text-sm hover:bg-firm-teal transition shadow-lg">
+                    Aplicar al Programa
+                </a>
+                <a href="https://drive.google.com/file/d/1Ycigs9pwm_4RnDUReuDz80uFszxd_ktD/view?usp=sharing" target="_blank" class="px-8 py-3 bg-white border border-slate-300 text-slate-700 font-bold text-sm hover:border-firm-navy hover:text-firm-navy transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> Ver Modelo
+                </a>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Métricas -->
-  <section class="py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" id="metrics">
-        <div class="rounded-2xl bg-slate-100 p-6 text-center shadow-sm">
-          <div class="text-2xl text-sky-700"><i class="fas fa-users"></i></div>
-          <div class="mt-2 text-3xl font-extrabold text-slate-900" data-target="30">0</div>
-          <div class="text-slate-600 text-sm">Consultores Jr. certificados</div>
+        <div class="hidden lg:block relative">
+            <div class="absolute inset-0 bg-gradient-to-tr from-firm-teal/20 to-transparent rounded-full blur-3xl"></div>
+            <div class="relative bg-white p-8 border border-slate-200 shadow-xl rounded-xl max-w-md mx-auto rotate-2 hover:rotate-0 transition duration-500">
+                <div class="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <div class="w-12 h-12 bg-firm-navy rounded-full flex items-center justify-center text-white font-bold font-serif">Jr</div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Perfil del Consultor</h3>
+                        <p class="text-xs text-slate-500">Skills Target</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1"><span>Análisis de Datos (R/Python)</span> <span>90%</span></div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full"><div class="bg-firm-teal h-1.5 rounded-full" style="width: 90%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1"><span>Diseño de Estrategia</span> <span>85%</span></div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full"><div class="bg-firm-navy h-1.5 rounded-full" style="width: 85%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1"><span>Ética Pública</span> <span>100%</span></div>
+                        <div class="w-full bg-slate-100 h-1.5 rounded-full"><div class="bg-emerald-500 h-1.5 rounded-full" style="width: 100%"></div></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="rounded-2xl bg-slate-100 p-6 text-center shadow-sm">
-          <div class="text-2xl text-sky-700"><i class="fas fa-file-alt"></i></div>
-          <div class="mt-2 text-3xl font-extrabold text-slate-900" data-target="10">0</div>
-          <div class="text-slate-600 text-sm">Proyectos con impacto regional</div>
-        </div>
-        <div class="rounded-2xl bg-slate-100 p-6 text-center shadow-sm">
-          <div class="text-2xl text-sky-700"><i class="fas fa-user-tie"></i></div>
-          <div class="mt-2 text-3xl font-extrabold text-slate-900" data-target="8">0</div>
-          <div class="text-slate-600 text-sm">Mentores y expertos</div>
-        </div>
-        <div class="rounded-2xl bg-slate-100 p-6 text-center shadow-sm">
-          <div class="text-2xl text-sky-700"><i class="fas fa-signal"></i></div>
-          <div class="mt-2 text-3xl font-extrabold text-slate-900" data-target="97" data-suffix="%">0%</div>
-          <div class="text-slate-600 text-sm">Satisfacción del cliente</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Modelo de incubación -->
-  <section id="modelo" class="py-12 bg-white border-y border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Fases de la Incubadora</h3>
-      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl text-rose-600"><i class="fa-solid fa-rocket"></i></div>
-          <h4 class="mt-2 font-semibold">Selección</h4>
-          <p class="mt-1 text-sm text-slate-600">Convocatoria, pruebas de aptitud y dinámica grupal. <span class="font-medium">Entregable:</span> cohortes seleccionadas.</p>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl text-rose-600"><i class="fa-solid fa-graduation-cap"></i></div>
-          <h4 class="mt-2 font-semibold">Formación intensiva</h4>
-          <p class="mt-1 text-sm text-slate-600">Bootcamp en cuantitativo, cualitativo, ética y comunicación. <span class="font-medium">Entregable:</span> certificación intermedia.</p>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl text-rose-600"><i class="fa-solid fa-handshake-angle"></i></div>
-          <h4 class="mt-2 font-semibold">Prácticas de consultoría</h4>
-          <p class="mt-1 text-sm text-slate-600">Proyectos reales con clientes, supervisión semanal y entregables ejecutivos.</p>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center shadow-sm hover:shadow-md transition">
-          <div class="text-2xl text-rose-600"><i class="fa-solid fa-award"></i></div>
-          <h4 class="mt-2 font-semibold">Acompañamiento al egreso</h4>
-          <p class="mt-1 text-sm text-slate-600">Networking, mentoría personalizada, bolsa de trabajo y certificación CIRCPyCS.</p>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Servicios diferenciadores -->
-  <section id="servicios" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">¿Qué hace única a la incubadora?</h3>
-      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-          <div class="text-xl text-sky-600"><i class="fas fa-code"></i></div>
-          <h4 class="mt-2 font-semibold">Ciencia de datos aplicada</h4>
-          <p class="mt-1 text-sm text-slate-600">Python, R, análisis cualitativo y ML aplicados a desafíos públicos reales.</p>
+  <section class="border-b border-slate-200 bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center" id="metrics">
+            <div class="p-4">
+                <div class="text-4xl font-serif font-bold text-firm-navy mb-1" data-target="30">0</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Consultores Certificados</div>
+            </div>
+            <div class="p-4 border-l border-slate-100">
+                <div class="text-4xl font-serif font-bold text-firm-navy mb-1" data-target="12">0</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Proyectos Regionales</div>
+            </div>
+            <div class="p-4 border-l border-slate-100">
+                <div class="text-4xl font-serif font-bold text-firm-navy mb-1" data-target="8">0</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Mentores Senior</div>
+            </div>
+            <div class="p-4 border-l border-slate-100">
+                <div class="text-4xl font-serif font-bold text-firm-teal mb-1" data-target="98" data-suffix="%">0%</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Inserción Laboral</div>
+            </div>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-          <div class="text-xl text-sky-600"><i class="fas fa-hand-holding-heart"></i></div>
-          <h4 class="mt-2 font-semibold">Ética y responsabilidad</h4>
-          <p class="mt-1 text-sm text-slate-600">Impacto social, cumplimiento ético y prácticas de ciencia abierta.</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-          <div class="text-xl text-sky-600"><i class="fas fa-network-wired"></i></div>
-          <h4 class="mt-2 font-semibold">Mentoría y networking</h4>
-          <p class="mt-1 text-sm text-slate-600">Mentores expertos, acompañamiento 1:1 y eventos con aliados.</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
-          <div class="text-xl text-sky-600"><i class="fas fa-gauge-high"></i></div>
-          <h4 class="mt-2 font-semibold">Monitoreo en tiempo real</h4>
-          <p class="mt-1 text-sm text-slate-600">Plataforma con seguimiento de proyectos y métricas de desempeño.</p>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- Áreas de formación / Portafolio -->
-  <section id="areas" class="py-12 bg-white border-y border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold text-center">Áreas de formación y portafolio</h3>
-      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div class="text-xl text-sky-600"><i class="fas fa-chart-line"></i></div>
-          <h4 class="mt-2 font-semibold">Análisis cuantitativo</h4>
-          <p class="mt-1 text-sm text-slate-600">Estadística, R y Python, visualización de datos. <span class="font-medium">Proyectos:</span> encuestas electorales, mapeo de pobreza.</p>
+  <section id="modelo" class="py-20 max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold text-firm-navy mb-4">El Camino del Consultor</h2>
+        <p class="text-slate-600 max-w-2xl mx-auto font-light">
+            Un proceso estructurado de 4 fases diseñado para transformar estudiantes prometedores en profesionales de alto impacto.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <div class="consulting-card p-8 relative overflow-hidden group">
+            <span class="step-number text-6xl absolute -top-2 -right-2 opacity-20 font-bold">01</span>
+            <div class="w-10 h-10 bg-slate-100 text-firm-navy rounded-full flex items-center justify-center mb-6 text-lg"><i class="fa-solid fa-filter"></i></div>
+            <h3 class="font-serif text-xl font-bold text-firm-navy mb-2">Selección</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Convocatoria competitiva. Evaluamos aptitudes analíticas, redacción y compromiso ético. Solo el top 10% ingresa.
+            </p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div class="text-xl text-sky-600"><i class="fas fa-scale-balanced"></i></div>
-          <h4 class="mt-2 font-semibold">Análisis cualitativo</h4>
-          <p class="mt-1 text-sm text-slate-600">Teoría institucional, métodos mixtos, entrevistas. <span class="font-medium">Proyectos:</span> diagnóstico institucional, policy brief.</p>
+
+        <div class="consulting-card p-8 relative overflow-hidden group">
+            <span class="step-number text-6xl absolute -top-2 -right-2 opacity-20 font-bold">02</span>
+            <div class="w-10 h-10 bg-slate-100 text-firm-navy rounded-full flex items-center justify-center mb-6 text-lg"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <h3 class="font-serif text-xl font-bold text-firm-navy mb-2">Formación</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Bootcamp intensivo. Métodos cuantitativos, redacción de informes ejecutivos, ética pública y software (R/Python).
+            </p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div class="text-xl text-sky-600"><i class="fas fa-diagram-project"></i></div>
-          <h4 class="mt-2 font-semibold">Gestión de proyectos</h4>
-          <p class="mt-1 text-sm text-slate-600">Metodologías ágiles, cronogramas, riesgos. <span class="font-medium">Proyectos:</span> gestión de reformas, análisis de políticas públicas.</p>
+
+        <div class="consulting-card p-8 relative overflow-hidden group">
+            <span class="step-number text-6xl absolute -top-2 -right-2 opacity-20 font-bold">03</span>
+            <div class="w-10 h-10 bg-slate-100 text-firm-navy rounded-full flex items-center justify-center mb-6 text-lg"><i class="fa-solid fa-briefcase"></i></div>
+            <h3 class="font-serif text-xl font-bold text-firm-navy mb-2">Consultoría</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Asignación a proyectos reales bajo supervisión de un Mentor Senior. Interacción directa con clientes y toma de decisiones.
+            </p>
         </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div class="text-xl text-sky-600"><i class="fas fa-bullhorn"></i></div>
-          <h4 class="mt-2 font-semibold">Comunicación política</h4>
-          <p class="mt-1 text-sm text-slate-600">Storytelling de datos, presentaciones ejecutivas. <span class="font-medium">Proyectos:</span> campañas y análisis de opinión pública.</p>
+
+        <div class="consulting-card p-8 relative overflow-hidden group border-firm-teal">
+            <span class="step-number text-6xl absolute -top-2 -right-2 opacity-20 font-bold">04</span>
+            <div class="w-10 h-10 bg-firm-teal text-white rounded-full flex items-center justify-center mb-6 text-lg"><i class="fa-solid fa-rocket"></i></div>
+            <h3 class="font-serif text-xl font-bold text-firm-teal mb-2">Despegue</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Certificación CIRCPyCS. Acceso a bolsa de trabajo exclusiva, networking regional y recomendación profesional.
+            </p>
         </div>
-      </div>
+
     </div>
   </section>
 
-  <section id="postula" class="py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <a href="https://forms.gle/STNwwoMncswXamNL8" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600 shadow hover:shadow-lg hover:brightness-105"><i class="fa-solid fa-envelope"></i> Postularme</a>
+  <section id="areas" class="bg-firm-paper py-20 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+            <div>
+                <span class="text-firm-teal font-bold text-xs uppercase tracking-widest block mb-2">Nuestras Prácticas</span>
+                <h2 class="font-serif text-3xl font-bold text-firm-navy">Áreas de Especialización</h2>
+            </div>
+            <a href="#postula" class="text-sm font-bold text-firm-navy border-b-2 border-firm-navy pb-1 hover:text-firm-teal hover:border-firm-teal transition mt-4 md:mt-0">
+                ¿Te interesa alguna? Postula →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div class="bg-white p-8 shadow-sm border-t-4 border-firm-navy">
+                <div class="mb-4 text-firm-navy text-2xl"><i class="fa-solid fa-chart-pie"></i></div>
+                <h4 class="font-serif text-xl font-bold text-slate-900 mb-3">Inteligencia Electoral</h4>
+                <ul class="text-sm text-slate-600 space-y-2 mb-6 list-disc list-inside">
+                    <li>Diseño muestral y encuestas.</li>
+                    <li>Análisis de geografía electoral.</li>
+                    <li>Modelado de escenarios.</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-8 shadow-sm border-t-4 border-firm-teal">
+                <div class="mb-4 text-firm-teal text-2xl"><i class="fa-solid fa-file-contract"></i></div>
+                <h4 class="font-serif text-xl font-bold text-slate-900 mb-3">Políticas Públicas</h4>
+                <ul class="text-sm text-slate-600 space-y-2 mb-6 list-disc list-inside">
+                    <li>Diagnóstico institucional.</li>
+                    <li>Evaluación de impacto.</li>
+                    <li>Redacción de Policy Briefs.</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-8 shadow-sm border-t-4 border-slate-400">
+                <div class="mb-4 text-slate-500 text-2xl"><i class="fa-solid fa-bullhorn"></i></div>
+                <h4 class="font-serif text-xl font-bold text-slate-900 mb-3">Comunicación Estratégica</h4>
+                <ul class="text-sm text-slate-600 space-y-2 mb-6 list-disc list-inside">
+                    <li>Storytelling con datos.</li>
+                    <li>Gestión de crisis.</li>
+                    <li>Narrativa política.</li>
+                </ul>
+            </div>
+
+        </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p><strong>CIRCPyCS — UAGRM</strong> · Incubadora de Consultores Jr. <span class="whitespace-nowrap">2026</span>. Todos los derechos reservados.</p>
-        <p class="text-slate-500">Contacto: <a class="text-sky-700 hover:underline" href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a> · <i class="fas fa-phone"></i> +591 67381294</p>
-      </div>
-      <p class="mt-2 text-slate-500 italic">Inspirando una nueva generación de consultores con ética, ciencia y compromiso regional.</p>
+  <section id="mentores" class="py-20 max-w-7xl mx-auto px-6">
+    <h2 class="font-serif text-3xl font-bold text-firm-navy mb-10 text-center">Mentores Expertos</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="text-center group">
+            <div class="w-32 h-32 mx-auto bg-slate-200 rounded-full mb-4 overflow-hidden grayscale group-hover:grayscale-0 transition duration-500">
+                <img src="https://ui-avatars.com/api/?name=Director+Acad&background=0f172a&color=fff&size=128" alt="Mentor">
+            </div>
+            <h4 class="font-bold text-slate-900">Dirección Académica</h4>
+            <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Estrategia</p>
+        </div>
+        <div class="text-center group">
+            <div class="w-32 h-32 mx-auto bg-slate-200 rounded-full mb-4 overflow-hidden grayscale group-hover:grayscale-0 transition duration-500">
+                <img src="https://ui-avatars.com/api/?name=Senior+Data&background=0f766e&color=fff&size=128" alt="Mentor">
+            </div>
+            <h4 class="font-bold text-slate-900">Lead Data Scientist</h4>
+            <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Cuantitativo</p>
+        </div>
+        <div class="text-center group">
+            <div class="w-32 h-32 mx-auto bg-slate-200 rounded-full mb-4 overflow-hidden grayscale group-hover:grayscale-0 transition duration-500">
+                <img src="https://ui-avatars.com/api/?name=Qualitative+Exp&background=475569&color=fff&size=128" alt="Mentor">
+            </div>
+            <h4 class="font-bold text-slate-900">Senior Researcher</h4>
+            <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Cualitativo</p>
+        </div>
+        <div class="text-center group">
+            <div class="w-32 h-32 mx-auto bg-slate-200 rounded-full mb-4 overflow-hidden grayscale group-hover:grayscale-0 transition duration-500">
+                <img src="https://ui-avatars.com/api/?name=Comms+Dir&background=0f172a&color=fff&size=128" alt="Mentor">
+            </div>
+            <h4 class="font-bold text-slate-900">Dir. Comunicación</h4>
+            <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Narrativa</p>
+        </div>
     </div>
-  </footer>
+  </section>
+
+  <section id="postula" class="bg-firm-navy py-16 text-center text-white">
+    <div class="max-w-3xl mx-auto px-6">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold mb-6">¿Estás listo para el desafío?</h2>
+        <p class="text-slate-300 mb-8 font-light text-lg">
+            Buscamos estudiantes de últimos semestres y recién egresados con pasión por la política, curiosidad intelectual y vocación de servicio.
+        </p>
+        <a href="https://forms.gle/STNwwoMncswXamNL8" target="_blank" class="inline-block px-10 py-4 bg-firm-teal font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-firm-teal transition shadow-xl rounded-sm">
+            Iniciar Postulación
+        </a>
+    </div>
+  </section>
+
+  {% include footer.html %}
 
   <script>
     // Menú móvil
-    const wrap = document.getElementById('mobile-wrap');
-    const openBtn = document.getElementById('btn-open');
-    const closeBtn = document.getElementById('btn-close');
-    const backdrop = document.getElementById('backdrop');
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    btnOpen.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
 
-    function openMenu(){ wrap.classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeMenu(){ wrap.classList.add('hidden'); document.body.style.overflow=''; }
-
-    openBtn?.addEventListener('click', openMenu);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
-    backdrop?.addEventListener('click', closeMenu);
-    closeBtn?.addEventListener('click', closeMenu);
-
-    // Contadores cuando el bloque entra en viewport
+    // Animación de Contadores
     function animate(el){
       const target = parseInt(el.getAttribute('data-target'), 10) || 0;
       const suffix = el.getAttribute('data-suffix') || '';
-      const start = 0; const duration = 1200; const startTime = performance.now();
+      const start = 0; const duration = 1500; const startTime = performance.now();
       function tick(now){
         const progress = Math.min((now - startTime) / duration, 1);
         const value = Math.round(start + progress * (target - start));
@@ -261,11 +326,18 @@
       }
       requestAnimationFrame(tick);
     }
-    const metrics = document.querySelectorAll('#metrics [data-target]');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ animate(e.target); io.unobserve(e.target); }});
+    
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ 
+          if(e.isIntersecting){ 
+              animate(e.target); 
+              observer.unobserve(e.target); 
+          }
+      });
     }, { threshold: 0.5 });
-    metrics.forEach(m => io.observe(m));
+    
+    document.querySelectorAll('#metrics [data-target]').forEach(m => observer.observe(m));
   </script>
+
 </body>
 </html>
