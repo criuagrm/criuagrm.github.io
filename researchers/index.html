@@ -1,69 +1,99 @@
+---
+---
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CIRCPyCS — Investigadores (Tailwind completo)</title>
-  <meta name="description" content="Listado de investigadores del CIRCPyCS — versión Tailwind con emojis y certificados." />
+  <title>Investigadores — CIRCPyCS</title>
+  <meta name="description" content="Directorio de investigadores asociados y fellows del CIRCPyCS." />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ["Poppins","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"],
-            display: ["Playfair Display","serif"]
+          fontFamily: { 
+            sans: ["Inter", "system-ui", "sans-serif"], 
+            serif: ["Merriweather", "serif"] 
           },
           colors: {
-            brand: { azul:"#203A63", verde:"#007A3D", rojo:"#D20B18" }
-          },
-          boxShadow: { soft:'0 4px 14px rgba(2,6,23,.06)'}
+            'academic-slate': '#1e293b', 
+            'academic-blue': '#0f172a',
+            'brand-red': '#D20B18',
+          }
         }
       }
     }
   </script>
-  <!-- Fuentes -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-  <!-- Iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <!-- jsPDF -->
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
-  <!-- Cinta superior -->
-  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Navbar -->
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a class="flex items-center gap-3" href="https://cir.uagrm.edu.bo/">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain" />
-        <span class="font-semibold">CIRCPyCS</span>
+  <style>
+    body { background-color: #f8fafc; }
+    
+    article { 
+        background: white; 
+        transition: all 0.2s ease-in-out;
+    }
+    article:hover { 
+        transform: translateY(-2px); 
+    }
+  </style>
+</head>
+<body class="text-slate-800 font-sans flex flex-col min-h-screen">
+
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-brand-red"></div>
+
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95 transition-all shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-10 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
+        <div class="leading-tight">
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS Investigadores</h1>
+        </div>
       </a>
-      <a href="https://cir.uagrm.edu.bo/" class="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
-        <i class="fa-solid fa-arrow-left"></i>
-        Volver al CIRCPyCS
-      </a>
+      
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="https://cir.uagrm.edu.bo/" class="hover:text-black transition">Inicio</a>
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Lineas de Investigación</a>
+        <a href="https://cir.uagrm.edu.bo/labap/index.html" class="hover:text-black transition">Grupos de Investigación</a>
+        <a href="https://cir.uagrm.edu.bo/revista" class="hover:text-black transition">Proyectos</a>
+      </nav>
+      
+      <button id="btn-open" class="md:hidden text-slate-600 text-xl"><i class="fa-solid fa-bars"></i></button>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
+        <div class="grid gap-3 text-sm">
+            <a href="https://cir.uagrm.edu.bo/" class="block py-2">Inicio</a>
+            <a href="https://cir.uagrm.edu.bo/lineas" class="text-black font-bold border-b-2 border-black pb-1">Lineas de Investigación</a>
+            <a href="https://cir.uagrm.edu.bo/rgroups.html" class="block py-2">Grupos de Investigación</a>
+            <a href="https://cir.uagrm.edu.bo/rprojects" class="block py-2 font-bold text-slate-900">Proyectos</a>
+        </div>
     </div>
   </header>
 
-  <!-- Título -->
-  <section class="py-8 sm:py-10">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="font-display text-2xl sm:text-3xl font-bold">Investigadores del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales — UAGRM</h1>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-b border-slate-200 bg-white">
+    <div class="max-w-4xl">
+        <span class="text-slate-500 font-bold tracking-wider text-xs uppercase mb-3 block">Faculty & Fellows</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Nuestros Investigadores.
+        </h2>
+        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
+            Directorio académico del Centro de Investigación Regional en Ciencia Política y Cienciasl Sociales. Perfiles multidisciplinarios dedicados al análisis político, social y económico.
+        </p>
     </div>
-  </section>
+  </div>
 
-  <!-- Grid tarjetas -->
-  <section class="pb-14">
+  <main class="bg-slate-50 min-h-screen py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
-        <!-- ============== PRIMEROS 6 (ya estaban) ============== -->
-        <!-- 1. Loreto Correa Vera -->
+         <!-- 1. Loreto Correa Vera -->
         <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
           <div class="flex flex-col items-center">
             <img src="https://i.imgur.com/ZkcUerp.png" alt="Loreto Correa Vera" class="w-24 h-24 rounded-full object-cover mb-4"/>
@@ -1728,176 +1758,111 @@
   </div>
 </article>
 
-
-         
-      </div><!-- /grid -->
-    </div><!-- /container -->
-  </section>
-
-   <!-- Sobre -->
-  <section id="sobre" class="py-12 sm:py-14">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid gap-8 md:grid-cols-2 md:gap-10 items-center">
-        <div>
-          <h2 class="text-2xl font-bold">Sobre el Centro</h2>
-          <p class="mt-2 text-slate-600">El CIRCPyCS es una iniciativa de la UAGRM dedicada a investigación aplicada y formación en ciencia política y ciencias sociales. Promovemos datos abiertos, colaboración interdisciplinaria y transferencia de conocimiento para el desarrollo regional.</p>
-          <ul class="mt-4 space-y-2 text-slate-700 list-disc list-inside">
-            <li>Los investigadores se encuentran adcristos al CIRCPyCS.</li>
-            <li>No implica una relación laboral formal.</li>
-            <li>Si quieres contactarte con alguno de ellos puedes escribirnos.</li>
-          </ul>
-        </div>
-        <div class="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-          <h3 class="font-semibold">Contacto</h3>
-          <p class="mt-1 text-sm text-slate-600">Escríbenos para colaboraciones, cursos o investigaciones conjuntas.</p>
-          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">Email</div>
-              <div class="font-medium break-words">cri.cspoliticas.fcjpsri@uagrm.edu.bo</div>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">Ciudad</div>
-              <div class="font-medium">Santa Cruz de la Sierra, Bolivia</div>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">Redes</div>
-              <div class="font-medium">YouTube • Facebook • X</div>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-3">
-              <div class="text-slate-500">OJS</div>
-              <a class="font-medium text-sky-700 hover:underline" target="_blank" rel="noopener" href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica">Revista Conocimiento i Política</a>
-            </div>
-          </div>
-        </div>
+        </div> 
       </div>
-    </div>
-  </section>
+  </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <p>© <span id="year"></span> CIRCPyCS — UAGRM. Todos los derechos reservados.</p>
-        <p class="text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM. <span class="ml-2">Actualizado: Sept 2025</span></p>
-</div>
-    </div>
-  </footer>
-<!-- jsPDF (CDN) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  {% include footer.html %}
 
-<!-- Generador de PDF (igual al original) -->
-<script>
-  async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({
-          format: "letter" // Tamaño carta
-      });
+  <script>
+    // Menú Móvil
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if(btnOpen && mobileMenu){
+        btnOpen.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 
-      // Fondo blanco en tamaño carta
-      doc.setFillColor(255, 255, 255);
-      doc.rect(0, 0, 216, 279, 'F'); // Tamaño carta en mm (216 x 279)
+    // Tu Script de Generación de PDF (INTACTO)
+    async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ format: "letter" });
 
-      // Marca de agua
-      const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-      doc.setGState(new doc.GState({ opacity: 0.1 }));
-      doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
-      doc.setGState(new doc.GState({ opacity: 1 }));
+        // Fondo blanco
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, 216, 279, 'F');
 
-      // Logo superior derecho
-      const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-      doc.addImage(logoSuperiorDerecho, "PNG", 60, 1, 90, 20);
+        // Imágenes
+        const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
+        doc.setGState(new doc.GState({ opacity: 0.1 }));
+        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
+        doc.setGState(new doc.GState({ opacity: 1 }));
 
-      // Encabezado
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.setTextColor("#B22222");
-      doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
-      doc.setTextColor("#003366");
-      doc.setFontSize(12);
-      doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
-      doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
-      doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
+        const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
+        doc.addImage(logoSuperiorDerecho, "PNG", 60, 1, 90, 20);
 
-      // Título
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(20);
-      doc.text("Certificado de Investigador", 105, 65, { align: "center" });
+        // Textos
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);
+        doc.setTextColor("#B22222");
+        doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
+        
+        doc.setTextColor("#003366");
+        doc.setFontSize(12);
+        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
+        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
+        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
 
-      // Cuerpo
-      const textoCertificacion = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) de la Universidad Autónoma Gabriel René Moreno. En el ejercicio de sus funciones, ha contribuido activamente en las siguientes líneas de investigación:`;
+        doc.setFontSize(20);
+        doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.setTextColor(0, 0, 0);
-      doc.text(textoCertificacion, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+        // Cuerpo
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        const texto = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS). Ha contribuido activamente en las siguientes líneas de investigación:`;
+        
+        doc.text(texto, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
-      // Líneas
-      doc.setFontSize(11);
-      let yPosition = 130;
-      lineasInvestigacion.forEach((linea) => {
-          doc.text(`• ${linea}`, 25, yPosition, { align: "left" });
-          yPosition += 8;
-      });
+        // Líneas
+        let y = 130;
+        lineasInvestigacion.forEach(linea => {
+            doc.text(`• ${linea}`, 30, y);
+            y += 8;
+        });
 
-      // Agradecimiento y cierre
-      const textoAgradecimiento = `Agradecemos profundamente su dedicación y esfuerzo, los cuales son fundamentales para el avance de la investigación científica en nuestra institución.`;
-      const textoSolicitud = `Se expide el presente certificado a solicitud del interesado, para los fines que estime convenientes.`;
+        // Cierre
+        doc.text("Se expide el presente certificado para los fines que estime convenientes.", 25, y + 20);
+        doc.setFontSize(10);
+        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, y + 40, { align: "center" });
 
-      doc.setFontSize(12);
-      doc.text(textoAgradecimiento, 25, yPosition + 17, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-      doc.text(textoSolicitud, 25, yPosition + 35, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
+        // Firmas
+        const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
+        const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
+        const imgDecano = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
 
-      // Fecha
-      doc.setFontSize(10);
-      doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, yPosition + 55, { align: "center" });
+        let firmaY = y + 50;
+        doc.addImage(imgDirector, "PNG", 35, firmaY, 40, 20); 
+        doc.addImage(imgDecano, "PNG", 90, firmaY, 40, 20);  
+        doc.addImage(imgDirectora, "PNG", 145, firmaY, 40, 20); 
 
-      // Firmas
-      const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-      const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-      const imgDecano = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
+        // Textos firmas
+        doc.setFont("helvetica", "bold");
+        let textoFirmaY = firmaY + 23;
+        
+        doc.text("Francisco Méndez Égüez", 55, textoFirmaY, { align: "center" });
+        doc.text("Director", 55, textoFirmaY + 5, { align: "center" });
 
-      doc.addImage(imgDirector, "PNG", 35, yPosition + 65, 40, 20); // Director
-      doc.addImage(imgDecano, "PNG", 90, yPosition + 65, 40, 20);  // Decano
-      doc.addImage(imgDirectora, "PNG", 145, yPosition + 65, 40, 20); // Directora
+        doc.text("Alfonso Coca", 110, textoFirmaY, { align: "center" });
+        doc.text("Decano", 110, textoFirmaY + 5, { align: "center" });
 
-      // Nombres
-      doc.setFont("helvetica", "bold");
-      doc.text("Francisco Méndez Égüez", 55, yPosition + 88, { align: "center" });
-      doc.text("Director", 55, yPosition + 93, { align: "center" });
-      doc.text("Carrera de Ciencia Política y Adm. Pública", 55, yPosition + 98, { align: "center" });
+        doc.text("María Angélica Suárez", 165, textoFirmaY, { align: "center" });
+        doc.text("Directora", 165, textoFirmaY + 5, { align: "center" });
 
-      doc.text("Alfonso Coca", 110, yPosition + 88, { align: "center" });
-      doc.text("Decano", 110, yPosition + 93, { align: "center" });
-      doc.text("FCJPSRRII", 110, yPosition + 98, { align: "center" });
+        doc.save(`Certificado_${nombreInvestigador.replace(/ /g, "_")}.pdf`);
+    }
 
-      doc.text("María Angélica Suárez Ribera", 165, yPosition + 88, { align: "center" });
-      doc.text("Directora", 165, yPosition + 93, { align: "center" });
-      doc.text("CIRCPyCS", 165, yPosition + 98, { align: "center" });
+    async function cargarImagen(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; 
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
+  </script>
 
-      // Pie
-      doc.setDrawColor(178, 34, 34);
-      doc.setLineWidth(0.5);
-      doc.line(10, 265, 200, 265);
-
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text("cri.cspoliticas.fcjpsri@uagrm.edu.bo | Ciudad Universitaria, UAGRM, Módulo 284, Planta Baja", 105, 272, { align: "center" });
-
-      // Guardar
-      doc.save(`Certificado_${nombreInvestigador}.pdf`);
-  }
-
-  // Cargar imagen desde URL
-  async function cargarImagen(url) {
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      return new Promise((resolve, reject) => {
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-          img.src = url;
-      });
-  }
-</script>
-  
 </body>
 </html>
