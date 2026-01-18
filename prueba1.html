@@ -1,5 +1,3 @@
----
----
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -20,6 +18,7 @@
           colors: {
             'academic-slate': '#1e293b', 
             'academic-blue': '#0f172a',
+            'brand-red': '#D20B18',
           }
         }
       }
@@ -31,30 +30,25 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    /* Estilos globales para mantener la coherencia */
-    body { background-color: #f8fafc; } /* Fondo Slate-50 muy suave */
-    
-    /* Estilo de las tarjetas de investigadores (para que coincidan con el nuevo tema) */
+    body { background-color: #f8fafc; }
+    /* Ajuste para que tus artículos existentes se vean bien con el nuevo tema */
     article { 
         background: white; 
-        border: 1px solid #e2e8f0; 
         transition: all 0.2s ease-in-out;
     }
     article:hover { 
         transform: translateY(-2px); 
-        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); 
-        border-color: #cbd5e1;
     }
   </style>
 </head>
 <body class="text-slate-800 font-sans flex flex-col min-h-screen">
 
-  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-brand-red"></div>
 
-  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95 transition-all shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
       <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-10 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
           <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
           <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS Research</h1>
@@ -68,7 +62,7 @@
         <a href="https://cir.uagrm.edu.bo/revista" class="hover:text-black transition">Publicaciones</a>
       </nav>
       
-      <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
+      <button id="btn-open" class="md:hidden text-slate-600 text-xl"><i class="fa-solid fa-bars"></i></button>
     </div>
 
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
@@ -101,7 +95,54 @@
       </div>
   </main>
 
-  {% include footer.html %}
+  <footer class="bg-slate-900 text-slate-300 py-12 border-t-4 border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        
+        <div>
+          <div class="flex items-center gap-3 mb-4 opacity-90 hover:opacity-100 transition">
+            <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-10 brightness-0 invert"/>
+            <span class="font-serif font-bold text-xl text-white">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales. UAGRM.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-widest mb-4">Contacto</h4>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+                <i class="fa-solid fa-location-dot mt-1 text-slate-500"></i>
+                <span>Santa Cruz de la Sierra, Bolivia.<br>Ciudad Universitaria, Módulo 284.</span>
+            </li>
+            <li class="flex items-center gap-3">
+                <i class="fa-solid fa-envelope text-slate-500"></i>
+                <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="hover:text-white transition">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+            <h4 class="text-white font-bold text-xs uppercase tracking-widest mb-4">Legal</h4>
+            <div class="flex flex-col gap-2 text-sm">
+                <a href="privacy.html" class="hover:text-white transition">Política de Privacidad</a>
+                <a href="terms.html" class="hover:text-white transition">Términos de Uso</a>
+                <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" class="hover:text-white transition mt-2 flex items-center gap-2"><i class="fa-solid fa-book-open"></i> Revista OJS</a>
+            </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-600">
+        <p>&copy; <script>document.write(new Date().getFullYear())</script> CIRCPyCS - UAGRM. Derechos Reservados.</p>
+        <div class="flex gap-4 mt-2 md:mt-0">
+            <a href="#" class="hover:text-slate-400"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="hover:text-slate-400"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="hover:text-slate-400"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
     // Menú Móvil
@@ -113,16 +154,16 @@
         });
     }
 
-    // Tu Script de Generación de PDF (Intacto)
+    // Tu Script de Generación de PDF (INTACTO)
     async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ format: "letter" });
 
-        // Fondo blanco
+        // Fondo
         doc.setFillColor(255, 255, 255);
         doc.rect(0, 0, 216, 279, 'F');
 
-        // Lógica de imágenes (Asegúrate que las URLs funcionan)
+        // Imágenes
         const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
         doc.setGState(new doc.GState({ opacity: 0.1 }));
         doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
@@ -146,7 +187,7 @@
         doc.setFontSize(20);
         doc.text("Certificado de Investigador", 105, 65, { align: "center" });
 
-        // Cuerpo del texto
+        // Cuerpo
         doc.setFont("helvetica", "normal");
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
@@ -154,19 +195,41 @@
         
         doc.text(texto, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
 
-        // Líneas de investigación
+        // Líneas
         let y = 130;
         lineasInvestigacion.forEach(linea => {
             doc.text(`• ${linea}`, 30, y);
             y += 8;
         });
 
-        // Firmas y cierre
+        // Cierre
         doc.text("Se expide el presente certificado para los fines que estime convenientes.", 25, y + 20);
         doc.setFontSize(10);
         doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, y + 40, { align: "center" });
 
-        // Guardar
+        // Firmas
+        const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
+        const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
+        const imgDecano = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
+
+        let firmaY = y + 50;
+        doc.addImage(imgDirector, "PNG", 35, firmaY, 40, 20); 
+        doc.addImage(imgDecano, "PNG", 90, firmaY, 40, 20);  
+        doc.addImage(imgDirectora, "PNG", 145, firmaY, 40, 20); 
+
+        // Textos firmas
+        doc.setFont("helvetica", "bold");
+        let textoFirmaY = firmaY + 23;
+        
+        doc.text("Francisco Méndez Égüez", 55, textoFirmaY, { align: "center" });
+        doc.text("Director", 55, textoFirmaY + 5, { align: "center" });
+
+        doc.text("Alfonso Coca", 110, textoFirmaY, { align: "center" });
+        doc.text("Decano", 110, textoFirmaY + 5, { align: "center" });
+
+        doc.text("María Angélica Suárez", 165, textoFirmaY, { align: "center" });
+        doc.text("Directora", 165, textoFirmaY + 5, { align: "center" });
+
         doc.save(`Certificado_${nombreInvestigador.replace(/ /g, "_")}.pdf`);
     }
 
