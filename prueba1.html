@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Investigadores — CIRCPyCS</title>
-  <meta name="description" content="Directorio de investigadores asociados y fellows del CIRCPyCS." />
+  <title>Organización — CIRCPyCS UAGRM</title>
+  <meta name="description" content="Estructura organizacional y autoridades del Centro de Investigación Regional." />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -18,50 +18,81 @@
             serif: ["Merriweather", "serif"] 
           },
           colors: {
-            'academic-slate': '#1e293b', 
-            'academic-blue': '#0f172a',
-            'brand-red': '#D20B18',
+            'org-teal': '#1e5f74',   /* Investigación (Verde azulado oscuro) */
+            'org-orange': '#d97706', /* Análisis (Naranja) */
+            'org-green': '#15803d',  /* RRPP (Verde) */
+            'org-purple': '#7e22ce', /* Comunicación (Morado) */
+            'org-slate': '#334155',  /* Dirección */
           }
         }
       }
     }
   </script>
   
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    body { background-color: #f8fafc; }
-    /* Ajuste para que tus artículos existentes se vean bien con el nuevo tema */
-    article { 
-        background: white; 
-        transition: all 0.2s ease-in-out;
-    }
-    article:hover { 
-        transform: translateY(-2px); 
+    /* Estilos específicos para las líneas del organigrama */
+    
+    /* Línea horizontal superior (PC) */
+    @media (min-width: 768px) {
+        .connector-line-top {
+            position: absolute;
+            top: 50%;
+            left: 10%; /* Ajuste para que no salga de los comités */
+            right: 10%;
+            height: 2px;
+            background-color: #cbd5e1; /* Slate-300 */
+            z-index: 0;
+        }
+        
+        /* Conector vertical central */
+        .connector-vertical {
+            width: 2px;
+            height: 30px;
+            background-color: #94a3b8;
+            margin: 0 auto;
+        }
+
+        /* Línea horizontal que une las coordinaciones */
+        .connector-horizontal-bar {
+            width: 86%; /* Ancho ajustado para conectar las columnas */
+            height: 2px;
+            background-color: #94a3b8;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Pequeñas líneas bajando a cada coordinación */
+        .connector-stem {
+            height: 15px;
+            width: 2px;
+            background-color: #94a3b8;
+            margin: 0 auto;
+        }
     }
   </style>
 </head>
-<body class="text-slate-800 font-sans flex flex-col min-h-screen">
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-brand-red"></div>
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95 transition-all shadow-sm">
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-      <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-10 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
           <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
-          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS Research</h1>
+          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS</h1>
         </div>
       </a>
       
       <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-        <a href="https://cir.uagrm.edu.bo/" class="hover:text-black transition">Inicio</a>
-        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Lineas de Investigación</a>
-        <a href="https://cir.uagrm.edu.bo/labap/index.html" class="hover:text-black transition">Grupos de Investigación</a>
-        <a href="https://cir.uagrm.edu.bo/revista" class="hover:text-black transition">Proyectos</a>
+        <a href="index.html" class="hover:text-black transition">Inicio</a>
+        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Organización</a>
+        <a href="researchers.html" class="hover:text-black transition">Investigadores</a>
+        <a href="labap/index.html" class="hover:text-black transition">Laboratorios</a>
       </nav>
       
       <button id="btn-open" class="md:hidden text-slate-600 text-xl"><i class="fa-solid fa-bars"></i></button>
@@ -69,1797 +100,229 @@
 
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
         <div class="grid gap-3 text-sm">
-            <a href="https://cir.uagrm.edu.bo/" class="block py-2">Inicio</a>
-            <a href="https://cir.uagrm.edu.bo/lineas" class="text-black font-bold border-b-2 border-black pb-1">Lineas de Investigación</a>
-            <a href="https://cir.uagrm.edu.bo/rgroups.html" class="block py-2">Grupos de Investigación</a>
-            <a href="https://cir.uagrm.edu.bo/rprojects" class="block py-2 font-bold text-slate-900">Proyectos</a>
+            <a href="index.html" class="block py-2">Inicio</a>
+            <a href="#" class="block py-2 font-bold text-slate-900">Organización</a>
+            <a href="researchers.html" class="block py-2">Investigadores</a>
         </div>
     </div>
   </header>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-b border-slate-200 bg-white">
-    <div class="max-w-4xl">
-        <span class="text-slate-500 font-bold tracking-wider text-xs uppercase mb-3 block">Faculty & Fellows</span>
-        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
-            Nuestros Investigadores.
+    <div class="text-center max-w-3xl mx-auto">
+        <span class="text-slate-500 font-bold tracking-wider text-xs uppercase mb-3 block">Estructura Institucional</span>
+        <h2 class="text-3xl md:text-4xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Autoridades y Organigrama
         </h2>
-        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
-            Directorio académico del Centro de Investigación Regional. Perfiles multidisciplinarios dedicados al análisis político, social y económico.
+        <p class="text-sm text-slate-600 font-light leading-relaxed">
+            Conoce el equipo de liderazgo y la estructura funcional que impulsa la investigación en el CIRCPyCS.
         </p>
     </div>
   </div>
 
-  <main class="bg-slate-50 min-h-screen py-16">
+  <section id="autoridades" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-         <!-- 1. Loreto Correa Vera -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/ZkcUerp.png" alt="Loreto Correa Vera" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Loreto Correa Vera</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigadora Senior</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> loretocorreav@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Postdoctorado</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia: </strong>  Más de 10 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Desarrollo Productivo, Agroindustria y Economía </span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Integración, gobernanza y modelo de explotación en el triángulo del litio (2023-en curso)</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>América Latina como “zona de paz” en el mundo global (2023)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="https://orcid.org/0000-0003-2051-1548" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="https://www.linkedin.com/in/maria-angelica-suarez-72b54517a/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Loreto Correa Vera', 'Investigadora Senior', ['Sistema Político e Instituciones Públicas', 'Desarrollo Productivo, Agroindustria y Economia'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 2. María Angélica Suárez -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/PYZcAHG.jpeg" alt="María Angélica Suarez" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">María Angélica Suárez</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigadora Principal</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> angelicasuarez@uagrm.edu.bo</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia: </strong> Más de 5 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Cambio Climático y Recursos Naturales</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Santa Cruz No Somos Todos (2019)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="https://www.linkedin.com/in/maria-angelica-suarez-72b54517a/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Maria Angélica Suarez Ribera', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas', 'Cambio Climático y Recursos Naturales'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 3. Nelson Alberto Jordan B. -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/8y6AfLc.jpeg" alt="Nelson Alberto Jordan Bazán" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Nelson Alberto Jordan B.</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigador Senior (Emérito)</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> nelsonjordanb@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica: </strong> Maestría en curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Cambio Climático y Recursos Naturales</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Sociedad, Salud y Educación </span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> Comentarios a la obra de Enrique de Gandía “Santa Cruz de la Sierra, una nueva republica en Sud America (2022)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Nelson Alberto Jordán Bazán', 'Investigador Senior', ['Cambio Climático y Recursos Naturales', 'Sociedad, Salud y Educación'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 4. Carlos Jr Escobar V. -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/ER0tp5a.jpeg" alt="Carlos JR Escobar V." class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Carlos Jr Escobar V. </h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> carlosjr19.ev@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en Curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia: </strong> 2 a 3 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Ciencias Sociales Computacionales</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Análisis de la dinámica de las redes legislativas en el Concejo Municipal de Santa Cruz de la Sierra" (2023)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Carlos Jr Escobar Vargas', 'Investigador Asociado', ['Ciencias Sociales Computacionales'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 5. Tito Daza Cazon -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/7Ha4and.jpeg" alt="Tito Daza Cazon" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Tito Daza Cazon</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong>  titodaza2209@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 1 a 3 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Sistema Político e Instituciones Públicas</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Reformas Constitucionales en Bolivia y su impacto en el Régimen de Tierras" en curso</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Tito Daza Cazón', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 6. Yessenia Pedraza Surano -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/4A17cb9.jpeg" alt="Yessenia Pedraza Surano" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Yessenia Pedraza Surano</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> yesseniapedraza@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en Curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 1 a 3 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Ciencias Sociales Computacionales</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Diseño un algoritmo de impacto territorial de politicas públicas educativas" (2021)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Gladys Yessenia Pedraza Surano', 'Investigadora Asociada', ['Ciencias Sociales Computacionales'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- ============== RESTO DE PERFILES ============== -->
-
-        <!-- 7. Mónica Ximena Guzmán -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/iXCNpu0.png" alt="Mónica Ximena Guzmán Rojo" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Mónica Ximena Guzmán</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigadora Principal</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> mguzman@ucb.edu.bo</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 8 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Cambio Climático y Recursos Naturales</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Impacts of Wildfires on Groundwater Recharge: A Comprehensive Analysis of Processes, Methodological Challenges, and Research Opportunities" (2024)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="https://orcid.org/0000-0002-0264-7874" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="https://www.linkedin.com/in/mónica-x-guzmán-rojo-1ba03773" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Mónica Ximena Guzmán Rojo', 'Investigadora Principal', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 8. Mario Alberto Renán Díaz -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/MuLYWCx.png" alt="Mario Alberto Renán Díaz Leiva" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Mario Alberto Renán Díaz</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> ing.marioadiaz@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica: </strong> Maestría en curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia: </strong> 1 a 3 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Cambio Climático y Recursos Naturales</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> En curso</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="https://www.linkedin.com/in/marioadiaz" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Mario Alberto Renán Díaz Leiva', 'Investigador Asociado', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 9. Mario Galindo Soza (senior emérito) -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/UXg83Nj.jpeg" alt="Mario Galindo Soza" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Mario Galindo Soza</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigador Senior (Emérito)</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> megsoza@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica: </strong> Doctorado Completo</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Cambio Climático y Recursos Naturales</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Sistema Político e Instituciones Pública </span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> Tristán Roca (1826-1868), La Estrella del Oriente y El Federalismo en Bolivia Durante el Siglo XIX. (2024)</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> Análisis comparado de las transiciones gubernamentales recientes en America Latina. (2023)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Mario Galindo Soza', 'Investigador Senior', ['Cambio Climático y Recursos Naturales', 'Sistema Político e Instituciones Públicas'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 10. Ricardo Alonzo Fernández -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/6FtfJAx.jpeg" alt="Ricardo Alonzo Fernández Salguero" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Ricardo Alonzo Fernández</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> rialofesalp@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica: </strong> Doctorado en curso</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia: </strong> Más de 5 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Ciencias Sociales Computacionales</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Desarrollo Productivo, Agroindustria y Economía</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Fundamentos de Machine Learning" (2023)</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Informe: Estigma y discriminación a personas que viven con VIH/SIDA Bolivia" (2022)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="https://orcid.org/0000-0002-4189-961X" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="https://www.linkedin.com/in/ricardoalonzofernandezsalguero/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Ricardo Alonzo Fernández Salguero', 'Investigador Principal', ['Ciencias Sociales Computacionales', 'Desarrollo Productivo, Agroindustria y Economía'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 11. Reymi Ferreira -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/wQvHcAm.jpeg" alt="Reymi Ferreira" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Reymi Ferreira</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> reymiferreira@uagrm.edu.bo</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica: </strong> Doctorado completado</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia: </strong> Más de 10 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Sistema Político e Instituciones Públicas</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> Inobservancia del mandato de determinación del tipo conducta antieconómica en el Código Penal boliviano (2023)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Reymi Ferreira Justiniano', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- 12. Fabiola Rodriguez H. -->
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-          <div class="flex flex-col items-center">
-            <img src="https://i.imgur.com/rXXhTSh.jpeg" alt="Fabiola Rodriguez" class="w-24 h-24 rounded-full object-cover mb-4"/>
-            <h2 class="text-lg font-semibold">Fabiola Rodriguez H.</h2>
-            <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-          </div>
-          <div class="mt-4 space-y-1 text-sm text-slate-700">
-            <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> fabiolahatfield@gmail.com</p>
-            <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría completada</p>
-            <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span> Cambio Climático y Recursos Naturales </span></li>
-            </ul>
-          </div>
-          <div class="mt-4 text-left">
-            <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-            <ul class="mt-2 space-y-1 text-sm">
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Presevación y revitalización del Centro Histórico de Santa Cruz de la Sierra" (2022)</span></li>
-              <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span> "Intervención urbana sostenible para el acercamiento de la ciudad de Santa Cruz de la Sierra al Río Piraí" (2021)</span></li>
-            </ul>
-          </div>
-          <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-            <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-          </div>
-          <div class="mt-5">
-            <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Fabiola Rodriguez Hatfield', 'Investigadora Asociada', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
-          </div>
-        </article>
-
-        <!-- Inserta estos 12 <article> dentro de tu grid existente (#grid o similar) -->
-
-<!-- 13. Monica Vicente Calani -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/JUkqNio.jpeg" alt="Monica Vicente Calani" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Monica Vicente Calani</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigadora Principal</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> monicavicente@uagrm.edu.bo</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría completada</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Cambio Climático y Recursos Naturales</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Prescripción Silvicultural para un Plan de Manejo Forestal en un bosque subtropical en la Provincia Guarayos, Santa Cruz, Bolivia (2016)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Dendrochronological potential of Tarara colorada (Platymiscium ulei Harms) in tropical dry forests of Bolivia" (2023)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="https://orcid.org/0000-0002-1610-984X" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="https://www.linkedin.com/in/monica-vicente-calani-5b214b33a/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Monica Vicente Calani', 'Investigadora Principal', ['Cambio Climático y Recursos Naturales'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 14. James M. Campos -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/QNuYClh.jpeg" alt="James M. Campos" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">James M. Campos</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> jimcampos@hotmail.es</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Oficial del Ejercito del Arma de Caballería</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Cambio Climático y Recursos Naturales</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"La Guerra de los Sitios de Zaragoza - España 1808 -0809" (2023)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Tomas de las tierras del Oriente y la quema de los Bosques" (2024)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Los Tercios Españoles" (en curso)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('James M. Campos Cuellar ', 'Investigador Asociado', ['Cambio Climático y Recursos Naturales','Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 15. Marco Torrez Valverde -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/GWijiNJ.jpeg" alt="Marco Torrez Valverde" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Marco Torrez Valverde</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> torrezmarcoa@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado Completado</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="https://orcid.org/0000-0002-8683-4748" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Marco Torrez Valverde', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 16. Javier Vizcarra Valdivia -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/sx67mvX.jpeg" alt="Javier Vizcarra Valdivia" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Javier Vizcarra Valdivia</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> javoviscarra@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Javier Vizcarra Valdivia', 'Investigador Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 17. Elizabeth Galarza de Eid -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/9dZXWQG.jpeg" alt="Elizabeth Galarza de Eid" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Elizabeth Galarza de Eid</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigadora Principal</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> galarzaely.105@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Salud Educación y Sociedad</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>La educación a partir de la Ley Avelino Siñani-Elizardo Pérez: procesos de apropiación y aplicación de sus principios por parte del profesorado cruceño (2015)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="https://orcid.org/0009-0001-6126-7601" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('María Elizabeth Galarza Claudio', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas','Salud, Educación y Sociedad'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 18. Carmen Sandoval Landivar -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/448ZaAc.jpeg" alt="Carmen Sandoval Landivar" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Carmen Sandoval Landivar</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigadora Principal</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> carmensilvanasandoval@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Reflexiones diplomáticas y jurídicas" (2016)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="https://www.linkedin.com/in/carmen-sandoval" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Carmen Sandóval Landivar', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 19. Rudy Vladimir Guarachi -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/AeNQMe6.jpeg" alt="Rudy Vladimir Guarachi" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Rudy Vladimir Guarachi</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> rudy.nebo@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"La relación de MORENA y MAS con los movimientos feministas e indígenas en México y Bolivia (2018-2023)"</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Deliverys y la ausencia de derechos laborales" (2024)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="https://orcid.org/0000-0003-2781-156X" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="https://www.linkedin.com/in/rudy-guarachi-cota/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Rudy Vladimir Guarachi Cota', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 20. Dunia Sandoval Arenas -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/ZfWomJM.jpeg" alt="Dunia Sandoval Arenas" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Dunia Sandoval Arenas</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigadora Senior</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> cdunia@hotmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad Salud y Educación</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Percepciones de los comerciantes mayoristas y minoristas de La Paz, El Alto y Santa Cruz, sobre la coyuntura económica. OXFAM." (2024)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Percepciones de la ciudadanía, respecto a las opciones de relacionamiento del departamento de Santa Cruz con el Estado." (2023)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Dunia Sandoval Arenas', 'Investigadora Senior', ['Sistema Político e Instituciones Públicas', 'Sociedad, Salud y Educación'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 21. Luis Andia Fernández -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/QCInUSs.jpeg" alt="Luis Andia Fernández" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Luis Andia Fernández</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigador Senior (Emérito)</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> andialuis981@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>El régimen Autonómico en Bolivia (2024)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Crisis, democracia y desafíos de la Izquierda en Bolivia - FES (2021)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Historia Política, económica y social Latinoamericana, Segunda Parte. (en curso)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('José Luis Andia Fernández', 'Investigador Senior', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 22. María Jesús Villanueva Achá -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/O5WR38b.png" alt="María Jesús Villanueva Achá" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">María Jesús Villanueva Achá</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-300">Investigadora Asistente</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> mariavillanueva@uagrm.edu.bo</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Salud Educación y Sociedad</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Violencias en las interacciones sociales de los universitarios de Santa Cruz. (2023)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="https://www.linkedin.com/in/jenny-monta%C3%B1o-85077414b/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('María Jesús Villanueva Achá', 'Investigadora Asistente', ['Salud Educación y Sociedad'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 23. Natalia Banzer -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/vyLbVDD.png" alt="Banzer" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Natalia Banzer</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora asociada</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> banzernatalia@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 1 a 3 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Análisis del Sistema Electoral Boliviano</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Banzer Natalia', 'Investigadora Asociada', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-
-<!-- 24. Rosa Castro Cavero -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/mv51Sbj.jpeg" alt="Rosa Castro Cavero" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Rosa Castro Cavero</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigadora Senior</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> rosacastro74@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad Salud y Educación</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"El rendimiento académico y el cristal de la enseñanza para docentes empleando realidad virtual en neurotecnoeducación - RIDE" (2023)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Proyecto de Indicadores de Percepción Pública, Cultura Científica y Participación Ciudadana en el entorno universitario de Santa Cruz de la Sierra" (2019)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="https://orcid.org/0000-0003-2781-156X" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-    <a href="http://www.linkedin.com/in/rosacastrocavero1974" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Rosa Castro Cavero', 'Investigadora Senior', ['Sociedad, Salud y Educación'])">Certificado</button>
-  </div>
-</article>
-
-  <!-- 25. Edgar Rau Flores -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/vvvd1GA.jpeg" alt="Edgar Rau Flores" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Edgar Rau Flores</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Investigador Senior</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> edgarrau@uagrm.edu.bo</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Desarrollo Productivo, Agroindustria y Economía</span></li>
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>“El Objeto de Estudio Como Crisol de la Ciencia” (2021)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Edgar Rau Flores', 'Investigador Senior', ['Desarrollo Productivo, Agroindustria y Economía','Sistema Político e Instituciones Públicas'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 26. Daniel Hurtado J. -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/pcBiXh2.png" alt="Daniel Hurtado Justiniano" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Daniel Hurtado J.</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> danielhurtadoj@uagrm.edu.bo</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Ciencias Sociales Computacionales</span></li>
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Comportamiento y cognición política</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>“Gerrymandering y malapportionment como factores distorsionadores del Sistema Electoral Boliviano” (en curso)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Daniel Hurtado Justiniano', 'Investigador Asociado', ['Ciencias Sociales Computacionales', 'Comportamiento y Cognición Política'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 27. Jenny Montaño Mariscal -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/9XaJf5l.jpeg" alt="Jenny Montaño Mariscal" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Jenny Montaño Mariscal</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-300">Investigadora Asistente</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> montanojenny577@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Salud, Educación y Sociedad</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="https://www.linkedin.com/in/jenny-monta%C3%B1o-85077414b/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Jenny Ingrid Montaño Mariscal', 'Investigadora Asistente', ['Salud Educación y Sociedad'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 28. Vilma Paredes Villalba -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/UIsvDSC.jpeg" alt="Vilma Paredes" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Vilma Paredes Villalba</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigadora Principal</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> zzaffiro56@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>“La Sociedad de Economía Mixta: Régimen jurídico en el Derecho Boliviano” (2017)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700"
-        onclick="generarCertificado('Vilma Paredes Villalba', 'Investigadora Principal', ['Sistema Político e Instituciones Públicas'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 29. Francisco Mendez Eguez -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/7mlNXEy.png" alt="Francisco Mendez Eguez" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Francisco Mendez Eguez</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> franciscomendez@uagrm.edu.bo</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>“La formación del poder político y los sistemas políticos” (2022)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Francisco Mendez Eguez', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 30. Paola Parra Rojas -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/9EzDO9D.jpeg" alt="Paola Parra" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Paola Parra Rojas</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> paolamercedesparrarojas@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Cambio Climático y Recursos Naturales</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Incidencia de los plaguicidas en la salud (2023)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Paola Mercedes Parra Rojas ', 'Investigadora Asociada', ['Cambio Climático y Recursos Naturales'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 31. Javier Hernández Serrano -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/vPm0BWE.jpeg" alt="Javier Hernández" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Javier Hernández Serrano</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> hernandezjavie@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Desarrollo Productivo, Agroindustria y Economía</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Impacto de las Instituciones en los costos sociales de transacción (tesis doctoral en curso)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Javier Hernández Serrano', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas','Desarrollo Productivo, Agroindustria y Economía'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 32. Saba Lenk Añez Parra -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/DhDumIG.png" alt="Saba Lenk Añez Parra" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Saba Lenk Añez Parra</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-300">Investigadora Asistente</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> sanez@santacruz.gob.bo</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 1 a 3 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Desarrollo Productivo, Agroindustria y Economía</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Saba Lenk Añez Parra', 'Investigadora Asistente', ['Desarrollo Productivo, Agroindustria y Economía'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 33. Fátima Céspedes Justiniano -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/08aaRXP.jpeg" alt="Fátima Roxana Céspedes Justiniano" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Fátima Céspedes Justiniano</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-300">Investigadora Asistente</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> rcep.jus@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad, Salud y Educación</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Fátima Roxana Céspedes Justiniano', 'Investigadora Asistente', ['Sociedad Salud y Educación'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 34. Iris Vaca Martinez -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/QJYKnnA.png" alt="Iris Vaca Martinez" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Iris Vaca Martinez</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> irisdra.v@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Iris Vaca Martínez', 'Investigadora Asociada', ['Sistema Político e Instituciones Públicas'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 35. Marcial Trigo Valverde -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/MjeCkKC.png" alt="Marcial Trigo Valverde" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Marcial Trigo Valverde</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> marcialtrigo24@gmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado completado</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Salud, Sociedad y Educación</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Diagnóstico de la lectoescritura y el pensamiento lógico matemático... (2024)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Marcial Trigo Valverde', 'Investigador Asociado', ['Salud, Sociedad y Educación'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 36. Jorge Nuñez del Prado -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/qmkexzu.jpeg" alt="Jorge Nuñez del Prado" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Jorge Nuñez del Prado</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> jornupra@hotmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado completo</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 10 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad, Educación y Salud</span></li>
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>La importancia de la axiología en la Educación Superior (2024)</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="https://www.linkedin.com/in/maria-angelica-suarez-72b54517a/" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700"
-        onclick="generarCertificado('Jorge Nuñez del Prado', 'Investigador Principal', ['Sistema Político e Instituciones Públicas', 'Sociedad Salud y Educación'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-  <!-- 37. Amparo Torrico Velasquez -->
-  <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-    <div class="flex flex-col items-center">
-      <img src="https://i.imgur.com/u33SxYP.jpeg" alt="Amparo Susy Torrico Velasquez" class="w-24 h-24 rounded-full object-cover mb-4" />
-      <h2 class="text-lg font-semibold">Amparo Torrico Velasquez</h2>
-      <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-300">Investigador Asistente</span>
-    </div>
-
-    <div class="mt-4 space-y-1 text-sm text-slate-700">
-      <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> Suebombom@hotmail.com</p>
-      <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-      <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      </ul>
-    </div>
-
-    <div class="mt-4 text-left">
-      <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-      </ul>
-      <div class="mt-3 flex flex-wrap gap-3 text-sm">
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-        <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
-      </div>
-      <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-        onclick="generarCertificado('Amparo Susy Torrico Velasquez', 'Investigador Asistente', ['Sistema Político e Instituciones Públicas'])">
-        Certificado
-      </button>
-    </div>
-  </article>
-
-    <!-- 38. Roy Céspedes -->
-    <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-      <div class="flex flex-col items-center">
-        <img src="https://i.imgur.com/GHEtQho.png" alt="Roy Cespedes" class="w-24 h-24 rounded-full object-cover mb-4" />
-        <h2 class="text-lg font-semibold">Roy Céspedes</h2>
-        <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-      </div>
-
-      <div class="mt-4 space-y-1 text-sm text-slate-700">
-        <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> roycespedes@uagrm.edu.bo </p>
-        <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado en curso</p>
-        <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> más de 5 años</p>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas </span></li>
-        </ul>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span>
-            <span>Analisis de la credibilidad en el sistema de partidos politicos en Bolivia y Latinoamérica (tesis doctoral en curso) (2024)</span>
-          </li>
-        </ul>
-        <div class="mt-3 flex flex-wrap gap-3 text-sm">
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
+      <h3 class="text-xl font-serif font-bold text-slate-900 text-center mb-10">Autoridades Académicas</h3>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="bg-slate-50 border border-slate-100 p-4 text-center rounded-lg hover:shadow-md transition">
+          <img class="mx-auto w-20 h-20 rounded-full object-cover ring-2 ring-slate-200 mb-3" src="https://i.imgur.com/nKvJms9.jpeg" alt="Rector">
+          <h5 class="font-bold text-sm text-slate-900">Dr. Reinerio Vargas</h5>
+          <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Rector UAGRM</p>
         </div>
-        <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-          onclick="generarCertificado('Roy Céspedes Justiniano', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">
-          Certificado
-        </button>
-      </div>
-    </article>
-
-    <!-- 39. Damián Vaca Céspedes -->
-    <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-      <div class="flex flex-col items-center">
-        <img src="https://i.imgur.com/0fjLDma.jpeg" alt="Damián Vaca Céspedes" class="w-24 h-24 rounded-full object-cover mb-4" />
-        <h2 class="text-lg font-semibold">Damián Vaca Céspedes</h2>
-        <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-300">Investigador Asistente</span>
-      </div>
-
-      <div class="mt-4 space-y-1 text-sm text-slate-700">
-        <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> biodavaces@gmail.com</p>
-        <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-        <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 3 a 5 años</p>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Cambio Climático y Recursos Naturales </span></li>
-        </ul>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Riesgos Hidrogeológicos para la Llanura Cruceña(en curso)</span></li>
-        </ul>
-        <div class="mt-3 flex flex-wrap gap-3 text-sm">
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
+        <div class="bg-slate-50 border border-slate-100 p-4 text-center rounded-lg hover:shadow-md transition">
+          <img class="mx-auto w-20 h-20 rounded-full object-cover ring-2 ring-slate-200 mb-3" src="https://i.imgur.com/xmNjCgD.png" alt="Vicerrectora">
+          <h5 class="font-bold text-sm text-slate-900">Ing. Juana Borja</h5>
+          <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Vicerrectora</p>
         </div>
-        <button class="mt-4 px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700"
-          onclick="generarCertificado('Damián Vaca Céspedes', 'Investigador Asistente', ['Cambio Climático y Recursos Naturales'])">
-          Certificado
-        </button>
-      </div>
-    </article>
-
-            <!-- 40. Cesar Rosso -->
-    <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-      <div class="flex flex-col items-center">
-        <img src="https://i.imgur.com/ndwpiaI.jpeg" alt="Cesar Rosso" class="w-24 h-24 rounded-full object-cover mb-4" />
-        <h2 class="text-lg font-semibold">Cesar Rosso</h2>
-        <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-      </div>
-
-      <div class="mt-4 space-y-1 text-sm text-slate-700">
-        <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> cesarrosso@hotmal.com</p>
-        <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
-        <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Salud Educación y Sociedad</span></li>
-        </ul>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span>
-            <span>Hacia una nueva ética de relación con los pueblos originarios en la Bolivia plurinacional (2021)</span>
-          </li>
-        </ul>
-        <div class="mt-3 flex flex-wrap gap-3 text-sm">
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
+        <div class="bg-slate-50 border border-slate-100 p-4 text-center rounded-lg hover:shadow-md transition">
+          <img class="mx-auto w-20 h-20 rounded-full object-cover ring-2 ring-slate-200 mb-3" src="https://i.imgur.com/2yXqGD9.png" alt="Decano">
+          <h5 class="font-bold text-sm text-slate-900">Dr. Marcos Sánchez</h5>
+          <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Decano</p>
         </div>
-        <button class="mt-4 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700"
-          onclick="generarCertificado('Cesar Rosso Neueneschwander', 'Investigador Principal', ['Sistema Político e Instituciones Públicas','Salud, Educación y Sociedad'])">
-          Certificado
-        </button>
-      </div>
-    </article>
-
-    <!-- 41. Alberto Mendieta Arredondo -->
-    <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-      <div class="flex flex-col items-center">
-        <img src="https://i.imgur.com/qP3MyO8.png" alt="Alberto Mendieta Arredondo" class="w-24 h-24 rounded-full object-cover mb-4" />
-        <h2 class="text-lg font-semibold">Alberto Mendieta Arredondo</h2>
-        <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200">Investigador Principal</span>
-      </div>
-
-      <div class="mt-4 space-y-1 text-sm text-slate-700">
-        <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> albertomendieta@hotmal.com</p>
-        <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Doctorado Completo</p>
-        <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Salud Educación y Sociedad</span></li>
-        </ul>
-      </div>
-
-      <div class="mt-4 text-left">
-        <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-        <ul class="mt-2 space-y-1 text-sm">
-          <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span>
-            <span>Proyecto educativo de investigación acción para perfeccionar e innovar la investigación científica en las universidades (2024 en proceso de desarrollo con universidades de Dinamarca y locales)</span>
-          </li>
-        </ul>
-        <div class="mt-3 flex flex-wrap gap-3 text-sm">
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span>ORCID</a>
-          <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span>LinkedIn</a>
+        <div class="bg-slate-50 border border-slate-100 p-4 text-center rounded-lg hover:shadow-md transition">
+          <img class="mx-auto w-20 h-20 rounded-full object-cover ring-2 ring-slate-200 mb-3" src="https://i.imgur.com/zAYyPpv.png" alt="Vicedecano">
+          <h5 class="font-bold text-sm text-slate-900">Dr. Adolfo Guerrero</h5>
+          <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Vicedecano</p>
         </div>
-        <button class="mt-4 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700"
-          onclick="generarCertificado('Alberto Mendieta Arredondo', 'Investigador Principal', ['Sistema Político e Instituciones Públicas','Salud, Educación y Sociedad'])">
-          Certificado
-        </button>
+        <div class="bg-slate-50 border border-slate-100 p-4 text-center rounded-lg hover:shadow-md transition">
+          <img class="mx-auto w-20 h-20 rounded-full object-cover ring-2 ring-slate-200 mb-3" src="https://i.imgur.com/vdMqwM0.jpeg" alt="Director">
+          <h5 class="font-bold text-sm text-slate-900">Msc. Odin Rodriguez</h5>
+          <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Director Carrera</p>
+        </div>
       </div>
-    </article>
+    </div>
+  </section>
 
-        <!-- 42. Yessica Torrico Yépez -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/JwPKb7g.jpeg" alt="Yessica Torrico Yépez" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Yessica Torrico Yépez</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> yessica.torrico@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Licenciatura</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Desarrollo, Innovación y Tecnología</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Yessica Torrico Yépez', 'Investigadora Asociada', ['Desarrollo, Innovación y Tecnología'])">Certificado</button>
-  </div>
-</article>
+  <section class="py-16 bg-slate-50 border-t border-slate-200 overflow-x-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-serif font-bold text-slate-900 text-center mb-12">Estructura Organizacional (CIRCPyCS)</h3>
 
-        <!-- 42. Johan Martín Claure Calbimonte  -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/jj50Xx9.png" alt="Johan Martín Claure Calbimonte" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Johan Claure Calbimonte </h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> johhan1799@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría en curso</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 1 a 3 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad, Salud y Educación</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Ciencias Sociales Computacionales</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-    <a href="https://www.linkedin.com/in/johan-m-claure-c-0a8b40371?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Yessica Torrico Yépez', 'Investigadora Asociada', ['Desarrollo, Innovación y Tecnología'])">Certificado</button>
-  </div>
-</article>
-<!-- 43. Fátima Inés Pizarro -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/VdbrjWI.jpeg" alt="Fátima Inés Pizarro" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Fátima Inés Pizarro</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> fatimapizarro@uagrm.edu.bo</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Desarrollo, Innovación y Tecnología</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad y Educación</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Fátima Inés Pizarro Rivero', 'Investigadora Asociada', ['Desarrollo, Innovación y Tecnología','Sociedad y Educación'])">Certificado</button>
-  </div>
-</article>
+      <div class="relative flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 mb-8 md:mb-4">
+        
+        <div class="hidden md:block connector-line-top"></div>
 
-<!-- 44. Germán Alpire Rivero -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/SgiCsGQ.png" alt="Germán Alpire Rivero" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Germán Alpire Rivero</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> mr.kimby@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> 1 a 3 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad, Salud y Educación</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>En curso</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Germán Alpire Rivero', 'Investigador Asociado', ['Sociedad, Salud y Educación'])">Certificado</button>
-  </div>
-</article>
+        <div class="relative z-10 bg-white border-2 border-dashed border-slate-400 text-slate-600 p-4 rounded-lg text-xs font-bold uppercase tracking-wide w-48 text-center shadow-sm">
+            Comité Científico
+        </div>
 
-<!-- 45. José Orlando Peralta -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <a href="https://cir.uagrm.edu.bo/orlandoperalta.html" target="_blank" rel="noopener">
-      <img src="https://i.imgur.com/oVPiPsD.jpeg" alt="José Orlando Peralta" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    </a>
-    <h2 class="text-lg font-semibold">José Orlando Peralta</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigador Asociado</span>
-  </div>
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> orlandoperalta@uagrm.edu.bo</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Maestría Completada</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>"Rebelión y Pandemia" (2020)</span></li>
-    </ul>
-  </div>
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="https://cir.uagrm.edu.bo/orlandoperalta" class="inline-flex items-center gap-2 text-sky-700 hover:underline" target="_blank" rel="noopener"><span class="text-[13px]">🌐</span> Perfil</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('José Orlando Peralta Beltrán', 'Investigador Asociado', ['Sistema Político e Instituciones Públicas'])">Certificado</button>
-  </div>
-</article>
-<!-- 46. Solia Centeno de Baglivo -->
-<article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition p-5 text-center">
-  <div class="flex flex-col items-center">
-    <img src="https://i.imgur.com/8iwwSTE.jpeg" alt="Solia Centeno de Baglivo" class="w-24 h-24 rounded-full object-cover mb-4"/>
-    <h2 class="text-lg font-semibold">Solia Centeno de Baglivo</h2>
-    <span class="mt-1 inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 ring-1 ring-sky-200">Investigadora Asociada</span>
-  </div>
+        <div class="relative z-10 bg-slate-700 text-white p-5 rounded-lg text-sm font-bold uppercase tracking-widest w-64 text-center shadow-lg transform md:scale-110">
+            Dirección Ejecutiva
+            <div class="text-[10px] normal-case font-normal opacity-80 mt-1">Lic. María Angélica Suárez</div>
+        </div>
 
-  <div class="mt-4 space-y-1 text-sm text-slate-700">
-    <p><span class="text-[13px] mr-1">📧</span><strong>Correo Electrónico:</strong> soliacentenobaglivo@gmail.com</p>
-    <p><span class="text-[13px] mr-1">🎓</span><strong>Nivel de Formación Académica:</strong> Licenciatura</p>
-    <p><span class="text-[13px] mr-1">⏱️</span><strong>Años de Experiencia:</strong> Más de 5 años</p>
-  </div>
-
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">💡</span>Líneas de Investigación</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sistema Político e Instituciones Públicas</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">✅</span><span>Sociedad, Salud y Educación</span></li>
-    </ul>
-  </div>
-
-  <div class="mt-4 text-left">
-    <h6 class="text-sm font-semibold text-slate-800"><span class="text-[13px] mr-1">📚</span>Publicaciones</h6>
-    <ul class="mt-2 space-y-1 text-sm">
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Sobreviviendo al Sistema Educativo (2020)</span></li>
-      <li class="flex items-start gap-2"><span class="text-[13px] mt-0.5">📝</span><span>Voces ancestrales en la educación: hacia un nuevo paradigma desde el enfoque de la sabiduría de los pueblos originarios del Oriente boliviano para la transformación educativa (2024)</span></li>
-    </ul>
-  </div>
-
-  <div class="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🆔</span> ORCID</a>
-    <a href="" class="inline-flex items-center gap-2 text-sky-700 hover:underline"><span class="text-[13px]">🔗</span> LinkedIn</a>
-  </div>
-
-  <div class="mt-5">
-    <button class="px-4 py-2 rounded-xl bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700" onclick="generarCertificado('Solia Maria Centeno de Baglivo', 'Investigadora Asociada', ['Sistema Político e Instituciones Públicas', 'Sociedad, Salud y Educación'])">Certificado</button>
-  </div>
-</article>
-
-        </div> 
+        <div class="relative z-10 bg-white border-2 border-dashed border-slate-400 text-slate-600 p-4 rounded-lg text-xs font-bold uppercase tracking-wide w-48 text-center shadow-sm">
+            Comité de Ética
+        </div>
       </div>
-  </main>
+
+      <div class="hidden md:block">
+          <div class="connector-vertical"></div> <div class="connector-horizontal-bar"></div> </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6 md:mt-0 relative">
+        
+        <div class="flex flex-col items-center">
+            <div class="hidden md:block connector-stem mb-2"></div> <div class="w-full bg-org-teal text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
+                Coord. de Investigación y Extensión
+            </div>
+            
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
+                        Lab. de Economía Política Constitucional
+                    </div>
+                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
+                        Lab. de Experimentación Política
+                    </div>
+                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
+                        Lab. de Análisis Político
+                    </div>
+                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
+                        Lab. de Innovación Pública
+                    </div>
+                </div>
+                <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center">
+                    Escuela de Gobierno
+                </div>
+                <div class="bg-white border border-org-teal text-org-teal p-2 rounded text-[10px] font-bold text-center">
+                    Sello Editorial CIRCPyCS
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div class="hidden md:block connector-stem mb-2"></div>
+            
+            <div class="w-full bg-org-orange text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
+                Coord. Análisis Político y Fondos
+            </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
+                <div class="bg-org-orange text-white p-3 rounded text-[10px] font-bold text-center">
+                    Unidad de Gestión de Fondos (Grant Writing)
+                </div>
+                <div class="bg-org-orange text-white p-3 rounded text-[10px] font-bold text-center">
+                    Incubadora de Consultores Jr. (Semillero)
+                </div>
+                <div class="bg-org-orange text-white p-3 rounded text-[10px] font-bold text-center">
+                    Unidad de Servicios y Proyectos
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div class="hidden md:block connector-stem mb-2"></div>
+            
+            <div class="w-full bg-org-green text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
+                Coord. Relaciones Públicas Int.
+            </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
+                <div class="bg-org-green text-white p-6 rounded text-[10px] font-bold text-center h-24 flex items-center justify-center">
+                    Unidad de Alianzas Globales
+                </div>
+                <div class="bg-org-green text-white p-6 rounded text-[10px] font-bold text-center h-24 flex items-center justify-center">
+                    Unidad de Think Tanks
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div class="hidden md:block connector-stem mb-2"></div>
+            
+            <div class="w-full bg-org-purple text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
+                Coord. Comunicación Institucional
+            </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
+                <div class="bg-org-purple text-white p-3 rounded text-[10px] font-bold text-center">
+                    Unidad Multimedia <br><span class="font-normal opacity-80">(Podcast, Redes)</span>
+                </div>
+                <div class="bg-org-purple text-white p-3 rounded text-[10px] font-bold text-center">
+                    Unidad de Cultura Organizacional
+                </div>
+                <div class="bg-org-purple text-white p-3 rounded text-[10px] font-bold text-center">
+                    Unidad de Eventos <br><span class="font-normal opacity-80">(Seminarios, Talleres)</span>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-slate-600 text-white py-8 border-t border-slate-500">
+    <div class="max-w-6xl mx-auto px-6">
+        <h4 class="text-center font-bold text-sm uppercase tracking-widest mb-6 border-b border-slate-500 pb-2 inline-block w-full">
+            Carrera del Investigador
+        </h4>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 text-center text-xs md:text-sm">
+            
+            <div class="flex-1 group hover:bg-white/10 p-2 rounded transition">
+                <span class="block font-bold text-lg text-slate-100">1. Senior</span>
+                <span class="text-slate-400">(Líder)</span>
+            </div>
+            
+            <i class="fa-solid fa-arrow-up md:hidden text-slate-400"></i> 
+            <i class="fa-solid fa-arrow-left hidden md:block text-slate-400"></i>
+
+            <div class="flex-1 group hover:bg-white/10 p-2 rounded transition">
+                <span class="block font-bold text-lg text-slate-100">2. Principal</span>
+                <span class="text-slate-400">(Jefe Proyecto)</span>
+            </div>
+
+            <i class="fa-solid fa-arrow-up md:hidden text-slate-400"></i> 
+            <i class="fa-solid fa-arrow-left hidden md:block text-slate-400"></i>
+
+            <div class="flex-1 group hover:bg-white/10 p-2 rounded transition">
+                <span class="block font-bold text-lg text-slate-100">3. Asociado</span>
+                <span class="text-slate-400">(Staff)</span>
+            </div>
+
+            <i class="fa-solid fa-arrow-up md:hidden text-slate-400"></i> 
+            <i class="fa-solid fa-arrow-left hidden md:block text-slate-400"></i>
+
+            <div class="flex-1 group hover:bg-white/10 p-2 rounded transition">
+                <span class="block font-bold text-lg text-slate-100">4. Asistente</span>
+                <span class="text-slate-400">(Consultor Jr.)</span>
+            </div>
+
+            <i class="fa-solid fa-arrow-up md:hidden text-slate-400"></i> 
+            <i class="fa-solid fa-arrow-left hidden md:block text-slate-400"></i>
+
+            <div class="flex-1 group hover:bg-white/10 p-2 rounded transition">
+                <span class="block font-bold text-lg text-slate-100">5. Estudiante</span>
+                <span class="text-slate-400">(Pre/Postgrado)</span>
+            </div>
+
+        </div>
+    </div>
+  </section>
 
   {% include footer.html %}
 
   <script>
-    // Menú Móvil
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
     if(btnOpen && mobileMenu){
         btnOpen.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
-        });
-    }
-
-    // Tu Script de Generación de PDF (INTACTO)
-    async function generarCertificado(nombreInvestigador, tipoInvestigador, lineasInvestigacion) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ format: "letter" });
-
-        // Fondo blanco
-        doc.setFillColor(255, 255, 255);
-        doc.rect(0, 0, 216, 279, 'F');
-
-        // Imágenes
-        const logoMarcaAgua = await cargarImagen("https://i.imgur.com/OjAw4PH.png");
-        doc.setGState(new doc.GState({ opacity: 0.1 }));
-        doc.addImage(logoMarcaAgua, "PNG", 30, 90, 150, 150);
-        doc.setGState(new doc.GState({ opacity: 1 }));
-
-        const logoSuperiorDerecho = await cargarImagen("https://i.imgur.com/R952Ljv.png");
-        doc.addImage(logoSuperiorDerecho, "PNG", 60, 1, 90, 20);
-
-        // Textos
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(14);
-        doc.setTextColor("#B22222");
-        doc.text("UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO", 105, 30, { align: "center" });
-        
-        doc.setTextColor("#003366");
-        doc.setFontSize(12);
-        doc.text("Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales", 105, 35, { align: "center" });
-        doc.text("Carrera de Ciencia Política y Administración Pública", 105, 40, { align: "center" });
-        doc.text("Centro de Investigación Regional en Ciencia Política y Ciencias Sociales", 105, 45, { align: "center" });
-
-        doc.setFontSize(20);
-        doc.text("Certificado de Investigador", 105, 65, { align: "center" });
-
-        // Cuerpo
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        const texto = `Por medio del presente, certificamos que ${nombreInvestigador} se desempeña actualmente como ${tipoInvestigador} en el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS). Ha contribuido activamente en las siguientes líneas de investigación:`;
-        
-        doc.text(texto, 25, 90, { align: "justify", maxWidth: 160, lineHeightFactor: 1.5 });
-
-        // Líneas
-        let y = 130;
-        lineasInvestigacion.forEach(linea => {
-            doc.text(`• ${linea}`, 30, y);
-            y += 8;
-        });
-
-        // Cierre
-        doc.text("Se expide el presente certificado para los fines que estime convenientes.", 25, y + 20);
-        doc.setFontSize(10);
-        doc.text("Santa Cruz de la Sierra, " + new Date().toLocaleDateString(), 105, y + 40, { align: "center" });
-
-        // Firmas
-        const imgDirector = await cargarImagen("https://i.imgur.com/o9tccxV.png");
-        const imgDirectora = await cargarImagen("https://i.imgur.com/vvpbKq7.png");
-        const imgDecano = await cargarImagen("https://i.imgur.com/BCsBBUp.png");
-
-        let firmaY = y + 50;
-        doc.addImage(imgDirector, "PNG", 35, firmaY, 40, 20); 
-        doc.addImage(imgDecano, "PNG", 90, firmaY, 40, 20);  
-        doc.addImage(imgDirectora, "PNG", 145, firmaY, 40, 20); 
-
-        // Textos firmas
-        doc.setFont("helvetica", "bold");
-        let textoFirmaY = firmaY + 23;
-        
-        doc.text("Francisco Méndez Égüez", 55, textoFirmaY, { align: "center" });
-        doc.text("Director", 55, textoFirmaY + 5, { align: "center" });
-
-        doc.text("Alfonso Coca", 110, textoFirmaY, { align: "center" });
-        doc.text("Decano", 110, textoFirmaY + 5, { align: "center" });
-
-        doc.text("María Angélica Suárez", 165, textoFirmaY, { align: "center" });
-        doc.text("Directora", 165, textoFirmaY + 5, { align: "center" });
-
-        doc.save(`Certificado_${nombreInvestigador.replace(/ /g, "_")}.pdf`);
-    }
-
-    async function cargarImagen(url) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.crossOrigin = "Anonymous"; 
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-            img.src = url;
         });
     }
   </script>
