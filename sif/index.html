@@ -3,484 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIF-FCJPSRRII | Sistema de Investigación Facultativo</title>
+    <title>SIF HUB | Ecosistema de Investigación</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- VARIABLES CSS (PALETA UAGRM) --- */
+        /* --- 1. ADN VISUAL UAGRM MODERNO --- */
         :root {
-            --uagrm-blue: #003366;      /* Azul Institucional */
-            --uagrm-red: #CC0000;       /* Rojo Institucional */
-            --uagrm-gold: #D4AF37;      /* Dorado (Detalles) */
-            --light-gray: #f4f6f9;
-            --text-dark: #333333;
-            --white: #ffffff;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --primary: #003366;       /* Azul Profundo UAGRM */
+            --accent: #CC0000;        /* Rojo Carmesí */
+            --gold: #D4AF37;          /* Dorado Institucional */
+            --bg-color: #F0F2F5;      /* Gris Muy Claro (Moderno) */
+            --card-bg: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-sec: #6B7280;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius: 16px;
         }
 
-        /* --- RESET & BASE --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--light-gray); display: flex; height: 100vh; overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; }
 
-        /* --- SIDEBAR (NAVEGACIÓN) --- */
-        aside {
-            width: 260px;
-            background-color: var(--uagrm-blue);
-            color: var(--white);
-            display: flex;
-            flex-direction: column;
-            border-right: 4px solid var(--uagrm-red);
-        }
-        
-        .brand {
-            padding: 20px;
-            text-align: center;
-            background-color: rgba(0,0,0,0.2);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .brand h1 { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
-        .brand span { font-size: 0.8rem; color: #ccc; }
-
-        nav { flex: 1; padding-top: 20px; }
-        nav ul { list-style: none; }
-        nav li { margin-bottom: 5px; }
-        
-        .nav-btn {
-            width: 100%;
-            padding: 15px 20px;
-            background: none;
-            border: none;
-            color: #e0e0e0;
-            text-align: left;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-btn:hover, .nav-btn.active {
-            background-color: var(--uagrm-red);
-            color: var(--white);
-            padding-left: 25px; /* Efecto de desplazamiento */
-        }
-        
-        .nav-btn .icon { margin-right: 10px; font-weight: bold; }
-
-        /* --- MAIN CONTENT --- */
-        main { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            background: var(--white);
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            border-left: 5px solid var(--uagrm-gold);
-        }
-        
-        header h2 { color: var(--uagrm-blue); }
-        .user-profile { font-weight: bold; color: var(--text-dark); display: flex; align-items: center; gap: 10px; }
-        .badge { background: var(--uagrm-red); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; }
-
-        /* --- SECCIONES DINÁMICAS --- */
-        .section { display: none; animation: fadeIn 0.4s ease; }
-        .section.active { display: block; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- DASHBOARD CARDS --- */
-        .stats-grid {
+        /* --- 2. LAYOUT FLUIDO (GRID) --- */
+        .app-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            border-top: 3px solid var(--uagrm-blue);
-        }
-        
-        .card h3 { font-size: 0.9rem; color: #666; margin-bottom: 10px; text-transform: uppercase; }
-        .card .value { font-size: 2rem; font-weight: bold; color: var(--uagrm-blue); }
-        .card .trend { font-size: 0.8rem; color: green; margin-top: 5px; }
-
-        /* --- DIAGRAMA DE BARRAS (JS GENERATED) --- */
-        .chart-container {
-            background: var(--white);
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-        }
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            height: 200px;
-            gap: 20px;
-            padding-top: 20px;
-            border-bottom: 1px solid #ccc;
-        }
-        .bar-group { flex: 1; text-align: center; position: relative; cursor: pointer; transition: transform 0.2s; }
-        .bar-group:hover { transform: scale(1.05); }
-        .bar {
-            background-color: var(--uagrm-blue);
-            width: 50%;
-            margin: 0 auto;
-            border-radius: 4px 4px 0 0;
-            position: relative;
-            transition: height 1s ease;
-        }
-        .bar.low { background-color: var(--uagrm-gold); }
-        .bar.high { background-color: var(--uagrm-red); }
-        .bar-label { margin-top: 10px; font-size: 0.8rem; font-weight: bold; color: var(--text-dark); }
-        .bar-value { position: absolute; top: -25px; width: 100%; text-align: center; font-weight: bold; font-size: 0.8rem; }
-
-        /* --- TABLA DE PROYECTOS --- */
-        .table-container {
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
+            grid-template-columns: 280px 1fr; /* Sidebar fija | Contenido */
+            height: 100vh;
             overflow: hidden;
         }
-        
-        .table-header {
-            padding: 15px 20px;
-            background: var(--uagrm-blue);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px 20px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background-color: #f8f9fa; color: var(--uagrm-blue); font-weight: 600; }
-        tr:hover { background-color: #f1f1f1; }
-        
-        .status { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-        .status.aprobado { background: #d4edda; color: #155724; }
-        .status.revision { background: #fff3cd; color: #856404; }
-        .status.borrador { background: #e2e3e5; color: #383d41; }
-        .status.registrado { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
 
-        /* --- CENTROS GRID --- */
-        .centers-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .center-box {
-            background: white; border-radius: 8px; padding: 20px; box-shadow: var(--shadow);
-            border-left: 5px solid;
+        /* --- 3. SIDEBAR (Navegación Vertical Estilizada) --- */
+        aside {
+            background: var(--card-bg);
+            border-right: 1px solid #E5E7EB;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            z-index: 10;
+        }
+
+        .logo-area {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 40px;
+            padding-bottom: 20px; border-bottom: 1px solid #F3F4F6;
+        }
+        .logo-icon {
+            width: 40px; height: 40px; background: var(--primary); color: white;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.2rem;
+        }
+        .logo-text h1 { font-size: 1.1rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .logo-text span { font-size: 0.75rem; color: var(--text-sec); font-weight: 500; }
+
+        nav ul { list-style: none; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 16px; margin-bottom: 8px;
+            border-radius: 12px; color: var(--text-sec);
+            text-decoration: none; font-weight: 500;
+            transition: all 0.2s ease; cursor: pointer;
+        }
+        .nav-item:hover { background: #F3F4F6; color: var(--primary); }
+        .nav-item.active { background: #EBF5FF; color: var(--primary); font-weight: 600; }
+        .nav-item .material-icons-round { font-size: 20px; }
+
+        .create-btn {
+            margin-top: auto;
+            background: var(--accent); color: white;
+            padding: 16px; border-radius: 12px;
+            border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(204, 0, 0, 0.3);
             transition: transform 0.2s;
         }
-        .center-box:hover { transform: translateY(-5px); }
-        .center-box h3 { margin-bottom: 10px; color: var(--uagrm-blue); }
-        .center-box p { font-size: 0.9rem; color: #666; line-height: 1.5; }
-        
-        /* Colores por carrera */
-        .c-pol { border-color: #e74c3c; } /* Rojo */
-        .c-der { border-color: #2ecc71; } /* Verde */
-        .c-rrii { border-color: #3498db; } /* Azul claro */
-        .c-soc { border-color: #f1c40f; } /* Amarillo */
+        .create-btn:hover { transform: translateY(-2px); }
 
-        /* --- BOTONES --- */
-        .btn {
-            padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;
-            background: var(--uagrm-blue); color: white; transition: background 0.2s;
+        /* --- 4. MAIN AREA (El Hub) --- */
+        main {
+            overflow-y: auto;
+            padding: 32px 40px;
         }
-        .btn:hover { background: var(--uagrm-red); }
+
+        /* Header Transparente */
+        header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;
+        }
+        .welcome h2 { font-size: 1.8rem; font-weight: 700; color: var(--text-main); }
+        .welcome p { color: var(--text-sec); }
+        
+        .user-pill {
+            background: white; padding: 6px 6px 6px 16px;
+            border-radius: 50px; display: flex; align-items: center; gap: 12px;
+            box-shadow: var(--shadow-sm); border: 1px solid #E5E7EB;
+        }
+        .avatar {
+            width: 36px; height: 36px; background: var(--gold);
+            border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+
+        /* Grid Dashboard */
+        .hub-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 66% Contenido | 33% Feed Lateral */
+            gap: 32px;
+        }
+
+        /* TARJETAS KPI (Key Performance Indicators) */
+        .kpi-row {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px;
+        }
+        .kpi-card {
+            background: white; padding: 24px; border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); border: 1px solid #F3F4F6; position: relative; overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .kpi-card::after { /* Decoración */
+            content: ''; position: absolute; top: 0; right: 0; width: 60px; height: 60px;
+            background: linear-gradient(135deg, transparent 50%, rgba(0, 51, 102, 0.05) 50%);
+        }
+        .kpi-title { font-size: 0.85rem; font-weight: 600; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.5px; }
+        .kpi-value { font-size: 2.2rem; font-weight: 800; color: var(--primary); margin: 8px 0; }
+        .kpi-trend { font-size: 0.85rem; display: flex; align-items: center; gap: 4px; }
+        .trend-up { color: #10B981; } .trend-down { color: var(--accent); }
+
+        /* SECCIÓN "MIS PROYECTOS" (Visualmente rica) */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; }
+        .view-all { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+        .project-list { display: flex; flex-direction: column; gap: 16px; }
+        .project-card {
+            background: white; padding: 20px; border-radius: var(--radius);
+            display: flex; align-items: center; gap: 20px;
+            box-shadow: var(--shadow-sm); border: 1px solid #F3F4F6;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .project-card:hover { border-color: var(--primary); }
+        
+        .p-icon {
+            width: 50px; height: 50px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
+        }
+        .bg-blue { background: #EBF5FF; color: var(--primary); }
+        .bg-red { background: #FEF2F2; color: var(--accent); }
+        
+        .p-info { flex: 1; }
+        .p-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .p-info span { font-size: 0.85rem; color: var(--text-sec); }
+        
+        .p-meta { text-align: right; }
+        .status-badge {
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-bottom: 6px;
+        }
+        .st-review { background: #FEF3C7; color: #D97706; }
+        .st-active { background: #D1FAE5; color: #059669; }
+
+        /* BARRA LATERAL DERECHA (Feed) */
+        .feed-panel {
+            background: white; padding: 24px; border-radius: var(--radius); height: fit-content;
+            border: 1px solid #F3F4F6;
+        }
+        .feed-item {
+            display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid #F3F4F6;
+        }
+        .feed-item:last-child { border-bottom: none; }
+        .feed-avatar {
+            width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 14px;
+        }
+        .feed-content p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 4px; }
+        .feed-content b { color: var(--primary); }
+        .feed-time { font-size: 0.75rem; color: #9CA3AF; }
 
     </style>
 </head>
 <body>
 
-    <aside>
-        <div class="brand">
-            <h1>SIF - FCJPSRRII</h1>
-            <span>Sistema Facultativo</span>
-        </div>
-        <nav>
-            <ul>
-                <li><button class="nav-btn active" onclick="navigate('dashboard')"><span class="icon">📊</span> Dashboard</button></li>
-                <li><button class="nav-btn" onclick="navigate('instituto')"><span class="icon">🏛️</span> Instituto (IIF)</button></li>
-                <li><button class="nav-btn" onclick="navigate('centros')"><span class="icon">🏢</span> Centros (4)</button></li>
-                <li><button class="nav-btn" onclick="navigate('proyectos')"><span class="icon">📑</span> Proyectos</button></li>
-                <li><button class="nav-btn" onclick="navigate('presupuesto')"><span class="icon">💰</span> Gestión IDH</button></li>
-            </ul>
-        </nav>
-        <div style="padding: 20px; font-size: 0.7rem; text-align: center; color: #aaa;">
-            UAGRM © 2026<br>Reglamento ICU 019-2025
-        </div>
-    </aside>
-
-    <main>
-        <header>
-            <h2 id="page-title">Panel de Control General</h2>
-            <div class="user-profile">
-                <span>Dr. Daniel Hurtado (Director IIF)</span>
-                <span class="badge">Admin</span>
-            </div>
-        </header>
-
-        <div id="dashboard" class="section active">
-            <div class="stats-grid">
-                <div class="card">
-                    <h3>Proyectos Activos</h3>
-                    <div class="value" id="stat-proyectos">0</div>
-                    <div class="trend">↗ 4 Nuevos este mes</div>
-                </div>
-                <div class="card">
-                    <h3>Investigadores</h3>
-                    <div class="value">42</div>
-                    <div class="trend">Docentes y Auxiliares</div>
-                </div>
-                <div class="card">
-                    <h3>Presupuesto IDH (Bs)</h3>
-                    <div class="value">1.2M</div>
-                    <div class="trend">15% Ejecutado</div>
-                </div>
-                <div class="card">
-                    <h3>Publicaciones</h3>
-                    <div class="value">18</div>
-                    <div class="trend">Papers Indexados</div>
+    <div class="app-container">
+        <aside>
+            <div class="logo-area">
+                <div class="logo-icon">U</div>
+                <div class="logo-text">
+                    <h1>SIF System</h1>
+                    <span>FCJPSRRII - UAGRM</span>
                 </div>
             </div>
 
-            <div class="chart-container">
-                <h3 style="margin-bottom: 20px; color: var(--uagrm-blue);">Producción Científica por Centro (2025-2026)</h3>
-                <div id="chart-area" class="bar-chart">
-                    </div>
-            </div>
-        </div>
+            <nav>
+                <ul>
+                    <li class="nav-item active"><span class="material-icons-round">dashboard</span> Inicio</li>
+                    <li class="nav-item"><span class="material-icons-round">folder_open</span> Mis Proyectos</li>
+                    <li class="nav-item"><span class="material-icons-round">school</span> Centros (4)</li>
+                    <li class="nav-item"><span class="material-icons-round">account_balance_wallet</span> Fondos IDH</li>
+                    <li class="nav-item"><span class="material-icons-round">library_books</span> Repositorio</li>
+                    <li class="nav-item" style="margin-top: 20px; border-top: 1px solid #F3F4F6; padding-top: 20px;">
+                        <span class="material-icons-round">settings</span> Configuración
+                    </li>
+                </ul>
+            </nav>
 
-        <div id="instituto" class="section">
-            <div style="background: white; padding: 30px; border-radius: 8px; border-top: 4px solid var(--uagrm-red);">
-                <h2 style="color: var(--uagrm-blue); margin-bottom: 10px;">Instituto de Investigación Facultativo (IIF)</h2>
-                <p style="margin-bottom: 20px;">
-                    Ente rector encargado de la gestión normativa, administrativa y validación metodológica según el <strong>Art. 22</strong> del Reglamento.
-                </p>
-                
-                <div style="display: flex; gap: 20px; margin-top: 20px;">
-                    <div style="flex: 1; background: var(--light-gray); padding: 15px; border-radius: 6px;">
-                        <h4>Unidad Editorial</h4>
-                        <p style="font-size: 0.9rem;">Gestión de revistas y repositorio.</p>
-                    </div>
-                    <div style="flex: 1; background: var(--light-gray); padding: 15px; border-radius: 6px;">
-                        <h4>Gestión Administrativa</h4>
-                        <p style="font-size: 0.9rem;">Consolidación de compras IDH.</p>
-                    </div>
-                    <div style="flex: 1; background: var(--light-gray); padding: 15px; border-radius: 6px;">
-                        <h4>Data Lab</h4>
-                        <p style="font-size: 0.9rem;">Estadística y Metodología.</p>
-                    </div>
+            <button class="create-btn">
+                <span class="material-icons-round">add</span> Nuevo Proyecto
+            </button>
+        </aside>
+
+        <main>
+            <header>
+                <div class="welcome">
+                    <h2>Hola, Daniel 👋</h2>
+                    <p>Aquí tienes el resumen de la actividad científica de hoy.</p>
                 </div>
-            </div>
-        </div>
-
-        <div id="centros" class="section">
-            <div class="centers-grid">
-                <div class="center-box c-pol">
-                    <h3>C.R.I. (Ciencia Política)</h3>
-                    <p><strong>Centro de Investigación Regional.</strong> Especializado en comportamiento electoral, gestión pública y análisis de crisis.</p>
-                    <div style="margin-top: 10px; font-size: 0.8rem;">Coordinador: MSc. Juan Perez</div>
+                <div class="user-pill">
+                    <span style="font-size: 0.9rem; font-weight: 600;">Director IIF</span>
+                    <div class="avatar">DH</div>
                 </div>
-                <div class="center-box c-der">
-                    <h3>C.I.J. (Derecho)</h3>
-                    <p><strong>Centro de Investigaciones Jurídicas.</strong> Enfocado en dogmática jurídica, sociología del derecho y litigio estratégico.</p>
-                    <div style="margin-top: 10px; font-size: 0.8rem;">Coordinadora: Dra. Maria Lopez</div>
-                </div>
-                <div class="center-box c-rrii">
-                    <h3>C.E.I. (Relaciones Int.)</h3>
-                    <p><strong>Centro de Estudios Internacionales.</strong> Geopolítica, comercio exterior y diplomacia fronteriza.</p>
-                    <div style="margin-top: 10px; font-size: 0.8rem;">Coordinador: Lic. Carlos Ruiz</div>
-                </div>
-                <div class="center-box c-soc">
-                    <h3>C.I.D.S. (Trabajo Social)</h3>
-                    <p><strong>Centro de Investigación Social.</strong> Intervención comunitaria, políticas de familia y bienestar social.</p>
-                    <div style="margin-top: 10px; font-size: 0.8rem;">Coordinadora: Lic. Ana Suarez</div>
-                </div>
-            </div>
-        </div>
+            </header>
 
-        <div id="proyectos" class="section">
-            <div class="table-container">
-                <div class="table-header">
-                    <h3>Listado Maestro de Proyectos (Ciclo Art. 51)</h3>
-                    <button class="btn" onclick="alert('Funcionalidad Backend: Generar nuevo perfil')">+ Nuevo Proyecto</button>
-                </div>
-                <div style="padding: 15px; background: #fafafa; border-bottom: 1px solid #eee;">
-                    Filtrar por: 
-                    <select id="filter-center" onchange="renderProjects()" style="padding: 5px;">
-                        <option value="all">Todos los Centros</option>
-                        <option value="CRI">CRI - Ciencia Política</option>
-                        <option value="CIJ">CIJ - Derecho</option>
-                        <option value="CEI">CEI - RRII</option>
-                        <option value="CIDS">CIDS - Trabajo Social</option>
-                    </select>
-                </div>
-                <table id="projects-table">
-                    <thead>
-                        <tr>
-                            <th>Código DICIT</th>
-                            <th>Proyecto</th>
-                            <th>Centro</th>
-                            <th>Inv. Principal</th>
-                            <th>Presupuesto (IDH)</th>
-                            <th>Estado</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div id="presupuesto" class="section">
-            <div class="card">
-                <h3>Módulo de Gestión Financiera (IDH)</h3>
-                <p>Aquí se cargará la integración con la Unidad Administrativa del IIF para gestionar compras y viáticos según Art. 60.</p>
-            </div>
-        </div>
-
-    </main>
-
-    <script>
-        // --- 1. DATOS MOCK (Simulando Backend Python) ---
-        const db = {
-            proyectos: [
-                { id: 1, codigo: "DICIT-2026-001", titulo: "Comportamiento Electoral Santa Cruz 2025", centro: "CRI", inv: "D. Hurtado", presupuesto: "45,000 Bs", estado: "REGISTRADO_DICIT" },
-                { id: 2, codigo: "---", titulo: "Impacto de la IA en el Derecho Laboral", centro: "CIJ", inv: "M. Lopez", presupuesto: "12,000 Bs", estado: "REVISION" },
-                { id: 3, codigo: "DICIT-2026-004", titulo: "Geopolítica del Litio y Fronteras", centro: "CEI", inv: "C. Ruiz", presupuesto: "80,000 Bs", estado: "EJECUCION" },
-                { id: 4, codigo: "---", titulo: "Violencia Intrafamiliar Post-Pandemia", centro: "CIDS", inv: "A. Suarez", presupuesto: "25,000 Bs", estado: "BORRADOR" },
-                { id: 5, codigo: "DICIT-2026-012", titulo: "Automatización de Procesos Públicos", centro: "CRI", inv: "J. Perez", presupuesto: "30,000 Bs", estado: "APROBADO" },
-            ],
-            estadisticas: {
-                CRI: 12,
-                CIJ: 8,
-                CEI: 5,
-                CIDS: 9
-            }
-        };
-
-        // --- 2. FUNCIONES DE NAVEGACIÓN (SPA) ---
-        function navigate(sectionId) {
-            // Ocultar todas las secciones
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
-            // Mostrar la seleccionada
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Actualizar botón activo
-            // Nota: Esto es un truco simple, en producción usaríamos IDs en los botones
-            const buttons = document.querySelectorAll('.nav-btn');
-            if(sectionId === 'dashboard') buttons[0].classList.add('active');
-            if(sectionId === 'instituto') buttons[1].classList.add('active');
-            if(sectionId === 'centros') buttons[2].classList.add('active');
-            if(sectionId === 'proyectos') buttons[3].classList.add('active');
-            if(sectionId === 'presupuesto') buttons[4].classList.add('active');
-
-            // Actualizar título
-            const titles = {
-                dashboard: "Panel de Control General",
-                instituto: "Gestión Institucional (IIF)",
-                centros: "Red de Centros Facultativos",
-                proyectos: "Gestión de Proyectos de Investigación",
-                presupuesto: "Ejecución Financiera IDH"
-            };
-            document.getElementById('page-title').innerText = titles[sectionId];
-        }
-
-        // --- 3. RENDERIZADO DE PROYECTOS (TABLA DINÁMICA) ---
-        function renderProjects() {
-            const filter = document.getElementById('filter-center').value;
-            const tbody = document.querySelector('#projects-table tbody');
-            tbody.innerHTML = ''; // Limpiar
-
-            db.proyectos.forEach(p => {
-                if (filter === 'all' || p.centro === filter) {
-                    const tr = document.createElement('tr');
+            <div class="hub-grid">
+                <div class="left-col">
                     
-                    // Clase CSS para el estado
-                    let statusClass = '';
-                    if(p.estado.includes('REGISTRADO') || p.estado.includes('EJECUCION')) statusClass = 'registrado';
-                    else if(p.estado === 'APROBADO') statusClass = 'aprobado';
-                    else if(p.estado === 'REVISION') statusClass = 'revision';
-                    else statusClass = 'borrador';
-
-                    // Texto amigable del estado
-                    let statusText = p.estado.replace('_', ' ');
-
-                    tr.innerHTML = `
-                        <td style="font-family: monospace; color: var(--uagrm-blue); font-weight:bold;">${p.codigo}</td>
-                        <td>${p.titulo}</td>
-                        <td><span style="font-weight:bold; color: var(--uagrm-red);">${p.centro}</span></td>
-                        <td>${p.inv}</td>
-                        <td>${p.presupuesto}</td>
-                        <td><span class="status ${statusClass}">${statusText}</span></td>
-                        <td><button class="btn" style="padding: 4px 8px; font-size: 0.7rem;">Ver</button></td>
-                    `;
-                    tbody.appendChild(tr);
-                }
-            });
-            
-            // Actualizar contador del dashboard
-            animateValue("stat-proyectos", 0, db.proyectos.length, 1000);
-        }
-
-        // --- 4. RENDERIZADO DE GRÁFICO (JS PURO, SIN LIBRERÍAS) ---
-        function renderChart() {
-            const container = document.getElementById('chart-area');
-            const data = db.estadisticas;
-            const maxVal = Math.max(...Object.values(data));
-
-            for (const [key, value] of Object.entries(data)) {
-                // Calcular altura relativa (max 150px)
-                const height = (value / maxVal) * 100; 
-                
-                // Determinar color
-                let extraClass = '';
-                if(value < 6) extraClass = 'low';
-                if(value > 10) extraClass = 'high';
-
-                const barGroup = document.createElement('div');
-                barGroup.className = 'bar-group';
-                barGroup.innerHTML = `
-                    <div class="bar ${extraClass}" style="height: ${height}%;">
-                        <div class="bar-value">${value}</div>
+                    <div class="kpi-row">
+                        <div class="kpi-card">
+                            <div class="kpi-title">Proyectos en Curso</div>
+                            <div class="kpi-value">12</div>
+                            <div class="kpi-trend trend-up">
+                                <span class="material-icons-round" style="font-size: 16px;">trending_up</span> +3 este mes
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-title">Presupuesto IDH</div>
+                            <div class="kpi-value">15%</div>
+                            <div class="kpi-trend">
+                                Ejecutado (Bs. 180k)
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-title">Pendientes de Revisión</div>
+                            <div class="kpi-value" style="color: var(--accent);">4</div>
+                            <div class="kpi-trend trend-down">
+                                Requiere atención
+                            </div>
+                        </div>
                     </div>
-                    <div class="bar-label">${key}</div>
-                `;
-                container.appendChild(barGroup);
-            }
-        }
 
-        // --- 5. UTILIDAD DE ANIMACIÓN DE NÚMEROS ---
-        function animateValue(id, start, end, duration) {
-            const obj = document.getElementById(id);
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
+                    <div class="section-header">
+                        <div class="section-title">Proyectos Destacados</div>
+                        <a href="#" class="view-all">Ver todos</a>
+                    </div>
 
-        // --- INICIALIZACIÓN ---
-        window.onload = function() {
-            renderProjects();
-            renderChart();
-            console.log("Sistema SIF Cargado. Modo: Prototipo Alta Fidelidad.");
-        };
+                    <div class="project-list">
+                        <div class="project-card">
+                            <div class="p-icon bg-red">
+                                <span class="material-icons-round">how_to_vote</span>
+                            </div>
+                            <div class="p-info">
+                                <h4>Comportamiento Electoral Santa Cruz 2025</h4>
+                                <span>Centro: <b>CRI (Ciencia Política)</b> • Inv: Juan Perez</span>
+                            </div>
+                            <div class="p-meta">
+                                <span class="status-badge st-active">En Ejecución</span>
+                                <div style="font-size: 0.8rem; color: #6B7280;">Avance: 45%</div>
+                            </div>
+                        </div>
 
-    </script>
+                        <div class="project-card">
+                            <div class="p-icon bg-blue">
+                                <span class="material-icons-round">gavel</span>
+                            </div>
+                            <div class="p-info">
+                                <h4>Reforma Judicial y Derechos Humanos</h4>
+                                <span>Centro: <b>CIJ (Derecho)</b> • Inv: Maria Lopez</span>
+                            </div>
+                            <div class="p-meta">
+                                <span class="status-badge st-review">En Revisión Pares</span>
+                                <div style="font-size: 0.8rem; color: #6B7280;">Hace 2 días</div>
+                            </div>
+                        </div>
+
+                         <div class="project-card">
+                            <div class="p-icon" style="background: #FFF7ED; color: #EA580C;">
+                                <span class="material-icons-round">public</span>
+                            </div>
+                            <div class="p-info">
+                                <h4>Geopolítica de Fronteras</h4>
+                                <span>Centro: <b>CEI (RRII)</b> • Inv: Carlos Ruiz</span>
+                            </div>
+                            <div class="p-meta">
+                                <span class="status-badge st-active">En Ejecución</span>
+                                <div style="font-size: 0.8rem; color: #6B7280;">Avance: 10%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="right-col">
+                    <div class="section-header">
+                        <div class="section-title">Actividad Reciente</div>
+                    </div>
+                    
+                    <div class="feed-panel">
+                        <div class="feed-item">
+                            <div class="feed-avatar">🏛️</div>
+                            <div class="feed-content">
+                                <p><b>Decanato</b> aprobó la nueva línea de investigación para Trabajo Social.</p>
+                                <span class="feed-time">Hace 2 horas</span>
+                            </div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="feed-avatar">👤</div>
+                            <div class="feed-content">
+                                <p><b>Juan Perez</b> subió el informe parcial del proyecto CRI-001.</p>
+                                <span class="feed-time">Hace 5 horas</span>
+                            </div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="feed-avatar">💰</div>
+                            <div class="feed-content">
+                                <p><b>Unidad Admin</b> desembolsó viáticos para el viaje a Cotoca.</p>
+                                <span class="feed-time">Ayer</span>
+                            </div>
+                        </div>
+                        <div class="feed-item">
+                            <div class="feed-avatar">✅</div>
+                            <div class="feed-content">
+                                <p>El proyecto <b>CIJ-2026</b> recibió su Código DICIT oficial.</p>
+                                <span class="feed-time">Ayer</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px; background: linear-gradient(135deg, var(--primary) 0%, #001a33 100%); padding: 24px; border-radius: var(--radius); color: white; text-align: center;">
+                        <span class="material-icons-round" style="font-size: 32px; margin-bottom: 10px; color: var(--gold);">lightbulb</span>
+                        <h4 style="margin-bottom: 8px;">Convocatoria Abierta</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 16px;">Fondos IDH 2026 para proyectos de impacto social.</p>
+                        <button style="background: white; color: var(--primary); border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">Ver Bases</button>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
 </body>
 </html>
