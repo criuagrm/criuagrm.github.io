@@ -33,45 +33,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
-    /* Estilos específicos para las líneas del organigrama */
-    
-    /* Línea horizontal superior (PC) */
+    /* Conectores del Organigrama (Solo PC) */
     @media (min-width: 768px) {
         .connector-line-top {
             position: absolute;
             top: 50%;
-            left: 10%; /* Ajuste para que no salga de los comités */
-            right: 10%;
+            /* Ajuste para evitar desbordamiento */
+            left: 18%; 
+            right: 18%;
             height: 2px;
             background-color: #cbd5e1; /* Slate-300 */
             z-index: 0;
         }
         
-        /* Conector vertical central */
-        .connector-vertical {
-            width: 2px;
-            height: 30px;
-            background-color: #94a3b8;
-            margin: 0 auto;
-        }
-
-        /* Línea horizontal que une las coordinaciones */
-        .connector-horizontal-bar {
-            width: 86%; /* Ancho ajustado para conectar las columnas */
-            height: 2px;
-            background-color: #94a3b8;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        /* Pequeñas líneas bajando a cada coordinación */
-        .connector-stem {
-            height: 15px;
-            width: 2px;
-            background-color: #94a3b8;
-            margin: 0 auto;
-        }
+        .connector-vertical { width: 2px; height: 30px; background-color: #94a3b8; margin: 0 auto; }
+        .connector-horizontal-bar { width: 86%; height: 2px; background-color: #94a3b8; margin: 0 auto; position: relative; }
+        .connector-stem { height: 15px; width: 2px; background-color: #94a3b8; margin: 0 auto; }
     }
+    
     .profile-card { transition: all 0.2s ease-in-out; }
     .profile-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
   </style>
@@ -82,7 +61,7 @@
 
   <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-3 group">
+      <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
         <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
           <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
@@ -90,18 +69,19 @@
         </div>
       </a>
       <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-        <a href="index.html" class="hover:text-black transition">Inicio</a>
+        <a href="https://cir.uagrm.edu.bo/" class="hover:text-black transition">Web Principal</a>
         <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Organización</a>
         <a href="researchers.html" class="hover:text-black transition">Investigadores</a>
-        <a href="labap/index.html" class="hover:text-black transition">Laboratorios</a>
+        <a href="students.html" class="hover:text-black transition">Estudiantes</a>
       </nav>
       <button id="btn-open" class="md:hidden text-slate-600 text-xl"><i class="fa-solid fa-bars"></i></button>
     </div>
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
         <div class="grid gap-3 text-sm">
-            <a href="index.html" class="block py-2">Inicio</a>
+            <a href="https://cir.uagrm.edu.bo/" class="block py-2">Web Principal</a>
             <a href="#" class="block py-2 font-bold text-slate-900">Organización</a>
             <a href="researchers.html" class="block py-2">Investigadores</a>
+            <a href="students.html" class="block py-2">Estudiantes</a>
         </div>
     </div>
   </header>
@@ -151,7 +131,7 @@
     </div>
   </section>
 
-  <section class="py-16 bg-slate-50 border-t border-slate-200 overflow-x-hidden">
+  <section class="py-16 bg-slate-50 overflow-x-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 class="text-2xl font-serif font-bold text-slate-900 text-center mb-12">Estructura Organizacional (CIRCPyCS)</h3>
 
@@ -163,9 +143,8 @@
             Comité Científico
         </div>
 
-        <div class="relative z-10 bg-slate-700 text-white p-5 rounded-lg text-sm font-bold uppercase tracking-widest w-64 text-center shadow-lg transform md:scale-110">
+        <div class="relative z-10 bg-org-slate text-white p-5 rounded-lg text-sm font-bold uppercase tracking-widest w-64 text-center shadow-lg transform md:scale-110">
             Dirección Ejecutiva
-            <div class="text-[10px] normal-case font-normal opacity-80 mt-1">Lic. María Angélica Suárez</div>
         </div>
 
         <div class="relative z-10 bg-white border-2 border-dashed border-slate-400 text-slate-600 p-4 rounded-lg text-xs font-bold uppercase tracking-wide w-48 text-center shadow-sm">
@@ -174,90 +153,56 @@
       </div>
 
       <div class="hidden md:block">
-          <div class="connector-vertical"></div> <div class="connector-horizontal-bar"></div> </div>
+          <div class="connector-vertical"></div>
+          <div class="connector-horizontal-bar"></div>
+      </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6 md:mt-0 relative">
         
         <div class="flex flex-col items-center">
-            <div class="hidden md:block connector-stem mb-2"></div> <div class="w-full bg-org-teal text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
-                Coord. de Investigación y Extensión
+            <div class="hidden md:block connector-stem mb-2"></div>
+            <div class="w-full bg-org-teal text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center">
+                Coord. Investigación y Extensión
             </div>
-            
-            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
-                        Lab. de Economía Política Constitucional
-                    </div>
-                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
-                        Lab. de Experimentación Política
-                    </div>
-                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
-                        Lab. de Análisis Político
-                    </div>
-                    <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center leading-tight h-20 flex items-center justify-center">
-                        Lab. de Innovación Pública
-                    </div>
-                </div>
-                <div class="bg-org-teal text-white p-2 rounded text-[10px] font-bold text-center">
-                    Escuela de Gobierno
-                </div>
-                <div class="bg-white border border-org-teal text-org-teal p-2 rounded text-[10px] font-bold text-center">
-                    Sello Editorial CIRCPyCS
-                </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2 text-[10px]">
+                <div class="bg-org-teal text-white p-2 rounded text-center">Laboratorios (LEPC, LEP, InnoLab, LAP)</div>
+                <div class="bg-org-teal text-white p-2 rounded text-center">Escuela de Gobierno</div>
+                <div class="border border-org-teal text-org-teal p-2 rounded text-center">Editorial CIRCPyCS</div>
             </div>
         </div>
 
         <div class="flex flex-col items-center">
             <div class="hidden md:block connector-stem mb-2"></div>
-            
-            <div class="w-full bg-org-orange text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
-                Coord. Análisis Político y Fondos
+            <div class="w-full bg-org-orange text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center">
+                Coord. Análisis y Fondos
             </div>
-            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
-                <div class="bg-org-orange text-white p-3 rounded text-[10px] font-bold text-center">
-                    Unidad de Gestión de Fondos (Grant Writing)
-                </div>
-                <div class="bg-org-orange text-white p-3 rounded text-[10px] font-bold text-center">
-                    Incubadora de Consultores Jr. (Semillero)
-                </div>
-                <div class="bg-org-orange text-white p-3 rounded text-[10px] font-bold text-center">
-                    Unidad de Servicios y Proyectos
-                </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2 text-[10px]">
+                <div class="bg-org-orange/10 text-org-orange border border-org-orange p-2 rounded text-center">Gestión de Fondos (Grants)</div>
+                <div class="bg-org-orange/10 text-org-orange border border-org-orange p-2 rounded text-center">Incubadora de Consultores</div>
+                <div class="bg-org-orange/10 text-org-orange border border-org-orange p-2 rounded text-center">Servicios y Proyectos</div>
             </div>
         </div>
 
         <div class="flex flex-col items-center">
             <div class="hidden md:block connector-stem mb-2"></div>
-            
-            <div class="w-full bg-org-green text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
-                Coord. Relaciones Públicas Int.
+            <div class="w-full bg-org-green text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center">
+                Coord. Relaciones Int.
             </div>
-            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
-                <div class="bg-org-green text-white p-6 rounded text-[10px] font-bold text-center h-24 flex items-center justify-center">
-                    Unidad de Alianzas Globales
-                </div>
-                <div class="bg-org-green text-white p-6 rounded text-[10px] font-bold text-center h-24 flex items-center justify-center">
-                    Unidad de Think Tanks
-                </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2 text-[10px]">
+                <div class="bg-org-green/10 text-org-green border border-org-green p-2 rounded text-center">Alianzas Globales</div>
+                <div class="bg-org-green/10 text-org-green border border-org-green p-2 rounded text-center">Red de Think Tanks</div>
             </div>
         </div>
 
         <div class="flex flex-col items-center">
             <div class="hidden md:block connector-stem mb-2"></div>
-            
-            <div class="w-full bg-org-purple text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center leading-tight">
-                Coord. Comunicación Institucional
+            <div class="w-full bg-org-purple text-white p-4 rounded-t-lg text-xs font-bold uppercase text-center h-16 flex items-center justify-center">
+                Coord. Comunicación
             </div>
-            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2">
-                <div class="bg-org-purple text-white p-3 rounded text-[10px] font-bold text-center">
-                    Unidad Multimedia <br><span class="font-normal opacity-80">(Podcast, Redes)</span>
-                </div>
-                <div class="bg-org-purple text-white p-3 rounded text-[10px] font-bold text-center">
-                    Unidad de Cultura Organizacional
-                </div>
-                <div class="bg-org-purple text-white p-3 rounded text-[10px] font-bold text-center">
-                    Unidad de Eventos <br><span class="font-normal opacity-80">(Seminarios, Talleres)</span>
-                </div>
+            <div class="w-full bg-white border-x border-b border-slate-200 p-3 rounded-b-lg shadow-sm space-y-2 text-[10px]">
+                <div class="bg-org-purple/10 text-org-purple border border-org-purple p-2 rounded text-center">Multimedia</div>
+                <div class="bg-org-purple/10 text-org-purple border border-org-purple p-2 rounded text-center">Cultura Organizacional</div>
+                <div class="bg-org-purple/10 text-org-purple border border-org-purple p-2 rounded text-center">Eventos</div>
             </div>
         </div>
 
@@ -345,23 +290,17 @@
                 <i class="fa-solid fa-scale-balanced text-org-orange"></i> Comité de Ética
             </h3>
             <div class="space-y-3">
-                <div class="bg-white p-4 rounded border border-dashed border-slate-300 flex items-center gap-4 opacity-75">
-                    <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="text-xs text-slate-500 font-bold uppercase">Representante Docente</div>
+                <div class="bg-white p-4 rounded border border-dashed border-slate-300 flex items-center gap-4">
+                    <img src="https://i.imgur.com/GWijiNJ.jpeg" class="w-10 h-10 rounded-full object-cover">
+                    <div class="text-xs"><span class="font-bold block">Dr. Marco Torrez</span> Miembro</div>
                 </div>
-                <div class="bg-white p-4 rounded border border-dashed border-slate-300 flex items-center gap-4 opacity-75">
-                    <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="text-xs text-slate-500 font-bold uppercase">Representante Externo</div>
+                <div class="bg-white p-4 rounded border border-dashed border-slate-300 flex items-center gap-4">
+                    <img src="https://i.imgur.com/qmkexzu.jpeg" class="w-10 h-10 rounded-full object-cover">
+                    <div class="text-xs"><span class="font-bold block">Dr. Jorge Nuñez</span> Miembro</div>
                 </div>
-                <div class="bg-white p-4 rounded border border-dashed border-slate-300 flex items-center gap-4 opacity-75">
-                    <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="text-xs text-slate-500 font-bold uppercase">Secretaría Técnica</div>
+                <div class="bg-white p-4 rounded border border-dashed border-slate-300 flex items-center gap-4">
+                    <img src="https://i.imgur.com/8y6AfLc.jpeg" class="w-10 h-10 rounded-full object-cover">
+                    <div class="text-xs"><span class="font-bold block">Dr. Nelson Jordan</span> Miembro</div>
                 </div>
             </div>
         </div>
@@ -403,18 +342,22 @@
 
       <div class="border-t border-slate-100 pt-10">
           <h3 class="text-xl font-serif font-bold text-slate-900 text-center mb-8">Estudiantes Investigadores</h3>
-          <div class="flex flex-wrap justify-center gap-8">
-              <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
-                  <img src="https://i.imgur.com/tv4cq5M.jpeg" class="w-10 h-10 rounded-full object-cover">
-                  <div class="text-xs text-left"><span class="font-bold block">Aneth Flores</span> Avanzado</div>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 justify-center">
+              <div class="text-center group">
+                  <img src="https://i.imgur.com/tv4cq5M.jpeg" class="w-20 h-20 rounded-full mx-auto mb-2 grayscale group-hover:grayscale-0 transition object-cover">
+                  <div class="font-bold text-sm">Aneth Flores</div>
+                  <div class="text-xs text-slate-500">Estudiante Avanzado</div>
               </div>
-              <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
-                  <img src="https://i.imgur.com/DJsGBEh.jpeg" class="w-10 h-10 rounded-full object-cover">
-                  <div class="text-xs text-left"><span class="font-bold block">Carmen King</span> Avanzado</div>
+              <div class="text-center group">
+                  <img src="https://i.imgur.com/DJsGBEh.jpeg" class="w-20 h-20 rounded-full mx-auto mb-2 grayscale group-hover:grayscale-0 transition object-cover">
+                  <div class="font-bold text-sm">Carmen King</div>
+                  <div class="text-xs text-slate-500">Estudiante Avanzado</div>
               </div>
-              <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
-                  <img src="https://i.imgur.com/Znf7sdh.jpeg" class="w-10 h-10 rounded-full object-cover">
-                  <div class="text-xs text-left"><span class="font-bold block">Yhelsy Torrico</span> Formación</div>
+              <div class="text-center group">
+                  <img src="https://i.imgur.com/Znf7sdh.jpeg" class="w-20 h-20 rounded-full mx-auto mb-2 grayscale group-hover:grayscale-0 transition object-cover">
+                  <div class="font-bold text-sm">Yhelsy Torrico</div>
+                  <div class="text-xs text-slate-500">Estudiante Formación</div>
               </div>
           </div>
       </div>
