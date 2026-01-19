@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Evaluación | SIF Peer Review</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #1F2937;
+            --panel-bg: #FFFFFF;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --uagrm-blue: #003366;
+            --text-serif: 'Merriweather', serif;
+            --text-sans: 'Inter', sans-serif;
+        }
+
+        body { margin: 0; height: 100vh; overflow: hidden; background: var(--bg-dark); font-family: var(--text-sans); display: flex; }
+
+        /* --- COLUMNA IZQUIERDA: VISOR DE DOCUMENTO --- */
+        .doc-viewer {
+            flex: 2; /* Ocupa 2/3 de la pantalla */
+            background: #374151;
+            display: flex; flex-direction: column;
+            border-right: 1px solid #000;
+        }
+
+        .viewer-header {
+            height: 60px; background: #111827; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+            border-bottom: 1px solid #4B5563;
+        }
+        .blind-badge {
+            background: #F59E0B; color: black; padding: 4px 12px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; display: flex; align-items: center; gap: 5px;
+        }
+        
+        .pdf-mockup {
+            flex: 1; margin: 20px; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            overflow-y: auto; padding: 60px; font-family: var(--text-serif); color: #333; line-height: 1.8;
+        }
+        .pdf-mockup h1 { font-size: 1.8rem; margin-bottom: 40px; text-align: center; }
+        .redacted { background: black; color: black; border-radius: 2px; } /* Efecto de censura */
+
+        /* --- COLUMNA DERECHA: RÚBRICA --- */
+        .rubric-panel {
+            flex: 1; /* Ocupa 1/3 */
+            background: #F9FAFB;
+            display: flex; flex-direction: column;
+            border-left: 1px solid #E5E7EB;
+        }
+
+        .rubric-header {
+            padding: 20px; background: white; border-bottom: 1px solid #E5E7EB;
+        }
+        .rubric-header h2 { font-size: 1.1rem; color: var(--uagrm-blue); margin-bottom: 5px; }
+        .rubric-header p { font-size: 0.85rem; color: #6B7280; }
+
+        .rubric-body { flex: 1; overflow-y: auto; padding: 20px; }
+
+        .criteria-card {
+            background: white; padding: 15px; border-radius: 8px; border: 1px solid #E5E7EB; margin-bottom: 15px;
+            transition: box-shadow 0.2s;
+        }
+        .criteria-card:focus-within { border-color: var(--uagrm-blue); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        .criteria-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .score-input { 
+            width: 50px; padding: 5px; border: 1px solid #D1D5DB; border-radius: 4px; text-align: center; font-weight: bold;
+        }
+        
+        .radio-group { display: flex; gap: 10px; margin-top: 10px; }
+        .radio-btn {
+            flex: 1; padding: 8px; border: 1px solid #D1D5DB; border-radius: 4px; text-align: center; cursor: pointer; font-size: 0.8rem;
+        }
+        .radio-btn.selected { background: var(--uagrm-blue); color: white; border-color: var(--uagrm-blue); }
+
+        textarea {
+            width: 100%; height: 80px; margin-top: 10px; padding: 10px; border: 1px solid #D1D5DB; border-radius: 4px; resize: none; font-family: var(--text-sans);
+        }
+
+        .rubric-footer {
+            padding: 20px; background: white; border-top: 1px solid #E5E7EB;
+        }
+
+        .action-btn {
+            width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 1rem; margin-bottom: 10px; transition: transform 0.1s;
+        }
+        .btn-approve { background: var(--accent-green); color: white; }
+        .btn-reject { background: white; color: var(--accent-red); border: 2px solid var(--accent-red); }
+        .btn-approve:hover { background: #059669; }
+
+        /* Timer de sesión */
+        .timer { font-family: monospace; font-size: 1.1rem; color: #9CA3AF; display: flex; align-items: center; gap: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <section class="doc-viewer">
+        <div class="viewer-header">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span class="material-icons-round" style="color: #9CA3AF;">description</span>
+                <span style="font-weight: 600;">Proyecto: DICIT-2026-TEMP-045</span>
+            </div>
+            <div class="blind-badge">
+                <span class="material-icons-round" style="font-size: 16px;">visibility_off</span>
+                Revisión Doble Ciego
+            </div>
+            <div class="timer">
+                <span class="material-icons-round" style="font-size: 16px;">timer</span>
+                45:00
+            </div>
+        </div>
+
+        <div class="pdf-mockup">
+            <div style="text-align: center; color: #666; font-size: 0.8rem; margin-bottom: 20px;">
+                DOCUMENTO PRELIMINAR - SOLO PARA EVALUACIÓN
+            </div>
+            <h1>Efectos de la Automatización en la Gestión Pública Municipal de Cotoca</h1>
+            <p style="text-align: center; margin-bottom: 50px;">
+                <strong>Autor:</strong> <span class="redacted">[NOMBRE ELIMINADO POR SISTEMA]</span><br>
+                <strong>Unidad:</strong> <span class="redacted">[CENTRO ELIMINADO]</span>
+            </p>
+
+            <h3>1. Planteamiento del Problema</h3>
+            <p>La administración pública en los municipios intermedios de Santa Cruz enfrenta un desafío crítico en la digitalización de sus catastros. Actualmente, el 85% de los trámites son manuales, lo que genera...</p>
+            
+            <h3>2. Objetivos (Art. 46)</h3>
+            <p>El objetivo general es diseñar un prototipo de automatización basado en Python y SQLite para el registro de contribuyentes, reduciendo los tiempos de espera en un 40%...</p>
+
+            <h3>3. Metodología</h3>
+            <p>Se utilizará un enfoque mixto... <br><br> (El documento continúa...)</p>
+        </div>
+    </section>
+
+    <aside class="rubric-panel">
+        <div class="rubric-header">
+            <h2>Rúbrica de Evaluación</h2>
+            <p>Reglamento ICU 019-2025 | Cap. IV</p>
+        </div>
+
+        <div class="rubric-body">
+            
+            <div class="criteria-card">
+                <div class="criteria-title">
+                    1. Originalidad y Pertinencia
+                    <span style="color: #6B7280; font-size: 0.8rem;">(Max 30 pts)</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #555; margin-bottom: 10px;">
+                    ¿El problema abordado es relevante para la región y aporta conocimiento nuevo?
+                </div>
+                <div class="radio-group">
+                    <div class="radio-btn" onclick="selectScore(this, 'c1', 10)">Bajo</div>
+                    <div class="radio-btn" onclick="selectScore(this, 'c1', 20)">Medio</div>
+                    <div class="radio-btn selected" onclick="selectScore(this, 'c1', 30)">Alto</div>
+                </div>
+                <textarea placeholder="Observaciones sobre la pertinencia..."></originalidad>
+            </div>
+
+            <div class="criteria-card">
+                <div class="criteria-title">
+                    2. Rigor Metodológico
+                    <span style="color: #6B7280; font-size: 0.8rem;">(Max 40 pts)</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #555; margin-bottom: 10px;">
+                    ¿La metodología es coherente con los objetivos planteados?
+                </div>
+                <div class="radio-group">
+                    <div class="radio-btn" onclick="selectScore(this, 'c2', 10)">Deficiente</div>
+                    <div class="radio-btn" onclick="selectScore(this, 'c2', 25)">Aceptable</div>
+                    <div class="radio-btn" onclick="selectScore(this, 'c2', 40)">Excelente</div>
+                </div>
+                <textarea placeholder="Comentarios sobre la metodología..."></textarea>
+            </div>
+
+            <div class="criteria-card">
+                <div class="criteria-title">
+                    3. Viabilidad Presupuestaria
+                    <span style="color: #6B7280; font-size: 0.8rem;">(Max 30 pts)</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #555; margin-bottom: 10px;">
+                    ¿El presupuesto IDH solicitado es razonable y está justificado?
+                </div>
+                <div class="radio-group">
+                    <div class="radio-btn" onclick="selectScore(this, 'c3', 5)">No realista</div>
+                    <div class="radio-btn selected" onclick="selectScore(this, 'c3', 30)">Justificado</div>
+                </div>
+            </div>
+
+            <div style="background: #E0E7FF; padding: 15px; border-radius: 8px; text-align: center; color: var(--uagrm-blue);">
+                <span style="display: block; font-size: 0.8rem; text-transform: uppercase; font-weight: bold;">Calificación Total</span>
+                <span style="font-size: 2rem; font-weight: 800;">85/100</span>
+                <span style="display: block; font-size: 0.8rem; color: #10B981; font-weight: bold;">APROBABLE</span>
+            </div>
+
+        </div>
+
+        <div class="rubric-footer">
+            <button class="action-btn btn-approve" onclick="submitReview('aprobado')">
+                <span class="material-icons-round" style="vertical-align: middle; margin-right: 5px;">check_circle</span>
+                Aprobar Proyecto
+            </button>
+            <button class="action-btn btn-reject" onclick="submitReview('rechazado')">
+                Rechazar / Solicitar Cambios
+            </button>
+        </div>
+    </aside>
+
+    <script>
+        function selectScore(element, group, score) {
+            // Lógica visual para seleccionar botones
+            let parent = element.parentElement;
+            let siblings = parent.getElementsByClassName('radio-btn');
+            for(let btn of siblings) {
+                btn.classList.remove('selected');
+            }
+            element.classList.add('selected');
+        }
+
+        function submitReview(verdict) {
+            if(verdict === 'aprobado') {
+                alert("Dictamen Enviado: El proyecto pasará al Consejo Científico Facultativo.");
+            } else {
+                alert("Dictamen Enviado: Se notificará al investigador para correcciones.");
+            }
+            // Aquí iría la llamada al Backend (Python/Django)
+        }
+    </script>
+</body>
+</html>
