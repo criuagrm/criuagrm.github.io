@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigación UAGRM | Facultad de Ciencias Jurídicas y Políticas</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --uagrm-blue: #003366;
+            --uagrm-dark: #001a33;
+            --uagrm-red: #CC0000;
+            --uagrm-gold: #D4AF37;
+            --text-main: #1F2937;
+            --text-light: #6B7280;
+            --bg-light: #F9FAFB;
+            --white: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-light); color: var(--text-main); }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- NAVBAR: Transparente y Elegante --- */
+        nav {
+            background: var(--white);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .brand { display: flex; align-items: center; gap: 15px; }
+        .brand-logo { 
+            width: 45px; height: 45px; background: var(--uagrm-blue); border-radius: 8px; 
+            color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;
+        }
+        .brand-text h1 { font-size: 1rem; font-weight: 900; color: var(--uagrm-blue); text-transform: uppercase; line-height: 1.1; }
+        .brand-text span { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-link { font-weight: 600; color: var(--text-main); font-size: 0.95rem; transition: color 0.3s; }
+        .nav-link:hover { color: var(--uagrm-red); }
+
+        .btn-login {
+            background: var(--uagrm-blue); color: white; padding: 10px 24px; border-radius: 50px;
+            font-weight: 600; transition: transform 0.2s, background 0.2s; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-login:hover { background: var(--uagrm-red); transform: translateY(-2px); }
+
+        /* --- HERO SECTION: Impacto Visual --- */
+        .hero {
+            background: linear-gradient(rgba(0, 51, 102, 0.9), rgba(0, 26, 51, 0.9)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+        .hero-content { max-width: 800px; }
+        .hero h2 { font-size: 3rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 40px; line-height: 1.6; }
+        
+        .search-bar {
+            background: white; padding: 10px; border-radius: 50px; display: flex; width: 100%; max-width: 600px; margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .search-input { border: none; flex: 1; padding: 10px 20px; font-size: 1rem; outline: none; border-radius: 50px; }
+        .search-btn {
+            background: var(--uagrm-gold); color: var(--uagrm-dark); width: 50px; height: 50px; border-radius: 50%;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- STATS BAR (Transparencia Art. 60) --- */
+        .stats-bar {
+            background: white; margin: -50px auto 50px; width: 90%; max-width: 1100px;
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: grid; grid-template-columns: repeat(4, 1fr); padding: 30px;
+            position: relative; z-index: 10;
+        }
+        .stat-item { text-align: center; border-right: 1px solid #eee; }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-size: 2.5rem; font-weight: 800; color: var(--uagrm-blue); display: block; }
+        .stat-label { font-size: 0.85rem; text-transform: uppercase; color: var(--text-light); font-weight: 600; letter-spacing: 1px; }
+
+        /* --- SECCIÓN CENTROS --- */
+        .section { padding: 80px 5%; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .badge { background: #E0E7FF; color: var(--uagrm-blue); padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+        .section-title { font-size: 2.2rem; font-weight: 800; color: var(--uagrm-dark); margin-top: 10px; }
+        
+        .centers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        
+        .center-card {
+            background: white; border-radius: 16px; overflow: hidden; transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;
+        }
+        .center-card:hover { transform: translateY(-10px); box-shadow: 0 20px 30px rgba(0,0,0,0.1); }
+        .center-header { height: 100px; position: relative; }
+        
+        /* Colores Específicos por Centro */
+        .bg-pol { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .bg-der { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+        .bg-rrii { background: linear-gradient(45deg, #3498db, #2980b9); }
+        .bg-soc { background: linear-gradient(45deg, #f1c40f, #f39c12); }
+
+        .center-icon {
+            width: 60px; height: 60px; background: white; border-radius: 12px;
+            position: absolute; bottom: -30px; left: 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 30px;
+        }
+        .center-body { padding: 40px 20px 20px; }
+        .center-body h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--uagrm-dark); }
+        .center-body p { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; margin-bottom: 20px; }
+        .link-arrow { color: var(--uagrm-blue); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+
+        /* --- TRANSPARENCIA IDH (Visualización) --- */
+        .transparency-box {
+            background: var(--white); border-radius: 20px; padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+        }
+        .bar-container { margin-bottom: 20px; }
+        .bar-label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 5px; }
+        .progress-bg { background: #f0f0f0; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 5px; }
+        
+        /* --- FOOTER --- */
+        footer { background: var(--uagrm-dark); color: white; padding: 60px 5%; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; }
+        .footer-col h4 { color: var(--uagrm-gold); margin-bottom: 20px; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 10px; opacity: 0.8; }
+        
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="brand">
+            <div class="brand-logo">U</div>
+            <div class="brand-text">
+                <h1>Investigación Facultativa</h1>
+                <span>Ciencias Jurídicas y Políticas</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link">Inicio</a>
+            <a href="#centros" class="nav-link">Centros</a>
+            <a href="#proyectos" class="nav-link">Proyectos</a>
+            <a href="#transparencia" class="nav-link">Transparencia IDH</a>
+        </div>
+        <a href="login.html" class="btn-login">
+            <span class="material-icons-round" style="font-size: 18px;">lock</span> Acceso Investigador
+        </a>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h2>El conocimiento transforma sociedades</h2>
+            <p>Accede a la producción científica, datos abiertos y proyectos de la Facultad de Ciencias Jurídicas, Políticas, Sociales y RRII.</p>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Buscar tesis, papers, investigadores...">
+                <button class="search-btn">
+                    <span class="material-icons-round">search</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-num">42</span>
+            <span class="stat-label">Proyectos Activos</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-num">18</span>
+            <span class="stat-label">Papers 2025</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-num">1.2M</span>
+            <span class="stat-label">Inv. Ejecutada (Bs)</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-num">4</span>
+            <span class="stat-label">Centros Especializados</span>
+        </div>
+    </div>
+
+    <section id="centros" class="section">
+        <div class="section-header">
+            <span class="badge">Nuestra Red</span>
+            <h3 class="section-title">Centros de Investigación</h3>
+            <p style="color: #666; max-width: 600px; margin: 10px auto;">Estructura operativa basada en el Art. 26 del Reglamento de Investigación UAGRM.</p>
+        </div>
+
+        <div class="centers-grid">
+            <div class="center-card">
+                <div class="center-header bg-pol">
+                    <div class="center-icon">🗳️</div>
+                </div>
+                <div class="center-body">
+                    <h3>C.R.I. Ciencia Política</h3>
+                    <p>Análisis de sistemas electorales, comportamiento político y gestión pública regional.</p>
+                    <a href="#" class="link-arrow">Ver Publicaciones <span class="material-icons-round">arrow_forward</span></a>
+                </div>
+            </div>
+
+            <div class="center-card">
+                <div class="center-header bg-der">
+                    <div class="center-icon">⚖️</div>
+                </div>
+                <div class="center-body">
+                    <h3>C.I.J. Derecho</h3>
+                    <p>Investigación jurídica, dogmática, derechos humanos y reforma judicial.</p>
+                    <a href="#" class="link-arrow">Ver Publicaciones <span class="material-icons-round">arrow_forward</span></a>
+                </div>
+            </div>
+
+            <div class="center-card">
+                <div class="center-header bg-rrii">
+                    <div class="center-icon">🌍</div>
+                </div>
+                <div class="center-body">
+                    <h3>C.E.I. Relaciones Int.</h3>
+                    <p>Estudios fronterizos, geopolítica, integración y comercio exterior.</p>
+                    <a href="#" class="link-arrow">Ver Publicaciones <span class="material-icons-round">arrow_forward</span></a>
+                </div>
+            </div>
+
+             <div class="center-card">
+                <div class="center-header bg-soc">
+                    <div class="center-icon">🤝</div>
+                </div>
+                <div class="center-body">
+                    <h3>C.I.D.S. Trabajo Social</h3>
+                    <p>Intervención comunitaria, políticas públicas sociales y bienestar familiar.</p>
+                    <a href="#" class="link-arrow">Ver Publicaciones <span class="material-icons-round">arrow_forward</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="transparencia" class="section" style="background: #F3F4F6;">
+        <div class="transparency-box">
+            <div>
+                <span class="badge" style="background: var(--uagrm-gold); color: black;">Transparencia Art. 60</span>
+                <h3 class="section-title" style="margin-bottom: 20px;">Ejecución de Fondos IDH</h3>
+                <p style="color: #555; margin-bottom: 20px;">
+                    En cumplimiento con la normativa universitaria, publicamos en tiempo real la ejecución del presupuesto asignado a investigación científica.
+                </p>
+                <button style="padding: 12px 24px; background: var(--uagrm-dark); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    Descargar Informe Auditado (PDF)
+                </button>
+            </div>
+            <div>
+                <div class="bar-container">
+                    <div class="bar-label"><span>Activos Fijos (Equipos)</span> <span>75%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 75%; background: var(--uagrm-blue);"></div></div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-label"><span>Trabajo de Campo (Viáticos)</span> <span>40%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 40%; background: var(--uagrm-red);"></div></div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-label"><span>Publicaciones y Divulgación</span> <span>60%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: 60%; background: var(--uagrm-gold);"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h2 style="margin-bottom: 10px;">UAGRM</h2>
+                <p style="opacity: 0.7; font-size: 0.9rem;">Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales.</p>
+                <div style="margin-top: 20px; font-size: 0.8rem; color: #888;">
+                    Desarrollado bajo el Reglamento ICU N° 019-2025.
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="#">Repositorio Institucional</a></li>
+                    <li><a href="#">Revista "Conocimiento i Política"</a></li>
+                    <li><a href="#">Convocatorias Abiertas</a></li>
+                    <li><a href="#">Reglamento de Investigación</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto IIF</h4>
+                <ul>
+                    <li>Ciudad Universitaria, Módulo 214</li>
+                    <li>Santa Cruz de la Sierra, Bolivia</li>
+                    <li>investigacion.fcjpsrrii@uagrm.edu.bo</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
