@@ -12,45 +12,104 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui"] }
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui"] },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800">
-  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-sky-100 selection:text-sky-700">
+  
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-sky-500 to-rose-500"></div>
 
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-10 object-contain" />
-        <div class="leading-tight">
-          <p class="text-[10px] tracking-widest text-slate-500 font-bold uppercase">UAGRM</p>
-          <h1 class="font-bold text-lg tracking-tight">CIRCPyCS</h1>
-        </div>
-      </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
-        <a href="#cartillas" class="hover:text-sky-700">Explorar</a>
-        <a href="#series" class="hover:text-sky-700">Series</a>
-        <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 transition-all">
-          <i class="fa-solid fa-arrow-left text-xs"></i> Volver al CRI
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 supports-[backdrop-filter]:bg-white/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <a href="#" class="flex items-center gap-3 group">
+          <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain group-hover:scale-105 transition-transform" />
+          <div class="leading-tight">
+            <p class="text-[10px] tracking-widest text-slate-500 font-bold uppercase">UAGRM</p>
+            <h1 class="font-bold text-lg tracking-tight text-slate-900">CIRCPyCS</h1>
+          </div>
         </a>
-      </nav>
+
+        <nav class="hidden md:flex items-center gap-1">
+          <a href="#cartillas" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-sky-700 rounded-lg hover:bg-slate-50 transition-colors">Explorar</a>
+          <a href="#series" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-sky-700 rounded-lg hover:bg-slate-50 transition-colors">Series</a>
+          <div class="w-px h-5 bg-slate-200 mx-2"></div>
+          <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-700 bg-white border border-slate-200 rounded-xl hover:border-sky-500 hover:text-sky-600 hover:shadow-sm transition-all">
+            <i class="fa-solid fa-house text-xs"></i> Inicio
+          </a>
+        </nav>
+
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus:outline-none">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-white border-b border-slate-200 shadow-lg animate-[fadeIn_0.2s_ease-out]">
+      <div class="px-4 py-4 space-y-2">
+        <a href="#cartillas" class="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-sky-700">Explorar Cartillas</a>
+        <a href="#series" class="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-sky-700">Series Temáticas</a>
+        <div class="h-px bg-slate-100 my-2"></div>
+        <a href="https://criuagrm.github.io/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-bold text-white bg-slate-900 shadow-md">
+          <i class="fa-solid fa-house"></i> Ir a Inicio
+        </a>
+      </div>
     </div>
   </header>
 
   <section id="inicio" class="relative overflow-hidden bg-white border-b border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
-      <div>
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-700 ring-1 ring-sky-200 mb-6 uppercase tracking-wider">Divulgación Científica</span>
-        <h2 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">Cartillas de Divulgación — CIRCPyCS UAGRM</h2>
-        <p class="mt-6 text-lg text-slate-600 leading-relaxed">Publicaciones breves y accionables diseñadas para fortalecer el conocimiento sobre <b>instituciones</b>, <b>política</b> y <b>gestión y políticas públicas</b> en Bolivia.</p>
+    <div class="absolute top-0 inset-x-0 h-64 bg-gradient-to-b from-slate-50 to-white -z-10"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      
+      <div class="text-center lg:text-left z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 mb-6">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+          </span>
+          <span class="text-xs font-bold text-sky-700 uppercase tracking-wider">Divulgación Científica</span>
+        </div>
+        
+        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+          Cartillas de <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-indigo-600">Divulgación</span>
+        </h2>
+        <p class="mt-6 text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          Herramientas breves y accionables para fortalecer el conocimiento sobre <b>instituciones</b>, <b>política</b> y <b>gestión pública</b> en Bolivia.
+        </p>
+        
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <a href="#cartillas" class="px-8 py-3.5 rounded-xl bg-slate-900 text-white font-bold shadow-lg hover:bg-slate-800 hover:scale-105 transition-all duration-300">
+            Ver Cartillas
+          </a>
+          <a href="#series" class="px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold hover:border-sky-300 hover:text-sky-700 hover:shadow-md transition-all duration-300">
+            Explorar Series
+          </a>
+        </div>
       </div>
-      <div class="flex justify-center lg:justify-end relative">
-        <img src="https://i.imgur.com/l69Irw0.png" alt="Cartillas" class="w-full max-w-lg brightness-110 drop-shadow-[0_20px_50px_rgba(8,_112,_184,_0.6)] animate-[pulse_12s_ease-in-out_infinite]" />
+
+      <div class="relative flex justify-center lg:justify-end">
+        <div class="absolute inset-0 bg-gradient-to-tr from-sky-200/40 via-purple-200/40 to-emerald-200/40 rounded-full blur-3xl scale-90 animate-pulse"></div>
+        
+        <img src="https://i.imgur.com/l69Irw0.png" 
+             alt="Colección de Cartillas" 
+             class="relative z-10 w-full max-w-md lg:max-w-lg object-contain drop-shadow-2xl animate-float hover:scale-105 transition-transform duration-500" 
+             style="filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));" />
       </div>
     </div>
   </section>
@@ -58,167 +117,187 @@
   <section id="cartillas" class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="mb-8 flex items-end justify-between border-b border-slate-200 pb-4">
+      <div class="mb-10 flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-4">
         <div>
-            <h3 class="text-2xl font-bold text-slate-900">Serie: Formación Política (2026)</h3>
-            <p class="text-slate-500">Ciclo Electoral 2026 — Instituciones e Identidad Regional</p>
+            <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-landmark text-sky-600"></i> Formación Política (2026)
+            </h3>
+            <p class="text-slate-500 mt-1">Ciclo Electoral 2026 — Instituciones e Identidad Regional</p>
         </div>
-        <span class="text-xs font-bold bg-slate-200 text-slate-600 px-2 py-1 rounded uppercase">3 Documentos</span>
+        <span class="inline-block text-[10px] font-bold bg-white border border-slate-200 text-slate-500 px-3 py-1 rounded-full uppercase shadow-sm whitespace-nowrap">3 Documentos</span>
       </div>
 
-      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-20">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
 
-        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all flex flex-col h-full overflow-hidden">
-          <div class="h-64 bg-slate-100 relative">
-             <img src="https://i.imgur.com/hDIYgVr.png" class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700" />
-             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
-             <div class="absolute bottom-4 left-4 text-white">
-                <div class="text-[10px] font-bold bg-rose-600 px-2 py-0.5 rounded inline-block mb-1">Vol 1. No 1</div>
+        <article class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100">
+          <div class="h-56 relative overflow-hidden">
+             <img src="https://i.imgur.com/hDIYgVr.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+             <div class="absolute bottom-4 left-5">
+                <span class="inline-block px-2 py-1 rounded text-[10px] font-bold bg-rose-500 text-white uppercase tracking-wide shadow-sm">Vol 1. No 1</span>
              </div>
           </div>
           <div class="p-6 flex flex-col grow">
-            <h4 class="font-bold text-xl text-slate-900 leading-snug">La construcción narrativa de la autonomía</h4>
-            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Examina cómo el lenguaje político condiciona la percepción de capacidad legislativa de los Gobiernos Autónomos.</p>
+            <h4 class="font-bold text-xl text-slate-900 leading-tight group-hover:text-rose-600 transition-colors">La construcción narrativa de la autonomía</h4>
+            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">El lenguaje político condiciona la percepción de capacidad legislativa de los Gobiernos Autónomos.</p>
             
-            <div class="mt-5 p-3 rounded-lg bg-slate-50 border border-slate-200 relative group/cite">
-              <p id="cite-1" class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2026). La construcción narrativa de la autonomía (Vol 1, No. 1). Serie: Formación Política. UAGRM.</p>
-              <button onclick="copyText('cite-1')" class="absolute top-2 right-2 text-sky-600 hover:text-sky-800" title="Copiar cita">
-                <i class="fa-regular fa-copy"></i>
+            <div class="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 relative group/cite">
+              <p id="cite-1" class="text-[10px] font-mono text-slate-500 leading-tight italic pr-6">CIRCPyCS. (2026). La construcción narrativa de la autonomía (Vol 1, No. 1). UAGRM.</p>
+              <button onclick="copyText('cite-1')" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded bg-white text-slate-400 hover:text-sky-600 shadow-sm transition-colors" title="Copiar cita">
+                <i class="fa-regular fa-copy text-xs"></i>
               </button>
             </div>
 
-            <div class="mt-6 flex gap-2">
-              <a href="https://drive.google.com/file/d/1rK7R47P1UqKrtUOHYZq4e4uGAF132P86/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="grow py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold hover:bg-black transition-colors"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</a>
-              <button onclick="openModal('https://i.imgur.com/hDIYgVr.png')" class="grow py-2.5 rounded-xl border border-slate-300 text-sm font-bold hover:bg-slate-50 transition-colors"><i class="fa-solid fa-image mr-2"></i>Infografía</button>
+            <div class="mt-6 flex gap-3">
+              <a href="https://drive.google.com/file/d/1rK7R47P1UqKrtUOHYZq4e4uGAF132P86/view?usp=sharing" target="_blank" class="flex-1 py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold shadow-md hover:bg-black hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-file-pdf"></i> PDF
+              </a>
+              <button onclick="openModal('https://i.imgur.com/hDIYgVr.png')" class="flex-1 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-bold hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-image"></i> Info
+              </button>
             </div>
           </div>
         </article>
 
-        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all flex flex-col h-full overflow-hidden">
-          <div class="h-64 bg-slate-100 relative">
-            <img src="https://i.imgur.com/teRld4E.png" class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
-            <div class="absolute bottom-4 left-4 text-white">
-                <div class="text-[10px] font-bold bg-purple-600 px-2 py-0.5 rounded inline-block mb-1">Vol 1. No 2</div>
+        <article class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100">
+          <div class="h-56 relative overflow-hidden">
+            <img src="https://i.imgur.com/teRld4E.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-5">
+                <span class="inline-block px-2 py-1 rounded text-[10px] font-bold bg-purple-600 text-white uppercase tracking-wide shadow-sm">Vol 1. No 2</span>
              </div>
           </div>
           <div class="p-6 flex flex-col grow">
-            <h4 class="font-bold text-xl text-slate-900 leading-snug">Gobernar es Legislar</h4>
-            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Propuesta sobre la jerarquía normativa: por qué una Ley Municipal tiene igual rango que una Nacional en su competencia.</p>
+            <h4 class="font-bold text-xl text-slate-900 leading-tight group-hover:text-purple-600 transition-colors">Gobernar es Legislar</h4>
+            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">¿Por qué una Ley Municipal tiene el mismo rango jurídico que una Ley Nacional?</p>
             
-            <div class="mt-5 p-3 rounded-lg bg-slate-50 border border-slate-200 relative group/cite">
-              <p id="cite-2" class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2026). Gobernar es Legislar (Vol 1, No. 2). Serie: Formación Política. UAGRM.</p>
-              <button onclick="copyText('cite-2')" class="absolute top-2 right-2 text-sky-600 hover:text-sky-800"><i class="fa-regular fa-copy"></i></button>
+            <div class="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 relative group/cite">
+              <p id="cite-2" class="text-[10px] font-mono text-slate-500 leading-tight italic pr-6">CIRCPyCS. (2026). Gobernar es Legislar (Vol 1, No. 2). UAGRM.</p>
+              <button onclick="copyText('cite-2')" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded bg-white text-slate-400 hover:text-sky-600 shadow-sm transition-colors">
+                <i class="fa-regular fa-copy text-xs"></i>
+              </button>
             </div>
 
-            <div class="mt-6 flex gap-2">
-              <a href="https://drive.google.com/file/d/14TdB6kobIRXYAZO6FjmBqziTgC_vRm_X/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="grow py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold hover:bg-black transition-colors"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</a>
-              <button onclick="openModal('https://i.imgur.com/teRld4E.png')" class="grow py-2.5 rounded-xl border border-slate-300 text-sm font-bold hover:bg-slate-50 transition-colors"><i class="fa-solid fa-image mr-2"></i>Infografía</button>
+            <div class="mt-6 flex gap-3">
+              <a href="https://drive.google.com/file/d/14TdB6kobIRXYAZO6FjmBqziTgC_vRm_X/view?usp=sharing" target="_blank" class="flex-1 py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold shadow-md hover:bg-black hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-file-pdf"></i> PDF
+              </a>
+              <button onclick="openModal('https://i.imgur.com/teRld4E.png')" class="flex-1 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-bold hover:border-purple-200 hover:bg-purple-50 hover:text-purple-700 transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-image"></i> Info
+              </button>
             </div>
           </div>
         </article>
 
-        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all flex flex-col h-full overflow-hidden">
-          <div class="h-64 bg-slate-100 relative">
-            <img src="https://i.imgur.com/IcG90PH.png" class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-700" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
-            <div class="absolute bottom-4 left-4 text-white">
-                <div class="text-[10px] font-bold bg-sky-600 px-2 py-0.5 rounded inline-block mb-1">Vol 1. No 3</div>
+        <article class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100">
+          <div class="h-56 relative overflow-hidden">
+            <img src="https://i.imgur.com/IcG90PH.png" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-5">
+                <span class="inline-block px-2 py-1 rounded text-[10px] font-bold bg-sky-600 text-white uppercase tracking-wide shadow-sm">Vol 1. No 3</span>
              </div>
           </div>
           <div class="p-6 flex flex-col grow">
-            <h4 class="font-bold text-xl text-slate-900 leading-snug">Gobernar sin pedir permiso</h4>
-            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Uso de la metáfora del semáforo para identificar espacios de autonomía plena frente a las trampas del centralismo.</p>
+            <h4 class="font-bold text-xl text-slate-900 leading-tight group-hover:text-sky-600 transition-colors">Gobernar sin pedir permiso</h4>
+            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">La metáfora del semáforo: espacios de autonomía plena frente a las trampas del centralismo.</p>
             
-            <div class="mt-5 p-3 rounded-lg bg-slate-50 border border-slate-200 relative group/cite">
-              <p id="cite-3" class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2026). Gobernar sin pedir permiso (Vol 1, No. 3). Serie: Formación Política. UAGRM.</p>
-              <button onclick="copyText('cite-3')" class="absolute top-2 right-2 text-sky-600 hover:text-sky-800"><i class="fa-regular fa-copy"></i></button>
+            <div class="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 relative group/cite">
+              <p id="cite-3" class="text-[10px] font-mono text-slate-500 leading-tight italic pr-6">CIRCPyCS. (2026). Gobernar sin pedir permiso (Vol 1, No. 3). UAGRM.</p>
+              <button onclick="copyText('cite-3')" class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded bg-white text-slate-400 hover:text-sky-600 shadow-sm transition-colors">
+                <i class="fa-regular fa-copy text-xs"></i>
+              </button>
             </div>
 
-            <div class="mt-6 flex gap-2">
-              <a href="https://drive.google.com/file/d/1seeU7VZD08YkB1HUY7HmaFgsh02g74iZ/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="grow py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold hover:bg-black transition-colors"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</a>
-              <button onclick="openModal('https://i.imgur.com/IcG90PH.png')" class="grow py-2.5 rounded-xl border border-slate-300 text-sm font-bold hover:bg-slate-50 transition-colors"><i class="fa-solid fa-image mr-2"></i>Infografía</button>
+            <div class="mt-6 flex gap-3">
+              <a href="https://drive.google.com/file/d/1seeU7VZD08YkB1HUY7HmaFgsh02g74iZ/view?usp=sharing" target="_blank" class="flex-1 py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold shadow-md hover:bg-black hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-file-pdf"></i> PDF
+              </a>
+              <button onclick="openModal('https://i.imgur.com/IcG90PH.png')" class="flex-1 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-bold hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700 transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-image"></i> Info
+              </button>
             </div>
           </div>
         </article>
 
       </div>
 
-      <div class="mb-8 flex items-end justify-between border-b border-slate-200 pb-4">
+      <div class="mb-10 flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-4">
         <div>
-            <h3 class="text-2xl font-bold text-slate-900">Serie: Gestión y Territorio (2025)</h3>
-            <p class="text-slate-500">Herramientas técnicas para la administración pública municipal</p>
+            <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-city text-emerald-600"></i> Gestión y Territorio (2025)
+            </h3>
+            <p class="text-slate-500 mt-1">Herramientas técnicas para la administración pública municipal</p>
         </div>
-        <span class="text-xs font-bold bg-slate-200 text-slate-600 px-2 py-1 rounded uppercase">3 Documentos</span>
+        <span class="inline-block text-[10px] font-bold bg-white border border-slate-200 text-slate-500 px-3 py-1 rounded-full uppercase shadow-sm whitespace-nowrap">3 Documentos</span>
       </div>
 
-      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all flex flex-col h-full overflow-hidden">
-          <div class="h-64 bg-amber-50 relative">
-             <div class="w-full h-full bg-gradient-to-br from-amber-400 to-orange-600"></div>
-             <div class="absolute bottom-4 left-4 text-white">
-                <div class="text-[10px] font-bold bg-black/30 px-2 py-0.5 rounded inline-block mb-1 backdrop-blur">Vol 2. No 1</div>
+        <article class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100">
+          <div class="h-56 relative overflow-hidden bg-slate-100">
+             <div class="w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 group-hover:scale-110 transition-transform duration-700"></div>
+             <div class="absolute bottom-4 left-5">
+                <span class="inline-block px-2 py-1 rounded text-[10px] font-bold bg-white/20 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide">Vol 2. No 1</span>
              </div>
           </div>
           <div class="p-6 flex flex-col grow">
-            <h4 class="font-bold text-xl text-slate-900 leading-snug">Finanzas Públicas para No Economistas</h4>
-            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Guía esencial para entender el POA y el Presupuesto Municipal: cómo priorizar la inversión sin perder la solvencia.</p>
+            <h4 class="font-bold text-xl text-slate-900 leading-tight">Finanzas Públicas para No Economistas</h4>
+            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Entender el POA y el Presupuesto: priorizar la inversión sin perder la solvencia.</p>
             
-            <div class="mt-5 p-3 rounded-lg bg-slate-50 border border-slate-200 relative group/cite">
-              <p id="cite-4" class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2025). Finanzas Públicas para No Economistas. Serie: Gestión y Territorio. UAGRM.</p>
-              <button onclick="copyText('cite-4')" class="absolute top-2 right-2 text-sky-600 hover:text-sky-800"><i class="fa-regular fa-copy"></i></button>
+            <div class="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 relative">
+              <p class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2025). Finanzas Públicas. UAGRM.</p>
             </div>
 
-            <div class="mt-6 flex gap-2">
-              <a href="#" class="grow py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold hover:bg-black transition-colors"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</a>
-              <button class="grow py-2.5 rounded-xl border border-slate-300 text-sm font-bold hover:bg-slate-50 text-slate-400 cursor-not-allowed">Proximamente</button>
+            <div class="mt-6 flex gap-3">
+              <button class="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-400 text-sm font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fa-regular fa-clock"></i> Próximamente
+              </button>
             </div>
           </div>
         </article>
 
-        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all flex flex-col h-full overflow-hidden">
-          <div class="h-64 bg-indigo-50 relative">
-            <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-700"></div>
-            <div class="absolute bottom-4 left-4 text-white">
-                <div class="text-[10px] font-bold bg-black/30 px-2 py-0.5 rounded inline-block mb-1 backdrop-blur">Vol 2. No 2</div>
+        <article class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100">
+          <div class="h-56 relative overflow-hidden bg-slate-100">
+            <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-violet-600 group-hover:scale-110 transition-transform duration-700"></div>
+            <div class="absolute bottom-4 left-5">
+                <span class="inline-block px-2 py-1 rounded text-[10px] font-bold bg-white/20 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide">Vol 2. No 2</span>
              </div>
           </div>
           <div class="p-6 flex flex-col grow">
-            <h4 class="font-bold text-xl text-slate-900 leading-snug">Catastro y Planificación Urbana</h4>
-            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Del caos a la ciudad inteligente: estrategias para la actualización catastral y la recuperación de espacios públicos.</p>
+            <h4 class="font-bold text-xl text-slate-900 leading-tight">Catastro y Planificación Urbana</h4>
+            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Del caos a la ciudad inteligente: actualización catastral y recuperación de espacios.</p>
             
-            <div class="mt-5 p-3 rounded-lg bg-slate-50 border border-slate-200 relative group/cite">
-              <p id="cite-5" class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2025). Catastro y Planificación Urbana. Serie: Gestión y Territorio. UAGRM.</p>
-              <button onclick="copyText('cite-5')" class="absolute top-2 right-2 text-sky-600 hover:text-sky-800"><i class="fa-regular fa-copy"></i></button>
+            <div class="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 relative">
+              <p class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2025). Catastro Urbano. UAGRM.</p>
             </div>
 
-            <div class="mt-6 flex gap-2">
-              <a href="#" class="grow py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold hover:bg-black transition-colors"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</a>
-              <button class="grow py-2.5 rounded-xl border border-slate-300 text-sm font-bold hover:bg-slate-50 text-slate-400 cursor-not-allowed">Proximamente</button>
+            <div class="mt-6 flex gap-3">
+              <button class="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-400 text-sm font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fa-regular fa-clock"></i> Próximamente
+              </button>
             </div>
           </div>
         </article>
 
-        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all flex flex-col h-full overflow-hidden">
-          <div class="h-64 bg-teal-50 relative">
-            <div class="w-full h-full bg-gradient-to-br from-teal-400 to-cyan-600"></div>
-            <div class="absolute bottom-4 left-4 text-white">
-                <div class="text-[10px] font-bold bg-black/30 px-2 py-0.5 rounded inline-block mb-1 backdrop-blur">Vol 2. No 3</div>
+        <article class="group relative bg-white rounded-3xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col border border-slate-100">
+          <div class="h-56 relative overflow-hidden bg-slate-100">
+            <div class="w-full h-full bg-gradient-to-br from-teal-400 to-emerald-500 group-hover:scale-110 transition-transform duration-700"></div>
+            <div class="absolute bottom-4 left-5">
+                <span class="inline-block px-2 py-1 rounded text-[10px] font-bold bg-white/20 backdrop-blur-md border border-white/30 text-white uppercase tracking-wide">Vol 2. No 3</span>
              </div>
           </div>
           <div class="p-6 flex flex-col grow">
-            <h4 class="font-bold text-xl text-slate-900 leading-snug">Transparencia Activa Municipal</h4>
-            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Más allá de publicar PDFs escaneados: estándares de datos abiertos para recuperar la confianza ciudadana.</p>
+            <h4 class="font-bold text-xl text-slate-900 leading-tight">Transparencia Activa Municipal</h4>
+            <p class="mt-3 text-slate-600 text-sm leading-relaxed grow">Estándares de datos abiertos para recuperar la confianza ciudadana.</p>
             
-            <div class="mt-5 p-3 rounded-lg bg-slate-50 border border-slate-200 relative group/cite">
-              <p id="cite-6" class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2025). Transparencia Activa Municipal. Serie: Gestión y Territorio. UAGRM.</p>
-              <button onclick="copyText('cite-6')" class="absolute top-2 right-2 text-sky-600 hover:text-sky-800"><i class="fa-regular fa-copy"></i></button>
+            <div class="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 relative">
+              <p class="text-[10px] font-mono text-slate-500 leading-tight italic">CIRCPyCS. (2025). Transparencia Activa. UAGRM.</p>
             </div>
 
-            <div class="mt-6 flex gap-2">
-              <a href="#" class="grow py-2.5 rounded-xl bg-slate-900 text-white text-center text-sm font-bold hover:bg-black transition-colors"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</a>
-              <button class="grow py-2.5 rounded-xl border border-slate-300 text-sm font-bold hover:bg-slate-50 text-slate-400 cursor-not-allowed">Proximamente</button>
+            <div class="mt-6 flex gap-3">
+              <button class="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-400 text-sm font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                <i class="fa-regular fa-clock"></i> Próximamente
+              </button>
             </div>
           </div>
         </article>
@@ -228,16 +307,16 @@
   </section>
 
   <div id="image-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="relative bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl">
-      <div class="flex items-center justify-between p-4 border-b border-slate-100">
-        <span class="font-bold text-slate-900">Vista Previa: Infografía</span>
-        <button onclick="closeModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors">
+    <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+    <div class="relative bg-white rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-white z-10">
+        <span class="font-bold text-slate-900 flex items-center gap-2"><i class="fa-regular fa-image"></i> Vista Previa</span>
+        <button onclick="closeModal()" class="w-9 h-9 rounded-full flex items-center justify-center bg-slate-100 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div class="p-6 bg-slate-50 flex justify-center">
-        <img id="modal-content" src="" class="max-h-[70vh] w-auto rounded-lg shadow-lg" />
+      <div class="p-0 bg-slate-100 overflow-auto flex items-center justify-center grow">
+        <img id="modal-content" src="" class="max-w-full h-auto shadow-lg" />
       </div>
     </div>
   </div>
@@ -245,13 +324,18 @@
   {% include footer.html %}
 
   <script>
+    // Copiar Cita
     function copyText(id) {
       const text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text).then(() => {
-        alert("Cita bibliográfica copiada.");
+        const btn = document.querySelector(`[onclick="copyText('${id}')"]`);
+        const originalIcon = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check text-emerald-500"></i>';
+        setTimeout(() => { btn.innerHTML = originalIcon; }, 2000);
       });
     }
 
+    // Modal Logic
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-content');
 
@@ -265,6 +349,23 @@
       modal.classList.add('hidden');
       modalImg.src = '';
       document.body.style.overflow = '';
+    }
+
+    // Menú Móvil Logic
+    const btnMobile = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if(btnMobile && mobileMenu) {
+      btnMobile.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          btnMobile.innerHTML = '<i class="fa-solid fa-xmark text-xl"></i>';
+        } else {
+          mobileMenu.classList.add('hidden');
+          btnMobile.innerHTML = '<i class="fa-solid fa-bars text-xl"></i>';
+        }
+      });
     }
   </script>
 </body>
