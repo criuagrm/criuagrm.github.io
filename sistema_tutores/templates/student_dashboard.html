@@ -2,138 +2,139 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Practicum - Estudiante</title>
+    <title>Mi Panel - Estudiante</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-    <style>body { font-family: 'Outfit', sans-serif; }</style>
 </head>
-<body class="bg-slate-50 text-slate-800">
-
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center font-bold">CP</div>
-            <div class="leading-tight hidden sm:block">
-                <h1 class="font-bold text-slate-900">Panel del Estudiante</h1>
-                <p class="text-xs text-slate-500">Ciencia Política</p>
-            </div>
+<body class="bg-slate-50 font-sans">
+    
+    <nav class="bg-white border-b px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center">CP</span>
+            Panel Estudiante
         </div>
-        <a href="/logout" class="text-slate-500 hover:text-red-600 font-medium text-sm transition">
-            <i class="fa-solid fa-right-from-bracket mr-1"></i> Salir
-        </a>
+        <a href="/logout" class="text-sm text-red-600 font-bold">Salir</a>
     </nav>
 
-    <div class="max-w-5xl mx-auto p-6">
+    <div x-data="{ tab: 'inicio' }" class="max-w-4xl mx-auto p-6">
         
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-8 flex flex-col md:flex-row items-center gap-6">
-            <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center text-3xl text-slate-400">
-                <i class="fa-solid fa-user-graduate"></i>
-            </div>
-            <div class="flex-1 text-center md:text-left">
-                <h2 class="text-2xl font-bold text-slate-900">Hola, {{ profile.full_name }}</h2>
-                <div class="flex flex-wrap gap-4 justify-center md:justify-start mt-2">
-                    <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold border border-slate-200">
-                        <i class="fa-solid fa-id-card mr-1"></i> {{ profile.registro }}
-                    </span>
-                    <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold border border-green-200">
-                        <i class="fa-solid fa-check-circle mr-1"></i> {{ profile.status }}
-                    </span>
+        <div class="flex gap-2 overflow-x-auto mb-6 pb-2">
+            <button @click="tab = 'inicio'" :class="tab === 'inicio' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
+                <i class="fa-solid fa-house mr-1"></i> Inicio
+            </button>
+            <button @click="tab = 'plan'" :class="tab === 'plan' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
+                <i class="fa-solid fa-map mr-1"></i> Plan de Trabajo
+            </button>
+            <button @click="tab = 'bitacora'" :class="tab === 'bitacora' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
+                <i class="fa-solid fa-pen-to-square mr-1"></i> Bitácora
+            </button>
+            <button @click="tab = 'asistencia'" :class="tab === 'asistencia' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
+                <i class="fa-solid fa-clock mr-1"></i> Asistencia
+            </button>
+        </div>
+
+        <div x-show="tab === 'inicio'" class="animate-fade-in">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-6">
+                <h2 class="text-2xl font-bold mb-2">Hola, {{ profile.full_name }}</h2>
+                <p class="text-slate-500 mb-6">Bienvenido a tu gestor de Practicum.</p>
+                <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-blue-900">Carpeta Digital (Drive)</h3>
+                        <p class="text-sm text-blue-700">Sube aquí tus documentos firmados.</p>
+                    </div>
+                    <a href="{{ profile.drive_folder_url }}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700">Abrir</a>
                 </div>
-            </div>
-            <div class="text-right hidden md:block border-l pl-6 border-slate-100">
-                <p class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Tu Tutor Asignado</p>
-                <p class="font-bold text-slate-900 text-lg">{{ profile.tutor.name }}</p>
-                <p class="text-sm text-slate-500">{{ profile.tutor.email }}</p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div x-show="tab === 'plan'" style="display:none;">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                <h2 class="text-xl font-bold mb-6">Mi Plan de Trabajo</h2>
+                <form action="/student/save_plan" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Título del Proyecto</label>
+                        <input type="text" name="title" value="{{ profile.work_plan.title if profile.work_plan else '' }}" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-red-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Objetivo General</label>
+                        <textarea name="general_objective" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-red-500" required>{{ profile.work_plan.general_objective if profile.work_plan else '' }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Cronograma (Resumen)</label>
+                        <textarea name="schedule" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-red-500" required>{{ profile.work_plan.schedule if profile.work_plan else '' }}</textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800">Guardar Plan</button>
+                </form>
+            </div>
+        </div>
+
+        <div x-show="tab === 'bitacora'" style="display:none;">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-6">
+                <h2 class="text-xl font-bold mb-4">Nueva Entrada de Bitácora</h2>
+                <form action="/student/add_log" method="POST" class="flex flex-col gap-4 md:flex-row md:items-end">
+                    <div class="flex-1">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Fecha</label>
+                        <input type="date" name="date" class="w-full bg-slate-50 border p-2 rounded-lg" required>
+                    </div>
+                    <div class="flex-[3]">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Actividad Realizada</label>
+                        <input type="text" name="activity" class="w-full bg-slate-50 border p-2 rounded-lg" placeholder="Ej: Entrevista con director..." required>
+                    </div>
+                    <div class="w-24">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Horas</label>
+                        <input type="number" step="0.5" name="hours" class="w-full bg-slate-50 border p-2 rounded-lg" placeholder="4" required>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold h-[42px]"><i class="fa-solid fa-plus"></i></button>
+                </form>
+            </div>
+
+            <div class="space-y-3">
+                {% for log in profile.logs|reverse %}
+                <div class="bg-white p-4 rounded-xl border border-slate-100 flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-slate-800">{{ log.activity }}</p>
+                        <p class="text-xs text-slate-400">{{ log.date }}</p>
+                    </div>
+                    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold">{{ log.hours }} Hrs</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div x-show="tab === 'asistencia'" style="display:none;">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-6">
+                <h2 class="text-xl font-bold mb-4">Marcar Asistencia</h2>
+                <form action="/student/add_attendance" method="POST" class="flex flex-col gap-4 md:flex-row md:items-end">
+                    <div class="flex-1">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Fecha</label>
+                        <input type="date" name="date" class="w-full bg-slate-50 border p-2 rounded-lg" required>
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Entrada</label>
+                        <input type="time" name="entry" class="w-full bg-slate-50 border p-2 rounded-lg" required>
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-xs font-bold text-slate-400 uppercase">Salida</label>
+                        <input type="time" name="exit" class="w-full bg-slate-50 border p-2 rounded-lg" required>
+                    </div>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold h-[42px]"><i class="fa-solid fa-check"></i></button>
+                </form>
+            </div>
             
-            <div class="md:col-span-2">
-                <div class="bg-gradient-to-br from-blue-600 to-blue-500 rounded-3xl p-8 text-white shadow-xl shadow-blue-200 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-white opacity-10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition duration-500"></div>
-                    
-                    <h3 class="text-2xl font-bold mb-2">Tu Carpeta Digital</h3>
-                    <p class="text-blue-100 mb-8 max-w-sm">Aquí debes subir tu Plan de Trabajo, Informes Mensuales y Memoria Final. La Dirección revisará el contenido.</p>
-                    
-                    <a href="{{ profile.drive_folder_url }}" target="_blank" 
-                       class="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition shadow-md">
-                        <i class="fa-brands fa-google-drive text-xl"></i> Abrir en Google Drive
-                    </a>
-                </div>
-
-                <div class="mt-8">
-                    <h3 class="font-bold text-slate-900 text-lg mb-4">Hitos del Semestre</h3>
-                    <div class="space-y-3">
-                        <div class="bg-white p-4 rounded-xl border border-slate-100 flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-slate-800">Solicitud Aprobada</h4>
-                                <p class="text-xs text-slate-500">Trámite administrativo completado</p>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white p-4 rounded-xl border border-slate-100 flex items-center gap-4 opacity-75">
-                            <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center border-2 border-slate-200 border-dashed">
-                                2
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-slate-600">Plan de Trabajo</h4>
-                                <p class="text-xs text-slate-400">Pendiente de subir a Drive</p>
-                            </div>
-                        </div>
-
-                         <div class="bg-white p-4 rounded-xl border border-slate-100 flex items-center gap-4 opacity-75">
-                            <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center border-2 border-slate-200 border-dashed">
-                                3
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-bold text-slate-600">Informe de Medio Término</h4>
-                                <p class="text-xs text-slate-400">Pendiente de subir a Drive</p>
-                            </div>
-                        </div>
+            <div class="space-y-3">
+                {% for att in profile.attendance|reverse %}
+                <div class="bg-white p-4 rounded-xl border border-slate-100 flex justify-between items-center">
+                    <p class="text-sm font-bold text-slate-500 font-mono">{{ att.date }}</p>
+                    <div class="flex gap-4 text-sm">
+                        <span class="text-green-600"><i class="fa-solid fa-arrow-right-to-bracket"></i> {{ att.entry_time }}</span>
+                        <span class="text-red-500"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ att.exit_time }}</span>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-
-            <div class="bg-white rounded-3xl p-6 border border-slate-200 h-fit">
-                <h3 class="font-bold text-slate-900 mb-4">Datos del Tutor</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500"><i class="fa-solid fa-user-tie"></i></div>
-                        <div>
-                            <p class="text-xs text-slate-400 font-bold uppercase">Nombre</p>
-                            <p class="text-sm font-medium">{{ profile.tutor.name }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500"><i class="fa-solid fa-envelope"></i></div>
-                        <div>
-                            <p class="text-xs text-slate-400 font-bold uppercase">Email</p>
-                            <p class="text-sm font-medium">{{ profile.tutor.email }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500"><i class="fa-solid fa-phone"></i></div>
-                        <div>
-                            <p class="text-xs text-slate-400 font-bold uppercase">Teléfono</p>
-                            <p class="text-sm font-medium">{{ profile.tutor.phone }}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 pt-6 border-t border-slate-100">
-                    <p class="text-xs text-slate-500 text-center">
-                        Si necesitas cambiar de tutor, debes presentar una carta física en Dirección.
-                    </p>
-                </div>
-            </div>
-
         </div>
-    </div>
 
+    </div>
 </body>
 </html>
