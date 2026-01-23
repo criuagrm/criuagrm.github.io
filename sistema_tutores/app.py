@@ -6,10 +6,10 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from fpdf import FPDF
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_uagrm_politica' # Necesario para el login
+app.secret_key = 'clave_secreta_uagrm_politica' # Necesario para sesiones seguras
 
 # --- 1. CONFIGURACIÓN DE BASE DE DATOS ---
-# Render entrega la URL como 'postgres://', SQLAlchemy necesita 'postgresql://'
+# Detecta si estamos en Render (PostgreSQL) o en Local (SQLite)
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///local_tutores.db')
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
@@ -20,22 +20,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login' # Si no estás logueado, te manda aquí
 
 # --- 2. MODELOS DE BASE DE DATOS ---
 
 class User(UserMixin, db.Model):
-    """Sistema de Usuarios (Admin y Estudiantes)"""
+    """Sistema de Usuarios (Login)"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True) # Admin: 'admin', Est: Registro
-    password = db.Column(db.String(100)) # Admin: 'admin123', Est: Carnet
+    password = db.Column(db.String(100)) # Admin: '123', Est: Carnet
     role = db.Column(db.String(20)) # 'admin' o 'student'
     
     # Relación con perfil de estudiante
     student_profile = db.relationship('StudentProfile', backref='user_account', uselist=False)
 
 class Tutor(db.Model):
-    """Lista de Docentes y Cupos"""
+    """Docentes y sus Cupos"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     phone = db.Column(db.String(50))
@@ -48,7 +48,7 @@ class Tutor(db.Model):
     students = db.relationship('StudentProfile', backref='tutor', lazy=True)
 
 class StudentProfile(db.Model):
-    """Perfil del Estudiante (Solicitudes)"""
+    """Perfil del Estudiante (Datos Académicos)"""
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # Se vincula al aprobar
     
@@ -64,7 +64,7 @@ class StudentProfile(db.Model):
     submissions = db.relationship('Submission', backref='student', lazy=True)
 
 class Submission(db.Model):
-    """Control de Hitos/Entregas"""
+    """Control de Hitos (Para futuro uso de semáforos)"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     tipo = db.Column(db.String(50)) # 'PLAN', 'INFORME', 'MEMORIA'
@@ -72,7 +72,7 @@ class Submission(db.Model):
     status = db.Column(db.String(20), default='EN_REVISION') 
     teacher_feedback = db.Column(db.Text)
 
-# --- 3. CONFIGURACIÓN INICIAL ---
+# --- 3. CONFIGURACIÓN INICIAL Y CARGA DE DATOS ---
 CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
 
 @login_manager.user_loader
@@ -231,19 +231,10 @@ def login():
             else:
                 return redirect(url_for('student_dashboard'))
         else:
-            return "<h1>Usuario o contraseña incorrectos</h1><a href='/login'>Volver</a>"
+            # Aquí podrías pasar un mensaje de error a la plantilla si usas flash
+            return render_template('login.html', error="Usuario o contraseña incorrectos")
             
-    # Formulario Login Simple (HTML incrustado para no crear archivo extra por ahora)
-    return """
-    <div style="font-family:sans-serif; max-width:400px; margin:50px auto; padding:20px; border:1px solid #ccc; border-radius:10px;">
-        <h2 style="text-align:center;">Ingreso al Sistema</h2>
-        <form method="POST">
-            <input type="text" name="username" placeholder="Usuario / Registro" required style="width:100%; padding:10px; margin-bottom:10px;">
-            <input type="password" name="password" placeholder="Contraseña / Carnet" required style="width:100%; padding:10px; margin-bottom:10px;">
-            <button type="submit" style="width:100%; padding:10px; background:#cc0000; color:white; border:none; border-radius:5px; cursor:pointer;">Ingresar</button>
-        </form>
-    </div>
-    """
+    return render_template('login.html')
 
 @app.route('/logout')
 @login_required
@@ -256,46 +247,14 @@ def logout():
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
-    if current_user.role != 'admin': return "Acceso Denegado"
+    if current_user.role != 'admin': return redirect(url_for('index'))
     
-    # Lista de solicitudes pendientes
+    # Recuperar listas para mostrar en el HTML
     pendientes = StudentProfile.query.filter_by(status='PENDIENTE').all()
     activos = StudentProfile.query.filter_by(status='ACTIVO').all()
     
-    # HTML simple del Admin
-    html = """
-    <div style="font-family:sans-serif; padding:20px;">
-        <h1>Panel del Director</h1>
-        <a href="/logout" style="color:red;">Cerrar Sesión</a>
-        <hr>
-        <h2>Solicitudes Pendientes (Requieren Aprobación)</h2>
-        <table border="1" cellpadding="10" style="border-collapse:collapse; width:100%;">
-            <tr style="background:#eee;">
-                <th>Estudiante</th><th>Registro</th><th>Nivel</th><th>Tutor Solicitado</th><th>Acción</th>
-            </tr>
-    """
-    for p in pendientes:
-        html += f"""
-            <tr>
-                <td>{p.full_name}</td>
-                <td>{p.registro}</td>
-                <td>{p.practicum_level}</td>
-                <td>{p.tutor.name}</td>
-                <td>
-                    <form action="/admin/approve/{p.id}" method="POST">
-                        <input type="text" name="drive_url" placeholder="Pegar Link Carpeta Drive" required style="width:200px;">
-                        <button type="submit" style="background:green; color:white;">APROBAR Y CREAR USUARIO</button>
-                    </form>
-                </td>
-            </tr>
-        """
-    
-    html += "</table><h2>Estudiantes Activos</h2><ul>"
-    for a in activos:
-        html += f"<li>{a.full_name} - <a href='{a.drive_folder_url}' target='_blank'>Ver Carpeta Drive</a></li>"
-    
-    html += "</ul></div>"
-    return html
+    # Usamos la plantilla nueva (admin_dashboard.html)
+    return render_template('admin_dashboard.html', pendientes=pendientes, activos=activos)
 
 @app.route('/admin/approve/<int:student_id>', methods=['POST'])
 @login_required
@@ -307,6 +266,7 @@ def approve_student(student_id):
     
     if student:
         # 1. Crear Usuario para el estudiante (Reg, Carnet)
+        # Verificamos que no exista ya el usuario
         if not User.query.filter_by(username=student.registro).first():
             new_user = User(username=student.registro, password=student.carnet, role='student')
             db.session.add(new_user)
@@ -325,53 +285,25 @@ def approve_student(student_id):
 @app.route('/student/dashboard')
 @login_required
 def student_dashboard():
-    if current_user.role != 'student': return "Acceso Denegado"
+    if current_user.role != 'student': return redirect(url_for('index'))
     
     profile = current_user.student_profile
     if not profile: return "Perfil no encontrado"
     
-    return f"""
-    <div style="font-family:sans-serif; max-width:800px; margin:20px auto; padding:20px; border:1px solid #ddd;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h1>Bienvenido, {profile.full_name}</h1>
-            <a href="/logout">Salir</a>
-        </div>
-        <div style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:20px;">
-            <p><strong>Estado:</strong> <span style="color:green;">{profile.status}</span></p>
-            <p><strong>Tutor:</strong> {profile.tutor.name}</p>
-            <p><strong>Nivel:</strong> Practicum {profile.practicum_level}</p>
-        </div>
-        
-        <div style="text-align:center; padding:30px; border:2px dashed #ccc; border-radius:10px;">
-            <h2>📂 Tu Carpeta Digital</h2>
-            <p>Sube tus informes, bitácoras y avances directamente aquí.</p>
-            <a href="{profile.drive_folder_url}" target="_blank" style="display:inline-block; padding:15px 30px; background:#4285F4; color:white; text-decoration:none; font-weight:bold; border-radius:5px; font-size:18px;">
-                ABRIR CARPETA DRIVE
-            </a>
-            <p style="margin-top:10px; font-size:12px; color:#666;">(La Dirección de Carrera revisará el contenido de esta carpeta)</p>
-        </div>
-        
-        <h3>Calendario de Hitos</h3>
-        <ul>
-            <li>✅ Solicitud Aprobada</li>
-            <li>⬜ Plan de Trabajo (Subir a Drive)</li>
-            <li>⬜ Informe Medio (Subir a Drive)</li>
-            <li>⬜ Memoria Final (Subir a Drive)</li>
-        </ul>
-    </div>
-    """
+    # Usamos la plantilla nueva (student_dashboard.html)
+    return render_template('student_dashboard.html', profile=profile)
 
 # --- FUNCIONALIDAD EXTRA ---
 @app.route('/admin/reset-total')
 def reset_db():
-    # Solo para emergencias - Borra cupos
+    # Solo para emergencias - Borra cupos y reinicia base de pruebas
     tutors = Tutor.query.all()
     for t in tutors:
         t.taken_II = 0
         t.taken_III = 0
         t.taken_IV = 0
     db.session.commit()
-    return "Reset OK"
+    return "<h1>Reset de Cupos Exitoso</h1><a href='/'>Volver</a>"
 
 # --- GENERADOR PDF (Mismo diseño de tabla) ---
 def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
