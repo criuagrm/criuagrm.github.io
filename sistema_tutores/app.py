@@ -32,23 +32,23 @@ class User(UserMixin, db.Model):
     """Sistema de Usuarios"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True) 
-    password_hash = db.Column(db.String(256)) # Guardamos el HASH, no la contraseña plana
+    password_hash = db.Column(db.String(256)) # Guardamos el HASH
     role = db.Column(db.String(20)) 
     display_name = db.Column(db.String(100))
     
-    # --- CORRECCIÓN DE AMBIGÜEDAD (Foreign Keys explícitas) ---
+    # --- RELACIONES CORREGIDAS (Foreign Keys explícitas) ---
     student_profile = db.relationship(
         'StudentProfile', 
         backref='user_account', 
         uselist=False, 
-        foreign_keys='StudentProfile.user_id' # Relación 1: Usuario del sistema
+        foreign_keys='StudentProfile.user_id' # Relación 1: Cuenta de usuario del estudiante
     )
     
     assigned_students = db.relationship(
         'StudentProfile', 
         backref='assigned_docente', 
         lazy=True, 
-        foreign_keys='StudentProfile.docente_id' # Relación 2: Profesor asignado
+        foreign_keys='StudentProfile.docente_id' # Relación 2: Estudiantes asignados al docente
     )
 
     # Métodos de seguridad
@@ -66,7 +66,7 @@ class Tutor(db.Model):
     taken_II = db.Column(db.Integer, default=0)
     taken_III = db.Column(db.Integer, default=0)
     taken_IV = db.Column(db.Integer, default=0)
-    # Relación con Foreign Key explícita
+    # Relación explícita
     students = db.relationship('StudentProfile', backref='tutor', lazy=True, foreign_keys='StudentProfile.tutor_id')
 
 class StudentProfile(db.Model):
@@ -166,22 +166,11 @@ DOCENTES_MATERIA_DATA = [
     {"user": "p4_noche",  "pass": "123", "name": "Practicum IV - Turno Noche (B)"}
 ]
 
-# --- INICIALIZADOR CON AUTORREPARACIÓN ---
 with app.app_context():
-    # 1. Intentamos crear tablas (si no existen)
+    # 1. Crear tablas (si no existen)
     db.create_all()
     
-    # 2. VERIFICACIÓN DE SALUD DE LA BASE DE DATOS
-    try:
-        # Intentamos una consulta simple para ver si la tabla User tiene la estructura correcta
-        User.query.first()
-    except Exception as e:
-        print("¡ALERTA! La estructura de la base de datos es antigua. Reiniciando todo...")
-        # Si falla (por ejemplo, falta la columna password_hash), borramos todo y recreamos
-        db.drop_all()
-        db.create_all()
-
-    # 3. CARGA DE DATOS (Ahora es seguro correr esto)
+    # 2. CARGA DE DATOS INICIALES (Con Hashing Seguro)
     
     # Cargar Tutores
     if Tutor.query.count() == 0:
@@ -206,6 +195,7 @@ with app.app_context():
             db.session.add(doc)
             
     db.session.commit()
+
 # --- 4. RUTAS PÚBLICAS Y API ---
 
 @app.route('/')
@@ -395,13 +385,14 @@ def descargar_portafolio():
     filename = generar_reporte_academico(current_user.student_profile)
     return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
 
-# --- 7. RUTAS DOCENTE (SEGMENTADAS) ---
+# --- 7. RUTAS DOCENTE (SEGMENTADAS Y SEGURAS) ---
 
 @app.route('/docente/dashboard')
 @login_required
 def docente_dashboard():
     if current_user.role != 'docente': return "Acceso Denegado"
     
+    # FILTRO SEGMENTADO: Solo mostramos alumnos asignados a ESTE docente (ID)
     mis_estudiantes = StudentProfile.query.filter_by(
         docente_id=current_user.id, 
         status='ACTIVO'
@@ -415,7 +406,7 @@ def docente_ver_estudiante(student_id):
     if current_user.role != 'docente': return "Acceso Denegado"
     estudiante = StudentProfile.query.get(student_id)
     
-    # SEGURIDAD EXTRA: Evitar IDOR
+    # SEGURIDAD EXTRA: Evitar IDOR (Ver alumnos de otro profe)
     if estudiante.docente_id != current_user.id:
         return "<h1>Acceso Restringido: Este estudiante no está en su turno.</h1>", 403
         
@@ -455,47 +446,6 @@ def approve_student(student_id):
             db.session.commit()
             
     return redirect(url_for('admin_dashboard'))
-
-# ==========================================
-# RUTA DE EMERGENCIA PARA RENDER (Reset Completo)
-# ==========================================
-@app.route('/peligro/reset-completo')
-def reset_completo():
-    # 1. Borrar DB antigua
-    db.drop_all()
-    
-    # 2. Crear tablas nuevas
-    db.create_all()
-    
-    # 3. RE-CREAR DATOS
-    
-    # Tutores
-    if Tutor.query.count() == 0:
-        for d in DATOS_TUTORES:
-            db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
-    
-    # Admin (Hash)
-    admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
-    admin.set_password('123') 
-    db.session.add(admin)
-    
-    # Docentes (Hash)
-    for dm in DOCENTES_MATERIA_DATA:
-        doc = User(username=dm['user'], role='docente', display_name=dm['name'])
-        doc.set_password(dm['pass'])
-        db.session.add(doc)
-            
-    db.session.commit()
-    
-    return """
-    <div style='text-align:center; font-family:sans-serif; padding:50px;'>
-        <h1 style='color:green;'>✅ Base de Datos Reiniciada y Segura</h1>
-        <p>Se han borrado los datos antiguos.</p>
-        <p>Usuarios creados con Hashing seguro.</p>
-        <br>
-        <a href='/login' style='background:#cc0000; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;'>Ir al Login</a>
-    </div>
-    """
 
 # --- 9. GENERADORES PDF ---
 
@@ -583,4 +533,3 @@ def generar_reporte_academico(p):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
