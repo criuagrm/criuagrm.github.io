@@ -1,280 +1,320 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practicum | Ciencia Política</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { 
-            background-color: #121212; 
-            color: #e0e0e0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Tutores — UAGRM</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Outfit", "sans-serif"], 
+            display: ["Space Grotesk", "sans-serif"] 
+          },
+          colors: {
+            'uagrm-red': '#cc0000',
+            'uagrm-dark': '#0f172a',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
         }
-        
-        /* PANTALLA DE INICIO (HERO) */
-        #hero-section {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at center, #1e1e1e 0%, #000000 100%);
-            text-align: center;
-        }
+      }
+    }
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-        .btn-practicum {
-            background: transparent;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 20px 40px;
-            font-size: 1.5rem;
-            margin: 10px;
-            width: 300px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .btn-practicum:hover {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
-        }
-
-        /* PANTALLA DE TUTORES (OCULTA AL INICIO) */
-        #tutors-section {
-            display: none;
-            min-height: 100vh;
-            padding: 40px 20px;
-            background-color: #121212;
-        }
-
-        .card-tutor {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            color: #fff;
-            border-radius: 0; /* Bordes cuadrados, más serio */
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .card-tutor:hover {
-            border-color: #fff;
-            background-color: #252525;
-        }
-
-        .tutor-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .tutor-info {
-            color: #aaa;
-            font-size: 0.9rem;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .cupo-lleno {
-            opacity: 0.4;
-            pointer-events: none;
-            border: 1px dashed #555;
-        }
-
-        /* MODALES */
-        .modal-content {
-            background-color: #1e1e1e;
-            color: #fff;
-            border: 1px solid #444;
-        }
-        .form-control {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            color: #fff;
-        }
-        .form-control:focus {
-            background-color: #333;
-            color: #fff;
-            border-color: #888;
-            box-shadow: none;
-        }
-    </style>
+  <style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Efecto para ocultar scroll pero permitir deslizar */
+    .snap-container {
+        -webkit-overflow-scrolling: touch;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
 
-    <div id="hero-section">
-        <h1 class="display-3 fw-bold mb-5" style="letter-spacing: 5px;">PRACTICUM</h1>
-        <p class="text-muted mb-5">SELECCIONE SU NIVEL PARA INICIAR</p>
+  <div id="main-view" class="relative min-h-screen flex flex-col justify-between transition-opacity duration-500">
+    
+    <nav class="absolute top-0 w-full z-40 p-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-uagrm-red text-white flex items-center justify-center font-bold text-lg shadow-lg">CP</div>
+            <div>
+                <h1 class="font-display font-bold text-slate-900 leading-tight">Ciencia Política</h1>
+                <p class="text-xs text-slate-500 uppercase tracking-widest">Gestión de Practicum</p>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex-1 flex flex-col justify-center pt-24 pb-0 lg:pb-0 px-6 max-w-7xl mx-auto w-full z-10">
+        <div class="max-w-2xl animate-fade-in">
+            <span class="inline-block px-3 py-1 rounded-full bg-red-100 text-red-600 text-xs font-bold uppercase tracking-widest mb-4 border border-red-200">
+                Sistema Oficial
+            </span>
+            <h2 class="font-display text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+                Asignación de <br> <span class="text-uagrm-red">Tutores de Tesis</span>
+            </h2>
+            <p class="text-lg text-slate-600 mb-10 max-w-lg">
+                Selecciona tu nivel de Practicum para visualizar la disponibilidad de docentes y generar tu carta de solicitud automáticamente.
+            </p>
+        </div>
+
+        <div class="w-full mb-10 lg:mb-20">
+            <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 snap-container">
+                
+                <div onclick="cargarNivel('II')" class="min-w-[85%] md:min-w-[350px] snap-center bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-red-200 transition cursor-pointer group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-red-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-red-100"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center text-xl mb-4 group-hover:bg-red-600 group-hover:text-white transition"><i class="fa-solid fa-magnifying-glass"></i></div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900 mb-1">Practicum II</h3>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wide">Diagnóstico</p>
+                    </div>
+                </div>
+
+                <div onclick="cargarNivel('III')" class="min-w-[85%] md:min-w-[350px] snap-center bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-red-200 transition cursor-pointer group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-blue-100"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center text-xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition"><i class="fa-solid fa-pen-ruler"></i></div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900 mb-1">Practicum III</h3>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wide">Desarrollo</p>
+                    </div>
+                </div>
+
+                <div onclick="cargarNivel('IV')" class="min-w-[85%] md:min-w-[350px] snap-center bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-red-200 transition cursor-pointer group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-100"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-600 flex items-center justify-center text-xl mb-4 group-hover:bg-green-600 group-hover:text-white transition"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900 mb-1">Practicum IV</h3>
+                        <p class="text-slate-500 text-sm font-medium uppercase tracking-wide">Finalización</p>
+                    </div>
+                </div>
+
+            </div>
+            <p class="text-slate-400 text-sm text-center md:text-left animate-pulse"><i class="fa-solid fa-arrow-right"></i> Desliza o haz clic para seleccionar</p>
+        </div>
+    </div>
+
+    <div class="relative lg:absolute lg:bottom-0 lg:right-0 w-full lg:w-auto flex flex-col items-center lg:items-end z-0 pointer-events-none">
+        <img src="https://i.imgur.com/G6kesFp.png" 
+             class="w-auto h-[350px] md:h-[500px] lg:h-[600px] object-contain drop-shadow-2xl translate-y-10 lg:translate-y-0"
+             alt="Director">
         
-        <div class="d-flex flex-column flex-md-row">
-            <button class="btn btn-practicum" onclick="entrarNivel('II')">Practicum II</button>
-            <button class="btn btn-practicum" onclick="entrarNivel('III')">Practicum III</button>
-            <button class="btn btn-practicum" onclick="entrarNivel('IV')">Practicum IV</button>
-        </div>
-    </div>
-
-    <div id="tutors-section">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-5 border-bottom border-secondary pb-3">
-                <h2 class="m-0" id="titulo-nivel">LISTADO DOCENTE</h2>
-                <button class="btn btn-outline-light btn-sm" onclick="volverInicio()">
-                    <i class="fas fa-arrow-left"></i> VOLVER AL INICIO
-                </button>
+        <div class="absolute bottom-6 left-6 lg:left-auto lg:right-12 lg:bottom-12 glass-card p-4 rounded-xl flex items-center gap-4 animate-fade-in shadow-xl max-w-[280px]">
+            <div class="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center text-white">
+                <i class="fa-solid fa-user-tie"></i>
             </div>
-
-            <div id="listaTutores" class="row g-4">
-                </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalInscripcion" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title">Confirmar Solicitud</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-muted mb-4">Docente seleccionado:<br><strong class="text-white fs-5" id="nombreTutorModal"></strong></p>
-                    <form id="formSolicitud">
-                        <input type="hidden" id="tutorIdInput">
-                        <div class="mb-3">
-                            <label class="form-label text-secondary">Nombre Completo</label>
-                            <input type="text" class="form-control" id="nombreEst" required autocomplete="off">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-secondary">Registro Universitario</label>
-                            <input type="number" class="form-control" id="registroEst" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-secondary">Cédula de Identidad</label>
-                            <input type="text" class="form-control" id="carnetEst" required>
-                        </div>
-                        <button type="submit" class="btn btn-light w-100 mt-3 fw-bold">GENERAR CARTA PDF</button>
-                    </form>
-                </div>
+            <div>
+                <h4 class="font-display font-bold text-slate-900 text-sm leading-tight">M.Sc. Odín Rodriguez Mercado</h4>
+                <p class="text-[10px] text-uagrm-red font-bold uppercase tracking-widest mt-0.5">Director de Carrera</p>
             </div>
         </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let nivelActual = "";
+  <div id="tutors-view" class="hidden min-h-screen bg-slate-50 pb-20">
+      <div class="max-w-6xl mx-auto px-6 py-10">
+          <div class="flex justify-between items-center mb-10">
+              <div>
+                <h2 class="font-display text-3xl font-bold text-slate-900" id="titulo-nivel">Practicum</h2>
+                <p class="text-slate-500">Docentes habilitados para este nivel</p>
+              </div>
+              <button onclick="volverInicio()" class="px-5 py-2 rounded-xl border border-slate-300 hover:bg-white hover:shadow-md transition text-sm font-bold text-slate-600">
+                  <i class="fa-solid fa-arrow-left mr-2"></i> Volver
+              </button>
+          </div>
 
-        // Transición de entrada
-        function entrarNivel(nivel) {
-            nivelActual = nivel;
-            document.getElementById('hero-section').style.display = 'none';
-            document.getElementById('tutors-section').style.display = 'block';
-            document.getElementById('titulo-nivel').innerText = `PRACTICUM ${nivel} - SELECCIÓN DE TUTOR`;
-            window.scrollTo(0,0);
-            cargarTutores();
-        }
+          <div id="lista-tutores" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              </div>
+      </div>
+  </div>
 
-        // Transición de salida
-        function volverInicio() {
-            document.getElementById('tutors-section').style.display = 'none';
-            document.getElementById('hero-section').style.display = 'flex';
-            document.getElementById('listaTutores').innerHTML = ''; // Limpiar para no mezclar
-        }
+  <div id="modal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" onclick="cerrarModal()"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
+          <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+              <div class="bg-slate-900 p-6 text-white relative">
+                  <h3 class="font-display text-xl font-bold">Confirmar Solicitud</h3>
+                  <p class="text-slate-400 text-sm mt-1">Practicum <span id="modal-nivel"></span></p>
+                  <button onclick="cerrarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+              </div>
+              
+              <div class="p-6">
+                  <p class="text-sm text-slate-500 mb-4">Estás solicitando tutoría con:</p>
+                  <div class="flex items-center gap-3 mb-6 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                      <div class="w-10 h-10 rounded-full bg-uagrm-red/10 text-uagrm-red flex items-center justify-center font-bold"><i class="fa-solid fa-chalkboard-user"></i></div>
+                      <span class="font-bold text-slate-900" id="modal-tutor-nombre"></span>
+                  </div>
 
-        async function cargarTutores() {
-            const contenedor = document.getElementById('listaTutores');
-            contenedor.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-light"></div></div>';
+                  <form id="formSolicitud" onsubmit="enviarSolicitud(event)">
+                      <input type="hidden" id="input-tutor-id">
+                      
+                      <div class="space-y-4">
+                          <div>
+                              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Nombre Completo</label>
+                              <input type="text" id="input-nombre" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-uagrm-red focus:ring-1 focus:ring-uagrm-red transition" placeholder="Ej: Juan Pérez">
+                          </div>
+                          <div>
+                              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Registro Universitario</label>
+                              <input type="number" id="input-registro" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-uagrm-red focus:ring-1 focus:ring-uagrm-red transition" placeholder="Ej: 219000000">
+                          </div>
+                          <div>
+                              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Cédula de Identidad</label>
+                              <input type="text" id="input-carnet" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-uagrm-red focus:ring-1 focus:ring-uagrm-red transition">
+                          </div>
+                      </div>
 
-            try {
-                const respuesta = await fetch(`/api/tutors?level=${nivelActual}`);
-                const tutores = await respuesta.json();
+                      <button type="submit" class="w-full mt-8 py-4 bg-uagrm-red text-white font-bold rounded-xl shadow-lg shadow-red-200 hover:bg-red-700 hover:scale-[1.02] transition">
+                          Generar Carta PDF
+                      </button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
 
-                contenedor.innerHTML = "";
+  <script>
+    let nivelActual = "";
 
-                if (tutores.length === 0) {
-                    contenedor.innerHTML = '<div class="text-center text-muted">No hay cupos disponibles.</div>';
-                    return;
+    function cargarNivel(nivel) {
+        nivelActual = nivel;
+        // Transición visual
+        document.getElementById('main-view').classList.add('hidden');
+        document.getElementById('tutors-view').classList.remove('hidden');
+        document.getElementById('titulo-nivel').innerText = `Practicum ${nivel}`;
+        window.scrollTo(0,0);
+        
+        fetchTutores();
+    }
+
+    function volverInicio() {
+        document.getElementById('tutors-view').classList.add('hidden');
+        document.getElementById('main-view').classList.remove('hidden');
+        document.getElementById('lista-tutores').innerHTML = ''; 
+    }
+
+    async function fetchTutores() {
+        const contenedor = document.getElementById('lista-tutores');
+        contenedor.innerHTML = '<div class="col-span-3 text-center py-20"><div class="inline-block w-8 h-8 border-4 border-slate-200 border-t-uagrm-red rounded-full animate-spin"></div></div>';
+
+        try {
+            const res = await fetch(`/api/tutors?level=${nivelActual}`);
+            const tutores = await res.json();
+            
+            contenedor.innerHTML = "";
+            
+            if(tutores.length === 0) {
+                contenedor.innerHTML = '<div class="col-span-3 text-center text-slate-500">No hay docentes disponibles en este momento.</div>';
+                return;
+            }
+
+            tutores.forEach(t => {
+                const lleno = t.cupos_disponibles === 0;
+                // Estilo tarjeta
+                const card = document.createElement('div');
+                card.className = `bg-white p-6 rounded-2xl border ${lleno ? 'border-slate-100 opacity-60' : 'border-slate-200 hover:border-uagrm-red hover:shadow-lg'} transition group relative overflow-hidden`;
+                
+                if(!lleno) {
+                    card.onclick = () => abrirModal(t.id, t.name);
+                    card.style.cursor = 'pointer';
                 }
 
-                tutores.forEach(tutor => {
-                    const lleno = tutor.cupos_disponibles === 0;
-                    const claseCard = lleno ? 'card p-4 h-100 cupo-lleno' : 'card p-4 h-100 card-tutor';
-                    
-                    const html = `
-                        <div class="col-md-6 col-lg-4">
-                            <div class="${claseCard}" onclick="${lleno ? '' : `abrirModal(${tutor.id}, '${tutor.name}')`}">
-                                <div class="tutor-name">${tutor.name}</div>
-                                <span class="tutor-info"><i class="fas fa-phone-alt me-2"></i> ${tutor.phone}</span>
-                                <span class="tutor-info"><i class="fas fa-envelope me-2"></i> ${tutor.email}</span>
-                                
-                                <div class="mt-3 pt-3 border-top border-secondary d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">DISPONIBILIDAD</small>
-                                    <span class="badge ${lleno ? 'bg-secondary' : 'bg-light text-dark'}">
-                                        ${lleno ? 'AGOTADO' : `${tutor.cupos_disponibles} LUGARES`}
-                                    </span>
-                                </div>
-                            </div>
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-lg text-slate-700 font-bold">
+                            ${t.name.charAt(0)}
                         </div>
-                    `;
-                    contenedor.innerHTML += html;
-                });
+                        <span class="${lleno ? 'bg-slate-100 text-slate-400' : 'bg-green-100 text-green-700'} px-3 py-1 rounded-full text-xs font-bold">
+                            ${lleno ? 'AGOTADO' : `${t.cupos_disponibles} Libres`}
+                        </span>
+                    </div>
+                    <h3 class="font-display font-bold text-slate-900 text-lg mb-1 leading-tight">${t.name}</h3>
+                    <div class="space-y-1 mt-4">
+                        <p class="text-sm text-slate-500 flex items-center gap-2"><i class="fa-solid fa-phone text-xs"></i> ${t.phone}</p>
+                        <p class="text-sm text-slate-500 flex items-center gap-2"><i class="fa-solid fa-envelope text-xs"></i> ${t.email}</p>
+                    </div>
+                    ${!lleno ? '<div class="absolute bottom-0 left-0 w-full h-1 bg-uagrm-red transform scale-x-0 group-hover:scale-x-100 transition duration-300"></div>' : ''}
+                `;
+                contenedor.appendChild(card);
+            });
 
-            } catch (error) {
-                console.error(error);
-                contenedor.innerHTML = '<div class="text-center text-danger">Error de conexión</div>';
-            }
+        } catch (error) {
+            contenedor.innerHTML = '<div class="col-span-3 text-center text-red-500">Error de conexión.</div>';
         }
+    }
 
-        const modal = new bootstrap.Modal(document.getElementById('modalInscripcion'));
+    // Lógica Modal
+    const modal = document.getElementById('modal');
+    
+    function abrirModal(id, nombre) {
+        document.getElementById('input-tutor-id').value = id;
+        document.getElementById('modal-tutor-nombre').innerText = nombre;
+        document.getElementById('modal-nivel').innerText = nivelActual;
+        modal.classList.remove('hidden');
+    }
 
-        function abrirModal(id, nombre) {
-            document.getElementById('tutorIdInput').value = id;
-            document.getElementById('nombreTutorModal').innerText = nombre;
-            modal.show();
-        }
+    function cerrarModal() {
+        modal.classList.add('hidden');
+    }
 
-        document.getElementById('formSolicitud').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const textoOriginal = btn.innerText;
-            btn.disabled = true;
-            btn.innerText = "PROCESANDO...";
+    async function enviarSolicitud(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const txtOriginal = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = "Procesando...";
 
-            const datos = {
-                tutor_id: parseInt(document.getElementById('tutorIdInput').value),
-                nivel: nivelActual,
-                nombre: document.getElementById('nombreEst').value,
-                registro: document.getElementById('registroEst').value,
-                carnet: document.getElementById('carnetEst').value
-            };
+        const datos = {
+            tutor_id: parseInt(document.getElementById('input-tutor-id').value),
+            nivel: nivelActual,
+            nombre: document.getElementById('input-nombre').value,
+            registro: document.getElementById('input-registro').value,
+            carnet: document.getElementById('input-carnet').value
+        };
 
-            try {
-                const res = await fetch('/api/solicitar', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(datos)
-                });
-                const resultado = await res.json();
+        try {
+            const res = await fetch('/api/solicitar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(datos)
+            });
+            const json = await res.json();
 
-                if (res.ok) {
-                    window.location.href = resultado.pdf_url;
-                    modal.hide();
-                    cargarTutores();
-                    document.getElementById('formSolicitud').reset();
-                    alert("Solicitud generada correctamente.");
-                } else {
-                    alert("ERROR: " + resultado.error);
-                }
-            } catch (error) {
-                alert("Error de red.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = textoOriginal;
+            if (res.ok) {
+                window.location.href = json.pdf_url;
+                cerrarModal();
+                fetchTutores(); // Recargar lista
+                e.target.reset();
+                alert("¡Solicitud Exitosa! Descargando carta...");
+            } else {
+                alert("Error: " + json.error);
             }
-        });
-    </script>
+        } catch (err) {
+            alert("Error de conexión");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = txtOriginal;
+        }
+    }
+  </script>
 </body>
 </html>
