@@ -4,12 +4,16 @@ from flask import Flask, jsonify, request, send_file, render_template, redirect,
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from fpdf import FPDF
+# LIBRERÍA DE SEGURIDAD (HASHING)
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_uagrm_politica'
 
-# --- 1. CONFIGURACIÓN ---
-# Detecta automáticamente si es Render (Postgres) o Local (SQLite)
+# 1. CONFIGURACIÓN SEGURA
+# Usamos una variable de entorno para la clave secreta en producción
+app.secret_key = os.environ.get('SECRET_KEY', 'clave_secreta_uagrm_politica_desarrollo')
+
+# Configuración de Base de Datos (Render vs Local)
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///local_tutores.db')
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
@@ -25,66 +29,76 @@ login_manager.login_view = 'login'
 # --- 2. MODELOS DE BASE DE DATOS ---
 
 class User(UserMixin, db.Model):
-    """Sistema de Usuarios (Login)"""
+    """Sistema de Usuarios"""
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True) # Admin: 'admin', Docente: 'p2_manana', Est: Registro
-    password = db.Column(db.String(100)) # Contraseña simple (en prod usar hash)
-    role = db.Column(db.String(20)) # 'admin', 'student', 'docente'
-    
-    # Nombre visible (Ej: "Lic. Juan Perez - Turno Mañana")
+    username = db.Column(db.String(50), unique=True) 
+    password_hash = db.Column(db.String(256)) # Guardamos el HASH, no la contraseña plana
+    role = db.Column(db.String(20)) 
     display_name = db.Column(db.String(100))
     
-    # Relaciones
-    student_profile = db.relationship('StudentProfile', backref='user_account', uselist=False)
-    # Estudiantes asignados a este docente
-    assigned_students = db.relationship('StudentProfile', backref='assigned_docente', lazy=True, foreign_keys='StudentProfile.docente_id')
+    # --- CORRECCIÓN DE AMBIGÜEDAD (Foreign Keys explícitas) ---
+    student_profile = db.relationship(
+        'StudentProfile', 
+        backref='user_account', 
+        uselist=False, 
+        foreign_keys='StudentProfile.user_id' # Relación 1: Usuario del sistema
+    )
+    
+    assigned_students = db.relationship(
+        'StudentProfile', 
+        backref='assigned_docente', 
+        lazy=True, 
+        foreign_keys='StudentProfile.docente_id' # Relación 2: Profesor asignado
+    )
+
+    # Métodos de seguridad
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 class Tutor(db.Model):
-    """Docentes Tutores de Tesis (Los 34)"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     phone = db.Column(db.String(50))
     email = db.Column(db.String(100))
-    # Contadores de cupos ocupados
     taken_II = db.Column(db.Integer, default=0)
     taken_III = db.Column(db.Integer, default=0)
     taken_IV = db.Column(db.Integer, default=0)
-    
+    # Relación con Foreign Key explícita
     students = db.relationship('StudentProfile', backref='tutor', lazy=True, foreign_keys='StudentProfile.tutor_id')
 
 class StudentProfile(db.Model):
-    """Perfil Académico del Estudiante"""
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # Se vincula al aprobar
+    
+    # DOS LLAVES FORÁNEAS A LA TABLA USER
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # El usuario del estudiante
+    docente_id = db.Column(db.Integer, db.ForeignKey('user.id')) # El profesor asignado
     
     full_name = db.Column(db.String(100))
     registro = db.Column(db.String(20))
     carnet = db.Column(db.String(20))
-    practicum_level = db.Column(db.String(5)) # II, III, IV
+    practicum_level = db.Column(db.String(5))
     
-    # DOBLE ASIGNACIÓN:
-    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id')) # Tutor de Tesis
-    docente_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Docente de Materia (Turno)
+    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id')) 
     
-    status = db.Column(db.String(20), default='PENDIENTE') # PENDIENTE -> ACTIVO -> FINALIZADO
-    drive_folder_url = db.Column(db.String(300)) # Link a la carpeta de Drive (Puesto por el Director)
+    status = db.Column(db.String(20), default='PENDIENTE')
+    drive_folder_url = db.Column(db.String(300))
     
-    # Relaciones con las tablas de gestión
     work_plan = db.relationship('WorkPlan', backref='student', uselist=False)
     logs = db.relationship('DailyLog', backref='student', lazy=True)
     attendance = db.relationship('AttendanceLog', backref='student', lazy=True)
 
 class WorkPlan(db.Model):
-    """El Plan de Trabajo del Estudiante"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     title = db.Column(db.String(200))
     general_objective = db.Column(db.Text)
-    schedule = db.Column(db.Text) # Cronograma en texto
-    status = db.Column(db.String(20), default='BORRADOR') # BORRADOR, ENVIADO, APROBADO
+    schedule = db.Column(db.Text)
+    status = db.Column(db.String(20), default='BORRADOR')
 
 class DailyLog(db.Model):
-    """Bitácora Diaria"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     date = db.Column(db.Date, default=datetime.date.today)
@@ -93,12 +107,11 @@ class DailyLog(db.Model):
     observations = db.Column(db.Text)
 
 class AttendanceLog(db.Model):
-    """Control de Asistencia"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     date = db.Column(db.Date, default=datetime.date.today)
-    entry_time = db.Column(db.String(10)) # Ej: "08:00"
-    exit_time = db.Column(db.String(10))  # Ej: "12:00"
+    entry_time = db.Column(db.String(10))
+    exit_time = db.Column(db.String(10))
 
 # --- 3. CARGA DE DATOS INICIALES ---
 CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
@@ -107,7 +120,6 @@ CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# LISTA COMPLETA DE TUTORES DE TESIS
 DATOS_TUTORES = [
     {"nombre": "Alejandro Mansilla Arias", "tel": "716 30 108", "email": "alejandro.mansilla@uagrm.edu.bo"},
     {"nombre": "Alfredo Víctor Copaz Pacheco", "tel": "726 48 166", "email": "alfredo.copaz@uagrm.edu.bo"},
@@ -145,8 +157,6 @@ DATOS_TUTORES = [
     {"nombre": "Sarah Gutiérrez Mendoza", "tel": "709 50 778", "email": "sarah.gutierrez@uagrm.edu.bo"}
 ]
 
-# LISTA DE DOCENTES DE MATERIA (6 - SEGMENTADOS)
-# NOTA: Los 'username' deben coincidir con la lógica del frontend si vas a filtrar por nombre
 DOCENTES_MATERIA_DATA = [
     {"user": "p2_manana", "pass": "123", "name": "Practicum II - Turno Mañana (A)"},
     {"user": "p2_noche",  "pass": "123", "name": "Practicum II - Turno Noche (B)"},
@@ -159,22 +169,24 @@ DOCENTES_MATERIA_DATA = [
 with app.app_context():
     db.create_all()
     
-    # 1. Cargar Tutores de Tesis
+    # 1. Cargar Tutores
     if Tutor.query.count() == 0:
-        print("Cargando lista maestra de tutores...")
         for d in DATOS_TUTORES:
             db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
         db.session.commit()
     
-    # 2. Cargar Admin
+    # 2. Cargar Admin (Con Hashing)
     if not User.query.filter_by(username='admin').first():
-        db.session.add(User(username='admin', password='123', role='admin', display_name="Dirección de Carrera"))
+        admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
+        admin.set_password('123') 
+        db.session.add(admin)
     
-    # 3. Cargar Docentes de Materia (Los 6)
+    # 3. Cargar Docentes (Con Hashing)
     for dm in DOCENTES_MATERIA_DATA:
         if not User.query.filter_by(username=dm['user']).first():
-            print(f"Creando docente: {dm['name']}")
-            db.session.add(User(username=dm['user'], password=dm['pass'], role='docente', display_name=dm['name']))
+            doc = User(username=dm['user'], role='docente', display_name=dm['name'])
+            doc.set_password(dm['pass'])
+            db.session.add(doc)
             
     db.session.commit()
 
@@ -206,10 +218,8 @@ def get_tutors():
             })
     return jsonify(disponibles)
 
-# NUEVA API: Devuelve la lista de profesores de materia para el dropdown
 @app.route('/api/docentes_materia', methods=['GET'])
 def get_docentes_materia():
-    # Retornamos solo los usuarios que son docentes
     docentes = User.query.filter_by(role='docente').all()
     lista = []
     for d in docentes:
@@ -223,16 +233,14 @@ def get_docentes_materia():
 def solicitar_tutor():
     data = request.json
     tutor_id = data.get('tutor_id')
-    docente_id = data.get('docente_id') # NUEVO: El estudiante nos dice su profe
+    docente_id = data.get('docente_id') 
     level = data.get('nivel')
     
     tutor = Tutor.query.get(tutor_id)
     if not tutor: return jsonify({"error": "Tutor no encontrado"}), 404
     
-    # Validar que seleccionó docente de materia
     if not docente_id: return jsonify({"error": "Debes seleccionar tu turno/docente de materia"}), 400
 
-    # Verificar cupo tutor tesis
     campo_cupo = f"taken_{level}"
     tomados = getattr(tutor, campo_cupo)
     maximo = 0 if "Odin Rodríguez Mercado" in tutor.name else CAPACIDAD[level]
@@ -240,25 +248,21 @@ def solicitar_tutor():
     if tomados >= maximo:
         return jsonify({"error": "¡Ups! Cupo lleno."}), 409
 
-    # 1. Reservar Cupo
     setattr(tutor, campo_cupo, tomados + 1)
     
-    # 2. Crear Perfil PENDIENTE con AMBOS docentes asignados
     est = StudentProfile(
         full_name=data.get('nombre'),
         registro=data.get('registro'),
         carnet=data.get('carnet'),
         practicum_level=level,
         tutor_id=tutor.id,
-        docente_id=int(docente_id), # ASIGNACIÓN DIRECTA
+        docente_id=int(docente_id), 
         status='PENDIENTE'
     )
     db.session.add(est)
     db.session.commit()
     
-    # 3. Generar PDF (Carta para el Director)
     try:
-        # Recuperamos nombre del docente de materia para ponerlo en la carta si quieres (opcional)
         docente_obj = User.query.get(int(docente_id))
         docente_nombre = docente_obj.display_name if docente_obj else ""
         
@@ -276,7 +280,7 @@ def descargar_archivo(filename):
     path = os.path.join(os.getcwd(), filename)
     return send_file(path, as_attachment=True)
 
-# --- 5. RUTAS DE AUTENTICACIÓN (LOGIN) ---
+# --- 5. RUTAS DE AUTENTICACIÓN SEGURA ---
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -286,7 +290,8 @@ def login():
         
         user = User.query.filter_by(username=username).first()
         
-        if user and user.password == password:
+        # VALIDACIÓN SEGURA DE CONTRASEÑA
+        if user and user.check_password(password):
             login_user(user)
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
@@ -295,7 +300,7 @@ def login():
             else:
                 return redirect(url_for('student_dashboard'))
         else:
-            return render_template('login.html') 
+            return render_template('login.html', error=True) 
             
     return render_template('login.html')
 
@@ -305,7 +310,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- 6. RUTAS ESTUDIANTE (DASHBOARD Y GESTIÓN) ---
+# --- 6. RUTAS ESTUDIANTE (BLINDADAS) ---
 
 @app.route('/student/dashboard')
 @login_required
@@ -381,8 +386,6 @@ def descargar_portafolio():
 def docente_dashboard():
     if current_user.role != 'docente': return "Acceso Denegado"
     
-    # FILTRO SEGMENTADO: Solo mostramos alumnos asignados a ESTE docente (ID)
-    # y que estén ACTIVOS (ya aprobados por director)
     mis_estudiantes = StudentProfile.query.filter_by(
         docente_id=current_user.id, 
         status='ACTIVO'
@@ -396,9 +399,9 @@ def docente_ver_estudiante(student_id):
     if current_user.role != 'docente': return "Acceso Denegado"
     estudiante = StudentProfile.query.get(student_id)
     
-    # SEGURIDAD EXTRA: Si el alumno no es mío, no lo veo
+    # SEGURIDAD EXTRA: Evitar IDOR
     if estudiante.docente_id != current_user.id:
-        return "<h1>Acceso Restringido: Este estudiante no está en su turno.</h1>"
+        return "<h1>Acceso Restringido: Este estudiante no está en su turno.</h1>", 403
         
     return render_template('docente_detail.html', e=estudiante)
 
@@ -423,14 +426,13 @@ def approve_student(student_id):
     student = StudentProfile.query.get(student_id)
     
     if student:
-        # Verificar que no exista usuario ya
         if not User.query.filter_by(username=student.registro).first():
-            # Crear Usuario Estudiante (User: Registro, Pass: Carnet)
-            new_user = User(username=student.registro, password=student.carnet, role='student')
+            # CREACIÓN SEGURA DE USUARIO ESTUDIANTE
+            new_user = User(username=student.registro, role='student')
+            new_user.set_password(student.carnet) 
             db.session.add(new_user)
             db.session.commit() 
             
-            # Vincular y Activar (EL DOCENTE YA VIENE ELEGIDO DESDE LA SOLICITUD)
             student.user_id = new_user.id
             student.status = 'ACTIVO'
             student.drive_folder_url = drive_url
@@ -438,13 +440,46 @@ def approve_student(student_id):
             
     return redirect(url_for('admin_dashboard'))
 
-@app.route('/admin/reset-total')
-def reset_db():
-    tutors = Tutor.query.all()
-    for t in tutors:
-        t.taken_II = 0; t.taken_III = 0; t.taken_IV = 0
+# ==========================================
+# RUTA DE EMERGENCIA PARA RENDER (Reset Completo)
+# ==========================================
+@app.route('/peligro/reset-completo')
+def reset_completo():
+    # 1. Borrar DB antigua
+    db.drop_all()
+    
+    # 2. Crear tablas nuevas
+    db.create_all()
+    
+    # 3. RE-CREAR DATOS
+    
+    # Tutores
+    if Tutor.query.count() == 0:
+        for d in DATOS_TUTORES:
+            db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
+    
+    # Admin (Hash)
+    admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
+    admin.set_password('123') 
+    db.session.add(admin)
+    
+    # Docentes (Hash)
+    for dm in DOCENTES_MATERIA_DATA:
+        doc = User(username=dm['user'], role='docente', display_name=dm['name'])
+        doc.set_password(dm['pass'])
+        db.session.add(doc)
+            
     db.session.commit()
-    return "Reset OK"
+    
+    return """
+    <div style='text-align:center; font-family:sans-serif; padding:50px;'>
+        <h1 style='color:green;'>✅ Base de Datos Reiniciada y Segura</h1>
+        <p>Se han borrado los datos antiguos.</p>
+        <p>Usuarios creados con Hashing seguro.</p>
+        <br>
+        <a href='/login' style='background:#cc0000; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;'>Ir al Login</a>
+    </div>
+    """
 
 # --- 9. GENERADORES PDF ---
 
@@ -530,46 +565,5 @@ def generar_reporte_academico(p):
     pdf.output(filename)
     return filename
 
-# ==========================================
-# RUTA DE EMERGENCIA (Borrar después de usar)
-# ==========================================
-@app.route('/peligro/reset-completo')
-def reset_completo():
-    # 1. Borrar tablas viejas
-    db.drop_all()
-    
-    # 2. Crear tablas nuevas
-    db.create_all()
-    
-    # 3. RE-CREAR DATOS (Misma lógica que al inicio)
-    
-    # Tutores
-    if Tutor.query.count() == 0:
-        for d in DATOS_TUTORES:
-            db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
-    
-    # Admin (Con contraseña segura)
-    admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
-    admin.set_password('123') 
-    db.session.add(admin)
-    
-    # Docentes (Con contraseña segura)
-    for dm in DOCENTES_MATERIA_DATA:
-        doc = User(username=dm['user'], role='docente', display_name=dm['name'])
-        doc.set_password(dm['pass'])
-        db.session.add(doc)
-            
-    db.session.commit()
-    
-    return """
-    <div style='text-align:center; font-family:sans-serif; padding:50px;'>
-        <h1 style='color:green;'>✅ Base de Datos Reiniciada y Segura</h1>
-        <p>Se han borrado los datos antiguos en texto plano.</p>
-        <p>Se han creado los usuarios con contraseñas encriptadas.</p>
-        <br>
-        <a href='/login' style='background:#cc0000; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;'>Ir al Login</a>
-    </div>
-    """
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
