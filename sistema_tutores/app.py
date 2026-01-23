@@ -333,6 +333,15 @@ def add_attendance():
     db.session.commit()
     return redirect(url_for('student_dashboard'))
 
+# --- NUEVO: REPORTE FINAL (PORTAFOLIO) ---
+
+@app.route('/student/descargar_portafolio')
+@login_required
+def descargar_portafolio():
+    if current_user.role != 'student': return "Error", 403
+    filename = generar_reporte_academico(current_user.student_profile)
+    return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
+
 # --- 7. RUTAS DOCENTE DE MATERIA ---
 
 @app.route('/docente/dashboard')
@@ -433,6 +442,59 @@ def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
     pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C'); pdf.cell(0, 5, txt=f"C.I. {carnet}", ln=1, align='C')
     
     filename = f"solicitud_{registro}_{nivel}.pdf"
+    pdf.output(filename)
+    return filename
+
+def generar_reporte_academico(p):
+    """Genera el Portafolio con Plan, Bitácora y Asistencia"""
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(0, 10, "Portafolio Académico de Practicum", 0, 1, 'C')
+    pdf.set_font("Arial", size=12)
+    pdf.cell(0, 10, f"Estudiante: {p.full_name} | Registro: {p.registro}", 0, 1, 'C')
+    pdf.ln(10)
+    
+    # 1. Plan de Trabajo
+    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "1. Plan de Trabajo", 0, 1)
+    pdf.set_font("Arial", size=11)
+    if p.work_plan:
+        pdf.multi_cell(0, 8, f"Título: {p.work_plan.title}")
+        pdf.multi_cell(0, 8, f"Objetivo: {p.work_plan.general_objective}")
+    else:
+        pdf.cell(0, 10, "No registrado.", 0, 1)
+    pdf.ln(10)
+
+    # 2. Bitácora
+    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "2. Bitácora de Actividades (Anexo II)", 0, 1)
+    pdf.set_font("Arial", 'B', 10); pdf.set_fill_color(230, 230, 230)
+    pdf.cell(30, 10, "Fecha", 1, 0, 'C', True)
+    pdf.cell(130, 10, "Actividad", 1, 0, 'C', True)
+    pdf.cell(30, 10, "Horas", 1, 1, 'C', True)
+    pdf.set_font("Arial", size=10)
+    total_horas = 0
+    for log in p.logs:
+        pdf.cell(30, 10, str(log.date), 1)
+        pdf.cell(130, 10, str(log.activity)[:60], 1) # Cortar texto si es muy largo
+        pdf.cell(30, 10, str(log.hours), 1, 1, 'C')
+        total_horas += log.hours
+    pdf.cell(160, 10, "TOTAL HORAS ACUMULADAS", 1, 0, 'R')
+    pdf.cell(30, 10, str(total_horas), 1, 1, 'C')
+    pdf.ln(10)
+
+    # 3. Asistencia
+    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "3. Control de Asistencia (Anexo I)", 0, 1)
+    pdf.set_font("Arial", 'B', 10); pdf.set_fill_color(230, 230, 230)
+    pdf.cell(60, 10, "Fecha", 1, 0, 'C', True)
+    pdf.cell(60, 10, "Entrada", 1, 0, 'C', True)
+    pdf.cell(60, 10, "Salida", 1, 1, 'C', True)
+    pdf.set_font("Arial", size=10)
+    for att in p.attendance:
+        pdf.cell(60, 10, str(att.date), 1, 0, 'C')
+        pdf.cell(60, 10, str(att.entry_time), 1, 0, 'C')
+        pdf.cell(60, 10, str(att.exit_time), 1, 1, 'C')
+
+    filename = f"reporte_{p.registro}.pdf"
     pdf.output(filename)
     return filename
 
