@@ -2,115 +2,154 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Revisión Estudiante</title>
+    <title>Evaluación - {{ e.full_name }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
-<body class="bg-slate-50 font-sans pb-20">
-    <nav class="bg-white border-b px-6 py-4 mb-8">
-        <a href="/docente/dashboard" class="flex items-center gap-2 text-slate-600 hover:text-blue-900 font-bold">
-            <i class="fa-solid fa-arrow-left"></i> Volver al Panel
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="max-w-6xl mx-auto p-6">
+        <a href="/docente/dashboard" class="inline-flex items-center text-slate-500 hover:text-slate-800 mb-6 font-bold">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Volver al listado
         </a>
-    </nav>
 
-    <div class="max-w-5xl mx-auto px-6">
-        <div class="flex justify-between items-end mb-10">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">{{ e.full_name }}</h1>
-                <p class="text-slate-500">Registro: {{ e.registro }} • Tutor: {{ e.tutor.name }}</p>
+                <h1 class="text-2xl font-bold">{{ e.full_name }}</h1>
+                <p class="text-slate-500">{{ e.registro }} | {{ e.practicum_level }}</p>
             </div>
-            <a href="{{ e.drive_folder_url }}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700">
-                <i class="fa-brands fa-google-drive mr-2"></i> Ver Evidencias Drive
-            </a>
+            <div class="text-right">
+                <p class="text-sm font-bold text-slate-400 uppercase">Horas Totales</p>
+                <p class="text-3xl font-black text-blue-600">{{ e.total_hours }} <span class="text-lg text-slate-400">/ 120</span></p>
+            </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-6 border-b pb-2"><i class="fa-solid fa-map mr-2 text-blue-600"></i> Plan de Trabajo</h2>
-            
-            {% if e.work_plan %}
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-400 uppercase">Título del Proyecto</h3>
-                        <p class="text-lg font-medium">{{ e.work_plan.title }}</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-400 uppercase">Objetivo General</h3>
-                            <p class="text-slate-700 mt-1 bg-slate-50 p-3 rounded-lg">{{ e.work_plan.general_objective }}</p>
-                        </div>
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-400 uppercase">Cronograma Propuesto</h3>
-                            <p class="text-slate-700 mt-1 bg-slate-50 p-3 rounded-lg">{{ e.work_plan.schedule }}</p>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="text-center py-10 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                    <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
-                    <p>El estudiante aún no ha registrado su Plan de Trabajo.</p>
-                </div>
-            {% endif %}
-        </div>
+        <div x-data="{ tab: 'academico' }">
+            <div class="flex gap-4 border-b border-slate-200 mb-6">
+                <button @click="tab = 'academico'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'academico', 'text-slate-400': tab !== 'academico' }" class="pb-2 px-4 font-bold transition">
+                    Avance Académico
+                </button>
+                <button @click="tab = 'bitacora'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'bitacora', 'text-slate-400': tab !== 'bitacora' }" class="pb-2 px-4 font-bold transition">
+                    Bitácora de Horas
+                </button>
+                <button @click="tab = 'admin'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'admin', 'text-slate-400': tab !== 'admin' }" class="pb-2 px-4 font-bold transition">
+                    Documentos Admin
+                </button>
+            </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-book-open text-orange-500"></i> Bitácora de Actividades
-                </h2>
-                <div class="overflow-y-auto max-h-[400px]">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-400 uppercase bg-slate-50 sticky top-0">
+            <div x-show="tab === 'academico'" class="space-y-6">
+                {% for sub in submissions %}
+                <div class="bg-white rounded-xl shadow-sm border {{ 'border-yellow-300 ring-2 ring-yellow-100' if sub.status == 'EN_REVISION' else 'border-slate-100' }} p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg">{{ sub.assignment.title }}</h3>
+                            <p class="text-sm text-slate-500 mb-2">{{ sub.assignment.description }}</p>
+                            
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 rounded text-xs font-bold uppercase
+                                {{ 'bg-yellow-100 text-yellow-700' if sub.status == 'EN_REVISION' else 'bg-slate-100 text-slate-500' }}">
+                                    {{ sub.status }}
+                                </span>
+                                {% if sub.status == 'EN_REVISION' %}
+                                    <span class="text-xs text-red-500 font-bold animate-pulse">Esperando hace {{ sub.days_waiting }} días</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if sub.content %}
+                    <div class="bg-slate-50 p-3 rounded text-sm text-blue-600 font-mono mb-4 break-all">
+                        <i class="fa-solid fa-link mr-2"></i> <a href="{{ sub.content }}" target="_blank" class="underline">Ver contenido enviado por el estudiante</a>
+                    </div>
+                    {% endif %}
+
+                    {% if sub.status == 'EN_REVISION' %}
+                    <form action="/docente/grade_submission" method="POST" class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Retroalimentación / Correcciones</label>
+                        <textarea name="feedback" rows="3" class="w-full border-slate-300 rounded mb-3 p-2 text-sm" placeholder="Escribe aquí las observaciones..."></textarea>
+                        
+                        <div class="flex gap-3">
+                            <button type="submit" name="action" value="reject" class="flex-1 bg-white border border-red-200 text-red-600 hover:bg-red-50 py-2 rounded font-bold text-sm">
+                                Rechazar / Observar
+                            </button>
+                            <button type="submit" name="action" value="approve" class="flex-1 bg-green-600 text-white hover:bg-green-700 py-2 rounded font-bold text-sm">
+                                Aprobar Entrega
+                            </button>
+                        </div>
+                    </form>
+                    {% elif sub.feedback %}
+                        <div class="border-t pt-3 mt-3">
+                            <p class="text-xs font-bold text-slate-400">Tu Feedback:</p>
+                            <p class="text-sm text-slate-600">{{ sub.feedback }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div x-show="tab === 'bitacora'">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <table class="w-full text-sm text-left text-slate-500">
+                        <thead class="text-xs text-slate-700 uppercase bg-slate-50">
                             <tr>
-                                <th class="px-3 py-2">Fecha</th>
-                                <th class="px-3 py-2">Actividad</th>
-                                <th class="px-3 py-2 text-right">Hrs</th>
+                                <th class="px-6 py-3">Fecha</th>
+                                <th class="px-6 py-3">Actividad</th>
+                                <th class="px-6 py-3">Detalle</th>
+                                <th class="px-6 py-3">Horas</th>
+                                <th class="px-6 py-3">Estado</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody>
                             {% for log in e.logs %}
-                            <tr>
-                                <td class="px-3 py-3 font-mono text-slate-500">{{ log.date }}</td>
-                                <td class="px-3 py-3">{{ log.activity }}</td>
-                                <td class="px-3 py-3 text-right font-bold">{{ log.hours }}</td>
+                            <tr class="border-b hover:bg-slate-50">
+                                <td class="px-6 py-4">{{ log.date }}</td>
+                                <td class="px-6 py-4 font-bold text-slate-800">{{ log.activity_type }}</td>
+                                <td class="px-6 py-4 truncate max-w-xs">{{ log.activity_detail }}</td>
+                                <td class="px-6 py-4 font-bold">{{ log.hours }}</td>
+                                <td class="px-6 py-4">
+                                    {% if log.is_validated %}
+                                        <span class="text-green-600"><i class="fa-solid fa-check-circle"></i></span>
+                                    {% else %}
+                                        <span class="text-slate-400"><i class="fa-regular fa-clock"></i></span>
+                                    {% endif %}
+                                </td>
                             </tr>
-                            {% else %}
-                            <tr><td colspan="3" class="text-center py-4 text-slate-400">Sin registros</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                    
+                    <div class="p-4 bg-slate-50 border-t flex justify-end">
+                        <form action="/docente/validate_hours" method="POST">
+                            <input type="hidden" name="student_id" value="{{ e.id }}">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-bold">
+                                <i class="fa-solid fa-check-double mr-2"></i> Validar Todas las Horas Pendientes
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-clock text-green-600"></i> Registro de Asistencia
-                </h2>
-                <div class="overflow-y-auto max-h-[400px]">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-400 uppercase bg-slate-50 sticky top-0">
-                            <tr>
-                                <th class="px-3 py-2">Fecha</th>
-                                <th class="px-3 py-2">Entrada</th>
-                                <th class="px-3 py-2">Salida</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            {% for att in e.attendance %}
-                            <tr>
-                                <td class="px-3 py-3 font-mono text-slate-500">{{ att.date }}</td>
-                                <td class="px-3 py-3 font-bold text-green-600">{{ att.entry_time }}</td>
-                                <td class="px-3 py-3 font-bold text-red-500">{{ att.exit_time }}</td>
-                            </tr>
+            <div x-show="tab === 'admin'">
+                <div class="grid grid-cols-2 gap-4">
+                    {% for doc in e.documents %}
+                    <div class="bg-white p-4 rounded-lg border border-slate-200">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">{{ doc.doc_type }}</span>
+                            {% if doc.status == 'VALIDADO' %}
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">OK</span>
                             {% else %}
-                            <tr><td colspan="3" class="text-center py-4 text-slate-400">Sin registros</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                <span class="bg-slate-100 text-slate-500 px-2 py-1 rounded text-xs">{{ doc.status }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
 
         </div>
     </div>
+
 </body>
 </html>
