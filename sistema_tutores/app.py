@@ -530,5 +530,46 @@ def generar_reporte_academico(p):
     pdf.output(filename)
     return filename
 
+# ==========================================
+# RUTA DE EMERGENCIA (Borrar después de usar)
+# ==========================================
+@app.route('/peligro/reset-completo')
+def reset_completo():
+    # 1. Borrar tablas viejas
+    db.drop_all()
+    
+    # 2. Crear tablas nuevas
+    db.create_all()
+    
+    # 3. RE-CREAR DATOS (Misma lógica que al inicio)
+    
+    # Tutores
+    if Tutor.query.count() == 0:
+        for d in DATOS_TUTORES:
+            db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
+    
+    # Admin (Con contraseña segura)
+    admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
+    admin.set_password('123') 
+    db.session.add(admin)
+    
+    # Docentes (Con contraseña segura)
+    for dm in DOCENTES_MATERIA_DATA:
+        doc = User(username=dm['user'], role='docente', display_name=dm['name'])
+        doc.set_password(dm['pass'])
+        db.session.add(doc)
+            
+    db.session.commit()
+    
+    return """
+    <div style='text-align:center; font-family:sans-serif; padding:50px;'>
+        <h1 style='color:green;'>✅ Base de Datos Reiniciada y Segura</h1>
+        <p>Se han borrado los datos antiguos en texto plano.</p>
+        <p>Se han creado los usuarios con contraseñas encriptadas.</p>
+        <br>
+        <a href='/login' style='background:#cc0000; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;'>Ir al Login</a>
+    </div>
+    """
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
