@@ -3,171 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignación de Tutores UAGRM</title>
+    <title>Practicum | Ciencia Política</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #f8f9fa; }
-        .card-tutor { transition: transform 0.2s; cursor: pointer; }
-        .card-tutor:hover { transform: scale(1.02); border-color: #0d6efd; }
-        .cupo-lleno { opacity: 0.6; pointer-events: none; background-color: #e9ecef; }
-        .badge-cupo { font-size: 0.9em; }
+        body { 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* PANTALLA DE INICIO (HERO) */
+        #hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1e1e1e 0%, #000000 100%);
+            text-align: center;
+        }
+
+        .btn-practicum {
+            background: transparent;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            margin: 10px;
+            width: 300px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-practicum:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+
+        /* PANTALLA DE TUTORES (OCULTA AL INICIO) */
+        #tutors-section {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background-color: #121212;
+        }
+
+        .card-tutor {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 0; /* Bordes cuadrados, más serio */
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .card-tutor:hover {
+            border-color: #fff;
+            background-color: #252525;
+        }
+
+        .tutor-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .tutor-info {
+            color: #aaa;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .cupo-lleno {
+            opacity: 0.4;
+            pointer-events: none;
+            border: 1px dashed #555;
+        }
+
+        /* MODALES */
+        .modal-content {
+            background-color: #1e1e1e;
+            color: #fff;
+            border: 1px solid #444;
+        }
+        .form-control {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            color: #fff;
+        }
+        .form-control:focus {
+            background-color: #333;
+            color: #fff;
+            border-color: #888;
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold text-primary">Practicum - Asignación de Tutores</h1>
-        <p class="lead">Selecciona tu nivel para ver los docentes disponibles.</p>
-    </div>
-
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-6">
-            <select id="selectNivel" class="form-select form-select-lg shadow-sm" onchange="cargarTutores()">
-                <option value="" selected disabled>-- Elige tu Practicum --</option>
-                <option value="II">Practicum II (Diagnóstico)</option>
-                <option value="III">Practicum III (Desarrollo)</option>
-                <option value="IV">Practicum IV (Final)</option>
-            </select>
+    <div id="hero-section">
+        <h1 class="display-3 fw-bold mb-5" style="letter-spacing: 5px;">PRACTICUM</h1>
+        <p class="text-muted mb-5">SELECCIONE SU NIVEL PARA INICIAR</p>
+        
+        <div class="d-flex flex-column flex-md-row">
+            <button class="btn btn-practicum" onclick="entrarNivel('II')">Practicum II</button>
+            <button class="btn btn-practicum" onclick="entrarNivel('III')">Practicum III</button>
+            <button class="btn btn-practicum" onclick="entrarNivel('IV')">Practicum IV</button>
         </div>
     </div>
 
-    <div id="listaTutores" class="row g-3">
-        <div class="text-center text-muted mt-4">
-            <small>Selecciona un nivel arriba para comenzar</small>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalInscripcion" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Confirmar Solicitud</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    <div id="tutors-section">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-5 border-bottom border-secondary pb-3">
+                <h2 class="m-0" id="titulo-nivel">LISTADO DOCENTE</h2>
+                <button class="btn btn-outline-light btn-sm" onclick="volverInicio()">
+                    <i class="fas fa-arrow-left"></i> VOLVER AL INICIO
+                </button>
             </div>
-            <div class="modal-body">
-                <p>Estás solicitando tutoría con: <strong id="nombreTutorModal"></strong></p>
-                <form id="formSolicitud">
-                    <input type="hidden" id="tutorIdInput">
-                    <div class="mb-3">
-                        <label class="form-label">Nombre Completo</label>
-                        <input type="text" class="form-control" id="nombreEst" required placeholder="Ej: Juan Pérez">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Registro Universitario</label>
-                        <input type="number" class="form-control" id="registroEst" required placeholder="Ej: 219000000">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Cédula de Identidad (C.I.)</label>
-                        <input type="text" class="form-control" id="carnetEst" required>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100">Generar Carta de Solicitud</button>
-                </form>
+
+            <div id="listaTutores" class="row g-4">
+                </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalInscripcion" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">Confirmar Solicitud</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-4">Docente seleccionado:<br><strong class="text-white fs-5" id="nombreTutorModal"></strong></p>
+                    <form id="formSolicitud">
+                        <input type="hidden" id="tutorIdInput">
+                        <div class="mb-3">
+                            <label class="form-label text-secondary">Nombre Completo</label>
+                            <input type="text" class="form-control" id="nombreEst" required autocomplete="off">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-secondary">Registro Universitario</label>
+                            <input type="number" class="form-control" id="registroEst" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-secondary">Cédula de Identidad</label>
+                            <input type="text" class="form-control" id="carnetEst" required>
+                        </div>
+                        <button type="submit" class="btn btn-light w-100 mt-3 fw-bold">GENERAR CARTA PDF</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let nivelActual = "";
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let nivelActual = "";
 
-    async function cargarTutores() {
-        nivelActual = document.getElementById('selectNivel').value;
-        const contenedor = document.getElementById('listaTutores');
-        contenedor.innerHTML = '<div class="text-center"><div class="spinner-border text-primary"></div><p>Cargando cupos...</p></div>';
+        // Transición de entrada
+        function entrarNivel(nivel) {
+            nivelActual = nivel;
+            document.getElementById('hero-section').style.display = 'none';
+            document.getElementById('tutors-section').style.display = 'block';
+            document.getElementById('titulo-nivel').innerText = `PRACTICUM ${nivel} - SELECCIÓN DE TUTOR`;
+            window.scrollTo(0,0);
+            cargarTutores();
+        }
 
-        try {
-            const respuesta = await fetch(`/api/tutors?level=${nivelActual}`);
-            const tutores = await respuesta.json();
+        // Transición de salida
+        function volverInicio() {
+            document.getElementById('tutors-section').style.display = 'none';
+            document.getElementById('hero-section').style.display = 'flex';
+            document.getElementById('listaTutores').innerHTML = ''; // Limpiar para no mezclar
+        }
 
-            contenedor.innerHTML = ""; // Limpiar
+        async function cargarTutores() {
+            const contenedor = document.getElementById('listaTutores');
+            contenedor.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-light"></div></div>';
 
-            if (tutores.length === 0) {
-                contenedor.innerHTML = '<div class="alert alert-warning">No hay tutores disponibles para este nivel.</div>';
-                return;
-            }
+            try {
+                const respuesta = await fetch(`/api/tutors?level=${nivelActual}`);
+                const tutores = await respuesta.json();
 
-            tutores.forEach(tutor => {
-                const lleno = tutor.cupos_disponibles === 0;
-                const claseCard = lleno ? 'card p-3 h-100 cupo-lleno' : 'card p-3 h-100 card-tutor shadow-sm';
-                const colorBadge = tutor.cupos_disponibles < 2 ? 'bg-danger' : 'bg-success';
-                
-                const html = `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="${claseCard}" onclick="${lleno ? '' : `abrirModal(${tutor.id}, '${tutor.name}')`}">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="card-title mb-0 fw-bold">${tutor.name}</h6>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">Licenciado/a</small>
-                                <span class="badge ${lleno ? 'bg-secondary' : colorBadge} badge-cupo">
-                                    ${lleno ? 'AGOTADO' : `Cupos: ${tutor.cupos_disponibles}/${tutor.cupos_totales}`}
-                                </span>
+                contenedor.innerHTML = "";
+
+                if (tutores.length === 0) {
+                    contenedor.innerHTML = '<div class="text-center text-muted">No hay cupos disponibles.</div>';
+                    return;
+                }
+
+                tutores.forEach(tutor => {
+                    const lleno = tutor.cupos_disponibles === 0;
+                    const claseCard = lleno ? 'card p-4 h-100 cupo-lleno' : 'card p-4 h-100 card-tutor';
+                    
+                    const html = `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="${claseCard}" onclick="${lleno ? '' : `abrirModal(${tutor.id}, '${tutor.name}')`}">
+                                <div class="tutor-name">${tutor.name}</div>
+                                <span class="tutor-info"><i class="fas fa-phone-alt me-2"></i> ${tutor.phone}</span>
+                                <span class="tutor-info"><i class="fas fa-envelope me-2"></i> ${tutor.email}</span>
+                                
+                                <div class="mt-3 pt-3 border-top border-secondary d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">DISPONIBILIDAD</small>
+                                    <span class="badge ${lleno ? 'bg-secondary' : 'bg-light text-dark'}">
+                                        ${lleno ? 'AGOTADO' : `${tutor.cupos_disponibles} LUGARES`}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `;
-                contenedor.innerHTML += html;
-            });
+                    `;
+                    contenedor.innerHTML += html;
+                });
 
-        } catch (error) {
-            contenedor.innerHTML = `<div class="alert alert-danger">Error cargando datos: ${error}</div>`;
-        }
-    }
-
-    const modal = new bootstrap.Modal(document.getElementById('modalInscripcion'));
-
-    function abrirModal(id, nombre) {
-        document.getElementById('tutorIdInput').value = id;
-        document.getElementById('nombreTutorModal').innerText = nombre;
-        modal.show();
-    }
-
-    document.getElementById('formSolicitud').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const btn = e.target.querySelector('button');
-        const textoOriginal = btn.innerText;
-        btn.disabled = true;
-        btn.innerText = "Procesando...";
-
-        const datos = {
-            tutor_id: parseInt(document.getElementById('tutorIdInput').value),
-            nivel: nivelActual,
-            nombre: document.getElementById('nombreEst').value,
-            registro: document.getElementById('registroEst').value,
-            carnet: document.getElementById('carnetEst').value
-        };
-
-        try {
-            const res = await fetch('/api/solicitar', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(datos)
-            });
-            
-            const resultado = await res.json();
-
-            if (res.ok) {
-                alert(`¡ÉXITO!\n\nTu cupo ha sido reservado.\nSe descargará tu carta automáticamente.`);
-                window.location.href = resultado.pdf_url; // Descargar PDF
-                modal.hide();
-                cargarTutores(); // Recargar lista para actualizar cupos
-                document.getElementById('formSolicitud').reset();
-            } else {
-                alert("ERROR: " + resultado.error);
+            } catch (error) {
+                console.error(error);
+                contenedor.innerHTML = '<div class="text-center text-danger">Error de conexión</div>';
             }
-
-        } catch (error) {
-            alert("Error de conexión");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = textoOriginal;
         }
-    });
-</script>
 
+        const modal = new bootstrap.Modal(document.getElementById('modalInscripcion'));
+
+        function abrirModal(id, nombre) {
+            document.getElementById('tutorIdInput').value = id;
+            document.getElementById('nombreTutorModal').innerText = nombre;
+            modal.show();
+        }
+
+        document.getElementById('formSolicitud').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const textoOriginal = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = "PROCESANDO...";
+
+            const datos = {
+                tutor_id: parseInt(document.getElementById('tutorIdInput').value),
+                nivel: nivelActual,
+                nombre: document.getElementById('nombreEst').value,
+                registro: document.getElementById('registroEst').value,
+                carnet: document.getElementById('carnetEst').value
+            };
+
+            try {
+                const res = await fetch('/api/solicitar', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(datos)
+                });
+                const resultado = await res.json();
+
+                if (res.ok) {
+                    window.location.href = resultado.pdf_url;
+                    modal.hide();
+                    cargarTutores();
+                    document.getElementById('formSolicitud').reset();
+                    alert("Solicitud generada correctamente.");
+                } else {
+                    alert("ERROR: " + resultado.error);
+                }
+            } catch (error) {
+                alert("Error de red.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = textoOriginal;
+            }
+        });
+    </script>
 </body>
 </html>
