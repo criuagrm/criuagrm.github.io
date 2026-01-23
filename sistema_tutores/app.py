@@ -6,10 +6,9 @@ import datetime
 
 app = Flask(__name__)
 
-# --- CONFIGURACIÓN DE BASE DE DATOS ---
-# Render nos da la URL en la variable de entorno. Si falla, usa sqlite local.
+# --- 1. CONFIGURACIÓN DE BASE DE DATOS (POSTGRESQL) ---
+# Render entrega la URL como 'postgres://', pero SQLAlchemy necesita 'postgresql://'
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///local_tutores.db')
-# Corrección para Render: empieza por postgres:// pero SQLAlchemy pide postgresql://
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
@@ -18,21 +17,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# --- MODELO DE LA BASE DE DATOS (LA TABLA) ---
+# --- 2. MODELO DE LA BASE DE DATOS ---
 class Tutor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(50))
     email = db.Column(db.String(100))
-    # Contadores de cupos ocupados (Empiezan en 0)
+    # Contadores de cupos ocupados
     taken_II = db.Column(db.Integer, default=0)
     taken_III = db.Column(db.Integer, default=0)
     taken_IV = db.Column(db.Integer, default=0)
 
-# --- CAPACIDADES MÁXIMAS ---
+# --- 3. CONFIGURACIÓN DE CUPOS ---
 CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
 
-# --- LISTA MAESTRA DE DOCENTES (Para cargar la primera vez) ---
+# --- 4. LISTA MAESTRA DE DOCENTES ---
 DATOS_INICIALES = [
     {"nombre": "Alejandro Mansilla Arias", "tel": "716 30 108", "email": "alejandro.mansilla@uagrm.edu.bo"},
     {"nombre": "Alfredo Víctor Copaz Pacheco", "tel": "726 48 166", "email": "alfredo.copaz@uagrm.edu.bo"},
@@ -70,10 +69,10 @@ DATOS_INICIALES = [
     {"nombre": "Sarah Gutiérrez Mendoza", "tel": "709 50 778", "email": "sarah.gutierrez@uagrm.edu.bo"}
 ]
 
-# --- INICIALIZADOR (Se ejecuta al arrancar) ---
+# --- 5. INICIALIZADOR DE BASE DE DATOS ---
 with app.app_context():
-    db.create_all() # Crea la tabla si no existe
-    # Si la tabla está vacía, cargamos los datos
+    db.create_all() # Crea tablas si no existen
+    # Si la tabla está vacía, carga los docentes automáticamente
     if Tutor.query.count() == 0:
         print("Base de datos vacía. Cargando docentes...")
         for d in DATOS_INICIALES:
@@ -82,11 +81,33 @@ with app.app_context():
         db.session.commit()
         print("¡Carga inicial completada!")
 
-# --- RUTAS ---
+# --- 6. RUTAS DEL SISTEMA ---
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# --- RUTA SECRETA PARA REINICIAR LA BASE DE DATOS (PANIC BUTTON) ---
+@app.route('/admin/reset-total')
+def reset_db():
+    try:
+        # Pone todos los contadores en 0
+        tutors = Tutor.query.all()
+        for t in tutors:
+            t.taken_II = 0
+            t.taken_III = 0
+            t.taken_IV = 0
+        db.session.commit()
+        return """
+        <div style="font-family:sans-serif; text-align:center; padding:50px;">
+            <h1 style="color:green;">¡RESET EXITOSO!</h1>
+            <p>Todos los cupos han vuelto a 0.</p>
+            <p>La base de datos está limpia para nuevas pruebas.</p>
+            <a href="/" style="font-size:20px;">Volver al Inicio</a>
+        </div>
+        """
+    except Exception as e:
+        return f"Error reseteando DB: {str(e)}"
 
 @app.route('/api/tutors', methods=['GET'])
 def get_tutors():
@@ -98,11 +119,11 @@ def get_tutors():
     disponibles = []
     
     for t in tutors:
-        # Obtenemos cuántos ha tomado en este nivel específico
         tomados = getattr(t, f"taken_{level}") 
+        # Director Odin tiene capacidad 0, el resto usa la constante
         maximo = 0 if "Odin Rodríguez Mercado" in t.name else CAPACIDAD[level]
         
-        # Filtro: Solo mostramos si hay espacio (tomados < maximo)
+        # Solo mostramos si hay cupo
         if tomados < maximo:
             disponibles.append({
                 "id": t.id,
@@ -124,20 +145,19 @@ def solicitar_tutor():
     tutor = Tutor.query.get(tutor_id)
     if not tutor: return jsonify({"error": "Tutor no encontrado"}), 404
 
-    # Determinar capacidad y uso actual
     campo_cupo = f"taken_{level}"
     tomados = getattr(tutor, campo_cupo)
     maximo = 0 if "Odin Rodríguez Mercado" in tutor.name else CAPACIDAD[level]
 
-    # VALIDACIÓN FINAL DE CUPO
+    # VALIDACIÓN DE CONCURRENCIA
     if tomados >= maximo:
         return jsonify({"error": "¡Ups! Alguien ganó el cupo hace un segundo."}), 409
 
-    # ACTUALIZAR BASE DE DATOS
+    # GUARDAR EN BASE DE DATOS
     setattr(tutor, campo_cupo, tomados + 1)
-    db.session.commit() # ¡Aquí se guarda permanentemente!
+    db.session.commit()
     
-    # Generar PDF
+    # GENERAR PDF
     try:
         pdf_file = generar_carta_pdf(data.get('nombre'), data.get('registro'), data.get('carnet'), level, tutor.name)
         return jsonify({
@@ -145,7 +165,7 @@ def solicitar_tutor():
             "pdf_url": f"/descargar/{pdf_file}"
         })
     except Exception as e:
-        # Si falla el PDF, devolvemos el cupo (Rollback manual)
+        # Rollback manual si falla el PDF
         setattr(tutor, campo_cupo, tomados)
         db.session.commit()
         return jsonify({"error": str(e)}), 500
@@ -155,30 +175,40 @@ def descargar_archivo(filename):
     path = os.path.join(os.getcwd(), filename)
     return send_file(path, as_attachment=True)
 
-# --- GENERADOR PDF (IGUAL AL ANTERIOR) ---
+# --- 7. GENERADOR PDF (DISEÑO TABLA) ---
 def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=11)
+    
     fecha = datetime.datetime.now().strftime("%d de %B de %Y")
     pdf.cell(0, 10, txt=f"Santa Cruz, {fecha}", ln=1, align='R'); pdf.ln(10)
+    
     pdf.set_font("Arial", 'B', size=11)
     pdf.cell(0, 5, txt="Señor:", ln=1)
     pdf.cell(0, 5, txt="Lic. Odin Rodríguez Mercado", ln=1)
     pdf.cell(0, 5, txt="DIRECTOR DE CARRERA CIENCIA POLÍTICA Y ADM. PÚBLICA", ln=1)
     pdf.cell(0, 5, txt="Presente.-", ln=1); pdf.ln(15)
+    
     pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
+    
     pdf.set_font("Arial", size=11)
     pdf.multi_cell(0, 8, "De mi mayor consideración:\n\nMediante la presente, solicito formalmente la asignación de tutoría para la materia de Practicum. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
+    
+    # TABLA DE DATOS
     pdf.set_fill_color(240, 240, 240); pdf.set_font("Arial", 'B', size=10)
     w_label = 60; w_data = 130; h_row = 10
+    
     pdf.cell(w_label, h_row, "NOMBRE ESTUDIANTE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO UNIVERSITARIO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CÉDULA DE IDENTIDAD:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR SOLICITADO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+    
     pdf.ln(20); pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente."); pdf.ln(30)
+    
     pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C'); pdf.cell(0, 5, txt=f"C.I. {carnet}", ln=1, align='C')
+    
     filename = f"solicitud_{registro}_{nivel}.pdf"
     pdf.output(filename)
     return filename
