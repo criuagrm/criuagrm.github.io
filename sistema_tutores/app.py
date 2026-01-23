@@ -1,17 +1,39 @@
+import os
 from flask import Flask, jsonify, request, send_file, render_template
+from flask_sqlalchemy import SQLAlchemy
 from fpdf import FPDF
 import datetime
-import os
 
 app = Flask(__name__)
 
-# --- CONFIGURACIÓN DE LOGÍSTICA ---
-CAPACIDAD_POR_NIVEL = {
-    "II": 5, "III": 3, "IV": 2    
-}
+# --- CONFIGURACIÓN DE BASE DE DATOS ---
+# Render nos da la URL en la variable de entorno. Si falla, usa sqlite local.
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///local_tutores.db')
+# Corrección para Render: empieza por postgres:// pero SQLAlchemy pide postgresql://
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
 
-# --- DATOS COMPLETOS DE DOCENTES (Nombre, Tel, Email) ---
-datos_docentes = [
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# --- MODELO DE LA BASE DE DATOS (LA TABLA) ---
+class Tutor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(50))
+    email = db.Column(db.String(100))
+    # Contadores de cupos ocupados (Empiezan en 0)
+    taken_II = db.Column(db.Integer, default=0)
+    taken_III = db.Column(db.Integer, default=0)
+    taken_IV = db.Column(db.Integer, default=0)
+
+# --- CAPACIDADES MÁXIMAS ---
+CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
+
+# --- LISTA MAESTRA DE DOCENTES (Para cargar la primera vez) ---
+DATOS_INICIALES = [
     {"nombre": "Alejandro Mansilla Arias", "tel": "716 30 108", "email": "alejandro.mansilla@uagrm.edu.bo"},
     {"nombre": "Alfredo Víctor Copaz Pacheco", "tel": "726 48 166", "email": "alfredo.copaz@uagrm.edu.bo"},
     {"nombre": "Armengol Vaca Flores", "tel": "716 31 448", "email": "armengol.vaca@uagrm.edu.bo"},
@@ -48,24 +70,19 @@ datos_docentes = [
     {"nombre": "Sarah Gutiérrez Mendoza", "tel": "709 50 778", "email": "sarah.gutierrez@uagrm.edu.bo"}
 ]
 
-# Inicialización de DB
-tutors_db = []
-for i, docente in enumerate(datos_docentes, start=1):
-    nombre = docente["nombre"]
-    es_director = "Odin Rodríguez Mercado" in nombre
-    capacidad = {k: 0 for k in CAPACIDAD_POR_NIVEL} if es_director else CAPACIDAD_POR_NIVEL.copy()
-    
-    tutors_db.append({
-        "id": i,
-        "name": nombre,
-        "phone": docente["tel"],
-        "email": docente["email"],
-        "slots": {
-            "II":  {"capacity": capacidad["II"], "taken": 0},
-            "III": {"capacity": capacidad["III"], "taken": 0},
-            "IV":  {"capacity": capacidad["IV"], "taken": 0}
-        }
-    })
+# --- INICIALIZADOR (Se ejecuta al arrancar) ---
+with app.app_context():
+    db.create_all() # Crea la tabla si no existe
+    # Si la tabla está vacía, cargamos los datos
+    if Tutor.query.count() == 0:
+        print("Base de datos vacía. Cargando docentes...")
+        for d in DATOS_INICIALES:
+            nuevo = Tutor(name=d['nombre'], phone=d['tel'], email=d['email'])
+            db.session.add(nuevo)
+        db.session.commit()
+        print("¡Carga inicial completada!")
+
+# --- RUTAS ---
 
 @app.route('/')
 def index():
@@ -74,22 +91,28 @@ def index():
 @app.route('/api/tutors', methods=['GET'])
 def get_tutors():
     level = request.args.get('level') 
-    if level not in CAPACIDAD_POR_NIVEL:
+    if level not in CAPACIDAD:
         return jsonify({"error": "Nivel inválido"}), 400
 
+    tutors = Tutor.query.order_by(Tutor.name).all()
     disponibles = []
-    for tutor in tutors_db:
-        info_cupo = tutor['slots'][level]
-        if info_cupo['taken'] < info_cupo['capacity']:
+    
+    for t in tutors:
+        # Obtenemos cuántos ha tomado en este nivel específico
+        tomados = getattr(t, f"taken_{level}") 
+        maximo = 0 if "Odin Rodríguez Mercado" in t.name else CAPACIDAD[level]
+        
+        # Filtro: Solo mostramos si hay espacio (tomados < maximo)
+        if tomados < maximo:
             disponibles.append({
-                "id": tutor['id'],
-                "name": tutor['name'],
-                "phone": tutor['phone'],
-                "email": tutor['email'],
-                "cupos_disponibles": info_cupo['capacity'] - info_cupo['taken'],
-                "cupos_totales": info_cupo['capacity']
+                "id": t.id,
+                "name": t.name,
+                "phone": t.phone,
+                "email": t.email,
+                "cupos_disponibles": maximo - tomados,
+                "cupos_totales": maximo
             })
-    disponibles.sort(key=lambda x: x['name'])
+            
     return jsonify(disponibles)
 
 @app.route('/api/solicitar', methods=['POST'])
@@ -97,27 +120,34 @@ def solicitar_tutor():
     data = request.json
     tutor_id = data.get('tutor_id')
     level = data.get('nivel')
-    nombre_est = data.get('nombre')
-    registro_est = data.get('registro')
-    carnet_est = data.get('carnet')
-
-    tutor = next((t for t in tutors_db if t['id'] == tutor_id), None)
+    
+    tutor = Tutor.query.get(tutor_id)
     if not tutor: return jsonify({"error": "Tutor no encontrado"}), 404
 
-    cupo_actual = tutor['slots'][level]
-    if cupo_actual['taken'] >= cupo_actual['capacity']:
-        return jsonify({"error": "Cupo lleno."}), 409
+    # Determinar capacidad y uso actual
+    campo_cupo = f"taken_{level}"
+    tomados = getattr(tutor, campo_cupo)
+    maximo = 0 if "Odin Rodríguez Mercado" in tutor.name else CAPACIDAD[level]
 
-    cupo_actual['taken'] += 1
+    # VALIDACIÓN FINAL DE CUPO
+    if tomados >= maximo:
+        return jsonify({"error": "¡Ups! Alguien ganó el cupo hace un segundo."}), 409
+
+    # ACTUALIZAR BASE DE DATOS
+    setattr(tutor, campo_cupo, tomados + 1)
+    db.session.commit() # ¡Aquí se guarda permanentemente!
     
+    # Generar PDF
     try:
-        pdf_file = generar_carta_pdf(nombre_est, registro_est, carnet_est, level, tutor['name'])
+        pdf_file = generar_carta_pdf(data.get('nombre'), data.get('registro'), data.get('carnet'), level, tutor.name)
         return jsonify({
             "mensaje": "Solicitud exitosa",
             "pdf_url": f"/descargar/{pdf_file}"
         })
     except Exception as e:
-        cupo_actual['taken'] -= 1
+        # Si falla el PDF, devolvemos el cupo (Rollback manual)
+        setattr(tutor, campo_cupo, tomados)
+        db.session.commit()
         return jsonify({"error": str(e)}), 500
 
 @app.route('/descargar/<filename>')
@@ -125,83 +155,30 @@ def descargar_archivo(filename):
     path = os.path.join(os.getcwd(), filename)
     return send_file(path, as_attachment=True)
 
-# --- GENERADOR PDF ESTILO TABLA ---
+# --- GENERADOR PDF (IGUAL AL ANTERIOR) ---
 def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=11)
-    
-    # Fecha
     fecha = datetime.datetime.now().strftime("%d de %B de %Y")
-    pdf.cell(0, 10, txt=f"Santa Cruz, {fecha}", ln=1, align='R')
-    pdf.ln(10)
-    
-    # Destinatario
+    pdf.cell(0, 10, txt=f"Santa Cruz, {fecha}", ln=1, align='R'); pdf.ln(10)
     pdf.set_font("Arial", 'B', size=11)
     pdf.cell(0, 5, txt="Señor:", ln=1)
     pdf.cell(0, 5, txt="Lic. Odin Rodríguez Mercado", ln=1)
     pdf.cell(0, 5, txt="DIRECTOR DE CARRERA CIENCIA POLÍTICA Y ADM. PÚBLICA", ln=1)
-    pdf.cell(0, 5, txt="Presente.-", ln=1)
-    pdf.ln(15)
-    
-    # Referencia
-    pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R')
-    pdf.ln(10)
-    
-    # Cuerpo Intro
+    pdf.cell(0, 5, txt="Presente.-", ln=1); pdf.ln(15)
+    pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
     pdf.set_font("Arial", size=11)
-    pdf.multi_cell(0, 8, "De mi mayor consideración:\n\nMediante la presente, solicito formalmente la asignación de tutoría para la materia de Practicum. A continuación detallo mis datos y el docente seleccionado:")
-    pdf.ln(10)
-
-    # --- TABLA DE DATOS ---
-    pdf.set_fill_color(240, 240, 240) # Gris suave para encabezados
-    pdf.set_font("Arial", 'B', size=10)
-    
-    # Anchos de columnas
-    w_label = 60
-    w_data = 130
-    h_row = 10
-
-    # Fila 1: Estudiante
-    pdf.cell(w_label, h_row, "NOMBRE ESTUDIANTE:", 1, 0, 'L', True)
-    pdf.set_font("Arial", size=10)
-    pdf.cell(w_data, h_row, nombre.upper(), 1, 1, 'L')
-
-    # Fila 2: Registro
-    pdf.set_font("Arial", 'B', size=10)
-    pdf.cell(w_label, h_row, "REGISTRO UNIVERSITARIO:", 1, 0, 'L', True)
-    pdf.set_font("Arial", size=10)
-    pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
-
-    # Fila 3: Carnet
-    pdf.set_font("Arial", 'B', size=10)
-    pdf.cell(w_label, h_row, "CÉDULA DE IDENTIDAD:", 1, 0, 'L', True)
-    pdf.set_font("Arial", size=10)
-    pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
-
-    # Fila 4: Nivel
-    pdf.set_font("Arial", 'B', size=10)
-    pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True)
-    pdf.set_font("Arial", size=10)
-    pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
-
-    # Fila 5: Tutor
-    pdf.set_font("Arial", 'B', size=10)
-    pdf.cell(w_label, h_row, "TUTOR SOLICITADO:", 1, 0, 'L', True)
-    pdf.set_font("Arial", size=10)
-    pdf.cell(w_data, h_row, nombre_tutor.upper(), 1, 1, 'L')
-    
-    pdf.ln(20)
-    pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente.")
-    pdf.ln(30)
-    
-    # Firma Simple
-    pdf.cell(0, 5, txt="__________________________", ln=1, align='C')
-    pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C')
-    pdf.cell(0, 5, txt=f"C.I. {carnet}", ln=1, align='C')
-
-    # (SE ELIMINÓ EL CUADRO DE APROBADO/OBSERVADO COMO PEDISTE)
-
+    pdf.multi_cell(0, 8, "De mi mayor consideración:\n\nMediante la presente, solicito formalmente la asignación de tutoría para la materia de Practicum. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
+    pdf.set_fill_color(240, 240, 240); pdf.set_font("Arial", 'B', size=10)
+    w_label = 60; w_data = 130; h_row = 10
+    pdf.cell(w_label, h_row, "NOMBRE ESTUDIANTE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO UNIVERSITARIO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CÉDULA DE IDENTIDAD:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR SOLICITADO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+    pdf.ln(20); pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente."); pdf.ln(30)
+    pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C'); pdf.cell(0, 5, txt=f"C.I. {carnet}", ln=1, align='C')
     filename = f"solicitud_{registro}_{nivel}.pdf"
     pdf.output(filename)
     return filename
