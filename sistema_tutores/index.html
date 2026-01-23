@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignación de Tutores UAGRM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card-tutor { transition: transform 0.2s; cursor: pointer; }
+        .card-tutor:hover { transform: scale(1.02); border-color: #0d6efd; }
+        .cupo-lleno { opacity: 0.6; pointer-events: none; background-color: #e9ecef; }
+        .badge-cupo { font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">Practicum - Asignación de Tutores</h1>
+        <p class="lead">Selecciona tu nivel para ver los docentes disponibles.</p>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <select id="selectNivel" class="form-select form-select-lg shadow-sm" onchange="cargarTutores()">
+                <option value="" selected disabled>-- Elige tu Practicum --</option>
+                <option value="II">Practicum II (Diagnóstico)</option>
+                <option value="III">Practicum III (Desarrollo)</option>
+                <option value="IV">Practicum IV (Final)</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="listaTutores" class="row g-3">
+        <div class="text-center text-muted mt-4">
+            <small>Selecciona un nivel arriba para comenzar</small>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalInscripcion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Confirmar Solicitud</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Estás solicitando tutoría con: <strong id="nombreTutorModal"></strong></p>
+                <form id="formSolicitud">
+                    <input type="hidden" id="tutorIdInput">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" id="nombreEst" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Registro Universitario</label>
+                        <input type="number" class="form-control" id="registroEst" required placeholder="Ej: 219000000">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cédula de Identidad (C.I.)</label>
+                        <input type="text" class="form-control" id="carnetEst" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Generar Carta de Solicitud</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let nivelActual = "";
+
+    async function cargarTutores() {
+        nivelActual = document.getElementById('selectNivel').value;
+        const contenedor = document.getElementById('listaTutores');
+        contenedor.innerHTML = '<div class="text-center"><div class="spinner-border text-primary"></div><p>Cargando cupos...</p></div>';
+
+        try {
+            const respuesta = await fetch(`/api/tutors?level=${nivelActual}`);
+            const tutores = await respuesta.json();
+
+            contenedor.innerHTML = ""; // Limpiar
+
+            if (tutores.length === 0) {
+                contenedor.innerHTML = '<div class="alert alert-warning">No hay tutores disponibles para este nivel.</div>';
+                return;
+            }
+
+            tutores.forEach(tutor => {
+                const lleno = tutor.cupos_disponibles === 0;
+                const claseCard = lleno ? 'card p-3 h-100 cupo-lleno' : 'card p-3 h-100 card-tutor shadow-sm';
+                const colorBadge = tutor.cupos_disponibles < 2 ? 'bg-danger' : 'bg-success';
+                
+                const html = `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="${claseCard}" onclick="${lleno ? '' : `abrirModal(${tutor.id}, '${tutor.name}')`}">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="card-title mb-0 fw-bold">${tutor.name}</h6>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Licenciado/a</small>
+                                <span class="badge ${lleno ? 'bg-secondary' : colorBadge} badge-cupo">
+                                    ${lleno ? 'AGOTADO' : `Cupos: ${tutor.cupos_disponibles}/${tutor.cupos_totales}`}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                contenedor.innerHTML += html;
+            });
+
+        } catch (error) {
+            contenedor.innerHTML = `<div class="alert alert-danger">Error cargando datos: ${error}</div>`;
+        }
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('modalInscripcion'));
+
+    function abrirModal(id, nombre) {
+        document.getElementById('tutorIdInput').value = id;
+        document.getElementById('nombreTutorModal').innerText = nombre;
+        modal.show();
+    }
+
+    document.getElementById('formSolicitud').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btn = e.target.querySelector('button');
+        const textoOriginal = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = "Procesando...";
+
+        const datos = {
+            tutor_id: parseInt(document.getElementById('tutorIdInput').value),
+            nivel: nivelActual,
+            nombre: document.getElementById('nombreEst').value,
+            registro: document.getElementById('registroEst').value,
+            carnet: document.getElementById('carnetEst').value
+        };
+
+        try {
+            const res = await fetch('/api/solicitar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(datos)
+            });
+            
+            const resultado = await res.json();
+
+            if (res.ok) {
+                alert(`¡ÉXITO!\n\nTu cupo ha sido reservado.\nSe descargará tu carta automáticamente.`);
+                window.location.href = resultado.pdf_url; // Descargar PDF
+                modal.hide();
+                cargarTutores(); // Recargar lista para actualizar cupos
+                document.getElementById('formSolicitud').reset();
+            } else {
+                alert("ERROR: " + resultado.error);
+            }
+
+        } catch (error) {
+            alert("Error de conexión");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = textoOriginal;
+        }
+    });
+</script>
+
+</body>
+</html>
