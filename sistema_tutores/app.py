@@ -166,30 +166,46 @@ DOCENTES_MATERIA_DATA = [
     {"user": "p4_noche",  "pass": "123", "name": "Practicum IV - Turno Noche (B)"}
 ]
 
+# --- INICIALIZADOR CON AUTORREPARACIÓN ---
 with app.app_context():
+    # 1. Intentamos crear tablas (si no existen)
     db.create_all()
     
-    # 1. Cargar Tutores
+    # 2. VERIFICACIÓN DE SALUD DE LA BASE DE DATOS
+    try:
+        # Intentamos una consulta simple para ver si la tabla User tiene la estructura correcta
+        User.query.first()
+    except Exception as e:
+        print("¡ALERTA! La estructura de la base de datos es antigua. Reiniciando todo...")
+        # Si falla (por ejemplo, falta la columna password_hash), borramos todo y recreamos
+        db.drop_all()
+        db.create_all()
+
+    # 3. CARGA DE DATOS (Ahora es seguro correr esto)
+    
+    # Cargar Tutores
     if Tutor.query.count() == 0:
+        print("Cargando lista maestra de tutores...")
         for d in DATOS_TUTORES:
             db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
         db.session.commit()
     
-    # 2. Cargar Admin (Con Hashing)
+    # Cargar Admin
     if not User.query.filter_by(username='admin').first():
+        print("Creando Admin...")
         admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
         admin.set_password('123') 
         db.session.add(admin)
     
-    # 3. Cargar Docentes (Con Hashing)
+    # Cargar Docentes
     for dm in DOCENTES_MATERIA_DATA:
         if not User.query.filter_by(username=dm['user']).first():
+            print(f"Creando docente: {dm['name']}")
             doc = User(username=dm['user'], role='docente', display_name=dm['name'])
-            doc.set_password(dm['pass'])
+            doc.set_password(dm['pass']) 
             db.session.add(doc)
             
     db.session.commit()
-
 # --- 4. RUTAS PÚBLICAS Y API ---
 
 @app.route('/')
@@ -567,3 +583,4 @@ def generar_reporte_academico(p):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
