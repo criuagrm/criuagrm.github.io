@@ -6,10 +6,10 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from fpdf import FPDF
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_uagrm_politica' # Necesario para sesiones seguras
+app.secret_key = 'clave_secreta_uagrm_politica'
 
-# --- 1. CONFIGURACIÓN DE BASE DE DATOS ---
-# Detecta si estamos en Render (PostgreSQL) o en Local (SQLite)
+# --- 1. CONFIGURACIÓN ---
+# Detecta automáticamente si es Render (Postgres) o Local (SQLite)
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///local_tutores.db')
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
@@ -20,22 +20,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login' # Si no estás logueado, te manda aquí
+login_manager.login_view = 'login'
 
 # --- 2. MODELOS DE BASE DE DATOS ---
 
 class User(UserMixin, db.Model):
     """Sistema de Usuarios (Login)"""
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True) # Admin: 'admin', Est: Registro
-    password = db.Column(db.String(100)) # Admin: '123', Est: Carnet
-    role = db.Column(db.String(20)) # 'admin' o 'student'
+    username = db.Column(db.String(50), unique=True) # Admin: 'admin', Docente: 'docente', Est: Registro
+    password = db.Column(db.String(100)) # Contraseña simple (en prod usar hash)
+    role = db.Column(db.String(20)) # 'admin', 'student', 'docente'
     
-    # Relación con perfil de estudiante
+    # Relación inversa con perfil de estudiante
     student_profile = db.relationship('StudentProfile', backref='user_account', uselist=False)
 
 class Tutor(db.Model):
-    """Docentes y sus Cupos"""
+    """Docentes y Cupos"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     phone = db.Column(db.String(50))
@@ -48,7 +48,7 @@ class Tutor(db.Model):
     students = db.relationship('StudentProfile', backref='tutor', lazy=True)
 
 class StudentProfile(db.Model):
-    """Perfil del Estudiante (Datos Académicos)"""
+    """Perfil Académico del Estudiante"""
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # Se vincula al aprobar
     
@@ -61,25 +61,45 @@ class StudentProfile(db.Model):
     status = db.Column(db.String(20), default='PENDIENTE') # PENDIENTE -> ACTIVO -> FINALIZADO
     drive_folder_url = db.Column(db.String(300)) # Link a la carpeta de Drive (Puesto por el Director)
     
-    submissions = db.relationship('Submission', backref='student', lazy=True)
+    # Relaciones con las nuevas tablas de gestión
+    work_plan = db.relationship('WorkPlan', backref='student', uselist=False)
+    logs = db.relationship('DailyLog', backref='student', lazy=True)
+    attendance = db.relationship('AttendanceLog', backref='student', lazy=True)
 
-class Submission(db.Model):
-    """Control de Hitos (Para futuro uso de semáforos)"""
+class WorkPlan(db.Model):
+    """El Plan de Trabajo del Estudiante"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
-    tipo = db.Column(db.String(50)) # 'PLAN', 'INFORME', 'MEMORIA'
-    date_submitted = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    status = db.Column(db.String(20), default='EN_REVISION') 
-    teacher_feedback = db.Column(db.Text)
+    title = db.Column(db.String(200))
+    general_objective = db.Column(db.Text)
+    schedule = db.Column(db.Text) # Cronograma en texto
+    status = db.Column(db.String(20), default='BORRADOR') # BORRADOR, ENVIADO, APROBADO
 
-# --- 3. CONFIGURACIÓN INICIAL Y CARGA DE DATOS ---
+class DailyLog(db.Model):
+    """Bitácora Diaria"""
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
+    date = db.Column(db.Date, default=datetime.date.today)
+    activity = db.Column(db.Text)
+    hours = db.Column(db.Float)
+    observations = db.Column(db.Text)
+
+class AttendanceLog(db.Model):
+    """Control de Asistencia"""
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
+    date = db.Column(db.Date, default=datetime.date.today)
+    entry_time = db.Column(db.String(10)) # Ej: "08:00"
+    exit_time = db.Column(db.String(10))  # Ej: "12:00"
+
+# --- 3. CARGA DE DATOS INICIALES ---
 CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Datos semilla de tutores
+# LISTA COMPLETA DE TUTORES
 DATOS_INICIALES = [
     {"nombre": "Alejandro Mansilla Arias", "tel": "716 30 108", "email": "alejandro.mansilla@uagrm.edu.bo"},
     {"nombre": "Alfredo Víctor Copaz Pacheco", "tel": "726 48 166", "email": "alfredo.copaz@uagrm.edu.bo"},
@@ -117,26 +137,33 @@ DATOS_INICIALES = [
     {"nombre": "Sarah Gutiérrez Mendoza", "tel": "709 50 778", "email": "sarah.gutierrez@uagrm.edu.bo"}
 ]
 
+# Inicializador de la App
 with app.app_context():
     db.create_all()
     
-    # 1. Cargar Tutores si está vacío
+    # 1. Cargar Tutores si la tabla está vacía
     if Tutor.query.count() == 0:
-        print("Cargando docentes...")
+        print("Cargando lista maestra de docentes...")
         for d in DATOS_INICIALES:
             nuevo = Tutor(name=d['nombre'], phone=d['tel'], email=d['email'])
             db.session.add(nuevo)
         db.session.commit()
     
-    # 2. Crear ADMIN si no existe
+    # 2. Crear Usuario ADMIN si no existe
     if not User.query.filter_by(username='admin').first():
-        print("Creando Admin...")
-        # Contraseña simple para pruebas. En producción usar hash.
+        print("Creando usuario Administrador...")
         admin = User(username='admin', password='123', role='admin')
         db.session.add(admin)
         db.session.commit()
+    
+    # 3. Crear Usuario DOCENTE si no existe
+    if not User.query.filter_by(username='docente').first():
+        print("Creando usuario Docente de Materia...")
+        docente = User(username='docente', password='123', role='docente')
+        db.session.add(docente)
+        db.session.commit()
 
-# --- RUTAS PÚBLICAS (LANDING Y SOLICITUD) ---
+# --- 4. RUTAS PÚBLICAS Y API ---
 
 @app.route('/')
 def index():
@@ -152,7 +179,9 @@ def get_tutors():
     
     for t in tutors:
         tomados = getattr(t, f"taken_{level}") 
+        # Director Odin tiene capacidad 0 (o ilimitada según lógica, aquí 0 cupos directos)
         maximo = 0 if "Odin Rodríguez Mercado" in t.name else CAPACIDAD[level]
+        
         if tomados < maximo:
             disponibles.append({
                 "id": t.id,
@@ -166,7 +195,6 @@ def get_tutors():
 
 @app.route('/api/solicitar', methods=['POST'])
 def solicitar_tutor():
-    # Esta ruta crea la solicitud PENDIENTE y genera el PDF
     data = request.json
     tutor_id = data.get('tutor_id')
     level = data.get('nivel')
@@ -180,7 +208,7 @@ def solicitar_tutor():
     maximo = 0 if "Odin Rodríguez Mercado" in tutor.name else CAPACIDAD[level]
 
     if tomados >= maximo:
-        return jsonify({"error": "Cupo lleno."}), 409
+        return jsonify({"error": "¡Ups! Cupo lleno."}), 409
 
     # 1. Reservar Cupo
     setattr(tutor, campo_cupo, tomados + 1)
@@ -213,7 +241,7 @@ def descargar_archivo(filename):
     path = os.path.join(os.getcwd(), filename)
     return send_file(path, as_attachment=True)
 
-# --- RUTAS DE AUTENTICACIÓN (LOGIN) ---
+# --- 5. RUTAS DE AUTENTICACIÓN (LOGIN) ---
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -223,16 +251,17 @@ def login():
         
         user = User.query.filter_by(username=username).first()
         
-        # Validación simple (en prod usar check_password_hash)
         if user and user.password == password:
             login_user(user)
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
+            elif user.role == 'docente':
+                return redirect(url_for('docente_dashboard'))
             else:
                 return redirect(url_for('student_dashboard'))
         else:
-            # Aquí podrías pasar un mensaje de error a la plantilla si usas flash
-            return render_template('login.html', error="Usuario o contraseña incorrectos")
+            # En un caso real usar flash messages, aquí simple redirect
+            return render_template('login.html') 
             
     return render_template('login.html')
 
@@ -242,18 +271,95 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- RUTAS DIRECTOR (ADMIN) ---
+# --- 6. RUTAS ESTUDIANTE (DASHBOARD Y GESTIÓN) ---
+
+@app.route('/student/dashboard')
+@login_required
+def student_dashboard():
+    if current_user.role != 'student': return redirect(url_for('index'))
+    profile = current_user.student_profile
+    return render_template('student_dashboard.html', profile=profile)
+
+@app.route('/student/save_plan', methods=['POST'])
+@login_required
+def save_plan():
+    p = current_user.student_profile
+    if not p: return "Error perfil", 400
+    
+    if not p.work_plan:
+        plan = WorkPlan(student_id=p.id)
+        db.session.add(plan)
+    else:
+        plan = p.work_plan
+    
+    plan.title = request.form['title']
+    plan.general_objective = request.form['general_objective']
+    plan.schedule = request.form['schedule']
+    plan.status = 'ENVIADO'
+    db.session.commit()
+    return redirect(url_for('student_dashboard'))
+
+@app.route('/student/add_log', methods=['POST'])
+@login_required
+def add_log():
+    p = current_user.student_profile
+    if not p: return "Error perfil", 400
+
+    date_obj = datetime.datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+    new_log = DailyLog(
+        student_id=p.id, 
+        date=date_obj, 
+        activity=request.form['activity'], 
+        hours=float(request.form['hours'])
+    )
+    db.session.add(new_log)
+    db.session.commit()
+    return redirect(url_for('student_dashboard'))
+
+@app.route('/student/add_attendance', methods=['POST'])
+@login_required
+def add_attendance():
+    p = current_user.student_profile
+    if not p: return "Error perfil", 400
+
+    date_obj = datetime.datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+    new_att = AttendanceLog(
+        student_id=p.id, 
+        date=date_obj, 
+        entry_time=request.form['entry'], 
+        exit_time=request.form['exit']
+    )
+    db.session.add(new_att)
+    db.session.commit()
+    return redirect(url_for('student_dashboard'))
+
+# --- 7. RUTAS DOCENTE DE MATERIA ---
+
+@app.route('/docente/dashboard')
+@login_required
+def docente_dashboard():
+    if current_user.role != 'docente': return "Acceso Denegado"
+    # Mostrar todos los estudiantes activos
+    estudiantes = StudentProfile.query.filter_by(status='ACTIVO').all()
+    return render_template('docente_dashboard.html', estudiantes=estudiantes)
+
+@app.route('/docente/ver/<int:student_id>')
+@login_required
+def docente_ver_estudiante(student_id):
+    if current_user.role != 'docente': return "Acceso Denegado"
+    estudiante = StudentProfile.query.get(student_id)
+    return render_template('docente_detail.html', e=estudiante)
+
+# --- 8. RUTAS ADMIN (DIRECTOR) ---
 
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
     if current_user.role != 'admin': return redirect(url_for('index'))
     
-    # Recuperar listas para mostrar en el HTML
     pendientes = StudentProfile.query.filter_by(status='PENDIENTE').all()
     activos = StudentProfile.query.filter_by(status='ACTIVO').all()
     
-    # Usamos la plantilla nueva (admin_dashboard.html)
     return render_template('admin_dashboard.html', pendientes=pendientes, activos=activos)
 
 @app.route('/admin/approve/<int:student_id>', methods=['POST'])
@@ -265,14 +371,14 @@ def approve_student(student_id):
     student = StudentProfile.query.get(student_id)
     
     if student:
-        # 1. Crear Usuario para el estudiante (Reg, Carnet)
-        # Verificamos que no exista ya el usuario
+        # Verificar que no exista usuario ya
         if not User.query.filter_by(username=student.registro).first():
+            # Crear Usuario (User: Registro, Pass: Carnet)
             new_user = User(username=student.registro, password=student.carnet, role='student')
             db.session.add(new_user)
-            db.session.commit()
+            db.session.commit() # Commit para obtener el ID
             
-            # 2. Vincular y Activar
+            # Vincular y Activar
             student.user_id = new_user.id
             student.status = 'ACTIVO'
             student.drive_folder_url = drive_url
@@ -280,23 +386,9 @@ def approve_student(student_id):
             
     return redirect(url_for('admin_dashboard'))
 
-# --- RUTAS ESTUDIANTE ---
-
-@app.route('/student/dashboard')
-@login_required
-def student_dashboard():
-    if current_user.role != 'student': return redirect(url_for('index'))
-    
-    profile = current_user.student_profile
-    if not profile: return "Perfil no encontrado"
-    
-    # Usamos la plantilla nueva (student_dashboard.html)
-    return render_template('student_dashboard.html', profile=profile)
-
-# --- FUNCIONALIDAD EXTRA ---
 @app.route('/admin/reset-total')
 def reset_db():
-    # Solo para emergencias - Borra cupos y reinicia base de pruebas
+    # Solo para emergencias - Pone todos los cupos en 0
     tutors = Tutor.query.all()
     for t in tutors:
         t.taken_II = 0
@@ -305,30 +397,41 @@ def reset_db():
     db.session.commit()
     return "<h1>Reset de Cupos Exitoso</h1><a href='/'>Volver</a>"
 
-# --- GENERADOR PDF (Mismo diseño de tabla) ---
+# --- 9. GENERADOR DE PDF ---
+
 def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=11)
+    
     fecha = datetime.datetime.now().strftime("%d de %B de %Y")
     pdf.cell(0, 10, txt=f"Santa Cruz, {fecha}", ln=1, align='R'); pdf.ln(10)
+    
     pdf.set_font("Arial", 'B', size=11)
     pdf.cell(0, 5, txt="Señor:", ln=1)
     pdf.cell(0, 5, txt="Lic. Odin Rodríguez Mercado", ln=1)
     pdf.cell(0, 5, txt="DIRECTOR DE CARRERA CIENCIA POLÍTICA Y ADM. PÚBLICA", ln=1)
     pdf.cell(0, 5, txt="Presente.-", ln=1); pdf.ln(15)
+    
     pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
+    
     pdf.set_font("Arial", size=11)
     pdf.multi_cell(0, 8, "De mi mayor consideración:\n\nMediante la presente, solicito formalmente la asignación de tutoría. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
+    
+    # Tabla de datos
     pdf.set_fill_color(240, 240, 240); pdf.set_font("Arial", 'B', size=10)
     w_label = 60; w_data = 130; h_row = 10
+    
     pdf.cell(w_label, h_row, "NOMBRE ESTUDIANTE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO UNIVERSITARIO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CÉDULA DE IDENTIDAD:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR SOLICITADO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+    
     pdf.ln(20); pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente."); pdf.ln(30)
+    
     pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C'); pdf.cell(0, 5, txt=f"C.I. {carnet}", ln=1, align='C')
+    
     filename = f"solicitud_{registro}_{nivel}.pdf"
     pdf.output(filename)
     return filename
