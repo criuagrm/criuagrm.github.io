@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Docente - UAGRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+</head>
+<body class="bg-slate-100 font-sans">
+    <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center font-bold">DOC</div>
+            <div>
+                <h1 class="font-bold">Docente de Materia</h1>
+                <p class="text-xs text-blue-200">Supervisión Académica</p>
+            </div>
+        </div>
+        <a href="/logout" class="text-sm hover:text-blue-300">Cerrar Sesión</a>
+    </nav>
+
+    <div class="max-w-7xl mx-auto p-8">
+        <h2 class="text-2xl font-bold text-slate-800 mb-6">Estudiantes Asignados ({{ estudiantes|length }})</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for e in estudiantes %}
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xl">
+                        {{ e.full_name[0] }}
+                    </div>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold">P-{{ e.practicum_level }}</span>
+                </div>
+                
+                <h3 class="font-bold text-slate-900 text-lg mb-1">{{ e.full_name }}</h3>
+                <p class="text-sm text-slate-500 mb-4">Reg: {{ e.registro }}</p>
+                
+                <div class="space-y-2 text-sm text-slate-600 mb-6">
+                    <div class="flex justify-between">
+                        <span><i class="fa-solid fa-file-lines mr-2"></i>Plan:</span>
+                        {% if e.work_plan %}
+                            <span class="text-green-600 font-bold">Enviado</span>
+                        {% else %}
+                            <span class="text-red-400">Pendiente</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex justify-between">
+                        <span><i class="fa-solid fa-clock mr-2"></i>Bitácoras:</span>
+                        <span class="font-bold">{{ e.logs|length }} Reg.</span>
+                    </div>
+                </div>
+
+                <a href="/docente/ver/{{ e.id }}" class="block w-full text-center bg-slate-900 text-white py-2 rounded-lg font-bold hover:bg-slate-800 transition">
+                    Revisar Avance
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
