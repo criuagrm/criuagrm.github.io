@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Revisión Estudiante</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+</head>
+<body class="bg-slate-50 font-sans pb-20">
+    <nav class="bg-white border-b px-6 py-4 mb-8">
+        <a href="/docente/dashboard" class="flex items-center gap-2 text-slate-600 hover:text-blue-900 font-bold">
+            <i class="fa-solid fa-arrow-left"></i> Volver al Panel
+        </a>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-6">
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900">{{ e.full_name }}</h1>
+                <p class="text-slate-500">Registro: {{ e.registro }} • Tutor: {{ e.tutor.name }}</p>
+            </div>
+            <a href="{{ e.drive_folder_url }}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700">
+                <i class="fa-brands fa-google-drive mr-2"></i> Ver Evidencias Drive
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
+            <h2 class="text-xl font-bold text-slate-900 mb-6 border-b pb-2"><i class="fa-solid fa-map mr-2 text-blue-600"></i> Plan de Trabajo</h2>
+            
+            {% if e.work_plan %}
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase">Título del Proyecto</h3>
+                        <p class="text-lg font-medium">{{ e.work_plan.title }}</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase">Objetivo General</h3>
+                            <p class="text-slate-700 mt-1 bg-slate-50 p-3 rounded-lg">{{ e.work_plan.general_objective }}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase">Cronograma Propuesto</h3>
+                            <p class="text-slate-700 mt-1 bg-slate-50 p-3 rounded-lg">{{ e.work_plan.schedule }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-10 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
+                    <p>El estudiante aún no ha registrado su Plan de Trabajo.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-orange-500"></i> Bitácora de Actividades
+                </h2>
+                <div class="overflow-y-auto max-h-[400px]">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-400 uppercase bg-slate-50 sticky top-0">
+                            <tr>
+                                <th class="px-3 py-2">Fecha</th>
+                                <th class="px-3 py-2">Actividad</th>
+                                <th class="px-3 py-2 text-right">Hrs</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for log in e.logs %}
+                            <tr>
+                                <td class="px-3 py-3 font-mono text-slate-500">{{ log.date }}</td>
+                                <td class="px-3 py-3">{{ log.activity }}</td>
+                                <td class="px-3 py-3 text-right font-bold">{{ log.hours }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center py-4 text-slate-400">Sin registros</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-green-600"></i> Registro de Asistencia
+                </h2>
+                <div class="overflow-y-auto max-h-[400px]">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-400 uppercase bg-slate-50 sticky top-0">
+                            <tr>
+                                <th class="px-3 py-2">Fecha</th>
+                                <th class="px-3 py-2">Entrada</th>
+                                <th class="px-3 py-2">Salida</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for att in e.attendance %}
+                            <tr>
+                                <td class="px-3 py-3 font-mono text-slate-500">{{ att.date }}</td>
+                                <td class="px-3 py-3 font-bold text-green-600">{{ att.entry_time }}</td>
+                                <td class="px-3 py-3 font-bold text-red-500">{{ att.exit_time }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center py-4 text-slate-400">Sin registros</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
