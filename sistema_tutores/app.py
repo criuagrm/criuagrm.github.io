@@ -27,15 +27,20 @@ login_manager.login_view = 'login'
 class User(UserMixin, db.Model):
     """Sistema de Usuarios (Login)"""
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True) # Admin: 'admin', Docente: 'docente', Est: Registro
+    username = db.Column(db.String(50), unique=True) # Admin: 'admin', Docente: 'p2_manana', Est: Registro
     password = db.Column(db.String(100)) # Contraseña simple (en prod usar hash)
     role = db.Column(db.String(20)) # 'admin', 'student', 'docente'
     
-    # Relación inversa con perfil de estudiante
+    # Nombre visible (Ej: "Lic. Juan Perez - Turno Mañana")
+    display_name = db.Column(db.String(100))
+    
+    # Relaciones
     student_profile = db.relationship('StudentProfile', backref='user_account', uselist=False)
+    # Estudiantes asignados a este docente
+    assigned_students = db.relationship('StudentProfile', backref='assigned_docente', lazy=True, foreign_keys='StudentProfile.docente_id')
 
 class Tutor(db.Model):
-    """Docentes y Cupos"""
+    """Docentes Tutores de Tesis (Los 34)"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     phone = db.Column(db.String(50))
@@ -45,7 +50,7 @@ class Tutor(db.Model):
     taken_III = db.Column(db.Integer, default=0)
     taken_IV = db.Column(db.Integer, default=0)
     
-    students = db.relationship('StudentProfile', backref='tutor', lazy=True)
+    students = db.relationship('StudentProfile', backref='tutor', lazy=True, foreign_keys='StudentProfile.tutor_id')
 
 class StudentProfile(db.Model):
     """Perfil Académico del Estudiante"""
@@ -56,12 +61,15 @@ class StudentProfile(db.Model):
     registro = db.Column(db.String(20))
     carnet = db.Column(db.String(20))
     practicum_level = db.Column(db.String(5)) # II, III, IV
-    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id'))
+    
+    # DOBLE ASIGNACIÓN:
+    tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id')) # Tutor de Tesis
+    docente_id = db.Column(db.Integer, db.ForeignKey('user.id')) # Docente de Materia (Turno)
     
     status = db.Column(db.String(20), default='PENDIENTE') # PENDIENTE -> ACTIVO -> FINALIZADO
     drive_folder_url = db.Column(db.String(300)) # Link a la carpeta de Drive (Puesto por el Director)
     
-    # Relaciones con las nuevas tablas de gestión
+    # Relaciones con las tablas de gestión
     work_plan = db.relationship('WorkPlan', backref='student', uselist=False)
     logs = db.relationship('DailyLog', backref='student', lazy=True)
     attendance = db.relationship('AttendanceLog', backref='student', lazy=True)
@@ -99,8 +107,8 @@ CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# LISTA COMPLETA DE TUTORES
-DATOS_INICIALES = [
+# LISTA COMPLETA DE TUTORES DE TESIS
+DATOS_TUTORES = [
     {"nombre": "Alejandro Mansilla Arias", "tel": "716 30 108", "email": "alejandro.mansilla@uagrm.edu.bo"},
     {"nombre": "Alfredo Víctor Copaz Pacheco", "tel": "726 48 166", "email": "alfredo.copaz@uagrm.edu.bo"},
     {"nombre": "Armengol Vaca Flores", "tel": "716 31 448", "email": "armengol.vaca@uagrm.edu.bo"},
@@ -137,31 +145,38 @@ DATOS_INICIALES = [
     {"nombre": "Sarah Gutiérrez Mendoza", "tel": "709 50 778", "email": "sarah.gutierrez@uagrm.edu.bo"}
 ]
 
-# Inicializador de la App
+# LISTA DE DOCENTES DE MATERIA (6 - SEGMENTADOS)
+# NOTA: Los 'username' deben coincidir con la lógica del frontend si vas a filtrar por nombre
+DOCENTES_MATERIA_DATA = [
+    {"user": "p2_manana", "pass": "123", "name": "Practicum II - Turno Mañana (A)"},
+    {"user": "p2_noche",  "pass": "123", "name": "Practicum II - Turno Noche (B)"},
+    {"user": "p3_manana", "pass": "123", "name": "Practicum III - Turno Mañana (A)"},
+    {"user": "p3_noche",  "pass": "123", "name": "Practicum III - Turno Noche (B)"},
+    {"user": "p4_manana", "pass": "123", "name": "Practicum IV - Turno Mañana (A)"},
+    {"user": "p4_noche",  "pass": "123", "name": "Practicum IV - Turno Noche (B)"}
+]
+
 with app.app_context():
     db.create_all()
     
-    # 1. Cargar Tutores si la tabla está vacía
+    # 1. Cargar Tutores de Tesis
     if Tutor.query.count() == 0:
-        print("Cargando lista maestra de docentes...")
-        for d in DATOS_INICIALES:
-            nuevo = Tutor(name=d['nombre'], phone=d['tel'], email=d['email'])
-            db.session.add(nuevo)
+        print("Cargando lista maestra de tutores...")
+        for d in DATOS_TUTORES:
+            db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
         db.session.commit()
     
-    # 2. Crear Usuario ADMIN si no existe
+    # 2. Cargar Admin
     if not User.query.filter_by(username='admin').first():
-        print("Creando usuario Administrador...")
-        admin = User(username='admin', password='123', role='admin')
-        db.session.add(admin)
-        db.session.commit()
+        db.session.add(User(username='admin', password='123', role='admin', display_name="Dirección de Carrera"))
     
-    # 3. Crear Usuario DOCENTE si no existe
-    if not User.query.filter_by(username='docente').first():
-        print("Creando usuario Docente de Materia...")
-        docente = User(username='docente', password='123', role='docente')
-        db.session.add(docente)
-        db.session.commit()
+    # 3. Cargar Docentes de Materia (Los 6)
+    for dm in DOCENTES_MATERIA_DATA:
+        if not User.query.filter_by(username=dm['user']).first():
+            print(f"Creando docente: {dm['name']}")
+            db.session.add(User(username=dm['user'], password=dm['pass'], role='docente', display_name=dm['name']))
+            
+    db.session.commit()
 
 # --- 4. RUTAS PÚBLICAS Y API ---
 
@@ -179,9 +194,7 @@ def get_tutors():
     
     for t in tutors:
         tomados = getattr(t, f"taken_{level}") 
-        # Director Odin tiene capacidad 0 (o ilimitada según lógica, aquí 0 cupos directos)
         maximo = 0 if "Odin Rodríguez Mercado" in t.name else CAPACIDAD[level]
-        
         if tomados < maximo:
             disponibles.append({
                 "id": t.id,
@@ -193,16 +206,33 @@ def get_tutors():
             })
     return jsonify(disponibles)
 
+# NUEVA API: Devuelve la lista de profesores de materia para el dropdown
+@app.route('/api/docentes_materia', methods=['GET'])
+def get_docentes_materia():
+    # Retornamos solo los usuarios que son docentes
+    docentes = User.query.filter_by(role='docente').all()
+    lista = []
+    for d in docentes:
+        lista.append({
+            "id": d.id,
+            "name": d.display_name
+        })
+    return jsonify(lista)
+
 @app.route('/api/solicitar', methods=['POST'])
 def solicitar_tutor():
     data = request.json
     tutor_id = data.get('tutor_id')
+    docente_id = data.get('docente_id') # NUEVO: El estudiante nos dice su profe
     level = data.get('nivel')
     
     tutor = Tutor.query.get(tutor_id)
     if not tutor: return jsonify({"error": "Tutor no encontrado"}), 404
+    
+    # Validar que seleccionó docente de materia
+    if not docente_id: return jsonify({"error": "Debes seleccionar tu turno/docente de materia"}), 400
 
-    # Verificar cupo
+    # Verificar cupo tutor tesis
     campo_cupo = f"taken_{level}"
     tomados = getattr(tutor, campo_cupo)
     maximo = 0 if "Odin Rodríguez Mercado" in tutor.name else CAPACIDAD[level]
@@ -213,21 +243,26 @@ def solicitar_tutor():
     # 1. Reservar Cupo
     setattr(tutor, campo_cupo, tomados + 1)
     
-    # 2. Crear Perfil PENDIENTE
-    nuevo_estudiante = StudentProfile(
+    # 2. Crear Perfil PENDIENTE con AMBOS docentes asignados
+    est = StudentProfile(
         full_name=data.get('nombre'),
         registro=data.get('registro'),
         carnet=data.get('carnet'),
         practicum_level=level,
         tutor_id=tutor.id,
+        docente_id=int(docente_id), # ASIGNACIÓN DIRECTA
         status='PENDIENTE'
     )
-    db.session.add(nuevo_estudiante)
+    db.session.add(est)
     db.session.commit()
     
     # 3. Generar PDF (Carta para el Director)
     try:
-        pdf_file = generar_carta_pdf(nuevo_estudiante.full_name, nuevo_estudiante.registro, nuevo_estudiante.carnet, level, tutor.name)
+        # Recuperamos nombre del docente de materia para ponerlo en la carta si quieres (opcional)
+        docente_obj = User.query.get(int(docente_id))
+        docente_nombre = docente_obj.display_name if docente_obj else ""
+        
+        pdf_file = generar_carta_pdf(est.full_name, est.registro, est.carnet, level, tutor.name, docente_nombre)
         return jsonify({
             "mensaje": "Solicitud registrada. Pendiente de aprobación.",
             "pdf_url": f"/descargar/{pdf_file}"
@@ -260,7 +295,6 @@ def login():
             else:
                 return redirect(url_for('student_dashboard'))
         else:
-            # En un caso real usar flash messages, aquí simple redirect
             return render_template('login.html') 
             
     return render_template('login.html')
@@ -333,8 +367,6 @@ def add_attendance():
     db.session.commit()
     return redirect(url_for('student_dashboard'))
 
-# --- NUEVO: REPORTE FINAL (PORTAFOLIO) ---
-
 @app.route('/student/descargar_portafolio')
 @login_required
 def descargar_portafolio():
@@ -342,21 +374,32 @@ def descargar_portafolio():
     filename = generar_reporte_academico(current_user.student_profile)
     return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
 
-# --- 7. RUTAS DOCENTE DE MATERIA ---
+# --- 7. RUTAS DOCENTE (SEGMENTADAS) ---
 
 @app.route('/docente/dashboard')
 @login_required
 def docente_dashboard():
     if current_user.role != 'docente': return "Acceso Denegado"
-    # Mostrar todos los estudiantes activos
-    estudiantes = StudentProfile.query.filter_by(status='ACTIVO').all()
-    return render_template('docente_dashboard.html', estudiantes=estudiantes)
+    
+    # FILTRO SEGMENTADO: Solo mostramos alumnos asignados a ESTE docente (ID)
+    # y que estén ACTIVOS (ya aprobados por director)
+    mis_estudiantes = StudentProfile.query.filter_by(
+        docente_id=current_user.id, 
+        status='ACTIVO'
+    ).all()
+    
+    return render_template('docente_dashboard.html', estudiantes=mis_estudiantes, docente_nombre=current_user.display_name)
 
 @app.route('/docente/ver/<int:student_id>')
 @login_required
 def docente_ver_estudiante(student_id):
     if current_user.role != 'docente': return "Acceso Denegado"
     estudiante = StudentProfile.query.get(student_id)
+    
+    # SEGURIDAD EXTRA: Si el alumno no es mío, no lo veo
+    if estudiante.docente_id != current_user.id:
+        return "<h1>Acceso Restringido: Este estudiante no está en su turno.</h1>"
+        
     return render_template('docente_detail.html', e=estudiante)
 
 # --- 8. RUTAS ADMIN (DIRECTOR) ---
@@ -382,12 +425,12 @@ def approve_student(student_id):
     if student:
         # Verificar que no exista usuario ya
         if not User.query.filter_by(username=student.registro).first():
-            # Crear Usuario (User: Registro, Pass: Carnet)
+            # Crear Usuario Estudiante (User: Registro, Pass: Carnet)
             new_user = User(username=student.registro, password=student.carnet, role='student')
             db.session.add(new_user)
-            db.session.commit() # Commit para obtener el ID
+            db.session.commit() 
             
-            # Vincular y Activar
+            # Vincular y Activar (EL DOCENTE YA VIENE ELEGIDO DESDE LA SOLICITUD)
             student.user_id = new_user.id
             student.status = 'ACTIVO'
             student.drive_folder_url = drive_url
@@ -397,18 +440,15 @@ def approve_student(student_id):
 
 @app.route('/admin/reset-total')
 def reset_db():
-    # Solo para emergencias - Pone todos los cupos en 0
     tutors = Tutor.query.all()
     for t in tutors:
-        t.taken_II = 0
-        t.taken_III = 0
-        t.taken_IV = 0
+        t.taken_II = 0; t.taken_III = 0; t.taken_IV = 0
     db.session.commit()
-    return "<h1>Reset de Cupos Exitoso</h1><a href='/'>Volver</a>"
+    return "Reset OK"
 
-# --- 9. GENERADOR DE PDF ---
+# --- 9. GENERADORES PDF ---
 
-def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
+def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor, nombre_docente_materia):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=11)
@@ -425,34 +465,36 @@ def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor):
     pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
     
     pdf.set_font("Arial", size=11)
-    pdf.multi_cell(0, 8, "De mi mayor consideración:\n\nMediante la presente, solicito formalmente la asignación de tutoría. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
+    pdf.multi_cell(0, 8, "Mediante la presente, solicito formalmente la asignación de tutoría. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
     
     # Tabla de datos
     pdf.set_fill_color(240, 240, 240); pdf.set_font("Arial", 'B', size=10)
     w_label = 60; w_data = 130; h_row = 10
     
-    pdf.cell(w_label, h_row, "NOMBRE ESTUDIANTE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
-    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO UNIVERSITARIO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
-    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CÉDULA DE IDENTIDAD:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
+    pdf.cell(w_label, h_row, "NOMBRE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CI:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
     pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
-    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR SOLICITADO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "DOCENTE MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_docente_materia), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR TESIS:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
     
     pdf.ln(20); pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente."); pdf.ln(30)
     
-    pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C'); pdf.cell(0, 5, txt=f"C.I. {carnet}", ln=1, align='C')
+    pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C')
     
     filename = f"solicitud_{registro}_{nivel}.pdf"
     pdf.output(filename)
     return filename
 
 def generar_reporte_academico(p):
-    """Genera el Portafolio con Plan, Bitácora y Asistencia"""
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", 'B', 16)
     pdf.cell(0, 10, "Portafolio Académico de Practicum", 0, 1, 'C')
     pdf.set_font("Arial", size=12)
     pdf.cell(0, 10, f"Estudiante: {p.full_name} | Registro: {p.registro}", 0, 1, 'C')
+    if p.assigned_docente:
+        pdf.cell(0, 10, f"Docente Materia: {p.assigned_docente.display_name}", 0, 1, 'C')
     pdf.ln(10)
     
     # 1. Plan de Trabajo
@@ -461,38 +503,28 @@ def generar_reporte_academico(p):
     if p.work_plan:
         pdf.multi_cell(0, 8, f"Título: {p.work_plan.title}")
         pdf.multi_cell(0, 8, f"Objetivo: {p.work_plan.general_objective}")
-    else:
-        pdf.cell(0, 10, "No registrado.", 0, 1)
+    else: pdf.cell(0, 10, "No registrado.", 0, 1)
     pdf.ln(10)
 
     # 2. Bitácora
-    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "2. Bitácora de Actividades (Anexo II)", 0, 1)
+    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "2. Bitácora (Anexo II)", 0, 1)
     pdf.set_font("Arial", 'B', 10); pdf.set_fill_color(230, 230, 230)
-    pdf.cell(30, 10, "Fecha", 1, 0, 'C', True)
-    pdf.cell(130, 10, "Actividad", 1, 0, 'C', True)
-    pdf.cell(30, 10, "Horas", 1, 1, 'C', True)
+    pdf.cell(30, 10, "Fecha", 1, 0, 'C', True); pdf.cell(130, 10, "Actividad", 1, 0, 'C', True); pdf.cell(30, 10, "Horas", 1, 1, 'C', True)
     pdf.set_font("Arial", size=10)
-    total_horas = 0
+    total = 0
     for log in p.logs:
-        pdf.cell(30, 10, str(log.date), 1)
-        pdf.cell(130, 10, str(log.activity)[:60], 1) # Cortar texto si es muy largo
-        pdf.cell(30, 10, str(log.hours), 1, 1, 'C')
-        total_horas += log.hours
-    pdf.cell(160, 10, "TOTAL HORAS ACUMULADAS", 1, 0, 'R')
-    pdf.cell(30, 10, str(total_horas), 1, 1, 'C')
+        pdf.cell(30, 10, str(log.date), 1); pdf.cell(130, 10, str(log.activity)[:60], 1); pdf.cell(30, 10, str(log.hours), 1, 1, 'C')
+        total += log.hours
+    pdf.cell(160, 10, "TOTAL", 1, 0, 'R'); pdf.cell(30, 10, str(total), 1, 1, 'C')
     pdf.ln(10)
 
     # 3. Asistencia
-    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "3. Control de Asistencia (Anexo I)", 0, 1)
+    pdf.set_font("Arial", 'B', 14); pdf.cell(0, 10, "3. Asistencia (Anexo I)", 0, 1)
     pdf.set_font("Arial", 'B', 10); pdf.set_fill_color(230, 230, 230)
-    pdf.cell(60, 10, "Fecha", 1, 0, 'C', True)
-    pdf.cell(60, 10, "Entrada", 1, 0, 'C', True)
-    pdf.cell(60, 10, "Salida", 1, 1, 'C', True)
+    pdf.cell(60, 10, "Fecha", 1, 0, 'C', True); pdf.cell(60, 10, "Entrada", 1, 0, 'C', True); pdf.cell(60, 10, "Salida", 1, 1, 'C', True)
     pdf.set_font("Arial", size=10)
     for att in p.attendance:
-        pdf.cell(60, 10, str(att.date), 1, 0, 'C')
-        pdf.cell(60, 10, str(att.entry_time), 1, 0, 'C')
-        pdf.cell(60, 10, str(att.exit_time), 1, 1, 'C')
+        pdf.cell(60, 10, str(att.date), 1, 0, 'C'); pdf.cell(60, 10, str(att.entry_time), 1, 0, 'C'); pdf.cell(60, 10, str(att.exit_time), 1, 1, 'C')
 
     filename = f"reporte_{p.registro}.pdf"
     pdf.output(filename)
