@@ -37,7 +37,7 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20)) # 'admin', 'student', 'docente'
     display_name = db.Column(db.String(100))
     
-    # RELACIONES (Foreign Keys explícitas para evitar error de ambigüedad)
+    # RELACIONES
     student_profile = db.relationship(
         'StudentProfile', 
         backref='user_account', 
@@ -84,7 +84,7 @@ class StudentProfile(db.Model):
     status = db.Column(db.String(20), default='PENDIENTE') # PENDIENTE, ACTIVO
     drive_folder_url = db.Column(db.String(300))
     
-    # RELACIONES NUEVAS
+    # RELACIONES
     documents = db.relationship('StudentDocument', backref='student', lazy=True)
     submissions = db.relationship('Submission', backref='student', lazy=True)
     logs = db.relationship('TimeLog', backref='student', lazy=True)
@@ -92,12 +92,10 @@ class StudentProfile(db.Model):
 
     @property
     def total_hours(self):
-        """Calcula horas totales registradas"""
         return sum(log.hours for log in self.logs)
 
     @property
     def administrative_status(self):
-        """Verifica si todos los docs administrativos están validados"""
         required = ['Boleta Inscripción', 'CV', 'Fotocopia Carnet', 'Formulario Datos']
         docs = {d.doc_type: d.status for d in self.documents}
         for r in required:
@@ -117,10 +115,12 @@ class StudentDocument(db.Model):
 class Assignment(db.Model):
     """Módulo Académico: El 'Molde' de la tarea creado por el Docente"""
     id = db.Column(db.Integer, primary_key=True)
-    docente_id = db.Column(db.Integer, db.ForeignKey('user.id')) # El profe que creó la tarea
+    docente_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     title = db.Column(db.String(200)) # Ej: "Primer Avance: Perfil"
     description = db.Column(db.Text)
-    order = db.Column(db.Integer) # 1, 2, 3... para controlar la secuencia
+    order = db.Column(db.Integer) # 1, 2, 3...
+    deadline = db.Column(db.Date, nullable=True) # FECHA LIMITE (NUEVO)
     
     submissions = db.relationship('Submission', backref='assignment', lazy=True)
 
@@ -150,12 +150,11 @@ class TimeLog(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     date = db.Column(db.Date, default=datetime.date.today)
     
-    # Categorización de horas
-    activity_type = db.Column(db.String(50)) # 'Investigación', 'Reunión Tutor', 'Redacción', 'Seminario'
+    activity_type = db.Column(db.String(50)) 
     activity_detail = db.Column(db.Text)
     hours = db.Column(db.Float)
     
-    is_validated = db.Column(db.Boolean, default=False) # El docente puede validar horas
+    is_validated = db.Column(db.Boolean, default=False) 
 
 class AttendanceLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -234,17 +233,16 @@ with app.app_context():
         admin.set_password('123') 
         db.session.add(admin)
     
-    # Carga Docentes y sus Asignaciones por Defecto
+    # Carga Docentes
     for dm in DOCENTES_MATERIA_DATA:
         doc = User.query.filter_by(username=dm['user']).first()
         if not doc:
             doc = User(username=dm['user'], role='docente', display_name=dm['name'])
             doc.set_password(dm['pass']) 
             db.session.add(doc)
-            db.session.commit() # Commit para obtener ID
+            db.session.commit() 
             
-            # CREAR ASIGNACIONES POR DEFECTO PARA EL DOCENTE
-            # Esto define las "3 o 4 entregas" del año
+            # TAREAS POR DEFECTO (EL DOCENTE DEBE EDITARLAS LUEGO)
             tareas = [
                 "1. Perfil de Proyecto", 
                 "2. Marco Teórico y Metodológico", 
@@ -253,10 +251,11 @@ with app.app_context():
             ]
             for idx, tarea in enumerate(tareas):
                 if not Assignment.query.filter_by(docente_id=doc.id, title=tarea).first():
-                    db.session.add(Assignment(docente_id=doc.id, title=tarea, order=idx+1, description="Subir avance correspondiente."))
+                    # Por defecto sin fecha límite, el docente la pone
+                    db.session.add(Assignment(docente_id=doc.id, title=tarea, order=idx+1, description="Pendiente de configuración por el docente."))
             db.session.commit()
 
-# --- RUTAS PÚBLICAS Y API ---
+# --- RUTAS PÚBLICAS ---
 
 @app.route('/')
 def index():
@@ -304,7 +303,6 @@ def solicitar_tutor():
     
     tutor = Tutor.query.get(tutor_id)
     if not tutor: return jsonify({"error": "Tutor no encontrado"}), 404
-    
     if not docente_id: return jsonify({"error": "Debes seleccionar tu turno/docente de materia"}), 400
 
     campo_cupo = f"taken_{level}"
@@ -327,9 +325,9 @@ def solicitar_tutor():
         status='PENDIENTE'
     )
     db.session.add(est)
-    db.session.commit() # Commit para obtener ID
+    db.session.commit()
     
-    # Inicializar Lista de Documentos Requeridos
+    # Inicializar Documentos
     for doc_name in DOCS_REQUERIDOS:
         db.session.add(StudentDocument(student_id=est.id, doc_type=doc_name))
     db.session.commit()
@@ -337,10 +335,9 @@ def solicitar_tutor():
     try:
         docente_obj = User.query.get(int(docente_id))
         docente_nombre = docente_obj.display_name if docente_obj else ""
-        
         pdf_file = generar_carta_pdf(est.full_name, est.registro, est.carnet, level, tutor.name, docente_nombre)
         return jsonify({
-            "mensaje": "Solicitud registrada. Pendiente de aprobación.",
+            "mensaje": "Solicitud registrada.",
             "pdf_url": f"/descargar/{pdf_file}"
         })
     except Exception as e:
@@ -375,7 +372,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- MÓDULO ESTUDIANTE ---
+# --- MÓDULO ESTUDIANTE (REPARADO Y CON LÓGICA SEMÁFORO) ---
 
 @app.route('/student/dashboard')
 @login_required
@@ -383,43 +380,60 @@ def student_dashboard():
     if current_user.role != 'student': return redirect(url_for('index'))
     profile = current_user.student_profile
     
-    # Asegurar que existan las Submissions para las Assignments del Docente
-    assignments = Assignment.query.filter_by(docente_id=profile.docente_id).order_by(Assignment.order).all()
-    for a in assignments:
-        if not Submission.query.filter_by(student_id=profile.id, assignment_id=a.id).first():
-            db.session.add(Submission(student_id=profile.id, assignment_id=a.id))
-    db.session.commit()
-    
+    # 1. AUTO-GENERAR DOCUMENTOS (Si faltan)
+    if not profile.documents:
+        docs_requeridos = ['Boleta Inscripción', 'CV', 'Fotocopia Carnet', 'Formulario Datos']
+        for doc_name in docs_requeridos:
+            db.session.add(StudentDocument(student_id=profile.id, doc_type=doc_name))
+        db.session.commit()
+
+    # 2. ASEGURAR TAREAS (Si el docente ya las tiene configuradas)
+    if profile.docente_id:
+        tareas_docente = Assignment.query.filter_by(docente_id=profile.docente_id).all()
+        # Si el docente no tiene tareas, se crean las DEFAULT
+        if not tareas_docente:
+             defaults = ["1. Perfil de Proyecto", "2. Marco Teórico", "3. Trabajo de Campo", "4. Informe Final"]
+             for idx, titulo in enumerate(defaults):
+                db.session.add(Assignment(docente_id=profile.docente_id, title=titulo, order=idx+1, description="Por configurar..."))
+             db.session.commit()
+        
+        # Vincular estudiante a las tareas
+        tareas_actuales = Assignment.query.filter_by(docente_id=profile.docente_id).all()
+        for t in tareas_actuales:
+            if not Submission.query.filter_by(student_id=profile.id, assignment_id=t.id).first():
+                db.session.add(Submission(student_id=profile.id, assignment_id=t.id))
+        db.session.commit()
+
     submissions = Submission.query.filter_by(student_id=profile.id).join(Assignment).order_by(Assignment.order).all()
-    
     return render_template('student_dashboard.html', profile=profile, submissions=submissions)
 
 @app.route('/student/upload_doc', methods=['POST'])
 @login_required
 def student_upload_doc():
-    """El estudiante marca que ya subió el documento al Drive"""
+    """El estudiante confirma subida de docs"""
     doc_id = request.form.get('doc_id')
     doc = StudentDocument.query.get(doc_id)
     if doc and doc.student_id == current_user.student_profile.id:
-        doc.status = 'REVISION' # Pasa a manos del Director
+        doc.status = 'REVISION' 
         db.session.commit()
     return redirect(url_for('student_dashboard'))
 
 @app.route('/student/submit_assignment', methods=['POST'])
 @login_required
 def student_submit_assignment():
-    """Entrega iterativa de avance"""
+    """Entrega iterativa con Bloqueo (Semáforo)"""
     sub_id = request.form.get('submission_id')
     content = request.form.get('content')
     
     sub = Submission.query.get(sub_id)
     if sub and sub.student_id == current_user.student_profile.id:
-        # Validación de orden: No puedes enviar la 2 si la 1 no está aprobada
+        
+        # LÓGICA SEMÁFORO: Verificar si la anterior está aprobada
         prev_assign = Assignment.query.filter_by(docente_id=sub.assignment.docente_id, order=sub.assignment.order - 1).first()
         if prev_assign:
             prev_sub = Submission.query.filter_by(student_id=current_user.student_profile.id, assignment_id=prev_assign.id).first()
             if not prev_sub or prev_sub.status != 'APROBADO':
-                flash("Debes aprobar el avance anterior primero.")
+                flash("⛔ Error: Debes tener APROBADO el avance anterior para entregar este.")
                 return redirect(url_for('student_dashboard'))
 
         sub.content = content
@@ -443,14 +457,42 @@ def student_add_timelog():
     db.session.commit()
     return redirect(url_for('student_dashboard'))
 
-# --- MÓDULO DOCENTE ---
+# --- MÓDULO DOCENTE (CONFIGURACIÓN Y REVISIÓN) ---
 
 @app.route('/docente/dashboard')
 @login_required
 def docente_dashboard():
     if current_user.role != 'docente': return "Acceso Denegado"
+    
+    # Obtener alumnos
     mis_estudiantes = StudentProfile.query.filter_by(docente_id=current_user.id, status='ACTIVO').all()
-    return render_template('docente_dashboard.html', estudiantes=mis_estudiantes, docente_nombre=current_user.display_name)
+    
+    # Obtener Tareas para configuración
+    mis_tareas = Assignment.query.filter_by(docente_id=current_user.id).order_by(Assignment.order).all()
+    
+    return render_template('docente_dashboard.html', 
+                           estudiantes=mis_estudiantes, 
+                           docente_nombre=current_user.display_name,
+                           tareas=mis_tareas) # Pasamos las tareas para que las edite
+
+@app.route('/docente/config_assignment', methods=['POST'])
+@login_required
+def docente_config_assignment():
+    """NUEVA RUTA: El docente configura fechas y descripciones"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+    
+    assign_id = request.form.get('assignment_id')
+    description = request.form.get('description')
+    deadline_str = request.form.get('deadline') # YYYY-MM-DD
+    
+    tarea = Assignment.query.get(assign_id)
+    if tarea and tarea.docente_id == current_user.id:
+        tarea.description = description
+        if deadline_str:
+            tarea.deadline = datetime.datetime.strptime(deadline_str, '%Y-%m-%d').date()
+        db.session.commit()
+        
+    return redirect(url_for('docente_dashboard'))
 
 @app.route('/docente/ver/<int:student_id>')
 @login_required
@@ -475,7 +517,7 @@ def docente_grade_submission():
     if action == 'approve':
         sub.status = 'APROBADO'
         sub.approved_at = datetime.date.today()
-        sub.feedback = "Aprobado: " + feedback
+        sub.feedback = feedback
     else:
         sub.status = 'OBSERVADO'
         sub.feedback = feedback
@@ -486,7 +528,6 @@ def docente_grade_submission():
 @app.route('/docente/validate_hours', methods=['POST'])
 @login_required
 def docente_validate_hours():
-    # Validación masiva de horas del estudiante
     student_id = request.form.get('student_id')
     logs = TimeLog.query.filter_by(student_id=student_id).all()
     for log in logs:
@@ -501,7 +542,6 @@ def docente_validate_hours():
 def admin_dashboard():
     if current_user.role != 'admin': return redirect(url_for('index'))
     
-    # Alertas: Documentos por validar
     docs_pendientes = StudentDocument.query.filter_by(status='REVISION').all()
     pendientes_registro = StudentProfile.query.filter_by(status='PENDIENTE').all()
     
@@ -513,13 +553,13 @@ def admin_dashboard():
 @login_required
 def admin_validate_doc():
     doc_id = request.form.get('doc_id')
-    action = request.form.get('action') # 'validate' or 'reject'
+    action = request.form.get('action') 
     
     doc = StudentDocument.query.get(doc_id)
     if action == 'validate':
         doc.status = 'VALIDADO'
     else:
-        doc.status = 'RECHAZADO' # El alumno tendrá que subirlo de nuevo
+        doc.status = 'RECHAZADO'
         
     db.session.commit()
     return redirect(url_for('admin_dashboard'))
@@ -541,7 +581,7 @@ def approve_student(student_id):
             
             student.user_id = new_user.id
             student.status = 'ACTIVO'
-            student.drive_folder_url = drive_url
+            student.drive_folder_url = drive_url # AQUÍ SE GUARDA EL LINK DEL DRIVE
             db.session.commit()
             
     return redirect(url_for('admin_dashboard'))
@@ -550,40 +590,26 @@ def approve_student(student_id):
 @login_required
 def admin_report_excel():
     if current_user.role != 'admin': return "Acceso Denegado"
-    
     output = io.StringIO()
     writer = csv.writer(output)
-    
-    # Encabezados
     writer.writerow(['Registro', 'Nombre', 'Nivel', 'Tutor', 'Docente', 'Horas Totales', 'Estado Docs'])
-    
     students = StudentProfile.query.filter_by(status='ACTIVO').all()
     for s in students:
         tutor_name = s.tutor.name if s.tutor else "Sin Asignar"
         docente_name = s.assigned_docente.display_name if s.assigned_docente else "Sin Asignar"
-        writer.writerow([
-            s.registro, 
-            s.full_name, 
-            s.practicum_level, 
-            tutor_name, 
-            docente_name,
-            s.total_hours,
-            s.administrative_status
-        ])
-        
+        writer.writerow([s.registro, s.full_name, s.practicum_level, tutor_name, docente_name, s.total_hours, s.administrative_status])
     output.seek(0)
     return make_response(output.getvalue(), 200, {
         'Content-Disposition': 'attachment; filename=reporte_general.csv',
         'Content-Type': 'text/csv'
     })
 
-# --- RESET COMPLETO (Obligatorio por cambio de DB) ---
+# --- RESET COMPLETO (OBLIGATORIO) ---
 @app.route('/peligro/reset-completo')
 def reset_completo():
     db.drop_all()
     db.create_all()
     
-    # Recargar Maestros
     if Tutor.query.count() == 0:
         for d in DATOS_TUTORES:
             db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
@@ -599,13 +625,12 @@ def reset_completo():
         db.session.add(doc)
         db.session.commit()
         
-        # Crear Tareas por defecto
+        # Tareas por defecto
         tareas = ["1. Perfil", "2. Marco Teórico", "3. Campo", "4. Informe Final"]
         for idx, t in enumerate(tareas):
-            db.session.add(Assignment(docente_id=doc.id, title=t, order=idx+1, description="..."))
+             db.session.add(Assignment(docente_id=doc.id, title=t, order=idx+1, description="Por configurar..."))
             
     db.session.commit()
-    
     return "<h1>Sistema Reconstruido con Nueva Arquitectura (Assignments + Docs)</h1>"
 
 # --- PDF GENERATOR ---
@@ -623,7 +648,6 @@ def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor, nombre_doce
     pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
     pdf.set_font("Arial", size=11)
     pdf.multi_cell(0, 8, "Mediante la presente, solicito formalmente la asignación de tutoría...")
-    # (Tabla de datos simplificada para no alargar código, usa la lógica visual que ya tenías)
     pdf.cell(0, 10, f"Estudiante: {nombre} - Registro: {registro}", ln=1)
     pdf.cell(0, 10, f"Tutor Tesis: {nombre_tutor}", ln=1)
     filename = f"solicitud_{registro}_{nivel}.pdf"
@@ -638,7 +662,6 @@ def generar_reporte_academico(p):
     pdf.set_font("Arial", size=12)
     pdf.cell(0, 10, f"Estudiante: {p.full_name} | Horas: {p.total_hours}", 0, 1)
     pdf.ln(10)
-    # Lista de horas
     pdf.set_font("Arial", 'B', 12); pdf.cell(0, 10, "Bitácora de Actividades", 0, 1)
     pdf.set_font("Arial", size=10)
     for log in p.logs:
