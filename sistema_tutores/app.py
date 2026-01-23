@@ -10,7 +10,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 # 1. CONFIGURACIÓN SEGURA
-# Usamos una variable de entorno para la clave secreta en producción
 app.secret_key = os.environ.get('SECRET_KEY', 'clave_secreta_uagrm_politica_desarrollo')
 
 # Configuración de Base de Datos (Render vs Local)
@@ -36,22 +35,21 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20)) 
     display_name = db.Column(db.String(100))
     
-    # --- RELACIONES CORREGIDAS (Foreign Keys explícitas) ---
+    # RELACIONES CORREGIDAS
     student_profile = db.relationship(
         'StudentProfile', 
         backref='user_account', 
         uselist=False, 
-        foreign_keys='StudentProfile.user_id' # Relación 1: Cuenta de usuario del estudiante
+        foreign_keys='StudentProfile.user_id'
     )
     
     assigned_students = db.relationship(
         'StudentProfile', 
         backref='assigned_docente', 
         lazy=True, 
-        foreign_keys='StudentProfile.docente_id' # Relación 2: Estudiantes asignados al docente
+        foreign_keys='StudentProfile.docente_id'
     )
 
-    # Métodos de seguridad
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -66,15 +64,12 @@ class Tutor(db.Model):
     taken_II = db.Column(db.Integer, default=0)
     taken_III = db.Column(db.Integer, default=0)
     taken_IV = db.Column(db.Integer, default=0)
-    # Relación explícita
     students = db.relationship('StudentProfile', backref='tutor', lazy=True, foreign_keys='StudentProfile.tutor_id')
 
 class StudentProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    
-    # DOS LLAVES FORÁNEAS A LA TABLA USER
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # El usuario del estudiante
-    docente_id = db.Column(db.Integer, db.ForeignKey('user.id')) # El profesor asignado
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    docente_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
     full_name = db.Column(db.String(100))
     registro = db.Column(db.String(20))
@@ -82,7 +77,6 @@ class StudentProfile(db.Model):
     practicum_level = db.Column(db.String(5))
     
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id')) 
-    
     status = db.Column(db.String(20), default='PENDIENTE')
     drive_folder_url = db.Column(db.String(300))
     
@@ -93,10 +87,26 @@ class StudentProfile(db.Model):
 class WorkPlan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
+    
+    # Contenido del Plan
     title = db.Column(db.String(200))
     general_objective = db.Column(db.Text)
     schedule = db.Column(db.Text)
-    status = db.Column(db.String(20), default='BORRADOR')
+    
+    # --- NUEVO MOTOR DE REVISIÓN ---
+    status = db.Column(db.String(20), default='BORRADOR') # BORRADOR, EN_REVISION, OBSERVADO, APROBADO
+    
+    teacher_feedback = db.Column(db.Text) # Comentarios del docente
+    submitted_at = db.Column(db.Date)     # Fecha de envío (para calcular retraso)
+    approved_at = db.Column(db.Date)      # Fecha de aprobación
+
+    @property
+    def days_waiting(self):
+        """Calcula días esperando revisión"""
+        if self.status == 'EN_REVISION' and self.submitted_at:
+            delta = datetime.date.today() - self.submitted_at
+            return delta.days
+        return 0
 
 class DailyLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -166,11 +176,12 @@ DOCENTES_MATERIA_DATA = [
     {"user": "p4_noche",  "pass": "123", "name": "Practicum IV - Turno Noche (B)"}
 ]
 
+# --- INICIALIZADOR SIMPLE (PARA BD LIMPIA) ---
 with app.app_context():
-    # 1. Crear tablas (si no existen)
+    # 1. Crear tablas
     db.create_all()
     
-    # 2. CARGA DE DATOS INICIALES (Con Hashing Seguro)
+    # 2. CARGA DE DATOS INICIALES
     
     # Cargar Tutores
     if Tutor.query.count() == 0:
@@ -296,7 +307,6 @@ def login():
         
         user = User.query.filter_by(username=username).first()
         
-        # VALIDACIÓN SEGURA DE CONTRASEÑA
         if user and user.check_password(password):
             login_user(user)
             if user.role == 'admin':
@@ -316,7 +326,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- 6. RUTAS ESTUDIANTE (BLINDADAS) ---
+# --- 6. RUTAS ESTUDIANTE (CON WORKFLOW Y BLOQUEO) ---
 
 @app.route('/student/dashboard')
 @login_required
@@ -337,11 +347,27 @@ def save_plan():
     else:
         plan = p.work_plan
     
+    # BLOQUEO DE EDICIÓN: Si ya está enviado o aprobado, no dejar editar
+    if plan.status in ['EN_REVISION', 'APROBADO']:
+         return "El plan está bajo revisión o aprobado. No puedes editarlo.", 403
+
     plan.title = request.form['title']
     plan.general_objective = request.form['general_objective']
     plan.schedule = request.form['schedule']
-    plan.status = 'ENVIADO'
+    # El estado sigue siendo BORRADOR hasta que envíe explícitamente
+    
     db.session.commit()
+    return redirect(url_for('student_dashboard'))
+
+@app.route('/student/submit_plan', methods=['POST'])
+@login_required
+def submit_plan():
+    """ACCIÓN: Estudiante envía a revisión (cambia estado y fecha)"""
+    p = current_user.student_profile
+    if p.work_plan:
+        p.work_plan.status = 'EN_REVISION'
+        p.work_plan.submitted_at = datetime.date.today()
+        db.session.commit()
     return redirect(url_for('student_dashboard'))
 
 @app.route('/student/add_log', methods=['POST'])
@@ -385,14 +411,13 @@ def descargar_portafolio():
     filename = generar_reporte_academico(current_user.student_profile)
     return send_file(os.path.join(os.getcwd(), filename), as_attachment=True)
 
-# --- 7. RUTAS DOCENTE (SEGMENTADAS Y SEGURAS) ---
+# --- 7. RUTAS DOCENTE (CON REVISIÓN Y FEEDBACK) ---
 
 @app.route('/docente/dashboard')
 @login_required
 def docente_dashboard():
     if current_user.role != 'docente': return "Acceso Denegado"
     
-    # FILTRO SEGMENTADO: Solo mostramos alumnos asignados a ESTE docente (ID)
     mis_estudiantes = StudentProfile.query.filter_by(
         docente_id=current_user.id, 
         status='ACTIVO'
@@ -406,11 +431,33 @@ def docente_ver_estudiante(student_id):
     if current_user.role != 'docente': return "Acceso Denegado"
     estudiante = StudentProfile.query.get(student_id)
     
-    # SEGURIDAD EXTRA: Evitar IDOR (Ver alumnos de otro profe)
     if estudiante.docente_id != current_user.id:
         return "<h1>Acceso Restringido: Este estudiante no está en su turno.</h1>", 403
         
     return render_template('docente_detail.html', e=estudiante)
+
+@app.route('/docente/review_plan', methods=['POST'])
+@login_required
+def review_plan():
+    """ACCIÓN: Docente aprueba o rechaza el plan"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+    
+    plan_id = request.form.get('plan_id')
+    action = request.form.get('action') # 'approve' o 'reject'
+    feedback = request.form.get('feedback')
+    
+    plan = WorkPlan.query.get(plan_id)
+    
+    if action == 'approve':
+        plan.status = 'APROBADO'
+        plan.approved_at = datetime.date.today()
+        plan.teacher_feedback = "Plan Aprobado. " + feedback
+    elif action == 'reject':
+        plan.status = 'OBSERVADO' # Regresa al estudiante para correcciones
+        plan.teacher_feedback = feedback
+    
+    db.session.commit()
+    return redirect(url_for('docente_ver_estudiante', student_id=plan.student.id))
 
 # --- 8. RUTAS ADMIN (DIRECTOR) ---
 
