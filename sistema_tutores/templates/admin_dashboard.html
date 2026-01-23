@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Director - Sistema Tutores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <style>body { font-family: 'Outfit', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <nav class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-bold">DIR</div>
+            <div>
+                <h1 class="font-bold">Dirección de Carrera</h1>
+                <p class="text-xs text-slate-400">Administración</p>
+            </div>
+        </div>
+        <a href="/logout" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-bold transition">
+            Cerrar Sesión
+        </a>
+    </nav>
+
+    <div class="max-w-7xl mx-auto p-6">
+        
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-yellow-500 animate-pulse"></span>
+                Solicitudes Pendientes
+                <span class="bg-slate-200 text-slate-600 text-sm px-2 py-1 rounded-md">{{ pendientes|length }}</span>
+            </h2>
+
+            {% if pendientes %}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {% for p in pendientes %}
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-red-200 transition">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">{{ p.full_name }}</h3>
+                            <p class="text-sm text-slate-500">Reg: {{ p.registro }} • CI: {{ p.carnet }}</p>
+                        </div>
+                        <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">
+                            Practicum {{ p.practicum_level }}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-slate-50 rounded-lg p-3 mb-4 text-sm border border-slate-100">
+                        <span class="font-bold text-slate-400 text-xs uppercase block mb-1">Solicita Tutor:</span>
+                        <i class="fa-solid fa-chalkboard-user text-red-500 mr-2"></i> {{ p.tutor.name }}
+                    </div>
+
+                    <form action="/admin/approve/{{ p.id }}" method="POST" class="mt-4">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Pegar Link de Carpeta (Drive)</label>
+                        <div class="flex gap-2">
+                            <input type="url" name="drive_url" required placeholder="https://drive.google.com/..." 
+                                   class="flex-1 px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-red-500 transition">
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-md">
+                                <i class="fa-solid fa-check mr-1"></i> Aprobar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-white rounded-2xl p-10 text-center border border-dashed border-slate-300">
+                <div class="text-slate-300 text-5xl mb-4"><i class="fa-regular fa-folder-open"></i></div>
+                <p class="text-slate-500">No hay solicitudes pendientes por ahora.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <hr class="border-slate-200 my-10">
+
+        <div>
+            <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                Estudiantes Activos
+                <span class="bg-slate-200 text-slate-600 text-sm px-2 py-1 rounded-md">{{ activos|length }}</span>
+            </h2>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500">
+                        <tr>
+                            <th class="px-6 py-4">Estudiante</th>
+                            <th class="px-6 py-4">Tutor</th>
+                            <th class="px-6 py-4">Nivel</th>
+                            <th class="px-6 py-4">Carpeta</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for a in activos %}
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="px-6 py-4 font-medium text-slate-900">
+                                {{ a.full_name }} <br>
+                                <span class="text-slate-400 text-xs font-normal">{{ a.registro }}</span>
+                            </td>
+                            <td class="px-6 py-4">{{ a.tutor.name }}</td>
+                            <td class="px-6 py-4"><span class="bg-slate-100 px-2 py-1 rounded text-xs font-bold">P-{{ a.practicum_level }}</span></td>
+                            <td class="px-6 py-4">
+                                <a href="{{ a.drive_folder_url }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1">
+                                    <i class="fa-brands fa-google-drive"></i> Abrir
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
