@@ -27,311 +27,197 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+# --- 2. MODELOS DE BASE DE DATOS (NUEVA ARQUITECTURA) ---
 # --- 2. MODELOS DE BASE DE DATOS ---
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True) 
-    password_hash = db.Column(db.String(256)) 
+    """Sistema de Usuarios"""
+@@ -37,19 +37,11 @@
     role = db.Column(db.String(20)) # 'admin', 'student', 'docente'
     display_name = db.Column(db.String(100))
+
+    # RELACIONES
+    student_profile = db.relationship(
+        'StudentProfile', 
+        backref='user_account', 
+        uselist=False, 
+        foreign_keys='StudentProfile.user_id'
+        'StudentProfile', backref='user_account', uselist=False, foreign_keys='StudentProfile.user_id'
+    )
     
-    student_profile = db.relationship('StudentProfile', backref='user_account', uselist=False, foreign_keys='StudentProfile.user_id')
-    assigned_students = db.relationship('StudentProfile', backref='assigned_docente', lazy=True, foreign_keys='StudentProfile.docente_id')
+    assigned_students = db.relationship(
+        'StudentProfile', 
+        backref='assigned_docente', 
+        lazy=True, 
+        foreign_keys='StudentProfile.docente_id'
+        'StudentProfile', backref='assigned_docente', lazy=True, foreign_keys='StudentProfile.docente_id'
+    )
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-class Tutor(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    phone = db.Column(db.String(50))
-    email = db.Column(db.String(100))
-    taken_II = db.Column(db.Integer, default=0)
-    taken_III = db.Column(db.Integer, default=0)
-    taken_IV = db.Column(db.Integer, default=0)
-    students = db.relationship('StudentProfile', backref='tutor', lazy=True, foreign_keys='StudentProfile.tutor_id')
-
-class StudentProfile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    docente_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    
-    full_name = db.Column(db.String(100))
-    registro = db.Column(db.String(20))
-    carnet = db.Column(db.String(20))
+@@ -81,10 +73,9 @@
     practicum_level = db.Column(db.String(5))
-    
+
     tutor_id = db.Column(db.Integer, db.ForeignKey('tutor.id')) 
+    status = db.Column(db.String(20), default='PENDIENTE') # PENDIENTE, ACTIVO
     status = db.Column(db.String(20), default='PENDIENTE') 
     drive_folder_url = db.Column(db.String(300))
-    
+
+    # RELACIONES
     documents = db.relationship('StudentDocument', backref='student', lazy=True)
     submissions = db.relationship('Submission', backref='student', lazy=True)
     logs = db.relationship('TimeLog', backref='student', lazy=True)
-    attendance = db.relationship('AttendanceLog', backref='student', lazy=True)
-
-    @property
-    def total_hours(self):
-        return sum(log.hours for log in self.logs)
-    
-    @property
-    def meeting_hours_count(self):
-        """Cuenta cuántas reuniones ha tenido (logs tipo 'Reunión Tutor')"""
-        return len([log for log in self.logs if log.activity_type == 'Reunión Tutor'])
-
-    @property
-    def administrative_status(self):
-        # Verificamos documentos base, excluimos Evaluación por ahora para el status general
-        required = ['Boleta Inscripción', 'CV', 'Fotocopia Carnet', 'Formulario Datos']
-        docs = {d.doc_type: d.status for d in self.documents}
-        for r in required:
-            if docs.get(r) != 'VALIDADO':
-                return "PENDIENTE"
+@@ -104,36 +95,29 @@
         return "OK"
 
 class StudentDocument(db.Model):
+    """Módulo Administrativo: Papeles y Requisitos"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
+    doc_type = db.Column(db.String(50)) # 'Boleta', 'CV', 'Carnet', 'Formulario'
+    status = db.Column(db.String(20), default='PENDIENTE') # PENDIENTE, REVISION, VALIDADO, RECHAZADO
+    drive_link = db.Column(db.String(300)) # Link específico si el alumno quiere ponerlo
     doc_type = db.Column(db.String(50)) 
     status = db.Column(db.String(20), default='PENDIENTE') 
     drive_link = db.Column(db.String(300))
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 class Assignment(db.Model):
+    """Módulo Académico: El 'Molde' de la tarea creado por el Docente"""
     id = db.Column(db.Integer, primary_key=True)
     docente_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    title = db.Column(db.String(200)) # Ej: "Avance 1"
     title = db.Column(db.String(200)) 
     description = db.Column(db.Text)
+    order = db.Column(db.Integer) # 1, 2, 3...
+    deadline = db.Column(db.Date, nullable=True) # FECHA LIMITE
+    
     order = db.Column(db.Integer) 
     deadline = db.Column(db.Date, nullable=True) 
     submissions = db.relationship('Submission', backref='assignment', lazy=True, cascade="all, delete-orphan")
 
 class Submission(db.Model):
+    """Módulo Académico: La entrega del estudiante"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
+    
+    content = db.Column(db.Text) # Texto o Link al documento
+    status = db.Column(db.String(20), default='BORRADOR') # BORRADOR, EN_REVISION, OBSERVADO, APROBADO
+    feedback = db.Column(db.Text) # Correcciones del docente
+    
     content = db.Column(db.Text) 
     status = db.Column(db.String(20), default='BORRADOR') 
     feedback = db.Column(db.Text) 
     submitted_at = db.Column(db.Date)
     approved_at = db.Column(db.Date)
 
+@@ -145,15 +129,12 @@
+        return 0
+
 class TimeLog(db.Model):
+    """Módulo Cronómetro: Bitácora de Horas"""
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
     date = db.Column(db.Date, default=datetime.date.today)
+    
     activity_type = db.Column(db.String(50)) 
     activity_detail = db.Column(db.Text)
     hours = db.Column(db.Float)
+    
     is_validated = db.Column(db.Boolean, default=False) 
 
 class AttendanceLog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student_profile.id'))
-    date = db.Column(db.Date, default=datetime.date.today)
-    entry_time = db.Column(db.String(10))
-    exit_time = db.Column(db.String(10))
-
-# --- CONSTANTES ---
-CAPACIDAD = {"II": 5, "III": 3, "IV": 2}
-# Añadimos Evaluación de Tutor a la lista de documentos requeridos
-DOCS_REQUERIDOS = ['Boleta Inscripción', 'CV', 'Fotocopia Carnet', 'Formulario Datos', 'Evaluación de Tutor']
-
-DATOS_TUTORES = [
-    {"nombre": "Alejandro Mansilla Arias", "tel": "716 30 108", "email": "alejandro.mansilla@uagrm.edu.bo"},
-    {"nombre": "Alfredo Víctor Copaz Pacheco", "tel": "726 48 166", "email": "alfredo.copaz@uagrm.edu.bo"},
-    {"nombre": "Armengol Vaca Flores", "tel": "716 31 448", "email": "armengol.vaca@uagrm.edu.bo"},
-    {"nombre": "Berman Saucedo Campos", "tel": "721 55 880", "email": "berman.saucedo@uagrm.edu.bo"},
-    {"nombre": "Cecilia Rua Heredia", "tel": "721 26 100", "email": "cecilia.rua@uagrm.edu.bo"},
-    {"nombre": "Daniel Valverde Aparicio", "tel": "760 09 909", "email": "daniel.valverde@uagrm.edu.bo"},
-    {"nombre": "Edwin Javier Alarcón Vásquez", "tel": "721 70 868", "email": "edwin.alarcon@uagrm.edu.bo"},
-    {"nombre": "Francisco Méndez Egüez", "tel": "721 65 897", "email": "francisco.mendez@uagrm.edu.bo"},
-    {"nombre": "Grover Núñez Klinsky", "tel": "721 23 441", "email": "grover.nunez@uagrm.edu.bo"},
-    {"nombre": "Javier Hernández Serrano", "tel": "763 32 033", "email": "javier.hernandez@uagrm.edu.bo"},
-    {"nombre": "Juan Rubén Cabello Mérida", "tel": "713 45 312", "email": "juan.cabello@uagrm.edu.bo"},
-    {"nombre": "José Luis Andia Fernández", "tel": "721 89 977", "email": "jose.andia@uagrm.edu.bo"},
-    {"nombre": "Julio Guzmán Gutiérrez", "tel": "770 24 779", "email": "julio.guzman@uagrm.edu.bo"},
-    {"nombre": "Jorge Espinoza Moreno", "tel": "702 04 333", "email": "jorge.espinoza@uagrm.edu.bo"},
-    {"nombre": "Jorge Francisco Rojas Bonilla", "tel": "709 37 494", "email": "jorge.rojas@uagrm.edu.bo"},
-    {"nombre": "Leo Ricardo Klinsky Marín", "tel": "708 88 383", "email": "leo.klinsky@uagrm.edu.bo"},
-    {"nombre": "Marcelo Arrazola Weise", "tel": "709 55 063", "email": "marcelo.arrazola@uagrm.edu.bo"},
-    {"nombre": "Ma. Hortencia Ayala De Fernández", "tel": "700 08 294", "email": "hortencia.ayala@uagrm.edu.bo"},
-    {"nombre": "Manfredo Rafael Bravo Chávez", "tel": "760 03 190", "email": "manfredo.bravo@uagrm.edu.bo"},
-    {"nombre": "Mario Campos Barrera", "tel": "776 59 663", "email": "mario.campos@uagrm.edu.bo"},
-    {"nombre": "Maria Rosario Chávez Vaca", "tel": "768 58 598", "email": "maria.chavez@uagrm.edu.bo"},
-    {"nombre": "Maria Elizabeth Galarza De Eid", "tel": "760 00 944", "email": "maria.galarza@uagrm.edu.bo"},
-    {"nombre": "Menacho Manfredo", "tel": "756 37 378", "email": "manfredo.menacho@uagrm.edu.bo"},
-    {"nombre": "Maria Angélica Suárez", "tel": "678 94 922", "email": "maria.suarez@uagrm.edu.bo"},
-    {"nombre": "Marcio Aranda García", "tel": "620 00 571", "email": "marcio.aranda@uagrm.edu.bo"},
-    {"nombre": "Marco Antonio Torrez Valverde", "tel": "776 72 950", "email": "marco.torrez@uagrm.edu.bo"},
-    {"nombre": "Nicolás Ribera Cardozo", "tel": "708 27 450", "email": "nicolas.ribera@uagrm.edu.bo"},
-    {"nombre": "Oswaldo Martorell Roca", "tel": "773 42 184", "email": "oswaldo.martorell@uagrm.edu.bo"},
-    {"nombre": "Odin Rodríguez Mercado", "tel": "721 58 042", "email": "odin.rodriguez@uagrm.edu.bo"},
-    {"nombre": "Paula Alejandra Peña Hasbun", "tel": "773 54 565", "email": "paula.pena@uagrm.edu.bo"},
-    {"nombre": "Reymi Luis Ferreira Justiniano", "tel": "721 20 832", "email": "reymi.ferreira@uagrm.edu.bo"},
-    {"nombre": "Ricardo Pérez Peredo", "tel": "726 62 754", "email": "ricardo.perez@uagrm.edu.bo"},
-    {"nombre": "Roger Emilio Tuero Velásquez", "tel": "708 14 346", "email": "roger.tuero@uagrm.edu.bo"},
-    {"nombre": "Sarah Gutiérrez Mendoza", "tel": "709 50 778", "email": "sarah.gutierrez@uagrm.edu.bo"}
-]
-
-DOCENTES_MATERIA_DATA = [
-    {"user": "p2_manana", "pass": "123", "name": "Practicum II - Turno Mañana (A)"},
-    {"user": "p2_noche",  "pass": "123", "name": "Practicum II - Turno Noche (B)"},
-    {"user": "p3_manana", "pass": "123", "name": "Practicum III - Turno Mañana (A)"},
-    {"user": "p3_noche",  "pass": "123", "name": "Practicum III - Turno Noche (B)"},
-    {"user": "p4_manana", "pass": "123", "name": "Practicum IV - Turno Mañana (A)"},
-    {"user": "p4_noche",  "pass": "123", "name": "Practicum IV - Turno Noche (B)"}
-]
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-# --- INICIALIZADOR ---
+@@ -221,19 +202,16 @@
 with app.app_context():
     db.create_all()
-    
+
+    # Carga Tutores
     if Tutor.query.count() == 0:
         for d in DATOS_TUTORES:
             db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
         db.session.commit()
-    
+
+    # Carga Admin
     if not User.query.filter_by(username='admin').first():
         admin = User(username='admin', role='admin', display_name="Dirección de Carrera")
         admin.set_password('123') 
         db.session.add(admin)
-    
+
+    # Carga Docentes
     for dm in DOCENTES_MATERIA_DATA:
         doc = User.query.filter_by(username=dm['user']).first()
         if not doc:
-            doc = User(username=dm['user'], role='docente', display_name=dm['name'])
-            doc.set_password(dm['pass']) 
-            db.session.add(doc)
+@@ -243,16 +221,10 @@
             db.session.commit() 
-            
+
+            # TAREAS POR DEFECTO (AVANCE 1, 2, 3...)
+            tareas = [
+                "Avance 1", 
+                "Avance 2", 
+                "Avance 3", 
+                "Avance 4",
+                "Presentación Final"
+            ]
+            for idx, tarea in enumerate(tareas):
+                if not Assignment.query.filter_by(docente_id=doc.id, title=tarea).first():
+                    db.session.add(Assignment(docente_id=doc.id, title=tarea, order=idx+1, description="Pendiente de configuración por el docente."))
             tareas = ["Avance 1", "Avance 2", "Avance 3", "Avance 4", "Presentación Final"]
             for idx, t in enumerate(tareas):
                 if not Assignment.query.filter_by(docente_id=doc.id, title=t).first():
-                    db.session.add(Assignment(docente_id=doc.id, title=t, order=idx+1, description="Por configurar..."))
+                    db.session.add(Assignment(docente_id=doc.id, title=t, order=idx+1, description="Pendiente de configuración por el docente."))
             db.session.commit()
 
 # --- RUTAS PÚBLICAS ---
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/api/tutors', methods=['GET'])
-def get_tutors():
-    level = request.args.get('level') 
-    if level not in CAPACIDAD: return jsonify({"error": "Nivel inválido"}), 400
-
-    tutors = Tutor.query.order_by(Tutor.name).all()
-    disponibles = []
-    
-    for t in tutors:
-        tomados = getattr(t, f"taken_{level}") 
-        maximo = 0 if "Odin Rodríguez Mercado" in t.name else CAPACIDAD[level]
-        if tomados < maximo:
-            disponibles.append({
-                "id": t.id,
-                "name": t.name,
-                "phone": t.phone,
-                "email": t.email,
-                "cupos_disponibles": maximo - tomados,
-                "cupos_totales": maximo
-            })
-    return jsonify(disponibles)
+@@ -285,18 +257,20 @@
 
 @app.route('/api/docentes_materia', methods=['GET'])
 def get_docentes_materia():
-    level = request.args.get('level')
+    # CORRECCIÓN DE FILTRADO PARA QUE NO SALGAN TODOS LOS TURNOS MEZCLADOS
+    level = request.args.get('level') # Ej: "II", "III", "IV"
     query = User.query.filter_by(role='docente')
+
     if level:
+        # Filtramos si el nombre contiene "Practicum NIVEL " (con espacio para no confundir II con III)
+        # Filtro estricto: Busca "Practicum II " o "Practicum II -"
         search_term = f"Practicum {level} "
+        docentes = query.filter(User.display_name.contains(search_term)).all()
+        # Si no encuentra (por el formato del nombre), busca con guion
+        if not docentes:
+            search_term_b = f"Practicum {level} -"
+            docentes = query.filter(User.display_name.contains(search_term_b)).all()
         search_term_b = f"Practicum {level} -"
-        docentes = query.filter(db.or_(User.display_name.contains(search_term), User.display_name.contains(search_term_b))).all()
+        
+        docentes = query.filter(
+            db.or_(
+                User.display_name.contains(search_term),
+                User.display_name.contains(search_term_b)
+            )
+        ).all()
     else:
         docentes = query.all()
-    
-    lista = [{"id": d.id, "name": d.display_name} for d in docentes]
-    return jsonify(lista)
 
-@app.route('/api/solicitar', methods=['POST'])
-def solicitar_tutor():
-    data = request.json
-    tutor_id = data.get('tutor_id')
-    docente_id = data.get('docente_id') 
-    level = data.get('nivel')
-    
-    tutor = Tutor.query.get(tutor_id)
-    if not tutor or not docente_id: return jsonify({"error": "Datos incompletos"}), 400
-
-    campo_cupo = f"taken_{level}"
-    tomados = getattr(tutor, campo_cupo)
-    maximo = 0 if "Odin Rodríguez Mercado" in tutor.name else CAPACIDAD[level]
-
-    if tomados >= maximo: return jsonify({"error": "Cupo lleno."}), 409
+@@ -328,7 +302,6 @@
 
     setattr(tutor, campo_cupo, tomados + 1)
-    
+
+    # Crear Perfil PENDIENTE
     est = StudentProfile(
         full_name=data.get('nombre'),
         registro=data.get('registro'),
-        carnet=data.get('carnet'),
-        practicum_level=level,
-        tutor_id=tutor.id,
-        docente_id=int(docente_id), 
-        status='PENDIENTE'
-    )
+@@ -341,7 +314,6 @@
     db.session.add(est)
     db.session.commit()
-    
+
+    # Inicializar Documentos
     for doc_name in DOCS_REQUERIDOS:
         db.session.add(StudentDocument(student_id=est.id, doc_type=doc_name))
     db.session.commit()
-    
-    try:
-        docente_obj = User.query.get(int(docente_id))
-        docente_nombre = docente_obj.display_name if docente_obj else ""
-        pdf_file = generar_carta_pdf(est.full_name, est.registro, est.carnet, level, tutor.name, docente_nombre)
-        return jsonify({"mensaje": "Solicitud registrada.", "pdf_url": f"/descargar/{pdf_file}"})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/descargar/<filename>')
-def descargar_archivo(filename):
-    path = os.path.join(os.getcwd(), filename)
-    return send_file(path, as_attachment=True)
-
-# --- RUTAS AUTENTICACIÓN ---
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
-            login_user(user)
-            if user.role == 'admin': return redirect(url_for('admin_dashboard'))
-            elif user.role == 'docente': return redirect(url_for('docente_dashboard'))
-            else: return redirect(url_for('student_dashboard'))
-        else:
-            return render_template('login.html', error=True) 
-    return render_template('login.html')
-
-@app.route('/logout')
-@login_required
-def logout():
+@@ -386,32 +358,28 @@
     logout_user()
     return redirect(url_for('index'))
 
+# --- MÓDULO ESTUDIANTE (REPARADO Y CON LÓGICA SEMÁFORO) ---
 # --- MÓDULO ESTUDIANTE ---
 
 @app.route('/student/dashboard')
@@ -339,323 +225,290 @@ def logout():
 def student_dashboard():
     if current_user.role != 'student': return redirect(url_for('index'))
     profile = current_user.student_profile
-    
-    # Auto-reparar documentos si falta la Evaluación
-    existing_docs = [d.doc_type for d in profile.documents]
-    for req in DOCS_REQUERIDOS:
-        if req not in existing_docs:
-            db.session.add(StudentDocument(student_id=profile.id, doc_type=req))
-    db.session.commit()
 
+    # 1. AUTO-GENERAR DOCUMENTOS (Si faltan)
+    if not profile.documents:
+        docs_requeridos = ['Boleta Inscripción', 'CV', 'Fotocopia Carnet', 'Formulario Datos']
+        for doc_name in docs_requeridos:
+            db.session.add(StudentDocument(student_id=profile.id, doc_type=doc_name))
+        db.session.commit()
+
+    # 2. ASEGURAR TAREAS (Si el docente ya las tiene configuradas)
     if profile.docente_id:
         tareas_docente = Assignment.query.filter_by(docente_id=profile.docente_id).all()
+        # Si el docente no tiene tareas, se crean las DEFAULT (AVANCES NUMERADOS)
         if not tareas_docente:
              defaults = ["Avance 1", "Avance 2", "Avance 3", "Avance 4", "Presentación Final"]
              for idx, titulo in enumerate(defaults):
                 db.session.add(Assignment(docente_id=profile.docente_id, title=titulo, order=idx+1, description="Por configurar..."))
              db.session.commit()
-        
+
+        # Vincular estudiante a las tareas
         tareas_actuales = Assignment.query.filter_by(docente_id=profile.docente_id).all()
         for t in tareas_actuales:
             if not Submission.query.filter_by(student_id=profile.id, assignment_id=t.id).first():
-                db.session.add(Submission(student_id=profile.id, assignment_id=t.id))
-        db.session.commit()
-
-    submissions = Submission.query.filter_by(student_id=profile.id).join(Assignment).order_by(Assignment.order).all()
-    
-    # Lógica para saber si se activa la Evaluación de Tutor
-    # Se activa si el penúltimo avance (ej. Avance 4) está APROBADO
-    evaluacion_activada = False
-    if len(submissions) >= 2:
-        # Asumiendo que el último es la Presentación Final, verificamos el anterior
-        penultimo = submissions[-2] # El índice -2 es el penúltimo
-        if penultimo.status == 'APROBADO':
-            evaluacion_activada = True
-
-    return render_template('student_dashboard.html', 
-                           profile=profile, 
-                           submissions=submissions, 
-                           evaluacion_activada=evaluacion_activada)
-
+@@ -424,7 +392,6 @@
 @app.route('/student/upload_doc', methods=['POST'])
 @login_required
 def student_upload_doc():
+    """El estudiante confirma subida de docs"""
     doc_id = request.form.get('doc_id')
     doc = StudentDocument.query.get(doc_id)
     if doc and doc.student_id == current_user.student_profile.id:
-        doc.status = 'REVISION' 
-        db.session.commit()
-    return redirect(url_for('student_dashboard'))
-
+@@ -435,14 +402,11 @@
 @app.route('/student/submit_assignment', methods=['POST'])
 @login_required
 def student_submit_assignment():
+    """Entrega iterativa con Bloqueo (Semáforo)"""
     sub_id = request.form.get('submission_id')
     content = request.form.get('content')
+
     sub = Submission.query.get(sub_id)
     if sub and sub.student_id == current_user.student_profile.id:
+        
+        # LÓGICA SEMÁFORO: Verificar si la anterior está aprobada
         prev_assign = Assignment.query.filter_by(docente_id=sub.assignment.docente_id, order=sub.assignment.order - 1).first()
         if prev_assign:
             prev_sub = Submission.query.filter_by(student_id=current_user.student_profile.id, assignment_id=prev_assign.id).first()
-            if not prev_sub or prev_sub.status != 'APROBADO':
-                flash("⛔ Error: Debes tener APROBADO el avance anterior.")
-                return redirect(url_for('student_dashboard'))
-        sub.content = content
-        sub.status = 'EN_REVISION'
-        sub.submitted_at = datetime.date.today()
-        db.session.commit()
-    return redirect(url_for('student_dashboard'))
-
-@app.route('/student/add_timelog', methods=['POST'])
-@login_required
-def student_add_timelog():
-    p = current_user.student_profile
-    new_log = TimeLog(
-        student_id=p.id, 
-        date=datetime.datetime.strptime(request.form['date'], '%Y-%m-%d').date(), 
-        activity_type=request.form['activity_type'],
-        activity_detail=request.form['activity_detail'], 
-        hours=float(request.form['hours'])
-    )
-    db.session.add(new_log)
+@@ -471,17 +435,14 @@
     db.session.commit()
     return redirect(url_for('student_dashboard'))
 
-# --- RUTAS DE DESCARGA PDFS NUEVOS (BLOQUEADOS) ---
-
-@app.route('/download/asistencia_pdf')
-@login_required
-def download_asistencia_pdf():
-    p = current_user.student_profile
-    # Validar requisito: 5 reuniones
-    meetings = [log for log in p.logs if log.activity_type == 'Reunión Tutor']
-    if len(meetings) < 5:
-        flash("⛔ Requisito incompleto: Debes registrar al menos 5 reuniones con tu tutor.")
-        return redirect(url_for('student_dashboard'))
-    
-    filename = generar_hoja_asistencia_pdf(p)
-    return send_file(filename, as_attachment=True)
-
-@app.route('/download/bitacora_pdf')
-@login_required
-def download_bitacora_pdf():
-    p = current_user.student_profile
-    # Validar requisito: 120 horas
-    if p.total_hours < 120:
-        flash(f"⛔ Requisito incompleto: Tienes {p.total_hours} hrs. Necesitas 120 hrs para generar la bitácora final.")
-        return redirect(url_for('student_dashboard'))
-        
-    filename = generar_bitacora_general_pdf(p)
-    return send_file(filename, as_attachment=True)
-
+# --- MÓDULO DOCENTE (CONFIGURACIÓN Y REVISIÓN) ---
 # --- MÓDULO DOCENTE ---
 
 @app.route('/docente/dashboard')
 @login_required
 def docente_dashboard():
     if current_user.role != 'docente': return "Acceso Denegado"
-    mis_estudiantes = StudentProfile.query.filter_by(docente_id=current_user.id, status='ACTIVO').all()
-    mis_tareas = Assignment.query.filter_by(docente_id=current_user.id).order_by(Assignment.order).all()
-    return render_template('docente_dashboard.html', estudiantes=mis_estudiantes, docente_nombre=current_user.display_name, tareas=mis_tareas) 
 
+    # Obtener alumnos
+    mis_estudiantes = StudentProfile.query.filter_by(docente_id=current_user.id, status='ACTIVO').all()
+    
+    # Obtener Tareas para configuración
+    mis_tareas = Assignment.query.filter_by(docente_id=current_user.id).order_by(Assignment.order).all()
+
+    return render_template('docente_dashboard.html', 
+@@ -492,12 +453,11 @@
 @app.route('/docente/config_assignment', methods=['POST'])
 @login_required
 def docente_config_assignment():
+    """El docente configura fechas y descripciones"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+
     assign_id = request.form.get('assignment_id')
     description = request.form.get('description')
+    deadline_str = request.form.get('deadline') # YYYY-MM-DD
     deadline_str = request.form.get('deadline') 
+
     tarea = Assignment.query.get(assign_id)
     if tarea and tarea.docente_id == current_user.id:
-        tarea.description = description
-        if deadline_str:
-            tarea.deadline = datetime.datetime.strptime(deadline_str, '%Y-%m-%d').date()
-        db.session.commit()
-    return redirect(url_for('docente_dashboard'))
-
+@@ -511,24 +471,18 @@
 @app.route('/docente/add_assignment', methods=['POST'])
 @login_required
 def docente_add_assignment():
+    """DOCENTE AGREGA UN NUEVO AVANCE AL FINAL"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+
+    # Buscar el orden más alto actual
     ultimo = Assignment.query.filter_by(docente_id=current_user.id).order_by(Assignment.order.desc()).first()
     nuevo_orden = 1 if not ultimo else ultimo.order + 1
+    titulo = f"Nuevo Avance {nuevo_orden}"
     titulo = f"Avance Extra {nuevo_orden}"
-    nueva_tarea = Assignment(docente_id=current_user.id, title=titulo, order=nuevo_orden, description="Configura este avance...")
+
+    nueva_tarea = Assignment(
+        docente_id=current_user.id, 
+        title=titulo, 
+        order=nuevo_orden, 
+        description="Configura este avance..."
+        docente_id=current_user.id, title=titulo, order=nuevo_orden, description="Configura este avance..."
+    )
     db.session.add(nueva_tarea)
     db.session.commit()
+
+    # Asignar a todos los estudiantes activos
     estudiantes = StudentProfile.query.filter_by(docente_id=current_user.id).all()
     for e in estudiantes:
         db.session.add(Submission(student_id=e.id, assignment_id=nueva_tarea.id))
-    db.session.commit()
-    return redirect(url_for('docente_dashboard'))
-
+@@ -539,14 +493,13 @@
 @app.route('/docente/delete_assignment', methods=['POST'])
 @login_required
 def docente_delete_assignment():
+    """DOCENTE ELIMINA UN AVANCE"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+
     assign_id = request.form.get('assignment_id')
     tarea = Assignment.query.get(assign_id)
+
     if tarea and tarea.docente_id == current_user.id:
+        db.session.delete(tarea) # Cascade borrará las submissions
         db.session.delete(tarea) 
         db.session.commit()
+
     return redirect(url_for('docente_dashboard'))
-
-@app.route('/docente/ver/<int:student_id>')
-@login_required
-def docente_ver_estudiante(student_id):
-    if current_user.role != 'docente': return "Acceso Denegado"
-    estudiante = StudentProfile.query.get(student_id)
-    submissions = Submission.query.filter_by(student_id=estudiante.id).join(Assignment).order_by(Assignment.order).all()
-    return render_template('docente_detail.html', e=estudiante, submissions=submissions)
-
-@app.route('/docente/grade_submission', methods=['POST'])
-@login_required
-def docente_grade_submission():
-    sub_id = request.form.get('submission_id')
-    action = request.form.get('action')
-    feedback = request.form.get('feedback')
-    sub = Submission.query.get(sub_id)
-    if action == 'approve':
-        sub.status = 'APROBADO'; sub.approved_at = datetime.date.today(); sub.feedback = feedback
-    else:
-        sub.status = 'OBSERVADO'; sub.feedback = feedback
-    db.session.commit()
-    return redirect(url_for('docente_ver_estudiante', student_id=sub.student_id))
-
-@app.route('/docente/validate_hours', methods=['POST'])
-@login_required
-def docente_validate_hours():
-    student_id = request.form.get('student_id')
-    logs = TimeLog.query.filter_by(student_id=student_id).all()
-    for log in logs: log.is_validated = True
+@@ -592,7 +545,7 @@
     db.session.commit()
     return redirect(url_for('docente_ver_estudiante', student_id=student_id))
 
+# --- MÓDULO ADMIN (DIRECTOR) ---
 # --- MÓDULO ADMIN ---
 
 @app.route('/admin/dashboard')
 @login_required
-def admin_dashboard():
-    if current_user.role != 'admin': return redirect(url_for('index'))
-    docs_pendientes = StudentDocument.query.filter_by(status='REVISION').all()
-    pendientes_registro = StudentProfile.query.filter_by(status='PENDIENTE').all()
-    estudiantes_activos = StudentProfile.query.filter_by(status='ACTIVO').all()
-    return render_template('admin_dashboard.html', docs_pendientes=docs_pendientes, pendientes_registro=pendientes_registro, activos=estudiantes_activos) 
+@@ -663,7 +616,7 @@
+        'Content-Type': 'text/csv'
+    })
 
-@app.route('/admin/validate_doc', methods=['POST'])
-@login_required
-def admin_validate_doc():
-    doc_id = request.form.get('doc_id')
-    action = request.form.get('action') 
-    doc = StudentDocument.query.get(doc_id)
-    doc.status = 'VALIDADO' if action == 'validate' else 'RECHAZADO'
-    db.session.commit()
-    return redirect(url_for('admin_dashboard'))
-
-@app.route('/admin/approve/<int:student_id>', methods=['POST'])
-@login_required
-def approve_student(student_id):
-    drive_url = request.form.get('drive_url')
-    student = StudentProfile.query.get(student_id)
-    if student:
-        if not User.query.filter_by(username=student.registro).first():
-            new_user = User(username=student.registro, role='student'); new_user.set_password(student.carnet)
-            db.session.add(new_user); db.session.commit()
-            student.user_id = new_user.id; student.status = 'ACTIVO'; student.drive_folder_url = drive_url
-            db.session.commit()
-    return redirect(url_for('admin_dashboard'))
-
-@app.route('/admin/report_excel')
-@login_required
-def admin_report_excel():
-    output = io.StringIO(); writer = csv.writer(output)
-    writer.writerow(['Registro', 'Nombre', 'Nivel', 'Tutor', 'Docente', 'Horas', 'Docs'])
-    students = StudentProfile.query.filter_by(status='ACTIVO').all()
-    for s in students:
-        tutor_name = s.tutor.name if s.tutor else "Sin Asignar"
-        docente_name = s.assigned_docente.display_name if s.assigned_docente else "Sin Asignar"
-        writer.writerow([s.registro, s.full_name, s.practicum_level, tutor_name, docente_name, s.total_hours, s.administrative_status])
-    output.seek(0)
-    return make_response(output.getvalue(), 200, {'Content-Disposition': 'attachment; filename=reporte.csv', 'Content-Type': 'text/csv'})
-
+# --- RESET COMPLETO (OBLIGATORIO) ---
+# --- RESET COMPLETO ---
 @app.route('/peligro/reset-completo')
 def reset_completo():
-    db.drop_all(); db.create_all()
-    for d in DATOS_TUTORES: db.session.add(Tutor(name=d['nombre'], phone=d['tel'], email=d['email']))
-    admin = User(username='admin', role='admin', display_name="Dirección de Carrera"); admin.set_password('123'); db.session.add(admin)
-    for dm in DOCENTES_MATERIA_DATA:
-        doc = User(username=dm['user'], role='docente', display_name=dm['name']); doc.set_password(dm['pass']); db.session.add(doc); db.session.commit()
-        for i, t in enumerate(["Avance 1", "Avance 2", "Avance 3", "Avance 4", "Presentación Final"]):
-             db.session.add(Assignment(docente_id=doc.id, title=t, order=i+1, description="Por configurar..."))
+    db.drop_all()
+@@ -684,72 +637,122 @@
+        db.session.add(doc)
+        db.session.commit()
+
+        # TAREAS POR DEFECTO (AVANCE 1, 2, 3...)
+        # Tareas por defecto
+        tareas = ["Avance 1", "Avance 2", "Avance 3", "Avance 4", "Presentación Final"]
+        for idx, t in enumerate(tareas):
+             db.session.add(Assignment(docente_id=doc.id, title=t, order=idx+1, description="Por configurar..."))
+
     db.session.commit()
-    return "<h1>Sistema Reconstruido</h1>"
+    return "<h1>Sistema Reconstruido con Nueva Arquitectura (Assignments + Docs)</h1>"
 
-# --- GENERADORES PDF ESTÉTICOS ---
-
+# --- PDF GENERATOR ---
+# --- PDF GENERATOR (CARTA FORMAL) ---
 def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor, nombre_docente_materia):
-    pdf = FPDF(); pdf.add_page(); pdf.set_margins(25, 25, 25)
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=11)
+    
+    # --- FECHA EN ESPAÑOL MANUAL ---
+    pdf.set_margins(25, 25, 25)
+    pdf.set_auto_page_break(auto=True, margin=25)
+
+    # 1. Fecha
     pdf.set_font("Times", size=11)
-    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-    now = datetime.datetime.now(); fecha = f"{now.day} de {meses[now.month - 1]} de {now.year}"
-    pdf.cell(0, 10, txt=f"Santa Cruz de la Sierra, {fecha}", ln=1, align='R'); pdf.ln(15)
+    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    now = datetime.datetime.now()
+    fecha = f"{now.day} de {meses[now.month - 1]} de {now.year}"
+    # -----------------------------------
+    pdf.cell(0, 10, txt=f"Santa Cruz de la Sierra, {fecha}", ln=1, align='R')
+    pdf.ln(15)
+
+    pdf.cell(0, 10, txt=f"Santa Cruz, {fecha}", ln=1, align='R'); pdf.ln(10)
+    
+    pdf.set_font("Arial", 'B', size=11)
+    # 2. Destinatario
     pdf.set_font("Times", 'B', size=11)
-    pdf.cell(0, 5, txt="Señor:", ln=1); pdf.cell(0, 5, txt="M.Sc. Odín Rodríguez Mercado", ln=1)
-    pdf.cell(0, 5, txt="DIRECTOR DE CARRERA DE CIENCIA POLÍTICA Y ADM. PÚBLICA", ln=1); pdf.cell(0, 5, txt="Presente.-", ln=1); pdf.ln(15)
-    pdf.set_font("Times", 'B', size=12); pdf.cell(0, 10, txt=f"REF.: SOLICITUD DE DESIGNACIÓN DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='C'); pdf.ln(10)
+    pdf.cell(0, 5, txt="Señor:", ln=1)
+    pdf.cell(0, 5, txt="Lic. Odin Rodríguez Mercado", ln=1)
+    pdf.cell(0, 5, txt="DIRECTOR DE CARRERA CIENCIA POLÍTICA Y ADM. PÚBLICA", ln=1)
+    pdf.cell(0, 5, txt="Presente.-", ln=1); pdf.ln(15)
+    pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
+    pdf.set_font("Arial", size=11)
+    pdf.multi_cell(0, 8, "Mediante la presente, solicito formalmente la asignación de tutoría. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
+    pdf.cell(0, 5, txt="M.Sc. Odín Rodríguez Mercado", ln=1) 
+    pdf.cell(0, 5, txt="DIRECTOR DE CARRERA DE CIENCIA POLÍTICA Y ADM. PÚBLICA", ln=1)
+    pdf.cell(0, 5, txt="Presente.-", ln=1)
+    pdf.ln(15)
+
+    # 3. Referencia
+    pdf.set_font("Times", 'B', size=12)
+    pdf.cell(0, 10, txt=f"REF.: SOLICITUD DE DESIGNACIÓN DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='C')
+    pdf.ln(10)
+
+    # 4. Cuerpo
     pdf.set_font("Times", size=12)
-    body = ("De mi mayor consideración:\n\nMediante la presente, tengo a bien dirigirme a su autoridad para saludarle muy cordialmente... (Solicitud Formal)...")
-    pdf.multi_cell(0, 6, body, align='J'); pdf.ln(10)
-    pdf.set_x(35); w_label = 50; w_data = 95; h_row = 8; pdf.set_font("Times", 'B', size=10); pdf.set_fill_color(245, 245, 245)
+    body = (
+        "De mi mayor consideración:\n\n"
+        "Mediante la presente, tengo a bien dirigirme a su autoridad para saludarle muy cordialmente "
+        "y desearle éxitos en las funciones que desempeña.\n\n"
+        "El motivo de la presente es solicitar formalmente la designación de Tutor para la asignatura "
+        f"de Practicum {nivel}, cumpliendo con los requisitos académicos establecidos. A continuación, "
+        "detallo mis datos personales y la selección del docente para su correspondiente validación:"
+    )
+    pdf.multi_cell(0, 6, body, align='J')
+    pdf.ln(10)
+
+    # 5. Tabla Centrada
+    pdf.set_x(35)
+    w_label = 50
+    w_data = 95
+    h_row = 8
+
+    pdf.set_font("Times", 'B', size=10)
+    pdf.set_fill_color(245, 245, 245)
+
+    # Filas
     pdf.cell(w_label, h_row, "NOMBRE COMPLETO:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
-    pdf.set_x(35); pdf.set_font("Times", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
-    pdf.set_x(35); pdf.set_font("Times", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR DE PRACTICUM:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
-    pdf.ln(15); pdf.set_font("Times", size=12); pdf.multi_cell(0, 6, "Sin otro particular, me despido atentamente.", align='J'); pdf.ln(30)
-    pdf.set_font("Times", size=11); pdf.cell(0, 5, "____________________________________", ln=1, align='C'); pdf.set_font("Times", 'B', size=11); pdf.cell(0, 5, str(nombre).upper(), ln=1, align='C')
-    filename = f"solicitud_{registro}.pdf"; pdf.output(filename); return filename
 
-def generar_hoja_asistencia_pdf(p):
-    pdf = FPDF(); pdf.add_page(); pdf.set_margins(25, 25, 25)
-    pdf.set_font("Times", 'B', 14); pdf.cell(0, 10, "CONTROL DE ASISTENCIA Y REUNIONES CON TUTOR", 0, 1, 'C'); pdf.ln(5)
-    pdf.set_font("Times", size=11)
-    pdf.cell(0, 8, f"Estudiante: {p.full_name}", 0, 1)
-    pdf.cell(0, 8, f"Tutor: {p.tutor.name}", 0, 1); pdf.ln(5)
-    
-    # Tabla Header
-    pdf.set_fill_color(220, 220, 220); pdf.set_font("Times", 'B', 10)
-    pdf.cell(30, 8, "Fecha", 1, 0, 'C', True)
-    pdf.cell(90, 8, "Tema Tratado / Detalle", 1, 0, 'C', True)
-    pdf.cell(20, 8, "Horas", 1, 0, 'C', True)
-    pdf.cell(30, 8, "Firma Tutor", 1, 1, 'C', True)
-    
-    pdf.set_font("Times", size=10)
-    meetings = [log for log in p.logs if log.activity_type == 'Reunión Tutor']
-    for m in meetings:
-        pdf.cell(30, 10, str(m.date), 1, 0, 'C')
-        pdf.cell(90, 10, str(m.activity_detail)[:50], 1, 0, 'L')
-        pdf.cell(20, 10, str(m.hours), 1, 0, 'C')
-        pdf.cell(30, 10, "", 1, 1, 'C') # Espacio para firma
-        
-    filename = f"asistencia_tutor_{p.registro}.pdf"; pdf.output(filename); return filename
+    # Tabla de datos
+    pdf.set_fill_color(240, 240, 240); pdf.set_font("Arial", 'B', size=10)
+    w_label = 60; w_data = 130; h_row = 10
+    pdf.set_x(35); pdf.set_font("Times", 'B', size=10)
+    pdf.cell(w_label, h_row, "REGISTRO UNIVERSITARIO:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
 
-def generar_bitacora_general_pdf(p):
-    pdf = FPDF(); pdf.add_page(); pdf.set_margins(25, 25, 25)
-    pdf.set_font("Times", 'B', 14); pdf.cell(0, 10, "BITÁCORA GENERAL DE ACTIVIDADES", 0, 1, 'C'); pdf.ln(5)
+    pdf.cell(w_label, h_row, "NOMBRE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CI:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "DOCENTE MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_docente_materia), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR TESIS:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+    pdf.set_x(35); pdf.set_font("Times", 'B', size=10)
+    pdf.cell(w_label, h_row, "CÉDULA DE IDENTIDAD:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
+
+    pdf.ln(20); pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente."); pdf.ln(30)
+    pdf.set_x(35); pdf.set_font("Times", 'B', size=10)
+    pdf.cell(w_label, h_row, "NIVEL DE PRACTICUM:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
+
+    pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C')
+    pdf.set_x(35); pdf.set_font("Times", 'B', size=10)
+    pdf.cell(w_label, h_row, "DOCENTE DE MATERIA:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(nombre_docente_materia), 1, 1, 'L')
+
+    pdf.set_x(35); pdf.set_font("Times", 'B', size=10)
+    pdf.cell(w_label, h_row, "TUTOR DE PRACTICUM:", 1, 0, 'L', True); pdf.set_font("Times", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+
+    pdf.ln(15)
+
+    # 6. Despedida
+    pdf.set_font("Times", size=12)
+    closing = (
+        "Agradeciendo de antemano su gentil atención y favorable acogida a la presente solicitud, "
+        "me despido con las mayores consideraciones."
+    )
+    pdf.multi_cell(0, 6, closing, align='J')
+    pdf.ln(30) 
+
+    # 7. Firma
     pdf.set_font("Times", size=11)
-    pdf.cell(0, 8, f"Estudiante: {p.full_name} ({p.registro})", 0, 1)
-    pdf.cell(0, 8, f"Total Horas Acumuladas: {p.total_hours} / 120", 0, 1); pdf.ln(5)
-    
-    pdf.set_fill_color(220, 220, 220); pdf.set_font("Times", 'B', 10)
-    pdf.cell(30, 8, "Fecha", 1, 0, 'C', True)
-    pdf.cell(40, 8, "Tipo", 1, 0, 'C', True)
-    pdf.cell(80, 8, "Detalle", 1, 0, 'C', True)
-    pdf.cell(20, 8, "Horas", 1, 1, 'C', True)
-    
-    pdf.set_font("Times", size=10)
-    others = [log for log in p.logs if log.activity_type != 'Reunión Tutor']
-    for o in others:
-        pdf.cell(30, 8, str(o.date), 1, 0, 'C')
-        pdf.cell(40, 8, str(o.activity_type), 1, 0, 'L')
-        pdf.cell(80, 8, str(o.activity_detail)[:45], 1, 0, 'L')
-        pdf.cell(20, 8, str(o.hours), 1, 1, 'C')
-        
-    filename = f"bitacora_general_{p.registro}.pdf"; pdf.output(filename); return filename
+    pdf.cell(0, 5, "____________________________________", ln=1, align='C')
+    pdf.set_font("Times", 'B', size=11)
+    pdf.cell(0, 5, str(nombre).upper(), ln=1, align='C')
+    pdf.set_font("Times", size=11)
+    pdf.cell(0, 5, f"Registro: {registro}", ln=1, align='C')
+    pdf.cell(0, 5, f"C.I.: {carnet}", ln=1, align='C')
+
+    filename = f"solicitud_{registro}_{nivel}.pdf"
+    pdf.output(filename)
+    return filename
+
+def generar_reporte_academico(p):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(0, 10, "Portafolio Académico", 0, 1, 'C')
+    pdf.set_font("Arial", size=12)
+    pdf.cell(0, 10, f"Estudiante: {p.full_name} | Horas: {p.total_hours}", 0, 1)
+    pdf.ln(10)
+    pdf.set_font("Arial", 'B', 12); pdf.cell(0, 10, "Bitácora de Actividades", 0, 1)
+    pdf.set_font("Arial", size=10)
+    for log in p.logs:
+        pdf.cell(0, 10, f"{log.date} - {log.activity_type}: {log.hours}hrs ({'Validado' if log.is_validated else 'Pendiente'})", 0, 1)
+    filename = f"reporte_{p.registro}.pdf"
+    pdf.output(filename)
+    return filename
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
