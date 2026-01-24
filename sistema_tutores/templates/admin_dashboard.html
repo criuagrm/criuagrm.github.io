@@ -8,10 +8,10 @@
 </head>
 <body class="bg-slate-100 font-sans text-slate-800">
 
-    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between">
+    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
             <h1 class="font-bold text-lg"><i class="fa-solid fa-building-columns mr-2"></i> Dirección de Carrera</h1>
-            <a href="/logout" class="text-red-300 hover:text-white"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <a href="/logout" class="text-red-300 hover:text-white transition"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </nav>
 
@@ -20,10 +20,10 @@
         <div class="flex justify-between items-center">
             <h2 class="text-2xl font-bold text-slate-800">Panel de Control</h2>
             <div class="flex gap-3">
-                <a href="/admin/report_excel" class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition flex items-center">
-                    <i class="fa-solid fa-file-excel mr-2"></i> Reporte Sábana (CSV)
+                <a href="/admin/report_excel" class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition flex items-center font-bold text-sm">
+                    <i class="fa-solid fa-file-excel mr-2"></i> Descargar Reporte (CSV)
                 </a>
-                <a href="/peligro/reset-completo" onclick="return confirm('¿Seguro? Esto borrará todo.')" class="bg-red-100 text-red-600 px-4 py-2 rounded hover:bg-red-200">
+                <a href="/peligro/reset-completo" onclick="return confirm('¿Seguro? Esto borrará todo.')" class="bg-red-100 text-red-600 px-4 py-2 rounded hover:bg-red-200 font-bold text-sm">
                     <i class="fa-solid fa-triangle-exclamation mr-1"></i> Reset DB
                 </a>
             </div>
@@ -31,35 +31,38 @@
 
         {% if docs_pendientes %}
         <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-yellow-400">
-            <h3 class="font-bold text-lg mb-4 flex items-center">
+            <h3 class="font-bold text-lg mb-4 flex items-center text-slate-800">
                 <i class="fa-solid fa-bell text-yellow-500 mr-2"></i> Documentos Pendientes de Validación
-                <span class="ml-2 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">{{ docs_pendientes|length }}</span>
+                <span class="ml-2 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-bold">{{ docs_pendientes|length }}</span>
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for doc in docs_pendientes %}
-                <div class="border border-slate-200 p-4 rounded-lg bg-slate-50">
-                    <p class="font-bold text-sm">{{ doc.student.full_name }}</p>
-                    <p class="text-xs text-slate-500 mb-2">{{ doc.doc_type }}</p>
+                <div class="border border-slate-200 p-4 rounded-lg bg-slate-50 hover:shadow-md transition">
+                    <div class="flex justify-between mb-2">
+                        <p class="font-bold text-sm text-slate-800">{{ doc.student.full_name }}</p>
+                        <a href="{{ doc.student.drive_folder_url }}" target="_blank" class="text-blue-600 text-xs font-bold hover:underline"><i class="fa-brands fa-google-drive"></i> Ver Carpeta</a>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3 bg-white p-1 rounded border border-slate-100 text-center font-bold">{{ doc.doc_type }}</p>
                     
-                    <form action="/admin/validate_doc" method="POST" class="flex gap-2 mt-3">
+                    <form action="/admin/validate_doc" method="POST" class="flex gap-2">
                         <input type="hidden" name="doc_id" value="{{ doc.id }}">
-                        <button type="submit" name="action" value="validate" class="flex-1 bg-green-500 text-white py-1 rounded text-xs hover:bg-green-600">Validar</button>
-                        <button type="submit" name="action" value="reject" class="flex-1 bg-red-500 text-white py-1 rounded text-xs hover:bg-red-600">Rechazar</button>
+                        <button type="submit" name="action" value="validate" class="flex-1 bg-green-500 text-white py-1.5 rounded text-xs font-bold hover:bg-green-600">Aceptar</button>
+                        <button type="submit" name="action" value="reject" class="flex-1 bg-red-500 text-white py-1.5 rounded text-xs font-bold hover:bg-red-600">Rechazar</button>
                     </form>
                 </div>
                 {% endfor %}
             </div>
         </div>
         {% else %}
-        <div class="bg-green-50 p-6 rounded-xl border border-green-100 text-center text-green-700">
-            <i class="fa-solid fa-check-circle text-2xl mb-2"></i>
-            <p>No hay documentos pendientes de revisión.</p>
+        <div class="bg-green-50 p-4 rounded-xl border border-green-100 text-center text-green-700 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check-circle"></i>
+            <p class="text-sm font-bold">Todo al día. No hay documentos pendientes de revisión.</p>
         </div>
         {% endif %}
 
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="font-bold text-lg mb-4">Solicitudes de Inscripción (Nuevos Estudiantes)</h3>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <h3 class="font-bold text-lg mb-4 text-slate-800">Solicitudes de Inscripción (Nuevos Estudiantes)</h3>
             {% if pendientes_registro %}
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-slate-500">
@@ -67,7 +70,7 @@
                             <tr>
                                 <th class="px-4 py-3">Estudiante</th>
                                 <th class="px-4 py-3">Tutor Tesis</th>
-                                <th class="px-4 py-3">Acción</th>
+                                <th class="px-4 py-3">Asignar Carpeta Drive</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,9 +82,11 @@
                                 </td>
                                 <td class="px-4 py-3">{{ p.tutor.name }}</td>
                                 <td class="px-4 py-3">
-                                    <form action="/admin/approve/{{ p.id }}" method="POST" class="flex gap-2">
-                                        <input type="text" name="drive_url" placeholder="Link Carpeta Drive" class="border rounded px-2 py-1 text-xs w-40" required>
-                                        <button class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700">Aprobar</button>
+                                    <form action="/admin/approve/{{ p.id }}" method="POST" class="flex gap-2 items-center">
+                                        <input type="text" name="drive_url" placeholder="Pegar Link Carpeta Drive..." class="border border-slate-300 rounded px-3 py-1.5 text-xs w-64 focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                                        <button class="bg-blue-600 text-white px-4 py-1.5 rounded text-xs font-bold hover:bg-blue-700 shadow-sm">
+                                            Aprobar y Crear Usuario
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
@@ -90,8 +95,53 @@
                     </table>
                 </div>
             {% else %}
-                <p class="text-slate-400 text-sm italic">No hay solicitudes nuevas.</p>
+                <p class="text-slate-400 text-sm italic p-4 text-center bg-slate-50 rounded-lg">No hay solicitudes nuevas.</p>
             {% endif %}
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+            <h3 class="font-bold text-lg mb-4 text-slate-800">Estudiantes Activos</h3>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-500">
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                        <tr>
+                            <th class="px-4 py-3">Estudiante</th>
+                            <th class="px-4 py-3">Tutor / Docente</th>
+                            <th class="px-4 py-3">Carpeta Drive</th>
+                            <th class="px-4 py-3">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in activos %} 
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="px-4 py-3">
+                                <span class="font-bold text-slate-900 block">{{ s.full_name }}</span>
+                                <span class="text-xs">{{ s.registro }}</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="text-xs">T: {{ s.tutor.name }}</div>
+                                <div class="text-xs">D: {{ s.assigned_docente.display_name }}</div>
+                            </td>
+                            <td class="px-4 py-3">
+                                {% if s.drive_folder_url %}
+                                    <a href="{{ s.drive_folder_url }}" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1 font-bold">
+                                        <i class="fa-brands fa-google-drive"></i> Abrir Carpeta
+                                    </a>
+                                {% else %}
+                                    <span class="text-red-400 text-xs font-bold">Sin asignar</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Activo</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="p-4 text-center text-slate-400">No hay estudiantes activos.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>
