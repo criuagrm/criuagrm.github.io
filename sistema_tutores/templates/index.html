@@ -45,6 +45,24 @@
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     .snap-container { -webkit-overflow-scrolling: touch; }
+    
+    /* Estilo para los inputs de la tabla */
+    .table-input {
+        width: 100%;
+        background: transparent;
+        outline: none;
+        font-weight: 700;
+        color: #1e293b;
+        border-bottom: 2px solid transparent;
+        transition: border-color 0.2s;
+    }
+    .table-input:focus {
+        border-bottom-color: #cc0000;
+    }
+    .table-input::placeholder {
+        color: #cbd5e1;
+        font-weight: 400;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
@@ -112,17 +130,14 @@
     </div>
 
     <div class="fixed bottom-0 right-0 z-0 pointer-events-none flex flex-col items-end justify-end">
-        
         <img src="https://i.imgur.com/G6kesFp.png" 
              class="h-44 lg:h-[350px] w-auto object-contain drop-shadow-2xl translate-y-4 lg:translate-y-2 mr-0 lg:mr-0 opacity-100"
              alt="Director">
         
         <div class="absolute bottom-4 right-4 lg:bottom-8 lg:right-8 glass-card px-4 py-1.5 lg:px-8 lg:py-2 rounded-xl flex items-center gap-3 animate-fade-in shadow-lg">
-            
             <div class="hidden lg:flex w-8 h-8 rounded bg-slate-900 items-center justify-center text-white text-xs">
                 <i class="fa-solid fa-user-tie"></i>
             </div>
-            
             <div class="leading-tight">
                 <h4 class="font-display font-bold text-slate-900 text-[9px] lg:text-[10px] whitespace-nowrap">M.Sc. Odín Rodriguez</h4>
                 <p class="text-[7px] lg:text-[8px] text-uagrm-red font-bold uppercase tracking-widest whitespace-nowrap">Director de Carrera</p>
@@ -150,56 +165,78 @@
 
   <div id="modal" class="fixed inset-0 z-50 hidden">
       <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" onclick="cerrarModal()"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-4">
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
           <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
               <div class="bg-slate-900 p-5 text-white relative">
-                  <h3 class="font-display text-lg font-bold">Confirmar Solicitud</h3>
-                  <p class="text-slate-400 text-xs mt-0.5">Practicum <span id="modal-nivel"></span></p>
+                  <h3 class="font-display text-lg font-bold">Solicitud de Carta</h3>
+                  <p class="text-slate-400 text-xs mt-0.5">Completa los datos para generar el documento.</p>
                   <button onclick="cerrarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
               </div>
               
               <div class="p-5">
-                  <div class="flex items-center gap-3 mb-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                      <div class="w-8 h-8 rounded-full bg-uagrm-red/10 text-uagrm-red flex items-center justify-center font-bold text-sm"><i class="fa-solid fa-user-check"></i></div>
-                      <div>
-                          <p class="text-[10px] text-slate-500 uppercase font-bold">Tutor de Tesis:</p>
-                          <span class="font-bold text-slate-900 text-sm leading-tight" id="modal-tutor-nombre"></span>
-                      </div>
-                  </div>
-
                   <form id="formSolicitud" onsubmit="enviarSolicitud(event)">
                       <input type="hidden" id="input-tutor-id">
                       
-                      <div class="mb-4">
-                          <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Docente de Materia / Turno</label>
-                          <select id="input-docente-materia" required class="w-full px-4 py-3 rounded-xl bg-blue-50 border border-blue-200 text-sm font-bold text-slate-700 focus:outline-none focus:border-blue-500 transition cursor-pointer">
-                              <option value="">Cargando docentes...</option>
-                          </select>
-                          <p class="text-[10px] text-slate-400 mt-1 pl-1">Selecciona el grupo en el que inscribiste la materia.</p>
+                      <div class="border border-slate-200 rounded-xl overflow-hidden mb-5">
+                          <table class="w-full text-sm text-left">
+                              <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-[10px] tracking-wider">
+                                  <tr><th colspan="2" class="px-4 py-2 border-b border-slate-200">Datos del Estudiante</th></tr>
+                              </thead>
+                              <tbody>
+                                  <tr class="border-b border-slate-100">
+                                      <td class="p-3 w-1/2 border-r border-slate-100">
+                                          <label class="block text-[9px] text-slate-400 font-bold uppercase mb-1">Nombre Completo</label>
+                                          <input type="text" id="input-nombre" required class="table-input" placeholder="Ej: Juan Pérez">
+                                      </td>
+                                      <td class="p-3 w-1/2">
+                                          <label class="block text-[9px] text-slate-400 font-bold uppercase mb-1">Registro</label>
+                                          <input type="number" id="input-registro" required class="table-input" placeholder="2190...">
+                                      </td>
+                                  </tr>
+                                  <tr class="border-b border-slate-100">
+                                      <td class="p-3 border-r border-slate-100">
+                                          <label class="block text-[9px] text-slate-400 font-bold uppercase mb-1">C.I.</label>
+                                          <input type="text" id="input-carnet" required class="table-input" placeholder="1234567">
+                                      </td>
+                                      <td class="p-3 bg-slate-50">
+                                          <label class="block text-[9px] text-slate-400 font-bold uppercase mb-1">Nivel</label>
+                                          <span id="display-nivel" class="font-bold text-uagrm-red text-sm">Practicum --</span>
+                                      </td>
+                                  </tr>
+                              </tbody>
+
+                              <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-[10px] tracking-wider">
+                                  <tr><th colspan="2" class="px-4 py-2 border-y border-slate-200">Datos Académicos</th></tr>
+                              </thead>
+                              <tbody>
+                                  <tr class="border-b border-slate-100">
+                                      <td colspan="2" class="p-3">
+                                          <label class="block text-[9px] text-slate-400 font-bold uppercase mb-1">Docente de Materia (Turno)</label>
+                                          <select id="input-docente-materia" required class="table-input cursor-pointer bg-white">
+                                              <option value="">Cargando docentes...</option>
+                                          </select>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2" class="p-3 bg-blue-50/50">
+                                          <label class="block text-[9px] text-blue-400 font-bold uppercase mb-1">Tutor de Tesis Seleccionado</label>
+                                          <div class="flex items-center gap-2">
+                                              <i class="fa-solid fa-user-check text-blue-600"></i>
+                                              <span id="modal-tutor-nombre" class="font-bold text-slate-800 text-sm">--</span>
+                                          </div>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
                       </div>
 
-                      <div class="space-y-3">
-                          <div>
-                              <label class="block text-xs font-bold text-slate-400 uppercase mb-1 ml-1">Nombre Completo</label>
-                              <input type="text" id="input-nombre" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:border-uagrm-red focus:ring-1 focus:ring-uagrm-red transition" placeholder="Ej: Juan Pérez">
-                          </div>
-                          <div>
-                              <label class="block text-xs font-bold text-slate-400 uppercase mb-1 ml-1">Registro Universitario</label>
-                              <input type="number" id="input-registro" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:border-uagrm-red focus:ring-1 focus:ring-uagrm-red transition" placeholder="Ej: 219000000">
-                          </div>
-                          <div>
-                              <label class="block text-xs font-bold text-slate-400 uppercase mb-1 ml-1">Cédula de Identidad</label>
-                              <input type="text" id="input-carnet" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:border-uagrm-red focus:ring-1 focus:ring-uagrm-red transition" placeholder="Ej: 8999123">
-                          </div>
+                      <div class="mb-4 flex items-start gap-2 p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                          <i class="fa-solid fa-circle-info text-yellow-600 text-xs mt-0.5"></i> 
+                          <p class="text-[10px] text-yellow-800 leading-tight">Verifica tus datos. Esta información se usará para generar tu <strong>Carta de Solicitud</strong> oficial.</p>
                       </div>
 
-                      <div class="mt-4 p-3 bg-yellow-50 text-yellow-800 text-xs rounded-lg border border-yellow-100 flex items-start gap-2">
-                          <i class="fa-solid fa-circle-info mt-0.5"></i> 
-                          <span>Tu solicitud quedará <strong>PENDIENTE</strong> hasta que entregues la carta física en Dirección de Carrera.</span>
-                      </div>
-
-                      <button type="submit" class="w-full mt-4 py-3 bg-uagrm-red text-white font-bold rounded-xl shadow-lg shadow-red-200 hover:bg-red-700 transition text-sm uppercase tracking-wide transform active:scale-95">
-                          Generar Carta y Reservar
+                      <button type="submit" class="w-full py-3 bg-uagrm-red text-white font-bold rounded-xl shadow-lg shadow-red-200 hover:bg-red-700 transition text-sm uppercase tracking-wide transform active:scale-95 flex justify-center items-center gap-2">
+                          <i class="fa-solid fa-file-pdf"></i> Generar Carta y Reservar
                       </button>
                   </form>
               </div>
@@ -209,9 +246,8 @@
 
   <script>
     let nivelActual = "";
-    let docentesCache = []; // Almacenamos la lista de profes aquí
+    let docentesCache = [];
 
-    // 1. Cargar lista de docentes al iniciar la página
     window.onload = async () => {
         try {
             const res = await fetch('/api/docentes_materia');
@@ -287,15 +323,13 @@
     function abrirModal(id, nombre) {
         document.getElementById('input-tutor-id').value = id;
         document.getElementById('modal-tutor-nombre').innerText = nombre;
-        document.getElementById('modal-nivel').innerText = nivelActual;
+        document.getElementById('display-nivel').innerText = `Practicum ${nivelActual}`;
         
-        // 2. Filtrar el select de docentes según el nivel actual
         const select = document.getElementById('input-docente-materia');
         select.innerHTML = '<option value="">-- Selecciona tu Turno --</option>';
         
-        const nivelRomano = nivelActual; // Ej: "II"
+        const nivelRomano = nivelActual; 
         
-        // Filtramos solo los profes que tengan "Practicum II" en su nombre
         const docentesFiltrados = docentesCache.filter(d => d.name.includes(`Practicum ${nivelRomano}`));
         
         if(docentesFiltrados.length === 0) {
@@ -306,7 +340,7 @@
             docentesFiltrados.forEach(d => {
                 const opt = document.createElement('option');
                 opt.value = d.id;
-                opt.innerText = d.name; // Ej: "Practicum II - Turno Mañana"
+                opt.innerText = d.name; 
                 select.appendChild(opt);
             });
         }
@@ -319,13 +353,13 @@
     async function enviarSolicitud(e) {
         e.preventDefault();
         const btn = e.target.querySelector('button');
-        const txtOriginal = btn.innerText;
+        const txtOriginal = btn.innerHTML;
         btn.disabled = true;
-        btn.innerText = "Procesando...";
+        btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Procesando...';
 
         const datos = {
             tutor_id: parseInt(document.getElementById('input-tutor-id').value),
-            docente_id: document.getElementById('input-docente-materia').value, // DATO NUEVO
+            docente_id: document.getElementById('input-docente-materia').value,
             nivel: nivelActual,
             nombre: document.getElementById('input-nombre').value,
             registro: document.getElementById('input-registro').value,
@@ -341,11 +375,8 @@
             const json = await res.json();
 
             if (res.ok) {
-                // Descarga automática
                 window.location.href = json.pdf_url;
-                
                 alert("¡SOLICITUD REGISTRADA!\n\n1. Se está descargando tu carta.\n2. Imprímela y llévala a Dirección de Carrera.\n3. Cuando sea aprobada, podrás ingresar al sistema con tu Registro y Carnet.");
-                
                 cerrarModal();
                 fetchTutores();
                 e.target.reset();
@@ -356,7 +387,7 @@
             alert("Error de conexión");
         } finally {
             btn.disabled = false;
-            btn.innerText = txtOriginal;
+            btn.innerHTML = txtOriginal;
         }
     }
   </script>
