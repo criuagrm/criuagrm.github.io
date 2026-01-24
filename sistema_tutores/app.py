@@ -117,12 +117,12 @@ class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     docente_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
-    title = db.Column(db.String(200)) # Ej: "Primer Avance: Perfil"
+    title = db.Column(db.String(200)) # Ej: "Avance 1"
     description = db.Column(db.Text)
     order = db.Column(db.Integer) # 1, 2, 3...
-    deadline = db.Column(db.Date, nullable=True) # FECHA LIMITE (NUEVO)
+    deadline = db.Column(db.Date, nullable=True) # FECHA LIMITE
     
-    submissions = db.relationship('Submission', backref='assignment', lazy=True)
+    submissions = db.relationship('Submission', backref='assignment', lazy=True, cascade="all, delete-orphan")
 
 class Submission(db.Model):
     """Módulo Académico: La entrega del estudiante"""
@@ -242,16 +242,16 @@ with app.app_context():
             db.session.add(doc)
             db.session.commit() 
             
-            # TAREAS POR DEFECTO (EL DOCENTE DEBE EDITARLAS LUEGO)
+            # TAREAS POR DEFECTO (AVANCE 1, 2, 3...)
             tareas = [
-                "1. Perfil de Proyecto", 
-                "2. Marco Teórico y Metodológico", 
-                "3. Trabajo de Campo y Análisis",
-                "4. Informe Final y Artículo Científico"
+                "Avance 1", 
+                "Avance 2", 
+                "Avance 3", 
+                "Avance 4",
+                "Presentación Final"
             ]
             for idx, tarea in enumerate(tareas):
                 if not Assignment.query.filter_by(docente_id=doc.id, title=tarea).first():
-                    # Por defecto sin fecha límite, el docente la pone
                     db.session.add(Assignment(docente_id=doc.id, title=tarea, order=idx+1, description="Pendiente de configuración por el docente."))
             db.session.commit()
 
@@ -285,7 +285,21 @@ def get_tutors():
 
 @app.route('/api/docentes_materia', methods=['GET'])
 def get_docentes_materia():
-    docentes = User.query.filter_by(role='docente').all()
+    # CORRECCIÓN DE FILTRADO PARA QUE NO SALGAN TODOS LOS TURNOS MEZCLADOS
+    level = request.args.get('level') # Ej: "II", "III", "IV"
+    query = User.query.filter_by(role='docente')
+    
+    if level:
+        # Filtramos si el nombre contiene "Practicum NIVEL " (con espacio para no confundir II con III)
+        search_term = f"Practicum {level} "
+        docentes = query.filter(User.display_name.contains(search_term)).all()
+        # Si no encuentra (por el formato del nombre), busca con guion
+        if not docentes:
+            search_term_b = f"Practicum {level} -"
+            docentes = query.filter(User.display_name.contains(search_term_b)).all()
+    else:
+        docentes = query.all()
+
     lista = []
     for d in docentes:
         lista.append({
@@ -390,9 +404,9 @@ def student_dashboard():
     # 2. ASEGURAR TAREAS (Si el docente ya las tiene configuradas)
     if profile.docente_id:
         tareas_docente = Assignment.query.filter_by(docente_id=profile.docente_id).all()
-        # Si el docente no tiene tareas, se crean las DEFAULT
+        # Si el docente no tiene tareas, se crean las DEFAULT (AVANCES NUMERADOS)
         if not tareas_docente:
-             defaults = ["1. Perfil de Proyecto", "2. Marco Teórico", "3. Trabajo de Campo", "4. Informe Final"]
+             defaults = ["Avance 1", "Avance 2", "Avance 3", "Avance 4", "Presentación Final"]
              for idx, titulo in enumerate(defaults):
                 db.session.add(Assignment(docente_id=profile.docente_id, title=titulo, order=idx+1, description="Por configurar..."))
              db.session.commit()
@@ -473,12 +487,12 @@ def docente_dashboard():
     return render_template('docente_dashboard.html', 
                            estudiantes=mis_estudiantes, 
                            docente_nombre=current_user.display_name,
-                           tareas=mis_tareas) # Pasamos las tareas para que las edite
+                           tareas=mis_tareas) 
 
 @app.route('/docente/config_assignment', methods=['POST'])
 @login_required
 def docente_config_assignment():
-    """NUEVA RUTA: El docente configura fechas y descripciones"""
+    """El docente configura fechas y descripciones"""
     if current_user.role != 'docente': return "Acceso Denegado"
     
     assign_id = request.form.get('assignment_id')
@@ -490,6 +504,49 @@ def docente_config_assignment():
         tarea.description = description
         if deadline_str:
             tarea.deadline = datetime.datetime.strptime(deadline_str, '%Y-%m-%d').date()
+        db.session.commit()
+        
+    return redirect(url_for('docente_dashboard'))
+
+@app.route('/docente/add_assignment', methods=['POST'])
+@login_required
+def docente_add_assignment():
+    """DOCENTE AGREGA UN NUEVO AVANCE AL FINAL"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+    
+    # Buscar el orden más alto actual
+    ultimo = Assignment.query.filter_by(docente_id=current_user.id).order_by(Assignment.order.desc()).first()
+    nuevo_orden = 1 if not ultimo else ultimo.order + 1
+    titulo = f"Nuevo Avance {nuevo_orden}"
+    
+    nueva_tarea = Assignment(
+        docente_id=current_user.id, 
+        title=titulo, 
+        order=nuevo_orden, 
+        description="Configura este avance..."
+    )
+    db.session.add(nueva_tarea)
+    db.session.commit()
+    
+    # Asignar a todos los estudiantes activos
+    estudiantes = StudentProfile.query.filter_by(docente_id=current_user.id).all()
+    for e in estudiantes:
+        db.session.add(Submission(student_id=e.id, assignment_id=nueva_tarea.id))
+    db.session.commit()
+    
+    return redirect(url_for('docente_dashboard'))
+
+@app.route('/docente/delete_assignment', methods=['POST'])
+@login_required
+def docente_delete_assignment():
+    """DOCENTE ELIMINA UN AVANCE"""
+    if current_user.role != 'docente': return "Acceso Denegado"
+    
+    assign_id = request.form.get('assignment_id')
+    tarea = Assignment.query.get(assign_id)
+    
+    if tarea and tarea.docente_id == current_user.id:
+        db.session.delete(tarea) # Cascade borrará las submissions
         db.session.commit()
         
     return redirect(url_for('docente_dashboard'))
@@ -544,13 +601,12 @@ def admin_dashboard():
     
     docs_pendientes = StudentDocument.query.filter_by(status='REVISION').all()
     pendientes_registro = StudentProfile.query.filter_by(status='PENDIENTE').all()
-    # AGREGAR ESTA LÍNEA PARA QUE APAREZCAN LOS ACTIVOS
     estudiantes_activos = StudentProfile.query.filter_by(status='ACTIVO').all()
     
     return render_template('admin_dashboard.html', 
                            docs_pendientes=docs_pendientes, 
                            pendientes_registro=pendientes_registro,
-                           activos=estudiantes_activos) # PASAR A LA PLANTILLA
+                           activos=estudiantes_activos) 
 
 @app.route('/admin/validate_doc', methods=['POST'])
 @login_required
@@ -584,7 +640,7 @@ def approve_student(student_id):
             
             student.user_id = new_user.id
             student.status = 'ACTIVO'
-            student.drive_folder_url = drive_url # AQUÍ SE GUARDA EL LINK DEL DRIVE
+            student.drive_folder_url = drive_url 
             db.session.commit()
             
     return redirect(url_for('admin_dashboard'))
@@ -628,8 +684,8 @@ def reset_completo():
         db.session.add(doc)
         db.session.commit()
         
-        # Tareas por defecto
-        tareas = ["1. Perfil", "2. Marco Teórico", "3. Campo", "4. Informe Final"]
+        # TAREAS POR DEFECTO (AVANCE 1, 2, 3...)
+        tareas = ["Avance 1", "Avance 2", "Avance 3", "Avance 4", "Presentación Final"]
         for idx, t in enumerate(tareas):
              db.session.add(Assignment(docente_id=doc.id, title=t, order=idx+1, description="Por configurar..."))
             
