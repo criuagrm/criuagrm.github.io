@@ -27,68 +27,91 @@
                 <h2 class="font-bold text-lg mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-sliders"></i> Configuración del Curso
                 </h2>
-                <p class="text-xs text-slate-500 mb-4">Define las instrucciones y fechas límite para cada fase de entrega.</p>
+                <p class="text-xs text-slate-500 mb-4">Define las fases de entrega. Puedes añadir o quitar avances según tu planificación.</p>
 
                 <div class="space-y-4">
                     {% for tarea in tareas %}
-                    <div x-data="{ open: false }" class="border border-slate-100 rounded-xl bg-slate-50 overflow-hidden">
+                    <div x-data="{ open: false }" class="border border-slate-100 rounded-xl bg-slate-50 overflow-hidden group">
                         <div @click="open = !open" class="p-4 cursor-pointer flex justify-between items-center hover:bg-slate-100 transition">
-                            <div>
-                                <h3 class="font-bold text-sm">{{ tarea.title }}</h3>
-                                {% if tarea.deadline %}
-                                <p class="text-[10px] text-red-500 font-bold"><i class="fa-regular fa-calendar"></i> {{ tarea.deadline }}</p>
-                                {% else %}
-                                <p class="text-[10px] text-slate-400">Sin fecha límite</p>
-                                {% endif %}
+                            <div class="flex items-center gap-3">
+                                <span class="bg-slate-200 text-slate-600 w-6 h-6 rounded flex items-center justify-center text-xs font-bold">{{ loop.index }}</span>
+                                <div>
+                                    <h3 class="font-bold text-sm text-slate-800">{{ tarea.title }}</h3>
+                                    {% if tarea.deadline %}
+                                        <p class="text-[10px] text-red-500 font-bold"><i class="fa-regular fa-calendar"></i> {{ tarea.deadline }}</p>
+                                    {% else %}
+                                        <p class="text-[10px] text-slate-400">Sin fecha límite</p>
+                                    {% endif %}
+                                </div>
                             </div>
                             <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform" :class="{'rotate-180': open}"></i>
                         </div>
 
-                        <div x-show="open" class="p-4 bg-white border-t border-slate-100">
+                        <div x-show="open" class="p-4 bg-white border-t border-slate-100 space-y-3">
+                            
                             <form action="/docente/config_assignment" method="POST">
                                 <input type="hidden" name="assignment_id" value="{{ tarea.id }}">
                                 
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Instrucciones</label>
-                                <textarea name="description" rows="2" class="w-full text-xs border border-slate-200 rounded p-2 mb-3 bg-slate-50" placeholder="Ej: Subir documento PDF con objetivos...">{{ tarea.description }}</textarea>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Instrucciones para el alumno</label>
+                                <textarea name="description" rows="2" class="w-full text-xs border border-slate-200 rounded p-2 mb-2 bg-slate-50 focus:bg-white transition outline-none focus:border-blue-300">{{ tarea.description }}</textarea>
                                 
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Fecha Límite</label>
-                                <input type="date" name="deadline" value="{{ tarea.deadline }}" class="w-full text-xs border border-slate-200 rounded p-2 mb-3">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fecha de Vencimiento</label>
+                                <input type="date" name="deadline" value="{{ tarea.deadline }}" class="w-full text-xs border border-slate-200 rounded p-2 mb-3 bg-slate-50 focus:bg-white transition outline-none focus:border-blue-300">
                                 
-                                <button type="submit" class="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded hover:bg-slate-700">Guardar Cambios</button>
+                                <button type="submit" class="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded hover:bg-slate-700 transition">Guardar Cambios</button>
                             </form>
+
+                            <div class="border-t border-slate-100 pt-3 mt-3">
+                                <form action="/docente/delete_assignment" method="POST" onsubmit="return confirm('¿Estás seguro de ELIMINAR este avance?\n\nCUIDADO: Se borrarán todas las tareas que los estudiantes hayan subido a este avance.')">
+                                    <input type="hidden" name="assignment_id" value="{{ tarea.id }}">
+                                    <button type="submit" class="w-full text-red-500 hover:text-red-700 text-[10px] font-bold uppercase flex items-center justify-center gap-1 transition">
+                                        <i class="fa-solid fa-trash"></i> Eliminar este avance
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                     {% endfor %}
+
+                    <form action="/docente/add_assignment" method="POST" class="pt-2">
+                        <button type="submit" class="w-full border-2 border-dashed border-slate-300 text-slate-500 font-bold py-3 rounded-xl hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid fa-plus-circle"></i> Agregar Nuevo Avance
+                        </button>
+                    </form>
+
                 </div>
             </div>
         </div>
 
         <div class="lg:col-span-2">
-            <h2 class="font-bold text-2xl mb-6">Mis Estudiantes ({{ estudiantes|length }})</h2>
+            <h2 class="font-bold text-2xl mb-6 text-slate-800">Mis Estudiantes <span class="text-slate-400 text-lg font-normal ml-2">({{ estudiantes|length }})</span></h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {% for e in estudiantes %}
-                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition group relative">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition group relative hover:border-blue-200">
                     <div class="flex justify-between items-start mb-2">
                         <div>
-                            <h3 class="font-bold text-lg text-slate-800 group-hover:text-blue-600 transition">{{ e.full_name }}</h3>
-                            <p class="text-xs text-slate-500">{{ e.registro }}</p>
+                            <h3 class="font-bold text-lg text-slate-800 group-hover:text-blue-700 transition leading-tight">{{ e.full_name }}</h3>
+                            <p class="text-xs text-slate-500 font-mono mt-1">{{ e.registro }}</p>
                         </div>
-                        <span class="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded">{{ e.practicum_level }}</span>
+                        <span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">{{ e.practicum_level }}</span>
                     </div>
 
-                    <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
-                        <span class="flex items-center gap-1"><i class="fa-solid fa-clock"></i> {{ e.total_hours }} hrs</span>
-                        <span class="flex items-center gap-1"><i class="fa-solid fa-folder"></i> {{ e.documents|selectattr("status", "equalto", "VALIDADO")|list|length }}/4 Docs</span>
+                    <div class="flex items-center gap-4 text-xs text-slate-500 mb-4 mt-3 border-t border-slate-50 pt-3">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-clock text-slate-300"></i> <strong class="text-slate-700">{{ e.total_hours }}</strong> hrs</span>
+                        {% set validados = e.documents|selectattr("status", "equalto", "VALIDADO")|list|length %}
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-folder text-slate-300"></i> <strong class="{{ 'text-green-600' if validados == 4 else 'text-slate-700' }}">{{ validados }}/4</strong> Docs</span>
                     </div>
 
-                    <a href="/docente/ver/{{ e.id }}" class="block w-full text-center bg-slate-100 text-slate-600 font-bold py-2 rounded-lg hover:bg-blue-600 hover:text-white transition text-sm">
-                        Evaluar Avance <i class="fa-solid fa-arrow-right ml-1"></i>
+                    <a href="/docente/ver/{{ e.id }}" class="flex items-center justify-center gap-2 w-full bg-slate-50 text-slate-600 font-bold py-2.5 rounded-lg hover:bg-slate-900 hover:text-white transition text-xs uppercase tracking-wide group-hover:shadow-lg">
+                        Evaluar Estudiante <i class="fa-solid fa-arrow-right ml-1 opacity-60"></i>
                     </a>
                 </div>
                 {% else %}
-                <div class="col-span-2 text-center py-10 bg-white rounded-xl border border-dashed border-slate-300 text-slate-400">
-                    No tienes estudiantes activos asignados.
+                <div class="col-span-2 text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300 text-slate-400">
+                    <i class="fa-solid fa-user-graduate text-4xl mb-3 text-slate-200"></i>
+                    <p>No tienes estudiantes activos asignados todavía.</p>
                 </div>
                 {% endfor %}
             </div>
