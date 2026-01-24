@@ -46,7 +46,6 @@
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     .snap-container { -webkit-overflow-scrolling: touch; }
     
-    /* Estilo para los inputs de la tabla */
     .table-input {
         width: 100%;
         background: transparent;
@@ -213,7 +212,7 @@
                                       <td colspan="2" class="p-3">
                                           <label class="block text-[9px] text-slate-400 font-bold uppercase mb-1">Docente de Materia (Turno)</label>
                                           <select id="input-docente-materia" required class="table-input cursor-pointer bg-white">
-                                              <option value="">Cargando docentes...</option>
+                                              <option value="">Cargando horarios...</option>
                                           </select>
                                       </td>
                                   </tr>
@@ -246,14 +245,6 @@
 
   <script>
     let nivelActual = "";
-    let docentesCache = [];
-
-    window.onload = async () => {
-        try {
-            const res = await fetch('/api/docentes_materia');
-            docentesCache = await res.json();
-        } catch(e) { console.error("Error cargando docentes materia"); }
-    };
 
     function cargarNivel(nivel) {
         nivelActual = nivel;
@@ -320,33 +311,45 @@
 
     const modal = document.getElementById('modal');
     
-    function abrirModal(id, nombre) {
+    // --- FUNCIÓN CORREGIDA PARA CARGAR SOLO EL NIVEL CORRECTO ---
+    async function abrirModal(id, nombre) {
         document.getElementById('input-tutor-id').value = id;
         document.getElementById('modal-tutor-nombre').innerText = nombre;
         document.getElementById('display-nivel').innerText = `Practicum ${nivelActual}`;
         
         const select = document.getElementById('input-docente-materia');
-        select.innerHTML = '<option value="">-- Selecciona tu Turno --</option>';
-        
-        const nivelRomano = nivelActual; 
-        
-        const docentesFiltrados = docentesCache.filter(d => d.name.includes(`Practicum ${nivelRomano}`));
-        
-        if(docentesFiltrados.length === 0) {
-             const opt = document.createElement('option');
-             opt.innerText = "No se encontraron docentes para este nivel";
-             select.appendChild(opt);
-        } else {
-            docentesFiltrados.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d.id;
-                opt.innerText = d.name; 
-                select.appendChild(opt);
-            });
-        }
+        select.innerHTML = '<option value="">Cargando horarios...</option>';
+        select.disabled = true;
 
         modal.classList.remove('hidden');
+
+        try {
+            // AQUI ESTÁ LA CLAVE: Pedimos a la API solo el nivel actual (Ej: ?level=II)
+            const res = await fetch(`/api/docentes_materia?level=${nivelActual}`);
+            const docentes = await res.json();
+            
+            select.innerHTML = '<option value="">-- Selecciona tu Turno --</option>';
+            
+            if(docentes.length === 0) {
+                 const opt = document.createElement('option');
+                 opt.innerText = "No se encontraron docentes para este nivel";
+                 select.appendChild(opt);
+            } else {
+                docentes.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.innerText = d.name;
+                    select.appendChild(opt);
+                });
+            }
+            select.disabled = false;
+
+        } catch(e) {
+            console.error(e);
+            select.innerHTML = '<option value="">Error cargando lista</option>';
+        }
     }
+    // ------------------------------------------------------------
     
     function cerrarModal() { modal.classList.add('hidden'); }
 
