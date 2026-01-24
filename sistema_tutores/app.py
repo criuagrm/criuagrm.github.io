@@ -544,10 +544,13 @@ def admin_dashboard():
     
     docs_pendientes = StudentDocument.query.filter_by(status='REVISION').all()
     pendientes_registro = StudentProfile.query.filter_by(status='PENDIENTE').all()
+    # AGREGAR ESTA LÍNEA PARA QUE APAREZCAN LOS ACTIVOS
+    estudiantes_activos = StudentProfile.query.filter_by(status='ACTIVO').all()
     
     return render_template('admin_dashboard.html', 
                            docs_pendientes=docs_pendientes, 
-                           pendientes_registro=pendientes_registro)
+                           pendientes_registro=pendientes_registro,
+                           activos=estudiantes_activos) # PASAR A LA PLANTILLA
 
 @app.route('/admin/validate_doc', methods=['POST'])
 @login_required
@@ -638,8 +641,16 @@ def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor, nombre_doce
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=11)
-    fecha = datetime.datetime.now().strftime("%d de %B de %Y")
+    
+    # --- FECHA EN ESPAÑOL MANUAL ---
+    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    now = datetime.datetime.now()
+    fecha = f"{now.day} de {meses[now.month - 1]} de {now.year}"
+    # -----------------------------------
+
     pdf.cell(0, 10, txt=f"Santa Cruz, {fecha}", ln=1, align='R'); pdf.ln(10)
+    
     pdf.set_font("Arial", 'B', size=11)
     pdf.cell(0, 5, txt="Señor:", ln=1)
     pdf.cell(0, 5, txt="Lic. Odin Rodríguez Mercado", ln=1)
@@ -647,9 +658,23 @@ def generar_carta_pdf(nombre, registro, carnet, nivel, nombre_tutor, nombre_doce
     pdf.cell(0, 5, txt="Presente.-", ln=1); pdf.ln(15)
     pdf.cell(0, 10, txt=f"REF: SOLICITUD DE TUTOR PARA PRACTICUM {nivel}", ln=1, align='R'); pdf.ln(10)
     pdf.set_font("Arial", size=11)
-    pdf.multi_cell(0, 8, "Mediante la presente, solicito formalmente la asignación de tutoría...")
-    pdf.cell(0, 10, f"Estudiante: {nombre} - Registro: {registro}", ln=1)
-    pdf.cell(0, 10, f"Tutor Tesis: {nombre_tutor}", ln=1)
+    pdf.multi_cell(0, 8, "Mediante la presente, solicito formalmente la asignación de tutoría. A continuación detallo mis datos y el docente seleccionado:"); pdf.ln(10)
+    
+    # Tabla de datos
+    pdf.set_fill_color(240, 240, 240); pdf.set_font("Arial", 'B', size=10)
+    w_label = 60; w_data = 130; h_row = 10
+    
+    pdf.cell(w_label, h_row, "NOMBRE:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre).upper(), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "REGISTRO:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(registro), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "CI:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(carnet), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, f"PRACTICUM {nivel}", 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "DOCENTE MATERIA:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_docente_materia), 1, 1, 'L')
+    pdf.set_font("Arial", 'B', size=10); pdf.cell(w_label, h_row, "TUTOR TESIS:", 1, 0, 'L', True); pdf.set_font("Arial", size=10); pdf.cell(w_data, h_row, str(nombre_tutor).upper(), 1, 1, 'L')
+    
+    pdf.ln(20); pdf.multi_cell(0, 8, "Sin otro particular, saludo a usted atentamente."); pdf.ln(30)
+    
+    pdf.cell(0, 5, txt="__________________________", ln=1, align='C'); pdf.cell(0, 5, txt=f"{nombre}", ln=1, align='C')
+    
     filename = f"solicitud_{registro}_{nivel}.pdf"
     pdf.output(filename)
     return filename
