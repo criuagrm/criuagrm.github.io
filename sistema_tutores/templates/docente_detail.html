@@ -13,47 +13,194 @@
         </a>
     </nav>
 
-    <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-6xl mx-auto px-6">
         <div class="flex justify-between items-end mb-10">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900">{{ e.full_name }}</h1>
-                <p class="text-slate-500">Registro: {{ e.registro }} • Tutor: {{ e.tutor.name }}</p>
+                <h1 class="text-3xl font-bold text-slate-900">{{ estudiante.full_name }}</h1>
+                <p class="text-slate-500">
+                    Registro: {{ estudiante.registro }} • 
+                    Tutor: {% if estudiante.tutor %}{{ estudiante.tutor.name }}{% else %}No asignado{% endif %} • 
+                    Estado: <span class="font-bold {% if estudiante.status == 'ACTIVO' %}text-green-600{% else %}text-yellow-600{% endif %}">{{ estudiante.status }}</span>
+                </p>
             </div>
-            <a href="{{ e.drive_folder_url }}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700">
+            {% if estudiante.drive_folder_url %}
+            <a href="{{ estudiante.drive_folder_url }}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700">
                 <i class="fa-brands fa-google-drive mr-2"></i> Ver Evidencias Drive
             </a>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-6 border-b pb-2"><i class="fa-solid fa-map mr-2 text-blue-600"></i> Plan de Trabajo</h2>
-            
-            {% if e.work_plan %}
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-400 uppercase">Título del Proyecto</h3>
-                        <p class="text-lg font-medium">{{ e.work_plan.title }}</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-400 uppercase">Objetivo General</h3>
-                            <p class="text-slate-700 mt-1 bg-slate-50 p-3 rounded-lg">{{ e.work_plan.general_objective }}</p>
-                        </div>
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-400 uppercase">Cronograma Propuesto</h3>
-                            <p class="text-slate-700 mt-1 bg-slate-50 p-3 rounded-lg">{{ e.work_plan.schedule }}</p>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="text-center py-10 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                    <i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i>
-                    <p>El estudiante aún no ha registrado su Plan de Trabajo.</p>
-                </div>
             {% endif %}
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Documentos del Estudiante -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-file-circle-check text-green-600"></i> Documentos Administrativos
+                </h2>
+                <div class="space-y-3 max-h-[400px] overflow-y-auto">
+                    {% for doc in estudiante.documents %}
+                    <div class="p-3 rounded-lg border {% if doc.status == 'VALIDADO' %}bg-green-50 border-green-200{% elif doc.status == 'RECHAZADO' %}bg-red-50 border-red-200{% else %}bg-slate-50 border-slate-100{% endif %}">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm font-bold">{{ doc.doc_type }}</p>
+                                <p class="text-xs text-slate-500">
+                                    {% if doc.status == 'VALIDADO' %}
+                                        <span class="text-green-600 font-bold">✓ Validado</span>
+                                    {% elif doc.status == 'REVISION' %}
+                                        <span class="text-yellow-600 font-bold">En revisión</span>
+                                    {% elif doc.status == 'RECHAZADO' %}
+                                        <span class="text-red-600 font-bold">✗ Rechazado</span>
+                                    {% else %}
+                                        <span class="text-slate-400">Pendiente</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            {% if doc.drive_link %}
+                            <a href="{{ doc.drive_link }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                <i class="fa-solid fa-link"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Resumen de Horas -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-blue-600"></i> Horas de Practicum
+                </h2>
+                <div class="text-center py-6">
+                    <div class="text-5xl font-bold text-slate-900 mb-2">{{ estudiante.total_hours() }}</div>
+                    <p class="text-sm text-slate-500">Horas validadas</p>
+                    <div class="mt-4">
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            {% set percent = (estudiante.total_hours() / 120) * 100 %}
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: {{ percent if percent <= 100 else 100 }}%"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">{{ estudiante.total_hours() }} de 120 horas requeridas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información General -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-graduate text-purple-600"></i> Información Académica
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase">Practicum</p>
+                        <p class="text-lg font-bold text-slate-900">Nivel {{ estudiante.practicum_level }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase">Cédula de Identidad</p>
+                        <p class="text-lg font-medium">{{ estudiante.ci }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase">Usuario Sistema</p>
+                        <p class="text-lg font-medium">{{ estudiante.user_account.username }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Entregas del Estudiante -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
+            <h2 class="text-xl font-bold text-slate-900 mb-6 border-b pb-2">
+                <i class="fa-solid fa-file-import mr-2 text-blue-600"></i> Entregas de Avances
+            </h2>
             
+            <div class="space-y-6">
+                {% for sub in estudiante.submissions|sort(attribute='assignment.order') %}
+                <div class="p-6 rounded-xl border {% if sub.status == 'APROBADO' %}bg-green-50 border-green-200{% elif sub.status == 'OBSERVADO' %}bg-yellow-50 border-yellow-200{% else %}bg-slate-50 border-slate-100{% endif %}">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">{{ sub.assignment.title }}</h3>
+                            <p class="text-sm text-slate-500">Orden: {{ sub.assignment.order }}</p>
+                            {% if sub.assignment.deadline %}
+                            <p class="text-sm text-slate-500">Fecha límite: {{ sub.assignment.deadline.strftime('%d/%m/%Y') }}</p>
+                            {% endif %}
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase 
+                            {% if sub.status == 'APROBADO' %}bg-green-100 text-green-800
+                            {% elif sub.status == 'EN_REVISION' %}bg-yellow-100 text-yellow-800
+                            {% elif sub.status == 'OBSERVADO' %}bg-red-100 text-red-800
+                            {% else %}bg-slate-100 text-slate-600{% endif %}">
+                            {{ sub.status }}
+                        </span>
+                    </div>
+                    
+                    {% if sub.assignment.description %}
+                    <div class="mb-4">
+                        <p class="text-sm font-bold text-slate-700 mb-1">Descripción:</p>
+                        <p class="text-slate-600">{{ sub.assignment.description }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if sub.content %}
+                    <div class="mb-4">
+                        <p class="text-sm font-bold text-slate-700 mb-1">Entrega del estudiante:</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            {% if sub.content.startswith('http') %}
+                                <a href="{{ sub.content }}" target="_blank" class="text-blue-600 hover:text-blue-800 break-words">
+                                    <i class="fa-solid fa-link mr-2"></i>{{ sub.content }}
+                                </a>
+                            {% else %}
+                                <p>{{ sub.content }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if sub.feedback %}
+                    <div class="mb-4">
+                        <p class="text-sm font-bold text-slate-700 mb-1">Tu feedback anterior:</p>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200">
+                            {{ sub.feedback }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if sub.status == 'EN_REVISION' %}
+                    <form action="/docente/review_submission" method="POST" class="mt-4">
+                        <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Feedback / Correcciones:</label>
+                            <textarea name="feedback" rows="3" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Escribe tus comentarios o correcciones aquí..." required></textarea>
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="submit" name="action" value="approve" class="flex-1 bg-green-600 text-white py-2 rounded-lg font-bold hover:bg-green-700 transition">
+                                <i class="fa-solid fa-check mr-2"></i>Aprobar
+                            </button>
+                            <button type="submit" name="action" value="reject" class="flex-1 bg-red-600 text-white py-2 rounded-lg font-bold hover:bg-red-700 transition">
+                                <i class="fa-solid fa-xmark mr-2"></i>Observar
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+                    
+                    {% if sub.submitted_at %}
+                    <p class="text-xs text-slate-500 mt-4">
+                        <i class="fa-solid fa-calendar mr-1"></i> 
+                        Enviado: {{ sub.submitted_at.strftime('%d/%m/%Y') }}
+                        {% if sub.approved_at %}
+                        | Aprobado: {{ sub.approved_at.strftime('%d/%m/%Y') }}
+                        {% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="text-center py-10 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    <i class="fa-solid fa-inbox text-3xl mb-2"></i>
+                    <p>El estudiante no tiene entregas registradas.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Bitácora de Horas -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-book-open text-orange-500"></i> Bitácora de Actividades
@@ -65,51 +212,81 @@
                                 <th class="px-3 py-2">Fecha</th>
                                 <th class="px-3 py-2">Actividad</th>
                                 <th class="px-3 py-2 text-right">Hrs</th>
+                                <th class="px-3 py-2 text-right">Estado</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            {% for log in e.logs %}
+                            {% for log in estudiante.logs|sort(attribute='date', reverse=true) %}
                             <tr>
-                                <td class="px-3 py-3 font-mono text-slate-500">{{ log.date }}</td>
-                                <td class="px-3 py-3">{{ log.activity }}</td>
+                                <td class="px-3 py-3 font-mono text-slate-500">{{ log.date.strftime('%d/%m/%Y') }}</td>
+                                <td class="px-3 py-3">
+                                    <div>
+                                        <p class="font-medium">{{ log.activity_type }}</p>
+                                        {% if log.activity_detail %}
+                                        <p class="text-xs text-slate-500">{{ log.activity_detail }}</p>
+                                        {% endif %}
+                                    </div>
+                                </td>
                                 <td class="px-3 py-3 text-right font-bold">{{ log.hours }}</td>
+                                <td class="px-3 py-3 text-right">
+                                    {% if log.is_validated %}
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-bold">
+                                        ✓ Validado
+                                    </span>
+                                    {% else %}
+                                    <form action="/docente/validate_hours/{{ estudiante.id }}" method="POST" class="inline">
+                                        <input type="hidden" name="log_id" value="{{ log.id }}">
+                                        <button type="submit" class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-bold hover:bg-yellow-200">
+                                            Validar
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% else %}
-                            <tr><td colspan="3" class="text-center py-4 text-slate-400">Sin registros</td></tr>
+                            <tr><td colspan="4" class="text-center py-4 text-slate-400">Sin registros de actividades</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Asistencia -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-clock text-green-600"></i> Registro de Asistencia
+                    <i class="fa-solid fa-calendar-check text-green-600"></i> Asistencia
                 </h2>
                 <div class="overflow-y-auto max-h-[400px]">
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-slate-400 uppercase bg-slate-50 sticky top-0">
                             <tr>
                                 <th class="px-3 py-2">Fecha</th>
-                                <th class="px-3 py-2">Entrada</th>
-                                <th class="px-3 py-2">Salida</th>
+                                <th class="px-3 py-2 text-center">Asistió</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            {% for att in e.attendance %}
+                            {% for att in estudiante.attendance|sort(attribute='date', reverse=true) %}
                             <tr>
-                                <td class="px-3 py-3 font-mono text-slate-500">{{ att.date }}</td>
-                                <td class="px-3 py-3 font-bold text-green-600">{{ att.entry_time }}</td>
-                                <td class="px-3 py-3 font-bold text-red-500">{{ att.exit_time }}</td>
+                                <td class="px-3 py-3 font-mono text-slate-500">{{ att.date.strftime('%d/%m/%Y') }}</td>
+                                <td class="px-3 py-3 text-center">
+                                    {% if att.attended %}
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-bold">
+                                        ✓ Presente
+                                    </span>
+                                    {% else %}
+                                    <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full font-bold">
+                                        ✗ Ausente
+                                    </span>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% else %}
-                            <tr><td colspan="3" class="text-center py-4 text-slate-400">Sin registros</td></tr>
+                            <tr><td colspan="2" class="text-center py-4 text-slate-400">Sin registros de asistencia</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 </body>
