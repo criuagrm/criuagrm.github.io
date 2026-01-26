@@ -800,5 +800,61 @@ def generar_reporte_academico(p):
     pdf.output(filename)
     return filename
 
+# Agregar estas rutas al final de tu app.py, antes de if __name__ == '__main__':
+
+@app.route('/api/tutores')
+def get_tutores():
+    """Obtiene todos los tutores con cupos disponibles"""
+    level = request.args.get('level', '')
+    
+    # Obtener todos los tutores
+    tutores = Tutor.query.all()
+    result = []
+    
+    for tutor in tutores:
+        # Calcular cupos ocupados
+        if level:
+            # Contar estudiantes con este tutor en este nivel específico
+            ocupados = StudentProfile.query.filter_by(
+                tutor_id=tutor.id,
+                practicum_level=level
+            ).count()
+        else:
+            # Contar todos los estudiantes con este tutor
+            ocupados = StudentProfile.query.filter_by(tutor_id=tutor.id).count()
+        
+        # Obtener cupo total para este nivel
+        campo_cupo = f"cupo_{level.lower()}" if level else "cupo_ii"
+        cupo_total = getattr(tutor, campo_cupo, 0)
+        
+        # Calcular cupos disponibles
+        cupos_disponibles = max(0, cupo_total - ocupados)
+        
+        result.append({
+            'id': tutor.id,
+            'name': tutor.name,
+            'phone': tutor.phone,
+            'email': tutor.email,
+            f'cupo_{level.lower()}': cupos_disponibles if level else 0,
+            'ocupados': ocupados,
+            'total': cupo_total
+        })
+    
+    return jsonify(result)
+
+@app.route('/download/carta/<filename>')
+def download_carta(filename):
+    """Sirve el archivo PDF generado"""
+    try:
+        return send_file(filename, as_attachment=True)
+    except FileNotFoundError:
+        return "Archivo no encontrado", 404
+
+# También necesitas esta función para inyectar la fecha actual en los templates
+@app.context_processor
+def inject_now():
+    return {'now': datetime.datetime.now()}
+
 if __name__ == '__main__':
     app.run(debug=True)
+
