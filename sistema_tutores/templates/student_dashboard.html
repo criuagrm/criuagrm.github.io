@@ -2,147 +2,241 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Panel - Estudiante</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Estudiante - Practicum</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-50 font-sans">
-    
-    <nav class="bg-white border-b px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center">CP</span>
-            Panel Estudiante
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 w-10 h-10 rounded-lg flex items-center justify-center font-bold">P</div>
+                <div>
+                    <h1 class="font-bold text-lg">Practicum {{ profile.practicum_level }}</h1>
+                    <p class="text-xs text-slate-400">{{ profile.full_name }}</p>
+                </div>
+            </div>
+            <a href="/logout" class="text-sm hover:text-red-400 transition"><i class="fa-solid fa-power-off"></i> Salir</a>
         </div>
-        <a href="/logout" class="text-sm text-red-600 font-bold">Salir</a>
     </nav>
 
-    <div x-data="{ tab: 'inicio' }" class="max-w-4xl mx-auto p-6">
-        
-        <div class="flex gap-2 overflow-x-auto mb-6 pb-2">
-            <button @click="tab = 'inicio'" :class="tab === 'inicio' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
-                <i class="fa-solid fa-house mr-1"></i> Inicio
-            </button>
-            <button @click="tab = 'plan'" :class="tab === 'plan' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
-                <i class="fa-solid fa-map mr-1"></i> Plan de Trabajo
-            </button>
-            <button @click="tab = 'bitacora'" :class="tab === 'bitacora' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
-                <i class="fa-solid fa-pen-to-square mr-1"></i> Bitácora
-            </button>
-            <button @click="tab = 'asistencia'" :class="tab === 'asistencia' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition">
-                <i class="fa-solid fa-clock mr-1"></i> Asistencia
-            </button>
-        </div>
+    <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <div x-show="tab === 'inicio'" class="animate-fade-in">
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-6">
-                <h2 class="text-2xl font-bold mb-2">Hola, {{ profile.full_name }}</h2>
-                <p class="text-slate-500 mb-6">Bienvenido a tu gestor de Practicum.</p>
-                <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 flex items-center justify-between">
-                    <div>
-                        <h3 class="font-bold text-blue-900">Carpeta Digital (Drive)</h3>
-                        <p class="text-sm text-blue-700">Sube aquí tus documentos firmados.</p>
-                    </div>
-                    <a href="{{ profile.drive_folder_url }}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700">Abrir</a>
-                </div>
-            </div>
-        </div>
-<div class="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-6 flex items-center justify-between">
-    <div>
-        <h3 class="font-bold text-slate-900">Cuaderno de Campo (PDF)</h3>
-        <p class="text-sm text-slate-500">Descarga tu bitácora y asistencia unificadas para imprimir.</p>
-    </div>
-    <a href="/student/descargar_portafolio" class="bg-slate-900 text-white px-4 py-2 rounded-lg font-bold hover:bg-slate-800">
-        <i class="fa-solid fa-file-pdf mr-2"></i> Descargar
-    </a>
-</div>
-        <div x-show="tab === 'plan'" style="display:none;">
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-                <h2 class="text-xl font-bold mb-6">Mi Plan de Trabajo</h2>
-                <form action="/student/save_plan" method="POST" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Título del Proyecto</label>
-                        <input type="text" name="title" value="{{ profile.work_plan.title if profile.work_plan else '' }}" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-red-500" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Objetivo General</label>
-                        <textarea name="general_objective" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-red-500" required>{{ profile.work_plan.general_objective if profile.work_plan else '' }}</textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Cronograma (Resumen)</label>
-                        <textarea name="schedule" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:border-red-500" required>{{ profile.work_plan.schedule if profile.work_plan else '' }}</textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800">Guardar Plan</button>
-                </form>
-            </div>
-        </div>
-
-        <div x-show="tab === 'bitacora'" style="display:none;">
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-6">
-                <h2 class="text-xl font-bold mb-4">Nueva Entrada de Bitácora</h2>
-                <form action="/student/add_log" method="POST" class="flex flex-col gap-4 md:flex-row md:items-end">
-                    <div class="flex-1">
-                        <label class="text-xs font-bold text-slate-400 uppercase">Fecha</label>
-                        <input type="date" name="date" class="w-full bg-slate-50 border p-2 rounded-lg" required>
-                    </div>
-                    <div class="flex-[3]">
-                        <label class="text-xs font-bold text-slate-400 uppercase">Actividad Realizada</label>
-                        <input type="text" name="activity" class="w-full bg-slate-50 border p-2 rounded-lg" placeholder="Ej: Entrevista con director..." required>
-                    </div>
-                    <div class="w-24">
-                        <label class="text-xs font-bold text-slate-400 uppercase">Horas</label>
-                        <input type="number" step="0.5" name="hours" class="w-full bg-slate-50 border p-2 rounded-lg" placeholder="4" required>
-                    </div>
-                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold h-[42px]"><i class="fa-solid fa-plus"></i></button>
-                </form>
-            </div>
-
-            <div class="space-y-3">
-                {% for log in profile.logs|reverse %}
-                <div class="bg-white p-4 rounded-xl border border-slate-100 flex justify-between items-center">
-                    <div>
-                        <p class="font-bold text-slate-800">{{ log.activity }}</p>
-                        <p class="text-xs text-slate-400">{{ log.date }}</p>
-                    </div>
-                    <span class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold">{{ log.hours }} Hrs</span>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div x-show="tab === 'asistencia'" style="display:none;">
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 mb-6">
-                <h2 class="text-xl font-bold mb-4">Marcar Asistencia</h2>
-                <form action="/student/add_attendance" method="POST" class="flex flex-col gap-4 md:flex-row md:items-end">
-                    <div class="flex-1">
-                        <label class="text-xs font-bold text-slate-400 uppercase">Fecha</label>
-                        <input type="date" name="date" class="w-full bg-slate-50 border p-2 rounded-lg" required>
-                    </div>
-                    <div class="flex-1">
-                        <label class="text-xs font-bold text-slate-400 uppercase">Entrada</label>
-                        <input type="time" name="entry" class="w-full bg-slate-50 border p-2 rounded-lg" required>
-                    </div>
-                    <div class="flex-1">
-                        <label class="text-xs font-bold text-slate-400 uppercase">Salida</label>
-                        <input type="time" name="exit" class="w-full bg-slate-50 border p-2 rounded-lg" required>
-                    </div>
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold h-[42px]"><i class="fa-solid fa-check"></i></button>
-                </form>
-            </div>
+        <div class="lg:col-span-4 space-y-6">
             
-            <div class="space-y-3">
-                {% for att in profile.attendance|reverse %}
-                <div class="bg-white p-4 rounded-xl border border-slate-100 flex justify-between items-center">
-                    <p class="text-sm font-bold text-slate-500 font-mono">{{ att.date }}</p>
-                    <div class="flex gap-4 text-sm">
-                        <span class="text-green-600"><i class="fa-solid fa-arrow-right-to-bracket"></i> {{ att.entry_time }}</span>
-                        <span class="text-red-500"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ att.exit_time }}</span>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-700 mb-4"><i class="fa-solid fa-folder-open mr-2"></i> Carpeta Administrativa</h3>
+                
+                {% if profile.drive_folder_url %}
+                <div class="mb-6">
+                    <a href="{{ profile.drive_folder_url }}" target="_blank" class="flex flex-col items-center justify-center w-full bg-blue-50 border-2 border-dashed border-blue-200 text-blue-600 font-bold py-4 rounded-xl hover:bg-blue-100 hover:border-blue-300 transition group">
+                        <i class="fa-brands fa-google-drive text-3xl mb-2 group-hover:scale-110 transition"></i>
+                        <span>Abrir Mi Carpeta Drive</span>
+                    </a>
+                    <div class="mt-3 p-3 bg-blue-50 text-blue-800 text-xs rounded-lg flex gap-2">
+                        <i class="fa-solid fa-circle-info mt-0.5"></i>
+                        <p><strong>Instrucciones:</strong> Sube tus documentos a esta carpeta y confirma abajo.</p>
                     </div>
                 </div>
-                {% endfor %}
+                {% else %}
+                <div class="mb-6 bg-yellow-50 border border-yellow-100 p-4 rounded-xl text-center">
+                    <div class="text-yellow-600 font-bold mb-1"><i class="fa-solid fa-clock"></i> Esperando Asignación</div>
+                    <p class="text-xs text-yellow-700">El Director aún no ha creado tu carpeta.</p>
+                </div>
+                {% endif %}
+
+                <div class="space-y-3">
+                    {% for doc in profile.documents %}
+                        {% if doc.doc_type == 'Evaluación de Tutor' and not evaluacion_activada %}
+                            {% else %}
+                            <div class="flex items-center justify-between p-3 rounded-lg border {{ 'bg-green-50 border-green-200' if doc.status == 'VALIDADO' else 'bg-slate-50 border-slate-100' }}">
+                                <div>
+                                    <p class="text-sm font-bold flex items-center gap-2">
+                                        {{ doc.doc_type }}
+                                        {% if doc.status == 'VALIDADO' %}<i class="fa-solid fa-circle-check text-green-500 text-xs"></i>{% endif %}
+                                    </p>
+                                    {% if doc.status == 'PENDIENTE' %}
+                                        <span class="text-[10px] text-slate-400">Pendiente de confirmación</span>
+                                    {% elif doc.status == 'REVISION' %}
+                                        <span class="text-[10px] text-yellow-600 font-bold"><i class="fa-solid fa-hourglass-half"></i> Revisando...</span>
+                                    {% elif doc.status == 'RECHAZADO' %}
+                                        <span class="text-[10px] text-red-600 font-bold">❌ Rechazado (Corregir)</span>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if doc.status in ['PENDIENTE', 'RECHAZADO'] %}
+                                <form action="/student/upload_doc" method="POST">
+                                    <input type="hidden" name="doc_id" value="{{ doc.id }}">
+                                    <button type="submit" class="text-xs bg-slate-800 text-white px-3 py-1.5 rounded hover:bg-slate-700 shadow font-bold transition">
+                                        Confirmar
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-700 mb-4"><i class="fa-solid fa-clipboard-list mr-2"></i> Reportes Finales</h3>
+                
+                <div class="mb-5">
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Reuniones con Tutor</span>
+                        <span class="text-sm font-bold text-slate-900">{{ profile.meeting_hours_count }} / 5</span>
+                    </div>
+                    {% set meet_percent = (profile.meeting_hours_count / 5) * 100 %}
+                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
+                        <div class="bg-indigo-500 h-2 rounded-full transition-all duration-500" style="width: {{ meet_percent if meet_percent < 100 else 100 }}%"></div>
+                    </div>
+                    
+                    {% if profile.meeting_hours_count >= 5 %}
+                        <a href="/download/asistencia_pdf" class="block w-full text-center bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 shadow-md transition">
+                            <i class="fa-solid fa-file-signature mr-1"></i> Descargar Hoja de Asistencia
+                        </a>
+                    {% else %}
+                        <button disabled class="block w-full text-center bg-slate-100 text-slate-400 py-2 rounded-lg text-xs font-bold cursor-not-allowed">
+                            <i class="fa-solid fa-lock mr-1"></i> Hoja Asistencia (Bloqueado)
+                        </button>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Horas Totales</span>
+                        <span class="text-sm font-bold text-slate-900">{{ profile.total_hours }} / 120</span>
+                    </div>
+                    
+                    {% if profile.total_hours >= 120 %}
+                        <a href="/download/bitacora_pdf" class="block w-full text-center bg-slate-800 text-white py-2 rounded-lg text-xs font-bold hover:bg-slate-700 shadow-md transition">
+                            <i class="fa-solid fa-book mr-1"></i> Descargar Bitácora Final
+                        </a>
+                    {% else %}
+                        <button disabled class="block w-full text-center bg-slate-100 text-slate-400 py-2 rounded-lg text-xs font-bold cursor-not-allowed">
+                            <i class="fa-solid fa-lock mr-1"></i> Bitácora Final (Bloqueado)
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="font-bold mb-4"><i class="fa-solid fa-stopwatch mr-2"></i> Registrar Actividad</h3>
+                    
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="mb-4 p-2 bg-red-500/20 border border-red-500 rounded text-xs text-red-200">
+                                {{ messages[0] }}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="/student/add_timelog" method="POST" class="space-y-3">
+                        <input type="date" name="date" class="w-full bg-slate-800 border-none rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500" required>
+                        <select name="activity_type" class="w-full bg-slate-800 border-none rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500" required>
+                            <option value="" disabled selected>Tipo de Actividad...</option>
+                            <option value="Reunión Tutor" class="font-bold text-yellow-300">⭐ Reunión con Tutor</option>
+                            <option value="Investigación">🔬 Investigación</option>
+                            <option value="Campo">🏢 Trabajo de Campo</option>
+                            <option value="Redacción">📝 Redacción</option>
+                        </select>
+                        <textarea name="activity_detail" rows="2" class="w-full bg-slate-800 border-none rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500" placeholder="Detalle breve..." required></textarea>
+                        <div class="flex gap-2">
+                            <input type="number" step="0.5" name="hours" placeholder="Hrs" class="w-20 bg-slate-800 border-none rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500" required>
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-500 rounded font-bold text-sm shadow-lg transition">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-8">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 min-h-[600px]">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-700 w-10 h-10 rounded-full flex items-center justify-center text-sm"><i class="fa-solid fa-graduation-cap"></i></span>
+                    Avance Académico
+                </h2>
+                
+                <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                    
+                    {% for sub in submissions %}
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 
+                        {{ 'bg-green-500 text-white' if sub.status == 'APROBADO' else 'bg-slate-200 text-slate-400' }}">
+                            {% if sub.status == 'APROBADO' %}
+                                <i class="fa-solid fa-check"></i>
+                            {% else %}
+                                <span class="font-bold">{{ sub.assignment.order }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl shadow-sm border 
+                        {{ 'border-green-200 bg-green-50' if sub.status == 'APROBADO' else 'border-slate-100 bg-white' }}">
+                            
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-slate-800">{{ sub.assignment.title }}</h3>
+                                    {% if sub.assignment.deadline %}
+                                    <p class="text-[10px] text-slate-500"><i class="fa-regular fa-calendar mr-1"></i> Vence: {{ sub.assignment.deadline }}</p>
+                                    {% endif %}
+                                </div>
+                                <span class="text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide
+                                {{ 'bg-yellow-100 text-yellow-700' if sub.status == 'EN_REVISION' else 
+                                   'bg-green-100 text-green-700' if sub.status == 'APROBADO' else 
+                                   'bg-red-100 text-red-700' if sub.status == 'OBSERVADO' else 'bg-slate-100 text-slate-500' }}">
+                                    {{ sub.status }}
+                                </span>
+                            </div>
+                            
+                            <p class="text-sm text-slate-500 mb-4">{{ sub.assignment.description }}</p>
+
+                            {% if sub.feedback %}
+                            <div class="bg-white/50 p-3 rounded-lg border border-slate-200 mb-4 text-sm text-slate-700">
+                                <span class="font-bold text-xs uppercase text-slate-400 block mb-1">Feedback Docente:</span>
+                                {{ sub.feedback }}
+                            </div>
+                            {% endif %}
+
+                            {% set prev_approved = True %}
+                            {% if loop.index0 > 0 %}
+                                {% if submissions[loop.index0 - 1].status != 'APROBADO' %}
+                                    {% set prev_approved = False %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if prev_approved %}
+                                {% if sub.status in ['BORRADOR', 'OBSERVADO'] %}
+                                <form action="/student/submit_assignment" method="POST">
+                                    <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                                    <div class="mb-3">
+                                        <input type="text" name="content" placeholder="Pega aquí el enlace a tu documento en Drive" class="w-full text-sm border border-slate-200 rounded p-2 bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                                    </div>
+                                    <button type="submit" class="w-full bg-slate-800 text-white py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition">
+                                        Enviar Avance
+                                    </button>
+                                </form>
+                                {% else %}
+                                    <p class="text-xs text-center text-slate-400 italic mt-2">
+                                        {% if sub.status == 'EN_REVISION' %} <i class="fa-solid fa-hourglass-start"></i> Esperando respuesta del docente... {% else %} Fase completada exitosamente. {% endif %}
+                                    </p>
+                                {% endif %}
+                            {% else %}
+                                <div class="flex items-center justify-center gap-2 text-slate-400 py-3 bg-slate-50 rounded-lg border border-dashed border-slate-200">
+                                    <i class="fa-solid fa-lock"></i> <span class="text-xs font-bold">Bloqueado (Completa el anterior)</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
             </div>
         </div>
 
     </div>
+
 </body>
 </html>
