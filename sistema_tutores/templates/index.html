@@ -209,14 +209,21 @@
 
   <script>
     let nivelActual = "";
-    let docentesCache = []; // Almacenamos la lista de profes aquí
+    let docentesCache = [];
+    let tutoresCache = [];
 
-    // 1. Cargar lista de docentes al iniciar la página
+    // 1. Cargar lista de docentes y tutores al iniciar la página
     window.onload = async () => {
         try {
-            const res = await fetch('/api/docentes_materia');
-            docentesCache = await res.json();
-        } catch(e) { console.error("Error cargando docentes materia"); }
+            // Cargar docentes (para materia)
+            const resDocentes = await fetch('/api/docentes_materia');
+            docentesCache = await resDocentes.json();
+            
+            // Cargar tutores (para tesis) - pero necesitamos crear esta ruta en app.py
+            // Por ahora, cargaremos desde el backend
+        } catch(e) { 
+            console.error("Error cargando datos iniciales:", e); 
+        }
     };
 
     function cargarNivel(nivel) {
@@ -239,18 +246,24 @@
         contenedor.innerHTML = '<div class="col-span-3 text-center py-10"><div class="inline-block w-6 h-6 border-2 border-slate-200 border-t-uagrm-red rounded-full animate-spin"></div></div>';
 
         try {
-            const res = await fetch(`/api/tutors?level=${nivelActual}`);
-            const tutores = await res.json();
+            // Necesitamos cargar todos los tutores desde la base de datos
+            // Vamos a hacer una llamada al backend para obtener los tutores
+            const response = await fetch(`/api/tutores?level=${nivelActual}`);
+            const tutores = await response.json();
             
             contenedor.innerHTML = "";
             
-            if(tutores.length === 0) {
+            if(!tutores || tutores.length === 0) {
                 contenedor.innerHTML = '<div class="col-span-3 text-center text-slate-500 text-sm">No hay docentes disponibles.</div>';
                 return;
             }
 
             tutores.forEach(t => {
-                const lleno = t.cupos_disponibles === 0;
+                // Determinar el cupo disponible para este nivel
+                const campo_cupo = `cupo_${nivelActual.toLowerCase()}`;
+                const cupo_disponible = t[campo_cupo] || 0;
+                const lleno = cupo_disponible <= 0;
+                
                 const card = document.createElement('div');
                 card.className = `bg-white p-5 rounded-xl border ${lleno ? 'border-slate-100 opacity-60' : 'border-slate-200 hover:border-uagrm-red hover:shadow-md'} transition group relative overflow-hidden`;
                 
@@ -265,20 +278,21 @@
                             ${t.name.charAt(0)}
                         </div>
                         <span class="${lleno ? 'bg-slate-100 text-slate-400' : 'bg-green-50 text-green-700'} px-2 py-1 rounded-md text-[10px] font-bold uppercase">
-                            ${lleno ? 'Agotado' : `${t.cupos_disponibles} Libres`}
+                            ${lleno ? 'Agotado' : `${cupo_disponible} Cupos`}
                         </span>
                     </div>
                     <h3 class="font-display font-bold text-slate-900 text-base mb-1 leading-tight line-clamp-1">${t.name}</h3>
                     <div class="space-y-1 mt-3 border-t border-slate-50 pt-3">
-                        <p class="text-xs text-slate-500 flex items-center gap-2"><i class="fa-solid fa-phone text-[10px] text-slate-300"></i> ${t.phone}</p>
-                        <p class="text-xs text-slate-500 flex items-center gap-2 line-clamp-1"><i class="fa-solid fa-envelope text-[10px] text-slate-300"></i> ${t.email}</p>
+                        <p class="text-xs text-slate-500 flex items-center gap-2"><i class="fa-solid fa-phone text-[10px] text-slate-300"></i> ${t.phone || 'Sin teléfono'}</p>
+                        <p class="text-xs text-slate-500 flex items-center gap-2 line-clamp-1"><i class="fa-solid fa-envelope text-[10px] text-slate-300"></i> ${t.email || 'Sin email'}</p>
                     </div>
                 `;
                 contenedor.appendChild(card);
             });
 
         } catch (error) {
-            contenedor.innerHTML = '<div class="col-span-3 text-center text-red-500 text-sm">Error de conexión.</div>';
+            console.error('Error cargando tutores:', error);
+            contenedor.innerHTML = '<div class="col-span-3 text-center text-red-500 text-sm">Error de conexión con el servidor.</div>';
         }
     }
 
@@ -289,32 +303,58 @@
         document.getElementById('modal-tutor-nombre').innerText = nombre;
         document.getElementById('modal-nivel').innerText = nivelActual;
         
-        // 2. Filtrar el select de docentes según el nivel actual
+        // Filtrar el select de docentes según el nivel actual
         const select = document.getElementById('input-docente-materia');
         select.innerHTML = '<option value="">-- Selecciona tu Turno --</option>';
         
-        const nivelRomano = nivelActual; // Ej: "II"
+        // Primero intentar cargar desde cache
+        const nivelRomano = nivelActual;
         
-        // Filtramos solo los profes que tengan "Practicum II" en su nombre
-        const docentesFiltrados = docentesCache.filter(d => d.name.includes(`Practicum ${nivelRomano}`));
-        
-        if(docentesFiltrados.length === 0) {
-             const opt = document.createElement('option');
-             opt.innerText = "No se encontraron docentes para este nivel";
-             select.appendChild(opt);
-        } else {
-            docentesFiltrados.forEach(d => {
+        if (docentesCache && docentesCache.length > 0) {
+            const docentesFiltrados = docentesCache.filter(d => 
+                d.name && d.name.includes(`Practicum ${nivelRomano}`)
+            );
+            
+            if(docentesFiltrados.length === 0) {
                 const opt = document.createElement('option');
-                opt.value = d.id;
-                opt.innerText = d.name; // Ej: "Practicum II - Turno Mañana"
+                opt.innerText = "No se encontraron docentes para este nivel";
                 select.appendChild(opt);
-            });
+            } else {
+                docentesFiltrados.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value = d.id;
+                    opt.innerText = d.name;
+                    select.appendChild(opt);
+                });
+            }
+        } else {
+            // Si no hay cache, cargar del servidor
+            fetch(`/api/docentes_materia?level=${nivelActual}`)
+                .then(res => res.json())
+                .then(docentes => {
+                    select.innerHTML = '<option value="">-- Selecciona tu Turno --</option>';
+                    docentes.forEach(d => {
+                        const opt = document.createElement('option');
+                        opt.value = d.id;
+                        opt.innerText = d.name;
+                        select.appendChild(opt);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error cargando docentes:', err);
+                    const opt = document.createElement('option');
+                    opt.innerText = "Error cargando docentes";
+                    select.appendChild(opt);
+                });
         }
 
         modal.classList.remove('hidden');
     }
     
-    function cerrarModal() { modal.classList.add('hidden'); }
+    function cerrarModal() { 
+        modal.classList.add('hidden'); 
+        document.getElementById('formSolicitud').reset();
+    }
 
     async function enviarSolicitud(e) {
         e.preventDefault();
@@ -325,35 +365,40 @@
 
         const datos = {
             tutor_id: parseInt(document.getElementById('input-tutor-id').value),
-            docente_id: document.getElementById('input-docente-materia').value, // DATO NUEVO
+            docente_id: parseInt(document.getElementById('input-docente-materia').value),
             nivel: nivelActual,
             nombre: document.getElementById('input-nombre').value,
             registro: document.getElementById('input-registro').value,
-            carnet: document.getElementById('input-carnet').value
+            ci: document.getElementById('input-carnet').value  // Cambiado de 'carnet' a 'ci'
         };
 
         try {
-            const res = await fetch('/api/solicitar', {
+            const res = await fetch('/api/register_student', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(datos)
             });
             const json = await res.json();
 
-            if (res.ok) {
-                // Descarga automática
-                window.location.href = json.pdf_url;
+            if (res.ok && json.success) {
+                // Crear un enlace temporal para descargar el PDF
+                const link = document.createElement('a');
+                link.href = `/download/carta/${json.carta_pdf}`;  // Asumiendo que tenemos esta ruta
+                link.download = json.carta_pdf;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
                 
                 alert("¡SOLICITUD REGISTRADA!\n\n1. Se está descargando tu carta.\n2. Imprímela y llévala a Dirección de Carrera.\n3. Cuando sea aprobada, podrás ingresar al sistema con tu Registro y Carnet.");
                 
                 cerrarModal();
-                fetchTutores();
-                e.target.reset();
+                fetchTutores(); // Actualizar la lista
             } else {
-                alert("Error: " + json.error);
+                alert("Error: " + (json.error || 'Error desconocido'));
             }
         } catch (err) {
-            alert("Error de conexión");
+            console.error('Error en solicitud:', err);
+            alert("Error de conexión con el servidor");
         } finally {
             btn.disabled = false;
             btn.innerText = txtOriginal;
