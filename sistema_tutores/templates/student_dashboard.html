@@ -49,33 +49,30 @@
 
                 <div class="space-y-3">
                     {% for doc in profile.documents %}
-                        {% if doc.doc_type == 'Evaluación de Tutor' and not evaluacion_activada %}
-                            {% else %}
-                            <div class="flex items-center justify-between p-3 rounded-lg border {{ 'bg-green-50 border-green-200' if doc.status == 'VALIDADO' else 'bg-slate-50 border-slate-100' }}">
-                                <div>
-                                    <p class="text-sm font-bold flex items-center gap-2">
-                                        {{ doc.doc_type }}
-                                        {% if doc.status == 'VALIDADO' %}<i class="fa-solid fa-circle-check text-green-500 text-xs"></i>{% endif %}
-                                    </p>
-                                    {% if doc.status == 'PENDIENTE' %}
-                                        <span class="text-[10px] text-slate-400">Pendiente de confirmación</span>
-                                    {% elif doc.status == 'REVISION' %}
-                                        <span class="text-[10px] text-yellow-600 font-bold"><i class="fa-solid fa-hourglass-half"></i> Revisando...</span>
-                                    {% elif doc.status == 'RECHAZADO' %}
-                                        <span class="text-[10px] text-red-600 font-bold">❌ Rechazado (Corregir)</span>
-                                    {% endif %}
-                                </div>
-                                
-                                {% if doc.status in ['PENDIENTE', 'RECHAZADO'] %}
-                                <form action="/student/upload_doc" method="POST">
-                                    <input type="hidden" name="doc_id" value="{{ doc.id }}">
-                                    <button type="submit" class="text-xs bg-slate-800 text-white px-3 py-1.5 rounded hover:bg-slate-700 shadow font-bold transition">
-                                        Confirmar
-                                    </button>
-                                </form>
+                        <div class="flex items-center justify-between p-3 rounded-lg border {{ 'bg-green-50 border-green-200' if doc.status == 'VALIDADO' else 'bg-slate-50 border-slate-100' }}">
+                            <div>
+                                <p class="text-sm font-bold flex items-center gap-2">
+                                    {{ doc.doc_type }}
+                                    {% if doc.status == 'VALIDADO' %}<i class="fa-solid fa-circle-check text-green-500 text-xs"></i>{% endif %}
+                                </p>
+                                {% if doc.status == 'PENDIENTE' %}
+                                    <span class="text-[10px] text-slate-400">Pendiente de confirmación</span>
+                                {% elif doc.status == 'REVISION' %}
+                                    <span class="text-[10px] text-yellow-600 font-bold"><i class="fa-solid fa-hourglass-half"></i> Revisando...</span>
+                                {% elif doc.status == 'RECHAZADO' %}
+                                    <span class="text-[10px] text-red-600 font-bold">❌ Rechazado (Corregir)</span>
                                 {% endif %}
                             </div>
-                        {% endif %}
+                            
+                            {% if doc.status in ['PENDIENTE', 'RECHAZADO'] %}
+                            <form action="/student/upload_doc" method="POST">
+                                <input type="hidden" name="doc_id" value="{{ doc.id }}">
+                                <button type="submit" class="text-xs bg-slate-800 text-white px-3 py-1.5 rounded hover:bg-slate-700 shadow font-bold transition">
+                                    Confirmar
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
                     {% endfor %}
                 </div>
             </div>
@@ -83,34 +80,17 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 <h3 class="font-bold text-slate-700 mb-4"><i class="fa-solid fa-clipboard-list mr-2"></i> Reportes Finales</h3>
                 
-                <div class="mb-5">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="text-xs font-bold text-slate-500 uppercase">Reuniones con Tutor</span>
-                        <span class="text-sm font-bold text-slate-900">{{ profile.meeting_hours_count }} / 5</span>
-                    </div>
-                    {% set meet_percent = (profile.meeting_hours_count / 5) * 100 %}
-                    <div class="w-full bg-slate-100 rounded-full h-2 mb-2">
-                        <div class="bg-indigo-500 h-2 rounded-full transition-all duration-500" style="width: {{ meet_percent if meet_percent < 100 else 100 }}%"></div>
-                    </div>
-                    
-                    {% if profile.meeting_hours_count >= 5 %}
-                        <a href="/download/asistencia_pdf" class="block w-full text-center bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 shadow-md transition">
-                            <i class="fa-solid fa-file-signature mr-1"></i> Descargar Hoja de Asistencia
-                        </a>
-                    {% else %}
-                        <button disabled class="block w-full text-center bg-slate-100 text-slate-400 py-2 rounded-lg text-xs font-bold cursor-not-allowed">
-                            <i class="fa-solid fa-lock mr-1"></i> Hoja Asistencia (Bloqueado)
-                        </button>
-                    {% endif %}
-                </div>
-
                 <div>
                     <div class="flex justify-between items-end mb-1">
                         <span class="text-xs font-bold text-slate-500 uppercase">Horas Totales</span>
-                        <span class="text-sm font-bold text-slate-900">{{ profile.total_hours }} / 120</span>
+                        <span class="text-sm font-bold text-slate-900">{{ profile.total_hours() }} / 120</span>
+                    </div>
+                    {% set total_percent = (profile.total_hours() / 120) * 100 %}
+                    <div class="w-full bg-slate-100 rounded-full h-2 mb-4">
+                        <div class="bg-indigo-500 h-2 rounded-full transition-all duration-500" style="width: {{ total_percent if total_percent < 100 else 100 }}%"></div>
                     </div>
                     
-                    {% if profile.total_hours >= 120 %}
+                    {% if profile.total_hours() >= 120 %}
                         <a href="/download/bitacora_pdf" class="block w-full text-center bg-slate-800 text-white py-2 rounded-lg text-xs font-bold hover:bg-slate-700 shadow-md transition">
                             <i class="fa-solid fa-book mr-1"></i> Descargar Bitácora Final
                         </a>
@@ -134,7 +114,7 @@
                         {% endif %}
                     {% endwith %}
 
-                    <form action="/student/add_timelog" method="POST" class="space-y-3">
+                    <form action="{{ url_for('student_add_log') }}" method="POST" class="space-y-3">
                         <input type="date" name="date" class="w-full bg-slate-800 border-none rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500" required>
                         <select name="activity_type" class="w-full bg-slate-800 border-none rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-blue-500" required>
                             <option value="" disabled selected>Tipo de Actividad...</option>
@@ -162,7 +142,7 @@
                 
                 <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
                     
-                    {% for sub in submissions %}
+                    {% for sub in profile.submissions %}
                     <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                         <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 
                         {{ 'bg-green-500 text-white' if sub.status == 'APROBADO' else 'bg-slate-200 text-slate-400' }}">
@@ -202,7 +182,7 @@
 
                             {% set prev_approved = True %}
                             {% if loop.index0 > 0 %}
-                                {% if submissions[loop.index0 - 1].status != 'APROBADO' %}
+                                {% if profile.submissions[loop.index0 - 1].status != 'APROBADO' %}
                                     {% set prev_approved = False %}
                                 {% endif %}
                             {% endif %}
