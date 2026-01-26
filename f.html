@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuestionarios de Filosofía</title>
+    <title>Cuestionarios de Filosofía y Antropología</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -13,6 +13,12 @@
             --error: #e74c3c;
             --light: #ecf0f1;
             --dark: #2c3e50;
+            --purple: #9b59b6;
+            --orange: #e67e22;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -52,11 +58,13 @@
         .menu-screen h1 {
             color: var(--primary);
             margin-bottom: 10px;
+            font-size: 1.8rem;
         }
 
         .menu-screen p {
             color: #7f8c8d;
             margin-bottom: 30px;
+            font-size: 1rem;
         }
 
         .theme-btn {
@@ -70,6 +78,7 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
+            width: 100%;
         }
 
         .theme-btn:hover {
@@ -93,14 +102,17 @@
             margin-bottom: 20px;
             border-bottom: 2px solid var(--light);
             padding-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .badge {
-            background: var(--primary);
+            background: var(--accent);
             color: white;
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.9rem;
+            white-space: nowrap;
         }
 
         #timer {
@@ -133,6 +145,8 @@
             font-size: 1rem;
             color: #555;
             position: relative;
+            word-wrap: break-word;
+            white-space: normal;
         }
 
         .option-btn:hover:not(.disabled) {
@@ -188,6 +202,7 @@
             margin-top: 20px;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
         }
 
         .btn {
@@ -197,6 +212,7 @@
             font-size: 1rem;
             border: none;
             transition: 0.2s;
+            min-width: 150px;
         }
 
         .btn-primary {
@@ -223,10 +239,161 @@
             display: none;
         }
 
+        /* Media Queries para Responsividad */
+
+        /* Tablets y pantallas medianas */
+        @media (max-width: 768px) {
+            .container {
+                width: 92%;
+            }
+            
+            .menu-screen {
+                padding: 30px;
+            }
+            
+            .theme-btn {
+                font-size: 1.1rem;
+                padding: 18px;
+            }
+            
+            .quiz-screen {
+                padding: 25px;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Móviles */
         @media (max-width: 600px) {
-            .menu-screen { padding: 20px; }
-            .theme-btn { font-size: 1rem; padding: 15px; }
-            .score-circle { width: 120px; height: 120px; font-size: 2.5rem; }
+            .menu-screen { 
+                padding: 25px 20px; 
+            }
+            
+            .menu-screen h1 {
+                font-size: 1.5rem;
+            }
+            
+            .theme-btn { 
+                font-size: 1rem; 
+                padding: 16px 12px;
+                margin: 8px 0;
+                white-space: normal;
+                word-wrap: break-word;
+            }
+            
+            .score-circle { 
+                width: 120px; 
+                height: 120px; 
+                font-size: 2.5rem; 
+            }
+            
+            .quiz-screen {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+            
+            .option-btn {
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        /* Móviles pequeños */
+        @media (max-width: 400px) {
+            .container {
+                width: 95%;
+                margin: 10px;
+                min-height: auto;
+            }
+            
+            .menu-screen {
+                padding: 20px 15px;
+            }
+            
+            .theme-btn {
+                font-size: 0.95rem;
+                padding: 14px 10px;
+            }
+            
+            .quiz-screen {
+                padding: 15px;
+            }
+            
+            .question-text {
+                font-size: 1rem;
+            }
+            
+            .option-btn {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .badge, #progress, #timer {
+                font-size: 0.85rem;
+                padding: 4px 8px;
+            }
+            
+            .score-circle {
+                width: 100px;
+                height: 100px;
+                font-size: 2rem;
+            }
+        }
+
+        /* Modo landscape en móviles */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 5px;
+            }
+            
+            .menu-screen {
+                padding: 15px;
+            }
+            
+            .theme-btn {
+                padding: 10px;
+                margin: 5px 0;
+            }
+        }
+
+        /* Prevenir zoom en inputs en iOS */
+        @media (max-width: 768px) {
+            .option-btn:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* Asegurar que los botones sean táctiles adecuadamente */
+        @media (hover: none) and (pointer: coarse) {
+            .option-btn {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -243,7 +410,15 @@
         </button>
         
         <button class="theme-btn" onclick="startQuiz(2)">
-            Tema 2: Antropología y Filosofía
+            Tema 2: Introducción a la Antropología
+        </button>
+        
+        <button class="theme-btn" onclick="startQuiz(3)">
+            Tema 3: Problemáticas Antropología Contemporánea
+        </button>
+        
+        <button class="theme-btn" onclick="startQuiz(4)">
+            Tema 4: Filosofía
         </button>
     </div>
 
@@ -332,7 +507,7 @@
         { q: "La antropología filosófica se pregunta fundamentalmente:", options: ["¿Cuántas culturas existen?", "¿Qué es el ser humano?", "¿Cómo excavar un sitio arqueológico?", "¿Qué idioma es más antiguo?"], a: 1 },
         { q: "Conceptos como conciencia, libertad y dignidad humana son centrales en:", options: ["Antropología cultural", "Antropología lingüística", "Antropología filosófica", "Antropología arqueológica"], a: 2 },
         { q: "Kant, Scheler y Heidegger son representantes de:", options: ["Antropología biológica", "Antropología filosófica", "Antropología evolucionista", "Antropología arqueológica"], a: 1 },
-        { q: "La relación entre antropología y filosofía se basa en que ambas:", options: ["Rechazan el estudio empírico", "Buscan comprender al ser humano", "Se oponen metodológicamente", "Tienen el mismo objeto y método"], a: 2 }, // Fiel al documento: Clave 18 C
+        { q: "La relación entre antropología y filosofía se basa en que ambas:", options: ["Rechazan el estudio empírico", "Buscan comprender al ser humano", "Se oponen metodológicamente", "Tienen el mismo objeto y método"], a: 2 },
         { q: "La antropología aporta principalmente:", options: ["Preguntas abstractas sin datos", "Evidencia empírica y análisis comparativo", "Argumentos matemáticos", "Leyes universales inmutables"], a: 1 },
         { q: "La importancia de la antropología en el mundo actual radica en que:", options: ["Homogeneiza las culturas", "Refuerza estereotipos", "Ayuda a comprender la diversidad cultural", "Elimina las diferencias sociales"], a: 2 },
         { q: "La antropología contribuye a evitar:", options: ["El diálogo intercultural", "El análisis social", "Prejuicios y discriminación", "El pensamiento crítico"], a: 2 },
@@ -344,7 +519,75 @@
         { q: "La etnografía es:", options: ["Un método experimental", "Una técnica matemática", "La descripción profunda de una cultura", "Un tipo de encuesta estadística"], a: 2 },
         { q: "El trabajo de campo es fundamental porque:", options: ["Sustituye la teoría", "Permite comprender la experiencia humana directa", "Elimina la subjetividad", "Evita el contacto cultural"], a: 1 },
         { q: "Una pregunta propia de la antropología filosófica es:", options: ["¿Qué herramientas usaban las sociedades antiguas?", "¿Qué idioma se habla en una región?", "¿Cuál es el sentido de la existencia?", "¿Qué normas sociales existen?"], a: 2 },
-        { q: "La pregunta “¿Cuál es la relación entre el cuerpo y la mente?” pertenece a:", options: ["Antropología arqueológica", "Antropología cultural", "Antropología filosófica", "Antropología lingüística"], a: 2 }
+        { q: "La pregunta \"¿Cuál es la relación entre el cuerpo y la mente?\" pertenece a:", options: ["Antropología arqueológica", "Antropología cultural", "Antropología filosófica", "Antropología lingüística"], a: 2 }
+    ];
+
+    // TEMA 3: PROBLEMÁTICAS DE LA ANTROPOLOGÍA CONTEMPORÁNEA
+    const bancoTema3 = [
+        { q: "¿Cuál es el núcleo del debate sobre la objetividad en la investigación antropológica?", options: ["La falta de herramientas tecnológicas para registrar datos", "La imposibilidad de eliminar por completo la carga cultural y axiológica del investigador", "La resistencia de las comunidades a ser grabadas", "La ausencia de un método científico en las ciencias sociales"], a: 1 },
+        { q: "En el contexto de la reflexividad, ¿qué implica reconocer la subjetividad del antropólogo?", options: ["Aceptar que cualquier interpretación personal es válida sin pruebas", "Un análisis crítico de la posición del investigador y cómo esta afecta la construcción del conocimiento", "Eliminar las emociones del investigador durante el trabajo de campo", "Dar prioridad absoluta a la visión del observador sobre la del observado"], a: 1 },
+        { q: "El concepto de \"extractivismo académico\" se refiere principalmente a:", options: ["La excavación ilegal de sitios arqueológicos", "La práctica de recolectar información de una comunidad sin ofrecer beneficios ni retorno de conocimiento", "El uso de mano de obra indígena para tareas administrativas", "La competencia entre universidades por fondos de investigación"], a: 1 },
+        { q: "¿Cómo distorsiona el etnocentrismo la interpretación de los rituales ajenos?", options: ["Al permitir una descripción técnica y neutral", "Al evaluarlos como formas \"primitivas\" o \"inferiores\" basándose en parámetros occidentales", "Al promover la idea de que todas las culturas son igualmente complejas", "Al enfocarse solo en las similitudes entre la cultura propia y la ajena"], a: 1 },
+        { q: "¿Cuál es la premisa fundamental del relativismo cultural propuesto por la antropología?", options: ["Cada cultura debe ser comprendida exclusivamente desde sus propios valores y parámetros", "Cualquier práctica cultural es moralmente aceptable si el grupo la defiende", "Las culturas deben permanecer aisladas para no contaminarse", "Existen leyes universales que todas las culturas deben seguir"], a: 0 },
+        { q: "¿Qué implica la \"crisis de representación\" en la antropología?", options: ["La falta de presupuesto para misiones antropológicas", "El cuestionamiento de la autoridad del antropólogo para hablar y escribir en nombre de otros", "La dificultad de encontrar antropólogos que quieran viajar a zonas remotas", "La disminución de publicaciones etnográficas en las editoriales"], a: 1 },
+        { q: "¿Por qué el consentimiento informado es un pilar ético en el trabajo de campo?", options: ["Para que el investigador pueda comercializar los datos legalmente", "Para asegurar que la comunidad comprenda los fines de la investigación y acepte participar voluntariamente", "Como una formalidad administrativa necesaria para obtener el título", "Para obligar a los informantes a decir siempre la verdad"], a: 1 },
+        { q: "¿Qué fenómeno ha propiciado el estudio de las \"identidades híbridas\" en la antropología?", options: ["El aislamiento geográfico de las comunidades", "La globalización y el contacto acelerado entre diversas culturas", "La imposición de una sola cultura global uniforme", "La herencia genética compartida entre humanos"], a: 1 },
+        { q: "En el análisis de cultura y poder, ¿qué papel juega el colonialismo?", options: ["Es un evento del pasado sin relevancia en la antropología actual", "Estableció estructuras de desigualdad que influyen en cómo se representan y estudian las culturas", "Facilitó el trabajo de campo al pacificar a las poblaciones", "Permitió que todas las culturas tuvieran acceso igualitario a la ciencia"], a: 1 },
+        { q: "¿Cuál es un reto metodológico común respecto a las barreras lingüísticas?", options: ["El costo elevado de contratar traductores profesionales", "La pérdida de matices simbólicos y significados profundos al no dominar el idioma local", "La imposibilidad física de aprender más de un idioma", "Que las comunidades olviden su idioma al hablar con el investigador"], a: 1 },
+        { q: "La \"autorepresentación\" en la antropología actual busca:", options: ["Que el antropólogo escriba su autobiografía", "Que los miembros de la comunidad tengan los medios para narrar su propia realidad", "Que la comunidad se disfrace para cumplir expectativas turísticas", "Que el gobierno decida cómo representar a los pueblos indígenas"], a: 1 },
+        { q: "¿Por qué se afirma que la cultura no es estática?", options: ["Porque está en constante transformación debido a interacciones sociales y cambios globales", "Porque las personas viajan más hoy en día que en el pasado", "Porque las leyes internacionales prohíben tradiciones centenarias", "Porque los antropólogos inventan nuevos términos constantemente"], a: 0 },
+        { q: "¿Qué significa que el trabajo de campo sea \"la base de la investigación\"?", options: ["Que el investigador debe trabajar físicamente en la agricultura con el grupo", "Que el conocimiento se genera a partir de la convivencia directa y prolongada con el grupo estudiado", "Que no se puede hacer antropología leyendo libros", "Que el antropólogo debe vivir permanentemente en la comunidad"], a: 1 },
+        { q: "En relación con el género, la antropología contemporánea analiza:", options: ["Las diferencias biológicas inalterables entre sexos", "Cómo las construcciones culturales de género refuerzan o desafían estructuras de poder", "La superioridad de la familia nuclear sobre otras formas", "Únicamente el papel de las mujeres en sociedades tribales"], a: 1 },
+        { q: "Un ejemplo de \"identidad híbrida\" en la globalización sería:", options: ["Una persona que solo habla su dialecto nativo y nunca ha salido de su pueblo", "Un joven indígena que usa redes sociales para promover música rap en su lengua materna", "Un científico que estudia especies animales en varios países", "La adopción de una religión extranjera abandonando totalmente la propia"], a: 1 },
+        { q: "¿Cuál es la crítica principal a la representación de culturas como \"exóticas\"?", options: ["Que deshumaniza a los sujetos y los presenta como objetos de curiosidad", "Que hace los libros demasiado entretenidos para ser ciencia", "Que atrae demasiado turismo a zonas protegidas", "Que impide que el antropólogo cobre sus honorarios"], a: 0 },
+        { q: "¿Cómo influye el \"tiempo limitado\" en los problemas metodológicos?", options: ["Obliga al antropólogo a escribir más rápido", "Puede llevar a conclusiones superficiales al no captar ciclos sociales completos", "Hace que la comunidad se aburra del investigador", "Impide que el investigador use la vestimenta local"], a: 1 },
+        { q: "El reconocimiento de las \"dinámicas de poder\" implica aceptar que:", options: ["El investigador posee a menudo un estatus de privilegio frente a la comunidad", "Solo las personas con poder político deben ser estudiadas", "El antropólogo debe convertirse en el líder de la comunidad", "La cultura no tiene relación con la economía o la política"], a: 0 },
+        { q: "¿Qué busca resolver la \"escritura transparente\"?", options: ["Usar un lenguaje tan simple que un niño lo entienda", "Hacer explícitos los sesgos y la relación del autor con sus datos", "Escribir solo hechos positivos para no ofender", "Publicar los nombres reales de todos los informantes sin permiso"], a: 1 },
+        { q: "¿Cómo afecta la migración masiva a las problemáticas antropológicas?", options: ["Desafía la idea de culturas vinculadas a un territorio fijo y único", "Facilita el campo al traer comunidades a la ciudad del investigador", "Hace que todos los humanos hablen el mismo idioma", "Elimina la necesidad de estudiar la historia de los pueblos"], a: 0 },
+        { q: "¿Qué se entiende por \"confidencialidad de datos\" en ética?", options: ["No mostrar los resultados a la comunidad estudiada", "Proteger la identidad de los informantes para evitarles daños o represalias", "Vender información solo a gobiernos que paguen bien", "Borrar todos los datos una vez terminada la tesis"], a: 1 },
+        { q: "¿Por qué es problemática la descripción de culturas como \"atrasadas\"?", options: ["Porque ignora su capacidad de agencia, cambio y adaptación histórica", "Porque hace que los museos parezcan aburridos", "Porque es la única forma de conseguir fondos de conservación", "Porque todas las culturas tienen la misma tecnología"], a: 0 },
+        { q: "Las \"políticas estatales sobre pueblos indígenas\" son una problemática porque:", options: ["El estado siempre tiene la razón sobre cómo organizar la sociedad", "A menudo chocan con las formas de vida tradicionales y generan tensiones de poder", "Obligan a todos los indígenas a vivir en ciudades modernas", "Hacen que el antropólogo gane más dinero como consultor"], a: 1 },
+        { q: "En antropología, ¿qué significa \"agencia\" de la comunidad?", options: ["La oficina gubernamental encargada de censar grupos étnicos", "La capacidad de los sujetos para actuar, tomar decisiones e influir en su destino", "El contrato que firma el antropólogo con su universidad", "La velocidad con la que una cultura adopta tecnología extranjera"], a: 1 },
+        { q: "¿Cuál es un impacto potencial negativo del investigador en la comunidad?", options: ["Alterar las jerarquías internas o crear expectativas económicas irreales", "Mejorar la salud de todos mediante consejos médicos no profesionales", "Aprender secretos que luego no pueda publicar", "Hacer que la comunidad sea famosa en redes sociales"], a: 0 },
+        { q: "El estudio de \"redes sociales\" se justifica en la antropología actual porque:", options: ["Permiten al antropólogo trabajar sin salir de su casa", "Son espacios donde se construyen nuevas formas de identidad y comunidad", "Ayudan a que los pueblos olviden sus tradiciones antiguas", "Son la única forma de medir objetivamente la felicidad"], a: 1 },
+        { q: "¿Cómo se distingue la \"descripción\" de la \"interpretación\"?", options: ["La descripción relata los hechos; la interpretación busca el significado detrás de ellos", "La descripción es verdadera y la interpretación es falsa", "La descripción la hacen máquinas y la interpretación humanos", "No existe distinción alguna en la práctica"], a: 0 },
+        { q: "El término \"poscolonialismo\" se enfoca en:", options: ["Celebrar el fin de todos los imperios en el siglo XIX", "Analizar cómo persisten lógicas de dominación colonial tras la independencia formal", "Recomendar que los países vuelvan a ser colonias", "Estudiar exclusivamente las colonias de insectos sociales"], a: 1 },
+        { q: "¿Por qué los símbolos son difíciles de interpretar en el campo?", options: ["Porque su significado es arbitrario y depende del contexto cultural específico", "Porque los antropólogos no tienen suficiente imaginación", "Porque las comunidades mienten a propósito sobre ellos", "Porque los símbolos cambian cada vez que el sol se pone"], a: 0 },
+        { q: "¿Cuál es el objetivo final de la antropología participativa?", options: ["Que el antropólogo no tenga que viajar al lugar de estudio", "Transformar la investigación en un proceso colaborativo con beneficios mutuos", "Hacer que la comunidad haga todo el trabajo de escritura", "Que la comunidad pague los gastos de la investigación"], a: 1 }
+    ];
+
+    // TEMA 4: FILOSOFÍA
+    const bancoTema4 = [
+        { q: "¿Cuál es la principal diferencia entre el saber racional (logos) y el saber mítico?", options: ["El logos se basa en la fe y el mito en la observación", "El logos busca argumentos y leyes naturales, mientras el mito usa relatos sobrenaturales", "El mito es más antiguo y por lo tanto más verdadero que el logos", "No existe diferencia, ambos son formas de arte"], a: 1 },
+        { q: "La característica \"crítica\" de la filosofía se refiere a:", options: ["Aceptar las ideas de los grandes maestros sin dudar", "Juzgar negativamente las opiniones de los demás", "Examinar y cuestionar todo, incluso las propias creencias", "Buscar solo los errores en los argumentos científicos"], a: 2 },
+        { q: "¿Qué buscaban los filósofos presocráticos al investigar el \"arjé\"?", options: ["El sistema político perfecto", "El principio u origen de todas las cosas", "La forma de alcanzar la vida eterna", "La clasificación de los dioses griegos"], a: 1 },
+        { q: "Para Tales de Mileto, el origen de todo era el agua, mientras que para Pitágoras era:", options: ["El fuego", "El aire", "El número", "El átomo"], a: 2 },
+        { q: "¿Qué defendía Parménides sobre la realidad?", options: ["Que todo está en constante cambio", "Que el ser es inmóvil y el cambio es una ilusión", "Que la realidad no puede ser conocida", "Que el mundo está hecho de cuatro elementos"], a: 1 },
+        { q: "Sócrates es reconocido por su método de enseñanza llamado:", options: ["Retórica", "Mayéutica", "Escolástica", "Empirismo"], a: 1 },
+        { q: "La frase \"Solo sé que no sé nada\" de Sócrates expresa:", options: ["Una falta total de estudios", "El reconocimiento de la propia ignorancia como inicio del saber", "Que la verdad es imposible de encontrar", "Un desprecio por la ciencia de su época"], a: 1 },
+        { q: "Según Platón, el \"Mundo de las Ideas\" es:", options: ["Un lugar físico en el centro de la Tierra", "El mundo verdadero, eterno e inmutable", "Una fantasía creada por la mente humana", "El mundo que percibimos a través de los sentidos"], a: 1 },
+        { q: "¿Cuál es la principal crítica de Aristóteles a la teoría de las Ideas de Platón?", options: ["Que las ideas no existen en absoluto", "Que la realidad debe analizarse de forma sistemática en este mundo sensible", "Que el conocimiento solo se logra a través de los sueños", "Que la lógica no sirve para conocer la realidad"], a: 1 },
+        { q: "Las escuelas helenísticas como el estoicismo y el epicureísmo se centraban en:", options: ["La conquista de nuevos mundos", "La búsqueda de la felicidad y la paz interior", "El estudio exclusivo de las matemáticas", "La creación de nuevas religiones"], a: 1 },
+        { q: "En la Edad Media, el objetivo principal de filósofos como Tomás de Aquino fue:", options: ["Demostrar que la ciencia era superior a la religión", "Conciliar la fe cristiana con la razón filosófica", "Eliminar el pensamiento griego de las universidades", "Crear una filosofía sin Dios"], a: 1 },
+        { q: "¿Cuál es la base del conocimiento para el Racionalismo de Descartes?", options: ["Los sentidos y la experiencia", "La razón y las ideas innatas", "La tradición y las costumbres", "La fe y la revelación divina"], a: 1 },
+        { q: "El Empirismo de David Hume sostiene que el conocimiento proviene de:", options: ["El pensamiento puro sin ayuda externa", "La experiencia y las impresiones sensoriales", "Los libros sagrados", "La intuición mágica"], a: 1 },
+        { q: "¿Qué propone Kant sobre el proceso de conocimiento?", options: ["Que solo importan los sentidos", "Que el conocimiento es la unión de sensibilidad y entendimiento", "Que el ser humano no puede conocer nada en absoluto", "Que la razón puede conocerlo todo sin necesidad de ver u oír"], a: 1 },
+        { q: "Para Karl Marx, la historia de la humanidad es la historia de:", options: ["La lucha de clases y las condiciones económicas", "El progreso espiritual de las religiones", "Los grandes descubrimientos científicos", "La evolución biológica del cerebro"], a: 0 },
+        { q: "Nietzsche critica la moral tradicional porque considera que:", options: ["Es demasiado fuerte para el ser humano", "Es una moral que reprime la vida y la voluntad de poder", "Debería ser más religiosa", "Es la única forma de salvar a la humanidad"], a: 1 },
+        { q: "El Existencialismo de Jean-Paul Sartre enfatiza:", options: ["Que el destino ya está escrito", "La libertad radical y la responsabilidad del individuo", "Que la vida no tiene ningún tipo de elección", "Que debemos obedecer siempre a la autoridad"], a: 1 },
+        { q: "La rama de la filosofía que estudia la conducta humana y lo que es correcto es:", options: ["La Metafísica", "La Estética", "La Ética", "La Lógica"], a: 2 },
+        { q: "La Epistemología es la rama que se pregunta por:", options: ["La belleza de las obras de arte", "El origen y la validez del conocimiento", "La mejor forma de gobernar un país", "La existencia de los átomos"], a: 1 },
+        { q: "¿Qué estudia la Metafísica?", options: ["Las leyes del movimiento físico", "La realidad última, el ser, el alma y Dios", "El lenguaje y sus reglas gramaticales", "La evolución de las especies"], a: 1 },
+        { q: "La rama encargada de estudiar el poder, el Estado y la justicia es la:", options: ["Filosofía del lenguaje", "Filosofía política", "Lógica", "Estética"], a: 1 },
+        { q: "¿Cuál es la función de la Lógica en la filosofía?", options: ["Estudiar las emociones humanas", "Regular el pensamiento correcto mediante reglas y principios", "Analizar la belleza de la naturaleza", "Investigar la historia antigua"], a: 1 },
+        { q: "La Estética es la rama que reflexiona sobre:", options: ["El funcionamiento del cerebro", "El arte y la belleza", "La creación de leyes justas", "El origen del universo"], a: 1 },
+        { q: "¿Qué corriente filosófica moderna se asocia con el uso del método de la duda?", options: ["Existencialismo", "Racionalismo (Descartes)", "Marxismo", "Estoicismo"], a: 1 },
+        { q: "¿Qué significa que la filosofía sea un saber \"universal\"?", options: ["Que solo se estudia en el planeta Tierra", "Que intenta abarcar los temas esenciales que afectan a todo ser humano", "Que todos los filósofos están de acuerdo en todo", "Que es un saber que no cambia con el tiempo"], a: 1 },
+        { q: "El período de la filosofía que se ocupa de la relación entre fe y razón se llama:", options: ["Filosofía Antigua", "Filosofía Medieval", "Filosofía Moderna", "Filosofía Contemporánea"], a: 1 },
+        { q: "La Mayéutica socrática se basa en:", options: ["La escritura de largos libros", "El diálogo y las preguntas para que el otro llegue a la verdad", "El uso de la fuerza para convencer", "El aislamiento total del mundo"], a: 1 },
+        { q: "¿Cuál de estos filósofos es un representante del Empirismo?", options: ["René Descartes", "David Hume", "Immanuel Kant", "Friedrich Nietzsche"], a: 1 },
+        { q: "La filosofía hoy en día es importante porque ayuda a:", options: ["Memorizar datos históricos rápidamente", "Desarrollar un pensamiento crítico frente a la desinformación", "Evitar el uso de la tecnología", "Ganar discusiones sin tener la razón"], a: 1 },
+        { q: "La corriente que analiza cómo el lenguaje construye significado se llama:", options: ["Filosofía del lenguaje", "Filosofía de la mente", "Fenomenología", "Positivismo"], a: 0 }
     ];
 
     /* =========================================
@@ -368,11 +611,39 @@
         currentThemeId = themeId;
         
         // Seleccionar banco según tema
-        let fullBank = (themeId === 1) ? bancoTema1 : bancoTema2;
-        let themeName = (themeId === 1) ? "Tema 1: Proyectos" : "Tema 2: Antropología";
+        let fullBank;
+        let themeName;
+        let badgeColor;
+        
+        switch(themeId) {
+            case 1:
+                fullBank = bancoTema1;
+                themeName = "Tema 1: Proyectos";
+                badgeColor = "var(--accent)";
+                break;
+            case 2:
+                fullBank = bancoTema2;
+                themeName = "Tema 2: Antropología";
+                badgeColor = "var(--success)";
+                break;
+            case 3:
+                fullBank = bancoTema3;
+                themeName = "Tema 3: Antropología Cont.";
+                badgeColor = "var(--purple)";
+                break;
+            case 4:
+                fullBank = bancoTema4;
+                themeName = "Tema 4: Filosofía";
+                badgeColor = "var(--orange)";
+                break;
+            default:
+                fullBank = bancoTema1;
+                themeName = "Tema 1";
+                badgeColor = "var(--accent)";
+        }
         
         topicBadge.innerText = themeName;
-        topicBadge.style.background = (themeId === 1) ? "var(--accent)" : "var(--success)";
+        topicBadge.style.background = badgeColor;
 
         // Seleccionar 10 preguntas aleatorias del banco de 30
         // Clonamos para no afectar el original
@@ -412,7 +683,6 @@
         optionsDiv.innerHTML = '';
 
         // Crear botones de opciones
-        // Mantenemos el orden A, B, C, D visualmente, pero verificamos el índice correcto
         qData.options.forEach((optText, idx) => {
             let btn = document.createElement('div');
             btn.className = 'option-btn';
@@ -506,7 +776,7 @@
 
     function goToMenu() {
         resultArea.style.display = 'none';
-        menuArea.style.display = 'flex'; // flex para centrar contenido
+        menuArea.style.display = 'flex';
     }
 
 </script>
