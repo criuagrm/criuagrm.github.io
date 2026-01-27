@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Análisis: The Handbook of Neoliberalism</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f8f9fa;
+    --sidebar-bg: #ffffff;
+    --text-primary: #2c3e50;
+    --accent-color: #2980b9; /* Azul académico */
+    --border-color: #bdc3c7;
+    --sidebar-width: 450px; /* Un poco más ancho para leer mejor */
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- BARRA LATERAL (INFO) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+    z-index: 20;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    height: 100vh;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
+    position: absolute;
+  }
+
+  .header {
+    padding: 20px 25px;
+    background: #34495e;
+    color: #ecf0f1;
+    border-bottom: 4px solid var(--accent-color);
+  }
+
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.3rem;
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+  }
+
+  .header .meta {
+    font-size: 0.75rem;
+    color: #bdc3c7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .filters {
+    padding: 15px 25px;
+    background: #ecf0f1;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .filter-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #bdc3c7;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+    flex: 1 1 45%; /* Dos columnas */
+    display: flex;
+    align-items: center;
+  }
+  
+  .filter-btn::before {
+    content: ''; margin-right: 8px;
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .filter-btn:hover { background: #dfe6e9; border-color: #95a5a6; }
+  
+  /* Colores de grupos */
+  .btn-origins::before { background: #e67e22; } /* Naranja */
+  .btn-politics::before { background: #c0392b; } /* Rojo */
+  .btn-spaces::before { background: #27ae60; } /* Verde */
+  .btn-theory::before { background: #8e44ad; } /* Morado */
+  .btn-aftermath::before { background: #2c3e50; } /* Gris Oscuro */
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 25px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .info-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  .info-subtitle {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  .info-body { font-size: 0.95rem; line-height: 1.6; color: #333; margin-bottom: 20px; text-align: justify; }
+
+  .data-box {
+    background: #fdfefe; border-left: 4px solid #f39c12;
+    padding: 12px; margin-bottom: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .data-label { font-size: 0.7rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .data-value { font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 0.95rem; color: #2c3e50; }
+
+  .quote-box {
+    font-family: 'Merriweather', serif;
+    font-style: italic;
+    color: #555;
+    padding: 10px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+
+  .reference-box { font-size: 0.8rem; color: #7f8c8d; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px; }
+
+  .footer {
+    padding: 10px; background: #ecf0f1; 
+    font-size: 0.7rem; text-align: center; color: #7f8c8d;
+  }
+
+  /* --- ÁREA DE RED --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    background-color: #f8f9fa;
+  }
+
+  /* BOTONES FLOTANTES */
+  .toggle-sidebar-btn {
+    position: absolute; top: 20px; left: 20px;
+    z-index: 50;
+    background: white; border: 1px solid #ccc;
+    padding: 10px; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-weight: bold; color: #333;
+    display: flex; align-items: center; gap: 5px;
+    transition: background 0.2s;
+  }
+  .toggle-sidebar-btn:hover { background: #f0f0f0; }
+
+  .canvas-controls {
+    position: absolute; bottom: 20px; right: 20px;
+    z-index: 50;
+    display: flex; gap: 10px;
+  }
+
+  .canvas-btn {
+    background: white; border: 1px solid #bdc3c7;
+    padding: 8px 15px; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 0.85rem; font-weight: 600; color: #2c3e50;
+    transition: all 0.2s;
+  }
+  .canvas-btn:hover { background: #ecf0f1; transform: translateY(-1px); }
+
+</style>
+</head>
+<body>
+
+<!-- BARRA LATERAL -->
+<div class="sidebar" id="sidebar">
+  <div class="header">
+    <h1>The Handbook of Neoliberalism</h1>
+    <div class="meta">Springer, Birch & MacLeavy (Eds.)</div>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Secciones del Manual</span>
+    <div class="btn-group">
+      <div class="filter-btn btn-origins" onclick="focusGroup('origins')">Part I: Orígenes</div>
+      <div class="filter-btn btn-politics" onclick="focusGroup('politics')">Part II: Política</div>
+      <div class="filter-btn btn-theory" onclick="focusGroup('theory')">Part IV: Conocimiento</div>
+      <div class="filter-btn btn-spaces" onclick="focusGroup('spaces')">Part V: Espacios</div>
+      <div class="filter-btn btn-aftermath" onclick="focusGroup('aftermath')">Part VII: Crisis</div>
+    </div>
+  </div>
+
+  <div class="content-area" id="infoPanel">
+    <div style="text-align: center; color: #95a5a6; margin-top: 50%; font-family: 'Merriweather', serif;">
+      <em>"El neoliberalismo es una cadena de significantes vacíos que se llenan con contenido político."</em><br><br>
+      Seleccione un nodo para ver el análisis en profundidad.
+    </div>
+  </div>
+
+  <div class="footer">
+    Visualización basada en los 7 apartados del Manual.
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div id="network-wrapper">
+  <button class="toggle-sidebar-btn" onclick="toggleSidebar()">
+    <span id="toggleIcon">☰</span> <span id="toggleText">Ocultar Panel</span>
+  </button>
+  <div id="network"></div>
+  <div class="canvas-controls">
+    <button class="canvas-btn" onclick="fitAll()">⌖ Resetear Vista</button>
+  </div>
+</div>
+
+<script>
+
+// --- ICONO LIBRO SVG ---
+const bookSvg = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2c3e50">
+  <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+</svg>`);
+
+// --- BASE DE DATOS DETALLADA (Extracto representativo del Handbook) ---
+const bookData = {
+  // NODO CENTRAL
+  0: {
+    title: "The Handbook of Neoliberalism", type: "Obra Central",
+    text: "Esta obra masiva busca desencializar el neoliberalismo. No lo trata como un bloque monolítico, sino como un proceso ('neoliberalización') mutante, híbrido y geográficamente desigual. Se divide en 7 partes que analizan desde sus orígenes intelectuales hasta su 'vida zombi' post-2008.",
+    data: "Editores: Simon Springer, Kean Birch, Julie MacLeavy. Contiene más de 50 capítulos.",
+    ref: "Introducción General."
+  },
+
+  // PART I: ORIGINS
+  1: {
+    title: "Orígenes Intelectuales", type: "Parte I: Contexto",
+    text: "El neoliberalismo no surgió de la nada en los 80. Tiene raíces profundas en la Sociedad Mont Pelerin y la Escuela de Chicago, presentándose inicialmente como una defensa utópica de la libertad contra el totalitarismo.",
+    data: "Concepto Clave: 'Thought Collective' (Colectivo de Pensamiento).",
+    ref: "Sección coordinada con trabajos de Mirowski y Plehwe."
+  },
+  11: {
+    title: "La Escuela de Chicago", type: "Capítulo Clave",
+    text: "Edward Nik-Khah y Robert Van Horn detallan cómo la Escuela de Chicago pasó de una defensa del liberalismo clásico a una justificación de los monopolios corporativos, redefiniendo el mercado no como un lugar de intercambio, sino como un procesador de información superior a cualquier gobierno.",
+    data: "Dato: El proyecto de 'Law and Economics' fue crucial para desregular leyes antimonopolio.",
+    ref: "Capítulo 2: The Ascendancy of Chicago Neoliberalism."
+  },
+  12: {
+    title: "Clase Capitalista Transnacional", type: "Mecanismo",
+    text: "William K. Carroll y J.P. Sapinski argumentan que el neoliberalismo es el proyecto político de una clase capitalista transnacional (TCC). No es solo teoría económica, es la consolidación de poder de una élite corporativa global.",
+    data: "Redes: Foros como el de Davos actúan como consejos de administración de esta clase.",
+    ref: "Capítulo 3: Neoliberalism and the Transnational Capitalist Class."
+  },
+
+  // PART II: POLITICAL IMPLICATIONS
+  2: {
+    title: "Implicaciones Políticas", type: "Parte II: Estado y Poder",
+    text: "Lejos de la idea de 'menos Estado', el neoliberalismo requiere un Estado fuerte y activo para crear y proteger mercados, a menudo a costa de la democracia.",
+    data: "Paradoja: Mercado libre requiere Estado fuerte.",
+    ref: "Introducción a la Parte II."
+  },
+  21: {
+    title: "Neoliberalismo Autoritario", type: "Concepto Crítico",
+    text: "Ian Bruff argumenta que tras la crisis de 2008, el neoliberalismo se ha vuelto explícitamente autoritario. Ya no busca el consentimiento (hegemonía), sino que utiliza mecanismos constitucionales y legales para aislar las políticas económicas de la presión democrática popular.",
+    data: "Ejemplo: Leyes de austeridad constitucionalizadas en la UE.",
+    ref: "Capítulo 9: Neoliberalism and Authoritarianism."
+  },
+  22: {
+    title: "La Violencia del Neoliberalismo", type: "Concepto Crítico",
+    text: "Simon Springer sostiene que la violencia no es un efecto secundario, sino una función central. El neoliberalismo opera mediante la violencia de la desposesión, el desplazamiento forzado y la criminalización de la pobreza para abrir nuevos mercados.",
+    data: "Mecanismo: 'Acumulación por desposesión' (Harvey) aplicada violentamente.",
+    ref: "Capítulo 13: The Violence of Neoliberalism."
+  },
+
+  // PART III: SOCIAL TENSIONS
+  3: {
+    title: "Tensiones Sociales", type: "Parte III: Identidad y Cuerpo",
+    text: "El neoliberalismo remodela la raza, el género y la sexualidad, convirtiendo la identidad en una mercancía o un activo personal, mientras castiga a quienes no se ajustan al modelo de 'empresario de sí mismo'.",
+    data: "Foco: Interseccionalidad y mercado.",
+    ref: "Introducción a la Parte III."
+  },
+  31: {
+    title: "Raza y Neoliberalismo", type: "Capítulo Clave",
+    text: "David J. Roberts analiza cómo el neoliberalismo se presenta como 'daltónico' (colorblind), pero en realidad utiliza el racismo estructural para justificar desigualdades económicas, culpando a las minorías de su propia pobreza por falta de 'responsabilidad personal'.",
+    data: "Efecto: El encarcelamiento masivo como gestión de poblaciones excedentes racializadas.",
+    ref: "Capítulo 17: Race and Neoliberalism."
+  },
+
+  // PART IV: KNOWLEDGE PRODUCTIONS
+  4: {
+    title: "Producción de Conocimiento", type: "Parte IV: Epistemología",
+    text: "El neoliberalismo no solo cambia la economía, cambia cómo pensamos. Transforma la educación, la ciencia y la cultura en mercados competitivos.",
+    data: "Concepto: El mercado de las ideas.",
+    ref: "Introducción a la Parte IV."
+  },
+  41: {
+    title: "Homo Economicus", type: "Teoría",
+    text: "Michael A. Peters explora la mutación del sujeto. Ya no es el ciudadano político, sino el 'Homo Economicus' de Gary Becker: un empresario de sí mismo que invierte en su propio capital humano (educación, salud) esperando un retorno financiero.",
+    data: "Consecuencia: La educación deja de ser un bien público y se vuelve una inversión privada.",
+    ref: "Capítulo 25: Education, Neoliberalism and Human Capital."
+  },
+  42: {
+    title: "Economía de la Innovación", type: "Capítulo Clave",
+    text: "Kean Birch y David Tyfield muestran cómo la ciencia se ha reestructurado para servir al valor financiero. La 'economía del conocimiento' neoliberal prioriza la propiedad intelectual y la monetización de la investigación sobre el descubrimiento científico abierto.",
+    data: "Mecanismo: La biotecnología como frontera de acumulación.",
+    ref: "Capítulo 29: Science, Innovation and Neoliberalism."
+  },
+
+  // PART V: SPACES
+  5: {
+    title: "Espacios y Geografías", type: "Parte V: Escala",
+    text: "El neoliberalismo es profundamente espacial. Se manifiesta en la competencia entre ciudades globales, la gentrificación y la reestructuración desigual del espacio urbano y rural.",
+    data: "Enfoque: Urbanismo Neoliberal.",
+    ref: "Introducción a la Parte V."
+  },
+  51: {
+    title: "Urbanismo Neoliberal", type: "Concepto Clave",
+    text: "Roger Keil y otros autores analizan cómo las ciudades han pasado de ser gestoras de servicios públicos a ser agentes empresariales que compiten por inversión global, resultando en 'ciudades revanchistas' que expulsan a los pobres.",
+    data: "Fenómeno: Gentrificación planetaria.",
+    ref: "Capítulo 33: Urban Neoliberalism."
+  },
+  52: {
+    title: "Geopolítica Neoliberal", type: "Capítulo Clave",
+    text: "Susan M. Roberts examina cómo el neoliberalismo reconfigura la geopolítica. La seguridad nacional se fusiona con la seguridad del mercado, y las intervenciones militares se justifican para 'abrir' economías cerradas al capital global.",
+    data: "Concepto: La 'paz liberal' como imposición de mercado.",
+    ref: "Capítulo 37: Neoliberal Geopolitics."
+  },
+
+  // PART VI: NATURES
+  6: {
+    title: "Naturalezas y Ambiente", type: "Parte VI: Ecología",
+    text: "La naturaleza se 'neoliberaliza' al convertirse en un conjunto de servicios ecosistémicos que pueden ser valorados, comercializados y bancarizados.",
+    data: "Crítica: La financiarización de la conservación.",
+    ref: "Introducción a la Parte VI."
+  },
+  61: {
+    title: "Neoliberalizar el Agua", type: "Estudio de Caso",
+    text: "Alex Loftus y Jessica Budds analizan la privatización del agua. Argumentan que tratar el agua como una mercancía económica ignora su naturaleza social y biofísica, llevando a conflictos y exclusión en el Sur Global.",
+    data: "Impacto: Guerras del agua (ej. Bolivia) como resistencia.",
+    ref: "Capítulo 43: Neoliberalizing Water."
+  },
+
+  // PART VII: AFTERMATHS
+  7: {
+    title: "Secuelas y Crisis", type: "Parte VII: Futuro",
+    text: "¿Está muerto el neoliberalismo? Esta sección argumenta que, a pesar de la crisis de 2008, el neoliberalismo ha demostrado una capacidad 'zombi' para sobrevivir, mutando en formas más agresivas.",
+    data: "Debate: Post-neoliberalismo vs. Neoliberalismo Zombi.",
+    ref: "Introducción a la Parte VII."
+  },
+  71: {
+    title: "Neoliberalismo Zombi", type: "Metáfora Central",
+    text: "Jamie Peck describe la fase actual como 'Neoliberalismo Zombi': una ideología intelectualmente muerta (desacreditada por la crisis) pero que sigue caminando, animada por la falta de alternativas institucionales claras y la inercia política.",
+    data: "Estado: Muerto pero dominante.",
+    ref: "Capítulo 51 (referencia conceptual): Neoliberal Gothic / Zombie Neoliberalism."
+  },
+  72: {
+    title: "Crisis del Neoliberalismo", type: "Análisis",
+    text: "Gérard Duménil y Dominique Lévy argumentan que la crisis de 2008 fue una crisis estructural de la hegemonía financiera de EE.UU., pero que las políticas de respuesta (rescates bancarios) han restaurado el poder de clase de la élite financiera.",
+    data: "Resultado: Socialismo para los ricos, austeridad para los pobres.",
+    ref: "Capítulo 47: The Crisis of Neoliberalism."
+  }
+};
+
+// --- ESTRUCTURA DE LA RED ---
+const nodes = new vis.DataSet([
+  // Centro
+  { id: 0, label: "Handbook of\nNeoliberalism", shape: 'image', image: bookSvg, size: 40, color: {background: '#fff'} },
+
+  // PART I: ORIGINS (Naranja)
+  { id: 1, label: "PART I:\nORÍGENES", group: 'origins', value: 20 },
+  { id: 11, label: "Escuela de\nChicago", group: 'origins', value: 10 },
+  { id: 12, label: "Clase Capitalista\nTransnacional", group: 'origins', value: 10 },
+
+  // PART II: POLITICS (Rojo)
+  { id: 2, label: "PART II:\nPOLÍTICA", group: 'politics', value: 20 },
+  { id: 21, label: "Autoritarismo\n(Ian Bruff)", group: 'politics', value: 10 },
+  { id: 22, label: "Violencia\n(Springer)", group: 'politics', value: 10 },
+
+  // PART III: SOCIAL (Amarillo/Marrón - usando grupo politics por simplicidad de paleta o custom)
+  { id: 3, label: "PART III:\nSOCIAL", group: 'politics', color: {background:'#f1c40f', border:'#d35400'}, value: 20 },
+  { id: 31, label: "Raza y\nNeoliberalismo", group: 'politics', color: {background:'#f39c12'}, value: 10 },
+
+  // PART IV: KNOWLEDGE (Morado)
+  { id: 4, label: "PART IV:\nCONOCIMIENTO", group: 'theory', value: 20 },
+  { id: 41, label: "Homo\nEconomicus", group: 'theory', value: 10 },
+  { id: 42, label: "Economía de la\nInnovación", group: 'theory', value: 10 },
+
+  // PART V: SPACES (Verde)
+  { id: 5, label: "PART V:\nESPACIOS", group: 'spaces', value: 20 },
+  { id: 51, label: "Urbanismo\nNeoliberal", group: 'spaces', value: 10 },
+  { id: 52, label: "Geopolítica\nNeoliberal", group: 'spaces', value: 10 },
+
+  // PART VI: NATURES (Verde Oscuro)
+  { id: 6, label: "PART VI:\nNATURALEZA", group: 'spaces', color: {background:'#16a085', border:'#0e6251'}, value: 20 },
+  { id: 61, label: "Privatización\ndel Agua", group: 'spaces', color: {background:'#1abc9c'}, value: 10 },
+
+  // PART VII: AFTERMATHS (Gris/Azul Oscuro)
+  { id: 7, label: "PART VII:\nSECUELAS", group: 'aftermath', value: 20 },
+  { id: 71, label: "Neoliberalismo\nZombi (Peck)", group: 'aftermath', value: 10 },
+  { id: 72, label: "Crisis y\nRescate", group: 'aftermath', value: 10 }
+]);
+
+const edges = new vis.DataSet([
+  // Conexiones al centro
+  { from: 0, to: 1 }, { from: 0, to: 2 }, { from: 0, to: 3 },
+  { from: 0, to: 4 }, { from: 0, to: 5 }, { from: 0, to: 6 }, { from: 0, to: 7 },
+
+  // Ramas Part I
+  { from: 1, to: 11 }, { from: 1, to: 12 },
+  // Ramas Part II
+  { from: 2, to: 21 }, { from: 2, to: 22 },
+  // Ramas Part III
+  { from: 3, to: 31 },
+  // Ramas Part IV
+  { from: 4, to: 41 }, { from: 4, to: 42 },
+  // Ramas Part V
+  { from: 5, to: 51 }, { from: 5, to: 52 },
+  // Ramas Part VI
+  { from: 6, to: 61 },
+  // Ramas Part VII
+  { from: 7, to: 71 }, { from: 7, to: 72 },
+
+  // Conexiones transversales (interdisciplinarias)
+  { from: 11, to: 41, label: "fundamenta", dashes: true, color: {opacity:0.3} }, // Chicago -> Homo Economicus
+  { from: 51, to: 31, label: "impacta", dashes: true, color: {opacity:0.3} }, // Urbanismo -> Raza (gentrificación)
+  { from: 72, to: 21, label: "causa", dashes: true, color: {opacity:0.3} } // Crisis -> Autoritarismo
+]);
+
+// --- CONFIGURACIÓN E INICIALIZACIÓN ---
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    shape: 'dot',
+    font: { size: 16, face: 'Roboto', color: '#2c3e50', strokeWidth: 4, strokeColor: '#fff' },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    width: 2,
+    color: { color: '#bdc3c7', highlight: '#2980b9' },
+    smooth: { type: 'continuous' }
+  },
+  groups: {
+    origins: { color: { background: '#e67e22', border: '#d35400' } },
+    politics: { color: { background: '#e74c3c', border: '#c0392b' } },
+    theory: { color: { background: '#9b59b6', border: '#8e44ad' } },
+    spaces: { color: { background: '#2ecc71', border: '#27ae60' } },
+    aftermath: { color: { background: '#34495e', border: '#2c3e50' } }
+  },
+  physics: {
+    forceAtlas2Based: {
+      gravitationalConstant: -80,
+      centralGravity: 0.005,
+      springLength: 250,
+      springConstant: 0.18
+    },
+    maxVelocity: 50,
+    solver: 'forceAtlas2Based',
+    timestep: 0.35,
+    stabilization: { iterations: 150 }
+  },
+  interaction: { hover: true, tooltipDelay: 200 }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    // Abrir sidebar si está cerrado
+    const sidebar = document.getElementById('sidebar');
+    const btnText = document.getElementById('toggleText');
+    const btnIcon = document.getElementById('toggleIcon');
+    
+    if (sidebar.classList.contains('closed')) {
+      sidebar.classList.remove('closed');
+      btnText.innerText = "Ocultar Panel";
+      btnIcon.innerText = "☰";
+    }
+    
+    if (info) {
+      document.getElementById('infoPanel').innerHTML = `
+        <h2 class="info-title">${info.title}</h2>
+        <div class="info-subtitle">${info.type}</div>
+        <div class="info-body">${info.text}</div>
+        <div class="data-box">
+          <span class="data-label">Concepto / Dato Clave</span>
+          <span class="data-value">${info.data}</span>
+        </div>
+        <div class="quote-box">
+           Capítulo de referencia en el Manual
+        </div>
+        <div class="reference-box">
+          <strong>Ubicación:</strong> ${info.ref}
+        </div>
+      `;
+    }
+  }
+});
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const btnText = document.getElementById('toggleText');
+  const btnIcon = document.getElementById('toggleIcon');
+  
+  sidebar.classList.toggle('closed');
+  
+  if (sidebar.classList.contains('closed')) {
+    btnText.innerText = "Mostrar Panel";
+    btnIcon.innerText = "";
+  } else {
+    btnText.innerText = "Ocultar Panel";
+    btnIcon.innerText = "";
+  }
+}
+
+function focusGroup(groupId) {
+  // Obtener todos los nodos del grupo
+  const groupNodes = nodes.get({
+    filter: function (item) {
+      return item.group === groupId;
+    }
+  });
+  
+  if (groupNodes.length > 0) {
+    // Abrir sidebar para ver detalles
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar.classList.contains('closed')) toggleSidebar();
+    
+    // Enfocar el primer nodo del grupo para asegurar visibilidad
+    const focusId = groupNodes[0].id;
+    
+    network.fit({
+      nodes: groupNodes.map(n => n.id),
+      animation: { duration: 1000, easingFunction: 'easeInOutQuad' }
+    });
+    
+    // Seleccionar los nodos visualmente
+    network.selectNodes(groupNodes.map(n => n.id));
+    
+    // Mostrar info del nodo principal del grupo
+    const info = bookData[focusId];
+    if(info) {
+        document.getElementById('infoPanel').innerHTML = `
+        <h2 class="info-title">${info.title}</h2>
+        <div class="info-subtitle">${info.type}</div>
+        <div class="info-body">${info.text}</div>
+        <div class="data-box">
+          <span class="data-label">Concepto / Dato Clave</span>
+          <span class="data-value">${info.data}</span>
+        </div>
+        <div class="reference-box">
+          <strong>Ubicación:</strong> ${info.ref}
+        </div>
+      `;
+    }
+  }
+}
+
+function fitAll() {
+  network.fit({ animation: { duration: 1000, easingFunction: 'easeInOutQuad' } });
+  network.unselectAll();
+  document.getElementById('infoPanel').innerHTML = `
+    <div style="text-align: center; color: #95a5a6; margin-top: 50%; font-family: 'Merriweather', serif;">
+      <em>"El neoliberalismo es una cadena de significantes vacíos que se llenan con contenido político."</em><br><br>
+      Seleccione un nodo para ver el análisis en profundidad.
+    </div>
+  `;
+}
+
+</script>
+</body>
+</html>

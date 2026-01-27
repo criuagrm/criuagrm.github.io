@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Germà Bel — Economía Política e Infraestructuras</title>
+
+<!-- Librería vis-network desde CDN -->
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+<style>
+  :root{
+    --bg:#f4f6f8; --fg:#333;
+    --card:#ffffff; --muted:#666;
+    --accent:#2c3e50; --highlight:#c0392b;
+    --shadow:0 4px 15px rgba(0,0,0,0.1);
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin:0; padding:0; height:100vh; overflow:hidden;
+    background:var(--bg); color:var(--fg);
+  }
+  
+  #network-container{
+    width:100%; height:100vh; background:var(--bg);
+  }
+  
+  /* --- PANELES FLOTANTES --- */
+  .panel {
+    position:fixed; background:var(--card); 
+    box-shadow:var(--shadow); border-radius:var(--radius);
+    padding:20px; z-index:1000; 
+    transition: transform .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    max-height: 90vh; overflow-y: auto;
+    border: 1px solid #e1e4e8;
+  }
+
+  /* Panel Izquierdo (Controles) */
+  .control-panel {
+    top: 20px; left: 20px; width: 260px;
+    transform: translateX(0);
+  }
+  .control-panel.closed { transform: translateX(-300px); }
+
+  /* Panel Derecho (Información) */
+  .info-panel {
+    top: 20px; right: 20px; width: 380px;
+    transform: translateX(0);
+  }
+  .info-panel.closed { transform: translateX(420px); }
+
+  /* Botones para ocultar/mostrar paneles */
+  .toggle-btn {
+    position: absolute; top: 15px; cursor: pointer;
+    background: var(--accent); color: white; border: none;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .toggle-btn:hover { background: #34495e; }
+  .toggle-left { right: -14px; }
+  .toggle-right { left: -14px; }
+
+  /* --- TIPOGRAFÍA Y ESTILOS INTERNOS --- */
+  h2 { margin: 0 0 12px 0; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
+  h3 { margin: 0 0 8px 0; font-size: 1.3rem; color: #e74c3c; line-height: 1.2; }
+  
+  .content-text { font-size: 0.95rem; line-height: 1.6; color: #444; margin-bottom: 15px; }
+  
+  .citation { 
+    background: #f9f9f9; padding: 10px; border-left: 3px solid var(--accent);
+    font-size: 0.85rem; color: #555; margin-top: 15px; border-radius: 0 4px 4px 0;
+  }
+  
+  /* Botones de Filtro */
+  .filter-btn {
+    display: flex; align-items: center; width: 100%; padding: 8px 12px; margin-bottom: 6px;
+    border: 1px solid #eee; background: #fff; border-radius: 6px;
+    cursor: pointer; text-align: left; font-size: 0.9rem; color: #555;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { background: #f4f6f8; border-color: #ccc; transform: translateX(2px); }
+  
+  .color-dot {
+    display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+    margin-right: 10px; flex-shrink: 0;
+  }
+
+  /* Búsqueda */
+  .search-box { display: flex; margin-bottom: 15px; }
+  .search-box input { 
+    width: 100%; padding: 8px 10px; border-radius: 6px; 
+    border: 1px solid #ccc; font-size: 0.9rem;
+  }
+
+  /* Tags (Micro/Meso/Macro) */
+  .meta-tag {
+    display: inline-block; padding: 3px 8px; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 700; margin-right: 5px; margin-bottom: 8px;
+    color: white; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .tag-micro { background: #3498db; } /* Azul */
+  .tag-meso { background: #f39c12; }  /* Naranja */
+  .tag-macro { background: #9b59b6; } /* Violeta */
+  .tag-metodo { background: #27ae60; } /* Verde */
+
+  /* Créditos del alumno (Estilo solicitado: pequeño) */
+  .student-credit {
+    font-size: 0.7rem; /* Muy pequeño */
+    color: #aaa;       /* Gris claro */
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+  }
+
+  /* Scrollbar bonita */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+</style>
+</head>
+<body>
+
+<!-- Panel Izquierdo: Controles -->
+<div class="panel control-panel" id="leftPanel">
+  <button class="toggle-btn toggle-left" onclick="togglePanel('leftPanel')">«</button>
+  <h2>Navegación</h2>
+  
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 Buscar concepto...">
+  </div>
+
+  <button class="filter-btn" onclick="filterNetwork('all')">
+    <span style="margin-right:10px">🌐</span> Mostrar Todo
+  </button>
+  
+  <div style="font-size:0.75rem; color:#999; margin:10px 0 5px 0; text-transform:uppercase; font-weight:bold;">Filtrar por Tema:</div>
+
+  <button class="filter-btn" onclick="filterNetwork(1)">
+    <span class="color-dot" style="background:#ffadad"></span>Privatización (Micro)
+  </button>
+  <button class="filter-btn" onclick="filterNetwork(2)">
+    <span class="color-dot" style="background:#9bf6ff"></span>Reformas Locales (Meso)
+  </button>
+  <button class="filter-btn" onclick="filterNetwork(3)">
+    <span class="color-dot" style="background:#fdffb6"></span>Infraestructura (Macro)
+  </button>
+  <button class="filter-btn" onclick="filterNetwork(4)">
+    <span class="color-dot" style="background:#caffbf"></span>Teoría y Método
+  </button>
+  
+  <button class="filter-btn" onclick="resetCamera()" style="margin-top:15px; text-align:center; display:block; background:#f0f2f5;">
+    🎯 Centrar Vista
+  </button>
+</div>
+
+<!-- Panel Derecho: Información -->
+<div class="panel info-panel" id="rightPanel">
+  <button class="toggle-btn toggle-right" onclick="togglePanel('rightPanel')">»</button>
+  
+  <!-- Crédito solicitado: Pequeño y discreto -->
+  <div class="student-credit">Apuntes de: Ricardo Alonzo Fernández Salguero</div>
+  
+  <div id="infoContent">
+    <h3>Germà Bel: Economía Política</h3>
+    <p class="content-text">
+      <b>Bienvenido al mapa conceptual interactivo.</b>
+      <br><br>
+      Esta red visualiza el pensamiento de Germà Bel, conectando sus rigurosos análisis empíricos con sus teorías sobre el Estado y la gestión pública.
+      <br><br>
+      Haz clic en cualquier nodo para ver:
+      <ul>
+        <li>Explicación detallada del concepto.</li>
+        <li>Nivel de análisis (Micro/Meso/Macro).</li>
+        <li>Referencias bibliográficas.</li>
+      </ul>
+    </p>
+  </div>
+</div>
+
+<div id="network-container"></div>
+
+<script>
+// --- 1. DEFINICIÓN DE NODOS ---
+// Grupos: 1 (Privatización), 2 (Local), 3 (Infraestructura), 4 (Teoría)
+const nodes = new vis.DataSet([
+  // G1: Privatización y Costes
+  {id: 1, label: "Privatización\nServicios Públicos", group: 1, title: "Tema central", value: 25},
+  {id: 2, label: "Ahorro de Costes\n(Mito)", group: 1, value: 20},
+  {id: 3, label: "Competencia\n(Factor Clave)", group: 1, value: 20},
+  {id: 4, label: "Costes de\nTransacción", group: 1, value: 15},
+  {id: 5, label: "Low-balling\n(Ofertas a la baja)", group: 1, value: 10},
+  {id: 6, label: "Falta de Evidencia\nSistemática", group: 1, value: 15},
+
+  // G2: Reformas Locales
+  {id: 10, label: "Reforma del\nGobierno Local", group: 2, value: 25},
+  {id: 11, label: "Remunicipalización\n(Privatización Inversa)", group: 2, value: 20},
+  {id: 12, label: "Pragmatismo\nvs Ideología", group: 2, value: 15},
+  {id: 13, label: "Cooperación\nIntermunicipal", group: 2, value: 15},
+  {id: 14, label: "Economías\nde Escala", group: 2, value: 10},
+  {id: 15, label: "Empresas\nMixtas", group: 2, value: 10},
+
+  // G3: Infraestructura y Nación
+  {id: 20, label: "Infraestructuras\ny Nación", group: 3, value: 25},
+  {id: 21, label: "España Radial\n(Km 0)", group: 3, value: 20},
+  {id: 22, label: "Centralización\nPolítica", group: 3, value: 20},
+  {id: 23, label: "AVE\n(Alta Velocidad)", group: 3, value: 15},
+  {id: 24, label: "Peajes y\nRedistribución", group: 3, value: 15},
+  {id: 25, label: "Oferta Política\nvs Demanda", group: 3, value: 10},
+
+  // G4: Teoría y Método
+  {id: 30, label: "Public Choice\nTheory", group: 4, value: 20},
+  {id: 31, label: "Meta-regresión\n(Metodología)", group: 4, value: 20},
+  {id: 32, label: "Dependencia de\nla Trayectoria", group: 4, value: 15},
+  {id: 33, label: "Captura del\nRegulador", group: 4, value: 10}
+]);
+
+// --- 2. DEFINICIÓN DE CONEXIONES (Aristas) ---
+const edges = new vis.DataSet([
+  // Privatización
+  {from: 1, to: 2, label: "cuestiona", arrows: "to"},
+  {from: 3, to: 2, label: "genera", arrows: "to", width: 3},
+  {from: 1, to: 3, label: "depende de", arrows: "to"},
+  {from: 4, to: 2, label: "anula ahorro", arrows: "to"},
+  {from: 5, to: 2, label: "crea ilusión de", arrows: "to"},
+  {from: 31, to: 6, label: "demuestra", arrows: "to", dashes: true},
+  {from: 6, to: 2, label: "confirma mito", arrows: "to"},
+
+  // Reformas Locales
+  {from: 10, to: 11, label: "tendencia", arrows: "to"},
+  {from: 11, to: 12, label: "causada por", arrows: "to", width: 3},
+  {from: 4, to: 13, label: "mitigados por", arrows: "to"},
+  {from: 13, to: 14, label: "busca", arrows: "to"},
+  {from: 10, to: 15, label: "alternativa", arrows: "to"},
+  {from: 33, to: 15, label: "riesgo de", arrows: "to"},
+  {from: 4, to: 11, label: "altos costes provocan", arrows: "to"}, // Conexión clave cruzada
+
+  // Infraestructura
+  {from: 20, to: 21, label: "modelo", arrows: "to"},
+  {from: 22, to: 21, label: "diseña", arrows: "to", width: 3},
+  {from: 22, to: 23, label: "prioriza", arrows: "to"},
+  {from: 25, to: 23, label: "ignora demanda", arrows: "to"},
+  {from: 24, to: 20, label: "inequidad", arrows: "to"},
+  {from: 32, to: 21, label: "refuerza", arrows: "to"},
+
+  // Conexiones Teóricas Transversales
+  {from: 30, to: 1, label: "marco", arrows: "to", dashes: true},
+  {from: 30, to: 22, label: "explica incentivos", arrows: "to", dashes: true},
+  {from: 31, to: 1, label: "analiza", arrows: "to"}
+]);
+
+// --- 3. CONFIGURACIÓN VISUAL (Física mejorada) ---
+const options = {
+  nodes: {
+    font: { size: 14, face: 'Segoe UI', color: '#333' },
+    borderWidth: 2,
+    shadow: { enabled: true, color: 'rgba(0,0,0,0.1)', size: 10, x: 5, y: 5 }
+  },
+  edges: {
+    width: 1.5,
+    font: { size: 11, align: 'middle', color: '#777', background: 'rgba(255,255,255,0.7)' },
+    color: { color: '#bdc3c7', highlight: '#2c3e50' },
+    smooth: { type: 'continuous', roundness: 0.5 }
+  },
+  groups: {
+    1: { color: { background: '#ffadad', border: '#e74c3c' }, shape: 'box' }, // Rojos suaves
+    2: { color: { background: '#9bf6ff', border: '#3498db' }, shape: 'ellipse' }, // Azules suaves
+    3: { color: { background: '#fdffb6', border: '#f1c40f' }, shape: 'box' }, // Amarillos suaves
+    4: { color: { background: '#caffbf', border: '#2ecc71' }, shape: 'dot' }  // Verdes suaves
+  },
+  physics: {
+    enabled: true,
+    solver: 'barnesHut',
+    barnesHut: {
+      gravitationalConstant: -2000, // Menos repulsión para que estén más juntos
+      centralGravity: 0.5,          // Mayor atracción al centro
+      springLength: 95,             // Muelles más cortos (más compacta)
+      springConstant: 0.04,
+      damping: 0.09,
+      avoidOverlap: 0.1
+    },
+    stabilization: {
+      iterations: 200,
+      updateInterval: 25
+    }
+  },
+  interaction: { hover: true, zoomView: true }
+};
+
+// Inicializar Red
+const container = document.getElementById('network-container');
+const network = new vis.Network(container, { nodes, edges }, options);
+
+// --- 4. BASE DE DATOS DE CONTENIDO (Diccionario Completo) ---
+const infoData = {
+  1: {
+    title: "Privatización de Servicios Públicos",
+    tags: ["MICRO", "MESO"],
+    text: "Punto de partida del análisis de Bel. Se enfoca en servicios locales (agua, basura, transporte). Su tesis principal es que la privatización no es una solución mágica, sino una herramienta que depende del contexto regulatorio.",
+    ref: "Bel, G. (2006). <i>Economía y política de la privatización local</i>. Madrid: Marcial Pons.<br>Bel, G., Fageda, X., & Warner, M. E. (2010). Is private production of public services cheaper than public production? <i>Journal of Policy Analysis and Management</i>, 29(3)."
+  },
+  2: {
+    title: "Mito del Ahorro de Costes",
+    tags: ["MICRO", "METODOLOGÍA"],
+    text: "Hallazgo empírico clave: <b>No existe diferencia sistemática de costes</b> entre producción pública y privada. El ahorro no proviene de la titularidad (quién es el dueño), sino de la estructura del mercado. Bel refuta el dogma neoliberal de que 'lo privado siempre es más barato'.",
+    ref: "Bel, G., & Warner, M. E. (2008). Does privatization of solid waste and water services reduce costs? A review of empirical studies. <i>Resources, Conservation and Recycling</i>, 52(12)."
+  },
+  3: {
+    title: "Competencia como Factor Clave",
+    tags: ["MICRO", "MECANISMO"],
+    text: "La variable que realmente reduce costes es la <b>competencia</b>, no la privatización. Privatizar un monopolio natural sin competencia o regulación fuerte no genera eficiencia, solo transfiere rentas al monopolista privado.",
+    ref: "Bel, G., & Fageda, X. (2017). What have we learned from the last three decades of empirical studies on factors driving local privatization? <i>Local Government Studies</i>, 43(4)."
+  },
+  4: {
+    title: "Costes de Transacción",
+    tags: ["MICRO", "TEORÍA"],
+    text: "La externalización (outsourcing) conlleva costes de monitoreo, negociación y cumplimiento de contratos. Si estos costes son altos (por complejidad del servicio o especificidad de activos), la gestión pública directa puede ser más eficiente económicamente.",
+    ref: "Bel, G., & Fageda, X. (2007). Why do local governments privatise public services? <i>Local Government Studies</i>, 33(4)."
+  },
+  5: {
+    title: "Low-balling (Ofertas a la baja)",
+    tags: ["MICRO"],
+    text: "Estrategia donde empresas privadas ofertan precios artificialmente bajos para ganar el concurso, planeando renegociar al alza una vez asegurado el contrato. Esto distorsiona la eficiencia aparente de la privatización.",
+    ref: "Albalate, D., & Bel, G. (2020). <i>Mitos y realidades de la colaboración público-privada</i>. Valencia: Tirant lo Blanch."
+  },
+  6: {
+    title: "Falta de Evidencia Sistemática",
+    tags: ["METODOLOGÍA"],
+    text: "A través de meta-análisis globales, Bel demuestra que la literatura académica no soporta la idea de superioridad privada. Los resultados dependen del tiempo, el sector y la metodología, no de una ley económica universal.",
+    ref: "Bel, G., Fageda, X., & Warner, M. E. (2010). A meta-regression analysis of solid waste and water services."
+  },
+  10: {
+    title: "Reforma del Gobierno Local",
+    tags: ["MESO"],
+    text: "Análisis de cómo los municipios gestionan servicios. Bel observa un movimiento pendular: de la privatización masiva en los 90 a una gestión más híbrida y pragmática en la actualidad.",
+    ref: "Bel, G., & Fageda, X. (2009). Factors explaining local privatization: a meta-regression analysis. <i>Public Choice</i>, 139."
+  },
+  11: {
+    title: "Remunicipalización",
+    tags: ["MESO", "TENDENCIA"],
+    text: "Tendencia global de devolver servicios al sector público (insourcing). Bel argumenta que no es un 'retorno al socialismo', sino una corrección de mercado ante altos costes de transacción o fallos de proveedores privados.",
+    ref: "Bel, G., & Gradus, R. (2018). Privatisation, outsourcing and inter-municipal cooperation. <i>Local Government Studies</i>, 44(2)."
+  },
+  12: {
+    title: "Pragmatismo vs Ideología",
+    tags: ["MESO", "TEORÍA"],
+    text: "Bel demuestra empíricamente que los alcaldes (de izquierda o derecha) toman decisiones basándose en <b>restricciones fiscales y pragmatismo</b>, no en ideología política. Se privatiza por dinero o eficiencia, no por doctrina.",
+    ref: "Bel, G., & Fageda, X. (2009). Factors explaining local privatization. <i>Public Choice</i>."
+  },
+  13: {
+    title: "Cooperación Intermunicipal",
+    tags: ["MESO"],
+    text: "Alternativa a la privatización para municipios pequeños. Agruparse (mancomunidades) permite alcanzar economías de escala sin perder el control público del servicio.",
+    ref: "Bel, G., Fageda, X., & Mur, M. (2014). Does cooperation reduce service delivery costs? <i>Journal of Public Administration Research and Theory</i>."
+  },
+  14: {
+    title: "Economías de Escala",
+    tags: ["MICRO", "MESO"],
+    text: "Reducción del coste unitario al aumentar el volumen. Crucial en servicios de red (agua, transporte). Si un municipio es muy pequeño, privatizar o cooperar es necesario para alcanzar la escala óptima.",
+    ref: "Bel, G., & Fageda, X. (2010)."
+  },
+  15: {
+    title: "Empresas Mixtas",
+    tags: ["MESO"],
+    text: "Modelo híbrido público-privado. Bel señala que a menudo se usan para mantener control político mientras se accede a capital privado, pero sufren de conflictos de interés y captura del regulador.",
+    ref: "Bel, G., & Fageda, X. (2010). Partial privatisation in local service delivery. <i>Local Government Studies</i>."
+  },
+  20: {
+    title: "Infraestructuras y Nación",
+    tags: ["MACRO", "HISTORIA"],
+    text: "Análisis de cómo España ha usado el transporte (carreteras, trenes) desde el siglo XVIII no para la eficiencia económica, sino para la <b>construcción nacional</b> y la centralización del poder.",
+    ref: "Bel, G. (2012). <i>Infrastructure and the Political Economy of Nation Building in Spain, 1720–2010</i>. Sussex Academic Press."
+  },
+  21: {
+    title: "España Radial (Km 0)",
+    tags: ["MACRO", "GEOGRAFÍA"],
+    text: "Crítica al diseño radial donde todo pasa por Madrid. Bel argumenta que esto responde a una lógica política de jerarquía, ignorando flujos económicos naturales como el Corredor Mediterráneo.",
+    ref: "Bel, G. (2011). <i>España, capital París</i>. Barcelona: Destino."
+  },
+  22: {
+    title: "Centralización Política",
+    tags: ["MACRO", "POLÍTICA"],
+    text: "Uso del presupuesto público para consolidar la capitalidad de Madrid, a menudo en detrimento de la eficiencia económica global del estado.",
+    ref: "Bel, G. (2011). <i>España, capital París</i>."
+  },
+  23: {
+    title: "AVE (Alta Velocidad)",
+    tags: ["MACRO", "GASTO"],
+    text: "Paradigma de la política sobre la economía. España tiene la mayor red de AVE por habitante del mundo, pero con muy bajos pasajeros. Bel lo califica de ruina financiera impulsada por rédito electoral.",
+    ref: "Albalate, D., & Bel, G. (2012). <i>The Economics and Politics of High-Speed Rail</i>. Lexington Books."
+  },
+  24: {
+    title: "Peajes y Redistribución",
+    tags: ["MACRO"],
+    text: "Análisis de la inequidad territorial. Bel critica que unas regiones paguen peajes (Cataluña, Valencia) mientras otras tienen autovías gratuitas financiadas por todos, generando agravios territoriales.",
+    ref: "Bel, G. (2010). <i>La España del gasto</i>. Barcelona: RBA."
+  },
+  25: {
+    title: "Demanda vs Oferta Política",
+    tags: ["MACRO", "ECONOMÍA"],
+    text: "La infraestructura debería seguir a la demanda (donde hay tráfico). En España, la infraestructura (oferta) se construye para crear demanda o por razones políticas, lo cual es ineficiente.",
+    ref: "Albalate, D., & Bel, G. (2012)."
+  },
+  30: {
+    title: "Public Choice Theory",
+    tags: ["TEORÍA"],
+    text: "Marco teórico que aplica la economía a la política. Bel asume que políticos y burócratas actúan por interés propio (votos, presupuesto) y no necesariamente por el 'bien común'.",
+    ref: "Bel, G. (2006). <i>Economía y política de la privatización local</i>."
+  },
+  31: {
+    title: "Meta-regresión",
+    tags: ["METODOLOGÍA"],
+    text: "Técnica estadística avanzada utilizada por Bel para sintetizar los resultados de docenas de estudios previos. Permite ver el 'bosque' (efecto real) más allá de los 'árboles' (estudios individuales contradictorios).",
+    ref: "Bel, G., Fageda, X., & Warner, M. E. (2010)."
+  },
+  32: {
+    title: "Dependencia de la Trayectoria",
+    tags: ["TEORÍA", "HISTORIA"],
+    text: "Path Dependence. Las decisiones históricas (como el diseño radial de los Borbones en el s. XVIII) condicionan y limitan las opciones actuales de infraestructura, haciendo difícil cambiar el modelo.",
+    ref: "Bel, G. (2012). <i>Infrastructure and the Political Economy...</i>"
+  },
+  33: {
+    title: "Captura del Regulador",
+    tags: ["TEORÍA"],
+    text: "Riesgo en privatizaciones y empresas mixtas donde la empresa regulada acaba dominando o manipulando al organismo público que debería controlarla.",
+    ref: "Bel, G. (2006)."
+  }
+};
+
+// --- 5. LÓGICA DE INTERACCIÓN ---
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const data = infoData[nodeId];
+    const infoDiv = document.getElementById('infoContent');
+    
+    // Abrir panel si está cerrado
+    document.getElementById('rightPanel').classList.remove('closed');
+
+    if (data) {
+      // Generar etiquetas HTML
+      let tagsHtml = data.tags.map(t => {
+        let className = 'meta-tag';
+        if(t==='MICRO') className += ' tag-micro';
+        if(t==='MESO') className += ' tag-meso';
+        if(t==='MACRO') className += ' tag-macro';
+        if(t==='METODOLOGÍA' || t==='TEORÍA') className += ' tag-metodo';
+        return `<span class="${className}">${t}</span>`;
+      }).join('');
+
+      infoDiv.innerHTML = `
+        <h3>${data.title}</h3>
+        <div>${tagsHtml}</div>
+        <p class="content-text">${data.text}</p>
+        <div class="citation"><b>Referencia:</b><br>${data.ref}</div>
+      `;
+    } else {
+      // Fallback por si falta info (aunque ahora todo está cubierto)
+      infoDiv.innerHTML = `<h3>${nodes.get(nodeId).label.replace('\n',' ')}</h3><p class="content-text">Concepto auxiliar en la estructura teórica. Analiza sus conexiones para entender el contexto.</p>`;
+    }
+  }
+});
+
+// Funciones de UI
+function togglePanel(id) {
+  document.getElementById(id).classList.toggle('closed');
+}
+
+function filterNetwork(groupId) {
+  if (groupId === 'all') {
+    nodes.forEach(node => nodes.update({id: node.id, hidden: false}));
+  } else {
+    nodes.forEach(node => {
+      if (node.group === groupId) {
+        nodes.update({id: node.id, hidden: false});
+      } else {
+        nodes.update({id: node.id, hidden: true});
+      }
+    });
+  }
+  network.fit();
+}
+
+function resetCamera() {
+  network.fit({ animation: { duration: 1000, easingFunction: 'easeInOutQuad' } });
+}
+
+// Búsqueda
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  const term = e.target.value.toLowerCase();
+  if (!term) { network.unselectAll(); return; }
+  
+  const foundNodes = nodes.get().filter(n => n.label.toLowerCase().includes(term));
+  
+  if(foundNodes.length > 0) {
+    const nodeIds = foundNodes.map(n => n.id);
+    network.selectNodes(nodeIds);
+    if(nodeIds.length === 1) {
+      network.focus(nodeIds[0], {scale: 1.2, animation: true});
+      network.emit('click', {nodes: [nodeIds[0]]}); // Simular click para mostrar info
+    }
+  }
+});
+
+</script>
+</body>
+</html>

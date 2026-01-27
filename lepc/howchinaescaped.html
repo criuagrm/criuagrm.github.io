@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: How China Escaped Shock Therapy</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f4f4f0;
+    --sidebar-bg: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #596275;
+    --accent-color: #c0392b; /* Rojo China */
+    --accent-light: #e74c3c;
+    --border-color: #dcdde1;
+    --sidebar-width: 400px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- BARRA LATERAL (Responsive) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.08);
+    z-index: 100;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    height: 100%;
+  }
+
+  /* Estado cerrado para escritorio */
+  .sidebar.closed {
+    margin-left: calc(var(--sidebar-width) * -1);
+  }
+
+  .header {
+    padding: 20px;
+    background: #2c3e50;
+    color: #ecf0f1;
+    border-bottom: 4px solid var(--accent-color);
+  }
+
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.2rem;
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+  }
+
+  .header .meta {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .filters {
+    padding: 15px 20px;
+    background: #ecf0f1;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+  }
+
+  .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #bdc3c7;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    flex: 1 1 45%;
+    display: flex; align-items: center;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { background: #dfe6e9; border-color: #95a5a6; }
+  
+  .dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+  .dot-hist { background: #7f8c8d; }
+  .dot-shock { background: #e74c3c; }
+  .dot-grad { background: #27ae60; }
+  .dot-crisis { background: #f39c12; }
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 25px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tipografía del contenido */
+  .info-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.4rem;
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  .info-subtitle {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+
+  .section-block { margin-bottom: 20px; }
+  
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+    border-left: 3px solid var(--accent-color);
+    padding-left: 8px;
+  }
+
+  .info-text { font-size: 0.9rem; line-height: 1.6; color: #34495e; margin: 0; }
+
+  .mech-box {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+  }
+  .mech-type { font-weight: bold; color: var(--accent-color); font-size: 0.7rem; }
+
+  .data-box {
+    background: #fff3f3; border: 1px solid #ffcccc;
+    padding: 12px; border-radius: 4px; margin-bottom: 15px;
+  }
+  .data-value { font-family: 'Merriweather', serif; font-size: 1rem; color: #c0392b; font-style: italic; }
+
+  .ref-box {
+    font-size: 0.75rem; color: #7f8c8d; margin-top: 20px;
+    padding-top: 10px; border-top: 1px solid #eee;
+  }
+
+  .footer {
+    padding: 10px; background: #ecf0f1; border-top: 1px solid var(--border-color);
+    font-size: 0.7rem; text-align: center; color: #7f8c8d;
+  }
+
+  /* --- RED / CANVAS --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    background-color: #fcfcfc;
+    background-image: radial-gradient(#bdc3c7 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* BOTONES FLOTANTES */
+  .float-btn {
+    position: absolute; 
+    z-index: 200;
+    background: white; border: 1px solid #bdc3c7;
+    padding: 8px 12px; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-weight: 500; color: #2c3e50;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .float-btn:active { transform: scale(0.95); }
+
+  #toggleSidebarBtn { top: 15px; left: 15px; display: flex; align-items: center; gap: 5px; }
+  
+  .canvas-controls {
+    position: absolute; bottom: 20px; right: 20px;
+    display: flex; gap: 10px; flex-direction: column;
+  }
+  @media (min-width: 768px) {
+    .canvas-controls { flex-direction: row; }
+  }
+
+  /* --- MEDIA QUERIES PARA MOBILE --- */
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    
+    .sidebar {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      transform: translateX(-100%);
+      margin-left: 0; /* Reset desktop margin logic */
+    }
+    
+    .sidebar.mobile-open {
+      transform: translateX(0);
+    }
+    
+    .sidebar.closed { margin-left: 0; } /* Reset */
+
+    #toggleSidebarBtn { top: 10px; left: 10px; }
+    
+    .filter-btn { flex: 1 1 100%; } /* Botones full width en mobile */
+  }
+
+</style>
+</head>
+<body>
+
+<!-- BARRA LATERAL -->
+<div class="sidebar" id="sidebar">
+  <div class="header">
+    <h1>How China Escaped Shock Therapy</h1>
+    <div class="meta">The Market Reform Debate</div>
+  </div>
+
+  <div class="filters">
+    <div class="btn-group">
+      <div class="filter-btn" onclick="focusNode(1)"><div class="dot dot-hist"></div> Raíces (Guanzi/1940s)</div>
+      <div class="filter-btn" onclick="focusNode(6)"><div class="dot dot-grad"></div> Sistema Dual (Doble Vía)</div>
+      <div class="filter-btn" onclick="focusNode(8)"><div class="dot dot-shock"></div> Terapia de Choque</div>
+      <div class="filter-btn" onclick="focusNode(11)"><div class="dot dot-crisis"></div> Crisis 1988 & Tiananmen</div>
+    </div>
+  </div>
+
+  <div class="content-area" id="infoPanel">
+    <div style="text-align: center; color: #bdc3c7; margin-top: 40%; font-family: 'Merriweather', serif;">
+      <p style="font-size: 1.1rem; margin-bottom: 10px;">Interacción con la Red</p>
+      <p style="font-size: 0.9rem;">Toque un nodo para desplegar el análisis detallado del libro.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div id="network-wrapper">
+  <button class="float-btn" id="toggleSidebarBtn" onclick="toggleSidebar()">
+    <span>☰</span> <span id="toggleText">Ocultar Panel</span>
+  </button>
+  
+  <div id="network"></div>
+  
+  <div class="canvas-controls">
+    <button class="float-btn" onclick="togglePhysics()">❄ Congelar</button>
+    <button class="float-btn" onclick="fitAll()">⌖ Centrar Todo</button>
+  </div>
+</div>
+
+<script>
+
+// --- BASE DE DATOS DE CONTENIDO (Basado en Weber, 2021) ---
+const bookData = {
+  1: {
+    title: "El Guanzi y el Debate Sal/Hierro", type: "Raíces Intelectuales",
+    text: "El libro argumenta que China no es una 'tabula rasa'. Las reformas de los 80s revivieron la antigua lógica del 'Guanzi': el Estado debe usar el mercado para estabilizar el mercado, equilibrando lo 'Ligero' (dinero) y lo 'Pesado' (bienes).",
+    mech: "Mecanismo (Meso): El Estado actúa como el mayor comerciante para suavizar fluctuaciones, en lugar de planificar cuotas rígidas o dejar todo al laissez-faire.",
+    data: "Evidencia Histórica: Siglo VII a.C. La creación de reservas de granos para comprar barato y vender caro estabilizó precios por siglos.",
+    ref: "Weber, Cap. 1: 'The Guanzi and the Art of Light and Heavy'."
+  },
+  2: {
+    title: "Hiperinflación de los 40s", type: "Contexto Formativo",
+    text: "El CCP (Partido Comunista) ganó legitimidad no solo por armas, sino por vencer la hiperinflación del Kuomintang. Aprendieron que la estabilidad de precios es supervivencia política.",
+    mech: "Mecanismo (Macro): 'Unidades de Paridad de Poder Adquisitivo'. Vincular salarios y ahorros a una canasta de bienes (arroz, aceite, carbón), no al dinero fiduciario.",
+    data: "Dato: En Shanghai (1949), los precios subían varias veces al día. El CCP estabilizó esto en meses mediante el control logístico de bienes, no solo política monetaria.",
+    ref: "Weber, Cap. 2: 'War Economy and the Rise of the Planner'."
+  },
+  3: {
+    title: "Reintegración Global (1978)", type: "Evento Geopolítico",
+    text: "Tras la muerte de Mao, Hua Guofeng y Deng inician la apertura. Envían delegaciones a Europa y Japón. Descubren que la planificación central soviética estaba obsoleta.",
+    mech: "Mecanismo (Meso): Aprendizaje institucional. Abandono de la autarquía para importar tecnología financiada con exportación de recursos.",
+    data: "Dato: En 1978, el ingreso per cápita de China era menor que el de muchas naciones subsaharianas.",
+    ref: "Weber, Cap. 3: 'Economics in Command'."
+  },
+  4: {
+    title: "Grupo de Desarrollo Rural", type: "Actor: Gradualistas",
+    text: "Jóvenes reformadores que vivieron en el campo (sent-down youth). Descubrieron que los campesinos comerciaban secretamente. Propusieron legalizar lo que ya ocurría.",
+    mech: "Mecanismo (Micro): Sistema de Responsabilidad Familiar. Permitir a los hogares quedarse con el excedente tras cumplir la cuota estatal.",
+    data: "Impacto: La producción agrícola se disparó, creando la base de capital para la industrialización rural (TVEs).",
+    ref: "Weber, Cap. 4: 'From the Countryside'."
+  },
+  5: {
+    title: "Conferencia del Barco Bashan (1985)", type: "Evento Intelectual",
+    text: "Evento crucial donde economistas occidentales (Tobin, Kornai) debatieron con chinos. Kornai advirtió que sin endurecer la 'restricción presupuestaria', liberar precios solo causaría inflación.",
+    mech: "Mecanismo (Teórico): Debate entre Control Macro (Tobin) vs. Cambio Estructural (Kornai). Los gradualistas chinos tomaron lo que servía: gestión de demanda.",
+    data: "Cita: Janos Kornai advirtió: 'No pueden tener mercado sin propiedad privada', pero China ignoró la segunda parte y tuvo éxito.",
+    ref: "Weber, Cap. 5: 'The Bashan Boat Conference'."
+  },
+  6: {
+    title: "El Sistema de Doble Vía", type: "Concepto Central",
+    text: "El núcleo de la tesis de Weber. En lugar de destruir el plan (Big Bang), China permitió que el mercado creciera *alrededor* del plan. Precios fijos para cuotas estatales, precios libres para el excedente.",
+    mech: "Mecanismo (Meso/Institucional): Coexistencia dinámica. El sector planificado actúa como estabilizador; el mercado marginal señala la asignación eficiente.",
+    data: "Evidencia: Hacia 1985, la mayoría de las empresas estatales ya vendían parte de su producción a precios de mercado, suavizando la transición.",
+    ref: "Weber, Cap. 6: 'The Reform Debate'."
+  },
+  7: {
+    title: "Wu Jinglian y Reformistas de Paquete", type: "Actor: Shock Therapy",
+    text: "El bando opuesto a la Doble Vía. Influenciados por el Banco Mundial y Milton Friedman. Argumentaban que la Doble Vía creaba corrupción y distorsiones. Exigían liberalización total e inmediata.",
+    mech: "Mecanismo Propuesto: 'Reforma Integrada'. Liberación de precios + Control monetario estricto + Privatización rápida.",
+    data: "Dato: Wu Jinglian era llamado 'Wu Mercado'. Su propuesta alineaba a China con el Consenso de Washington.",
+    ref: "Weber, Cap. 6: Argumentos a favor de la eficiencia de mercado teórica."
+  },
+  8: {
+    title: "Intento Fallido de 1986", type: "Evento Crítico",
+    text: "Bajo influencia de Zhao Ziyang y los reformistas de paquete, se planeó un 'Big Bang' para 1987. Se abortó en el último minuto debido a advertencias sobre la imposibilidad de predecir la inflación.",
+    mech: "Mecanismo (Político): El 'Instituto de Reforma del Sistema' presentó modelos mostrando que el déficit fiscal se saldría de control.",
+    data: "Consecuencia: Se detuvo el plan, salvando a China del destino de Polonia en 1990.",
+    ref: "Weber, Cap. 7: 'The 1986 Stalemate'."
+  },
+  9: {
+    title: "Crisis de Inflación de 1988", type: "Punto de Inflexión",
+    text: "Deng Xiaoping, frustrado por la lentitud, impulsó una liberalización de precios radicales ('Pasar la barrera'). El mero anuncio provocó pánico masivo.",
+    mech: "Mecanismo (Micro/Conductual): Expectativas desancladas. La gente corrió a los bancos a retirar ahorros para comprar cualquier bien físico, temiendo que el dinero perdiera valor.",
+    data: "Dato Duro: La inflación oficial saltó al 18.5%, pero en bienes básicos fue mucho mayor. Fue la mayor crisis desde 1949.",
+    ref: "Weber, Cap. 7: 'Escaping the Trap'."
+  },
+  10: {
+    title: "Retiro y Reajuste", type: "Respuesta Política",
+    text: "Ante el caos de 1988, el gobierno frenó en seco la Terapia de Choque. Se restauraron controles centrales y se priorizó la estabilidad social sobre la eficiencia teórica.",
+    mech: "Mecanismo (Gubernamental): Rectificación económica. Uso de controles administrativos para enfriar la economía, desacreditando a los reformistas radicales.",
+    data: "Resultado: La inflación bajó, pero el descontento por la corrupción (arbitraje de la doble vía) y la represión económica preparó el escenario para 1989.",
+    ref: "Weber, Cap. 7: Fin del coqueteo con el neoliberalismo puro."
+  },
+  11: {
+    title: "Tiananmen (1989)", type: "Desenlace Trágico",
+    text: "Weber conecta la crisis económica del 88 directamente con las protestas. El descontento no era solo 'democracia', sino inflación y corrupción derivadas de las reformas fallidas.",
+    mech: "Mecanismo (Socio-Político): La pérdida de control económico deslegitimó al ala liberal del partido (Zhao Ziyang).",
+    data: "Consecuencia: Purga de los reformistas radicales (apoyaban a los estudiantes o huyeron). Triunfo definitivo del enfoque gradualista-estatal bajo Jiang Zemin.",
+    ref: "Weber, Cap. 8: 'Tiananmen and Beyond'."
+  },
+  12: {
+    title: "Conclusión: El Estado Creador de Mercado", type: "Síntesis",
+    text: "China escapó de la Terapia de Choque no por accidente, sino por una lucha intelectual donde prevaleció la visión de que el mercado es una herramienta del Estado, no un fin en sí mismo.",
+    mech: "Mecanismo Final: El Estado mantiene los 'altos mandos' (banca, energía, infraestructura) mientras permite competencia feroz en manufactura.",
+    data: "Comparación: Rusia perdió 40% de su PIB en los 90s con Terapia de Choque; China creció al 9-10% anual con la Doble Vía.",
+    ref: "Weber, Epílogo."
+  }
+};
+
+// --- CONFIGURACIÓN DE LA RED ---
+const nodes = new vis.DataSet([
+  { id: 1, label: "Raíces:\nGuanzi & Sal", group: 'root', shape: 'box' },
+  { id: 2, label: "Hiperinflación\n1940s", group: 'root', shape: 'box' },
+  { id: 3, label: "Apertura\n1978", group: 'root', shape: 'ellipse' },
+  { id: 4, label: "Gradualistas\n(Rural)", group: 'grad', shape: 'dot', size: 25 },
+  { id: 5, label: "Conf.\nBashan '85", group: 'event', shape: 'diamond', size: 20 },
+  { id: 6, label: "Sistema\nDoble Vía", group: 'grad', shape: 'star', size: 30 },
+  { id: 7, label: "Wu Jinglian\n(Shock Therapy)", group: 'shock', shape: 'triangleDown', size: 20 },
+  { id: 8, label: "Intento Fallido\n1986", group: 'shock', shape: 'triangle', size: 15 },
+  { id: 9, label: "Crisis Inflación\n1988", group: 'crisis', shape: 'hexagon', size: 25 },
+  { id: 10, label: "Freno de\nEmergencia", group: 'grad', shape: 'square' },
+  { id: 11, label: "Tiananmen\n1989", group: 'crisis', shape: 'dot', size: 15, color: '#2c3e50' },
+  { id: 12, label: "Estado Creador\nde Mercado", group: 'final', shape: 'star', size: 40 }
+]);
+
+const edges = new vis.DataSet([
+  { from: 1, to: 6, label: "inspira lógica", arrows: "to", dashes: true },
+  { from: 2, to: 10, label: "memoria inst.", arrows: "to", dashes: true },
+  { from: 3, to: 4, label: "habilita", arrows: "to" },
+  { from: 4, to: 6, label: "inventa", arrows: "to" },
+  { from: 5, to: 7, label: "valida teoría", arrows: "to" },
+  { from: 5, to: 6, label: "debate", arrows: "to" },
+  { from: 7, to: 6, label: "ataca", arrows: "to", color: {color:'#c0392b'} },
+  { from: 7, to: 8, label: "propone", arrows: "to" },
+  { from: 6, to: 8, label: "resiste", arrows: "to", color: {color:'#27ae60'} },
+  { from: 7, to: 9, label: "causa pánico", arrows: "to", width: 2 },
+  { from: 9, to: 10, label: "fuerza", arrows: "to" },
+  { from: 9, to: 11, label: "detona", arrows: "to", width: 2 },
+  { from: 10, to: 11, label: "contexto", arrows: "to" },
+  { from: 11, to: 7, label: "desacredita", arrows: "to", color: {color:'#c0392b'} },
+  { from: 10, to: 12, label: "consolida", arrows: "to" },
+  { from: 6, to: 12, label: "evoluciona a", arrows: "to", width: 3 }
+]);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    font: { face: 'Roboto', color: '#333', size: 14, multi: true },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    color: { color: '#bdc3c7', highlight: '#2c3e50' },
+    width: 1.5,
+    smooth: { type: 'continuous' },
+    font: { align: 'middle', size: 10, background: 'rgba(255,255,255,0.7)' }
+  },
+  groups: {
+    root: { color: { background: '#ecf0f1', border: '#7f8c8d' } },
+    grad: { color: { background: '#e8f8f5', border: '#27ae60' }, font: {color: '#1e8449'} },
+    shock: { color: { background: '#fdedec', border: '#c0392b' }, font: {color: '#922b21'} },
+    crisis: { color: { background: '#fef9e7', border: '#f39c12' } },
+    event: { color: { background: '#ebf5fb', border: '#3498db' } },
+    final: { color: { background: '#ffd700', border: '#d4ac0d' }, font: {size: 16, strokeWidth: 3, strokeColor: '#fff'} }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -80,
+      centralGravity: 0.005,
+      springLength: 150,
+      springConstant: 0.1
+    }
+  },
+  interaction: { hover: true, tooltipDelay: 200 }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    // En Mobile: Abrir sidebar si está cerrada
+    const sidebar = document.getElementById('sidebar');
+    if (window.innerWidth <= 768 && !sidebar.classList.contains('mobile-open')) {
+      toggleSidebar();
+    } else if (window.innerWidth > 768 && sidebar.classList.contains('closed')) {
+      toggleSidebar();
+    }
+    
+    if (info) {
+      document.getElementById('infoPanel').innerHTML = `
+        <h2 class="info-title">${info.title}</h2>
+        <div class="info-subtitle">${info.type}</div>
+        
+        <div class="section-block">
+            <span class="section-label">Análisis</span>
+            <p class="info-text">${info.text}</p>
+        </div>
+
+        <div class="mech-box">
+            <div class="mech-type">${info.mech.split(':')[0]}</div>
+            ${info.mech.split(':')[1]}
+        </div>
+
+        <div class="data-box">
+            <span class="section-label" style="border-color:#e74c3c;">Datos / Evidencia</span>
+            <div class="data-value">${info.data}</div>
+        </div>
+
+        <div class="ref-box">
+            <strong>Fuente:</strong> ${info.ref}
+        </div>
+      `;
+    }
+  }
+});
+
+// Función Toggle Sidebar (Compatible con Mobile y Desktop)
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const btnText = document.getElementById('toggleText');
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    sidebar.classList.toggle('mobile-open');
+    btnText.innerText = sidebar.classList.contains('mobile-open') ? "Cerrar Panel" : "Ver Info";
+  } else {
+    sidebar.classList.toggle('closed');
+    btnText.innerText = sidebar.classList.contains('closed') ? "Mostrar Panel" : "Ocultar Panel";
+    // Ajustar red al cambiar tamaño del contenedor
+    setTimeout(() => {
+      network.fit({ animation: { duration: 500, easingFunction: 'easeInOutQuad' } });
+    }, 350);
+  }
+}
+
+// Control de Física
+let isPhysicsEnabled = true;
+function togglePhysics() {
+  isPhysicsEnabled = !isPhysicsEnabled;
+  network.setOptions({ physics: { enabled: isPhysicsEnabled } });
+}
+
+// Centrar y Enfocar Nodo
+function fitAll() {
+  network.fit({ animation: { duration: 1000, easingFunction: 'easeInOutQuad' } });
+  network.unselectAll();
+}
+
+function focusNode(nodeId) {
+  network.selectNodes([nodeId]);
+  network.focus(nodeId, {
+    scale: 1.2,
+    animation: { duration: 1000, easingFunction: 'easeInOutQuad' }
+  });
+  // Simular click para cargar info
+  network.emit('click', { nodes: [nodeId] });
+}
+
+// Inicialización Responsiva
+window.addEventListener('resize', () => {
+  const sidebar = document.getElementById('sidebar');
+  const btnText = document.getElementById('toggleText');
+  
+  if (window.innerWidth <= 768) {
+    sidebar.classList.remove('closed'); // Limpiar estado desktop
+    if (!sidebar.classList.contains('mobile-open')) {
+      btnText.innerText = "Ver Info";
+    }
+  } else {
+    sidebar.classList.remove('mobile-open'); // Limpiar estado mobile
+    if (!sidebar.classList.contains('closed')) {
+      btnText.innerText = "Ocultar Panel";
+    }
+  }
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Análisis: The Oxford Handbook of Capitalism</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #fdfdfd;
+    --sidebar-bg: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #546e7a;
+    --accent-color: #c0392b; /* Rojo Oxford */
+    --border-color: #e0e0e0;
+    --sidebar-width: 450px;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- BARRA LATERAL --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    z-index: 20;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
+    position: absolute;
+    height: 100%;
+  }
+
+  .header {
+    padding: 20px;
+    background: #002147; /* Azul Oxford */
+    color: #fff;
+    border-bottom: 4px solid var(--accent-color);
+  }
+
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.3rem;
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+  }
+
+  .header .meta {
+    font-size: 0.75rem;
+    color: #bdc3c7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .filters {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #cfd8dc;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    color: #455a64;
+  }
+  .filter-btn:hover { background: #eceff1; border-color: #b0bec5; }
+  
+  /* Colores de categorías */
+  .btn-fund { border-left: 4px solid #2e86c1; } /* Azul */
+  .btn-corp { border-left: 4px solid #27ae60; } /* Verde */
+  .btn-fin { border-left: 4px solid #f39c12; }  /* Naranja */
+  .btn-sys { border-left: 4px solid #8e44ad; }  /* Morado */
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 25px;
+  }
+
+  /* Estilos del contenido */
+  .chapter-number {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #95a5a6;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .info-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 5px;
+    line-height: 1.2;
+  }
+
+  .author-name {
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    font-style: italic;
+    margin-bottom: 15px;
+    display: block;
+    font-family: 'Merriweather', serif;
+  }
+
+  .section-header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #7f8c8d;
+    border-bottom: 1px solid #eee;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 3px;
+  }
+
+  .info-body { 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    color: #34495e; 
+    text-align: justify;
+  }
+
+  .data-box {
+    background: #f4f6f7;
+    border-left: 3px solid #607d8b;
+    padding: 12px;
+    margin: 15px 0;
+    font-size: 0.9rem;
+  }
+
+  .biblio-box {
+    font-family: 'Merriweather', serif;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    background: #fff;
+    border: 1px dashed #bdc3c7;
+    padding: 10px;
+    margin-top: 20px;
+  }
+
+  /* --- CANVAS --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100vh;
+    background-color: #f0f2f5;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+  }
+
+  /* CONTROLES */
+  .toggle-sidebar-btn {
+    position: absolute; top: 15px; left: 15px;
+    z-index: 50;
+    background: #002147; color: white;
+    border: none; padding: 8px 12px;
+    border-radius: 4px; cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .legend {
+    position: absolute; bottom: 20px; left: 20px;
+    background: rgba(255,255,255,0.9);
+    padding: 10px; border-radius: 4px;
+    font-size: 0.75rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div class="header">
+    <h1>The Oxford Handbook<br>of Capitalism</h1>
+    <div class="meta">Dennis C. Mueller (Editor) • 2012</div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-btn btn-fund" onclick="focusGroup('fund')">Fundamentos & Historia</div>
+    <div class="filter-btn btn-corp" onclick="focusGroup('corp')">La Empresa Moderna</div>
+    <div class="filter-btn btn-fin" onclick="focusGroup('fin')">Finanzas & Crisis</div>
+    <div class="filter-btn btn-sys" onclick="focusGroup('sys')">Sistemas Comparados</div>
+  </div>
+
+  <div class="content-area" id="infoPanel">
+    <div style="text-align: center; color: #95a5a6; margin-top: 50%; font-family: 'Merriweather', serif;">
+      <i>Haga clic en un nodo para explorar<br>el contenido del capítulo.</i>
+    </div>
+  </div>
+</div>
+
+<div id="network-wrapper">
+  <button class="toggle-sidebar-btn" onclick="toggleSidebar()">☰ Menú</button>
+  <div id="network"></div>
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:#2e86c1"></div>Fundamentos (Instituciones/Historia)</div>
+    <div class="legend-item"><div class="dot" style="background:#27ae60"></div>Corporación & Gestión</div>
+    <div class="legend-item"><div class="dot" style="background:#f39c12"></div>Mercados Financieros</div>
+    <div class="legend-item"><div class="dot" style="background:#8e44ad"></div>Variedades de Capitalismo</div>
+  </div>
+</div>
+
+<script>
+// --- DATOS DEL MANUAL (Extraction from PDF) ---
+const bookData = {
+  1: {
+    cat: "Fundamentos", author: "Dennis C. Mueller",
+    title: "Introducción: The Good, The Bad, and The Ugly",
+    text: "Mueller define el capitalismo no como una institución única, sino como un conjunto: derechos de propiedad, mercados libres y empresas. Discute la paradoja de que, aunque el capitalismo genera riqueza sin precedentes (The Good), conlleva monopolios y 'rent-seeking' (The Bad) y desigualdades severas (The Ugly).",
+    mech: "Destaca la importancia de la 'destrucción creativa' de Schumpeter frente a la eficiencia estática de Smith.",
+    data: "Contraste: Corea del Sur (PIB per cápita $27,000) vs Corea del Norte ($1,800) como prueba del sistema.",
+    ref: "Capítulo 1. Cita a Schumpeter (1934) sobre el empresario como constructor de imperios."
+  },
+  2: {
+    cat: "Fundamentos", author: "Jeffry A. Frieden",
+    title: "Historia: La Economía Capitalista Mundial",
+    text: "Analiza la evolución desde el mercantilismo hasta la globalización moderna. Argumenta que el patrón oro fue el mecanismo clave de integración en el S.XIX, sacrificando la autonomía política interna por la estabilidad cambiaria externa.",
+    mech: "Explica cómo la 'tecnología y los derechos de propiedad' transformaron el colonialismo en mercados integrados.",
+    data: "Dato: Entre 1870 y 1913, el comercio mundial creció al doble de velocidad que la producción mundial.",
+    ref: "Capítulo 2. Enfoque en la transición del Mercantilismo al Liberalismo."
+  },
+  3: {
+    cat: "Fundamentos", author: "Thorsten Beck",
+    title: "Instituciones Legales y Desarrollo",
+    text: "Compara el 'Common Law' (anglosajón) vs 'Civil Law' (francés). Argumenta que el Common Law protege mejor a los inversores minoritarios, fomentando mercados financieros más profundos, mientras que el Civil Law favorece la concentración bancaria y estatal.",
+    mech: "Teoría de los 'Orígenes Legales' (La Porta et al.): Las instituciones legales determinan la estructura financiera.",
+    data: "Evidencia: Los países con Common Law tienen mercados de valores significativamente mayores en % del PIB.",
+    ref: "Capítulo 3. Discusión sobre la hipótesis de 'Law and Finance'."
+  },
+  4: {
+    cat: "Fundamentos", author: "Paul H. Rubin & Tilman Klumpp",
+    title: "Derechos de Propiedad y Capitalismo",
+    text: "Define la propiedad como un 'haz de derechos' (control, beneficio, exclusión, transferencia). Sin estos derechos seguros, los incentivos para invertir desaparecen. Aborda el Teorema de Coase y cómo los costos de transacción definen la necesidad de leyes.",
+    mech: "Mecanismo: La propiedad privada resuelve la 'Tragedia de los Comunes' al internalizar externalidades.",
+    data: "Ejemplo: El desarrollo de derechos de propiedad intelectual (patentes) como motor de la innovación moderna.",
+    ref: "Capítulo 8. Referencia a Locke y la teoría evolutiva de la propiedad."
+  },
+  5: {
+    cat: "Corporación", author: "David J. Teece",
+    title: "Gestión y Gobernanza: Perspectiva de Capacidades",
+    text: "Critica la teoría de la agencia por ser demasiado cínica. Propone la 'Teoría de Capacidades Dinámicas': los gerentes no solo evitan el robo (agencia), sino que deben orquestar activos intangibles para innovar. La empresa es más que un nexo de contratos.",
+    mech: "Diferencia: 'Economizar' (Transaction Costs) vs 'Estrategiar' (Dynamic Capabilities).",
+    data: "Caso: El éxito de empresas como Toyota o Apple depende de capacidades organizativas únicas, no solo de incentivos.",
+    ref: "Capítulo 9. Contraste con Williamson y Jensen."
+  },
+  6: {
+    cat: "Corporación", author: "Dennis C. Mueller",
+    title: "Fusiones y Mercado de Control Corporativo",
+    text: "Una crítica mordaz. Muestra que la mayoría de las fusiones destruyen valor para los accionistas adquirentes. Las olas de fusiones se explican mejor por la 'hibris' (arrogancia) de los gerentes y la sobrevaluación de acciones que por eficiencia.",
+    mech: "Hipótesis de la Hibris (Roll): Los gerentes pagan de más creyendo que pueden gestionar mejor los activos.",
+    data: "Dato: Los accionistas de las empresas adquirentes pierden aprox. 12% de valor en grandes fusiones (1998-2001).",
+    ref: "Capítulo 16. Evidencia contra la hipótesis neoclásica de eficiencia."
+  },
+  7: {
+    cat: "Corporación", author: "John C. Coffee Jr.",
+    title: "Propiedad Dispersa: Lumpers vs Splitters",
+    text: "Desafía la idea de que la ley crea mercados. Argumenta que la propiedad dispersa (modelo anglosajón) surgió por 'orden privado' y confianza (bolsas de valores fuertes, banqueros de inversión) *antes* de que existieran leyes fuertes de protección al inversor.",
+    mech: "Causalidad Inversa: La dispersión de la propiedad creó la demanda política para leyes de protección, no al revés.",
+    data: "Historia: La Bolsa de Nueva York impuso estándares de auditoría en 1900, mucho antes de la SEC (1934).",
+    ref: "Capítulo 17. Crítica a la tesis de La Porta et al."
+  },
+  8: {
+    cat: "Corporación", author: "Martin J. Conyon",
+    title: "Compensación Ejecutiva",
+    text: "Analiza por qué los CEO ganan tanto. Contrasta la 'contratación óptima' (pago por talento escaso) con el 'poder gerencial' (CEOs fijan su propio sueldo). Concluye que, aunque hay excesos, el aumento se debe en gran parte al uso de opciones sobre acciones (stock options).",
+    mech: "Riesgo Moral: Las opciones incentivan la toma de riesgos excesivos si no están bien diseñadas.",
+    data: "Cifra: En 1993 el pago del CEO era 100x el del empleado medio; en 2006 era 200x.",
+    ref: "Capítulo 14. Análisis post-crisis financiera de 2008."
+  },
+  9: {
+    cat: "Corporación", author: "Cowling & Tomlinson",
+    title: "Capitalismo de Monopolio",
+    text: "Argumentan que el capitalismo moderno tiende inherentemente al monopolio/oligopolio, no a la competencia perfecta. Las grandes transnacionales tienen poder para fijar precios y manipular la demanda, generando ineficiencia y desigualdad.",
+    mech: "Grado de Monopolio (Kalecki): Determina la distribución del ingreso entre ganancias y salarios.",
+    data: "Observación: La concentración industrial ha aumentado consistentemente en EEUU y Reino Unido desde los 80.",
+    ref: "Capítulo 12. Perspectiva heterodoxa/Marxista-Kaleckiana."
+  },
+  10: {
+    cat: "Finanzas", author: "Burton G. Malkiel",
+    title: "Burbujas en Precios de Activos",
+    text: "El autor de 'A Random Walk Down Wall Street' admite que los mercados son eficientes *generalmente*, pero sufren episodios de irracionalidad (burbujas). Analiza desde los tulipanes hasta la crisis subprime.",
+    mech: "Feedback Loop (Shiller): Subidas de precios generan expectativas de más subidas, divorciándose de los fundamentales.",
+    data: "Dato: En la burbuja japonesa (1989), el Palacio Imperial de Tokio valía más que toda California.",
+    ref: "Capítulo 15. Discusión sobre si los bancos centrales deben pinchar burbujas."
+  },
+  11: {
+    cat: "Finanzas", author: "Morck & Yeung",
+    title: "Problemas de Agencia y el Destino del Capitalismo",
+    text: "Examinan cómo los 'insiders' (gerentes o familias controladoras) expropian a los 'outsiders' (accionistas). En muchos países, el capitalismo no es de mercado, sino de 'amiguetes' o familiar, frenando la innovación.",
+    mech: "Piramidación: Permite controlar vastos imperios corporativos con muy poco capital propio.",
+    data: "Evidencia: Las empresas controladas por herederos tienen peor desempeño que las controladas por fundadores.",
+    ref: "Capítulo 13. Importancia de la destrucción creativa."
+  },
+  12: {
+    cat: "Sistemas", author: "Baumol, Litan & Schramm",
+    title: "Los Cuatro Tipos de Capitalismo",
+    text: "Clasifican el capitalismo en 4 tipos: 1) Guiado por el Estado, 2) Oligárquico, 3) De Grandes Firmas, 4) Emprendedor. Argumentan que la mezcla óptima es Grandes Firmas (para escalar) + Emprendedor (para innovar radicalmente).",
+    mech: "Innovación: El motor del crecimiento no es la competencia de precios, sino la innovación disruptiva.",
+    data: "Ejemplo: EEUU combina capitalismo emprendedor y de grandes firmas; Japón se estancó por falta de emprendimiento.",
+    ref: "Capítulo 5. Enfoque en el crecimiento económico."
+  },
+  13: {
+    cat: "Sistemas", author: "Hiroyuki Odagiri",
+    title: "El Modelo de Asia del Este",
+    text: "Analiza Japón, Corea y Taiwán. Destaca los grupos empresariales (Zaibatsu/Keiretsu, Chaebol), el empleo de por vida y el papel del Estado (política industrial). Desafía la idea de que el modelo anglosajón es el único viable.",
+    mech: "Relaciones de Largo Plazo: Proveedores y bancos mantienen lazos estables, reduciendo costos de transacción.",
+    data: "Dato: Toyota utiliza 'voz' (colaboración) en lugar de 'salida' (cambiar de proveedor) para mejorar la calidad.",
+    ref: "Capítulo 18. Crítica a la visión miope del capitalismo de mercado puro."
+  },
+  14: {
+    cat: "Sistemas", author: "Richard R. Nelson",
+    title: "Capitalismo como Sistema Mixto",
+    text: "Argumenta que ninguna economía es puramente de mercado. Sectores clave (salud, educación, I+D, defensa) requieren gobernanza no de mercado. El éxito del capitalismo radica en esta simbiosis.",
+    mech: "Fallo de Mercado: Justificación estándar para la intervención, pero Nelson va más allá: la innovación requiere apoyo público.",
+    data: "Ejemplo: Internet, GPS y biotecnología nacieron de financiación estatal, no de mercados puros.",
+    ref: "Capítulo 11. Enfoque evolutivo de la economía."
+  },
+  15: {
+    cat: "Sistemas", author: "Edmund S. Phelps",
+    title: "Refundando el Capitalismo",
+    text: "Nobel de Economía. Defiende el capitalismo no solo por eficiencia, sino por 'Dinamismo' y justicia. El trabajo interesante y la resolución de problemas son vitales para la realización humana. Critica el corporativismo europeo.",
+    mech: "Inclusión y Dinamismo: El sistema debe permitir que cualquiera con una idea pueda competir.",
+    data: "Crítica: La financiarización excesiva ha desviado talento de la economía real innovadora.",
+    ref: "Capítulo 19. Reflexión filosófica post-crisis."
+  }
+};
+
+// --- ESTRUCTURA DE LA RED ---
+const nodes = new vis.DataSet([
+  // Fundamentos
+  { id: 1, label: "Mueller\n(Intro)", group: 'fund', shape: 'box', value: 20 },
+  { id: 2, label: "Frieden\n(Historia)", group: 'fund', shape: 'ellipse', value: 15 },
+  { id: 3, label: "Beck\n(Leyes)", group: 'fund', shape: 'ellipse', value: 15 },
+  { id: 4, label: "Rubin\n(Propiedad)", group: 'fund', shape: 'ellipse', value: 15 },
+  { id: 10, label: "Goldberg\n(Contratos)", group: 'fund', shape: 'ellipse', value: 10 },
+
+  // Corporación
+  { id: 5, label: "Teece\n(Gestión)", group: 'corp', shape: 'box', value: 18 },
+  { id: 6, label: "Mueller\n(Fusiones)", group: 'corp', shape: 'ellipse', value: 15 },
+  { id: 7, label: "Coffee\n(Propiedad)", group: 'corp', shape: 'ellipse', value: 15 },
+  { id: 8, label: "Conyon\n(Salarios)", group: 'corp', shape: 'ellipse', value: 15 },
+  { id: 9, label: "Cowling\n(Monopolio)", group: 'corp', shape: 'ellipse', value: 12 },
+
+  // Finanzas
+  { id: 11, label: "Malkiel\n(Burbujas)", group: 'fin', shape: 'box', value: 18 },
+  { id: 12, label: "Morck\n(Agencia)", group: 'fin', shape: 'ellipse', value: 15 },
+  { id: 13, label: "Beck\n(Desarrollo)", group: 'fin', shape: 'ellipse', value: 12 },
+
+  // Sistemas
+  { id: 14, label: "Baumol\n(Tipos)", group: 'sys', shape: 'box', value: 18 },
+  { id: 15, label: "Odagiri\n(Asia)", group: 'sys', shape: 'ellipse', value: 15 },
+  { id: 16, label: "Nelson\n(Mixto)", group: 'sys', shape: 'ellipse', value: 15 },
+  { id: 17, label: "Phelps\n(Futuro)", group: 'sys', shape: 'star', value: 20 },
+  { id: 18, label: "Scherer\n(Dinámica)", group: 'sys', shape: 'ellipse', value: 12 }
+]);
+
+const edges = new vis.DataSet([
+  // Conexiones Fundamentales
+  { from: 1, to: 2, label: "contexto" },
+  { from: 3, to: 4, label: "base legal" },
+  { from: 4, to: 10, label: "intercambio" },
+  { from: 3, to: 7, label: "origen legal" },
+
+  // Conexiones Corporativas
+  { from: 5, to: 13, label: "crítica agencia" },
+  { from: 6, to: 9, label: "concentración" },
+  { from: 6, to: 12, label: "destrucción valor" },
+  { from: 7, to: 12, label: "control/propiedad" },
+  { from: 8, to: 12, label: "incentivos" },
+
+  // Conexiones Financieras
+  { from: 11, to: 13, label: "crisis" },
+  { from: 12, to: 11, label: "causas" },
+  { from: 3, to: 13, label: "profundidad fin." },
+
+  // Conexiones Sistémicas
+  { from: 14, to: 15, label: "modelos" },
+  { from: 15, to: 5, label: "capacidades" },
+  { from: 16, to: 14, label: "rol estado" },
+  { from: 17, to: 1, label: "conclusión" },
+  { from: 18, to: 14, label: "innovación" },
+
+  // Cruces temáticos
+  { from: 9, to: 14, label: "oligopolio" },
+  { from: 11, to: 8, label: "burbujas/bonus" },
+  { from: 15, to: 3, label: "ley vs normas" }
+]);
+
+// --- CONFIGURACIÓN VIS.JS ---
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    font: { face: 'Roboto', color: '#fff', size: 16 },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    color: { color: '#bdc3c7', highlight: '#c0392b' },
+    width: 1,
+    smooth: { type: 'continuous' }
+  },
+  groups: {
+    fund: { color: { background: '#2e86c1', border: '#1b4f72' } },
+    corp: { color: { background: '#27ae60', border: '#145a32' } },
+    fin:  { color: { background: '#f39c12', border: '#af601a' } },
+    sys:  { color: { background: '#8e44ad', border: '#5b2c6f' } }
+  },
+  physics: {
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: { gravitationalConstant: -80, springLength: 150 },
+    stabilization: { iterations: 150 }
+  },
+  interaction: { hover: true, zoomView: true }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    // Abrir sidebar si está cerrado
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar.classList.contains('closed')) toggleSidebar();
+    
+    if (info) {
+      document.getElementById('infoPanel').innerHTML = `
+        <span class="chapter-number">${info.cat.toUpperCase()}</span>
+        <h2 class="info-title">${info.title}</h2>
+        <span class="author-name">${info.author}</span>
+        
+        <div class="section-header">Resumen Central</div>
+        <div class="info-body">${info.text}</div>
+        
+        <div class="section-header">Mecanismo / Argumento Clave</div>
+        <div class="info-body"><strong>${info.mech}</strong></div>
+
+        <div class="data-box">
+          <strong>Dato/Evidencia:</strong> ${info.data}
+        </div>
+
+        <div class="biblio-box">
+          📍 ${info.ref}
+        </div>
+      `;
+    }
+  }
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('closed');
+}
+
+function focusGroup(groupName) {
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar.classList.contains('closed')) toggleSidebar();
+
+  const groupNodes = nodes.get({ filter: function (item) { return item.group == groupName; } });
+  const nodeIds = groupNodes.map(n => n.id);
+  
+  network.selectNodes(nodeIds);
+  network.fit({ nodes: nodeIds, animation: true });
+  
+  // Mostrar resumen del grupo en el panel
+  let title = "";
+  if(groupName === 'fund') title = "Fundamentos e Historia";
+  if(groupName === 'corp') title = "La Empresa Moderna";
+  if(groupName === 'fin') title = "Finanzas y Crisis";
+  if(groupName === 'sys') title = "Sistemas Comparados";
+
+  document.getElementById('infoPanel').innerHTML = `
+    <h2 class="info-title" style="color:var(--accent-color)">Grupo: ${title}</h2>
+    <div class="info-body">
+      Se han seleccionado los nodos correspondientes a esta sección temática. Haga clic en cada nodo individual para ver el detalle específico del capítulo.
+    </div>
+  `;
+}
+
+</script>
+</body>
+</html>
