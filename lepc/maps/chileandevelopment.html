@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: Desarrollo Económico Chileno bajo el Neoliberalismo</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f8f9fa;
+    --sidebar-bg: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #5f6c7b;
+    --accent-color: #c0392b; /* Rojo chileno sobrio */
+    --border-color: #e2e8f0;
+    --sidebar-width: 450px;
+    --header-bg: #1a252f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- BARRA LATERAL (INFO) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.08);
+    z-index: 100;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
+    position: absolute;
+  }
+
+  .header {
+    padding: 20px;
+    background: var(--header-bg);
+    color: #ecf0f1;
+    border-bottom: 4px solid var(--accent-color);
+  }
+
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.2rem;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  .header .meta {
+    font-size: 0.75rem;
+    color: #bdc3c7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .filters {
+    padding: 15px 20px;
+    background: #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+  }
+
+  .filter-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+    flex: 1 1 45%; /* Dos columnas en el grupo */
+  }
+  
+  .filter-btn:hover { background: #e2e8f0; border-color: #94a3b8; }
+  .filter-btn.active { border-left: 3px solid var(--accent-color); }
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 25px;
+    scrollbar-width: thin;
+  }
+
+  .info-chapter {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+  }
+
+  .info-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .mechanism-box {
+    margin-bottom: 20px;
+  }
+
+  .mech-level {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .info-body {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 15px;
+    text-align: justify;
+  }
+
+  .data-section {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-left: 3px solid #334155;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .data-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .data-value {
+    font-family: 'Merriweather', serif;
+    font-size: 1rem;
+    color: #1e293b;
+    font-style: italic;
+  }
+
+  .reference-box {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 10px;
+  }
+
+  .footer {
+    padding: 12px;
+    background: #f1f5f9;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.7rem;
+    text-align: center;
+    color: #475569;
+  }
+
+  /* --- CANVAS & CONTROLES --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    background-color: #f8f9fa;
+  }
+
+  .toggle-sidebar-btn {
+    position: absolute; top: 15px; left: 15px;
+    z-index: 50;
+    background: white; border: 1px solid #cbd5e1;
+    padding: 8px 12px; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    font-weight: 600; color: #334155;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .toggle-sidebar-btn:hover { background: #f1f5f9; }
+
+  .canvas-controls {
+    position: absolute; bottom: 20px; right: 20px;
+    z-index: 50;
+    display: flex; gap: 10px;
+  }
+
+  .canvas-btn {
+    background: white; border: 1px solid #cbd5e1;
+    padding: 8px 12px; border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    font-size: 0.85rem; font-weight: 600; color: #334155;
+    transition: all 0.2s;
+  }
+  .canvas-btn:active { transform: translateY(1px); }
+
+  /* --- RESPONSIVE DESIGN --- */
+  @media (max-width: 768px) {
+    .sidebar {
+      position: absolute;
+      width: 100%;
+      height: 60%;
+      bottom: 0;
+      top: auto;
+      border-right: none;
+      border-top: 2px solid var(--accent-color);
+      transform: translateY(0);
+      z-index: 200;
+    }
+    
+    .sidebar.closed {
+      transform: translateY(100%);
+      transform: translateX(0); /* Reset X transform */
+    }
+
+    #network-wrapper {
+      height: 100%;
+      width: 100%;
+    }
+
+    .toggle-sidebar-btn {
+      top: auto; bottom: 20px; left: 20px;
+    }
+
+    .canvas-controls {
+      bottom: auto; top: 20px; right: 20px;
+    }
+    
+    .filters { display: none; /* Ahorrar espacio en móvil */ }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="header">
+    <h1>Chilean Economic Development under Neoliberalism</h1>
+    <div class="meta">Solimano & Zapata-Román (2024)</div>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Capítulos y Temas Clave</span>
+    <div class="btn-group">
+      <div class="filter-btn" onclick="focusNode('hist')">1. Historia y Constitución</div>
+      <div class="filter-btn" onclick="focusNode('struc')">2. Transf. Estructural</div>
+      <div class="filter-btn" onclick="focusNode('macro')">3. Macroeconomía</div>
+      <div class="filter-btn" onclick="focusNode('soc')">4. Pobreza y Social</div>
+    </div>
+  </div>
+
+  <div class="content-area" id="infoPanel">
+    <div style="text-align: center; color: #94a3b8; margin-top: 40%; font-family: 'Merriweather', serif; font-style: italic;">
+      Seleccione un nodo en el diagrama<br>para desplegar el análisis de mecanismos<br>y evidencia empírica.
+    </div>
+  </div>
+
+  <div class="footer">
+    Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+  </div>
+</div>
+
+<!-- NETWORK CANVAS -->
+<div id="network-wrapper">
+  <button class="toggle-sidebar-btn" onclick="toggleSidebar()">
+    <span id="toggleIcon">▼</span> <span id="toggleText">Ocultar Panel</span>
+  </button>
+  
+  <div id="network"></div>
+  
+  <div class="canvas-controls">
+    <button class="canvas-btn" onclick="fitAll()">⌖ Centrar</button>
+  </div>
+</div>
+
+<script>
+
+// --- BASE DE DATOS DEL LIBRO ---
+const bookData = {
+  // CAPÍTULO 2: HISTORIA
+  "const1980": {
+    chapter: "Capítulo 2: Historia y Constituciones",
+    title: "La Constitución de 1980",
+    mech_macro: "Institucionalización del Modelo",
+    text: "La Constitución de 1980, redactada bajo el régimen de Pinochet, estableció el principio de subsidiariedad del Estado y protegió los derechos de propiedad privada sobre los derechos sociales. Actuó como un 'candado' institucional (lock-in) que impidió reformas estructurales profundas durante la transición democrática.",
+    data: "Evidencia: Estableció quorums supramayoritarios y un Tribunal Constitucional con poder de veto, asegurando la continuidad del modelo neoliberal más allá de la dictadura.",
+    ref: "Solimano & Zapata-Román, Sec. 2.8: 'Pinochet's Constitution of 1980 Tried to Undermine the Republic'."
+  },
+  "chicago": {
+    chapter: "Capítulo 2: Historia y Constituciones",
+    title: "Tecnocracia: Chicago Boys",
+    mech_meso: "Captura Ideológica",
+    text: "Un grupo de economistas entrenados en la U. de Chicago implementó políticas de choque: desregulación de precios, liberalización comercial rápida y privatización. Operaron aislados de la presión democrática gracias a la represión militar.",
+    data: "Dato: En 1975 redujeron el gasto fiscal drásticamente y despidieron a cerca de 100,000 empleados públicos en un solo año.",
+    ref: "Solimano & Zapata-Román, Sec. 2.7: 'Neoliberal Economics under Pinochet’s Repressive Military Regime'."
+  },
+  
+  // CAPÍTULO 3: TRANSFORMACIÓN ESTRUCTURAL
+  "deindus": {
+    chapter: "Capítulo 3: Transformación Estructural",
+    title: "Desindustrialización Prematura",
+    mech_macro: "Asignación de Recursos vía Precios",
+    text: "La liberalización comercial radical sin política industrial llevó al colapso de la manufactura nacional. El capital se movió hacia sectores de ventajas comparativas estáticas (recursos naturales) y servicios no transables.",
+    data: "Cifra: La manufactura cayó del 25% del PIB en 1972 (pico histórico) a solo el 10% en 2018. Niveles similares a la Gran Depresión de 1930.",
+    ref: "Solimano & Zapata-Román, Sec. 3.1 y Fig. 1."
+  },
+  "finance": {
+    chapter: "Capítulo 3: Transformación Estructural",
+    title: "Financialización",
+    mech_meso: "Expansión del Sector Servicios",
+    text: "Mientras la industria caía, los servicios financieros y empresariales crecieron desproporcionadamente. Esto creó una economía 'rentista' basada en la extracción de recursos y la especulación financiera más que en la innovación schumpeteriana.",
+    data: "Dato: Los servicios financieros alcanzaron el 20% del PIB hacia 2010, desacoplándose de la economía real productiva.",
+    ref: "Solimano & Zapata-Román, Sec. 3.2.1: 'Changes in the Chilean Economic Structure'."
+  },
+  "productivity": {
+    chapter: "Capítulo 3: Transformación Estructural",
+    title: "Estancamiento de Productividad",
+    mech_micro: "Reasignación Laboral Ineficiente",
+    text: "El empleo se movió de la agricultura y manufactura hacia servicios de baja productividad (comercio, servicios personales). A diferencia de Asia, el cambio estructural en Chile redujo el potencial de crecimiento a largo plazo.",
+    data: "Evidencia: Todo el crecimiento de la productividad (1960-2011) fue 'intra-sectorial'. El componente de cambio estructural fue negativo.",
+    ref: "Solimano & Zapata-Román, Sec. 3.2.3 y Fig. 5 (Descomposición McMillan/Rodrik)."
+  },
+
+  // CAPÍTULO 4: MACROECONOMÍA
+  "inflation": {
+    chapter: "Capítulo 4: Macroeconomía",
+    title: "Control de Inflación",
+    mech_macro: "Autonomía del Banco Central",
+    text: "La transición de una inflación crónica (décadas de 1940-1970) a la estabilidad de precios se logró mediante la autonomía del Banco Central (1989), metas de inflación y disciplina fiscal. Sin embargo, esto se hizo a costa de comprimir la participación salarial.",
+    data: "Cifra: La inflación cayó de un promedio de 162% en los 70s a un dígito en los 90s, y ~3% en los 2000s.",
+    ref: "Solimano & Zapata-Román, Sec. 4.2 y Tabla 1."
+  },
+  "growth": {
+    chapter: "Capítulo 4: Macroeconomía",
+    title: "Ciclos de Crecimiento",
+    mech_macro: "Agotamiento del Modelo",
+    text: "Hubo una 'Edad de Oro' (1986-1998) impulsada por capacidad ociosa y altos precios del cobre. Desde 2010, el crecimiento se ha desacelerado estructuralmente debido a la falta de diversificación y baja productividad.",
+    data: "Cifra: El crecimiento del PIB per cápita cayó de ~6-7% anual en los 90s a 2.5% promedio entre 2010-2020.",
+    ref: "Solimano & Zapata-Román, Sec. 4.4 y Fig. 10."
+  },
+
+  // CAPÍTULO 5: POLÍTICAS SOCIALES Y DESIGUALDAD
+  "poverty": {
+    chapter: "Capítulo 5: Pobreza y Desigualdad",
+    title: "Reducción de Pobreza",
+    mech_micro: "Crecimiento + Transferencias Focalizadas",
+    text: "La pobreza por ingresos disminuyó drásticamente gracias al crecimiento económico y subsidios focalizados. Sin embargo, la pobreza multidimensional (acceso a derechos) sigue siendo alta y vulnerable a shocks.",
+    data: "Cifra: Pobreza por ingresos cayó del 68.5% (1990) al 8.6% (2017). Pero la vulnerabilidad persiste.",
+    ref: "Solimano & Zapata-Román, Sec. 5.2 y Fig. 14."
+  },
+  "inequality": {
+    chapter: "Capítulo 5: Pobreza y Desigualdad",
+    title: "Desigualdad Persistente",
+    mech_meso: "Concentración de Riqueza",
+    text: "Aunque el Gini de ingresos ha bajado levemente, la desigualdad de riqueza es extrema. Las élites capturan una parte desproporcionada del ingreso nacional, limitando la movilidad social.",
+    data: "Dato Duro: El Gini de Riqueza (Wealth Gini) es ~0.80-0.90, uno de los más altos del mundo. El 1% más rico captura cerca del 50% de la riqueza total (2021).",
+    ref: "Solimano & Zapata-Román, Sec. 5.2.1 y Figs. 16/17 (Datos WID)."
+  },
+  "social_serv": {
+    chapter: "Capítulo 5: Pobreza y Desigualdad",
+    title: "Mercantilización Social",
+    mech_micro: "Segmentación de Servicios",
+    text: "Educación, salud y pensiones fueron convertidas en mercancías. Esto creó sistemas duales: servicios privados de alta calidad para ricos y servicios públicos desfinanciados para pobres, perpetuando la desigualdad de origen.",
+    data: "Evidencia: Pensiones con tasas de reemplazo del 33-35% del sueldo. En educación superior, el 61% del gasto es financiado por familias (vs 31% en OECD).",
+    ref: "Solimano & Zapata-Román, Sec. 5.3."
+  },
+  "estallido": {
+    chapter: "Capítulo 6: Conclusiones",
+    title: "Estallido Social 2019",
+    mech_macro: "Crisis de Legitimidad",
+    text: "La combinación de estancamiento económico, alta desigualdad, endeudamiento familiar y desconexión de las élites provocó el colapso del consenso neoliberal. No fue solo '30 pesos', fueron '30 años' de contradicciones acumuladas.",
+    data: "Contexto: Ocurre tras una década de desaceleración del crecimiento y persistencia de abusos en precios de servicios básicos.",
+    ref: "Solimano & Zapata-Román, Sec. 2.9 y Cap. 6."
+  }
+};
+
+// --- DEFINICIÓN DE NODOS Y ARISTAS VIS.JS ---
+const nodes = new vis.DataSet([
+  // Nodos Centrales (Historia/Instituciones)
+  { id: 'pinochet', label: 'Régimen Militar\n(1973-1990)', group: 'hist', shape: 'box' },
+  { id: 'const1980', label: 'Constitución\n1980', group: 'hist', shape: 'diamond' },
+  { id: 'chicago', label: 'Chicago Boys\n(Tecnocracia)', group: 'hist', shape: 'ellipse' },
+  
+  // Nodos Estructurales (Cap 3)
+  { id: 'neolib', label: 'Modelo\nNeoliberal', group: 'struc', shape: 'hexagon', size: 30 },
+  { id: 'deindus', label: 'Desindustrialización\nPrematura', group: 'struc', shape: 'dot' },
+  { id: 'finance', label: 'Financialización\n(Servicios)', group: 'struc', shape: 'dot' },
+  { id: 'extract', label: 'Economía\nExtractiva', group: 'struc', shape: 'dot' },
+  { id: 'productivity', label: 'Baja\nProductividad', group: 'struc', shape: 'triangleDown' },
+
+  // Nodos Macro (Cap 4)
+  { id: 'macro', label: 'Ortodoxia\nMacro', group: 'macro', shape: 'box' },
+  { id: 'inflation', label: 'Control\nInflación', group: 'macro', shape: 'ellipse' },
+  { id: 'growth', label: 'Crecimiento\n(Golden Era vs Stagnation)', group: 'macro', shape: 'ellipse' },
+  
+  // Nodos Sociales (Cap 5)
+  { id: 'social_serv', label: 'Mercantilización\n(Educ/Salud/AFP)', group: 'soc', shape: 'box' },
+  { id: 'poverty', label: 'Reducción\nPobreza Ingresos', group: 'soc', shape: 'ellipse' },
+  { id: 'inequality', label: 'Desigualdad\nRiqueza Extrema', group: 'soc', shape: 'star', size: 25 },
+  
+  // Resultado
+  { id: 'estallido', label: 'Estallido Social\n2019', group: 'result', shape: 'star', size: 35, color: '#e74c3c' }
+]);
+
+const edges = new vis.DataSet([
+  // Historia
+  { from: 'pinochet', to: 'chicago', label: 'empodera' },
+  { from: 'chicago', to: 'neolib', label: 'implementa' },
+  { from: 'pinochet', to: 'const1980', label: 'promulga' },
+  { from: 'const1980', to: 'neolib', label: 'blinda (lock-in)', width: 2, dashes: true },
+  
+  // Estructura
+  { from: 'neolib', to: 'deindus', label: 'apertura comercial' },
+  { from: 'neolib', to: 'extract', label: 'ventajas comp.' },
+  { from: 'deindus', to: 'finance', label: 'desplazamiento' },
+  { from: 'deindus', to: 'productivity', label: 'causa' },
+  { from: 'extract', to: 'productivity', label: 'limita' },
+
+  // Macro
+  { from: 'neolib', to: 'macro', label: 'fundamenta' },
+  { from: 'macro', to: 'inflation', label: 'objetivo central' },
+  { from: 'macro', to: 'growth', label: '1986-1998' },
+  { from: 'productivity', to: 'growth', label: 'frena (2010+)', color: 'red' },
+
+  // Social
+  { from: 'neolib', to: 'social_serv', label: 'privatización' },
+  { from: 'growth', to: 'poverty', label: 'reduce' },
+  { from: 'social_serv', to: 'inequality', label: 'reproduce' },
+  { from: 'finance', to: 'inequality', label: 'concentra riqueza' },
+  
+  // Colapso
+  { from: 'inequality', to: 'estallido', label: 'provoca' },
+  { from: 'social_serv', to: 'estallido', label: 'malestar' },
+  { from: 'growth', to: 'estallido', label: 'estancamiento' }
+]);
+
+// --- CONFIGURACIÓN VIS.JS ---
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    font: { face: 'Inter', size: 14, color: '#34495e', background: '#fff' },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    width: 1.5,
+    color: { color: '#95a5a6', highlight: '#2c3e50' },
+    arrows: { to: { enabled: true, scaleFactor: 0.5 } },
+    font: { size: 10, align: 'middle', background: 'rgba(255,255,255,0.7)' },
+    smooth: { type: 'cubicBezier', roundness: 0.5 }
+  },
+  groups: {
+    hist: { color: { background: '#ebf5fb', border: '#2980b9' } },
+    struc: { color: { background: '#fdf2e9', border: '#d35400' } },
+    macro: { color: { background: '#eafaf1', border: '#27ae60' } },
+    soc:   { color: { background: '#f4ecf7', border: '#8e44ad' } },
+    result:{ color: { background: '#fadbd8', border: '#c0392b' }, font: { color: '#c0392b', bold: true } }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -80,
+      centralGravity: 0.005,
+      springLength: 150,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 150 }
+  },
+  layout: { randomSeed: 2 },
+  interaction: { hover: true, tooltipDelay: 200 }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    // Manejo del sidebar en móvil
+    const sidebar = document.getElementById('sidebar');
+    const btnText = document.getElementById('toggleText');
+    const btnIcon = document.getElementById('toggleIcon');
+    
+    if (window.innerWidth <= 768) {
+        if (sidebar.classList.contains('closed')) {
+            sidebar.classList.remove('closed');
+            btnText.innerText = "Ocultar Panel";
+            btnIcon.innerText = "▼";
+        }
+    } else {
+        // En escritorio, asegurar que esté visible si estaba cerrado
+        if (sidebar.classList.contains('closed')) {
+            sidebar.classList.remove('closed');
+            btnText.innerText = "Ocultar Panel";
+            btnIcon.innerText = "◀";
+        }
+    }
+
+    const panel = document.getElementById('infoPanel');
+    
+    if (info) {
+      let mechType = "";
+      let mechLabel = "";
+      if (info.mech_micro) { mechType = "mech-level"; mechLabel = "Mecanismo Micro"; }
+      if (info.mech_meso) { mechType = "mech-level"; mechLabel = "Mecanismo Meso"; }
+      if (info.mech_macro) { mechType = "mech-level"; mechLabel = "Mecanismo Macro"; }
+      
+      const mechContent = info.mech_micro || info.mech_meso || info.mech_macro;
+
+      panel.innerHTML = `
+        <div class="info-chapter">${info.chapter}</div>
+        <h2 class="info-title">${info.title}</h2>
+        
+        <div class="mechanism-box">
+          <span class="${mechType}">${mechLabel}</span>
+          <div style="font-weight: 600; color: #2c3e50; margin-bottom: 5px;">${mechContent}</div>
+        </div>
+
+        <div class="info-body">${info.text}</div>
+        
+        <div class="data-section">
+          <span class="data-label">Dato Duro / Evidencia</span>
+          <div class="data-value">"${info.data}"</div>
+        </div>
+        
+        <div class="reference-box">
+          <strong>Fuente:</strong> ${info.ref}
+        </div>
+      `;
+    } else {
+      // Fallback para nodos sin data detallada
+      panel.innerHTML = `
+        <h2 class="info-title">Concepto: ${nodes.get(nodeId).label.replace('\n', ' ')}</h2>
+        <div class="info-body">Este nodo conecta elementos estructurales del análisis. Para detalles específicos, selecciona nodos principales como "Constitución 1980", "Desindustrialización" o "Desigualdad".</div>
+      `;
+    }
+  }
+});
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const btnText = document.getElementById('toggleText');
+  const btnIcon = document.getElementById('toggleIcon');
+  const isMobile = window.innerWidth <= 768;
+
+  sidebar.classList.toggle('closed');
+
+  if (sidebar.classList.contains('closed')) {
+    btnText.innerText = "Ver Análisis";
+    btnIcon.innerText = isMobile ? "▲" : "▶";
+  } else {
+    btnText.innerText = "Ocultar Panel";
+    btnIcon.innerText = isMobile ? "▼" : "◀";
+  }
+}
+
+function focusNode(nodeId) {
+  // Asegurar que el sidebar se abra para mostrar la info
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar.classList.contains('closed')) toggleSidebar();
+
+  // Mapeo de botones a nodos específicos para centrar
+  let targetNode = nodeId; 
+  if(nodeId === 'hist') targetNode = 'const1980';
+  if(nodeId === 'struc') targetNode = 'deindus';
+  if(nodeId === 'macro') targetNode = 'inflation';
+  if(nodeId === 'soc') targetNode = 'inequality';
+
+  network.selectNodes([targetNode]);
+  network.focus(targetNode, {
+    scale: 1.2,
+    animation: { duration: 1000, easingFunction: 'easeInOutQuad' }
+  });
+  
+  // Disparar el evento click manualmente para cargar la info
+  network.emit("click", { nodes: [targetNode] });
+}
+
+function fitAll() {
+  network.fit({ animation: { duration: 1000, easingFunction: 'easeInOutQuad' } });
+}
+
+// Ajuste inicial
+window.onload = function() {
+    // Si es móvil, iniciar con sidebar cerrado para ver el gráfico
+    if (window.innerWidth <= 768) {
+        toggleSidebar();
+    }
+};
+
+</script>
+</body>
+</html>

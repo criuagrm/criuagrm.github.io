@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: The Invisible Doctrine</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f8f9fa;
+    --sidebar-bg: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --accent-color: #0f172a; /* Slate 900 */
+    --link-color: #2563eb;
+    --border-color: #e5e7eb;
+    --sidebar-width: 450px;
+    --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- LAYOUT RESPONSIVE --- */
+  .container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  /* --- BARRA LATERAL (INFO) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 30;
+    transition: transform 0.3s ease, width 0.3s ease;
+    height: 100%;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
+    position: absolute;
+  }
+
+  /* Header del Sidebar */
+  .header {
+    padding: 1.5rem;
+    background: #1e293b;
+    color: #fff;
+    border-bottom: 4px solid #3b82f6;
+  }
+
+  .header h1 {
+    font-family: 'Lora', serif;
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .header .meta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Área de Contenido */
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+  }
+
+  /* Estilos de Tipografía Académica */
+  .chapter-badge {
+    display: inline-block;
+    background: #e2e8f0;
+    color: #475569;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    border: 1px solid #cbd5e1;
+  }
+
+  .info-title {
+    font-family: 'Lora', serif;
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+  }
+
+  .info-body { 
+    font-size: 0.95rem; 
+    line-height: 1.6; 
+    color: #334155; 
+    margin-bottom: 1.5rem; 
+    text-align: justify;
+  }
+
+  /* Cajas de Mecanismos */
+  .mech-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .mech-box {
+    background: #fff;
+    border-left: 4px solid #6366f1;
+    padding: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border: 1px solid #e5e7eb;
+    border-left-width: 4px;
+  }
+
+  .mech-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #4338ca;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .mech-text { font-size: 0.9rem; color: #1f2937; }
+
+  /* Caja de Datos */
+  .data-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-left: 4px solid #10b981;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  .data-header { font-size: 0.7rem; font-weight: 800; color: #047857; text-transform: uppercase; margin-bottom: 5px; }
+  .data-content { font-family: 'Lora', serif; font-style: italic; font-size: 0.95rem; color: #064e3b; }
+
+  .source-box {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px dashed #cbd5e1;
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 1rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.7rem;
+    text-align: center;
+    color: #64748b;
+  }
+
+  /* --- VISUALIZACIÓN DE RED --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    background-color: #e5e5e5;
+    overflow: hidden;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* --- CONTROLES FLOTANTES --- */
+  .controls-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 40;
+    background: rgba(255,255,255,0.9);
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #e2e8f0;
+  }
+
+  .btn-control {
+    background: #1e293b; color: white;
+    border: none; padding: 8px 16px;
+    border-radius: 20px; cursor: pointer;
+    font-size: 0.8rem; font-weight: 600;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .btn-control:hover { background: #334155; }
+  .btn-toggle-sidebar {
+    position: absolute; top: 20px; left: 20px; z-index: 50;
+    background: #fff; color: #333; border: 1px solid #ccc;
+    padding: 10px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+
+  /* --- MEDIA QUERIES PARA RESPONSIVE --- */
+  
+  /* Tablets y Móviles */
+  @media (max-width: 1024px) {
+    .sidebar {
+      width: 350px;
+    }
+  }
+
+  /* Móviles (Pantalla completa para sidebar) */
+  @media (max-width: 768px) {
+    .container { flex-direction: column; }
+    
+    .sidebar {
+      position: absolute;
+      width: 100%;
+      height: 60%; /* Ocupa 60% de la pantalla inferior */
+      bottom: 0;
+      top: auto;
+      border-right: none;
+      border-top: 1px solid #ccc;
+      transform: translateY(100%); /* Oculto inicialmente hacia abajo */
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    }
+
+    .sidebar.active {
+      transform: translateY(0);
+    }
+
+    .sidebar.closed {
+      /* Reutilizamos closed para estado oculto en desktop, pero en mobile usamos active */
+      transform: translateY(100%); 
+    }
+
+    #network-wrapper {
+      height: 100%;
+      width: 100%;
+    }
+
+    .btn-toggle-sidebar { display: none; } /* Se controla por clic en nodos */
+    
+    .controls-bar {
+      bottom: 20px;
+      width: 90%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .close-mobile-btn {
+      display: block;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      font-weight: bold;
+      color: #64748b;
+      cursor: pointer;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .close-mobile-btn { display: none; }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- BOTÓN SOLO DESKTOP -->
+  <button class="btn-toggle-sidebar" onclick="toggleDesktopSidebar()">&#9776; Panel</button>
+
+  <div class="sidebar" id="sidebar">
+    <button class="close-mobile-btn" onclick="closeMobileSidebar()">×</button>
+    
+    <div class="header">
+      <h1>The Invisible Doctrine</h1>
+      <div class="meta">Monbiot & Hutchison (2024)</div>
+    </div>
+
+    <div class="content-area" id="infoPanel">
+      <div style="display: flex; height: 100%; align-items: center; justify-content: center; flex-direction: column; color: #94a3b8; text-align: center; padding: 20px;">
+        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">&#129514;</div>
+        <p style="font-family: 'Lora', serif;">Seleccione un nodo en la red para analizar los mecanismos del capítulo.</p>
+        <p style="font-size: 0.8rem;">(Funciona en móvil y escritorio)</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Análisis: <strong>Ricardo Alonzo Fernández Salguero</strong>
+    </div>
+  </div>
+
+  <div id="network-wrapper">
+    <div id="network"></div>
+    
+    <div class="controls-bar">
+      <button class="btn-control" onclick="network.fit({animation:{duration:1000}})">Centrar</button>
+      <button class="btn-control" onclick="togglePhysics()">Congelar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* 
+  BASE DE DATOS: The Invisible Doctrine
+  Basado estrictamente en el contenido del libro.
+  Estructura: Título, Texto, Mecanismos (Micro/Meso/Macro), Evidencia/Datos, Fuentes.
+*/
+const bookData = {
+  // --- GRUPO 1: ORIGEN E HISTORIA ---
+  1: {
+    badge: "Cap. 1: La Ideología Anónima",
+    title: "El Poder de la Invisibilidad",
+    text: "El neoliberalismo ha logrado su mayor triunfo: convencer al mundo de que no es una ideología, sino una ley natural inmutable como la gravedad. Su anonimato le permite evadir la rendición de cuentas por las crisis que genera (desigualdad, colapso ambiental).",
+    mecha: [
+      {type: "Macro", desc: "Hegemonía Cultural: Definir los límites de lo políticamente posible sin ser nombrado."},
+      {type: "Micro", desc: "Internalización: Los individuos absorben la doctrina, culpándose a sí mismos por fallos sistémicos (pobreza, desempleo)."}
+    ],
+    data: "Comparación: Imagina que los soviéticos nunca hubieran oído la palabra 'Comunismo'. Esa es nuestra situación actual.",
+    source: "Introducción del libro."
+  },
+  4: {
+    badge: "Cap. 4: El Ascenso de la Internacional Neoliberal",
+    title: "La Red de Persuasión",
+    text: "El neoliberalismo fue incubado deliberadamente. Hayek y Von Mises fundaron la Mont Pelerin Society (1947) para combatir el colectivismo. Fue financiado por multimillonarios (DuPont, Koch) para crear una infraestructura intelectual.",
+    mecha: [
+      {type: "Meso", desc: "Think Tanks (IEA, Heritage, Cato): Organizaciones diseñadas para empaquetar ideología radical como análisis objetivo."},
+      {type: "Meso", desc: "Patrocinio Académico: Financiación de departamentos en U. de Chicago y Virginia para legitimar la doctrina."},
+      {type: "Micro", desc: "Difusión Pop: Versión caricaturizada de 'Camino de Servidumbre' en Reader's Digest."}
+    ],
+    data: "Dato: Reader's Digest distribuyó millones de copias condensadas de Hayek. Empresas como GM las repartieron a empleados.",
+    source: "Daniel Stedman Jones, 'Masters of the Universe'."
+  },
+  11: {
+    badge: "Cap. 11: Doctrina Invisible, Patrocinadores Invisibles",
+    title: "Dark Money y la Paradoja de la Contaminación",
+    text: "La política moderna está moldeada por dinero anónimo ('Dark Money'). Las industrias más dañinas tienen el mayor incentivo para invertir en política para evitar regulaciones.",
+    mecha: [
+      {type: "Macro", desc: "La Paradoja de la Contaminación: La política llega a ser dominada por las industrias más sucias y antisociales."},
+      {type: "Meso", desc: "Opacidad Institucional: Think Tanks que se niegan a revelar donantes mientras redactan leyes."}
+    ],
+    data: "Evidencia: Los hermanos Koch financiaron más de 30 grupos de presión. El 'Mandate for Leadership' (Heritage Foundation) dictó el 60% de las políticas del primer año de Reagan.",
+    source: "Jane Mayer, 'Dark Money'."
+  },
+
+  // --- GRUPO 2: ECONOMÍA Y RENTISMO ---
+  2: {
+    badge: "Cap. 2: El Mercado 'Libre'",
+    title: "Competencia sobre Ciudadanía",
+    text: "La ideología nos redefine como consumidores competidores en lugar de ciudadanos cooperativos. Promete que el mercado recompensa el mérito y castiga la ineficiencia, justificando la desigualdad.",
+    mecha: [
+      {type: "Meso", desc: "Desmantelamiento Sindical: Eliminar la negociación colectiva para 'liberar' el mercado laboral."},
+      {type: "Macro", desc: "Mito del Goteo (Trickle-down): La falsa promesa de que enriquecer a los ricos beneficia a todos."}
+    ],
+    data: "Evidencia: Lejos de gotear hacia abajo, la riqueza se ha concentrado hacia arriba. El crecimiento económico se desacopló del bienestar general.",
+    source: "Adam Smith (malinterpretado por neoliberals)."
+  },
+  3: {
+    badge: "Cap. 3: El Cuento de Hadas del Capitalismo",
+    title: "Saqueo Colonial y Fronteras",
+    text: "El capitalismo se define no por el comercio, sino por el saqueo colonial y la frontera extractiva. Transforma recursos compartidos en propiedad exclusiva mediante la violencia y el agotamiento.",
+    mecha: [
+      {type: "Macro", desc: "Frontera de Mercancías: Ciclo 'Boom, Bust, Quit' (Auge, Quiebra, Abandono)."},
+      {type: "Macro", desc: "Lockean Proviso: Justificación filosófica para expropiar tierras indígenas (Terra Nullius)."}
+    ],
+    data: "Dato Histórico: Isla de Madeira (1420s). Producción de azúcar colapsó tras agotar los bosques. Gran Bretaña extrajo $45 billones de India.",
+    source: "Jason Moore, Utsa Patnaik."
+  },
+  7: {
+    badge: "Cap. 7: 'Renta' y Ambigüedades",
+    title: "El Auge del Rentismo",
+    text: "El neoliberalismo confunde deliberadamente 'beneficio' (productivo) con 'renta' (extracción no productiva). Ha creado un paraíso para los rentistas que cobran peajes por el acceso a recursos esenciales (tierra, dinero, infraestructura).",
+    mecha: [
+      {type: "Meso", desc: "Privatización de Monopolios Naturales: Agua, energía y transporte convertidos en fuentes de renta privada."},
+      {type: "Macro", desc: "Financialización: Expansión del sector financiero sobre la economía real."}
+    ],
+    data: "Dato: En UK, el 70% del costo de la vivienda es el precio del suelo (renta), no la construcción. Desde 1989, el 1% más rico de EE.UU. ganó $21 billones; el 50% pobre perdió $900 mil millones.",
+    source: "Thomas Piketty."
+  },
+  13: {
+    badge: "Cap. 13: Mintiendo entre Dientes",
+    title: "Destrucción Programada del NHS",
+    text: "Estrategia para privatizar servicios públicos populares: desfinanciarlos hasta que fallen, provocar descontento y luego presentar la privatización como solución.",
+    mecha: [
+      {type: "Meso", desc: "Contratos Imposibles: El sistema de Unidades de Actividad Dental (UDA) en UK hace no rentable tratar pacientes públicos."},
+      {type: "Macro", desc: "Muerte por Mil Cortes: Infrafinanciación crónica frente a la inflación."}
+    ],
+    data: "Dato: El 90% de las clínicas dentales en UK ya no aceptan nuevos pacientes adultos del NHS. Déficit acumulado de financiación: £200 mil millones.",
+    source: "British Dental Association, Nuffield Trust."
+  },
+
+  // --- GRUPO 3: POLÍTICA Y PODER ---
+  5: {
+    badge: "Cap. 5: La Era Neoliberal",
+    title: "La Captura de la Izquierda",
+    text: "El triunfo total ocurrió cuando partidos de izquierda (Clinton, Blair) adoptaron el neoliberalismo ('Tercera Vía'), eliminando la alternativa política real.",
+    mecha: [
+      {type: "Macro", desc: "Triangulación: Adoptar políticas económicas de derecha mezcladas con liberalismo social."},
+      {type: "Meso", desc: "Desregulación Financiera: Derogación de Glass-Steagall (Clinton, 1999) permitiendo la fusión de bancos comerciales y de inversión."}
+    ],
+    data: "Dato: Clinton declaró 'la era del gran gobierno ha terminado', consolidando el consenso neoliberal.",
+    source: "Nelson Lichtenstein."
+  },
+  9: {
+    badge: "Cap. 9: La Crisis de la Democracia",
+    title: "Desencanto Político",
+    text: "El neoliberalismo vacía la democracia. Al transferir decisiones cruciales al 'mercado' o a organismos tecnocráticos, el voto pierde poder, generando frustración y abriendo paso a demagogos.",
+    mecha: [
+      {type: "Macro", desc: "Bomba de Neutrones Política: Las estructuras quedan en pie (parlamento), pero la vida (poder) desaparece."},
+      {type: "Micro", desc: "Transferencia de Culpa: Al no poder cambiar la economía, la ira se dirige a chivos expiatorios (inmigrantes, minorías)."}
+    ],
+    data: "Evidencia: 'Recesión democrática' global. Solo el 20% de la población mundial vive en países 'libres' (Freedom House 2022).",
+    source: "William Davies, Freedom House."
+  },
+  15: {
+    badge: "Cap. 15: El Ataque de los Payasos Asesinos",
+    title: "Oligarquía y Caos",
+    text: "El paso del 'Capitalismo Domesticado' al 'Capitalismo Señor de la Guerra'. Oligarcas como los Koch o Murdoch prefieren el caos y la desregulación total, apoyando a figuras bufonescas (Trump, Johnson, Milei).",
+    mecha: [
+      {type: "Macro", desc: "Desconstrucción del Estado Administrativo: Desmantelar la capacidad del estado para regular."},
+      {type: "Micro", desc: "Distracción y Agotamiento: Escándalos constantes para saturar la capacidad de respuesta ciudadana."}
+    ],
+    data: "Cita: Peter Hargreaves (billonario pro-Brexit): 'La inseguridad es fantástica'.",
+    source: "Steve Bannon (Estratega)."
+  },
+  16: {
+    badge: "Cap. 16: Ficciones de Conspiración",
+    title: "Desmovilización Ciudadana",
+    text: "Las teorías de la conspiración falsas (QAnon, Gran Reemplazo) son útiles para el poder: distraen de las conspiraciones reales (lobbies, evasión fiscal) y despojan a la gente de agencia política.",
+    mecha: [
+      {type: "Micro", desc: "Inundar la zona con mierda: Táctica de Bannon para anular la verdad con ruido."},
+      {type: "Meso", desc: "Astroturfing: Movimientos falsos (Tea Party) financiados por élites para simular base popular."}
+    ],
+    data: "Dato: El Tea Party fue organizado y financiado por Americans for Prosperity (Hermanos Koch).",
+    source: "Naomi Klein, 'Doppelganger'."
+  },
+
+  // --- GRUPO 4: ECOLOGÍA Y SISTEMAS ---
+  18: {
+    badge: "Cap. 18: Un Fallo en el Modelo",
+    title: "Sistemas Complejos",
+    text: "El error fundamental: tratar sistemas complejos (economía, ecología) como simples y lineales. La búsqueda racional del interés propio individual puede llevar al colapso catastrófico del sistema colectivo.",
+    mecha: [
+      {type: "Macro", desc: "Pérdida de Resiliencia: La homogeneización de estrategias (todos los bancos haciendo lo mismo) elimina cortafuegos."},
+      {type: "Macro", desc: "Feedback Positivo: Bucles que amplifican pequeños shocks hasta el colapso total."}
+    ],
+    data: "Evidencia: Crisis financiera 2008. Alan Greenspan admitió ante el Congreso 'un fallo en el modelo que define cómo funciona el mundo'.",
+    source: "Andy Haldane (Banco de Inglaterra), Robert May (Ecólogo)."
+  },
+  19: {
+    badge: "Cap. 19: Sin Salida",
+    title: "Colapso de Sistemas Terrestres",
+    text: "El capitalismo requiere una frontera en expansión, pero la Tierra es finita. Estamos bajando en la cadena trófica de la entropía. No se puede negociar con la física.",
+    mecha: [
+      {type: "Macro", desc: "Minería de Suelos: Agotamiento de la fertilidad a cambio de ganancias a corto plazo."},
+      {type: "Macro", desc: "Puntos de Inflexión Climáticos: Umbrales irreversibles."}
+    ],
+    data: "Dato: Para tener 50% de probabilidad de no superar 1.5°C, el 60% del petróleo y gas debe quedarse bajo tierra. G20 subsidió fósiles con $3.3 billones.",
+    source: "IPCC, Nature."
+  },
+  20: {
+    badge: "Cap. 20: El Mito de las Micro-Soluciones",
+    title: "La Trampa del Consumidor",
+    text: "La industria desvió la responsabilidad de la crisis sistémica hacia el individuo. Se nos dice que 'consumamos mejor' en lugar de cambiar el sistema político-económico.",
+    mecha: [
+      {type: "Micro", desc: "Huella de Carbono Personal: Concepto popularizado por BP (Ogilvy & Mather) para culpar al usuario."},
+      {type: "Meso", desc: "Greenwashing: Vender bolsas de algodón (peores que el plástico en huella hídrica) como salvación."}
+    ],
+    data: "Dato: El 1% más rico emite 70 toneladas de CO2 al año promedio; el 50% más pobre casi nada. Bill Gates: 7,500 toneladas/año.",
+    source: "Campaña 'Keep America Beautiful' (1953)."
+  },
+
+  // --- GRUPO 5: SOLUCIÓN Y FUTURO ---
+  21: {
+    badge: "Cap. 21: Movilización: Un Caso de Estudio",
+    title: "El Estado Capacitado (WWII)",
+    text: "La idea de que 'no hay dinero' o 'no se puede cambiar' es falsa. El ejemplo de EE.UU. en la Segunda Guerra Mundial demuestra que la transformación radical es posible cuando hay voluntad política.",
+    mecha: [
+      {type: "Macro", desc: "Planificación Económica: Prohibición de autos civiles, racionamiento, retooling industrial."},
+      {type: "Macro", desc: "Fiscalidad Extrema: Impuesto sobre la renta al 94% para financiar el esfuerzo."}
+    ],
+    data: "Dato: Entre 1942-1945, EE.UU. prohibió la venta de autos nuevos y electrodomésticos. El gasto gubernamental se multiplicó por diez.",
+    source: "Historia económica de EE.UU."
+  },
+  22: {
+    badge: "Caps. 22-24: Una Nueva Historia",
+    title: "Política de la Pertenencia",
+    text: "Para vencer al neoliberalismo, necesitamos una nueva 'Historia de Restauración'. Proponen: 'Suficiencia Privada, Lujo Público'.",
+    mecha: [
+      {type: "Meso", desc: "Democracia Deliberativa: Sorteo cívico y asambleas ciudadanas para romper la polarización."},
+      {type: "Macro", desc: "Los Comunes: Recuperar la gestión comunitaria de recursos, ni estado ni mercado."}
+    ],
+    data: "Dato: Puntos de inflexión social (Damon Centola): Solo se necesita el 25% de la población comprometida para cambiar una norma social.",
+    source: "George Monbiot, Murray Bookchin."
+  }
+};
+
+// --- CONFIGURACIÓN DE LA RED (Vis.js) ---
+const nodes = new vis.DataSet([
+  // Grupo: Orígenes (Azul)
+  { id: 1, label: "Ideología\nInvisible", group: 'history', shape: 'box', margin: 10 },
+  { id: 4, label: "Red Neoliberal\n(Think Tanks)", group: 'history', shape: 'hexagon', size: 30 },
+  { id: 11, label: "Dark Money\n& Lobbies", group: 'history', shape: 'triangle' },
+
+  // Grupo: Economía (Rojo)
+  { id: 2, label: "Mercado\n'Libre'", group: 'economy', shape: 'ellipse' },
+  { id: 3, label: "Capitalismo\nFrontera", group: 'economy', shape: 'ellipse' },
+  { id: 7, label: "Rentismo &\nExtracción", group: 'economy', shape: 'diamond', size: 25 },
+  { id: 13, label: "Destrucción\nServicios (NHS)", group: 'economy', shape: 'box' },
+
+  // Grupo: Política (Naranja)
+  { id: 5, label: "Captura de\nIzquierda", group: 'politics', shape: 'box' },
+  { id: 9, label: "Crisis\nDemocracia", group: 'politics', shape: 'ellipse' },
+  { id: 15, label: "Payasos\nAsesinos", group: 'politics', shape: 'star', size: 25 },
+  { id: 16, label: "Ficciones\nConspiración", group: 'politics', shape: 'triangleDown' },
+
+  // Grupo: Ecología (Verde)
+  { id: 18, label: "Fallo Sistémico\n(Complejidad)", group: 'ecology', shape: 'dot', size: 20 },
+  { id: 19, label: "Sin Salida\n(Crisis Tierra)", group: 'ecology', shape: 'dot', size: 30 },
+  { id: 20, label: "Mito Micro-\nSoluciones", group: 'ecology', shape: 'square' },
+
+  // Grupo: Solución (Violeta)
+  { id: 21, label: "Movilización\n(Ej. WWII)", group: 'solution', shape: 'box' },
+  { id: 22, label: "Nueva Historia\n(Pertenencia)", group: 'solution', shape: 'star', size: 35 }
+]);
+
+const edges = new vis.DataSet([
+  // Conexiones lógicas basadas en el libro
+  { from: 4, to: 1, arrows: "to", label: "fabrica" },
+  { from: 11, to: 4, arrows: "to", label: "financia" },
+  { from: 4, to: 5, arrows: "to", label: "influye" },
+  
+  { from: 1, to: 2, arrows: "to", label: "justifica" },
+  { from: 3, to: 2, arrows: "to", label: "mito fundacional" },
+  { from: 2, to: 7, arrows: "to", label: "oculta" },
+  
+  { from: 4, to: 13, arrows: "to", label: "diseña políticas" },
+  
+  { from: 5, to: 9, arrows: "to", label: "desencanta" },
+  { from: 9, to: 15, arrows: "to", label: "abre paso" },
+  { from: 11, to: 16, arrows: "to", label: "alimenta" },
+  { from: 16, to: 15, arrows: "to", label: "empodera" },
+
+  { from: 3, to: 19, arrows: "to", label: "causa inevitable" },
+  { from: 18, to: 19, arrows: "to", label: "explica colapso" },
+  { from: 11, to: 20, arrows: "to", label: "inventa" },
+  { from: 20, to: 19, arrows: "to", label: "distrae de" },
+
+  { from: 18, to: 22, arrows: "to", label: "inspira", dashes: true },
+  { from: 21, to: 22, arrows: "to", label: "demuestra posibilidad", dashes: true }
+]);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    font: { size: 14, face: 'Inter', color: '#1f2937', multi: true, vadjust: 0 },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    width: 1.5,
+    color: { color: '#9ca3af', highlight: '#3b82f6' },
+    font: { size: 10, align: 'middle', background: 'rgba(255,255,255,0.8)' },
+    smooth: { type: 'cubicBezier', forceDirection: 'horizontal', roundness: 0.5 }
+  },
+  groups: {
+    history: { color: { background: '#eff6ff', border: '#3b82f6' }, font: { color: '#1e3a8a' } }, // Azul
+    economy: { color: { background: '#fef2f2', border: '#ef4444' }, font: { color: '#991b1b' } }, // Rojo
+    politics: { color: { background: '#fffbeb', border: '#f59e0b' }, font: { color: '#92400e' } }, // Naranja
+    ecology: { color: { background: '#ecfdf5', border: '#10b981' }, font: { color: '#065f46' } }, // Verde
+    solution: { color: { background: '#f5f3ff', border: '#8b5cf6' }, font: { color: '#5b21b6' } }  // Violeta
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 200,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 200 }
+  },
+  interaction: { hover: true, tooltipDelay: 200 }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+
+// Función para manejar clics en nodos
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    if (info) {
+      updateSidebar(info);
+      openSidebar(); // Asegura que se abra en móvil y escritorio
+    }
+  }
+});
+
+function updateSidebar(info) {
+  const panel = document.getElementById('infoPanel');
+  
+  // Generar HTML de Mecanismos
+  const mechHtml = info.mecha.map(m => 
+    `<div class="mech-box">
+       <span class="mech-label">${m.type}</span>
+       <span class="mech-text">${m.desc}</span>
+     </div>`
+  ).join('');
+
+  panel.innerHTML = `
+    <span class="chapter-badge">${info.badge}</span>
+    <h2 class="info-title">${info.title}</h2>
+    <div class="info-body">${info.text}</div>
+    
+    <div class="mech-container">
+      ${mechHtml}
+    </div>
+
+    <div class="data-box">
+      <div class="data-header">EVIDENCIA CLAVE</div>
+      <div class="data-content">"${info.data}"</div>
+    </div>
+
+    <div class="source-box">
+      <strong>Fuente:</strong> ${info.source}
+    </div>
+  `;
+}
+
+// Lógica del Sidebar Responsive
+const sidebar = document.getElementById('sidebar');
+
+function toggleDesktopSidebar() {
+  if (window.innerWidth > 768) {
+    sidebar.classList.toggle('closed');
+    // Ajustar red si cambia el tamaño del contenedor (opcional)
+  }
+}
+
+function openSidebar() {
+  // En móvil, añadimos clase 'active' para slide up
+  if (window.innerWidth <= 768) {
+    sidebar.classList.add('active');
+  } else {
+    // En escritorio, quitamos 'closed'
+    sidebar.classList.remove('closed');
+  }
+}
+
+function closeMobileSidebar() {
+  sidebar.classList.remove('active');
+}
+
+// Control de Física
+let isPhysicsEnabled = true;
+function togglePhysics() {
+  isPhysicsEnabled = !isPhysicsEnabled;
+  network.setOptions({ physics: { enabled: isPhysicsEnabled } });
+}
+
+</script>
+</body>
+</html>

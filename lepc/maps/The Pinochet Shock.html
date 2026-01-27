@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>The Pinochet Shock: Análisis Estructural</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --dark-bg: #1a1c23;
+        --panel-bg: #22252e;
+        --text-main: #e2e8f0;
+        --text-muted: #94a3b8;
+        --accent-pol: #3b82f6; /* Azul Política */
+        --accent-eco: #10b981; /* Verde Economía */
+        --accent-soc: #f43f5e; /* Rojo Sociedad */
+        --border: #2d3748;
+        --card-bg: #2d313a;
+    }
+
+    body {
+        margin: 0; padding: 0;
+        width: 100vw; height: 100vh;
+        overflow: hidden;
+        font-family: 'Lato', sans-serif;
+        background-color: var(--dark-bg);
+        display: flex;
+    }
+
+    /* --- CANVAS DE LA RED --- */
+    #network-container {
+        flex-grow: 1;
+        height: 100%;
+        position: relative;
+        background: radial-gradient(circle at center, #1f222b 0%, #111216 100%);
+    }
+
+    #network {
+        width: 100%;
+        height: 100%;
+        outline: none;
+    }
+
+    /* --- PANEL LATERAL DE INFORMACIÓN --- */
+    #sidebar {
+        width: 480px;
+        background-color: var(--panel-bg);
+        border-left: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+        z-index: 100;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+    }
+
+    #sidebar.hidden {
+        transform: translateX(100%);
+    }
+
+    /* Cabecera del Panel */
+    .sidebar-header {
+        padding: 30px;
+        background: linear-gradient(180deg, rgba(30,30,40,1) 0%, rgba(34,37,46,0) 100%);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .brand-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: #fff;
+        margin: 0;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+    }
+
+    .brand-subtitle {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 8px;
+        font-weight: 700;
+    }
+
+    .analyst-credit {
+        font-size: 0.75rem;
+        color: var(--accent-pol);
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px dashed #444;
+        display: block;
+    }
+
+    /* Contenido Scrolleable */
+    .sidebar-content {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 0 30px 40px 30px;
+        color: var(--text-main);
+    }
+
+    /* Estilos de las Fichas */
+    .chapter-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+    .badge-pol { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #1e40af; }
+    .badge-eco { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #065f46; }
+    .badge-soc { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid #9f1239; }
+
+    h2.node-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        margin: 0 0 5px 0;
+        color: #fff;
+    }
+
+    .authors {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        font-style: italic;
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 900;
+        color: #fff;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .section-title::after {
+        content: '';
+        flex-grow: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    .thesis-box {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        border-left: 3px solid #fff;
+        padding-left: 15px;
+        margin-bottom: 20px;
+    }
+
+    /* Tarjetas de Mecanismos y Datos */
+    .card {
+        background: var(--card-bg);
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 1px solid #3f4452;
+    }
+
+    .mech-header {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .mech-content {
+        color: #e2e8f0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .data-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .data-list li {
+        margin-bottom: 12px;
+        padding-left: 20px;
+        position: relative;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: #cbd5e1;
+    }
+    .data-list li::before {
+        content: '▹';
+        position: absolute;
+        left: 0;
+        color: var(--accent-eco);
+    }
+    .data-highlight {
+        color: #fff;
+        font-weight: 700;
+        background: rgba(255,255,255,0.1);
+        padding: 0 4px;
+        border-radius: 3px;
+    }
+
+    /* Estado Vacío */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: var(--text-muted);
+        text-align: center;
+        opacity: 0.6;
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 20px; }
+
+    /* Botones Flotantes */
+    .controls {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        display: flex;
+        gap: 15px;
+        z-index: 50;
+    }
+
+    .btn {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+
+    .legend {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        background: rgba(26, 28, 35, 0.9);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        z-index: 50;
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* --- RESPONSIVIDAD --- */
+    @media (max-width: 900px) {
+        body { flex-direction: column; }
+        
+        #sidebar {
+            width: 100%;
+            height: 65vh;
+            bottom: 0;
+            top: auto;
+            transform: translateY(100%);
+            border-left: none;
+            border-top: 1px solid var(--accent-pol);
+            border-radius: 20px 20px 0 0;
+        }
+
+        #sidebar.visible-mobile {
+            transform: translateY(0);
+        }
+
+        .controls {
+            top: 20px;
+            bottom: auto;
+            right: 20px;
+            left: auto;
+        }
+
+        .legend { display: none; } /* Ocultar leyenda en móvil para espacio */
+        
+        /* Ajuste para que el grafo ocupe todo */
+        #network-container { height: 100vh; width: 100vw; }
+    }
+
+</style>
+</head>
+<body>
+
+<!-- CANVAS DE LA RED -->
+<div id="network-container">
+    <div class="legend">
+        <div class="legend-item"><div class="dot" style="background: #3b82f6"></div> Política & Represión</div>
+        <div class="legend-item"><div class="dot" style="background: #10b981"></div> Economía & Empresas</div>
+        <div class="legend-item"><div class="dot" style="background: #f43f5e"></div> Sociedad & Cultura</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="fitNetwork()">
+            <span>⌖</span> Centrar
+        </button>
+        <button class="btn" onclick="toggleSidebar(true)">
+            <span>i</span> Información
+        </button>
+    </div>
+    
+    <div id="network"></div>
+</div>
+
+<!-- PANEL LATERAL -->
+<div id="sidebar" class="hidden">
+    <div class="sidebar-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <h1 class="brand-title">The Pinochet Shock</h1>
+                <div class="brand-subtitle">Análisis Estructural</div>
+            </div>
+            <button onclick="toggleSidebar(false)" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <span class="analyst-credit">Análisis por: <strong>Ricardo Alonzo Fernández Salguero</strong></span>
+    </div>
+
+    <div class="sidebar-content" id="panel-content">
+        <!-- ESTADO INICIAL -->
+        <div class="empty-state">
+            <div class="empty-icon">☊</div>
+            <h3>Explorador Interactivo</h3>
+            <p>Seleccione un nodo en el mapa para revelar<br>la evidencia, mecanismos y conexiones<br>causales del libro.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- DATOS RIGUROSOS DEL LIBRO ---
+    // Estructura: Tesis, Mecanismos (Micro/Meso/Macro), Datos Clave.
+    
+    const chapters = {
+        2: {
+            cat: "pol",
+            label: "Represión Política",
+            title: "Cap. 2: Efectos Políticos de la Represión Estatal",
+            authors: "María Angélica Bautista",
+            thesis: "La represión física directa (tortura, encarcelamiento) generó un efecto desmovilizador persistente en las víctimas, reduciendo su participación política futura sin alterar su ideología subyacente.",
+            mech: {
+                title: "Trauma y Cálculo Racional (Micro)",
+                desc: "El miedo internalizado eleva el costo percibido de la participación pública. Aunque la preferencia ideológica (izquierda) se mantiene intacta por resistencia cognitiva, la acción política (votar, inscribirse) se suprime por trauma."
+            },
+            data: [
+                "Estudio de <span class='data-highlight'>203 víctimas directas</span> de prisión política vs grupo control.",
+                "<strong>67%</strong> de los encuestados reportan secuelas psicológicas permanentes décadas después.",
+                "Disminución significativa en la probabilidad de inscripción en partidos políticos post-1990."
+            ]
+        },
+        3: {
+            cat: "soc",
+            label: "Educación Superior",
+            title: "Cap. 3: La Contracción de la Educación Superior",
+            authors: "Luis Martínez",
+            thesis: "La dictadura redujo deliberadamente el tamaño del sistema universitario para eliminar focos de activismo político, afectando desproporcionadamente a los sectores pobres y generando una brecha de desigualdad persistente.",
+            mech: {
+                title: "Exclusión Institucional (Meso)",
+                desc: "Mediante el desfinanciamiento y la reducción de vacantes, el régimen convirtió la universidad en un bien de élite, rompiendo el canal de movilidad social y desactivando la organización estudiantil."
+            },
+            data: [
+                "Matrícula universitaria cayó un <span class='data-highlight'>30%</span> entre 1973 y 1980.",
+                "Para la cohorte de 1960 (vs 1952), la probabilidad de acceder a la universidad cayó un <strong>46%</strong>.",
+                "Efecto dominó: Mayor mortalidad y menores ingresos en adultez para los excluidos."
+            ]
+        },
+        4: {
+            cat: "soc",
+            label: "Constitución y Leyes",
+            title: "Cap. 4: La Pedagogía Legal del Neoliberalismo",
+            authors: "R. Cordero & R. Valenzuela",
+            thesis: "La Constitución de 1980 impuso el concepto de 'Orden Público Económico', transformando la cultura legal para aislar el modelo económico de la deliberación democrática.",
+            mech: {
+                title: "Ingeniería Constitucional (Macro)",
+                desc: "A través de manuales de derecho y formación de jueces, se naturalizó la idea de que la libertad económica es un derecho supra-político, blindando el neoliberalismo contra futuras mayorías democráticas."
+            },
+            data: [
+                "Análisis de <strong>82 manuales de derecho constitucional</strong> (1925-2017).",
+                "Hegemonía del texto de José Luis Cea (1988), que codificó la interpretación neoliberal como la única válida.",
+                "Persistencia de esta doctrina en fallos del Tribunal Constitucional post-1990."
+            ]
+        },
+        5: {
+            cat: "pol",
+            label: "Gobiernos Locales",
+            title: "Cap. 5: Gobiernos Locales y Cambio de Régimen",
+            authors: "Pablo Muñoz",
+            thesis: "La dictadura utilizó a los alcaldes designados para construir una maquinaria clientelar que benefició electoralmente a la derecha incluso después de la transición a la democracia.",
+            mech: {
+                title: "Clientelismo Estratégico (Meso)",
+                desc: "Los alcaldes designados aumentaron el gasto visible (pavimentación, sedes) justo antes de las elecciones de 1988/1992 para generar lealtades que capitalizarían como candidatos democráticos."
+            },
+            data: [
+                "En la elección de 1992, ex-alcaldes designados obtuvieron una prima del <span class='data-highlight'>9%</span> de votos.",
+                "El gasto municipal en obras públicas se disparó artificialmente en 1988-1989.",
+                "Consolidación de bastiones electorales de derecha en comunas populares."
+            ]
+        },
+        8: {
+            cat: "pol",
+            label: "Supervivencia de Élites",
+            title: "Cap. 8: Legado Político y Trayectorias",
+            authors: "J. Esberg & A. Fresh",
+            thesis: "Las trayectorias durante el régimen (colaboración vs represión) determinaron quién sobrevivió políticamente. La derecha se benefició de recursos estatales; la izquierda sobrevivió solo vía exilio internacional.",
+            mech: {
+                title: "Acumulación de Recursos (Micro)",
+                desc: "La colaboración con el régimen otorgó a la derecha redes y experiencia administrativa (ventaja del incumbente). La izquierda reprimida en Chile fue aniquilada políticamente; el exilio permitió mantener redes activas."
+            },
+            data: [
+                "Políticos de derecha que colaboraron tuvieron <strong>20 p.p.</strong> más probabilidad de ganar elecciones en democracia.",
+                "Ningún político de izquierda torturado/preso que se quedó en Chile volvió al congreso; solo retornaron los exiliados.",
+                "Resiliencia selectiva de las élites pre-1973."
+            ]
+        },
+        9: {
+            cat: "eco",
+            label: "Privatización de Firmas",
+            title: "Cap. 9: La Privatización de Empresas",
+            authors: "F. González & M. Prem",
+            thesis: "La privatización aumentó la eficiencia interna de las firmas, pero cuando se hizo de forma corrupta (a allegados del régimen), generó menores retornos y concentración de poder a largo plazo.",
+            mech: {
+                title: "Crony Capitalism (Macro)",
+                desc: "Ventas 'no competitivas' a precios subvalorados transfirieron riqueza estatal a grupos leales, creando conglomerados ineficientes pero políticamente poderosos."
+            },
+            data: [
+                "Estudio de <strong>141 firmas</strong> privatizadas.",
+                "Firmas privatizadas aumentaron inversión (+7pp), pero las vendidas a 'cronies' tuvieron peor desempeño financiero.",
+                "Evidencia de que estas firmas financiaron campañas políticas de derecha post-democracia."
+            ]
+        },
+        10: {
+            cat: "eco",
+            label: "Grupos Económicos",
+            title: "Cap. 10: Evolución de Grupos Económicos",
+            authors: "Felipe Aldunate",
+            thesis: "La segunda ola de privatizaciones (post-crisis 1982) fue el motor principal para la formación de los grandes grupos económicos actuales, utilizando estructuras piramidales para controlar activos masivos con poco capital.",
+            mech: {
+                title: "Control Piramidal (Meso)",
+                desc: "El régimen permitió la venta de empresas estratégicas (electricidad, telecomunicaciones) a nuevos actores que utilizaron el flujo de caja de unas empresas para comprar otras, concentrando el poder."
+            },
+            data: [
+                "Afiliación a grupos económicos saltó del 22% (1970) al <span class='data-highlight'>59%</span> (1990).",
+                "81% de probabilidad de estructura piramidal en empresas compradas por conectados al régimen.",
+                "Renovación total de la élite empresarial: los grupos de 1970 desaparecieron."
+            ]
+        },
+        11: {
+            cat: "soc",
+            label: "Historia Laboral",
+            title: "Cap. 11: Familias Trabajadoras y Capitalismo Autoritario",
+            authors: "Ángela Vergara",
+            thesis: "La dictadura no solo reprimió sindicatos, sino que reestructuró la vida diaria de la clase trabajadora mediante la precarización, el desempleo estructural y la atomización de las relaciones laborales.",
+            mech: {
+                title: "Atomización Legal y Disciplina (Macro)",
+                desc: "El Plan Laboral (1979) eliminó la negociación por rama, limitó la huelga y facilitó el despido, disciplinando la fuerza de trabajo a través de la inseguridad económica."
+            },
+            data: [
+                "Desempleo real (inc. PEM/POJH) superó el <span class='data-highlight'>30%</span> en 1983.",
+                "Caída histórica en la tasa de sindicalización.",
+                "Surgimiento de estrategias de supervivencia (ollas comunes) ante la retirada del Estado."
+            ]
+        },
+        12: {
+            cat: "eco",
+            label: "¿Milagro Económico?",
+            title: "Cap. 12: Por la Razón o La Fuerza",
+            authors: "Enrique Escalante",
+            thesis: "El desempeño económico promedio bajo Pinochet fue mediocre. El verdadero crecimiento acelerado ('milagro') ocurrió bajo la democracia (años 90), aunque sobre las bases institucionales heredadas.",
+            mech: {
+                title: "Estabilidad Institucional Tardía (Macro)",
+                desc: "El caos inicial y la crisis de 1982 demuestran fallas de política. Solo el pragmatismo de Büchi (1985) y la continuidad de políticas en la Concertación generaron crecimiento sostenido."
+            },
+            data: [
+                "Crecimiento PIB per cápita 1973-1990: solo <strong>1.7% anual</strong>.",
+                "Crecimiento PIB per cápita 1990-2000 (Democracia): <strong>5.9% anual</strong>.",
+                "Chile recuperó su tendencia histórica recién en 1988 según modelos de control sintético."
+            ]
+        },
+        13: {
+            cat: "soc",
+            label: "Vivienda y Segregación",
+            title: "Cap. 13: Políticas de Vivienda Pública",
+            authors: "Fernanda Rojas-Ampuero",
+            thesis: "La política de erradicación de campamentos hacia la periferia segregó la ciudad y dañó irreversiblemente el capital humano de los niños desplazados, creando guetos de pobreza.",
+            mech: {
+                title: "Ruptura de Redes y Acceso (Micro)",
+                desc: "Mover a familias lejos de sus redes de apoyo y centros de trabajo aumentó costos de transporte y redujo acceso a buenos colegios y salud, perpetuando la pobreza."
+            },
+            data: [
+                "Niños desplazados ganan un <span class='data-highlight'>9% menos</span> como adultos hoy.",
+                "Tasa de mortalidad adulta <strong>30% mayor</strong> en desplazados.",
+                "Desplazamiento masivo del 5% de la población de Santiago entre 1979-1985."
+            ]
+        },
+        14: {
+            cat: "soc",
+            label: "Propiedad Indígena",
+            title: "Cap. 14: Propiedad Indígena y Desarrollo",
+            authors: "D. Jaimovich & F. Jordán",
+            thesis: "La contra-reforma agraria y la privatización forzosa de tierras comunales Mapuche (DL 2568) aceleraron la pérdida territorial y sentaron las bases del conflicto actual en la Araucanía.",
+            mech: {
+                title: "Privatización y Mercado de Tierras (Meso)",
+                desc: "Al dividir los Títulos de Merced en propiedad individual, se facilitó la venta de tierras a no-indígenas (especialmente forestales) a precios bajos, rompiendo la estructura comunitaria."
+            },
+            data: [
+                "Solo el <strong>28%</strong> de la tierra de reservas divididas temprano permanece en manos Mapuche.",
+                "Expansión masiva de la industria forestal en tierras disputadas.",
+                "Correlación directa entre tierras privatizadas en dictadura y focos de violencia actuales."
+            ]
+        },
+        15: {
+            cat: "soc",
+            label: "Censura Cultural",
+            title: "Cap. 15: Censura y Control Cultural",
+            authors: "Jane Esberg",
+            thesis: "La censura no solo fue política, sino moral. El régimen prohibió contenidos 'inmorales' (sexo, violencia) para satisfacer y recompensar a su base de apoyo conservadora católica.",
+            mech: {
+                title: "Recompensa a la Base de Apoyo (Meso)",
+                desc: "La dictadura usó la censura como un 'bien público' para grupos conservadores (ej. Opus Dei), validando su visión de mundo y asegurando su lealtad política."
+            },
+            data: [
+                "Análisis de <strong>562 películas prohibidas</strong>.",
+                "Términos como 'adulterio' o 'desnudez' predecían censura más fuerte que términos políticos.",
+                "Ejemplo: Prohibición de 'El Violinista en el Tejado' por presión religiosa."
+            ]
+        }
+    };
+
+    // --- CONFIGURACIÓN VIS.JS ---
+    
+    // Nodos
+    const nodesArray = [
+        { id: 0, label: "PINOCHET\nSHOCK", shape: "circle", color: "#e2e8f0", font: { size: 24, face: 'Playfair Display', color: '#111' }, size: 50, borderWidth: 4, color: { border: '#111', background: '#fff' } },
+        
+        // Política (Azul)
+        { id: 2, label: "Represión\nPolítica", group: "pol" },
+        { id: 5, label: "Alcaldes\nDesignados", group: "pol" },
+        { id: 8, label: "Elites y\nSupervivencia", group: "pol" },
+        
+        // Economía (Verde)
+        { id: 9, label: "Privatización\nEmpresas", group: "eco" },
+        { id: 10, label: "Grupos\nEconómicos", group: "eco" },
+        { id: 12, label: "Crecimiento\nEconómico", group: "eco" },
+        
+        // Sociedad (Rojo/Rosa)
+        { id: 3, label: "Educación\nSuperior", group: "soc" },
+        { id: 4, label: "Leyes y\nConstitución", group: "soc" },
+        { id: 11, label: "Trabajo y\nSindicatos", group: "soc" },
+        { id: 13, label: "Vivienda y\nSegregación", group: "soc" },
+        { id: 14, label: "Tierras\nIndígenas", group: "soc" },
+        { id: 15, label: "Censura\nCultural", group: "soc" },
+        { id: 6, label: "Género y\nPolítica", group: "soc" }
+    ];
+
+    // Aristas (Relaciones Causales y Temáticas)
+    const edgesArray = [
+        // Centrales
+        { from: 0, to: 2 }, { from: 0, to: 3 }, { from: 0, to: 4 }, { from: 0, to: 5 },
+        { from: 0, to: 6 }, { from: 0, to: 8 }, { from: 0, to: 9 }, { from: 0, to: 10 },
+        { from: 0, to: 11 }, { from: 0, to: 12 }, { from: 0, to: 13 }, { from: 0, to: 14 }, { from: 0, to: 15 },
+
+        // Relaciones Causales Fuertes (Explicadas en el texto)
+        { from: 9, to: 10, arrows: "to", label: "Crea", font: { align: 'middle', size: 9, color: '#94a3b8' }, color: { color: '#10b981', opacity: 0.6 } }, // Privatización -> Grupos
+        { from: 4, to: 9, arrows: "to", label: "Habilita" }, // Constitución -> Privatización
+        { from: 2, to: 8, arrows: "to", label: "Filtra" }, // Represión -> Quién sobrevive
+        { from: 5, to: 6, arrows: "to", label: "Promueve" }, // Alcaldes -> Mujeres en política
+        { from: 13, to: 14, label: "Desplazamiento", dashes: true }, // Lógica similar de desplazamiento
+        { from: 11, to: 12, arrows: "to", label: "Flexibiliza" }, // Plan Laboral -> Crecimiento (costo social)
+        { from: 15, to: 6, label: "Base Conservadora", dashes: true }, // Censura y mujeres conservadoras
+        { from: 3, to: 8, label: "Elitización", dashes: true } // Educación elitista -> Elites
+    ];
+
+    const nodes = new vis.DataSet(nodesArray);
+    const edges = new vis.DataSet(edgesArray);
+
+    const container = document.getElementById('network');
+    const data = { nodes: nodes, edges: edges };
+    
+    const options = {
+        nodes: {
+            shape: 'dot',
+            size: 25,
+            font: { size: 14, color: '#e2e8f0', face: 'Lato', strokeWidth: 4, strokeColor: '#1a1c23' },
+            borderWidth: 2,
+            shadow: true
+        },
+        edges: {
+            width: 1,
+            color: { color: '#4b5563', highlight: '#fff' },
+            smooth: { type: 'continuous' }
+        },
+        groups: {
+            pol: { color: { background: '#1e3a8a', border: '#60a5fa' }, shape: 'dot' },
+            eco: { color: { background: '#065f46', border: '#34d399' }, shape: 'dot' },
+            soc: { color: { background: '#9f1239', border: '#fb7185' }, shape: 'dot' }
+        },
+        physics: {
+            forceAtlas2Based: {
+                gravitationalConstant: -100,
+                centralGravity: 0.005,
+                springLength: 230,
+                springConstant: 0.18
+            },
+            maxVelocity: 146,
+            solver: 'forceAtlas2Based',
+            timestep: 0.35,
+            stabilization: { iterations: 150 }
+        },
+        interaction: { hover: true, tooltipDelay: 200, zoomView: true }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    // --- LÓGICA DE INTERACCIÓN ---
+
+    function getBadgeClass(cat) {
+        if (cat === 'pol') return 'badge-pol';
+        if (cat === 'eco') return 'badge-eco';
+        return 'badge-soc';
+    }
+
+    function getCatName(cat) {
+        if (cat === 'pol') return 'Política & Poder';
+        if (cat === 'eco') return 'Economía & Desarrollo';
+        return 'Sociedad & Cultura';
+    }
+
+    network.on("click", function (params) {
+        if (params.nodes.length > 0) {
+            const nodeId = params.nodes[0];
+            const info = chapters[nodeId];
+            
+            if (info) {
+                const panel = document.getElementById('panel-content');
+                
+                // Generar lista de datos
+                let dataHtml = '<ul class="data-list">';
+                info.data.forEach(item => {
+                    dataHtml += `<li>${item}</li>`;
+                });
+                dataHtml += '</ul>';
+
+                const content = `
+                    <div class="animate-fade-in">
+                        <span class="chapter-badge ${getBadgeClass(info.cat)}">${getCatName(info.cat)} | ${info.num}</span>
+                        <h2 class="node-title">${info.title.split(':')[1]}</h2>
+                        <div class="authors">Autores: ${info.authors}</div>
+
+                        <div class="section-title">Argumento Central</div>
+                        <div class="thesis-box">${info.thesis}</div>
+
+                        <div class="card">
+                            <div class="mech-header">Mecanismo Causal (${info.mechanism_type})</div>
+                            <div class="mech-content">${info.mech.title}: ${info.mech.desc}</div>
+                        </div>
+
+                        <div class="section-title">Evidencia Empírica</div>
+                        ${dataHtml}
+                    </div>
+                `;
+                
+                panel.innerHTML = content;
+                openSidebar();
+            }
+        } else {
+            // Clic en vacío no hace nada o podría cerrar, dejamos abierto si ya tiene info
+        }
+    });
+
+    // --- FUNCIONES DE INTERFAZ ---
+
+    const sidebar = document.getElementById('sidebar');
+    const desktopToggle = document.getElementById('desktopToggle');
+    const mobileToggle = document.getElementById('mobileToggle');
+
+    function toggleSidebar(forceOpen) {
+        if (window.innerWidth <= 900) {
+            // Modo Móvil
+            if (forceOpen === true || !sidebar.classList.contains('visible-mobile')) {
+                sidebar.classList.add('visible-mobile');
+                mobileToggle.innerText = "Cerrar Panel";
+            } else {
+                sidebar.classList.remove('visible-mobile');
+                mobileToggle.innerText = "Ver Análisis";
+            }
+        } else {
+            // Modo Desktop
+            if (forceOpen === false || !sidebar.classList.contains('hidden')) {
+                sidebar.classList.add('hidden');
+                desktopToggle.innerText = "Mostrar Panel";
+            } else {
+                sidebar.classList.remove('hidden');
+                desktopToggle.innerText = "Ocultar Panel";
+            }
+        }
+    }
+
+    function openSidebar() {
+        if (window.innerWidth <= 900) {
+            sidebar.classList.add('visible-mobile');
+            mobileToggle.innerText = "Cerrar Panel";
+        } else {
+            sidebar.classList.remove('hidden');
+            desktopToggle.innerText = "Ocultar Panel";
+        }
+    }
+
+    function toggleSidebarDesktop() {
+        toggleSidebar();
+    }
+
+    function toggleSidebarMobile() {
+        toggleSidebar();
+    }
+
+    function fitNetwork() {
+        network.fit({ animation: { duration: 1000, easingFunction: 'easeInOutQuad' } });
+    }
+
+    // Ajuste inicial por tamaño de pantalla
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) {
+            sidebar.classList.remove('visible-mobile'); // Limpiar clases móviles
+            if (!sidebar.classList.contains('hidden')) {
+                desktopToggle.innerText = "Ocultar Panel";
+            }
+        } else {
+            // En móvil empieza oculto abajo
+            sidebar.classList.remove('hidden'); 
+        }
+    });
+
+</script>
+</body>
+</html>

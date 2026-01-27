@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Análisis: From Development to Dictatorship</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #fcfcfc;
+    --sidebar-bg: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --accent-color: #8c2f39;
+    --border-color: #e0e0e0;
+
+    /* Responsive sidebar sizing */
+    --sidebar-width: 400px;
+    --sidebar-width-tablet: 360px;
+    --sidebar-width-mobile: 92vw;
+
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    margin: 0; padding: 0;
+    height: 100dvh; /* mejor que 100vh en móviles */
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* ====== Sidebar (Desktop default) ====== */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+    z-index: 30;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    min-width: 280px;
+    max-width: 520px;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
+    position: absolute;
+    height: 100%;
+  }
+
+  .header {
+    padding: 22px 22px;
+    background: #1f2937;
+    color: #fff;
+    border-bottom: 4px solid var(--accent-color);
+  }
+
+  .header h1 {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.35rem;
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+  }
+
+  .header .meta {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .filters {
+    padding: 14px 22px;
+    background: #f3f4f6;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .filter-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .btn-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    position: relative;
+    padding-left: 30px;
+    touch-action: manipulation;
+  }
+  .filter-btn::before {
+    content: ''; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .filter-btn:hover { background: #f9fafb; border-color: #9ca3af; }
+  .btn-us::before { background: #2563eb; }
+  .btn-mnr::before { background: #d97706; }
+  .btn-mil::before { background: #059669; }
+  .btn-res::before { background: #dc2626; }
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 22px;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(22px + var(--safe-bottom));
+  }
+
+  .info-title {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.55rem;
+    color: var(--accent-color);
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  .info-subtitle {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 18px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  .info-body { font-size: 0.95rem; line-height: 1.7; color: #333; margin-bottom: 18px; }
+
+  .data-box {
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    padding: 14px; border-radius: 6px; margin-bottom: 18px;
+  }
+  .data-label { font-size: 0.7rem; font-weight: bold; color: #4b5563; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .data-value { font-family: 'Crimson Text', serif; font-size: 1.05rem; color: #111827; font-style: italic; }
+  .reference-box { border-left: 3px solid var(--accent-color); padding-left: 15px; font-size: 0.85rem; color: #555; margin-top: 18px; }
+
+  .footer {
+    padding: 10px 12px;
+    background: #f3f4f6;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.7rem; text-align: center; color: #6b7280;
+  }
+
+  /* ====== Network canvas ====== */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100dvh;
+    overflow: hidden;
+    min-width: 0; /* evita overflow horizontal en flex */
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    background-color: #fcfcfc;
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 20px 20px;
+    touch-action: none; /* vis.js gestiona pan/zoom */
+  }
+
+  /* ====== Floating controls ====== */
+  .toggle-sidebar-btn {
+    position: absolute;
+    top: calc(14px + var(--safe-top));
+    left: calc(14px + var(--safe-left));
+    z-index: 60;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+    font-weight: 700; color: #333;
+    display: flex; align-items: center; gap: 8px;
+    transition: background 0.2s, transform 0.2s;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    touch-action: manipulation;
+  }
+  .toggle-sidebar-btn:hover { background: #f3f4f6; transform: translateY(-1px); }
+
+  .canvas-controls {
+    position: absolute;
+    bottom: calc(14px + var(--safe-bottom));
+    right: calc(14px + var(--safe-right));
+    z-index: 60;
+    display: flex; gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: min(520px, 95vw);
+  }
+
+  .canvas-btn {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+    font-size: 0.9rem; font-weight: 700; color: #333;
+    transition: background 0.2s, transform 0.2s;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    touch-action: manipulation;
+    white-space: nowrap;
+  }
+  .canvas-btn:hover { background: #f9fafb; transform: translateY(-1px); }
+  .canvas-btn.active { background: #fee2e2; color: #991b1b; border-color: #f87171; }
+
+  /* ====== Mobile/Tablet behavior: sidebar becomes drawer + overlay ====== */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 25;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Tablet */
+  @media (max-width: 1024px) {
+    :root { --sidebar-width: var(--sidebar-width-tablet); }
+    .header h1 { font-size: 1.25rem; }
+    .content-area { padding: 18px; }
+  }
+
+  /* Mobile drawer */
+  @media (max-width: 820px) {
+    body { overflow: hidden; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 100dvh;
+      width: var(--sidebar-width-mobile);
+      max-width: 520px;
+      transform: translateX(-105%);
+      border-right: 1px solid var(--border-color);
+      box-shadow: 10px 0 30px rgba(0,0,0,0.18);
+      z-index: 40;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar.closed {
+      transform: translateX(-105%);
+    }
+
+    /* En móvil, no queremos “position absolute” en closed */
+    .sidebar.closed { position: fixed; }
+
+    /* Compact buttons */
+    .toggle-sidebar-btn {
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+    #toggleText { display: none; } /* solo ícono en móvil */
+
+    .canvas-controls {
+      left: calc(14px + var(--safe-left));
+      right: calc(14px + var(--safe-right));
+      justify-content: space-between;
+      gap: 8px;
+      max-width: none;
+    }
+    .canvas-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 10px;
+      font-size: 0.85rem;
+    }
+  }
+
+  /* Preferencia del usuario: reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar, .overlay, .toggle-sidebar-btn, .canvas-btn {
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- overlay para móvil -->
+<div class="overlay" id="overlay" onclick="closeSidebarMobile()"></div>
+
+<!-- BARRA LATERAL -->
+<div class="sidebar closed" id="sidebar">
+  <div class="header">
+    <h1>From Development to Dictatorship</h1>
+    <div class="meta">Thomas C. Field Jr. (2014)</div>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Navegación Temática</span>
+    <div class="btn-group">
+      <div class="filter-btn btn-us" onclick="focusNode(1)">1. Ideología & Financiación (EEUU)</div>
+      <div class="filter-btn btn-mnr" onclick="focusNode(5)">2. El Estado Autoritario (MNR)</div>
+      <div class="filter-btn btn-mil" onclick="focusNode(10)">3. Militarización & Golpe</div>
+      <div class="filter-btn btn-res" onclick="focusNode(15)">4. Resistencia Minera & Caos</div>
+    </div>
+  </div>
+
+  <div class="content-area" id="infoPanel">
+    <div style="text-align: center; color: #9ca3af; margin-top: 50%; font-family: 'Crimson Text', serif; font-style: italic;">
+      Seleccione un nodo en el gráfico<br>para ver el análisis detallado.
+    </div>
+  </div>
+
+  <div class="footer">
+    Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div id="network-wrapper">
+  <button class="toggle-sidebar-btn" id="toggleSidebarBtn" onclick="toggleSidebar()">
+    <span id="toggleIcon">☰</span>
+    <span id="toggleText">Mostrar Fichas</span>
+  </button>
+
+  <div id="network"></div>
+
+  <div class="canvas-controls">
+    <button class="canvas-btn" id="freezeBtn" onclick="togglePhysics()"> Congelar dinamismo</button>
+    <button class="canvas-btn" onclick="fitAll()">⌖ Centrar Vista</button>
+  </div>
+</div>
+
+<script>
+// --- IMAGEN SVG: BANDERA EEUU ---
+const usFlagSvg = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 741 390">
+  <rect width="741" height="390" fill="#b22234"/>
+  <path d="M0,30h741v30h-741M0,90h741v30h-741M0,150h741v30h-741M0,210h741v30h-741M0,270h741v30h-741M0,330h741v30h-741" stroke="#fff" stroke-width="30"/>
+  <rect width="296.4" height="210" fill="#3c3b6e"/>
+  <g fill="#fff">
+    <g id="s18">
+      <g id="s9">
+        <g id="s5">
+          <g id="s4">
+            <path id="s" d="M24.7,5.7 30.6,23.8H11.4l14.7-10.7L20.5,30.7 24.7,18.2l4.2,12.5-5.6-17.5 14.7,10.7H18.8z"/>
+            <use xlink:href="#s" x="49.4"/>
+            <use xlink:href="#s" x="98.8"/>
+            <use xlink:href="#s" x="148.2"/>
+          </g>
+          <use xlink:href="#s" x="197.6"/>
+        </g>
+        <use xlink:href="#s5" x="24.7" y="21"/>
+      </g>
+      <use xlink:href="#s9" y="42"/>
+    </g>
+    <use xlink:href="#s18" y="84"/>
+    <use xlink:href="#s9" y="168"/>
+    <use xlink:href="#s5" y="168" transform="translate(24.7,21)"/>
+  </g>
+</svg>`);
+
+// --- BASE DE DATOS DE CONTENIDO ---
+const bookData = {
+  1: { title:"Ideología de la Modernización", type:"Concepto Central",
+    text:"Tesis central: La ideología del desarrollo (Alliance for Progress) no fue opuesta al autoritarismo, sino su catalizador. Para los liberales de Kennedy, la modernización requería orden y disciplina antes que democracia.",
+    data:"Paradoja: El desarrollo económico justificó la suspensión de libertades civiles.",
+    ref:"Field, Intro & Cap. 1: 'Development ideology has a tendency to justify authoritarianism'." },
+  2: { title:"Alianza para el Progreso", type:"Mecanismo Financiero",
+    text:"Bolivia fue el laboratorio de pruebas. Washington inyectó dinero masivo para sostener a Paz Estenssoro. La ayuda no era caridad, era contrainsurgencia preventiva.",
+    data:"Cifra: Bolivia recibió aprox. 20% de su PIB en ayuda (la mayor per cápita del mundo).",
+    ref:"Capítulo 1: 'Kennedy never shied away from development as combat'." },
+  3: { title:"Plan Triangular", type:"Política Económica",
+    text:"Plan de rehabilitación de minas (EEUU, BID, Alemania). Objetivo político: destruir el poder de la FSTMB y despedir mineros bajo excusa de 'racionalización'.",
+    data:"Impacto: Despido de 5,000+ mineros y fin del Control Obrero.",
+    ref:"Capítulo 2: El plan condicionaba la ayuda a los despidos masivos." },
+  4: { title:"Embajada de EEUU", type:"Actor Hegemónico",
+    text:"Ben Stephansky (Kennedy) y Douglas Henderson (Johnson) dirigieron la política interna boliviana. A pesar de ser liberales, impulsaron la línea dura contra los sindicatos, viendo al MNR autoritario como la única vía al progreso.",
+    data:"Intervención: Aprobación directa de listas de armamento para reprimir protestas.",
+    ref:"Capítulos 2 y 6: Arquitectos intelectuales de la represión desarrollista." },
+  5: { title:"Víctor Paz Estenssoro", type:"Actor Político",
+    text:"Operador astuto que usó la amenaza comunista para chantajear a Washington. Al destruir su base minera para complacer a EEUU, quedó rehén de los militares.",
+    data:"Estrategia: Gobernó casi todo su tercer mandato bajo Estado de Sitio.",
+    ref:"Capítulo 2: Usó el desarrollo como escudo para eliminar rivales." },
+  6: { title:"Guillermo Bedregal", type:"Tecnócrata",
+    text:"Presidente de COMIBOL y ejecutor del Plan Triangular. Representaba la élite del MNR que despreciaba a los sindicatos como 'obstáculos feudales'.",
+    data:"Cita: Llamó a los líderes sindicales 'señores feudales' a eliminar.",
+    ref:"Capítulo 3: Clave en la confrontación física con Siglo XX." },
+  7: { title:"Ruptura con la Izquierda", type:"Evento Político",
+    text:"Bajo presión de EEUU, Paz marginó a Lechín y al Sector de Izquierda. Esto fracturó la coalición de 1952 y obligó a Paz a recurrir al Ejército.",
+    data:"Consecuencia: Radicalización de la izquierda y conspiración final.",
+    ref:"Capítulo 5: 'Seeds of Revolt'." },
+  8: { title:"Acción Cívica Militar", type:"Estrategia",
+    text:"Programa de EEUU para que el ejército construyera obras civiles. Su fin real era ocupar territorio, mejorar la imagen militar y desplazar al MNR en el campo.",
+    data:"Dato: 20% de la ayuda total de EEUU pasó por manos militares.",
+    ref:"Capítulo 3: 'Bitter Medicine'. Legitimó el retorno militar a la política." },
+  9: { title:"Gral. René Barrientos", type:"Actor Militar",
+    text:"El 'General del Pueblo'. Cultivado por la CIA y el Coronel Fox como la alternativa 'moderna' y anticomunista a Paz Estenssoro.",
+    data:"Perfil: Un producto directo de la asistencia militar estadounidense.",
+    ref:"Capítulo 5: Usó la infraestructura de EEUU para construir su poder." },
+  10:{ title:"Golpe de Estado (1964)", type:"Desenlace",
+    text:"El clímax de la modernización. El ejército, fortalecido por EEUU, eliminó al intermediario civil (Paz) para gestionar el desarrollo directamente.",
+    data:"Ironía: Paz fue derrocado por tropas (Rangers) entrenadas por EEUU.",
+    ref:"Capítulo 6: 'Revolutionary Bolivia Puts on a Uniform'." },
+  11:{ title:"Coronel Edward Fox", type:"Actor Externo",
+    text:"Agregado Aéreo de EEUU y mentor de Barrientos. Actuó casi como operador político independiente, alentando las ambiciones de Barrientos.",
+    data:"Influencia: Enlace directo entre el Pentágono y los conspiradores.",
+    ref:"Capítulo 5-6: La diplomacia militar paralela." },
+  12:{ title:"Siglo XX y Catavi", type:"Espacio Geográfico",
+    text:"Las minas más politizadas, vistas como 'territorio enemigo'. Operaban con milicias propias hasta la intervención militar definitiva.",
+    data:"Estado: Resistencia armada contra el Plan Triangular.",
+    ref:"Capítulo 4: El epicentro de la resistencia." },
+  13:{ title:"Crisis de Rehenes (1963)", type:"Evento Crítico",
+    text:"Mineros secuestraron a 4 funcionarios de EEUU. Esto radicalizó a la administración Johnson y validó la opción militar como única salida.",
+    data:"Detalle: Las 'Amas de Casa' custodiaron a los rehenes con dinamita.",
+    ref:"Capítulo 4: El momento en que la diplomacia falló." },
+  14:{ title:"Batalla de Irupata", type:"Conflicto Armado",
+    text:"El gobierno, con logística de la CIA, armó milicias campesinas para atacar a los mineros. Guerra civil de baja intensidad financiada por la Alianza.",
+    data:"Costo: Violencia directa orquestada desde arriba.",
+    ref:"Capítulo 3: Violencia para imponer disciplina laboral." },
+  15:{ title:"Federico Escóbar", type:"Líder Sindical",
+    text:"Líder comunista de Siglo XX. Representaba lo que el Plan Triangular quería eliminar: control obrero y política radical.",
+    data:"Símbolo: Mártir de la resistencia minera.",
+    ref:"Capítulo 3-4: El antagonista de la 'racionalidad económica'." }
+};
+
+// --- NODOS Y ARISTAS ---
+const nodes = new vis.DataSet([
+  { id: 1, label: "Ideología\nModernización", group: 'us', shape: 'box', margin: 10 },
+  { id: 2, label: "Alianza para\nel Progreso", group: 'us', shape: 'box', margin: 10 },
+  { id: 3, label: "Plan\nTriangular", group: 'us', shape: 'box', margin: 10 },
+
+  { id: 4, label: "Embajada EEUU\n(Stephansky)", group: 'us', shape: 'circularImage',
+    image: usFlagSvg, size: 30, borderWidth: 4,
+    color: { border: '#2563eb', background: '#ffffff' } },
+
+  { id: 5, label: "Víctor Paz\nEstenssoro", group: 'mnr', shape: 'ellipse' },
+  { id: 6, label: "Guillermo\nBedregal", group: 'mnr', shape: 'ellipse' },
+  { id: 7, label: "Ruptura\nMNR", group: 'mnr', shape: 'diamond' },
+  { id: 8, label: "Acción Cívica\nMilitar", group: 'mil', shape: 'hexagon' },
+  { id: 9, label: "Gral. René\nBarrientos", group: 'mil', shape: 'hexagon' },
+  { id: 10, label: "Golpe de\n1964", group: 'mil', shape: 'star', size: 30 },
+  { id: 11, label: "Cnl. Edward\nFox (US)", group: 'mil', shape: 'triangleDown' },
+  { id: 12, label: "Siglo XX\nCatavi", group: 'res', shape: 'dot', size: 15 },
+  { id: 13, label: "Crisis Rehenes\n(1963)", group: 'res', shape: 'diamond' },
+  { id: 14, label: "Irupata\n(Violencia)", group: 'res', shape: 'diamond' },
+  { id: 15, label: "Federico\nEscóbar", group: 'res', shape: 'dot', size: 10 }
+]);
+
+const edges = new vis.DataSet([
+  { from: 1, to: 2, label: "fundamenta", arrows: "to" },
+  { from: 2, to: 3, label: "financia ($38M)", arrows: "to", width: 2 },
+  { from: 2, to: 8, label: "financia (20%)", arrows: "to", width: 2 },
+  { from: 4, to: 5, label: "presiona", arrows: "to" },
+  { from: 4, to: 3, label: "diseña", arrows: "to" },
+  { from: 5, to: 3, label: "acepta", arrows: "to" },
+  { from: 3, to: 6, label: "ejecuta", arrows: "to" },
+  { from: 6, to: 12, label: "despide", arrows: "to", color: {color:'#dc2626'} },
+  { from: 3, to: 7, label: "causa", arrows: "to" },
+  { from: 5, to: 7, label: "expulsa izquierda", arrows: "to" },
+  { from: 8, to: 9, label: "empodera", arrows: "to" },
+  { from: 11, to: 9, label: "mentorea", arrows: "to", dashes: true },
+  { from: 5, to: 8, label: "depende de", arrows: "to" },
+  { from: 5, to: 14, label: "ordena ataque", arrows: "to", color: {color:'#dc2626'} },
+  { from: 12, to: 13, label: "reacciona", arrows: "to" },
+  { from: 6, to: 15, label: "encarcela", arrows: "to" },
+  { from: 15, to: 12, label: "lidera", arrows: "to" },
+  { from: 13, to: 10, label: "acelera fin", arrows: "to" },
+  { from: 9, to: 10, label: "ejecuta", arrows: "to" },
+  { from: 10, to: 5, label: "derroca", arrows: "to", width: 3 }
+]);
+
+// --- CONFIGURACIÓN E INICIALIZACIÓN ---
+const container = document.getElementById('network');
+const data = { nodes, edges };
+const options = {
+  nodes: {
+    font: { size: 14, face: 'Lato', color: '#111' },
+    borderWidth: 2,
+    shadow: { enabled: true, color: 'rgba(0,0,0,0.1)', size: 5, x: 2, y: 2 }
+  },
+  edges: {
+    width: 1,
+    color: { color: '#9ca3af', highlight: '#1f2937' },
+    font: { size: 10, align: 'middle', background: 'rgba(255,255,255,0.8)' },
+    smooth: { type: 'cubicBezier', roundness: 0.4 }
+  },
+  groups: {
+    us: { color: { background: '#eff6ff', border: '#2563eb' }, font: { color: '#1e3a8a' } },
+    mnr:{ color: { background: '#fff7ed', border: '#d97706' }, font: { color: '#9a3412' } },
+    mil:{ color: { background: '#f0fdf4', border: '#059669' }, font: { color: '#065f46' } },
+    res:{ color: { background: '#fef2f2', border: '#dc2626' }, font: { color: '#991b1b' } }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 200,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 200 }
+  },
+  interaction: { hover: true, tooltipDelay: 200 }
+};
+
+const network = new vis.Network(container, data, options);
+
+// ===== Responsive helpers =====
+function isMobile() { return window.matchMedia("(max-width: 820px)").matches; }
+
+function openSidebarMobile() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  if (isMobile()) {
+    sidebar.classList.add('open');
+    sidebar.classList.remove('closed');
+    overlay.classList.add('show');
+  } else {
+    sidebar.classList.remove('closed');
+  }
+  syncToggleButton();
+}
+
+function closeSidebarMobile() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  if (isMobile()) {
+    sidebar.classList.remove('open');
+    sidebar.classList.add('closed');
+    overlay.classList.remove('show');
+  } else {
+    sidebar.classList.add('closed');
+  }
+  syncToggleButton();
+}
+
+function syncToggleButton() {
+  const sidebar = document.getElementById('sidebar');
+  const btnText = document.getElementById('toggleText');
+  const btnIcon = document.getElementById('toggleIcon');
+  const overlay = document.getElementById('overlay');
+
+  const isOpen = isMobile() ? sidebar.classList.contains('open') : !sidebar.classList.contains('closed');
+
+  btnIcon.textContent = isOpen ? "✕" : "☰";
+  btnText.textContent = isOpen ? "Ocultar Fichas" : "Mostrar Fichas";
+
+  if (!isMobile()) overlay.classList.remove('show');
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  if (isMobile()) {
+    if (sidebar.classList.contains('open')) closeSidebarMobile();
+    else openSidebarMobile();
+  } else {
+    sidebar.classList.toggle('closed');
+    syncToggleButton();
+  }
+
+  // Refit after layout change
+  setTimeout(() => network.fit({ animation: { duration: 500, easingFunction: 'easeInOutQuad' } }), isMobile() ? 250 : 350);
+}
+
+// Cierra drawer con ESC
+window.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") closeSidebarMobile();
+});
+
+// Recalcula canvas en resize/orientation
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    syncToggleButton();
+    network.redraw();
+    network.fit({ animation: { duration: 400 } });
+  }, 120);
+});
+
+// --- LÓGICA DE INTERACCIÓN ---
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+
+    // Abrir sidebar (drawer en móvil)
+    openSidebarMobile();
+
+    if (info) {
+      document.getElementById('infoPanel').innerHTML = `
+        <h2 class="info-title">${info.title}</h2>
+        <div class="info-subtitle">${info.type.toUpperCase()}</div>
+        <div class="info-body">${info.text}</div>
+        <div class="data-box">
+          <span class="data-label">Dato Clave / Cifra</span>
+          <span class="data-value">${info.data}</span>
+        </div>
+        <div class="reference-box">
+          <strong>Ref:</strong> ${info.ref}
+        </div>
+      `;
+    }
+  }
+});
+
+let isPhysicsEnabled = true;
+function togglePhysics() {
+  isPhysicsEnabled = !isPhysicsEnabled;
+  network.setOptions({ physics: { enabled: isPhysicsEnabled } });
+
+  const btn = document.getElementById('freezeBtn');
+  if (!isPhysicsEnabled) {
+    btn.innerHTML = " Reanudar dinamismo";
+    btn.classList.add('active');
+  } else {
+    btn.innerHTML = " Congelar dinamismo";
+    btn.classList.remove('active');
+  }
+}
+
+function focusNode(nodeId) {
+  openSidebarMobile();
+  network.focus(nodeId, {
+    scale: 1.2,
+    animation: { duration: 900, easingFunction: 'easeInOutQuad' }
+  });
+  network.selectNodes([nodeId]);
+  network.emit('click', { nodes: [nodeId] });
+}
+
+function fitAll() {
+  network.fit({ animation: { duration: 900, easingFunction: 'easeInOutQuad' } });
+  network.unselectAll();
+  document.getElementById('infoPanel').innerHTML = `
+    <div style="text-align: center; color: #9ca3af; margin-top: 50%; font-family: 'Crimson Text', serif; font-style: italic;">
+      Seleccione un nodo en el gráfico<br>para ver el análisis detallado.
+    </div>
+  `;
+  syncToggleButton();
+}
+
+// Estado inicial
+syncToggleButton();
+</script>
+</body>
+</html>

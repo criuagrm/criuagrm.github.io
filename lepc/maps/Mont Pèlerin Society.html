@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Análisis Estructural: The Road from Mont Pèlerin</title>
+<!-- Librería Vis.js para gráficos de redes -->
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<!-- Fuentes Académicas -->
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-bg: #f5f7fa;
+        --sidebar-bg: #ffffff;
+        --text-main: #333333;
+        --text-light: #5f6368;
+        --accent: #2c3e50;
+        --highlight: #c0392b;
+        --border: #e0e0e0;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Open Sans', sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-main);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+    }
+
+    /* --- SIDEBAR (Panel de Información) --- */
+    .sidebar {
+        width: 450px;
+        height: 100%;
+        background: var(--sidebar-bg);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease-in-out;
+        position: relative;
+    }
+
+    .header {
+        padding: 20px;
+        background: var(--accent);
+        color: white;
+    }
+
+    .header h1 {
+        font-family: 'Lora', serif;
+        font-size: 1.2rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .header .subtitle {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        margin-top: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* --- FILTROS DE NAVEGACIÓN --- */
+    .nav-filters {
+        padding: 15px;
+        border-bottom: 1px solid var(--border);
+        background: #fcfcfc;
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        background: white;
+        border: 1px solid #bdc3c7;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--text-light);
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+    }
+
+    /* --- ÁREA DE CONTENIDO --- */
+    .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 25px;
+        scroll-behavior: smooth;
+    }
+
+    .chapter-badge {
+        display: inline-block;
+        background: var(--highlight);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .analysis-title {
+        font-family: 'Lora', serif;
+        font-size: 1.4rem;
+        color: var(--accent);
+        margin: 0 0 5px 0;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .author-meta {
+        font-size: 0.85rem;
+        font-style: italic;
+        color: var(--text-light);
+        margin-bottom: 20px;
+    }
+
+    .section-head {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-light);
+        margin-top: 25px;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Estilos para Mecanismos */
+    .mechanism-card {
+        background: #f8f9fa;
+        border-left: 4px solid var(--accent);
+        padding: 12px;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+    .mechanism-label {
+        font-weight: bold;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+
+    /* Estilos para Datos */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    .data-table td {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+    }
+    .data-table strong { color: var(--highlight); }
+
+    .citation-box {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fff3e0;
+        font-size: 0.85rem;
+        border-radius: 4px;
+        font-family: 'Lora', serif;
+        font-style: italic;
+    }
+
+    .footer {
+        padding: 10px;
+        text-align: center;
+        font-size: 0.7rem;
+        color: #aaa;
+        border-top: 1px solid var(--border);
+        background: #f9f9f9;
+    }
+
+    /* --- VISUALIZACIÓN DE RED --- */
+    .network-container {
+        flex: 1;
+        position: relative;
+        background-color: #ffffff;
+        /* Patrón de fondo sutil académico */
+        background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+
+    #network { width: 100%; height: 100%; }
+
+    /* Controles Flotantes */
+    .toggle-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: none; /* Oculto en desktop por defecto */
+    }
+
+    .zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .zoom-btn {
+        background: white;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        color: var(--accent);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* --- RESPONSIVE DESIGN --- */
+    @media (max-width: 900px) {
+        body { flex-direction: column; }
+        
+        .sidebar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60vh; /* Ocupa 60% de la altura en móvil */
+            transform: translateY(100%); /* Oculto por defecto */
+            border-top: 2px solid var(--accent);
+            border-right: none;
+        }
+
+        .sidebar.active {
+            transform: translateY(0);
+        }
+
+        .toggle-btn {
+            display: block;
+        }
+
+        .network-container {
+            height: 100%; /* Ocupa todo el fondo */
+        }
+        
+        /* Ajuste para que el botón no tape nodos */
+        .zoom-controls { bottom: 65vh; } 
+    }
+</style>
+</head>
+<body>
+
+<!-- Panel Lateral -->
+<aside class="sidebar" id="sidebar">
+    <div class="header">
+        <h1>The Road from Mont Pèlerin</h1>
+        <div class="subtitle">Análisis Estructural y Causal</div>
+    </div>
+
+    <div class="nav-filters">
+        <button class="filter-btn" onclick="fitAll()">Ver Todo</button>
+        <button class="filter-btn" onclick="focusGroup('origins')">Orígenes</button>
+        <button class="filter-btn" onclick="focusGroup('strategies')">Estrategias</button>
+        <button class="filter-btn" onclick="focusGroup('mobilization')">Chile/Desarrollo</button>
+    </div>
+
+    <div class="content" id="detailContent">
+        <div style="text-align: center; margin-top: 40px; color: #95a5a6;">
+            <p style="font-family: 'Lora', serif; font-size: 1.1rem;">Seleccione un nodo de la red</p>
+            <p>Este mapa visualiza el "Colectivo de Pensamiento Neoliberal" tal como lo describe el libro.</p>
+            <p>Se enfoca en mecanismos causales (micro-meso-macro) y evidencia empírica.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        Análisis realizado por: <strong>Ricardo Alonzo Fernández Salguero</strong>
+    </div>
+</aside>
+
+<!-- Contenedor de la Red -->
+<main class="network-container">
+    <button class="toggle-btn" onclick="toggleMobileMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <div id="network"></div>
+
+    <div class="zoom-controls">
+        <button class="zoom-btn" onclick="network.fit()">Centrar</button>
+        <button class="zoom-btn" onclick="stopPhysics()">Fijar Nodos</button>
+    </div>
+</main>
+
+<script>
+// ==========================================
+// DATOS DE ANÁLISIS (Profundidad Académica)
+// ==========================================
+const bookData = {
+    // NODE: INTRODUCCIÓN
+    "intro": {
+        tag: "Introducción",
+        title: "La Construcción del Colectivo de Pensamiento",
+        author: "Dieter Plehwe",
+        mechanisms: {
+            micro: "<strong>Socialización Elitista:</strong> Reuniones cerradas (privadas) para crear confianza y lenguaje común entre intelectuales dispersos (Hayek, Röpke, Friedman).",
+            meso: "<strong>Estructura de 'Muñeca Rusa':</strong> Un núcleo ideológico puro (MPS) protegido por capas externas de think tanks, fundaciones y medios de comunicación que traducen la teoría en política.",
+            macro: "<strong>Guerra de Posiciones:</strong> Desplazamiento lento pero constante de la hegemonía keynesiana mediante la infiltración en la academia y la política."
+        },
+        evidence: [
+            "<strong>Dato:</strong> La reunión fundacional de 1947 contó con 39 participantes. Para 1951, la membresía subió a 172.",
+            "<strong>Financiación:</strong> Credit Suisse pagó el 93% de los costos de la conferencia de 1947 (18,062 francos suizos), demostrando el nexo temprano con el capital financiero.",
+            "<strong>Redes:</strong> Se identifican más de 100 think tanks vinculados directamente a miembros de la MPS (ej. Atlas Foundation)."
+        ],
+        ref: "Plehwe, Introduction, pp. 1-42."
+    },
+
+    // NODE: CAPÍTULO 4 (CHICAGO)
+    "ch4": {
+        tag: "Capítulo 4",
+        title: "El Ascenso de la Escuela de Chicago",
+        author: "Rob Van Horn & Philip Mirowski",
+        mechanisms: {
+            micro: "<strong>Emprendimiento Intelectual:</strong> El rol pivotal de Henry Simons y luego Aaron Director en reclutar a Hayek para Chicago.",
+            meso: "<strong>Proyecto de Mercado Libre (1946):</strong> Un proyecto financiado externamente (Volker Fund) dentro de la Facultad de Derecho para reformular el liberalismo clásico hacia una postura pro-corporativa.",
+            macro: "<strong>Giro Neoliberal:</strong> Abandono de la desconfianza clásica hacia los monopolios (Simons) en favor de una defensa de la concentración corporativa como eficiente (Director/Friedman)."
+        },
+        evidence: [
+            "<strong>Financiación Clave:</strong> El William Volker Fund contribuyó con $25,000 anuales durante 3 años para el 'Free Market Study', una suma enorme en 1946.",
+            "<strong>Documento:</strong> Cartas entre Hayek y Harold Luhnow (presidente de Volker) muestran que la financiación estaba condicionada a producir una 'versión americana' del Camino de Servidumbre.",
+            "<strong>Resultado:</strong> 'Capitalism and Freedom' (1962) de Friedman es identificado como el producto final (y retrasado) de este contrato con Volker."
+        ],
+        ref: "Van Horn & Mirowski, pp. 139-178."
+    },
+
+    // NODE: CAPÍTULO 6 (ANTITRUST)
+    "ch6": {
+        tag: "Capítulo 6",
+        title: "Reinventando el Monopolio (Law & Economics)",
+        author: "Rob Van Horn",
+        mechanisms: {
+            micro: "<strong>Conversión Intelectual:</strong> Aaron Director convence a colegas (como Edward Levi y John McGee) de abandonar las visiones tradicionales antimonopolio.",
+            meso: "<strong>El Proyecto Antitrust (1953-1957):</strong> Un taller financiado por corporaciones dentro de la Universidad de Chicago que generó la literatura base para cambiar la jurisprudencia de EEUU.",
+            macro: "<strong>Reingeniería Legal:</strong> Transformación del criterio judicial de 'proteger la competencia' a 'proteger la eficiencia del consumidor', legitimando monopolios privados."
+        },
+        evidence: [
+            "<strong>Evidencia de Cambio:</strong> En 1947, Edward Levi atacaba los monopolios. Para 1956, tras dirigir el proyecto Antitrust, co-escribió con Director defendiendo las fusiones corporativas.",
+            "<strong>Dato:</strong> El estudio de John McGee sobre Standard Oil (1958) argumentó (contra la historia) que la fijación de precios depredadora era 'irracional' y nunca ocurrió.",
+            "<strong>Cita:</strong> Friedman (1962) concluyó que el 'monopolio privado' era un mal menor comparado con la regulación pública."
+        ],
+        ref: "Van Horn, pp. 204-237."
+    },
+
+    // NODE: CAPÍTULO 8 (EMPRESARIOS)
+    "ch8": {
+        tag: "Capítulo 8",
+        title: "Conservadores de Negocios y la MPS",
+        author: "Kim Phillips-Fein",
+        mechanisms: {
+            micro: "<strong>Mecenazgo Activo:</strong> Jasper Crane (ex-ejecutivo de DuPont) no solo daba dinero, sino que intentaba vetar oradores que consideraba 'demasiado blandos' o 'socialistas'.",
+            meso: "<strong>Redes de Donantes:</strong> Movilización de fundaciones corporativas (Relm, Earhart, Lilly) para financiar viajes y conferencias, manteniendo viva a la MPS.",
+            macro: "<strong>Alianza Pragmática:</strong> Los empresarios buscaban legitimidad intelectual contra el New Deal; los académicos necesitaban recursos. Tensión constante entre pureza teórica y propaganda."
+        },
+        evidence: [
+            "<strong>Cifra:</strong> Jasper Crane recaudó $40,000 para la reunión de la MPS en Princeton (1958). Donantes incluyeron US Steel, General Motors y Ford Motor Fund.",
+            "<strong>Intervención:</strong> Crane escribió a Hayek preocupado por la participación de Wilhelm Röpke, temiendo que atacara el 'laissez-faire' en suelo americano.",
+            "<strong>Dato:</strong> La reunión de 1958 fue diseñada para mostrar a los intelectuales europeos las 'maravillas del capitalismo americano' (visitas a fábricas de DuPont).",
+        ],
+        ref: "Phillips-Fein, pp. 280-302."
+    },
+
+    // NODE: CAPÍTULO 9 (CHILE)
+    "ch9": {
+        tag: "Capítulo 9",
+        title: "Neoliberales en Chile (El Laboratorio)",
+        author: "Karin Fischer",
+        mechanisms: {
+            micro: "<strong>Transferencia de Conocimiento:</strong> El convenio de 1956 entre la Universidad de Chicago y la Universidad Católica de Chile (Proyecto Chile).",
+            meso: "<strong>Infiltración Institucional:</strong> Los 'Chicago Boys' coparon instituciones clave (ODEPLAN, Banco Central) y formaron alianzas con grupos empresariales (Cruzata-Larraín) y militares (Armada).",
+            macro: "<strong>Autoritarismo como Vehículo:</strong> Uso de la dictadura militar para imponer reformas de shock (El Ladrillo) que eran inviables democráticamente."
+        },
+        evidence: [
+            "<strong>Dato:</strong> Entre 1956 y 1964, aprox. 30 economistas chilenos se formaron en Chicago. En los 60s, un tercio de los estudiantes de posgrado de Chicago eran latinoamericanos.",
+            "<strong>Documento:</strong> 'El Ladrillo' (programa económico) fue redactado *antes* del golpe por economistas de Chicago y empresarios del 'Monday Club'.",
+            "<strong>Actores:</strong> Sergio de Castro (Ministro de Hacienda) y Rolf Lüders (Ministro de Economía) eran miembros de la MPS.",
+            "<strong>Resultado:</strong> Privatización radical de la seguridad social (José Piñera) y reducción del gasto público, llevando al colapso financiero de 1982."
+        ],
+        ref: "Fischer, pp. 305-346."
+    },
+
+    // NODE: CAPÍTULO 11 (PERÚ)
+    "ch11": {
+        tag: "Capítulo 11",
+        title: "Cómo el Neoliberalismo Hace su Mundo (Perú)",
+        author: "Timothy Mitchell",
+        mechanisms: {
+            micro: "<strong>Emprendedurismo Intelectual:</strong> Hernando de Soto se posiciona como el 'neoliberal del Tercer Mundo', apoyado por la red Atlas.",
+            meso: "<strong>Experimento Natural Construido:</strong> El proyecto de titulación de tierras en Lima no fue un experimento neutral, sino una intervención diseñada para producir datos favorables al mercado.",
+            macro: "<strong>Performatividad:</strong> La economía no describe la realidad, la crea. La titulación buscaba transformar a los pobres en 'micro-empresarios' atomizados, destruyendo la solidaridad comunitaria."
+        },
+        evidence: [
+            "<strong>Dato:</strong> El Banco Mundial prestó $38 millones para el proyecto de titulación. Sin embargo, estudios mostraron que la titulación NO aumentó el acceso al crédito para los pobres.",
+            "<strong>Redes:</strong> Atlas Foundation promovió el libro 'El Otro Sendero' globalmente. Milton Friedman y Thatcher lo respaldaron públicamente.",
+            "<strong>Contradicción:</strong> Aunque se vendió como éxito, la evidencia de aumento de horas de trabajo tras la titulación es explicada por Mitchell como resultado de la crisis económica, no de la propiedad."
+        ],
+        ref: "Mitchell, pp. 386-416."
+    },
+
+    // NODE: CAPÍTULO 3 (ALEMANIA)
+    "ch3": {
+        tag: "Capítulo 3",
+        title: "Ordoliberalismo y Economía Social de Mercado",
+        author: "Ralf Ptak",
+        mechanisms: {
+            micro: "<strong>Supervivencia:</strong> Eucken y Böhm mantienen la Escuela de Friburgo activa bajo el nazismo, enfocándose en la teoría del orden.",
+            meso: "<strong>Captura del Estado:</strong> Inserción de ordoliberales en el Consejo Asesor del Ministerio de Economía bajo Ludwig Erhard en 1948.",
+            macro: "<strong>Fórmula Irénica:</strong> Uso del término 'Social' en 'Economía Social de Mercado' como estrategia retórica para apaciguar a los sindicatos y legitimar el mercado libre."
+        },
+        evidence: [
+            "<strong>Publicación:</strong> La revista ORDO se lanza en 1948, consolidando el movimiento.",
+            "<strong>Política:</strong> La liberación de precios de 1948 fue ejecutada por Erhard (asesorado por Leonhard Miksch) contra la voluntad de las potencias ocupantes británicas, pero con apoyo tácito de EEUU.",
+            "<strong>Dato:</strong> Rüstow y Röpke argumentaban que el Estado de Bienestar llevaría al totalitarismo, proponiendo en su lugar una 'Vitalpolitik' conservadora."
+        ],
+        ref: "Ptak, pp. 98-138."
+    }
+};
+
+// ==========================================
+// CONFIGURACIÓN DE LA RED
+// ==========================================
+
+const nodesArray = [
+    { id: 'mps', label: "Mont Pèlerin\nSociety (MPS)", group: 'core', value: 30, title: "El Colectivo Central" },
+    
+    // Nodos de Capítulos
+    { id: 'ch3', label: "Alemania\n(Ordoliberalismo)", group: 'origin' },
+    { id: 'ch4', label: "Chicago\n(Fundación)", group: 'origin' },
+    { id: 'ch6', label: "Antitrust\n(Law & Econ)", group: 'strategy' },
+    { id: 'ch8', label: "Empresarios\n(Financiación)", group: 'strategy' },
+    { id: 'ch5', label: "Sindicatos\n(Anti-Labor)", group: 'strategy' },
+    { id: 'ch9', label: "Chile\n(Aplicación)", group: 'action' },
+    { id: 'ch11', label: "Perú\n(De Soto)", group: 'action' },
+    { id: 'ch10', label: "ONU/NIEO\n(Oposición)", group: 'action' },
+    { id: 'intro', label: "Teoría:\nThought Collective", group: 'theory' },
+    
+    // Nodos de Actores Clave (Micro)
+    { id: 'hayek', label: "Hayek", group: 'person', size: 10 },
+    { id: 'simons', label: "H. Simons", group: 'person', size: 8 },
+    { id: 'director', label: "A. Director", group: 'person', size: 8 },
+    { id: 'friedman', label: "Friedman", group: 'person', size: 10 },
+    { id: 'crane', label: "Jasper Crane\n(DuPont)", group: 'donor', size: 12 },
+    { id: 'volker', label: "Volker Fund", group: 'donor', size: 12 },
+    { id: 'decastro', label: "S. De Castro", group: 'person', size: 8 }
+];
+
+const edgesArray = [
+    // Relaciones Estructurales
+    { from: 'intro', to: 'mps', label: "Analiza" },
+    { from: 'mps', to: 'ch3', label: "Incluye" },
+    { from: 'mps', to: 'ch4', label: "Incuba" },
+    { from: 'mps', to: 'ch9', label: "Influye" },
+    
+    // Relaciones Causales Fuertes (Libro)
+    { from: 'volker', to: 'ch4', label: "Financia ($)", width: 3 },
+    { from: 'crane', to: 'mps', label: "Financia Princeton '58", width: 3 },
+    { from: 'ch4', to: 'ch6', label: "Evoluciona a", arrows: "to" },
+    { from: 'simons', to: 'ch4', label: "Inicia (luego purgado)" },
+    { from: 'director', to: 'ch6', label: "Dirige" },
+    { from: 'friedman', to: 'ch9', label: "Asesora" },
+    { from: 'ch9', to: 'ch11', label: "Modelo Exportado" },
+    
+    // Conexiones Ideológicas
+    { from: 'ch6', to: 'ch9', label: "Teoría aplicada en" },
+    { from: 'ch8', to: 'ch6', label: "Interés Corporativo" },
+    { from: 'hayek', to: 'mps', label: "Funda" },
+    { from: 'decastro', to: 'ch9', label: "Implementa" }
+];
+
+const nodes = new vis.DataSet(nodesArray);
+const edges = new vis.DataSet(edgesArray);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+
+const options = {
+    nodes: {
+        shape: 'dot',
+        font: { face: 'Open Sans', size: 14, color: '#333' },
+        borderWidth: 2,
+        shadow: true
+    },
+    edges: {
+        width: 1,
+        color: { color: '#bdc3c7', highlight: '#c0392b' },
+        smooth: { type: 'continuous' },
+        arrows: { to: { enabled: true, scaleFactor: 0.5 } }
+    },
+    groups: {
+        core: { color: '#2c3e50', font: { color: 'white' }, size: 25 },
+        origin: { color: '#3498db' },
+        strategy: { color: '#f1c40f' },
+        action: { color: '#e74c3c' },
+        theory: { color: '#9b59b6' },
+        person: { color: '#ecf0f1', shape: 'ellipse', font: { size: 10 } },
+        donor: { color: '#27ae60', shape: 'box' }
+    },
+    physics: {
+        enabled: true,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+            gravitationalConstant: -100,
+            centralGravity: 0.01,
+            springLength: 150,
+            springConstant: 0.08
+        }
+    },
+    interaction: {
+        hover: true,
+        tooltipDelay: 200,
+        zoomView: true
+    }
+};
+
+const network = new vis.Network(container, data, options);
+
+// ==========================================
+// LÓGICA DE INTERACCIÓN
+// ==========================================
+
+network.on("click", function (params) {
+    if (params.nodes.length > 0) {
+        const nodeId = params.nodes[0];
+        const info = bookData[nodeId];
+        
+        if (info) {
+            updateSidebar(info);
+            // En móvil, abrir el sidebar automáticamente
+            if (window.innerWidth <= 900) {
+                document.getElementById('sidebar').classList.add('active');
+            }
+        }
+    }
+});
+
+function updateSidebar(info) {
+    const content = document.getElementById('detailContent');
+    
+    let mechHTML = '';
+    if (info.mechanisms) {
+        mechHTML = `
+            <div class="section-head">Mecanismos Causales</div>
+            <div class="mechanism-card">
+                <span class="mechanism-label">Micro (Individual/Interpersonal)</span>
+                ${info.mechanisms.micro}
+            </div>
+            <div class="mechanism-card">
+                <span class="mechanism-label">Meso (Institucional/Organizacional)</span>
+                ${info.mechanisms.meso}
+            </div>
+            <div class="mechanism-card">
+                <span class="mechanism-label">Macro (Estructural/Político)</span>
+                ${info.mechanisms.macro}
+            </div>
+        `;
+    }
+
+    let evidHTML = '';
+    if (info.evidence) {
+        evidHTML = '<div class="section-head">Evidencia Empírica & Datos</div><table class="data-table">';
+        info.evidence.forEach(item => {
+            evidHTML += `<tr><td>•</td><td>${item}</td></tr>`;
+        });
+        evidHTML += '</table>';
+    }
+
+    content.innerHTML = `
+        <span class="chapter-badge">${info.tag}</span>
+        <h2 class="analysis-title">${info.title}</h2>
+        <div class="author-meta">Autor: ${info.author}</div>
+        ${mechHTML}
+        ${evidHTML}
+        <div class="citation-box">Fuente: ${info.ref}</div>
+    `;
+}
+
+// Funciones de Control
+function toggleMobileMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+}
+
+let physicsEnabled = true;
+function stopPhysics() {
+    physicsEnabled = !physicsEnabled;
+    network.setOptions({ physics: { enabled: physicsEnabled } });
+}
+
+function fitAll() {
+    network.fit({ animation: { duration: 1000 } });
+    nodes.update(nodesArray.map(n => ({ id: n.id, hidden: false })));
+}
+
+function focusGroup(group) {
+    const allNodes = nodes.get();
+    const update = allNodes.map(node => {
+        // Mostrar nodo si es del grupo, o es el núcleo, o es un actor relacionado
+        const isVisible = node.group === group || node.group === 'core' || node.group === 'donor' || node.group === 'person';
+        return { id: node.id, hidden: !isVisible };
+    });
+    nodes.update(update);
+    network.fit();
+}
+
+</script>
+</body>
+</html>
