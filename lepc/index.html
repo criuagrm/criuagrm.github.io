@@ -1,5 +1,3 @@
----
----
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -23,11 +21,16 @@
             'accent-red': '#9b2c2c',    
             'accent-teal': '#2c7a7b',
             'accent-gold': '#d69e2e',
+            'accent-blue': '#2b6cb0',
+            'accent-purple': '#6b46c1',
+            'accent-green': '#2f855a',
+            'accent-emerald': '#059669',
           }
         }
       }
     }
   </script>
+  
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
@@ -35,16 +38,19 @@
     body { background-color: #f4f1ea; }
     .hero-line { border-top: 1px solid #2d3748; margin-top: 0.5rem; margin-bottom: 0.5rem; width: 100%; }
     .article-card:hover h3 { text-decoration: underline; text-decoration-color: #9b2c2c; text-decoration-thickness: 2px; }
+    /* Efecto suave para las tarjetas de mapas */
+    .map-card { transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .map-card:hover { transform: translateY(-4px); }
   </style>
 </head>
 <body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
 
   <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
-    Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS) — UAGRM
+    Centro de Investigación Regional (CIRCPyCS) — UAGRM
   </div>
 
   <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
-    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
       <a href="#" class="flex flex-col leading-none group">
         <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
         <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Economía Política</span>
@@ -61,7 +67,7 @@
   </header>
 
   <section class="border-b border-stone-300">
-    <div class="max-w-6xl mx-auto px-6 py-16">
+    <div class="max-w-7xl mx-auto px-6 py-16">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             <div class="lg:col-span-8">
@@ -121,52 +127,100 @@
 
   <main class="flex-grow py-16 px-6">
     
-    <div class="max-w-6xl mx-auto mb-20 border-b border-stone-300 pb-12">
+    <div class="max-w-7xl mx-auto mb-20 border-b border-stone-300 pb-12">
         <div class="flex flex-col md:flex-row justify-between items-end mb-8">
             <div>
                 <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-1 block">Visualización de Datos</span>
                 <h3 class="font-serif text-3xl italic text-stone-800">Mapas Conceptuales Interactivos</h3>
             </div>
-            <span class="text-xs text-stone-500 font-light mt-2 md:mt-0">Explora las redes semánticas de nuestros proyectos clave.</span>
+            <span class="text-xs text-stone-500 font-light mt-2 md:mt-0">Explora las redes semánticas y causales de nuestros proyectos.</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            <a href="https://criuagrm.github.io/lepc/maps/how_china_escaped.html" class="block p-6 bg-white border border-stone-200 hover:border-accent-red hover:shadow-lg transition group relative">
-                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-6xl font-serif text-accent-red">I</div>
+            <a href="https://criuagrm.github.io/lepc/maps/how_china_escaped.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-red hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-red">I</div>
                 <div class="text-accent-red text-2xl mb-4"><i class="fa-solid fa-dragon"></i></div>
-                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-red transition leading-tight">China & Terapia de Choque</h4>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-red transition leading-tight">China & Shock Therapy</h4>
                 <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-red transition"></div>
                 <p class="text-xs text-stone-600 font-light leading-relaxed">Debate histórico entre gradualismo y terapia de choque (Isabella Weber).</p>
             </a>
 
-            <a href="https://criuagrm.github.io/lepc/maps/how_china_escaped.html" class="block p-6 bg-white border border-stone-200 hover:border-accent-teal hover:shadow-lg transition group relative">
-                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-6xl font-serif text-accent-teal">II</div>
+            <a href="https://criuagrm.github.io/lepc/maps/neoliberalismo.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-teal hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-teal">II</div>
                 <div class="text-accent-teal text-2xl mb-4"><i class="fa-solid fa-globe"></i></div>
-                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-teal transition leading-tight">Oxford Handbook sobre el Neoliberalismo</h4>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-teal transition leading-tight">Handbook Neoliberalismo</h4>
                 <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-teal transition"></div>
                 <p class="text-xs text-stone-600 font-light leading-relaxed">Las 7 dimensiones de la mutación neoliberal (Springer et al.).</p>
             </a>
 
-            <a href="https://criuagrm.github.io/lepc/maps/how_china_escaped.html" class="block p-6 bg-white border border-stone-200 hover:border-accent-gold hover:shadow-lg transition group relative">
-                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-6xl font-serif text-accent-gold">III</div>
+            <a href="https://criuagrm.github.io/lepc/maps/capitalismo.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-gold hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-gold">III</div>
                 <div class="text-accent-gold text-2xl mb-4"><i class="fa-solid fa-landmark"></i></div>
-                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-gold transition leading-tight">Oxford Handbook sobre el Capitalismo</h4>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-gold transition leading-tight">Oxford Capitalism</h4>
                 <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-gold transition"></div>
                 <p class="text-xs text-stone-600 font-light leading-relaxed">Sistemas comparados, finanzas y gobernanza corporativa.</p>
             </a>
 
-            <a href="https://criuagrm.github.io/lepc/maps/how_china_escaped.html" class="block p-6 bg-white border border-stone-200 hover:border-stone-800 hover:shadow-lg transition group relative">
-                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-6xl font-serif text-stone-800">IV</div>
+            <a href="https://criuagrm.github.io/lepc/maps/bel.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-stone-800 hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-stone-800">IV</div>
                 <div class="text-stone-800 text-2xl mb-4"><i class="fa-solid fa-train-subway"></i></div>
-                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:underline transition leading-tight"> Infraestructura y privatizaciones</h4>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:underline transition leading-tight">Germà Bel: Infraestructura</h4>
                 <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-stone-800 transition"></div>
                 <p class="text-xs text-stone-600 font-light leading-relaxed">Economía política de la privatización y el modelo radial.</p>
             </a>
 
+            <a href="https://criuagrm.github.io/lepc/maps/The%20Road%20Mont%20Pelerin.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-blue hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-blue">V</div>
+                <div class="text-accent-blue text-2xl mb-4"><i class="fa-solid fa-people-group"></i></div>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-blue transition leading-tight">The Road from Mont Pèlerin</h4>
+                <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-blue transition"></div>
+                <p class="text-xs text-stone-600 font-light leading-relaxed">La construcción del colectivo de pensamiento neoliberal (Mirowski & Plehwe).</p>
+            </a>
+
+            <a href="https://criuagrm.github.io/lepc/maps/The%20Invisible%20Doctrine.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-stone-500 hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-stone-500">VI</div>
+                <div class="text-stone-500 text-2xl mb-4"><i class="fa-solid fa-mask"></i></div>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-stone-500 transition leading-tight">The Invisible Doctrine</h4>
+                <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-stone-500 transition"></div>
+                <p class="text-xs text-stone-600 font-light leading-relaxed">Hegemonía cultural y la política de la pertenencia (Monbiot).</p>
+            </a>
+
+            <a href="https://criuagrm.github.io/lepc/maps/minasbalas.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-green hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-green">VII</div>
+                <div class="text-accent-green text-2xl mb-4"><i class="fa-solid fa-person-military-rifle"></i></div>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-green transition leading-tight">Minas y Balas (Bolivia)</h4>
+                <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-green transition"></div>
+                <p class="text-xs text-stone-600 font-light leading-relaxed">Desarrollismo autoritario y la Alianza para el Progreso (Field Jr.).</p>
+            </a>
+
+            <a href="https://criuagrm.github.io/lepc/maps/The%20Pinochet%20Shock.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-purple hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-purple">VIII</div>
+                <div class="text-accent-purple text-2xl mb-4"><i class="fa-solid fa-bolt"></i></div>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-purple transition leading-tight">The Pinochet Shock</h4>
+                <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-purple transition"></div>
+                <p class="text-xs text-stone-600 font-light leading-relaxed">Economía política de la represión y el cambio estructural.</p>
+            </a>
+
+            <a href="https://criuagrm.github.io/lepc/maps/freedomforcapital.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-emerald hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-emerald">IX</div>
+                <div class="text-accent-emerald text-2xl mb-4"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-emerald transition leading-tight">Freedom for Capital</h4>
+                <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-emerald transition"></div>
+                <p class="text-xs text-stone-600 font-light leading-relaxed">El fin de Bretton Woods y la financiarización global (Schmelzer).</p>
+            </a>
+
+            <a href="https://criuagrm.github.io/lepc/maps/chileandevelopment.html" class="map-card block p-6 bg-white border border-stone-200 hover:border-accent-blue hover:shadow-lg group relative">
+                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition text-5xl font-serif text-accent-blue">X</div>
+                <div class="text-accent-blue text-2xl mb-4"><i class="fa-solid fa-chart-area"></i></div>
+                <h4 class="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-accent-blue transition leading-tight">Chilean Development</h4>
+                <div class="w-8 h-px bg-stone-300 my-3 group-hover:bg-accent-blue transition"></div>
+                <p class="text-xs text-stone-600 font-light leading-relaxed">Análisis macroeconómico del desarrollo bajo el neoliberalismo.</p>
+            </a>
+
         </div>
     </div>
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
         <div class="flex justify-between items-end mb-10 border-b border-stone-300 pb-4">
             <h3 class="font-serif text-2xl italic text-stone-800">Investigación Crítica Reciente</h3>
             <a href="analysis.html" class="text-xs font-bold uppercase tracking-widest text-accent-red hover:underline">Ver Archivo Completo →</a>
