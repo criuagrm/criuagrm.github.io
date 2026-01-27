@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis Estructural: Handbook on Ecosocialism</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary-red: #8a1c1c; /* Socialismo */
+    --primary-green: #2d5a27; /* Ecología */
+    --bg-light: #f8f9fa;
+    --text-dark: #1f2937;
+    --text-meta: #6b7280;
+    --border: #e5e7eb;
+    --sidebar-width: 450px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* --- LAYOUT --- */
+  #main-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* --- SIDEBAR (INFO PANEL) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: #ffffff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  .header {
+    background: #111827;
+    color: white;
+    padding: 20px 24px;
+    border-bottom: 4px solid var(--primary-green);
+  }
+
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.25rem;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+  }
+
+  .header .meta {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  /* --- COMPONENTES DE LA FICHA --- */
+  .node-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .type-theory { background: #fee2e2; color: var(--primary-red); }
+  .type-praxis { background: #dcfce7; color: var(--primary-green); }
+  .type-inst { background: #e0f2fe; color: #0369a1; }
+
+  .node-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.5rem;
+    color: #111;
+    margin: 0 0 16px 0;
+    line-height: 1.3;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-meta);
+    margin-bottom: 8px;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 4px;
+    display: block;
+    margin-top: 24px;
+  }
+
+  .text-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #374151;
+    margin-bottom: 16px;
+  }
+
+  .mechanism-box {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .mechanism-item {
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+  .mechanism-item:last-child { margin-bottom: 0; }
+  .mech-tag {
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--primary-red);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .data-box {
+    border-left: 3px solid var(--primary-green);
+    background: #f0fdf4;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.9rem;
+    color: #064e3b;
+    font-style: italic;
+  }
+
+  .reference {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 30px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  /* --- NETWORK AREA --- */
+  .network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    background-color: #f3f4f6;
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  #network {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* --- CONTROLES --- */
+  .controls {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .btn {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  .btn-primary { background: #111827; color: white; border: none; }
+
+  /* --- FOOTER --- */
+  .footer {
+    padding: 12px;
+    background: #f9fafb;
+    border-top: 1px solid var(--border);
+    font-size: 0.7rem;
+    text-align: center;
+    color: #6b7280;
+  }
+
+  /* --- RESPONSIVE MOBILE --- */
+  @media (max-width: 1024px) {
+    #main-container { flex-direction: column; }
+    
+    .sidebar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60vh; /* Ocupa 60% de la pantalla al abrirse */
+      transform: translateY(100%); /* Oculto por defecto */
+      border-right: none;
+      border-top: 1px solid var(--border);
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    }
+
+    .sidebar.active {
+      transform: translateY(0);
+    }
+
+    .network-wrapper {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Botón para cerrar panel en móvil */
+    .close-panel-btn {
+      display: block;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .close-panel-btn { display: none; }
+  }
+
+</style>
+</head>
+<body>
+
+<div id="main-container">
+  
+  <!-- PANEL DE INFORMACIÓN -->
+  <div class="sidebar" id="sidebar">
+    <div class="header">
+      <button class="close-panel-btn" onclick="closeSidebar()">×</button>
+      <h1>Routledge Handbook on Ecosocialism</h1>
+      <div class="meta">Análisis: Ricardo Alonzo Fernández Salguero</div>
+    </div>
+
+    <div class="content-scroll" id="infoContent">
+      <!-- CONTENIDO DINÁMICO -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #9ca3af; text-align: center;">
+        <svg style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <p style="font-family: 'Merriweather', serif; font-style: italic;">Toque un nodo en la red<br>para ver el análisis detallado.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Basado en: Brownhill, L., Engel-Di Mauro, S., et al. (2022)
+    </div>
+  </div>
+
+  <!-- RED VISUAL -->
+  <div class="network-wrapper">
+    <div id="network"></div>
+    <div class="controls">
+      <button class="btn" onclick="network.fit()">⌖ Centrar</button>
+      <button class="btn btn-primary" onclick="togglePhysics()">❄ Congelar</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// --- DATOS DEL LIBRO ---
+// Estructura basada en los 4 partes del Handbook
+
+const bookData = {
+  // --- PART I: FOUNDATIONS ---
+  1: {
+    title: "La Segunda Contradicción",
+    type: "Teoría Fundacional",
+    class: "type-theory",
+    text: "James O'Connor postula que el capitalismo no solo explota el trabajo (1ª contradicción), sino que destruye sus propias condiciones de producción (naturaleza, espacio, cuerpo), creando crisis de subproducción.",
+    mechanisms: [
+      { level: "Macro", desc: "El capital trata a la naturaleza como un 'regalo gratuito', agotando recursos no renovables." },
+      { level: "Meso", desc: "El Estado debe intervenir para restaurar la naturaleza (costos de limpieza), socializando las pérdidas." },
+      { level: "Micro", desc: "Aumento de costos para empresas individuales debido a la escasez de recursos." }
+    ],
+    data: "Evidencia: El agotamiento del suelo y la crisis fiscal del estado para reparar daños ambientales (Caps. 1 y 8).",
+    ref: "O'Connor, J. (Cap 1); Foster & Clark (Cap 8)."
+  },
+  2: {
+    title: "Ecofeminismo Materialista",
+    type: "Teoría Fundacional",
+    class: "type-theory",
+    text: "Salleh, Mies y Federici argumentan que el trabajo reproductivo (mujeres) y los procesos naturales son la base invisible del valor. El capitalismo es estructuralmente patriarcal y antiecológico.",
+    mechanisms: [
+      { level: "Macro", desc: "Deuda Ecológica y Deuda de Cuidados: El Norte Global debe al Sur y a las mujeres." },
+      { level: "Meso", desc: "División sexual del trabajo que naturaliza el cuidado como 'recurso infinito'." },
+      { level: "Micro", desc: "Cuerpos de las mujeres como primer territorio de acumulación." }
+    ],
+    data: "Dato: Las mujeres producen hasta el 80% de los alimentos en el Sur Global pero poseen menos del 20% de la tierra (Cap 2 y 18).",
+    ref: "Kovel (Cap 2); Salleh (Cap 5); Turner (Cap 3)."
+  },
+  3: {
+    title: "Ruptura Metabólica",
+    type: "Teoría Marxista",
+    class: "type-theory",
+    text: "John Bellamy Foster recupera a Marx: el capitalismo crea una brecha irreparable en el metabolismo social con la naturaleza, rompiendo ciclos de nutrientes (ej. suelo-ciudad).",
+    mechanisms: [
+      { level: "Macro", desc: "Separación campo-ciudad que impide el retorno de nutrientes al suelo." },
+      { level: "Meso", desc: "Agricultura industrial dependiente de fertilizantes fósiles." },
+      { level: "Micro", desc: "Alienación del trabajador respecto a la naturaleza." }
+    ],
+    data: "Evidencia: La crisis del guano en el s. XIX y la actual crisis de nitrógeno/fósforo (Cap 8).",
+    ref: "Foster & Clark (Cap 8); Saito (Cap 13)."
+  },
+
+  // --- PART II & III: MOVEMENTS ---
+  4: {
+    title: "Resistencia en el Delta del Níger",
+    type: "Praxis / Movimiento",
+    class: "type-praxis",
+    text: "Estudio de caso sobre la extracción petrolera, ecocidio y la resistencia liderada por mujeres y el movimiento Ogoni contra Shell y el estado nigeriano.",
+    mechanisms: [
+      { level: "Macro", desc: "Neocolonialismo: El capital fósil dicta la política estatal en Nigeria." },
+      { level: "Meso", desc: "La 'Maldición de la desnudez': Táctica cultural de mujeres para avergonzar al poder." },
+      { level: "Micro", desc: "Destrucción directa de medios de subsistencia (pesca/agricultura)." }
+    ],
+    data: "Dato: Esperanza de vida en el Delta es de 41 años vs 55 media nacional. Derrames continuos equivalentes al Exxon Valdez cada año (Cap 15).",
+    ref: "Bassey (Cap 15); Tobocman et al. (Cap 16)."
+  },
+  5: {
+    title: "Agroecología (Vía Campesina)",
+    type: "Praxis / Prefiguración",
+    class: "type-praxis",
+    text: "La agroecología no es solo técnica, es política. Vía Campesina (200M de miembros) lucha por la soberanía alimentaria contra el agronegocio corporativo.",
+    mechanisms: [
+      { level: "Macro", desc: "Redes globales de intercambio de semillas fuera del mercado (Commons)." },
+      { level: "Meso", desc: "Agricultura campesina que enfría el planeta vs agricultura industrial emisora." },
+      { level: "Micro", desc: "Empoderamiento de mujeres campesinas como guardianas de biodiversidad." }
+    ],
+    data: "Dato: Los campesinos alimentan al 70% de la población mundial usando solo el 25% de los recursos (Cap 18).",
+    ref: "Giacomini (Cap 18)."
+  },
+  6: {
+    title: "Geoingeniería: Falsas Soluciones",
+    type: "Conflicto Tecnológico",
+    class: "type-inst",
+    text: "Crítica a las soluciones tecnológicas del capitalismo (captura de carbono, gestión de radiación solar) que buscan mantener el status quo fósil.",
+    mechanisms: [
+      { level: "Macro", desc: "Intento de controlar el termostato global por potencias imperiales." },
+      { level: "Meso", desc: "Acaparamiento de tierras para monocultivos de biomasa." },
+      { level: "Micro", desc: "Impactos en la salud local y desplazamiento de comunidades." }
+    ],
+    data: "Dato: Proyectos como SCoPEx financiados por multimillonarios sin consentimiento democrático global (Cap 21).",
+    ref: "Ribeiro (Cap 21)."
+  },
+
+  // --- PART IV: INSTITUTIONAL TERRAINS ---
+  7: {
+    title: "Green New Deal (GND)",
+    type: "Terreno Institucional",
+    class: "type-inst",
+    text: "Disputa sobre el GND: ¿Salvación del capitalismo verde o puente hacia el ecosocialismo? Necesidad de descarbonización con justicia de clase y racial.",
+    mechanisms: [
+      { level: "Macro", desc: "Planificación estatal de la inversión vs mercado libre." },
+      { level: "Meso", desc: "Garantía de empleo y transición justa para trabajadores fósiles." },
+      { level: "Micro", desc: "Mejora en calidad de vida (transporte público, vivienda)." }
+    ],
+    data: "Crítica: Un GND en el Norte Global no puede basarse en la extracción de litio/cobalto del Sur (imperialismo verde) (Cap 22, 30).",
+    ref: "Singh (Cap 22); Heenan (Cap 30)."
+  },
+  8: {
+    title: "Comunismo Solar",
+    type: "Visión Futura",
+    class: "type-theory",
+    text: "David Schwartzman propone un horizonte post-capitalista basado en la energía solar globalizada, que permite la abundancia material sin destrucción entrópica.",
+    mechanisms: [
+      { level: "Macro", desc: "Infraestructura energética solar global como bien común." },
+      { level: "Meso", desc: "Fin del complejo militar-industrial para financiar la transición." },
+      { level: "Micro", desc: "Eliminación del trabajo alienado mediante automatización limpia." }
+    ],
+    data: "Dato: La energía solar disponible supera en miles de veces el consumo actual de la humanidad (Cap 27).",
+    ref: "Schwartzman (Cap 27)."
+  },
+  9: {
+    title: "Estados Socialistas y Ecología",
+    type: "Análisis Histórico",
+    class: "type-inst",
+    text: "Reevaluación del historial ambiental de la URSS, Cuba y China. A pesar de errores (Chernobyl, Aral), hubo logros significativos en conservación y transporte público.",
+    mechanisms: [
+      { level: "Macro", desc: "Planificación central permite conservación a gran escala (zapovedniks)." },
+      { level: "Meso", desc: "Cuba como modelo de agricultura sostenible tras el Periodo Especial." },
+      { level: "Micro", desc: "Altos niveles de educación ambiental y científica." }
+    ],
+    data: "Dato: Cuba es el único país con alto desarrollo humano y huella ecológica sostenible según WWF (Cap 32).",
+    ref: "Engel-Di Mauro (Cap 32)."
+  },
+  10: {
+    title: "Democracia en el Trabajo",
+    type: "Estrategia",
+    class: "type-praxis",
+    text: "La transición ecosocialista requiere democratizar las empresas. Los trabajadores, al controlar la producción, tienden a proteger sus comunidades y salud.",
+    mechanisms: [
+      { level: "Macro", desc: "Economía planificada participativamente." },
+      { level: "Meso", desc: "Cooperativas y autogestión reducen la 'obsolescencia programada'." },
+      { level: "Micro", desc: "Fin de la alienación laboral." }
+    ],
+    data: "Evidencia: Las empresas recuperadas suelen adoptar prácticas más ecológicas para sobrevivir (Cap 20).",
+    ref: "Haro García (Cap 20)."
+  }
+};
+
+// --- CONFIGURACIÓN DE VIS.JS ---
+const nodes = new vis.DataSet([
+  // Fundamentos
+  { id: 1, label: "Segunda\nContradicción", shape: "hexagon", color: "#fee2e2", size: 35 },
+  { id: 2, label: "Ecofeminismo", shape: "hexagon", color: "#fee2e2", size: 30 },
+  { id: 3, label: "Ruptura\nMetabólica", shape: "hexagon", color: "#fee2e2", size: 30 },
+  
+  // Movimientos
+  { id: 4, label: "Delta del Níger\n(Resistencia)", shape: "dot", color: "#bbf7d0", size: 25 },
+  { id: 5, label: "Agroecología", shape: "dot", color: "#bbf7d0", size: 25 },
+  { id: 6, label: "Geoingeniería\n(Crítica)", shape: "diamond", color: "#fed7aa", size: 20 },
+  
+  // Instituciones y Futuro
+  { id: 7, label: "Green New Deal", shape: "box", color: "#e0f2fe", margin: 10 },
+  { id: 8, label: "Comunismo\nSolar", shape: "star", color: "#fef08a", size: 30 },
+  { id: 9, label: "Estados\nSocialistas", shape: "box", color: "#e0f2fe" },
+  { id: 10, label: "Democracia\nLaboral", shape: "box", color: "#e0f2fe" }
+]);
+
+const edges = new vis.DataSet([
+  // Relaciones Teóricas
+  { from: 1, to: 3, label: "complementa" },
+  { from: 2, to: 1, label: "expande (género)" },
+  { from: 2, to: 5, label: "fundamenta" },
+  
+  // Aplicaciones Prácticas
+  { from: 1, to: 4, label: "explica crisis" },
+  { from: 4, to: 6, label: "resiste tecnofix" },
+  { from: 3, to: 5, label: "repara grieta" },
+  
+  // Institucional
+  { from: 7, to: 1, label: "responde a" },
+  { from: 7, to: 8, label: "transición hacia" },
+  { from: 9, to: 8, label: "precursor" },
+  { from: 9, to: 5, label: "ejemplo Cuba" },
+  { from: 10, to: 7, label: "base social" },
+  { from: 10, to: 1, label: "internaliza costos" }
+]);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    font: { size: 14, face: 'Inter', color: '#1f2937' },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    width: 2,
+    color: { color: '#9ca3af', highlight: '#111827' },
+    smooth: { type: 'continuous' }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -80,
+      centralGravity: 0.005,
+      springLength: 150,
+      springConstant: 0.18
+    },
+    stabilization: { iterations: 150 }
+  },
+  interaction: { hover: true }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    if (info) {
+      renderInfo(info);
+      openSidebar();
+    }
+  }
+});
+
+function renderInfo(info) {
+  const mechHtml = info.mechanisms.map(m => 
+    `<div class="mechanism-item">
+      <span class="mech-tag">${m.level}</span>
+      ${m.desc}
+     </div>`
+  ).join('');
+
+  const html = `
+    <span class="node-type ${info.class}">${info.type}</span>
+    <h2 class="node-title">${info.title}</h2>
+    <div class="text-body">${info.text}</div>
+    
+    <div class="section-label">Mecanismos Causales</div>
+    <div class="mechanism-box">
+      ${mechHtml}
+    </div>
+
+    <div class="section-label">Evidencia Empírica</div>
+    <div class="data-box">
+      ${info.data}
+    </div>
+
+    <div class="reference">
+      <strong>Fuentes:</strong> ${info.ref}
+    </div>
+  `;
+  document.getElementById('infoContent').innerHTML = html;
+}
+
+// --- CONTROL DEL SIDEBAR (MÓVIL Y ESCRITORIO) ---
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('active');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('active');
+}
+
+let physicsEnabled = true;
+function togglePhysics() {
+  physicsEnabled = !physicsEnabled;
+  network.setOptions({ physics: { enabled: physicsEnabled } });
+}
+
+</script>
+</body>
+</html>

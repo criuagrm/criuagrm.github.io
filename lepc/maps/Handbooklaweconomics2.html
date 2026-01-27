@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Análisis: Handbook of Law and Economics (Vol. 2)</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Paleta de Colores Académica y Estricta */
+    --bg-main: #f5f7fa;
+    --bg-panel: #ffffff;
+    --text-main: #1a202c;
+    --text-muted: #718096;
+    --border-color: #e2e8f0;
+    
+    /* Colores Categóricos (Sobrios) */
+    --cat-private: #3182ce;
+    --cat-ip: #805ad5;
+    --cat-corp: #dd6b20;
+    --cat-comm: #38a169;
+    --cat-pub: #e53e3e;
+
+    /* Dimensiones */
+    --panel-width: 450px;
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Lora', serif;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    margin: 0; padding: 0;
+    height: 100vh;
+    display: flex;
+    font-family: var(--font-sans);
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    overflow: hidden;
+  }
+
+  /* --- CONTENEDOR PRINCIPAL --- */
+  #app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* --- ÁREA DE LA RED (CANVAS) --- */
+  #network-container {
+    flex: 1;
+    position: relative;
+    height: 100%;
+    z-index: 1;
+  }
+
+  #network {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Controles flotantes en la red */
+  .canvas-controls {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 12px;
+    z-index: 50;
+  }
+
+  .control-btn {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .control-btn:hover { background: #f7fafc; border-color: #cbd5e0; }
+
+  /* --- BARRA LATERAL (INFO PANEL) --- */
+  #info-panel {
+    width: var(--panel-width);
+    background: var(--bg-panel);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    box-shadow: -4px 0 15px rgba(0,0,0,0.03);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  /* Cabecera del Panel */
+  .panel-header {
+    padding: 24px;
+    background: #1a202c;
+    color: #ffffff;
+  }
+
+  .panel-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    letter-spacing: 0.2px;
+  }
+
+  .panel-subtitle {
+    font-size: 0.75rem;
+    color: #a0aec0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+
+  /* Filtros */
+  .filter-section {
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .filter-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.15s;
+  }
+
+  .filter-btn:hover { background: #edf2f7; }
+
+  /* Contenido Dinámico */
+  .panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+  }
+
+  .placeholder-text {
+    color: var(--text-muted);
+    font-family: var(--font-serif);
+    font-style: italic;
+    text-align: center;
+    margin-top: 40px;
+    line-height: 1.5;
+  }
+
+  /* Estilos para el texto del capítulo */
+  .chap-meta {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+
+  .chap-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+  }
+
+  .chap-author {
+    font-size: 0.85rem;
+    color: #4a5568;
+    margin-bottom: 24px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  .chap-text {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #2d3748;
+    margin-bottom: 16px;
+    text-align: justify;
+  }
+
+  .data-box {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    padding: 16px;
+    margin-top: 24px;
+  }
+
+  .data-box-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #4a5568;
+    margin-bottom: 8px;
+  }
+
+  .data-box-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #1a202c;
+  }
+
+  .citation {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 24px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+  }
+
+  /* Pie del panel */
+  .panel-footer {
+    padding: 12px 24px;
+    background: #f8fafc;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  /* Botón Toggle Mobile */
+  #mobile-toggle {
+    display: none;
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a202c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 200;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* --- ADAPTACIÓN RESPONSIVE EXTREMA --- */
+  @media (max-width: 900px) {
+    #app-container { flex-direction: column; }
+    
+    #info-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 85vh; /* Hoja inferior estilo iOS/Android */
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+      transform: translateY(100%);
+      z-index: 150;
+    }
+
+    #info-panel.open { transform: translateY(0); }
+
+    /* Indicador visual de que se puede arrastrar/bajar (solo visual CSS, sin iconos) */
+    .panel-header::before {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 4px;
+      background: #4a5568;
+      margin: 0 auto 16px auto;
+      border-radius: 2px;
+    }
+
+    #network-container { width: 100vw; height: 100vh; }
+
+    #mobile-toggle { display: block; }
+    .canvas-controls { display: none; /* Se ocultan para no saturar la pantalla móvil */ }
+  }
+
+</style>
+</head>
+<body>
+
+<div id="app-container">
+  
+  <!-- ÁREA DE RED -->
+  <div id="network-container">
+    <div id="network"></div>
+    <div class="canvas-controls">
+      <button class="control-btn" onclick="fitAll()">Centrar Red</button>
+      <button class="control-btn" id="physicsBtn" onclick="togglePhysics()">Pausar Dinamismo</button>
+    </div>
+  </div>
+
+  <!-- BOTÓN MÓVIL PARA ABRIR/CERRAR PANEL -->
+  <button id="mobile-toggle" onclick="toggleMobilePanel()">VER DETALLE</button>
+
+  <!-- PANEL LATERAL / INFERIOR -->
+  <div id="info-panel">
+    <div class="panel-header">
+      <h1 class="panel-title">The Oxford Handbook of Law and Economics (Vol. 2)</h1>
+      <p class="panel-subtitle">Private and Commercial Law</p>
+    </div>
+
+    <div class="filter-section">
+      <span class="filter-label">Filtrar por Área del Derecho</span>
+      <div class="filter-grid">
+        <button class="filter-btn" style="border-left: 4px solid var(--cat-private);" onclick="filterNodes('private')">Derecho Privado</button>
+        <button class="filter-btn" style="border-left: 4px solid var(--cat-corp);" onclick="filterNodes('corporate')">Corporativo</button>
+        <button class="filter-btn" style="border-left: 4px solid var(--cat-comm);" onclick="filterNodes('commercial')">Comercial / Banca</button>
+        <button class="filter-btn" style="border-left: 4px solid var(--cat-ip);" onclick="filterNodes('ip')">Propiedad Intelectual</button>
+        <button class="filter-btn" style="border-left: 4px solid var(--cat-pub);" onclick="filterNodes('public')">Regulación Pública</button>
+        <button class="filter-btn" style="border-left: 4px solid #718096;" onclick="filterNodes('all')">Restaurar Todo</button>
+      </div>
+    </div>
+
+    <div class="panel-content" id="content-display">
+      <p class="placeholder-text">Seleccione un nodo en el gráfico para visualizar el análisis económico detallado del capítulo.</p>
+    </div>
+
+    <div class="panel-footer">
+      Análisis Estructural: Ricardo Alonzo Fernández Salguero
+    </div>
+  </div>
+
+</div>
+
+<script>
+// --- DATOS RIGUROSOS DEL LIBRO ---
+const chaptersData = {
+  1: {
+    number: 1, title: "Economics of Contract Law", author: "Douglas Baird", type: "Derecho Privado", color: "#3182ce",
+    mech_micro: "Incentivos ex-ante frente a remedios ex-post. La teoría evalúa cómo las reglas por defecto (default rules) afectan las inversiones que hacen las partes antes del cumplimiento del contrato.",
+    mech_meso: "Estructura del contrato para mitigar el riesgo moral y el oportunismo (hold-up). Las partes racionales anticipan la renegociación, por lo que las reglas legales deben reducir los costes de dicha transacción.",
+    mech_macro: "Eficiencia del mercado global. Un sistema contractual predecible reduce los costes de transacción agregados, facilitando el comercio impersonal.",
+    data: "Evidencia central en el caso 'Hadley v. Baxendale': La limitación de daños consecuenciales incentiva a la parte con información privada sobre su propia vulnerabilidad a revelarla (penalty default rule).",
+    ref: "Capítulo 1. Transición de la visión de daños compensatorios clásica a la teoría de contratos incompletos."
+  },
+  2: {
+    number: 2, title: "(In)Efficient Breach of Contract", author: "Daniel Markovits & Alan Schwartz", type: "Derecho Privado", color: "#3182ce",
+    mech_micro: "Teoría del Incumplimiento Eficiente. El derecho de contratos no busca la moralidad de la promesa, sino la maximización de la utilidad conjunta.",
+    mech_meso: "El contrato como un instrumento de 'rendimiento dual': el promitente tiene la opción de cumplir la obligación o pagar el valor de la expectativa (una opción call sobre el cumplimiento).",
+    mech_macro: "Eficiencia de Kaldor-Hicks a nivel de mercado: permitir que los recursos fluyan hacia el usuario que más los valora, pagando una compensación completa al perjudicado.",
+    data: "La regla actual (daños por expectativa) simula el acuerdo hipotético que partes sofisticadas habrían alcanzado ex-ante en un entorno de costes de transacción cero (Teorema de Coase).",
+    ref: "Capítulo 2. Re-evaluación crítica: Los autores argumentan que la mayoría de los supuestos 'incumplimientos eficientes' son ficciones, dado que los contratos reales permiten este comportamiento mediante el precio."
+  },
+  3: {
+    number: 3, title: "Economics of Tort Law", author: "Jennifer Arlen", type: "Derecho Privado", color: "#3182ce",
+    mech_micro: "Internalización de externalidades. Las reglas de responsabilidad obligan a los agentes a considerar los costes que sus acciones imponen a terceros.",
+    mech_meso: "Selección entre Responsabilidad Estricta (Strict Liability) y Negligencia basada en la asimetría de información entre el agente y el tribunal sobre el 'nivel de actividad'.",
+    mech_macro: "Sostenibilidad de actividades industriales y minimización de los costes sociales totales (coste del daño + coste de precaución + coste administrativo).",
+    data: "Estudios empíricos muestran que la negligencia es superior cuando el tribunal puede verificar el nivel de cuidado. La responsabilidad estricta es superior cuando el riesgo principal proviene del 'nivel de actividad' (frecuencia con la que se realiza la actividad, algo que las cortes no pueden regular).",
+    ref: "Capítulo 3. Análisis de cómo los costes de información justifican la coexistencia de regulación ex-ante y responsabilidad ex-post."
+  },
+  7: {
+    number: 7, title: "Commons and Anticommons", author: "Michael Heller", type: "Propiedad Intelectual", color: "#805ad5",
+    mech_micro: "El impacto de la fragmentación de derechos de propiedad. Si demasiados individuos tienen derecho a vetar el uso de un recurso, este se desperdicia (subutilización).",
+    mech_meso: "Costes de ensamblaje. Negociar con múltiples propietarios fragmentados genera comportamientos de retención (hold-out) que bloquean transacciones mutuamente beneficiosas.",
+    mech_macro: "Estancamiento en la innovación tecnológica y el desarrollo de infraestructuras debido a la 'Tragedia de los Anticomunes'.",
+    data: "Caso empírico del sector biomédico: La proliferación de patentes sobre fragmentos de genes impide el desarrollo de fármacos comerciales. Se cita la estimación de costes ocultos de I+D paralizada.",
+    ref: "Capítulo 7. La propiedad excesiva destruye riqueza tanto como la falta de ella."
+  },
+  8: {
+    number: 8, title: "Economics of Intellectual Property Law", author: "Robert P. Merges", type: "Propiedad Intelectual", color: "#805ad5",
+    mech_micro: "El balance entre el incentivo al creador (monopolio temporal) y la pérdida de peso muerto (deadweight loss) por precios por encima del coste marginal.",
+    mech_meso: "Efecto sobre la organización de la industria. La PI permite a empresas especializadas existir mediante contratos de licencia, evitando la integración vertical forzada.",
+    mech_macro: "El crecimiento endógeno a largo plazo y la acumulación de conocimiento ('parados sobre hombros de gigantes').",
+    data: "La 'Segunda Ola' de estudios empíricos demuestra que la PI no es el único factor de innovación. Sectores como el software o la moda demuestran que el 'tiempo de ventaja' (lead time) y los secretos comerciales a menudo superan el valor de la PI formal.",
+    ref: "Capítulo 8. Una revisión crítica sobre la diversidad metodológica en la economía de la Propiedad Intelectual actual."
+  },
+  11: {
+    number: 11, title: "Open-Access and Information Commons", author: "Yochai Benkler", type: "Propiedad Intelectual", color: "#805ad5",
+    mech_micro: "Motivaciones no monetarias y psicología del comportamiento en la producción entre pares (ej. reputación, altruismo, aprendizaje).",
+    mech_meso: "Diseño institucional sin propiedad exclusiva. Uso de licencias como GPL o Creative Commons para evitar la apropiación privada de la red.",
+    mech_macro: "Eficiencia asignativa de los bienes de información. Dado que el coste marginal de reproducir información es cero, los sistemas de acceso abierto maximizan el bienestar social.",
+    data: "Casos de éxito dominantes en la economía real: El protocolo TCP/IP (Internet), Software de Código Abierto (Linux/Apache) y Wikipedia, que compiten y superan a modelos propietarios debido a costes de coordinación casi nulos.",
+    ref: "Capítulo 11. Refutación empírica a la visión de que el acceso abierto conduce inevitablemente a la tragedia."
+  },
+  13: {
+    number: 13, title: "Economics of Remedies", author: "Ariel Porat", type: "Derecho Privado", color: "#3182ce",
+    mech_micro: "El diseño de remedios como un sistema de incentivos para influir en la toma de decisiones precautoria.",
+    mech_meso: "Reglas de Propiedad vs. Reglas de Responsabilidad. (Marco de Calabresi y Melamed aplicado a contratos y daños).",
+    mech_macro: "Calibración del sistema judicial ante fallos de detección. Sub-compensación y sobre-disuasión.",
+    data: "Modelo de daños probabílisticos y multiplicadores de daños punitivos. Los daños punitivos solo son eficientes económicamente para corregir la probabilidad (menor a 1) de que el infractor sea detectado y pague.",
+    ref: "Capítulo 13. El remedio no como compensación ética, sino como un precio fijado para guiar el comportamiento futuro."
+  },
+  14: {
+    number: 14, title: "The Economic Nature of the Corporation", author: "Lynn Stout", type: "Corporativo", color: "#dd6b20",
+    mech_micro: "El problema de los costes de agencia entre directores y accionistas.",
+    mech_meso: "Bloqueo de activos (Asset lock-in). La personalidad jurídica impide que los inversores retiren su capital a voluntad, permitiendo a la firma asumir proyectos a largo plazo.",
+    mech_macro: "Generación de riqueza intergeneracional mediante la 'vida perpetua' de la corporación.",
+    data: "Crítica a la teoría del Nexo de Contratos y la Primacía del Accionista. Se argumenta mediante la 'Teoría de Producción en Equipo', donde los directivos actúan como árbitros entre múltiples stakeholders que hacen inversiones específicas (empleados, acreedores, comunidades).",
+    ref: "Capítulo 14. La corporación como entidad económica que supera las limitaciones del contrato privado."
+  },
+  15: {
+    number: 15, title: "Market for Corporate Law Redux", author: "Roberta Romano", type: "Corporativo", color: "#dd6b20",
+    mech_micro: "Decisión de incorporación de las firmas basada en la predictibilidad legal y protección contra litigios frívolos.",
+    mech_meso: "Competencia entre estados (Federalismo) para atraer tarifas de franquicia. El Estado de Delaware como monopolio eficiente.",
+    mech_macro: "Eficiencia general del mercado de capitales estadounidense en comparación con sistemas centralizados.",
+    data: "Estudios de eventos (Event Studies) muestran que el cambio de domicilio legal a Delaware genera retornos bursátiles anormales positivos. Delaware responde al mercado mediante su barra de abogados corporativos, asegurando un compromiso creíble (credible commitment).",
+    ref: "Capítulo 15. Refutación empírica a la teoría de 'Carrera hacia el abismo' (Race to the bottom)."
+  },
+  16: {
+    number: 16, title: "Law and Economics of Agency and Partnership", author: "George M. Cohen", type: "Comercial", color: "#38a169",
+    mech_micro: "Alineación de incentivos frente al riesgo moral de los agentes y socios.",
+    mech_meso: "Reducción de costes de transacción con terceros mediante doctrinas de autoridad aparente y responsabilidad vicaria.",
+    mech_macro: "Formación de las bases pre-corporativas de la economía de mercado.",
+    data: "El problema de la colusión. La ley de agencia previene que el principal y el agente coludan contra un tercero. En los Partnerships, la responsabilidad solidaria e ilimitada actúa como mecanismo de señalización de solvencia para reducir los costes de monitoreo de los acreedores.",
+    ref: "Capítulo 16. Agencia y sociedades como el puente económico entre el contrato puro y la empresa jerárquica."
+  },
+  17: {
+    number: 17, title: "Banking and Financial Regulation", author: "Steven L. Schwarcz", type: "Comercial", color: "#38a169",
+    mech_micro: "Problemas de asimetría de información en la fijación de precios de activos financieros.",
+    mech_meso: "Regulación microprudencial: corrección de fallos de mercado a nivel de institución individual (riesgo moral de la responsabilidad limitada).",
+    mech_macro: "Regulación macroprudencial: prevención del riesgo sistémico y fallos en cadena del mercado crediticio.",
+    data: "Lecciones de la crisis de 2008 y Basilea III. Evidencia del fallo de las pruebas de estrés tradicionales debido al 'Shadow Banking' y la transformación de madurez (financiar a largo plazo con deuda a corto plazo).",
+    ref: "Capítulo 17. La evolución necesaria hacia una regulación financiera funcional basada en el riesgo sistémico."
+  },
+  18: {
+    number: 18, title: "Economics of Bankruptcy", author: "Michelle J. White", type: "Comercial", color: "#38a169",
+    mech_micro: "El derecho de quiebra como seguro de consumo para el deudor y disciplina de riesgo.",
+    mech_meso: "Coordinación de acreedores (solución al problema del 'common pool') mediante la suspensión de pagos (automatic stay).",
+    mech_macro: "Fomento del espíritu emprendedor mediante la descarga de deudas ('fresh start').",
+    data: "Datos empíricos de EE.UU. (Capítulos 7 y 11). Violaciones frecuentes a la Regla de Prioridad Absoluta (APR) que resultan eficientes para agilizar las reorganizaciones. Mayor exención de bienes en quiebra personal correlaciona con mayores tasas de emprendimiento, pero incrementa las tasas de interés ex-ante.",
+    ref: "Capítulo 18. Eficiencia económica en la liquidación vs. reorganización."
+  },
+  19: {
+    number: 19, title: "Law and Economics of Insurance", author: "Daniel Schwarcz & Peter Siegelman", type: "Comercial", color: "#38a169",
+    mech_micro: "Aversión al riesgo de los consumidores y asimetrías de información ex-ante.",
+    mech_meso: "Selección Adversa (el asegurado sabe más sobre su riesgo que el asegurador) y Riesgo Moral (la existencia del seguro reduce el cuidado).",
+    mech_macro: "Estabilidad del mercado de seguros mediante regulación de solvencia y protección al consumidor.",
+    data: "Anomalías conductuales: los consumidores sobre-aseguran riesgos menores (ej. garantías de electrodomésticos) y sub-aseguran riesgos catastróficos (ej. inundaciones). La doctrina 'Contra Proferentem' penaliza al redactor (aseguradora) para forzar la revelación de información.",
+    ref: "Capítulo 19. El seguro desde la perspectiva de la economía de la información y economía del comportamiento."
+  },
+  20: {
+    number: 20, title: "Environmental Law and Economics", author: "Michael A. Livermore & Richard L. Revesz", type: "Regulación Pública", color: "#e53e3e",
+    mech_micro: "Internalización de externalidades ambientales mediante impuestos pigouvianos.",
+    mech_meso: "Elección de instrumentos: Comando y Control vs. Mecanismos de Mercado (Cap-and-Trade).",
+    mech_macro: "Coste Social del Carbono y equidad intergeneracional en el cambio climático.",
+    data: "Uso del Análisis Coste-Beneficio (CBA). Discusión profunda sobre la 'Tasa de Descuento': una tasa alta reduce a cero el valor presente de los daños climáticos a 100 años. La tendencia académica actual favorece tasas de descuento decrecientes con el tiempo.",
+    ref: "Capítulo 20. Desafíos normativos y positivos en la asignación jurisdiccional y el diseño de políticas ambientales."
+  }
+};
+
+// --- NODOS Y ARISTAS PARA VIS.JS ---
+const nodesArray = [
+  // PRIVADO
+  { id: 1, label: "1. Contratos", group: 'private', shape: 'box' },
+  { id: 2, label: "2. Incumplimiento\nEficiente", group: 'private', shape: 'box' },
+  { id: 3, label: "3. Torts", group: 'private', shape: 'box' },
+  { id: 13, label: "13. Remedios", group: 'private', shape: 'box' },
+
+  // PI
+  { id: 7, label: "7. Comunes/\nAnticomunes", group: 'ip', shape: 'box' },
+  { id: 8, label: "8. Ley de PI", group: 'ip', shape: 'box' },
+  { id: 11, label: "11. Open Access", group: 'ip', shape: 'box' },
+
+  // CORPORATIVO
+  { id: 14, label: "14. La Corporación", group: 'corporate', shape: 'box' },
+  { id: 15, label: "15. Mercado de\nLey Corporativa", group: 'corporate', shape: 'box' },
+
+  // COMERCIAL / FINANCIERO
+  { id: 16, label: "16. Agencia", group: 'commercial', shape: 'box' },
+  { id: 17, label: "17. Regulación\nBancaria", group: 'commercial', shape: 'box' },
+  { id: 18, label: "18. Quiebra", group: 'commercial', shape: 'box' },
+  { id: 19, label: "19. Seguros", group: 'commercial', shape: 'box' },
+
+  // PUBLICO
+  { id: 20, label: "20. Medio Ambiente", group: 'public', shape: 'box' }
+];
+
+const edgesArray = [
+  { from: 1, to: 2, label: "teoría base", font: {align: 'middle'} },
+  { from: 1, to: 13, label: "compensación", font: {align: 'middle'} },
+  { from: 2, to: 13, label: "análisis", font: {align: 'middle'} },
+  { from: 3, to: 13, label: "aplicación", font: {align: 'middle'} },
+  
+  { from: 7, to: 8, label: "límites PI", font: {align: 'middle'} },
+  { from: 11, to: 8, label: "alternativa", font: {align: 'middle'} },
+  { from: 7, to: 11, label: "contraste", font: {align: 'middle'}, dashes: true },
+
+  { from: 16, to: 14, label: "estructura", font: {align: 'middle'} },
+  { from: 14, to: 15, label: "competencia", font: {align: 'middle'} },
+  { from: 14, to: 18, label: "riesgo", font: {align: 'middle'} },
+  { from: 17, to: 18, label: "sistémico", font: {align: 'middle'} },
+  { from: 19, to: 3, label: "riesgo", font: {align: 'middle'}, dashes: true },
+
+  { from: 20, to: 3, label: "externalidad", font: {align: 'middle'} },
+  { from: 20, to: 7, label: "recursos", font: {align: 'middle'} }
+];
+
+const nodes = new vis.DataSet(nodesArray);
+const edges = new vis.DataSet(edgesArray);
+
+// --- CONFIGURACIÓN VIS.JS ---
+const container = document.getElementById('network');
+const dataViz = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    borderWidth: 1,
+    shadow: { enabled: true, color: 'rgba(0,0,0,0.05)' },
+    font: { size: 13, face: 'Inter', color: '#1a202c', bold: true },
+    shapeProperties: { borderRadius: 0 } // Bordes rectos para máxima seriedad
+  },
+  edges: {
+    width: 1.5,
+    color: { color: '#cbd5e0', highlight: '#718096' },
+    font: { size: 9, align: 'middle', background: 'rgba(255,255,255,0.8)', face: 'Inter' },
+    smooth: { type: 'continuous' }
+  },
+  groups: {
+    private: { color: { border: '#3182ce', background: '#ffffff' } },
+    corporate: { color: { border: '#dd6b20', background: '#ffffff' } },
+    commercial: { color: { border: '#38a169', background: '#ffffff' } },
+    ip: { color: { border: '#805ad5', background: '#ffffff' } },
+    public: { color: { border: '#e53e3e', background: '#ffffff' } }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 150,
+      springConstant: 0.08,
+      damping: 0.5
+    },
+    stabilization: { iterations: 100 }
+  },
+  interaction: { hover: true, zoomView: true, tooltipDelay: 100 }
+};
+
+const network = new vis.Network(container, dataViz, options);
+
+// --- FUNCIONES Y LÓGICA ---
+
+function displayContent(info) {
+  const container = document.getElementById('content-display');
+  container.innerHTML = `
+    <div class="chap-meta">Capítulo ${info.number} | ${info.type}</div>
+    <h2 class="chap-title">${info.title}</h2>
+    <div class="chap-author">Autor: ${info.author}</div>
+
+    <div class="section-label">Mecanismo Micro</div>
+    <div class="chap-text">${info.mech_micro}</div>
+    
+    <div class="section-label">Mecanismo Meso</div>
+    <div class="chap-text">${info.mech_meso}</div>
+    
+    <div class="section-label">Mecanismo Macro</div>
+    <div class="chap-text">${info.mech_macro}</div>
+
+    <div class="data-box">
+      <div class="data-box-label" style="color: ${info.color};">Evidencia Empírica y Datos</div>
+      <div class="data-box-text">${info.data}</div>
+    </div>
+
+    <div class="citation">
+      Referencia: ${info.ref}
+    </div>
+  `;
+}
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = chaptersData[nodeId];
+    
+    if (info) {
+      displayContent(info);
+      
+      // Control para versión móvil (abrir panel)
+      const panel = document.getElementById('info-panel');
+      const toggleBtn = document.getElementById('mobile-toggle');
+      if (window.innerWidth <= 900) {
+        panel.classList.add('open');
+        toggleBtn.innerText = "OCULTAR DETALLE";
+      }
+    }
+  }
+});
+
+let physicsOn = true;
+function togglePhysics() {
+  physicsOn = !physicsOn;
+  network.setOptions({ physics: { enabled: physicsOn } });
+  document.getElementById('physicsBtn').innerText = physicsOn ? "PAUSAR DINAMISMO" : "REANUDAR DINAMISMO";
+}
+
+function fitAll() {
+  network.fit({ animation: { duration: 800, easingFunction: 'easeInOutQuad' } });
+}
+
+function filterNodes(group) {
+  if (group === 'all') {
+    nodes.forEach(node => nodes.update({id: node.id, hidden: false}));
+  } else {
+    nodes.forEach(node => {
+      nodes.update({id: node.id, hidden: node.group !== group});
+    });
+  }
+  fitAll();
+}
+
+function toggleMobilePanel() {
+  const panel = document.getElementById('info-panel');
+  const btn = document.getElementById('mobile-toggle');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    btn.innerText = "OCULTAR DETALLE";
+  } else {
+    btn.innerText = "VER DETALLE";
+  }
+}
+
+// Escuchar cambios de tamaño para ajustar el UI
+window.addEventListener('resize', () => {
+  const panel = document.getElementById('info-panel');
+  const toggleBtn = document.getElementById('mobile-toggle');
+  if (window.innerWidth > 900) {
+    panel.classList.remove('open');
+  }
+});
+
+</script>
+</body>
+</html>
