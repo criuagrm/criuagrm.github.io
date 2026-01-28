@@ -109,16 +109,13 @@
           </div>
 
           <div>
-            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-4">Financiamiento</h3>
+            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-4">Estado</h3>
             <div class="space-y-2.5">
               <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                <input type="radio" name="fund" checked class="text-[#004494] focus:ring-[#004494]"> Todos
+                <input type="radio" name="state" checked class="text-[#004494] focus:ring-[#004494]"> En curso
               </label>
               <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                <input type="radio" name="fund" class="text-[#004494] focus:ring-[#004494]"> Fondos UAGRM
-              </label>
-              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                <input type="radio" name="fund" class="text-[#004494] focus:ring-[#004494]"> Cooperación Int.
+                <input type="radio" name="state" class="text-[#004494] focus:ring-[#004494]"> Finalizados
               </label>
             </div>
           </div>
@@ -162,7 +159,7 @@
           
           <div class="flex-1 space-y-8">
             <div>
-              <h3 class="text-lg font-bold text-gray-800 border-b-2 border-gray-100 pb-2 mb-4">Resumen Ejecutivo</h3>
+              <h3 class="text-lg font-bold text-gray-800 border-b-2 border-gray-100 pb-2 mb-4">Resumen y Objetivos</h3>
               <div id="d-objective" class="prose prose-sm text-gray-700 text-justify leading-relaxed"></div>
             </div>
 
@@ -172,10 +169,10 @@
             </div>
 
             <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 flex flex-wrap gap-4">
-               <button onclick="alert('Funcionalidad de contacto en desarrollo.')" class="px-4 py-2 bg-[#004494] text-white rounded-lg font-medium hover:bg-blue-800 transition shadow-sm">
+               <button onclick="alert('Enviando solicitud de contacto...')" class="px-4 py-2 bg-[#004494] text-white rounded-lg font-medium hover:bg-blue-800 transition shadow-sm">
                  <i class="fa-solid fa-envelope mr-2"></i> Contactar al PI
                </button>
-               <button onclick="alert('No hay entregables públicos disponibles todavía.')" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition shadow-sm">
+               <button onclick="alert('Se requiere acceso institucional UAGRM')" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition shadow-sm">
                  <i class="fa-solid fa-file-arrow-down mr-2"></i> Ver Entregables
                </button>
             </div>
@@ -194,8 +191,8 @@
               <div class="label-cordis">Investigador Principal (PI)</div>
               <div id="d-pi" class="value-cordis text-[#004494] font-semibold border-b border-gray-200 pb-2">---</div>
 
-              <div class="label-cordis mt-3">Presupuesto Total</div>
-              <div id="d-budget" class="value-cordis">---</div>
+              <div class="label-cordis mt-3">Estado</div>
+              <div class="value-cordis"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">En Ejecución</span></div>
 
               <div class="label-cordis">Institución Coordinadora</div>
               <div class="value-cordis">
@@ -220,38 +217,37 @@
   </div>
 
   <script>
-    // ===== DATA: Los 3 Proyectos Solicitados =====
+    // ===== DATA: Proyectos reales extraídos del documento y contexto =====
     const PROJECTS = [
       {
-        id: "PIRO-GOV-26",
-        acronym: "PIRO-GOV",
-        title: "Gobernanza Ambiental, Piro-política y Justicia Territorial en la Era del Piroceno",
-        start: "2026-01-01",
-        end: "2027-12-31",
-        budget: "Bs. 120,000",
-        pi: "MSc. María Angélica Suárez",
-        program: "HORIZON-UAGRM-ENV",
-        tags: ["Gobernanza Ambiental", "Piro-política", "Justicia Territorial", "Ecología Política"],
+        id: "GOV-FIRE-CHI",
+        acronym: "GOV-FIRE",
+        title: "Gobernanza Ambiental, Políticas Públicas y Justicia Territorial en la Gestión de Incendios Forestales",
+        start: "2025-10-01",
+        end: "2026-12-31",
+        pi: "MSc. María Angélica Suárez Ribera",
+        program: "PhD-POLSCI-UMSA",
+        tags: ["Gobernanza Ambiental", "Piro-política", "Justicia Territorial", "Pueblos Indígenas"],
         summary: `
-          <p class="mb-3">La investigación académica sobre los incendios forestales ha experimentado una transformación ontológica. Históricamente relegado a las ciencias forestales, el fuego ha emergido como un objeto de estudio central para la Ciencia Política. Este proyecto investiga la transición teórica de la gestión técnica a la <strong>gobernanza adaptativa</strong> en contextos de debilidad institucional como la Chiquitanía.</p>
-          <p class="mb-3">El estudio parte de la premisa de que habitamos el "Piroceno", donde los megaincendios no son accidentes, sino fenómenos sociopolíticos. A través del marco de la <strong>Piro-política</strong>, analizaremos cómo el Estado utiliza la gestión del fuego para gobernar poblaciones y disciplinar territorios.</p>
-          <ul class="list-disc list-inside mb-3 space-y-1">
-            <li><strong>Objetivo 1:</strong> Analizar cómo el extractivismo configura la distribución del fuego.</li>
-            <li><strong>Objetivo 2:</strong> Examinar marcos de justicia ambiental crítica y resistencia indígena.</li>
-            <li><strong>Objetivo 3:</strong> Deconstruir las narrativas políticas de la culpa (Politics of Blame).</li>
+          <p class="mb-3">La investigación analiza cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferacin de incendios en la Chiquitanía boliviana (2010-2025). Lejos de ser eventos naturales, se plantea que estos incendios son resultado de un entramado de decisiones políticas y modelos extractivistas[cite: 190].</p>
+          <p class="mb-3"><strong>Objetivos Específicos:</strong></p>
+          <ul class="list-disc list-inside mb-3 space-y-1 text-sm">
+            <li>Identificar políticas y marcos legales que regulan el fuego (2010-2025)[cite: 227].</li>
+            <li>Examinar el modelo de gobernanza territorial y la articulación entre niveles de gobierno[cite: 228].</li>
+            <li>Documentar impactos en comunidades indígenas (desplazamiento y pérdida de hábitat)[cite: 229].</li>
+            <li>Analizar respuestas de resistencia y resiliencia indígena frente al fuego[cite: 230].</li>
           </ul>
-          <p>Se busca demostrar que los incendios no son fallas del sistema, sino características funcionales de un modelo de desarrollo que requiere repensar los "Wildfire Commons" o bienes comunes del fuego.</p>
+          <p><strong>Hipótesis:</strong> La proliferación de incendios es resultado de una gobernanza subordinada a intereses extractivistas que priorizan el desarrollo productivo sobre la protección ambiental[cite: 232].</p>
         `
       },
       {
         id: "ELECT-BOL-25",
         acronym: "ELECT-BOL",
-        title: "Integridad Electoral y Reformas en el Sistema Político Boliviano: Análisis del Ciclo 2025",
+        title: "Integridad Electoral y Reformas en el Sistema Político Boliviano: Ciclo 2025",
         start: "2025-01-01",
         end: "2025-12-31",
-        budget: "Bs. 85,000",
         pi: "Dr. José Orlando Peralta",
-        program: "DEMOCRACY-LAB-25",
+        program: "DEMOCRACY-LAB",
         tags: ["Sistemas Electorales", "Ciencia Política", "Instituciones", "Democracia"],
         summary: `
           <p class="mb-3">Este proyecto realiza un seguimiento en tiempo real y un análisis estructural de la integridad electoral del ciclo 2025 en Bolivia. Se enfoca en la confianza institucional hacia el Órgano Electoral Plurinacional (OEP) y el impacto de las reformas recientes en la competitividad partidaria.</p>
@@ -259,29 +255,28 @@
         `
       },
       {
-        id: "COMP-SOC-IA",
-        acronym: "COMP-SOC",
-        title: "Laboratorio de Ciencias Sociales Computacionales: Minería de Opinión y Dinámicas de Red",
+        id: "SOC-COMP-AI",
+        acronym: "SOC-COMP",
+        title: "Laboratorio de Ciencias Sociales Computacionales: Big Data y Democracia",
         start: "2025-03-01",
         end: "2027-02-28",
-        budget: "Bs. 150,000",
         pi: "Ing. Daniel Hurtado Justiniano",
-        program: "DIGITAL-SOCIETY-AI",
+        program: "DIGITAL-SOCIETY",
         tags: ["Big Data", "NLP", "Redes Sociales", "Inteligencia Artificial"],
         summary: `
           <p class="mb-3">Este proyecto establece el primer nodo de Ciencias Sociales Computacionales del CIRCPyCS. Utilizando técnicas de Procesamiento de Lenguaje Natural (NLP) y Análisis de Redes Sociales (SNA), se examinará la estructura de la esfera pública digital boliviana.</p>
           <p class="mb-3"><strong>Metodología:</strong></p>
-          <ul class="list-disc list-inside mb-3 space-y-1">
+          <ul class="list-disc list-inside mb-3 space-y-1 text-sm">
             <li>Recolección de data masiva de redes sociales (X, Facebook, TikTok).</li>
             <li>Entrenamiento de modelos de clasificación de 'stance' (postura política).</li>
-            <li>Detección de comunidades y cámaras de eco.</li>
+            <li>Detección de comunidades y cámaras de eco en el debate público.</li>
           </ul>
-          <p>El objetivo final es desarrollar herramientas de código abierto para que investigadores sociales puedan auditar algoritmos y entender la propagación de desinformación.</p>
+          <p>El objetivo final es desarrollar herramientas de código abierto para auditar algoritmos y entender la desinformación.</p>
         `
       }
     ];
 
-    // ===== RENDERIZADO DE TARJETAS =====
+    // ===== RENDERIZADO =====
     const container = document.getElementById('projects-container');
 
     PROJECTS.forEach(p => {
@@ -316,21 +311,18 @@
              <button onclick="alert('Contactar a: ${p.pi}')" class="text-sm font-medium text-gray-600 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
                <i class="fa-regular fa-envelope mr-2"></i>Contactar
              </button>
-             <button onclick="alert('Se requiere acceso institucional')" class="text-sm font-medium text-gray-600 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition hidden sm:inline-flex">
-               <i class="fa-solid fa-lock mr-2"></i>Entregables
-             </button>
           </div>
         </div>
       `;
       container.appendChild(card);
     });
 
-    // ===== LÓGICA DEL DRAWER (MODAL) =====
+    // ===== DRAWER LOGIC =====
     const drawer = document.getElementById('drawer');
     const drawerBg = document.getElementById('drawer-bg');
     const drawerClose = document.getElementById('drawer-close');
 
-    // Elementos del DOM a actualizar
+    // Elementos del DOM
     const dAcronym = document.getElementById('d-acronym');
     const dTitle = document.getElementById('d-title');
     const dDates = document.getElementById('d-dates');
@@ -338,7 +330,6 @@
     const dObjective = document.getElementById('d-objective');
     const dId = document.getElementById('d-id');
     const dPi = document.getElementById('d-pi');
-    const dBudget = document.getElementById('d-budget');
     const dProgram = document.getElementById('d-program');
     const dTags = document.getElementById('d-tags');
 
@@ -346,7 +337,6 @@
       const p = PROJECTS.find(x => x.id === id);
       if(!p) return;
 
-      // Llenar datos
       dAcronym.textContent = p.acronym;
       dTitle.textContent = p.title;
       dDates.innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${p.start} a ${p.end}`;
@@ -354,16 +344,14 @@
       dObjective.innerHTML = p.summary;
       dId.textContent = p.id;
       dPi.textContent = p.pi;
-      dBudget.textContent = p.budget;
       dProgram.textContent = p.program;
       
       dTags.innerHTML = p.tags.map(t => 
         `<span class="bg-[#e6f0ff] text-[#004494] px-3 py-1 rounded-full text-xs font-semibold border border-blue-100">${t}</span>`
       ).join('');
 
-      // Mostrar
       drawer.classList.add('open');
-      document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
+      document.body.style.overflow = 'hidden';
     }
 
     function closeDrawer() {
@@ -371,12 +359,9 @@
       document.body.style.overflow = '';
     }
 
-    // Event Listeners
     document.addEventListener('click', (e) => {
       const trigger = e.target.closest('.trigger-drawer');
-      if (trigger) {
-        openDrawer(trigger.dataset.id);
-      }
+      if (trigger) openDrawer(trigger.dataset.id);
     });
 
     drawerClose.addEventListener('click', closeDrawer);
@@ -385,10 +370,10 @@
       if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
     });
 
-    // Mobile Menu Toggle (Simple)
+    // Mobile Menu Toggle
     const btnMobile = document.getElementById('btn-mobile');
     btnMobile?.addEventListener('click', () => {
-      alert('Menú móvil simplificado para esta vista. Usa "Volver al Inicio" para navegar.');
+      alert('Navegación simplificada: Utilice el botón "Volver al Inicio" para acceder a otras secciones.');
     });
 
   </script>
