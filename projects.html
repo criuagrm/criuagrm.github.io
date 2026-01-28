@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Proyectos de Investigación — CIRCPyCS</title>
-  <meta name="description" content="Portafolio de investigación doctoral del CIRCPyCS." />
+  <meta name="description" content="Portafolio de investigación del CIRCPyCS." />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -53,10 +53,10 @@
     
     .tag-pill { @apply px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 bg-white text-slate-600; }
     
-    /* Estilos para el contenido inyectado */
-    .section-title { @apply text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-200 pb-2 mb-3 mt-6; }
+    /* Estilos para el contenido inyectado en la ficha */
+    .section-title { @apply text-sm font-bold text-cordis-dark uppercase tracking-widest border-b border-gray-200 pb-2 mb-3 mt-8; }
     .rich-text p { @apply mb-3 text-gray-700 leading-relaxed text-sm text-justify; }
-    .rich-text ul { @apply list-disc list-inside mb-4 space-y-1 text-sm text-gray-700; }
+    .rich-text ul { @apply list-disc list-inside mb-4 space-y-2 text-sm text-gray-700; }
     .rich-text li { @apply pl-1; }
     .rich-text strong { @apply text-cordis-blue font-semibold; }
   </style>
@@ -98,6 +98,12 @@
         <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
           Repositorio oficial de proyectos activos del centro. Investigación aplicada en gobernanza ambiental, integridad democrática y desarrollo institucional.
         </p>
+        
+        <div class="relative max-w-lg group">
+          <input type="text" id="search-input" placeholder="Filtrar proyectos..." 
+                 class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-cordis-blue focus:border-cordis-blue outline-none shadow-sm transition group-hover:shadow-md">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-gray-400 group-hover:text-cordis-blue transition"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -141,23 +147,23 @@
               <span id="d-dates">Fechas</span>
             </div>
             <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-              <i class="fa-solid fa-flask mr-2 text-cordis-blue"></i>
+              <i class="fa-solid fa-tag mr-2 text-cordis-blue"></i>
               <span id="d-program">Programa</span>
             </div>
           </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-10">
+        <div class="flex flex-col lg:flex-row gap-12">
           
           <div class="flex-1">
             
             <div id="d-summary-section">
-              <h3 class="section-title">Resumen Ejecutivo</h3>
+              <h3 class="section-title text-cordis-dark mt-0">Resumen Ejecutivo</h3>
               <div id="d-summary" class="rich-text"></div>
             </div>
 
             <div id="d-objectives-section">
-              <h3 class="section-title">Objetivos Específicos</h3>
+              <h3 class="section-title">Objetivos</h3>
               <div id="d-objectives" class="rich-text"></div>
             </div>
 
@@ -167,19 +173,19 @@
             </div>
 
             <div id="d-hypothesis-section">
-              <h3 class="section-title">Hipótesis de Trabajo</h3>
+              <h3 class="section-title">Hipótesis</h3>
               <div id="d-hypothesis" class="rich-text"></div>
             </div>
 
-            <div class="mt-8">
-              <h3 class="section-title">Áreas de Conocimiento</h3>
+            <div class="mt-8 pt-4 border-t border-gray-100">
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Palabras Clave</h3>
               <div id="d-tags" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mt-8 flex flex-wrap gap-4 items-center justify-between">
-               <div class="text-sm text-gray-500 font-medium">Gestión del conocimiento:</div>
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mt-10 flex flex-wrap gap-4 items-center justify-between">
+               <div class="text-sm text-gray-500 font-medium">Acciones disponibles:</div>
                <div class="flex gap-3">
-                 <button onclick="alert('Redirigiendo al contacto...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
+                 <button onclick="alert('Redirigiendo al formulario de contacto con el investigador...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
                    <i class="fa-regular fa-envelope"></i> Contactar PI
                  </button>
                  <button onclick="alert('Descargando PDF...')" class="px-5 py-2.5 bg-cordis-blue text-white rounded-xl font-semibold hover:bg-blue-800 transition shadow-sm flex items-center gap-2">
@@ -219,7 +225,7 @@
               
               <div class="mt-8 pt-6 border-t border-gray-200">
                 <p class="text-[10px] text-gray-400 leading-relaxed text-center">
-                  Información gestionada por la Unidad de Postgrado. Última validación: Ene 2026.
+                  Información gestionada por la Unidad de Investigación. Última validación: Ene 2026.
                 </p>
               </div>
             </div>
@@ -231,7 +237,7 @@
   </div>
 
   <script>
-    // ===== DATA REAL EXTRAÍDA DE DOCUMENTOS =====
+    // ===== DATA: Proyectos Reales (Extraídos de Documentos) =====
     const PROJECTS = [
       {
         id: "PIRO-GOV-26",
@@ -240,19 +246,28 @@
         start: "Oct 2025",
         end: "Ene 2027",
         pi: "MSc. María Angélica Suárez Ribera",
-        program: "Doctorado en Ciencias Políticas: Gestión del Desarrollo",
-        tags: ["Gobernanza Ambiental", "Pueblos Indígenas", "Chiquitanía", "Piro-política"],
-        [cite_start]summary: "La investigación analiza críticamente cómo las políticas públicas y el modelo de gobernanza ambiental y territorial han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana. El estudio postula que los incendios no son meros desastres naturales, sino fenómenos sociopolíticos producidos por decisiones humanas y modelos de desarrollo[cite: 190, 194].",
+        program: "Research Action",
+        tags: ["Gobernanza Ambiental", "Piro-política", "Justicia Territorial", "Ecología Política"],
+        summary: `
+          <p>La investigación analiza de manera crítica cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana. El estudio parte de la premisa de que los incendios no son meros desastres naturales, sino fenómenos sociopolíticos producidos por decisiones humanas y modelos de desarrollo.</p>
+          <p>Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego, examinando las tensiones entre la normativa formal de protección y las prácticas de expansión agropecuaria.</p>
+        `,
         objectives: `
           <ul>
-            [cite_start]<li>Identificar las políticas públicas y marcos legales que regulan la gestión del territorio y del fuego en Bolivia (2010-2025)[cite: 227].</li>
-            [cite_start]<li>Examinar el modelo de gobernanza territorial en la Chiquitanía, considerando la articulación entre niveles de gobierno y actores no estatales[cite: 228].</li>
-            [cite_start]<li>Describir y documentar los impactos sociales, económicos y ecológicos en comunidades indígenas afectadas[cite: 229].</li>
-            [cite_start]<li>Analizar las respuestas institucionales y comunitarias frente a los incendios, identificando formas de resiliencia y resistencia indígena[cite: 230].</li>
+            <li><strong>General:</strong> Analizar la incidencia de las políticas públicas y la gobernanza ambiental en los incendios forestales y sus efectos en los derechos indígenas.</li>
+            <li><strong>Específico 1:</strong> Identificar el marco legal y las políticas que regulan el fuego y el territorio (2010-2025).</li>
+            <li><strong>Específico 2:</strong> Examinar la articulación multinivel de la gobernanza territorial en la Chiquitanía.</li>
+            <li><strong>Específico 3:</strong> Documentar impactos socio-ecológicos en comunidades indígenas (desplazamiento, pérdida de hábitat).</li>
+            <li><strong>Específico 4:</strong> Analizar respuestas de resistencia y resiliencia indígena frente a la crisis.</li>
           </ul>
         `,
-        [cite_start]methodology: "<p>Investigación con enfoque cualitativo y diseño analítico-interpretativo. Se utilizarán <strong>estudios de caso</strong> en comunidades indígenas afectadas (Lomerío, San Ignacio, Concepción), análisis de políticas públicas, entrevistas semiestructuradas a actores clave y grupos focales para recoger percepciones colectivas [cite: 276-277].</p>",
-        [cite_start]hypothesis: "<p>La proliferación e intensidad de los incendios forestales es resultado de un modelo de gobernanza ambiental subordinado a intereses extractivistas que priorizan el desarrollo productivo sobre la protección ambiental y los derechos indígenas[cite: 232].</p>"
+        methodology: `
+          <p>Investigación con enfoque <strong>cualitativo</strong> y diseño analítico-interpretativo. Se implementarán estudios de caso en comunidades afectadas (Lomerío, San Ignacio, Concepción).</p>
+          <p>Las técnicas incluyen: revisión documental de normativas (Ley 741, Ley INRA), entrevistas semiestructuradas a actores clave (líderes indígenas, funcionarios de ABT/Gobernación) y grupos focales para recoger percepciones colectivas sobre el impacto del fuego.</p>
+        `,
+        hypothesis: `
+          <p>La proliferación e intensidad de los incendios forestales en la Chiquitanía es resultado de un modelo de gobernanza ambiental subordinado a <strong>intereses extractivistas</strong> que priorizan el desarrollo productivo sobre la protección ambiental y los derechos territoriales indígenas.</p>
+        `
       },
       {
         id: "DECAD-EP-25",
@@ -261,18 +276,26 @@
         start: "Feb 2026",
         end: "Ene 2027",
         pi: "MSc. Francisco Mendez Egüez",
-        program: "Doctorado en Gestión del Desarrollo y Políticas Públicas",
+        program: "Research Action",
         tags: ["Estado Plurinacional", "Instituciones Políticas", "Gestión Pública", "Crisis Democrática"],
-        summary: "Análisis de las causas estructurales y coyunturales que han determinado la transformación y crisis de implementación del modelo de Estado Plurinacional en Bolivia. [cite_start]Se investiga la brecha entre el marco normativo constitucional de 2009 y la operación real del modelo, identificando factores de involución institucional[cite: 391].",
+        summary: `
+          <p>Investigación sobre las causas estructurales y coyunturales que han determinado la transformación y crisis de implementación del modelo de Estado Plurinacional en Bolivia.</p>
+          <p>El proyecto sostiene que, tras más de una década de implementación, existe una brecha significativa entre el marco normativo constitucional de 2009 y la operación real del modelo. Se analiza el proceso de <strong>involución institucional</strong> y la captura política que han desviado al Estado de sus principios fundacionales de interculturalidad y complementariedad.</p>
+        `,
         objectives: `
           <ul>
-            [cite_start]<li>Analizar el marco teórico-normativo del Estado Plurinacional boliviano y su desarrollo histórico[cite: 394].</li>
-            [cite_start]<li>Evaluar el proceso de implementación práctica, identificando discrepancias sustantivas entre el diseño constitucional y la realidad política[cite: 395].</li>
-            [cite_start]<li>Identificar los factores políticos, económicos y sociales que han incidido en la degeneración del proyecto (tensiones económicas, conflictos territoriales, prácticas partidistas)[cite: 396].</li>
+            <li><strong>General:</strong> Analizar las causas estructurales de la transformación y crisis del modelo de Estado Plurinacional.</li>
+            <li><strong>Específico 1:</strong> Analizar el marco teórico-normativo y el desarrollo histórico del Estado Plurinacional.</li>
+            <li><strong>Específico 2:</strong> Evaluar el proceso de implementación práctica y las discrepancias con el diseño constitucional.</li>
+            <li><strong>Específico 3:</strong> Identificar factores políticos y sociales (endógenos y exógenos) que incidieron en la degeneración del proyecto.</li>
           </ul>
         `,
-        [cite_start]methodology: "<p>Se utilizará el <strong>método histórico-deductivo</strong> para configurar la naturaleza del Estado Plurinacional a partir de teorías políticas relevantes. La técnica principal será el análisis documental comparado y el uso de fichas doctrinales para contrastar el modelo teórico con la realidad fáctica[cite: 408].</p>",
-        [cite_start]hypothesis: "<p>La decadencia del modelo es resultado de un proceso de <strong>involución institucional</strong> y <strong>captura política</strong>, explicado por la recentralización del poder, la persistencia del modelo extractivista y la cooptación del sujeto político originario, transformando al Estado Plurinacional en un discurso legitimador más que en una práctica democrática [cite: 400-405].</p>"
+        methodology: `
+          <p>Se utiliza el <strong>método histórico-deductivo</strong> para configurar la naturaleza del Estado Plurinacional a partir de teorías políticas relevantes. La técnica principal será el <strong>análisis documental</strong> y el uso de fichas doctrinales para contrastar el modelo teórico ideal con la realidad fáctica de la gestión pública.</p>
+        `,
+        hypothesis: `
+          <p>La decadencia del modelo es resultado de un proceso de <strong>involución institucional</strong> y <strong>captura política</strong>, explicado por tres factores: 1) Recentralización del poder, 2) Persistencia del modelo extractivista rentista, y 3) Cooptación del sujeto político originario, transformando al Estado Plurinacional en un discurso legitimador más que en una práctica democrática.</p>
+        `
       }
     ];
 
@@ -323,37 +346,52 @@
       container.appendChild(card);
     });
 
-    // ===== DRAWER LOGIC =====
+    // ===== LÓGICA DEL DRAWER (MODAL) =====
     const drawer = document.getElementById('drawer');
     const drawerBg = document.getElementById('drawer-bg');
     const drawerClose = document.getElementById('drawer-close');
+
+    // Elementos del DOM a actualizar
+    const dAcronym = document.getElementById('d-acronym');
+    const dTitle = document.getElementById('d-title');
+    const dDates = document.getElementById('d-dates');
+    const dIdHeader = document.getElementById('d-id-header');
+    const dSummary = document.getElementById('d-summary');
+    const dObjectives = document.getElementById('d-objectives');
+    const dMethodology = document.getElementById('d-methodology');
+    const dHypothesis = document.getElementById('d-hypothesis');
+    const dId = document.getElementById('d-id');
+    const dPi = document.getElementById('d-pi');
+    const dPeriod = document.getElementById('d-period');
+    const dProgram = document.getElementById('d-program');
+    const dTags = document.getElementById('d-tags');
 
     function openDrawer(id) {
       const p = PROJECTS.find(x => x.id === id);
       if(!p) return;
 
       // Header
-      document.getElementById('d-acronym').textContent = p.acronym;
-      document.getElementById('d-title').textContent = p.title;
-      document.getElementById('d-dates').textContent = `${p.start} - ${p.end}`;
-      document.getElementById('d-program').textContent = p.program;
-      document.getElementById('d-id-header').textContent = `ID: ${p.id}`;
+      dAcronym.textContent = p.acronym;
+      dTitle.textContent = p.title;
+      dDates.textContent = `${p.start} - ${p.end}`;
+      dProgram.textContent = p.program;
+      dIdHeader.textContent = `ID: ${p.id}`;
 
       // Body (Inyección de HTML enriquecido)
-      document.getElementById('d-summary').innerHTML = p.summary;
-      document.getElementById('d-objectives').innerHTML = p.objectives;
-      document.getElementById('d-methodology').innerHTML = p.methodology;
-      document.getElementById('d-hypothesis').innerHTML = p.hypothesis;
+      dSummary.innerHTML = p.summary;
+      dObjectives.innerHTML = p.objectives;
+      dMethodology.innerHTML = p.methodology;
+      dHypothesis.innerHTML = p.hypothesis;
 
       // Tags
-      document.getElementById('d-tags').innerHTML = p.tags.map(t => 
+      dTags.innerHTML = p.tags.map(t => 
         `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-cordis-blue border border-blue-100">${t}</span>`
       ).join('');
 
       // Fact Sheet
-      document.getElementById('d-id').textContent = p.id;
-      document.getElementById('d-pi').textContent = p.pi;
-      document.getElementById('d-period').textContent = `${p.start} a ${p.end}`;
+      dId.textContent = p.id;
+      dPi.textContent = p.pi;
+      dPeriod.textContent = `${p.start} - ${p.end}`;
 
       drawer.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -364,6 +402,7 @@
       document.body.style.overflow = '';
     }
 
+    // Event Listeners
     document.addEventListener('click', (e) => {
       const trigger = e.target.closest('.trigger-drawer');
       if (trigger) openDrawer(trigger.dataset.id);
