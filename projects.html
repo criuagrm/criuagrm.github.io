@@ -8,6 +8,7 @@
   <title>Proyectos de Investigación — CIRCPyCS</title>
   <meta name="description" content="Portafolio de investigación del CIRCPyCS." />
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -65,6 +66,7 @@
 
   <div class="h-1.5 w-full bg-cordis-blue"></div>
 
+  <!-- Header -->
   <header class="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
@@ -87,6 +89,7 @@
     </div>
   </header>
 
+  <!-- Hero -->
   <div class="bg-white border-b border-gray-200 py-12 md:py-16 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-50 to-transparent opacity-50"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -99,6 +102,7 @@
           Repositorio oficial de proyectos activos del centro. Investigación aplicada en gobernanza ambiental, integridad democrática y desarrollo institucional.
         </p>
         
+        <!-- Buscador -->
         <div class="relative max-w-lg group">
           <input type="text" id="search-input" placeholder="Filtrar proyectos..." 
                  class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-cordis-blue focus:border-cordis-blue outline-none shadow-sm transition group-hover:shadow-md">
@@ -108,22 +112,26 @@
     </div>
   </div>
 
+  <!-- Main Grid -->
   <main class="flex-grow py-12 bg-slate-50/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col items-center">
         <div id="projects-container" class="w-full grid gap-8 md:grid-cols-2 lg:max-w-5xl">
-          </div>
+          <!-- JS Inject -->
+        </div>
       </div>
     </div>
   </main>
 
   {% include footer.html %}
 
+  <!-- DRAWER / FICHA TÉCNICA -->
   <div id="drawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 drawer-backdrop" id="drawer-bg"></div>
     
     <div class="absolute right-0 top-0 h-full w-full lg:w-[960px] bg-white shadow-2xl drawer-panel overflow-y-auto flex flex-col">
       
+      <!-- Drawer Header -->
       <div class="sticky top-0 bg-white/95 backdrop-blur border-b border-gray-200 px-6 py-4 flex items-center justify-between z-30">
         <div class="flex items-center gap-3">
            <div class="bg-cordis-blue text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm uppercase tracking-wider">Ficha Técnica</div>
@@ -135,8 +143,10 @@
         </button>
       </div>
 
+      <!-- Drawer Body -->
       <div class="flex-grow p-6 md:p-12">
         
+        <!-- Project Title Area -->
         <div class="mb-8 border-b border-gray-100 pb-6">
           <div id="d-acronym" class="inline-block text-cordis-blue text-sm font-bold mb-3 tracking-wide bg-blue-50 px-3 py-1 rounded-lg">ACRONYM</div>
           <h2 id="d-title" class="text-2xl md:text-3xl font-bold text-cordis-dark leading-tight mb-4">Título del Proyecto</h2>
@@ -155,6 +165,7 @@
 
         <div class="flex flex-col lg:flex-row gap-12">
           
+          <!-- Columna Principal: Contenido Rico -->
           <div class="flex-1">
             
             <div id="d-summary-section">
@@ -182,6 +193,7 @@
               <div id="d-tags" class="flex flex-wrap gap-2"></div>
             </div>
 
+            <!-- Botones de Acción -->
             <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mt-10 flex flex-wrap gap-4 items-center justify-between">
                <div class="text-sm text-gray-500 font-medium">Acciones disponibles:</div>
                <div class="flex gap-3">
@@ -195,6 +207,7 @@
             </div>
           </div>
 
+          <!-- Columna Lateral: Fact Sheet -->
           <div class="w-full lg:w-72 flex-shrink-0">
             <div class="fact-sheet p-6 rounded-r-xl shadow-sm sticky top-24">
               <h3 class="font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-200 pb-3">
@@ -247,7 +260,7 @@
         end: "Ene 2027",
         pi: "MSc. María Angélica Suárez Ribera",
         program: "Research Action",
-        tags: ["Gobernanza Ambiental", "Piro-política", "Justicia Territorial", "Ecología Política"],
+        tags: ["Gobernanza Ambiental", "Pueblos Indígenas", "Chiquitanía", "Piro-política"],
         summary: `
           <p>La investigación analiza de manera crítica cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana. El estudio parte de la premisa de que los incendios no son meros desastres naturales, sino fenómenos sociopolíticos producidos por decisiones humanas y modelos de desarrollo.</p>
           <p>Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego, examinando las tensiones entre la normativa formal de protección y las prácticas de expansión agropecuaria.</p>
@@ -299,7 +312,7 @@
       }
     ];
 
-    // ===== RENDERIZADO =====
+    // ===== RENDERIZADO DE TARJETAS =====
     const container = document.getElementById('projects-container');
 
     PROJECTS.forEach(p => {
@@ -307,6 +320,7 @@
       card.className = "group bg-white border border-gray-200 rounded-xl p-0 hover:shadow-card-hover hover:border-blue-200 transition-all duration-300 flex flex-col overflow-hidden h-full";
       
       card.innerHTML = `
+        <!-- Header Tarjeta -->
         <div class="bg-slate-50/50 border-b border-gray-100 p-6 flex items-start justify-between">
            <div>
              <span class="block text-2xl font-bold text-cordis-blue tracking-tight mb-1">${p.acronym}</span>
@@ -317,6 +331,7 @@
            </div>
         </div>
         
+        <!-- Contenido -->
         <div class="flex-1 p-6 flex flex-col justify-between">
           <div>
             <div class="flex flex-wrap items-center gap-3 mb-4">
@@ -333,6 +348,7 @@
             </div>
           </div>
 
+          <!-- Barra de Acciones -->
           <div class="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
              <button class="trigger-drawer text-sm font-bold text-cordis-blue hover:text-blue-800 transition flex items-center gap-2" data-id="${p.id}">
                Ver Ficha Técnica <i class="fa-solid fa-arrow-right"></i>
@@ -404,8 +420,13 @@
 
     // Event Listeners
     document.addEventListener('click', (e) => {
+      // Importante: .closest() para que funcione al hacer clic en el texto o icono del botón
       const trigger = e.target.closest('.trigger-drawer');
-      if (trigger) openDrawer(trigger.dataset.id);
+      if (trigger) {
+        // Obtenemos el ID desde el dataset del botón
+        const projectId = trigger.dataset.id;
+        openDrawer(projectId);
+      }
     });
 
     drawerClose.addEventListener('click', closeDrawer);
