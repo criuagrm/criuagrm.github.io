@@ -1,5 +1,3 @@
----
----
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 <head>
@@ -18,8 +16,8 @@
             serif: ["Playfair Display", "serif"] 
           },
           colors: {
-            'paper-bg': '#f4f1ea',      
-            'ink-dark': '#2d3748',      
+            'paper-bg': '#f4f1ea',       
+            'ink-dark': '#2d3748',       
             'accent-red': '#9b2c2c',    
             'accent-teal': '#2c7a7b',
             'accent-gold': '#d69e2e',
@@ -65,7 +63,7 @@
     Centro de Investigación Regional en Ciencia Política y Ciencias Sociales(CIRCPyCS) — UAGRM
   </div>
 
-  <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
+  <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm relative">
     <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
       <a href="#" class="flex flex-col leading-none group">
         <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
@@ -78,7 +76,17 @@
         <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
         <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
       </nav>
-      <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
+      <button id="mobile-menu-btn" class="md:hidden text-stone-900 text-xl p-2"><i id="mobile-menu-icon" class="fa-solid fa-bars"></i></button>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-[#f4f1ea] border-b border-stone-300 shadow-xl z-50">
+        <nav class="flex flex-col p-6 space-y-4 text-sm font-bold text-stone-600 tracking-wide uppercase text-center">
+            <a href="#" class="text-accent-red block py-2 bg-stone-100 rounded">Inicio</a>
+            <a href="projects.html" class="hover:text-accent-red hover:bg-stone-50 block py-2 transition rounded">Proyectos</a>
+            <a href="monitor.html" class="hover:text-accent-red hover:bg-stone-50 block py-2 transition rounded">Monitor</a>
+            <a href="analysis.html" class="hover:text-accent-red hover:bg-stone-50 block py-2 transition rounded">Análisis</a>
+            <a href="library.html" class="hover:text-accent-red hover:bg-stone-50 block py-2 transition rounded">Biblioteca</a>
+        </nav>
     </div>
   </header>
 
@@ -394,5 +402,22 @@
   </main>
 
   {% include footer.html %}
+
+  <script>
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        if (menu.classList.contains('hidden')) {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+        } else {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        }
+    });
+  </script>
 </body>
 </html>
