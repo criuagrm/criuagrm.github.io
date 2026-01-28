@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Proyectos de Investigación — CIRCPyCS</title>
-  <meta name="description" content="Portafolio de investigación del CIRCPyCS. Gobernanza, Elecciones y Tecnología." />
+  <meta name="description" content="Portal de proyectos de investigación del CIRCPyCS. Gobernanza, Democracia y Tecnología." />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -14,108 +14,134 @@
       theme: {
         extend: {
           colors: {
-            cordisBlue: '#004494', // Azul estilo UE
-            cordisDark: '#1a1a1a',
-            cordisLight: '#f8f9fa'
+            cordis: {
+              blue: '#004494', // Azul Institucional
+              dark: '#0f2c52',
+              light: '#e9eff8',
+              text: '#222222',
+              gray: '#595959'
+            }
           },
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          boxShadow: { 'cordis': '0 4px 12px rgba(0,0,0,0.08)' }
+          boxShadow: { 
+            'card': '0 2px 8px rgba(0,0,0,0.06)',
+            'card-hover': '0 10px 25px rgba(0,68,148,0.1)' 
+          }
         }
       }
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
   <style>
-    /* Estilos específicos tipo CORDIS/FIREPOL */
+    /* Estilos específicos tipo Portal de Investigación */
+    body { background-color: #fcfcfc; }
     .fact-sheet { background-color: #f8f9fa; border-left: 4px solid #004494; }
-    .label-cordis { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; font-weight: 700; margin-bottom: 2px; }
-    .value-cordis { font-size: 0.95rem; color: #111; margin-bottom: 12px; font-weight: 500; }
+    .label-cordis { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; font-weight: 700; margin-bottom: 4px; }
+    .value-cordis { font-size: 0.95rem; color: #111; margin-bottom: 16px; font-weight: 500; line-height: 1.4; }
     
     /* Drawer (Panel lateral) */
-    .drawer { position: fixed; inset: 0; z-index: 50; display: none; }
+    .drawer { position: fixed; inset: 0; z-index: 100; display: none; }
     .drawer.open { display: block; }
-    .drawer-backdrop { background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); }
+    .drawer-backdrop { background: rgba(15, 44, 82, 0.6); backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s; }
+    .drawer.open .drawer-backdrop { opacity: 1; }
     .drawer-panel { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
     .drawer.open .drawer-panel { transform: translateX(0); }
+    
+    /* Tags */
+    .tag-pill { @apply px-2.5 py-1 rounded text-xs font-medium border border-slate-200 bg-white text-slate-600; }
   </style>
 </head>
-<body class="bg-white text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <div class="h-1.5 w-full bg-[#004494]"></div>
+  <div class="h-1.5 w-full bg-cordis-blue"></div>
 
-  <header class="border-b border-gray-200 bg-white sticky top-0 z-30">
+  <header class="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-auto group-hover:opacity-90 transition" />
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-auto group-hover:scale-105 transition duration-300" />
         <div class="leading-tight">
-          <h1 class="text-lg font-bold text-[#004494] tracking-tight">CIRCPyCS / RESEARCH</h1>
-          <p class="text-[10px] text-gray-500 uppercase tracking-widest">Portal de Proyectos</p>
+          <h1 class="text-lg font-bold text-cordis-blue tracking-tight">CIRCPyCS / RESEARCH</h1>
+          <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Portal de Proyectos</p>
         </div>
       </a>
       
       <nav class="hidden md:flex gap-6 text-sm font-medium items-center">
-        <span class="text-[#004494] bg-blue-50 px-3 py-1 rounded-full">Proyectos Activos</span>
-        <a href="https://cir.uagrm.edu.bo/" class="text-gray-600 hover:text-[#004494] transition flex items-center gap-2">
-          <i class="fa-solid fa-house"></i> Volver al Inicio
+        <a href="https://cir.uagrm.edu.bo/" class="text-gray-600 hover:text-cordis-blue transition flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50">
+          <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
         </a>
       </nav>
 
-      <button id="btn-mobile" class="md:hidden text-gray-600 p-2">
+      <button id="btn-mobile" class="md:hidden text-gray-600 p-2 rounded hover:bg-slate-100">
         <i class="fa-solid fa-bars text-xl"></i>
       </button>
     </div>
   </header>
 
-  <div class="bg-gray-50 border-b border-gray-200 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Investigación para el Desarrollo Regional</h2>
-        <p class="text-lg text-gray-600 leading-relaxed mb-6">
-          Explora los proyectos financiados y en ejecución del CIRCPyCS. Enfocados en la gobernanza ambiental, la integridad electoral y las nuevas fronteras de la computación social.
+  <div class="bg-white border-b border-gray-200 py-12 md:py-16 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-50 to-transparent opacity-50"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-cordis-blue text-xs font-bold uppercase tracking-wider mb-4 border border-blue-100">
+          <span class="w-2 h-2 rounded-full bg-cordis-blue"></span> Portafolio 2026-2027
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold text-cordis-dark mb-6 tracking-tight">Proyectos de Investigación Científica</h2>
+        <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
+          Repositorio oficial de proyectos activos del centro. Investigación aplicada en gobernanza ambiental, integridad democrática y nuevas tecnologías sociales.
         </p>
         
-        <div class="relative max-w-lg">
-          <input type="text" id="search-input" placeholder="Buscar por palabras clave, investigador o acrónimo..." 
-                 class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#004494] focus:outline-none shadow-sm transition">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400"></i>
+        <div class="relative max-w-lg group">
+          <input type="text" id="search-input" placeholder="Buscar por título, investigador o palabra clave..." 
+                 class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-cordis-blue focus:border-cordis-blue outline-none shadow-sm transition group-hover:shadow-md">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-gray-400 group-hover:text-cordis-blue transition"></i>
         </div>
       </div>
     </div>
   </div>
 
-  <main class="flex-grow py-12">
+  <main class="flex-grow py-12 bg-slate-50/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="flex flex-col lg:flex-row gap-10">
+      <div class="flex flex-col lg:flex-row gap-12">
         
         <aside class="w-full lg:w-64 flex-shrink-0 space-y-8">
           <div>
-            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-4">Dominio</h3>
-            <div class="space-y-2.5">
-              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:text-[#004494]">
-                <input type="checkbox" checked class="rounded text-[#004494] focus:ring-[#004494]"> Ecología Política
+            <h3 class="text-xs font-bold text-gray-900 uppercase tracking-widest border-b border-gray-200 pb-3 mb-4">Áreas Temáticas</h3>
+            <div class="space-y-3">
+              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:text-cordis-blue group">
+                <div class="relative flex items-center">
+                  <input type="checkbox" checked class="peer h-4 w-4 rounded border-gray-300 text-cordis-blue focus:ring-cordis-blue">
+                </div>
+                <span class="group-hover:translate-x-1 transition-transform">Gobernanza Ambiental</span>
               </label>
-              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:text-[#004494]">
-                <input type="checkbox" checked class="rounded text-[#004494] focus:ring-[#004494]"> Ciencia Política
+              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:text-cordis-blue group">
+                <div class="relative flex items-center">
+                  <input type="checkbox" checked class="peer h-4 w-4 rounded border-gray-300 text-cordis-blue focus:ring-cordis-blue">
+                </div>
+                <span class="group-hover:translate-x-1 transition-transform">Ciencia Política</span>
               </label>
-              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:text-[#004494]">
-                <input type="checkbox" checked class="rounded text-[#004494] focus:ring-[#004494]"> Computación Social
+              <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer hover:text-cordis-blue group">
+                <div class="relative flex items-center">
+                  <input type="checkbox" checked class="peer h-4 w-4 rounded border-gray-300 text-cordis-blue focus:ring-cordis-blue">
+                </div>
+                <span class="group-hover:translate-x-1 transition-transform">Big Data & IA</span>
               </label>
             </div>
           </div>
 
           <div>
-            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-4">Estado</h3>
-            <div class="space-y-2.5">
+            <h3 class="text-xs font-bold text-gray-900 uppercase tracking-widest border-b border-gray-200 pb-3 mb-4">Fase del Proyecto</h3>
+            <div class="space-y-3">
               <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                <input type="radio" name="state" checked class="text-[#004494] focus:ring-[#004494]"> En curso
+                <input type="radio" name="state" checked class="h-4 w-4 border-gray-300 text-cordis-blue focus:ring-cordis-blue">
+                <span>En Ejecución</span>
               </label>
               <label class="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
-                <input type="radio" name="state" class="text-[#004494] focus:ring-[#004494]"> Finalizados
+                <input type="radio" name="state" class="h-4 w-4 border-gray-300 text-cordis-blue focus:ring-cordis-blue">
+                <span>Finalizados</span>
               </label>
             </div>
           </div>
@@ -132,80 +158,95 @@
 
   <div id="drawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 drawer-backdrop" id="drawer-bg"></div>
-    <div class="absolute right-0 top-0 h-full w-full lg:w-[900px] bg-white shadow-2xl drawer-panel overflow-y-auto flex flex-col">
+    
+    <div class="absolute right-0 top-0 h-full w-full lg:w-[960px] bg-white shadow-2xl drawer-panel overflow-y-auto flex flex-col">
       
-      <div class="sticky top-0 bg-white/95 backdrop-blur border-b border-gray-200 px-6 py-4 flex items-center justify-between z-20">
-        <div class="flex items-center gap-2">
-           <span class="bg-blue-100 text-[#004494] text-[10px] font-bold px-2 py-1 rounded uppercase">Research Action</span>
-           <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Ficha Técnica</span>
+      <div class="sticky top-0 bg-white/95 backdrop-blur border-b border-gray-200 px-6 py-4 flex items-center justify-between z-30">
+        <div class="flex items-center gap-3">
+           <div class="bg-cordis-blue text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm uppercase tracking-wider">Proyecto de Investigación</div>
+           <span class="text-sm text-gray-400">|</span>
+           <span id="d-id-header" class="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded">ID: 000</span>
         </div>
-        <button id="drawer-close" class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-100 transition">
+        <button id="drawer-close" class="text-gray-400 hover:text-cordis-blue hover:bg-blue-50 p-2 rounded-full transition duration-200">
           <i class="fa-solid fa-xmark text-xl"></i>
         </button>
       </div>
 
-      <div class="flex-grow p-6 md:p-10">
+      <div class="flex-grow p-6 md:p-12">
         
-        <div class="mb-8">
-          <div id="d-acronym" class="inline-block bg-[#004494] text-white text-xs font-bold px-3 py-1 mb-4 shadow-sm">ACRONYM</div>
-          <h2 id="d-title" class="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-3">Título del Proyecto</h2>
-          <div class="flex items-center gap-4 text-sm text-gray-500">
-            <span id="d-dates"><i class="fa-regular fa-calendar mr-1"></i> 2025-2026</span>
-            <span id="d-id-header"><i class="fa-solid fa-hashtag mr-1"></i> ID: 0000</span>
+        <div class="mb-10 border-b border-gray-100 pb-8">
+          <div id="d-acronym" class="inline-block text-cordis-blue text-sm font-bold mb-3 tracking-wide">ACRONYM</div>
+          <h2 id="d-title" class="text-3xl md:text-4xl font-bold text-cordis-dark leading-tight mb-6">Título del Proyecto</h2>
+          
+          <div class="flex flex-wrap gap-4 text-sm">
+            <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+              <i class="fa-regular fa-calendar mr-2 text-cordis-blue"></i>
+              <span id="d-dates">2026 - 2027</span>
+            </div>
+            <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+              <i class="fa-solid fa-flask mr-2 text-cordis-blue"></i>
+              <span id="d-program">Programa</span>
+            </div>
           </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-10">
+        <div class="flex flex-col lg:flex-row gap-12">
           
-          <div class="flex-1 space-y-8">
+          <div class="flex-1 space-y-10">
             <div>
-              <h3 class="text-lg font-bold text-gray-800 border-b-2 border-gray-100 pb-2 mb-4">Resumen y Objetivos</h3>
-              <div id="d-objective" class="prose prose-sm text-gray-700 text-justify leading-relaxed"></div>
+              <h3 class="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-200 pb-3 mb-5">Descripción y Objetivos</h3>
+              <div id="d-objective" class="prose prose-slate text-gray-700 text-justify leading-relaxed"></div>
             </div>
 
             <div>
-              <h3 class="text-lg font-bold text-gray-800 border-b-2 border-gray-100 pb-2 mb-4">Campos de Ciencia</h3>
+              <h3 class="text-sm font-bold text-gray-900 uppercase tracking-widest border-b border-gray-200 pb-3 mb-5">Áreas de Conocimiento</h3>
               <div id="d-tags" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 flex flex-wrap gap-4">
-               <button onclick="alert('Enviando solicitud de contacto...')" class="px-4 py-2 bg-[#004494] text-white rounded-lg font-medium hover:bg-blue-800 transition shadow-sm">
-                 <i class="fa-solid fa-envelope mr-2"></i> Contactar al PI
-               </button>
-               <button onclick="alert('Se requiere acceso institucional UAGRM')" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition shadow-sm">
-                 <i class="fa-solid fa-file-arrow-down mr-2"></i> Ver Entregables
-               </button>
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-wrap gap-4 items-center justify-between">
+               <div class="text-sm text-gray-500 font-medium">Acciones disponibles:</div>
+               <div class="flex gap-3">
+                 <button onclick="alert('Redirigiendo al formulario de contacto con el investigador...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
+                   <i class="fa-regular fa-envelope"></i> Contactar PI
+                 </button>
+                 <button onclick="alert('Descarga iniciada... (Simulado)')" class="px-5 py-2.5 bg-cordis-blue text-white rounded-xl font-semibold hover:bg-blue-800 transition shadow-sm flex items-center gap-2">
+                   <i class="fa-solid fa-download"></i> Ficha Técnica (PDF)
+                 </button>
+               </div>
             </div>
           </div>
 
-          <div class="w-full lg:w-80 flex-shrink-0">
-            <div class="fact-sheet p-6 rounded-tr-xl rounded-br-xl shadow-sm sticky top-24">
-              <h3 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <i class="fa-solid fa-circle-info text-[#004494]"></i>
-                Información del Proyecto
+          <div class="w-full lg:w-72 flex-shrink-0">
+            <div class="fact-sheet p-6 rounded-r-xl shadow-sm sticky top-24">
+              <h3 class="font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-200 pb-3">
+                <i class="fa-solid fa-circle-info text-cordis-blue"></i>
+                Datos Clave
               </h3>
 
-              <div class="label-cordis">Identificador (ID)</div>
-              <div id="d-id" class="value-cordis font-mono text-gray-500">---</div>
-
-              <div class="label-cordis">Investigador Principal (PI)</div>
-              <div id="d-pi" class="value-cordis text-[#004494] font-semibold border-b border-gray-200 pb-2">---</div>
-
-              <div class="label-cordis mt-3">Estado</div>
-              <div class="value-cordis"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">En Ejecución</span></div>
-
-              <div class="label-cordis">Institución Coordinadora</div>
+              <div class="label-cordis">Estado</div>
               <div class="value-cordis">
-                <div class="font-semibold">CIRCPyCS - UAGRM</div>
-                <div class="text-xs text-gray-500 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>Santa Cruz, Bolivia 🇧🇴</div>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> En Ejecución
+                </span>
               </div>
 
-              <div class="label-cordis">Programa</div>
-              <div id="d-program" class="value-cordis text-xs bg-white border border-gray-200 p-2 rounded">---</div>
+              <div class="label-cordis">Investigador Principal</div>
+              <div id="d-pi" class="value-cordis text-cordis-blue font-semibold">---</div>
+
+              <div class="label-cordis">Institución</div>
+              <div class="value-cordis">
+                <div class="font-semibold text-gray-800">CIRCPyCS - UAGRM</div>
+                <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                  <i class="fa-solid fa-location-dot"></i> Santa Cruz, Bolivia
+                </div>
+              </div>
+
+              <div class="label-cordis">Convocatoria</div>
+              <div id="d-call" class="value-cordis text-xs text-gray-600">---</div>
               
-              <div class="mt-6 pt-4 border-t border-gray-300/50">
-                <p class="text-[10px] text-gray-400 leading-tight">
-                  Ultima actualización: 28 Ene 2026.<br>Información provista por la Unidad de Gestión de Proyectos.
+              <div class="mt-8 pt-6 border-t border-gray-200">
+                <p class="text-[10px] text-gray-400 leading-relaxed text-center">
+                  Información gestionada por la Unidad de Investigación y Extensión del CIRCPyCS. Última validación: Ene 2026.
                 </p>
               </div>
             </div>
@@ -217,99 +258,106 @@
   </div>
 
   <script>
-    // ===== DATA: Proyectos reales extraídos del documento y contexto =====
+    // ===== DATA: Proyectos =====
     const PROJECTS = [
       {
-        id: "GOV-FIRE-CHI",
-        acronym: "GOV-FIRE",
-        title: "Gobernanza Ambiental, Políticas Públicas y Justicia Territorial en la Gestión de Incendios Forestales",
-        start: "2025-10-01",
-        end: "2026-12-31",
+        id: "PIRO-GOV-26",
+        acronym: "PIRO-GOV",
+        title: "Gobernanza Ambiental, Piro-política y Justicia Territorial en la Era del Piroceno",
+        start: "Ene 2026",
+        end: "Dic 2027",
         pi: "MSc. María Angélica Suárez Ribera",
-        program: "PhD-POLSCI-UMSA",
-        tags: ["Gobernanza Ambiental", "Piro-política", "Justicia Territorial", "Pueblos Indígenas"],
+        program: "PhD Research Fellowship",
+        tags: ["Ecología Política", "Gobernanza Ambiental", "Pueblos Indígenas", "Chiquitanía"],
         summary: `
-          <p class="mb-3">La investigación analiza cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferacin de incendios en la Chiquitanía boliviana (2010-2025). Lejos de ser eventos naturales, se plantea que estos incendios son resultado de un entramado de decisiones políticas y modelos extractivistas.</p>
-          <p class="mb-3"><strong>Objetivos Específicos:</strong></p>
-          <ul class="list-disc list-inside mb-3 space-y-1 text-sm">
-            <li>Identificar políticas y marcos legales que regulan el fuego (2010-2025).</li>
-            <li>Examinar el modelo de gobernanza territorial y la articulación entre niveles de gobierno.</li>
-            <li>Documentar impactos en comunidades indígenas (desplazamiento y pérdida de hábitat).</li>
-            <li>Analizar respuestas de resistencia y resiliencia indígena frente al fuego.</li>
+          <p class="mb-4 text-lg font-medium text-gray-800">Investigación doctoral sobre la gestión de incendios forestales en la Chiquitanía boliviana (2010-2025).</p>
+          <p class="mb-4">La investigación aborda la transformación ontológica de los incendios forestales, entendidos no como desastres naturales, sino como fenómenos sociopolíticos producidos por modelos de desarrollo y estructuras de gobernanza. Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego.</p>
+          <h4 class="font-bold text-gray-900 mb-2">Objetivos Específicos:</h4>
+          <ul class="list-disc list-inside mb-4 space-y-2 marker:text-cordis-blue">
+            <li>Identificar las políticas públicas y marcos legales que regulan la gestión del territorio y el fuego.</li>
+            <li>Examinar el modelo de gobernanza territorial y la articulación (o desconexión) entre niveles de gobierno y actores locales.</li>
+            <li>Documentar los impactos sociales y ecológicos en comunidades indígenas, con énfasis en el desplazamiento y la pérdida de hábitat.</li>
+            <li>Analizar las respuestas de resistencia y resiliencia indígena frente a la crisis de los incendios.</li>
           </ul>
-          <p><strong>Hipótesis:</strong> La proliferación de incendios es resultado de una gobernanza subordinada a intereses extractivistas que priorizan el desarrollo productivo sobre la protección ambiental.</p>
+          <p><strong>Hipótesis de trabajo:</strong> La proliferación de incendios es resultado de un modelo de gobernanza subordinado a intereses extractivistas que priorizan el desarrollo productivo sobre la protección de los bienes comunes.</p>
         `
       },
       {
-        id: "ELECT-BOL-26",
+        id: "ELECT-BOL-25",
         acronym: "ELECT-BOL",
-        title: "Integridad Electoral y Reformas en el Sistema Político Boliviano: Ciclo 2026",
-        start: "2025-01-01",
-        end: "2025-12-31",
-        pi: "Dr. José Orlando Peralta",
-        program: "DEMOCRACY-LAB",
-        tags: ["Sistemas Electorales", "Ciencia Política", "Instituciones", "Democracia"],
+        title: "Integridad Electoral y Reformas en el Sistema Político Boliviano: Ciclo 2025-2026",
+        start: "Ene 2025",
+        end: "Dic 2026",
+        pi: "Luis Andia",
+        program: "Democracy Monitor",
+        tags: ["Ciencia Política", "Sistemas Electorales", "Instituciones", "Democracia"],
         summary: `
-          <p class="mb-3">Este proyecto realiza un seguimiento en tiempo real y un análisis estructural de la integridad electoral del ciclo 2025 en Bolivia. Se enfoca en la confianza institucional hacia el Órgano Electoral Plurinacional (OEP) y el impacto de las reformas recientes en la competitividad partidaria.</p>
-          <p>A través de métodos mixtos (análisis de legislación comparada y encuestas de percepción), el estudio busca identificar los cuellos de botella en la cadena de custodia del voto y proponer mecanismos de transparencia que fortalezcan la legitimidad de los resultados en un contexto de alta polarización.</p>
+          <p class="mb-4">Este proyecto realiza un seguimiento técnico y un análisis estructural de la integridad electoral durante el ciclo electoral 2025-2026 en Bolivia.</p>
+          <p class="mb-4">El estudio se enfoca en medir la confianza institucional hacia el Órgano Electoral Plurinacional (OEP) y evaluar el impacto de las reformas normativas recientes en la competitividad partidaria y la participación ciudadana.</p>
+          <h4 class="font-bold text-gray-900 mb-2">Metodología:</h4>
+          <p class="mb-4">Se emplea un diseño de métodos mixtos que incluye el análisis comparado de legislación electoral y encuestas de percepción ciudadana. El objetivo es identificar cuellos de botella en la cadena de custodia del voto y proponer mecanismos de transparencia que fortalezcan la legitimidad de los resultados en un contexto de alta polarización política.</p>
         `
       },
       {
         id: "SOC-COMP-AI",
         acronym: "SOC-COMP",
-        title: "Laboratorio de Ciencias Sociales Computacionales: Big Data y Democracia",
-        start: "2025-03-01",
-        end: "2027-02-28",
+        title: "Laboratorio de Ciencias Sociales Computacionales: Dinámicas de Opinión en Redes",
+        start: "Mar 2025",
+        end: "Feb 2027",
         pi: "Ing. Daniel Hurtado Justiniano",
-        program: "DIGITAL-SOCIETY",
-        tags: ["Big Data", "NLP", "Redes Sociales", "Inteligencia Artificial"],
+        program: "Digital Society Lab",
+        tags: ["Computación Social", "Big Data", "NLP", "Inteligencia Artificial"],
         summary: `
-          <p class="mb-3">Este proyecto establece el primer nodo de Ciencias Sociales Computacionales del CIRCPyCS. Utilizando técnicas de Procesamiento de Lenguaje Natural (NLP) y Análisis de Redes Sociales (SNA), se examinará la estructura de la esfera pública digital boliviana.</p>
-          <p class="mb-3"><strong>Metodología:</strong></p>
-          <ul class="list-disc list-inside mb-3 space-y-1 text-sm">
-            <li>Recolección de data masiva de redes sociales (X, Facebook, TikTok).</li>
-            <li>Entrenamiento de modelos de clasificación de 'stance' (postura política).</li>
-            <li>Detección de comunidades y cámaras de eco en el debate público.</li>
+          <p class="mb-4">Establecimiento del primer nodo de Ciencias Sociales Computacionales del CIRCPyCS. El proyecto utiliza técnicas de Big Data para examinar la estructura de la esfera pública digital en Bolivia.</p>
+          <h4 class="font-bold text-gray-900 mb-2">Componentes del Estudio:</h4>
+          <ul class="list-disc list-inside mb-4 space-y-2 marker:text-cordis-blue">
+            <li><strong>Recolección de Datos:</strong> Minería masiva de datos públicos en redes sociales para mapear conversaciones políticas.</li>
+            <li><strong>Procesamiento de Lenguaje Natural (NLP):</strong> Entrenamiento de modelos para clasificación de postura política (stance detection) y análisis de sentimientos.</li>
+            <li><strong>Análisis de Redes:</strong> Detección de comunidades, cámaras de eco y patrones de propagación de información.</li>
           </ul>
-          <p>El objetivo final es desarrollar herramientas de código abierto para auditar algoritmos y entender la desinformación.</p>
+          <p>El proyecto busca desarrollar herramientas de código abierto que permitan a los investigadores sociales auditar algoritmos y comprender mejor los fenómenos de polarización digital.</p>
         `
       }
     ];
 
-    // ===== RENDERIZADO =====
+    // ===== RENDERIZADO DE TARJETAS =====
     const container = document.getElementById('projects-container');
 
     PROJECTS.forEach(p => {
       const card = document.createElement('div');
-      card.className = "group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-cordis hover:border-[#004494]/30 transition-all duration-300 flex flex-col md:flex-row gap-6 items-start";
+      card.className = "group bg-white border border-gray-200 rounded-xl p-0 hover:shadow-card-hover hover:border-blue-200 transition-all duration-300 flex flex-col md:flex-row overflow-hidden";
+      
       card.innerHTML = `
-        <div class="flex-shrink-0 w-full md:w-36 h-28 bg-gray-50 flex items-center justify-center text-gray-400 rounded-lg border border-gray-100 group-hover:bg-blue-50/50 transition">
-           <div class="text-center">
-             <span class="block font-bold text-xl text-[#004494] mb-1">${p.acronym}</span>
-             <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Project</span>
-           </div>
+        <div class="md:w-40 bg-slate-50 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col items-center justify-center p-6 group-hover:bg-blue-50/30 transition">
+           <span class="text-2xl font-bold text-cordis-blue tracking-tight">${p.acronym}</span>
+           <span class="text-[10px] font-bold text-gray-400 uppercase mt-2 tracking-widest">Project</span>
         </div>
         
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-3 mb-2">
-             <span class="bg-[#004494] text-white text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wide">En curso</span>
-             <span class="text-gray-400 text-xs font-mono">ID: ${p.id}</span>
-          </div>
-          
-          <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#004494] transition cursor-pointer trigger-drawer" data-id="${p.id}">
-            ${p.title}
-          </h3>
-          
-          <div class="flex flex-wrap gap-2 mb-4">
-            ${p.tags.slice(0, 3).map(t => `<span class="text-[11px] bg-gray-100 text-gray-600 px-2 py-1 rounded border border-gray-200">${t}</span>`).join('')}
+        <div class="flex-1 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+               <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded border border-emerald-100 uppercase tracking-wide">Activo</span>
+               <span class="text-gray-400 text-xs font-mono">ID: ${p.id}</span>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-3 leading-snug group-hover:text-cordis-blue transition cursor-pointer trigger-drawer" data-id="${p.id}">
+              ${p.title}
+            </h3>
+            
+            <div class="flex flex-wrap gap-2 mb-5">
+              ${p.tags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('')}
+            </div>
           </div>
 
-          <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-gray-100">
-             <button class="trigger-drawer text-sm font-semibold text-white bg-[#004494] px-4 py-2 rounded-lg hover:bg-blue-800 transition shadow-sm" data-id="${p.id}">
-               <i class="fa-regular fa-eye mr-2"></i>Ver Ficha
+          <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50">
+             <button class="trigger-drawer flex items-center gap-2 text-sm font-semibold text-white bg-cordis-blue px-4 py-2 rounded-lg hover:bg-blue-800 transition shadow-sm" data-id="${p.id}">
+               Ver Ficha Completa
              </button>
-             <button onclick="alert('Contactar a: ${p.pi}')" class="text-sm font-medium text-gray-600 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
-               <i class="fa-regular fa-envelope mr-2"></i>Contactar
+             <button onclick="alert('Seccion de entregables en construcción')" class="flex items-center gap-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 hover:text-cordis-blue transition">
+               <i class="fa-regular fa-folder-open"></i> Entregables
+             </button>
+             <button onclick="alert('Contactar a: ${p.pi}')" class="flex items-center gap-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 hover:text-cordis-blue transition">
+               <i class="fa-regular fa-envelope"></i>
              </button>
           </div>
         </div>
@@ -317,12 +365,12 @@
       container.appendChild(card);
     });
 
-    // ===== DRAWER LOGIC =====
+    // ===== LÓGICA DEL DRAWER (MODAL) =====
     const drawer = document.getElementById('drawer');
     const drawerBg = document.getElementById('drawer-bg');
     const drawerClose = document.getElementById('drawer-close');
 
-    // Elementos del DOM
+    // Elementos del DOM a actualizar
     const dAcronym = document.getElementById('d-acronym');
     const dTitle = document.getElementById('d-title');
     const dDates = document.getElementById('d-dates');
@@ -330,6 +378,7 @@
     const dObjective = document.getElementById('d-objective');
     const dId = document.getElementById('d-id');
     const dPi = document.getElementById('d-pi');
+    const dCall = document.getElementById('d-call');
     const dProgram = document.getElementById('d-program');
     const dTags = document.getElementById('d-tags');
 
@@ -337,19 +386,24 @@
       const p = PROJECTS.find(x => x.id === id);
       if(!p) return;
 
+      // Llenar datos
       dAcronym.textContent = p.acronym;
       dTitle.textContent = p.title;
-      dDates.innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${p.start} a ${p.end}`;
-      dIdHeader.innerHTML = `<i class="fa-solid fa-hashtag mr-1"></i> ID: ${p.id}`;
+      dDates.textContent = `${p.start} - ${p.end}`;
+      dIdHeader.textContent = `ID: ${p.id}`;
       dObjective.innerHTML = p.summary;
+      
+      // Fact sheet
       dId.textContent = p.id;
       dPi.textContent = p.pi;
-      dProgram.textContent = p.program;
+      dProgram.textContent = p.program; // Header badge
+      dCall.textContent = p.program; // Fact sheet
       
       dTags.innerHTML = p.tags.map(t => 
-        `<span class="bg-[#e6f0ff] text-[#004494] px-3 py-1 rounded-full text-xs font-semibold border border-blue-100">${t}</span>`
+        `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-cordis-blue border border-blue-100">${t}</span>`
       ).join('');
 
+      // Mostrar
       drawer.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -359,6 +413,7 @@
       document.body.style.overflow = '';
     }
 
+    // Event Listeners
     document.addEventListener('click', (e) => {
       const trigger = e.target.closest('.trigger-drawer');
       if (trigger) openDrawer(trigger.dataset.id);
@@ -373,7 +428,7 @@
     // Mobile Menu Toggle
     const btnMobile = document.getElementById('btn-mobile');
     btnMobile?.addEventListener('click', () => {
-      alert('Navegación simplificada: Utilice el botón "Volver al Inicio" para acceder a otras secciones.');
+      alert('Utilice el botón "Volver al Inicio" para navegar por el sitio.');
     });
 
   </script>
