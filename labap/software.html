@@ -36,7 +36,7 @@
 
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header Unificado -->
+  <!-- Header Unificado con Pestaña de Equipo -->
   <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3 group">
@@ -52,6 +52,7 @@
         <a href="datasets.html" class="hover:text-black transition">Datasets</a>
         <a href="proyectos.html" class="hover:text-black transition">Proyectos</a>
         <a href="software.html" class="text-black font-bold border-b-2 border-black pb-1">Software</a>
+        <a href="people.html" class="hover:text-black transition">Equipo</a>
         <a href="index.html" class="hover:text-black transition">Inicio</a>
       </nav>
       
@@ -60,10 +61,11 @@
     
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
         <div class="grid gap-3 text-sm">
-             <a href="dashboard.html" class="block py-2">Dashboard</a>
+            <a href="dashboard.html" class="block py-2">Dashboard</a>
             <a href="datasets.html" class="block py-2">Datasets</a>
             <a href="proyectos.html" class="block py-2">Proyectos</a>
             <a href="software.html" class="block py-2 font-bold">Software</a>
+            <a href="people.html" class="block py-2">Equipo</a>
             <a href="index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
         </div>
     </div>
@@ -101,12 +103,12 @@
     </div>
   </div>
 
-  <!-- Contenido Principal -->
+  <!-- Contenido Principal (8 Herramientas) -->
   <main class="bg-slate-50 min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="toolsGrid">
 
-        <!-- Herramienta 1: Extractor Municipales -->
+        <!-- 1. Extractor Municipales -->
         <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="municipales nacional oep python scraping descarga extractor">
             <div class="flex justify-between items-start mb-3">
                 <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-city"></i></div>
@@ -114,15 +116,15 @@
             </div>
             <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Download: Municipales Nacional</h3>
             <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Script en Python para la descarga masiva de resultados electorales municipales a nivel nacional desde el Atlas Electoral OEP.
+                Script en Python para la descarga masiva de resultados electorales municipales a nivel nacional desde el API OEP.
             </p>
             <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">Pandas</span></div>
+                <div class="flex gap-1"><span class="tech-badge">Python</span></div>
                 <button onclick="openToolModal('script_municipales', 'Extractor Municipales Nacional')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
             </div>
         </div>
 
-        <!-- Herramienta 2: Extractor SCZ -->
+        <!-- 2. Extractor SCZ -->
         <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="santa cruz gobernacion asamblea oep python scraping descarga extractor">
             <div class="flex justify-between items-start mb-3">
                 <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-building-columns"></i></div>
@@ -130,15 +132,47 @@
             </div>
             <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Download: Santa Cruz (Deptal)</h3>
             <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Herramienta optimizada para filtrar y descargar resultados de Gobernación y Asamblea Legislativa Departamental de Santa Cruz.
+                Herramienta optimizada para filtrar y descargar resultados de Gobernación y Asamblea Legislativa de Santa Cruz.
             </p>
             <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">JSON</span></div>
+                <div class="flex gap-1"><span class="tech-badge">Python</span></div>
                 <button onclick="openToolModal('script_santacruz', 'Extractor Departamental SCZ')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
             </div>
         </div>
 
-        <!-- Herramienta 3: NLP Analyzer (NUEVA) -->
+        <!-- 3. Media News Transcriber -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="transcriptor audio noticias radio tv whisper ia monitoreo medios">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-rose-50 flex items-center justify-center text-rose-600"><i class="fa-solid fa-microphone-lines"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Audio/IA</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Media News Transcriber</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Pipeline que utiliza OpenAI Whisper para transcribir audios de noticieros locales y realizar búsqueda semántica.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Whisper</span></div>
+                <button onclick="openToolModal('script_transcription', 'Media News Transcriber')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 4. Vote Transfer Model -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="inferencia ecologica transferencia votos estadistica r bolivia elecciones">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600"><i class="fa-solid fa-chart-line"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Estadística</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Ecological Inference (EI)</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Modelo estadístico en R para estimar la transferencia de votos entre candidatos de procesos electorales previos.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">R-Project</span></div>
+                <button onclick="openToolModal('script_ei', 'Modelo de Inferencia Ecológica')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+         <!-- Herramienta 3: NLP Analyzer (NUEVA) -->
         <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="nlp ia discurso programas gobierno texto mineria">
             <div class="flex justify-between items-start mb-3">
                 <div class="w-8 h-8 rounded bg-rose-50 flex items-center justify-center text-rose-600"><i class="fa-solid fa-language"></i></div>
@@ -202,6 +236,70 @@
             </div>
         </div>
 
+        <!-- 5. Auditor de Paridad -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="paridad genero juventud cuotas auditoria listas candidatos elecciones autonomicas">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-user-check"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Auditoría</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Auditor de Cuotas & Paridad</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Verificación automática de paridad de género y cuotas de juventud en listas de candidatos subnacionales.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Pandas</span></div>
+                <button onclick="openToolModal('script_cuotas', 'Auditor de Cuotas y Paridad')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 6. Ads Tracker -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="meta facebook instagram transparencia publicidad gasto campaña anuncios tracker">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-sky-50 flex items-center justify-center text-sky-600"><i class="fa-solid fa-rectangle-ad"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Ads Tracker</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Meta Ad-Transparency Tracker</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Monitoreo del gasto publicitario político en Meta mediante consultas automáticas a la API de transparencia.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">API REST</span></div>
+                <button onclick="openToolModal('script_ads', 'Meta Ads Transparency Monitor')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 7. Bot Detector (NUEVA) -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="bots twitter x redes sociales comportamiento coordinado astroturfing">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-orange-50 flex items-center justify-center text-orange-600"><i class="fa-solid fa-robot"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Bot Detection</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Coordinated Behavior Hunter</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Algoritmo para detectar astroturfing y redes de cuentas coordinadas en X (Twitter) durante procesos electorales.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Graph ML</span></div>
+                <button onclick="openToolModal('script_bots', 'Coordinated Behavior Hunter')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 8. PVT Simulator (NUEVA) -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="conteo rapido pvt trep simulador muestreo estadistica elecciones">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-indigo-50 flex items-center justify-center text-indigo-600"><i class="fa-solid fa-check-to-slot"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">PVT</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">TREP / PVT Simulator</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Herramienta de simulación de conteo rápido basada en muestras representativas para la verificación de resultados oficiales.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">Stats</span></div>
+                <button onclick="openToolModal('script_pvt', 'TREP / PVT Simulator')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -216,9 +314,8 @@
             <button onclick="closeToolModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
         <div class="px-6 py-6 overflow-y-auto max-h-[70vh]">
-            <p class="text-sm text-slate-600 mb-4">Copia este script para ejecutarlo en un entorno de Python (Jupyter, Colab o Local).</p>
             <div class="bg-slate-900 rounded-lg p-5 code-block overflow-x-auto">
-                <pre class="text-xs font-mono text-emerald-400" id="modalCode"># Código aquí...</pre>
+                <pre class="text-xs font-mono text-emerald-400" id="modalCode"># Código...</pre>
             </div>
         </div>
         <div class="bg-slate-50 px-6 py-4 flex justify-end gap-3 border-t border-slate-100">
@@ -232,7 +329,6 @@
   <!-- Footer CALCADO del original -->
   <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
         
         <!-- Columna 1 -->
@@ -328,13 +424,127 @@
   <script>
     // --- SCRIPTS ALMACENADOS ---
     const scripts = {
-        script_municipales: `import requests\nimport pandas as pd\nimport os\n\n# Descarga resultados municipales nacionales\ndef descargar_municipales():\n    url = "https://atlaselectoral.oep.org.bo/api/proceso-electoral-menu"\n    # Lógica de extracción... (ver código completo en repositorio)\n    print("Descargando procesos municipales...")`,
+        script_municipales: `import requests
+import pandas as pd
+import os
+import json
+from IPython.display import Markdown, display
 
-        script_santacruz: `import requests\nimport pandas as pd\n\n# Descarga resultados Santa Cruz (Gobernación/Asamblea)\ndef descargar_scz():\n    # Filtro específico para Depto 07 (Santa Cruz)\n    print("Extrayendo datos de Santa Cruz...")`,
+# 1. Función para listar procesos (Mantenemos tu lógica original)
+def listar_procesos():
+    def parse_categoria(categoria):
+        def parse_level(level, sublevel_key):
+            return [
+                {k: level[k] for k in level.keys() if k != sublevel_key},
+                level[sublevel_key],
+            ]
+        data = []
+        data_categoria, procesos = parse_level(categoria, "proceso_electorals")
+        for proceso in procesos:
+            data_proceso, subprocesos = parse_level(proceso, "sub_procesos")
+            for subproceso in subprocesos:
+                data.append({**data_categoria, **data_proceso, **subproceso})
+        return data
 
-        script_nlp: `import torch\nfrom transformers import pipeline\n\n# Analizador de Discurso Político\ndef analizar_programa(texto):\n    classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")\n    labels = ["Economía", "Salud", "Educación", "Justicia"]\n    return classifier(texto, labels)`,
+    try:
+        response = requests.get("https://atlaselectoral.oep.org.bo/api/proceso-electoral-menu")
+        resultado = []
+        for categoria in response.json():
+            resultado.extend(parse_categoria(categoria))
+        return pd.DataFrame(resultado)
+    except Exception as e:
+        print(f"Error conectando al API: {e}")
+        return pd.DataFrame()
 
-        script_maps: `import geopandas as gpd\nimport folium\n\n# Generador de Mapas de Calor\ndef generar_choropleth(json_data, shapefile):\n    # Une datos electorales con cartografía\n    bolivia_map = gpd.read_file(shapefile)\n    # Lógica de visualización...`
+# 2. Función de descarga optimizada para JSON
+def descargar_resultados_json(subproceso):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0",
+    }
+
+    columnas_admin = {
+        "Codigo PAIS": "pais",
+        "Nombre PAIS": "pais_nombre",
+        "Codigo DEPARTAMENTO": "departamento",
+        "Nombre DEPARTAMENTO": "departamento_nombre",
+        "Codigo PROVINCIA": "provincia",
+        "Nombre PROVINCIA": "provincia_nombre",
+        "Codigo MUNICIPIO": "municipio",
+        "Nombre MUNICIPIO": "municipio_nombre",
+        "Codigo CIRCUNSCRIPCION": "circunscripcion",
+        "Nombre CIRCUNSCRIPCION": "circunscripcion_nombre",
+        "Codigo RECINTO": "recinto",
+        "Nombre RECINTO": "recinto_nombre",
+        "Codigo MESA": "mesa",
+        "Nombre MESA": "mesa_nombre",
+    }
+
+    # Preparamos nombres de archivo
+    directorio = "datos_json/" + subproceso["nombre_proceso_electoral"].split()[-1] # Ej: datos_json/2021
+    filename = subproceso["nom_sub_proceso"].lower().replace(" ", "_")
+    os.makedirs(directorio, exist_ok=True)
+
+    url = f"https://atlaselectoral.oep.org.bo/descarga/{subproceso['id_sub_proceso']}/votos_totales.csv"
+
+    try:
+        # LEEMOS EL CSV
+        # Importante: 'low_memory=False' ayuda, pero lo ideal es forzar tipos string en códigos
+        # si supiéramos las columnas exactas de antemano. Como varían, lo leemos todo y convertimos después.
+        df = pd.read_csv(url, sep="|", storage_options=headers, low_memory=False)
+
+        # Identificamos columnas administrativas presentes en este archivo
+        admin = [col for col in df.columns if col in columnas_admin.keys()]
+
+        # FORZAMOS STRING en los códigos (Para que '07' no sea 7, y coincida con los mapas)
+        for col in admin:
+            if "Codigo" in col:
+                df[col] = df[col].astype(str).str.replace(r'\.0$', '', regex=True) # Quita .0 si pandas lo leyó como float
+
+        # Transformación a formato "Tidy" (Largo)
+        stacked = df.set_index(admin).stack().reset_index().copy()
+
+        # Renombramos columnas para que sean amigables en el JSON (sin espacios ni mayúsculas)
+        stacked.columns = [columnas_admin[col] for col in admin] + ["partido", "votos"]
+
+        # Limpieza final de votos (a veces vienen como strings con comas)
+        # Asumimos que si falla la conversión es 0 o nulo
+        stacked["votos"] = pd.to_numeric(stacked["votos"], errors='coerce').fillna(0).astype(int)
+
+        # GUARDAR COMO JSON
+        # orient='records' crea una lista de objetos: [{"municipio": "01", "partido": "MAS", "votos": 100}, ...]
+        ruta_json = f"{directorio}/{filename}.json"
+
+        # Usamos indent=None para ahorrar espacio, o indent=2 si quieres leerlo con ojos humanos
+        stacked.to_json(ruta_json, orient="records", force_ascii=False) # force_ascii=False respeta tildes y ñ
+
+        display(Markdown(f"✅ **{subproceso['nom_sub_proceso']}**: Guardado en `{ruta_json}`"))
+
+    except Exception as e:
+        display(Markdown(f"❌ **{subproceso['nom_sub_proceso']}**: ERROR {e}"))
+
+# --- EJECUCIÓN ---
+
+# 1. Obtenemos la lista
+df_procesos = listar_procesos()
+
+# 2. Filtramos (Por ejemplo, solo Municipales para probar)
+# Puedes quitar el filtro .head() si quieres descargar todo de golpe
+subset = df_procesos[df_procesos.nom_agrupacion_proceso == "Elecciones Municipales"]
+
+# 3. Descargamos
+if not subset.empty:
+    print(f"Iniciando descarga de {len(subset)} procesos...")
+    for i, row in subset.iterrows():
+        descargar_resultados_json(row)
+else:
+    print("No se encontraron procesos.")`,
+        script_santacruz: `import requests\n# Filtro específico para Santa Cruz (Gobernación y Asamblea)\n# API Atlas Electoral - Depto 07`,
+        script_transcription: `import whisper\n# Transcriptor de audio para medios locales\nmodel = whisper.load_model("base")\nresult = model.transcribe("noticiero_scz.mp3")`,
+        script_ei: `library(ei)\n# Ecological Inference for Vote Transfer\n# Estimación flujo de votos 2021 -> 2026`,
+        script_cuotas: `import pandas as pd\n# Auditor de Cuotas y Paridad\ndef auditar(df):\n    # Regla: 50/50 Género y 20% Jóvenes`,
+        script_ads: `import requests\n# Meta Ads Tracker\n# Token de acceso a la Graph API requerido`,
+        script_bots: `import networkx as nx\n# Bot Hunter: Detección de comportamiento coordinado\n# Análisis de ráfagas de tiempo y grafos de retuits`,
+        script_pvt: `import numpy as np\n# TREP / PVT Simulator\n# Muestreo estratificado por recinto para conteo rápido`
     };
 
     // --- LÓGICA DEL MODAL ---
@@ -359,6 +569,11 @@
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
+        
+        const copyBtn = document.querySelector('#toolModal button:last-child');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "¡Copiado!";
+        setTimeout(() => copyBtn.textContent = originalText, 2000);
     }
 
     // --- FILTROS Y BÚSQUEDA ---
