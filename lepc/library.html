@@ -1,13 +1,12 @@
----
----
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Biblioteca Crítica — LEPC</title>
   <meta name="description" content="Archivo de pensamiento económico heterodoxo y análisis constitucional." />
 
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -15,14 +14,16 @@
         extend: {
           fontFamily: { 
             sans: ["Lato", "sans-serif"], 
-            serif: ["Playfair Display", "serif"] 
+            serif: ["Playfair Display", "serif"],
+            mono: ["Fira Code", "monospace"]
           },
           colors: {
-            'paper-bg': '#f4f1ea',      /* Color Hueso/Papel cálido */
-            'ink-dark': '#2d3748',      /* Gris plomo oscuro */
-            'accent-red': '#9b2c2c',    /* Rojo sangre (Crítico) */
-            'accent-teal': '#2c7a7b',   /* Verde azulado (Estructuralismo) */
-            'accent-gold': '#d69e2e',   /* Dorado (Institucionalismo) */
+            'paper-bg': '#f4f1ea',      
+            'ink-dark': '#2d3748',      
+            'accent-red': '#9b2c2c',    
+            'accent-teal': '#2c7a7b',
+            'accent-gold': '#d69e2e',
+            'accent-navy': '#1a365d'
           },
           boxShadow: {
             'paper': '2px 4px 12px rgba(0,0,0,0.08)',
@@ -32,11 +33,13 @@
     }
   </script>
   
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
     body { background-color: #f4f1ea; }
+    
     /* Estilo de la ficha de biblioteca */
     .lib-card { 
         background: white; 
@@ -47,55 +50,73 @@
         transform: translateX(4px); 
         box-shadow: 4px 4px 0px rgba(0,0,0,0.1); /* Sombra dura estilo retro */
     }
+    
     /* Bordes por categoría */
     .cat-structural { border-left-color: #2c7a7b; }
     .cat-critical { border-left-color: #9b2c2c; }
     .cat-institutional { border-left-color: #d69e2e; }
+    .cat-classic { border-left-color: #1a365d; }
   </style>
 </head>
 <body class="text-ink-dark font-sans antialiased min-h-screen flex flex-col">
 
+  <!-- Top Bar -->
   <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
-    Centro de Investigación Regional (CIRCPyCS) — UAGRM
+    Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS)
   </div>
 
+  <!-- Header -->
   <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
       <a href="index.html" class="flex flex-col leading-none group">
         <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
         <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Biblioteca</span>
       </a>
+      
+      <!-- Desktop Nav -->
       <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
         <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
+        <a href="#" class="hover:text-accent-red transition">Proyectos</a>
         <a href="monitor.html" class="hover:text-accent-red transition">Monitor</a>
         <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
-        <a href="#" class="text-accent-red border-b-2 border-accent-red">Archivo</a>
+        <a href="library.html" class="text-accent-red border-b-2 border-accent-red">Biblioteca</a>
       </nav>
-      <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-stone-900 text-xl focus:outline-none">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Nav (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-paper-bg border-t border-stone-200 shadow-lg absolute w-full z-50">
+        <nav class="flex flex-col p-6 gap-4 text-sm font-bold text-stone-600 uppercase tracking-wide">
+            <a href="index.html" class="hover:text-accent-red">Inicio</a>
+            <a href="monitor.html" class="hover:text-accent-red">Monitor</a>
+            <a href="analysis.html" class="hover:text-accent-red">Análisis</a>
+            <a href="library.html" class="text-accent-red">Biblioteca</a>
+        </nav>
     </div>
   </header>
 
+  <!-- Search & Filter Section -->
   <div class="border-b border-stone-300 bg-white">
-    <div class="max-w-6xl mx-auto px-6 py-8">
-        <h2 class="font-serif text-3xl italic text-stone-800 mb-6">Archivo de Pensamiento Económico</h2>
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <span class="text-accent-navy font-bold text-xs uppercase tracking-widest mb-2 block">Repositorio Bibliográfico</span>
+        <h2 class="font-serif text-3xl sm:text-4xl italic text-stone-800 mb-8">Fundamentos Teóricos & Canon Heterodoxo</h2>
+        
         <div class="flex flex-col md:flex-row gap-4">
             <div class="relative flex-grow">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-stone-400"></i>
-                <input type="text" id="libSearch" placeholder="Buscar por título, autor, año o palabra clave..." 
-                    class="w-full pl-10 pr-4 py-3 bg-paper-bg border border-stone-300 focus:border-accent-red focus:outline-none font-serif text-stone-700">
+                <input type="text" id="libSearch" placeholder="Buscar por título, autor o concepto..." 
+                    class="w-full pl-10 pr-4 py-3 bg-paper-bg border border-stone-300 focus:border-accent-red focus:outline-none font-serif text-stone-700 placeholder-stone-400 transition-colors">
             </div>
-            <div class="flex gap-2 overflow-x-auto">
-                <select class="bg-paper-bg border border-stone-300 px-4 py-3 text-sm font-bold text-stone-600 focus:outline-none cursor-pointer">
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+                <select id="catFilter" class="bg-paper-bg border border-stone-300 px-4 py-3 text-xs font-bold text-stone-600 uppercase tracking-wider focus:outline-none cursor-pointer hover:bg-stone-100 transition">
                     <option value="all">Todas las Corrientes</option>
                     <option value="cat-structural">Estructuralismo</option>
                     <option value="cat-critical">Ec. Crítica / Marxista</option>
-                    <option value="cat-institutional">Institucionalismo</option>
-                </select>
-                <select class="bg-paper-bg border border-stone-300 px-4 py-3 text-sm font-bold text-stone-600 focus:outline-none cursor-pointer">
-                    <option>Año: Todos</option>
-                    <option>2025</option>
-                    <option>2024</option>
-                    <option>Histórico</option>
+                    <option value="cat-institutional">Institucionalismo Legal</option>
                 </select>
             </div>
         </div>
@@ -103,90 +124,128 @@
   </div>
 
   <main class="flex-grow py-12 px-6">
-    <div class="max-w-4xl mx-auto space-y-6" id="libraryList">
+    <div class="max-w-4xl mx-auto space-y-8" id="libraryList">
 
-        <article class="lib-card cat-structural p-6 shadow-paper group">
-            <div class="flex justify-between items-start mb-2">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-teal-700 bg-teal-50 px-2 py-1">Estructuralismo Latinoamericano</span>
-                <span class="text-xs font-serif text-stone-500 italic">Working Paper #42 • 2025</span>
-            </div>
-            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-teal-800 transition">
-                Restricción Externa y Ciclos Constitucionales en Bolivia
-            </h3>
-            <p class="text-stone-600 font-light mb-4 leading-relaxed">
-                Un análisis de cómo la escasez de divisas (restricción externa) ha precipitado históricamente las crisis de legitimidad estatal y las reformas constitucionales. Revisión de datos 1952-2024.
-            </p>
-            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
-                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">J. Peralta</span></div>
-                <div class="flex gap-3">
-                    <button onclick="openModal('download', 'Restricción Externa PDF', '#', 'Peralta, J. (2025). Restricción Externa. LEPC.')" class="text-xs font-bold uppercase tracking-wide text-teal-700 hover:underline">
-                        <i class="fa-solid fa-file-pdf mr-1"></i> PDF
-                    </button>
-                    <button onclick="openModal('code', 'Dataset Balanza Pagos', '#', '')" class="text-xs font-bold uppercase tracking-wide text-stone-500 hover:text-stone-800 hover:underline">
-                        <i class="fa-solid fa-table mr-1"></i> Datos
-                    </button>
-                </div>
-            </div>
-        </article>
-
-        <article class="lib-card cat-critical p-6 shadow-paper group">
-            <div class="flex justify-between items-start mb-2">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-red-800 bg-red-50 px-2 py-1">Economía Política Crítica</span>
-                <span class="text-xs font-serif text-stone-500 italic">Journal Article • 2024</span>
-            </div>
-            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-red-900 transition">
-                La Inflación como Conflicto Distributivo: Una refutación monetarista
-            </h3>
-            <p class="text-stone-600 font-light mb-4 leading-relaxed">
-                Desafiando la tesis de que la inflación es "siempre un fenómeno monetario". Este paper demuestra econométricamente que la inflación en Bolivia responde a pugnas por el excedente entre sectores oligopólicos y trabajo.
-            </p>
-            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
-                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">D. Hurtado, C. Escobar</span></div>
-                <div class="flex gap-3">
-                    <button onclick="openModal('download', 'Inflación Conflicto PDF', '#', 'Hurtado, D. (2024). Inflación. LEPC.')" class="text-xs font-bold uppercase tracking-wide text-red-800 hover:underline">
-                        <i class="fa-solid fa-file-pdf mr-1"></i> PDF
-                    </button>
-                </div>
-            </div>
-        </article>
-
+        <!-- Entry 1: Pistor (Institutionalism) -->
         <article class="lib-card cat-institutional p-6 shadow-paper group">
-            <div class="flex justify-between items-start mb-2">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-amber-700 bg-amber-50 px-2 py-1">Neoinstitucionalismo</span>
-                <span class="text-xs font-serif text-stone-500 italic">Policy Brief • 2024</span>
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-amber-700 bg-amber-50 px-2 py-1 rounded-sm">Law & Political Economy</span>
+                <span class="text-xs font-serif text-stone-400 italic">Princeton Univ. Press • 2019</span>
             </div>
             <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-amber-800 transition">
-                Costos de Transacción en la Titulación de Tierras (INRA)
+                The Code of Capital: How the Law Creates Wealth and Inequality
             </h3>
-            <p class="text-stone-600 font-light mb-4 leading-relaxed">
-                Medición de los costos ocultos y la burocracia en el saneamiento de tierras. Cómo la inseguridad institucional afecta la inversión de largo plazo en el agro cruceño.
+            <p class="text-stone-600 font-light mb-4 leading-relaxed text-sm">
+                Texto fundamental para entender nuestra metodología de "Ingeniería Inversa de las Instituciones". Pistor argumenta que el capital no es solo un factor de producción, sino una cualidad legal codificada a través de la propiedad, el colateral y la bancarrota.
             </p>
             <div class="flex items-center justify-between border-t border-stone-100 pt-4">
-                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">Y. Pedraza</span></div>
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal font-serif italic">Katharina Pistor</span></div>
                 <div class="flex gap-3">
-                    <button onclick="openModal('download', 'Tierras INRA PDF', '#', 'Pedraza, Y. (2024). Costos INRA. LEPC.')" class="text-xs font-bold uppercase tracking-wide text-amber-700 hover:underline">
-                        <i class="fa-solid fa-file-pdf mr-1"></i> Brief
+                    <a href="https://press.princeton.edu/books/hardcover/9780691178974/the-code-of-capital" target="_blank" class="text-xs font-bold uppercase tracking-wide text-stone-500 hover:text-amber-700 hover:underline transition">
+                        <i class="fa-solid fa-book-open mr-1"></i> Ver Libro
+                    </a>
+                    <button onclick="openModal('citation', 'Pistor, K. (2019). The Code of Capital. Princeton University Press.')" class="text-xs font-bold uppercase tracking-wide text-stone-400 hover:text-stone-900 transition">
+                        <i class="fa-solid fa-quote-right mr-1"></i> Citar
                     </button>
                 </div>
             </div>
         </article>
 
+        <!-- Entry 2: Alex M. Thomas (Structuralism / Introduction) -->
         <article class="lib-card cat-structural p-6 shadow-paper group">
-            <div class="flex justify-between items-start mb-2">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-teal-700 bg-teal-50 px-2 py-1">Historia Económica</span>
-                <span class="text-xs font-serif text-stone-500 italic">Capítulo de Libro • 2023</span>
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-teal-700 bg-teal-50 px-2 py-1 rounded-sm">Macroeconomía Heterodoxa</span>
+                <span class="text-xs font-serif text-stone-400 italic">Cambridge Univ. Press • 2021</span>
             </div>
             <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-teal-800 transition">
-                La "Maldición de los Recursos" Revisitada: Santa Cruz y el Gas
+                Macroeconomics: An Introduction
             </h3>
-            <p class="text-stone-600 font-light mb-4 leading-relaxed">
-                Análisis histórico-comparado. ¿Generó el IDH una enfermedad holandesa subnacional? Estudio sobre la desindustrialización relativa y la terciarización de la economía departamental.
+            <p class="text-stone-600 font-light mb-4 leading-relaxed text-sm">
+                Alex M. Thomas ofrece una nueva visión del desarrollo de la macroeconomía, combinando conceptos teóricos con ejemplos del mundo real (economía india). Al vincular ideas económicas con problemas reales, Thomas permite a los lectores comprender la "vida cotidiana" de la macroeconomía más allá de la abstracción.
             </p>
             <div class="flex items-center justify-between border-t border-stone-100 pt-4">
-                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal">Equipo LEPC</span></div>
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal font-serif italic">Alex M. Thomas</span></div>
                 <div class="flex gap-3">
-                    <button onclick="openModal('restricted', 'Capítulo Gas PDF', '#', '')" class="text-xs font-bold uppercase tracking-wide text-stone-500 hover:text-stone-800 hover:underline">
-                        <i class="fa-solid fa-lock mr-1"></i> Solicitar
+                    <a href="https://books.google.com.bo/books?id=T28yEAAAQBAJ&printsec=copyright&redir_esc=y#v=onepage&q&f=false" target="_blank" class="text-xs font-bold uppercase tracking-wide text-teal-700 hover:underline transition">
+                        <i class="fa-brands fa-google mr-1"></i> Vista Previa
+                    </a>
+                    <button onclick="openModal('citation', 'Thomas, A. M. (2021). Macroeconomics: An Introduction. Cambridge University Press.')" class="text-xs font-bold uppercase tracking-wide text-stone-400 hover:text-stone-900 transition">
+                        <i class="fa-solid fa-quote-right mr-1"></i> Citar
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Entry 3: The Microeconomics Anti-Textbook (Critical) -->
+        <article class="lib-card cat-critical p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-red-800 bg-red-50 px-2 py-1 rounded-sm">Economía Crítica</span>
+                <span class="text-xs font-serif text-stone-400 italic">Bloomsbury / Zed Books • 2010/2021</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-red-900 transition">
+                The Microeconomics Anti-Textbook: A Critical Thinker's Guide
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed text-sm">
+                Hill y Myatt desafían los supuestos, argumentos y modelos de los libros de texto convencionales. Esta "guía esencial" decodifica la teoría estándar para mostrar que la economía real es mucho más interesante —y subversiva— que la versión simplista y aséptica presentada a los estudiantes universitarios.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autores: <span class="font-normal font-serif italic">Rod Hill & Tony Myatt</span></div>
+                <div class="flex gap-3">
+                    <a href="https://www.bloomsbury.com/us/microeconomics-antitextbook-9781350523562/" target="_blank" class="text-xs font-bold uppercase tracking-wide text-red-800 hover:underline transition">
+                        <i class="fa-solid fa-book-open mr-1"></i> Editorial
+                    </a>
+                    <button onclick="openModal('citation', 'Hill, R., & Myatt, T. (2010). The Microeconomics Anti-Textbook. Zed Books.')" class="text-xs font-bold uppercase tracking-wide text-stone-400 hover:text-stone-900 transition">
+                        <i class="fa-solid fa-quote-right mr-1"></i> Citar
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Entry 4: The Macroeconomics Anti-Textbook (Critical) -->
+        <article class="lib-card cat-critical p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-red-800 bg-red-50 px-2 py-1 rounded-sm">Economía Crítica</span>
+                <span class="text-xs font-serif text-stone-400 italic">Bloomsbury • 2022</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-red-900 transition">
+                The Macroeconomics Anti-Textbook: A Critical Thinker's Guide
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed text-sm">
+                En este volumen complementario, Tony Myatt revela cómo los puntos ciegos metodológicos de la microeconomía persisten en la macroeconomía dominante. Desde concepciones erróneas del mercado laboral hasta visiones 'Pollyanna' del sector financiero, expone los juicios de valor ocultos tras la supuesta neutralidad científica.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autor: <span class="font-normal font-serif italic">Tony Myatt</span></div>
+                <div class="flex gap-3">
+                    <a href="https://www.bloomsbury.com/ca/macroeconomics-antitextbook-9781350323735/" target="_blank" class="text-xs font-bold uppercase tracking-wide text-red-800 hover:underline transition">
+                        <i class="fa-solid fa-book-open mr-1"></i> Editorial
+                    </a>
+                    <button onclick="openModal('citation', 'Myatt, T. (2022). The Macroeconomics Anti-Textbook. Bloomsbury Academic.')" class="text-xs font-bold uppercase tracking-wide text-stone-400 hover:text-stone-900 transition">
+                        <i class="fa-solid fa-quote-right mr-1"></i> Citar
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <!-- Entry 5: Samuel Bowles (New Micro) - NUEVO/ACTUALIZADO -->
+        <article class="lib-card cat-critical p-6 shadow-paper group">
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-red-800 bg-red-50 px-2 py-1 rounded-sm">Nueva Microeconomía</span>
+                <span class="text-xs font-serif text-stone-400 italic">Open Book Publishers • 2022</span>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-red-900 transition">
+                Allocation, Distribution, and Policy
+            </h3>
+            <p class="text-stone-600 font-light mb-4 leading-relaxed text-sm">
+                La microeconomía se ha transformado en las últimas décadas por el uso creciente de la teoría de juegos, la economía del comportamiento, el modelado evolutivo y la atención a la información asimétrica. Esta obra ofrece un enfoque basado en problemas para entender la distribución del ingreso, la competencia limitada y temas de política pública como el cambio climático.
+            </p>
+            <div class="flex items-center justify-between border-t border-stone-100 pt-4">
+                <div class="text-sm font-bold text-stone-700">Autores: <span class="font-normal font-serif italic">Samuel Bowles & Simon Halliday</span></div>
+                <div class="flex gap-3">
+                    <a href="https://www.openbookpublishers.com/books/10.11647/obp.0466" target="_blank" class="text-xs font-bold uppercase tracking-wide text-stone-500 hover:text-red-800 hover:underline transition">
+                        <i class="fa-solid fa-book-open mr-1"></i> Acceso Abierto
+                    </a>
+                    <button onclick="openModal('citation', 'Bowles, S., & Halliday, S. (2022). Microeconomics: Competition, Conflict, and Coordination. Open Book Publishers.')" class="text-xs font-bold uppercase tracking-wide text-stone-400 hover:text-stone-900 transition">
+                        <i class="fa-solid fa-quote-right mr-1"></i> Citar
                     </button>
                 </div>
             </div>
@@ -195,77 +254,137 @@
     </div>
   </main>
 
-  <div id="libModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <!-- Modal Simple -->
+  <div id="libModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
     <div class="fixed inset-0 bg-stone-900/80 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
     <div class="flex min-h-full items-center justify-center p-4">
-      <div class="relative transform overflow-hidden bg-[#f4f1ea] text-left shadow-2xl transition-all w-full max-w-lg border border-stone-300">
-        <div class="p-8">
-            <h3 class="font-serif text-2xl font-bold text-stone-900 mb-2" id="modalTitle">Título Documento</h3>
-            <div class="h-1 w-12 bg-accent-red mb-6"></div>
-            
-            <div id="modalContent" class="text-sm text-stone-700 font-light space-y-4">
-                </div>
-
-            <div class="mt-8 flex justify-end gap-4">
-                <button onclick="closeModal()" class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-800 transition">Cerrar</button>
-                <a href="#" id="modalAction" class="px-6 py-2 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-accent-red transition">Descargar</a>
-            </div>
+      <div class="relative transform overflow-hidden bg-white text-left shadow-2xl transition-all w-full max-w-md border-t-4 border-stone-800 p-6">
+        <h3 class="font-serif text-xl font-bold text-stone-900 mb-2">Referencia Bibliográfica</h3>
+        <p class="text-xs text-stone-500 mb-4">Copie el siguiente formato para sus citas:</p>
+        <div class="bg-paper-bg p-4 border border-stone-200 font-mono text-xs text-stone-700 select-all mb-6" id="modalCitation">
+            <!-- Citation here -->
+        </div>
+        <div class="flex justify-end">
+            <button onclick="closeModal()" class="text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-900">Cerrar</button>
         </div>
       </div>
     </div>
   </div>
 
-  {% include footer.html %}
+  <!-- Footer -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">© <span id="year"></span> Todos los derechos reservados.</p>
+        </div>
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-regular fa-envelope mt-1 text-emerald-600"></i>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-location-dot mt-1 text-emerald-600"></i>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <i class="fa-brands fa-facebook text-blue-600"></i> <span class="text-sm">Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <i class="fa-brands fa-youtube text-red-600"></i> <span class="text-sm">YouTube</span>
+            </a>
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <i class="fa-brands fa-instagram text-pink-600"></i> <span class="text-sm">Instagram</span>
+            </a>
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <i class="fa-brands fa-x-twitter text-slate-900"></i> <span class="text-sm">X (Twitter)</span>
+            </a>
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <i class="fa-brands fa-github text-slate-800"></i> <span class="text-sm">GitHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    // Buscador en tiempo real
-    const searchInput = document.getElementById('libSearch');
-    const items = document.querySelectorAll('.lib-card');
+    // Mobile Menu Toggle
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
 
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        items.forEach(item => {
-            const text = item.innerText.toLowerCase();
-            item.style.display = text.includes(term) ? 'block' : 'none';
-        });
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
     });
 
-    // Lógica del Modal
-    function openModal(type, title, link, citation) {
-        const modal = document.getElementById('libModal');
-        const mTitle = document.getElementById('modalTitle');
-        const mContent = document.getElementById('modalContent');
-        const mBtn = document.getElementById('modalAction');
+    // Buscador
+    const searchInput = document.getElementById('libSearch');
+    const filterSelect = document.getElementById('catFilter');
+    const items = document.querySelectorAll('.lib-card');
 
-        mTitle.textContent = title;
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+    function filterItems() {
+        const term = searchInput.value.toLowerCase();
+        const category = filterSelect.value;
 
-        if (type === 'download') {
-            mContent.innerHTML = `
-                <p>Está a punto de descargar un documento académico. Por favor, utilice la siguiente referencia para citar este trabajo:</p>
-                <div class="bg-white border border-stone-300 p-3 font-mono text-xs select-all">${citation}</div>
-            `;
-            mBtn.textContent = "Descargar Archivo";
-            mBtn.href = link;
-            mBtn.style.display = 'inline-block';
-        } else if (type === 'restricted') {
-            mContent.innerHTML = `<p>Este documento se encuentra bajo embargo o restricción de derechos de autor. Debe solicitar acceso directo a los autores.</p>`;
-            mBtn.textContent = "Solicitar por Email";
-            mBtn.href = "mailto:contacto@lepc.uagrm.edu.bo";
-            mBtn.style.display = 'inline-block';
-        } else if (type === 'code') {
-            mContent.innerHTML = `<p>Script de replicación para Stata/R:</p><div class="bg-stone-800 text-white p-3 font-mono text-xs overflow-x-auto">use "data_balanza_pagos.dta", clear<br>regress log_res log_terms</div>`;
-            mBtn.style.display = 'none';
-        }
+        items.forEach(item => {
+            const text = item.innerText.toLowerCase();
+            const matchesSearch = text.includes(term);
+            const matchesCat = category === 'all' || item.classList.contains(category);
+            
+            item.style.display = (matchesSearch && matchesCat) ? 'block' : 'none';
+        });
     }
 
+    searchInput.addEventListener('input', filterItems);
+    filterSelect.addEventListener('change', filterItems);
+
+    // Modal
+    function openModal(type, citation) {
+        if (type === 'citation') {
+            document.getElementById('modalCitation').innerText = citation;
+            document.getElementById('libModal').classList.remove('hidden');
+        }
+    }
+    
     function closeModal() {
         document.getElementById('libModal').classList.add('hidden');
-        document.body.style.overflow = '';
     }
     
     document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
+    
+    // Año footer
+    if(document.getElementById('year')) document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
 </body>
