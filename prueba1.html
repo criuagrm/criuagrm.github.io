@@ -424,7 +424,120 @@
   <script>
     // --- SCRIPTS ALMACENADOS ---
     const scripts = {
-        script_municipales: `import requests\nimport pandas as pd\n# Descarga resultados municipales nacionales del API OEP\nurl = "https://atlaselectoral.oep.org.bo/api/proceso-electoral-menu"\n# Ver código completo en el repositorio de datos.`,
+        script_municipales: `import requests
+import pandas as pd
+import os
+import json
+from IPython.display import Markdown, display
+
+# 1. Función para listar procesos (Mantenemos tu lógica original)
+def listar_procesos():
+    def parse_categoria(categoria):
+        def parse_level(level, sublevel_key):
+            return [
+                {k: level[k] for k in level.keys() if k != sublevel_key},
+                level[sublevel_key],
+            ]
+        data = []
+        data_categoria, procesos = parse_level(categoria, "proceso_electorals")
+        for proceso in procesos:
+            data_proceso, subprocesos = parse_level(proceso, "sub_procesos")
+            for subproceso in subprocesos:
+                data.append({**data_categoria, **data_proceso, **subproceso})
+        return data
+
+    try:
+        response = requests.get("https://atlaselectoral.oep.org.bo/api/proceso-electoral-menu")
+        resultado = []
+        for categoria in response.json():
+            resultado.extend(parse_categoria(categoria))
+        return pd.DataFrame(resultado)
+    except Exception as e:
+        print(f"Error conectando al API: {e}")
+        return pd.DataFrame()
+
+# 2. Función de descarga optimizada para JSON
+def descargar_resultados_json(subproceso):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0",
+    }
+
+    columnas_admin = {
+        "Codigo PAIS": "pais",
+        "Nombre PAIS": "pais_nombre",
+        "Codigo DEPARTAMENTO": "departamento",
+        "Nombre DEPARTAMENTO": "departamento_nombre",
+        "Codigo PROVINCIA": "provincia",
+        "Nombre PROVINCIA": "provincia_nombre",
+        "Codigo MUNICIPIO": "municipio",
+        "Nombre MUNICIPIO": "municipio_nombre",
+        "Codigo CIRCUNSCRIPCION": "circunscripcion",
+        "Nombre CIRCUNSCRIPCION": "circunscripcion_nombre",
+        "Codigo RECINTO": "recinto",
+        "Nombre RECINTO": "recinto_nombre",
+        "Codigo MESA": "mesa",
+        "Nombre MESA": "mesa_nombre",
+    }
+
+    # Preparamos nombres de archivo
+    directorio = "datos_json/" + subproceso["nombre_proceso_electoral"].split()[-1] # Ej: datos_json/2021
+    filename = subproceso["nom_sub_proceso"].lower().replace(" ", "_")
+    os.makedirs(directorio, exist_ok=True)
+
+    url = f"https://atlaselectoral.oep.org.bo/descarga/{subproceso['id_sub_proceso']}/votos_totales.csv"
+
+    try:
+        # LEEMOS EL CSV
+        # Importante: 'low_memory=False' ayuda, pero lo ideal es forzar tipos string en códigos
+        # si supiéramos las columnas exactas de antemano. Como varían, lo leemos todo y convertimos después.
+        df = pd.read_csv(url, sep="|", storage_options=headers, low_memory=False)
+
+        # Identificamos columnas administrativas presentes en este archivo
+        admin = [col for col in df.columns if col in columnas_admin.keys()]
+
+        # FORZAMOS STRING en los códigos (Para que '07' no sea 7, y coincida con los mapas)
+        for col in admin:
+            if "Codigo" in col:
+                df[col] = df[col].astype(str).str.replace(r'\.0$', '', regex=True) # Quita .0 si pandas lo leyó como float
+
+        # Transformación a formato "Tidy" (Largo)
+        stacked = df.set_index(admin).stack().reset_index().copy()
+
+        # Renombramos columnas para que sean amigables en el JSON (sin espacios ni mayúsculas)
+        stacked.columns = [columnas_admin[col] for col in admin] + ["partido", "votos"]
+
+        # Limpieza final de votos (a veces vienen como strings con comas)
+        # Asumimos que si falla la conversión es 0 o nulo
+        stacked["votos"] = pd.to_numeric(stacked["votos"], errors='coerce').fillna(0).astype(int)
+
+        # GUARDAR COMO JSON
+        # orient='records' crea una lista de objetos: [{"municipio": "01", "partido": "MAS", "votos": 100}, ...]
+        ruta_json = f"{directorio}/{filename}.json"
+
+        # Usamos indent=None para ahorrar espacio, o indent=2 si quieres leerlo con ojos humanos
+        stacked.to_json(ruta_json, orient="records", force_ascii=False) # force_ascii=False respeta tildes y ñ
+
+        display(Markdown(f"✅ **{subproceso['nom_sub_proceso']}**: Guardado en `{ruta_json}`"))
+
+    except Exception as e:
+        display(Markdown(f"❌ **{subproceso['nom_sub_proceso']}**: ERROR {e}"))
+
+# --- EJECUCIÓN ---
+
+# 1. Obtenemos la lista
+df_procesos = listar_procesos()
+
+# 2. Filtramos (Por ejemplo, solo Municipales para probar)
+# Puedes quitar el filtro .head() si quieres descargar todo de golpe
+subset = df_procesos[df_procesos.nom_agrupacion_proceso == "Elecciones Municipales"]
+
+# 3. Descargamos
+if not subset.empty:
+    print(f"Iniciando descarga de {len(subset)} procesos...")
+    for i, row in subset.iterrows():
+        descargar_resultados_json(row)
+else:
+    print("No se encontraron procesos.")`,
         script_santacruz: `import requests\n# Filtro específico para Santa Cruz (Gobernación y Asamblea)\n# API Atlas Electoral - Depto 07`,
         script_transcription: `import whisper\n# Transcriptor de audio para medios locales\nmodel = whisper.load_model("base")\nresult = model.transcribe("noticiero_scz.mp3")`,
         script_ei: `library(ei)\n# Ecological Inference for Vote Transfer\n# Estimación flujo de votos 2021 -> 2026`,
