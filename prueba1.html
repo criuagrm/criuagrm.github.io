@@ -2,658 +2,428 @@
 <html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Proyectos de Investigación — CIRCPyCS UAGRM</title>
-  <meta name="description" content="Portafolio completo de proyectos de investigación del CIRCPyCS: filtros, fichas técnicas, avances, equipo y entregables." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infraestructura Digital — LABAP • CIRCPyCS</title>
+  <meta name="description" content="Toolkit computacional para ciencias sociales. Scripts, algoritmos y software desarrollado por el LABAP." />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
           colors: {
-            brand: '#0b3b8a',
-            slateInk: '#0f172a'
-          },
-          boxShadow: { soft: '0 8px 24px rgba(2,6,23,.08)' },
-          borderRadius: { xl2: '18px' },
-          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica Neue','Arial'] }
+            'academic-slate': '#1e293b', 
+          }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Plotly para gráficos en la ficha -->
-  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
-    section[id]{ scroll-margin-top: 96px; }
-    /* Poster / portada de proyecto (si hay imagen) */
-    .thumb { aspect-ratio: 16/9; width: 100%; background: #f8fafc; display:grid; place-items:center; overflow:hidden }
-    .thumb > img{ width:100%; height:100%; object-fit:cover }
-    /* Badges */
-    .badge{ display:inline-flex; align-items:center; gap:.4rem; padding:.18rem .5rem; border-radius:9999px; font-size:.72rem }
-    .badge-dot{ width:.5rem; height:.5rem; border-radius:9999px }
-    /* Grid responsive estable */
-    .grid-proj{ grid-template-columns: repeat(1,minmax(0,1fr)); }
-    @media (min-width:640px){ .grid-proj{ grid-template-columns: repeat(2,minmax(0,1fr)); } }
-    @media (min-width:1024px){ .grid-proj{ grid-template-columns: repeat(3,minmax(0,1fr)); } }
-    /* Modal (drawer) */
-    .drawer{ position:fixed; inset:0; display:none; }
-    .drawer.open{ display:block; }
+    .tool-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
+    .tool-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
+    .tech-badge { font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; text-transform: uppercase; letter-spacing: 0.025em; }
+    section[id] { scroll-margin-top: 100px; }
+    .code-block::-webkit-scrollbar { height: 6px; width: 6px; }
+    .code-block::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
-  <!-- Cinta superior -->
+<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/80 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-      <a href="#inicio" class="flex items-center gap-3 min-w-0">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 object-contain" />
-        <div class="leading-tight truncate">
-          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg truncate">CIRCPyCS</h1>
+  <!-- Header Unificado con Pestaña de Equipo -->
+  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
+        <div class="leading-tight">
+          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
+          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS</h1>
         </div>
       </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#proyectos" class="hover:text-sky-700">Proyectos</a>
-        <a href="#estadisticas" class="hover:text-sky-700">Estadísticas</a>
-        <a href="#lineas" class="hover:text-sky-700">Líneas</a>
-        <a href="#contacto" class="hover:text-sky-700">Contacto</a>
-        <a href="https://cir.uagrm.edu.bo/" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:border-sky-600 hover:text-sky-700">Volver a Inicio</a>
+      
+      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+        <a href="dashboard.html" class="hover:text-black transition">Dashboard</a>
+        <a href="datasets.html" class="hover:text-black transition">Datasets</a>
+        <a href="proyectos.html" class="hover:text-black transition">Proyectos</a>
+        <a href="software.html" class="text-black font-bold border-b-2 border-black pb-1">Software</a>
+        <a href="people.html" class="hover:text-black transition">Equipo</a>
+        <a href="index.html" class="hover:text-black transition">Inicio</a>
       </nav>
-      <!-- Botón móvil -->
-      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200"
-              aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
-        <span>Menú</span>
-        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" class="block"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </button>
+      
+      <button id="btn-open" class="md:hidden text-slate-600" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
     </div>
-    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-[0_8px_22px_rgba(2,6,23,.08)]" aria-label="Navegación móvil">
-      <ul class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1 text-[15px]">
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#proyectos">Proyectos</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#estadisticas">Estadísticas</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#lineas">Líneas</a></li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="#contacto">Contacto</a></li>
-        <li class="pt-2 mt-2 border-t border-slate-200 text-slate-500 text-xs px-3">Externo</li>
-        <li><a class="block px-3 py-2 rounded-lg hover:bg-slate-50" href="https://cir.uagrm.edu.bo/">Volver a Inicio</a></li>
-      </ul>
-    </nav>
+    
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
+        <div class="grid gap-3 text-sm">
+            <a href="dashboard.html" class="block py-2">Dashboard</a>
+            <a href="datasets.html" class="block py-2">Datasets</a>
+            <a href="proyectos.html" class="block py-2">Proyectos</a>
+            <a href="software.html" class="block py-2 font-bold">Software</a>
+            <a href="people.html" class="block py-2">Equipo</a>
+            <a href="index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
+        </div>
+    </div>
   </header>
 
-  <!-- HERO -->
-  <section id="inicio" class="relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
-      <div class="absolute -top-20 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
-      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+  <!-- Hero Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-slate-100">
+    <div class="max-w-4xl">
+        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Digital Infrastructure</span>
+        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
+            Herramientas Computacionales para el Análisis Político.
+        </h2>
+        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
+            Repositorio de algoritmos, scripts de scraping, modelos de procesamiento de lenguaje natural y plataformas de visualización desarrolladas por el LABAP.
+        </p>
     </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Investigación aplicada · Datos abiertos</span>
-      <h2 class="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">Portafolio de Proyectos de Investigación</h2>
-      <p class="mt-2 max-w-3xl text-slate-600">Explora los proyectos activos y concluidos del CIRCPyCS. Filtros por área, estado y año; fichas con objetivos, equipo, cronograma, presupuesto y entregables.</p>
-    </div>
-  </section>
+  </div>
 
-  <!-- FILTROS + KPIs -->
-  <section id="proyectos" class="pb-4">
+  <!-- Barra de Filtros y Búsqueda -->
+  <div class="sticky top-[73px] z-30 bg-white/95 border-b border-slate-200 backdrop-blur shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full sm:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                <input type="text" id="toolSearch" placeholder="Buscar herramienta (ej: Scraping, Python, R)..." 
+                    class="w-full pl-8 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm focus:ring-1 focus:ring-slate-400 focus:border-slate-400 outline-none transition placeholder:text-slate-400 font-sans">
+            </div>
+            <div class="flex gap-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest overflow-x-auto whitespace-nowrap">
+                <button class="hover:text-black transition" onclick="filterType('all')">Todos</button>
+                <button class="hover:text-blue-600 transition" onclick="filterType('scraping')">Data Mining</button>
+                <button class="hover:text-emerald-600 transition" onclick="filterType('analysis')">Análisis / ML</button>
+                <button class="hover:text-purple-600 transition" onclick="filterType('viz')">Visualización</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Contenido Principal (8 Herramientas) -->
+  <main class="bg-slate-50 min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft grid gap-3 lg:grid-cols-[1fr_auto_auto_auto_auto] lg:items-end">
-        <div class="grid gap-2">
-          <label for="q" class="text-xs text-slate-500">Buscar</label>
-          <input id="q" type="search" placeholder="Título, palabra clave, PI…" class="rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200 w-full"/>
-        </div>
-        <div class="grid gap-2">
-          <label for="area" class="text-xs text-slate-500">Área</label>
-          <select id="area" class="rounded-xl border border-slate-300 px-3 py-2 text-sm">
-            <option value="">Todas</option>
-          </select>
-        </div>
-        <div class="grid gap-2">
-          <label for="estado" class="text-xs text-slate-500">Estado</label>
-          <select id="estado" class="rounded-xl border border-slate-300 px-3 py-2 text-sm">
-            <option value="">Todos</option>
-            <option>En curso</option>
-            <option>Finalizado</option>
-            <option>En revisión</option>
-            <option>En diseño</option>
-          </select>
-        </div>
-        <div class="grid gap-2">
-          <label for="anio" class="text-xs text-slate-500">Año</label>
-          <select id="anio" class="rounded-xl border border-slate-300 px-3 py-2 text-sm">
-            <option value="">Todos</option>
-          </select>
-        </div>
-        <div class="flex gap-2">
-          <button id="btn-clear" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Limpiar</button>
-          <button id="btn-export" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">Exportar JSON</button>
-        </div>
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="toolsGrid">
 
-      <!-- KPIs -->
-      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-          <div class="text-slate-500 text-xs uppercase tracking-wide">Proyectos</div>
-          <div id="kpi-total" class="mt-1 text-2xl font-extrabold">—</div>
+        <!-- 1. Extractor Municipales -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="municipales nacional oep python scraping descarga extractor">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-city"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Extractor</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Download: Municipales Nacional</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Script en Python para la descarga masiva de resultados electorales municipales a nivel nacional desde el API OEP.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Python</span></div>
+                <button onclick="openToolModal('script_municipales', 'Extractor Municipales Nacional')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
         </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-          <div class="text-slate-500 text-xs uppercase tracking-wide">En curso</div>
-          <div id="kpi-curso" class="mt-1 text-2xl font-extrabold">—</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-          <div class="text-slate-500 text-xs uppercase tracking-wide">Finalizados</div>
-          <div id="kpi-fin" class="mt-1 text-2xl font-extrabold">—</div>
-        </div>
-        <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
-          <div class="text-slate-500 text-xs uppercase tracking-wide">Presupuesto (sim.)</div>
-          <div id="kpi-pres" class="mt-1 text-2xl font-extrabold">—</div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- GRID -->
-  <main class="pb-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div id="grid" class="grid grid-proj gap-5"></div>
-      <div id="empty" class="hidden mt-6 text-slate-500 text-sm">No hay proyectos con estos filtros.</div>
+        <!-- 2. Extractor SCZ -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="santa cruz gobernacion asamblea oep python scraping descarga extractor">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-building-columns"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Extractor</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Download: Santa Cruz (Deptal)</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Herramienta optimizada para filtrar y descargar resultados de Gobernación y Asamblea Legislativa de Santa Cruz.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Python</span></div>
+                <button onclick="openToolModal('script_santacruz', 'Extractor Departamental SCZ')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 3. Media News Transcriber -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="transcriptor audio noticias radio tv whisper ia monitoreo medios">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-rose-50 flex items-center justify-center text-rose-600"><i class="fa-solid fa-microphone-lines"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Audio/IA</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Media News Transcriber</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Pipeline que utiliza OpenAI Whisper para transcribir audios de noticieros locales y realizar búsqueda semántica.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Whisper</span></div>
+                <button onclick="openToolModal('script_transcription', 'Media News Transcriber')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 4. Vote Transfer Model -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="inferencia ecologica transferencia votos estadistica r bolivia elecciones">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600"><i class="fa-solid fa-chart-line"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Estadística</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Ecological Inference (EI)</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Modelo estadístico en R para estimar la transferencia de votos entre candidatos de procesos electorales previos.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">R-Project</span></div>
+                <button onclick="openToolModal('script_ei', 'Modelo de Inferencia Ecológica')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 5. Auditor de Paridad -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="paridad genero juventud cuotas auditoria listas candidatos elecciones autonomicas">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-user-check"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Auditoría</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Auditor de Cuotas & Paridad</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Verificación automática de paridad de género y cuotas de juventud en listas de candidatos subnacionales.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Pandas</span></div>
+                <button onclick="openToolModal('script_cuotas', 'Auditor de Cuotas y Paridad')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 6. Ads Tracker -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="meta facebook instagram transparencia publicidad gasto campaña anuncios tracker">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-sky-50 flex items-center justify-center text-sky-600"><i class="fa-solid fa-rectangle-ad"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Ads Tracker</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Meta Ad-Transparency Tracker</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Monitoreo del gasto publicitario político en Meta mediante consultas automáticas a la API de transparencia.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">API REST</span></div>
+                <button onclick="openToolModal('script_ads', 'Meta Ads Transparency Monitor')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 7. Bot Detector (NUEVA) -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="bots twitter x redes sociales comportamiento coordinado astroturfing">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-orange-50 flex items-center justify-center text-orange-600"><i class="fa-solid fa-robot"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">Bot Detection</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Coordinated Behavior Hunter</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Algoritmo para detectar astroturfing y redes de cuentas coordinadas en X (Twitter) durante procesos electorales.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Graph ML</span></div>
+                <button onclick="openToolModal('script_bots', 'Coordinated Behavior Hunter')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+        <!-- 8. PVT Simulator (NUEVA) -->
+        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="conteo rapido pvt trep simulador muestreo estadistica elecciones">
+            <div class="flex justify-between items-start mb-3">
+                <div class="w-8 h-8 rounded bg-indigo-50 flex items-center justify-center text-indigo-600"><i class="fa-solid fa-check-to-slot"></i></div>
+                <span class="text-[10px] uppercase font-bold text-slate-400">PVT</span>
+            </div>
+            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">TREP / PVT Simulator</h3>
+            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
+                Herramienta de simulación de conteo rápido basada en muestras representativas para la verificación de resultados oficiales.
+            </p>
+            <div class="flex items-center justify-between mt-auto">
+                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">Stats</span></div>
+                <button onclick="openToolModal('script_pvt', 'TREP / PVT Simulator')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
+            </div>
+        </div>
+
+      </div>
     </div>
   </main>
 
-  <!-- ESTADÍSTICAS (resumen general) -->
-  <section id="estadisticas" class="py-10 bg-white border-y border-slate-200">
+  <!-- Modal para Scripts -->
+  <div id="toolModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeToolModal()"></div>
+    <div class="flex min-h-full items-center justify-center p-4">
+      <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all w-full max-w-4xl border border-slate-200">
+        <div class="bg-white px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="text-lg font-serif font-bold text-slate-900" id="modalTitle">Título del Script</h3>
+            <button onclick="closeToolModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div class="px-6 py-6 overflow-y-auto max-h-[70vh]">
+            <div class="bg-slate-900 rounded-lg p-5 code-block overflow-x-auto">
+                <pre class="text-xs font-mono text-emerald-400" id="modalCode"># Código...</pre>
+            </div>
+        </div>
+        <div class="bg-slate-50 px-6 py-4 flex justify-end gap-3 border-t border-slate-100">
+            <button onclick="closeToolModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-200 transition">Cerrar</button>
+            <button onclick="copyCode()" class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-sm">Copiar Código</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer CALCADO del original -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between gap-3">
-        <h3 class="text-xl font-bold">Resumen estadístico</h3>
-        <span class="text-xs text-slate-500">Cifras simuladas para demostración</span>
-      </div>
-      <div class="mt-4 grid gap-5 lg:grid-cols-2">
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h4 class="font-semibold">Presupuesto por área</h4>
-          <div id="chart-area" class="mt-3" style="height:360px"></div>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h4 class="font-semibold">Estados de proyecto</h4>
-          <div id="chart-estado" class="mt-3" style="height:360px"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- LÍNEAS -->
-  <section id="lineas" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-xl font-bold">Líneas de investigación</h3>
-      <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-          <p class="text-xs uppercase tracking-wide text-slate-500">Comparada</p>
-          <h4 class="mt-1 font-semibold">Política comparada regional</h4>
-          <p class="mt-1 text-sm text-slate-600">Instituciones, elecciones y comportamiento político subnacional.</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-          <p class="text-xs uppercase tracking-wide text-slate-500">Economía política</p>
-          <h4 class="mt-1 font-semibold">Desarrollo, desigualdad y políticas</h4>
-          <p class="mt-1 text-sm text-slate-600">Evaluación de políticas, mercado laboral y bienestar.</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-          <p class="text-xs uppercase tracking-wide text-slate-500">Datos & IA</p>
-          <h4 class="mt-1 font-semibold">Laboratorio de datos y simulación</h4>
-          <p class="mt-1 text-sm text-slate-600">Minería de texto, modelos causales y simulación basada en agentes.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACTO -->
-  <section id="contacto" class="py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 items-start">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-        <h3 class="font-semibold text-lg">Contacto</h3>
-        <p class="mt-2 text-sm text-slate-600">¿Deseas colaborar o cofinanciar un proyecto?</p>
-        <div class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
-          <div class="rounded-xl border border-slate-200 p-3">
-            <div class="text-slate-500">Email</div>
-            <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo" class="font-medium text-sky-700">cri.cspoliticas.fcjpsri@uagrm.edu.bo</a>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Columna 1 -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
           </div>
-          <div class="rounded-xl border border-slate-200 p-3">
-            <div class="text-slate-500">Teléfono</div>
-            <div class="font-medium">+591 67381294</div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+
+        <!-- Columna 2 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 3 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna 4 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+            </a>
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+            </a>
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+            </a>
           </div>
         </div>
-      </div>
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-soft">
-        <h3 class="font-semibold text-lg">Proponer proyecto</h3>
-        <p class="mt-2 text-sm text-slate-600">Incluye título, resumen, equipo, cronograma y presupuesto estimado.</p>
-        <a href="https://forms.gle/" target="_blank" class="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800" rel="noopener">Formulario<span>→</span></a>
-      </div>
-    </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-600">
-      <div class="grid place-items-center gap-3 text-center">
-        <p>© <span id="year"></span> Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
-        <p>Portal de proyectos — versión demo.</p>
+      </div>
+      
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- DRAWER (ficha técnica) -->
-  <div id="drawer" class="drawer" aria-hidden="true" aria-labelledby="drawer-title" role="dialog">
-    <div id="drawer-bg" class="absolute inset-0 bg-black/30 opacity-0 transition-opacity"></div>
-    <aside class="absolute right-0 top-0 h-full w-full max-w-2xl bg-white shadow-2xl border-l border-slate-200 translate-x-full transition-transform overflow-y-auto">
-      <div class="p-5 sm:p-6 border-b border-slate-200 sticky top-0 bg-white">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <p id="drawer-area" class="text-xs text-slate-500">Área</p>
-            <h4 id="drawer-title" class="text-xl font-bold">Título</h4>
-            <p id="drawer-meta" class="mt-1 text-sm text-slate-600">Meta</p>
-          </div>
-          <button id="drawer-close" class="p-2 rounded-lg border border-slate-200 hover:bg-slate-50" aria-label="Cerrar">✕</button>
-        </div>
-      </div>
-      <div class="p-5 sm:p-6 grid gap-6">
-        <section>
-          <h5 class="font-semibold">Resumen</h5>
-          <p id="drawer-resumen" class="mt-1 text-slate-700"></p>
-        </section>
-        <section>
-          <h5 class="font-semibold">Objetivos y metodología</h5>
-          <ul id="drawer-objs" class="mt-2 list-disc list-inside text-slate-700 space-y-1"></ul>
-        </section>
-        <section>
-          <h5 class="font-semibold">Equipo</h5>
-          <ul id="drawer-equipo" class="mt-2 text-slate-700 space-y-1"></ul>
-        </section>
-        <section>
-          <h5 class="font-semibold">Avances / Hitos</h5>
-          <ul id="drawer-avances" class="mt-2 text-slate-700 space-y-1"></ul>
-        </section>
-        <section>
-          <h5 class="font-semibold">Presupuesto por rubro (simulado)</h5>
-          <div id="drawer-pie" style="height:320px"></div>
-        </section>
-        <section>
-          <h5 class="font-semibold">Entregables</h5>
-          <ul id="drawer-entregables" class="mt-2 list-disc list-inside text-slate-700 space-y-1"></ul>
-        </section>
-        <section id="drawer-links" class="hidden">
-          <h5 class="font-semibold">Enlaces</h5>
-          <div class="mt-2 flex flex-wrap gap-2 text-sm"></div>
-        </section>
-      </div>
-    </aside>
-  </div>
-
   <script>
-    // Año dinámico
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // --- SCRIPTS ALMACENADOS ---
+    const scripts = {
+        script_municipales: `import requests\nimport pandas as pd\n# Descarga resultados municipales nacionales del API OEP\nurl = "https://atlaselectoral.oep.org.bo/api/proceso-electoral-menu"\n# Ver código completo en el repositorio de datos.`,
+        script_santacruz: `import requests\n# Filtro específico para Santa Cruz (Gobernación y Asamblea)\n# API Atlas Electoral - Depto 07`,
+        script_transcription: `import whisper\n# Transcriptor de audio para medios locales\nmodel = whisper.load_model("base")\nresult = model.transcribe("noticiero_scz.mp3")`,
+        script_ei: `library(ei)\n# Ecological Inference for Vote Transfer\n# Estimación flujo de votos 2021 -> 2026`,
+        script_cuotas: `import pandas as pd\n# Auditor de Cuotas y Paridad\ndef auditar(df):\n    # Regla: 50/50 Género y 20% Jóvenes`,
+        script_ads: `import requests\n# Meta Ads Tracker\n# Token de acceso a la Graph API requerido`,
+        script_bots: `import networkx as nx\n# Bot Hunter: Detección de comportamiento coordinado\n# Análisis de ráfagas de tiempo y grafos de retuits`,
+        script_pvt: `import numpy as np\n# TREP / PVT Simulator\n# Muestreo estratificado por recinto para conteo rápido`
+    };
 
-    // ===== Menú móvil =====
+    // --- LÓGICA DEL MODAL ---
+    function openToolModal(id, title) {
+        const modal = document.getElementById('toolModal');
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalCode').textContent = scripts[id] || "# Script no disponible";
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeToolModal() {
+        document.getElementById('toolModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function copyCode() {
+        const code = document.getElementById('modalCode').textContent;
+        const textArea = document.createElement("textarea");
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        const copyBtn = document.querySelector('#toolModal button:last-child');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "¡Copiado!";
+        setTimeout(() => copyBtn.textContent = originalText, 2000);
+    }
+
+    // --- FILTROS Y BÚSQUEDA ---
+    document.getElementById('toolSearch').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.tool-card').forEach(card => {
+            const searchStr = (card.getAttribute('data-search') || '') + card.querySelector('h3').innerText.toLowerCase();
+            card.style.display = searchStr.includes(term) ? 'flex' : 'none';
+        });
+    });
+
+    function filterType(type) {
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.style.display = (type === 'all' || card.classList.contains('type-' + type)) ? 'flex' : 'none';
+        });
+    }
+
+    // Año dinámico
+    if(document.getElementById('year')) document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil
     const btnOpen = document.getElementById('btn-open');
     const mobileMenu = document.getElementById('mobile-menu');
-    btnOpen?.addEventListener('click', ()=>{
-      const open = mobileMenu.classList.contains('hidden');
-      mobileMenu.classList.toggle('hidden', !open);
-      btnOpen.setAttribute('aria-expanded', String(open));
-      document.getElementById('icon-bars').classList.toggle('hidden', open);
-      document.getElementById('icon-x').classList.toggle('hidden', !open);
-      document.body.style.overflow = open ? 'hidden' : '';
+    btnOpen.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
     });
-    window.matchMedia('(min-width:768px)').addEventListener('change', ev=>{ if(ev.matches) { mobileMenu.classList.add('hidden'); btnOpen.setAttribute('aria-expanded','false'); document.body.style.overflow=''; document.getElementById('icon-bars').classList.remove('hidden'); document.getElementById('icon-x').classList.add('hidden'); } });
-
-    // ===== Dataset de proyectos (demo) =====
-    const PROYECTOS = [
-      {
-        id:'p1',
-        titulo:'Cohesión social y polarización en áreas metropolitanas',
-        area:'Política comparada',
-        estado:'En curso',
-        anioIni:2025, anioFin:2026,
-        portada:'https://images.unsplash.com/photo-1532635052-0e4b6e079d8b?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Encuesta panel + análisis de redes para estimar dinámicas de polarización, exposición a medios y confianza institucional en 4 ciudades bolivianas.',
-        lider:'Ricardo A. Fernández',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:62,
-        objetivos:[
-          'Medir la evolución de la polarización afectiva (2025–2026).',
-          'Modelar exposición selectiva a medios y desinformación.',
-          'Proponer intervenciones de mitigación a nivel municipal.'
-        ],
-        equipo:['M. Rojas','L. Vargas','S. Aguilar'],
-        avances:[
-          {fecha:'2025-03-30', texto:'Cuestionario validado y protocolo ético aprobado'},
-          {fecha:'2025-05-18', texto:'Levantamiento 1ª ola (n=2.100) completado'},
-          {fecha:'2025-07-22', texto:'Dashboard de seguimiento público (beta)'}
-        ],
-        entregables:['Dataset panel anonimizado (OCDS)','Policy brief municipal','Artículo sometido (Q1)'],
-        presupuesto:42000,
-        rubros:{ TrabajoDeCampo:45, Personal:30, Infraestructura:10, Difusion:10, Otros:5 },
-        tags:['polarización','encuesta panel','redes sociales'],
-        links:{ github:'', pdf:'' }
-      },
-      {
-        id:'p2',
-        titulo:'Efectos de la desigualdad percibida en la legitimidad democrática',
-        area:'Economía política',
-        estado:'En curso',
-        anioIni:2025, anioFin:2025,
-        portada:'https://images.unsplash.com/photo-1542744094-24638eff58bb?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Experimentos con encuestas y modelos causales para estimar cómo la percepción de desigualdad afecta la confianza en instituciones y el voto.',
-        lider:'Mar Montoya Lozano',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:48,
-        objetivos:['Identificar mecanismos de percepción','Cuantificar efectos causales','Diseñar intervenciones comunicacionales'],
-        equipo:['D. Villarroel','A. Pinto'],
-        avances:[{fecha:'2025-06-05', texto:'Diseño experimental preregistrado'},{fecha:'2025-07-14', texto:'Piloto n=300 ejecutado'}],
-        entregables:['Artículo (Q2)','Conjunto de materiales replicables'],
-        presupuesto:26000,
-        rubros:{ Experimentos:40, Personal:35, Software:10, Difusion:10, Otros:5 },
-        tags:['desigualdad','actitudes','experimentos'],
-        links:{ github:'', pdf:'' }
-      },
-      {
-        id:'p3',
-        titulo:'Gobernanza del litio y desarrollo regional en el altiplano',
-        area:'Políticas públicas',
-        estado:'En revisión',
-        anioIni:2024, anioFin:2026,
-        portada:'https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Estudio comparado de marcos regulatorios y mecanismos de captura de renta en ecosistemas del litio. Entrevistas, datos fiscales y SIG.',
-        lider:'F. Barrientos',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:32,
-        objetivos:['Mapear actores y reglas','Cuantificar encadenamientos productivos','Proponer hoja de ruta regional'],
-        equipo:['V. Mercado','J. Quispe'],
-        avances:[{fecha:'2025-04-10', texto:'Base normativa compilada'},{fecha:'2025-07-02', texto:'Trabajo de campo en Potosí (fase 1)'}],
-        entregables:['Dossier geopolítico','Mapa interactivo (SIG)'],
-        presupuesto:38000,
-        rubros:{ TrabajoDeCampo:35, Personal:30, Viajes:15, DatosSIG:15, Otros:5 },
-        tags:['litio','desarrollo','gobernanza'],
-        links:{ github:'', pdf:'' }
-      },
-      {
-        id:'p4',
-        titulo:'Predicción electoral 2025 con modelos mixtos y datos abiertos',
-        area:'Datos & IA',
-        estado:'Finalizado',
-        anioIni:2024, anioFin:2025,
-        portada:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Pipeline reproducible (R/Python) para pronóstico subnacional con encuestas, series históricas y señales digitales.',
-        lider:'Equipo LAP-CIRCPyCS',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:100,
-        objetivos:['Integración multi-fuente','Validación cruzada','Publicación en tiempo real'],
-        equipo:['R. Fernández','M. Rojas','S. Aguilar'],
-        avances:[{fecha:'2025-08-20', texto:'Repositorio final publicado'},{fecha:'2025-08-25', texto:'Informe metodológico liberado'}],
-        entregables:['Código abierto (MIT)','Informe técnico','Dataset limpio'],
-        presupuesto:12000,
-        rubros:{ Personal:60, Infraestructura:20, Difusion:10, Otros:10 },
-        tags:['elecciones','modelos','reproducibilidad'],
-        links:{ github:'https://github.com/', pdf:'' }
-      },
-      {
-        id:'p5',
-        titulo:'Violencia política y medios: minería de texto en hemerotecas',
-        area:'Comportamiento político',
-        estado:'En curso',
-        anioIni:2025, anioFin:2026,
-        portada:'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Corpus de prensa 2000–2025 para identificar repertorios de acción y frames. Modelos de tópicos dinámicos y clasificación supervisada.',
-        lider:'Equipo LAP-CIRCPyCS',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:41,
-        objetivos:['Construir corpus anotado','Detectar cambios de repertorios','Liberar cartillas de buenas prácticas'],
-        equipo:['A. Ardaya','C. Rocha'],
-        avances:[{fecha:'2025-05-09', texto:'Scraper y pipeline de limpieza'},{fecha:'2025-07-29', texto:'Anotación piloto (n=1.000)'}],
-        entregables:['Corpus abierto','Guía de estilo','Dashboard'],
-        presupuesto:18000,
-        rubros:{ Datos:45, Personal:35, Infraestructura:10, Difusion:10 },
-        tags:['nlp','medios','violencia'],
-        links:{ github:'', pdf:'' }
-      },
-      {
-        id:'p6',
-        titulo:'Plan de integridad pública municipal (evaluación y diseño)',
-        area:'Políticas públicas',
-        estado:'Finalizado',
-        anioIni:2023, anioFin:2024,
-        portada:'https://images.unsplash.com/photo-1553729784-e91953dec042?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Diagnóstico institucional, riesgos de corrupción y manuales de procedimiento para municipios medianos.',
-        lider:'Unidad de Integridad',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:100,
-        objetivos:['Levantamiento de riesgos','Capacitación y manuales','Evaluación independiente'],
-        equipo:['C. Prado','N. Guzmán'],
-        avances:[{fecha:'2024-04-12', texto:'Manual aprobado por Concejo'},{fecha:'2024-07-21', texto:'Capacitaciones completadas'}],
-        entregables:['Manual de integridad','Informe de evaluación'],
-        presupuesto:24000,
-        rubros:{ Asesoría:50, Capacitación:30, Difusion:10, Otros:10 },
-        tags:['integridad','municipios','evaluación'],
-        links:{ pdf:'' }
-      },
-      {
-        id:'p7',
-        titulo:'Mapas de vulnerabilidad climática urbana',
-        area:'Datos & IA',
-        estado:'En diseño',
-        anioIni:2026, anioFin:2026,
-        portada:'https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Integración de satélite, catastros y sensores ciudadanos para mapas de calor urbano y riesgo hídrico.',
-        lider:'Lab Datos',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:12,
-        objetivos:['Protocolo de datos','Prototipo de índice de riesgo','Mapa web'],
-        equipo:['S. Aguilar','G. Lema'],
-        avances:[{fecha:'2026-01-15', texto:'Propuesta técnica en revisión'}],
-        entregables:['Prototipo índice','Sitio web'],
-        presupuesto:30000,
-        rubros:{ Datos:40, Personal:35, Infraestructura:20, Otros:5 },
-        tags:['clima','urbano','sensores'],
-        links:{}
-      },
-      {
-        id:'p8',
-        titulo:'Capital social y participación: experimento de campo',
-        area:'Comportamiento político',
-        estado:'En curso',
-        anioIni:2025, anioFin:2025,
-        portada:'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1600&auto=format&fit=crop',
-        resumen:'Intervención comunitaria aleatorizada para aumentar la cooperación y el control social en barrios periurbanos.',
-        lider:'J. Rocabado',
-        institucion:'CIRCPyCS — UAGRM',
-        progreso:28,
-        objetivos:['Diseñar intervención costo-efectiva','Medir efectos en cooperación','Generar recomendaciones'],
-        equipo:['M. Céspedes','L. Arnez'],
-        avances:[{fecha:'2025-08-05', texto:'Aprobación ética'},{fecha:'2025-08-29', texto:'Asignación aleatoria realizada'}],
-        entregables:['Reporte RCT','Manual de intervención'],
-        presupuesto:22000,
-        rubros:{ Intervención:50, Personal:30, Medición:15, Otros:5 },
-        tags:['rct','cooperación','barrio'],
-        links:{}
-      }
-    ];
-
-    // ===== Poblado de selects dinámicos =====
-    const selArea = document.getElementById('area');
-    const selEstado = document.getElementById('estado');
-    const selAnio = document.getElementById('anio');
-    const q = document.getElementById('q');
-    const grid = document.getElementById('grid');
-    const empty = document.getElementById('empty');
-
-    const AREAS = Array.from(new Set(PROYECTOS.map(p=>p.area))).sort();
-    AREAS.forEach(a=>{ const o=document.createElement('option'); o.textContent=a; selArea.appendChild(o); });
-    const ANIOS = Array.from(new Set(PROYECTOS.flatMap(p=>[p.anioIni,p.anioFin]))).sort((a,b)=>b-a);
-    ANIOS.forEach(a=>{ const o=document.createElement('option'); o.textContent=a; selAnio.appendChild(o); });
-
-    // ===== Render de tarjetas =====
-    function estadoBadge(estado){
-      const map = {
-        'En curso': ['bg-emerald-50 text-emerald-700 ring-emerald-200','bg-emerald-500'],
-        'Finalizado': ['bg-sky-50 text-sky-700 ring-sky-200','bg-sky-500'],
-        'En revisión': ['bg-amber-50 text-amber-700 ring-amber-200','bg-amber-500'],
-        'En diseño': ['bg-slate-100 text-slate-700 ring-slate-300','bg-slate-400']
-      }[estado] || ['bg-slate-100 text-slate-700 ring-slate-300','bg-slate-400'];
-      return `<span class="badge ${map[0]} ring-1"><span class="badge-dot" style="background:${map[1]}"></span>${estado}</span>`;
-    }
-
-    function progressBar(p){
-      return `<div class="mt-3 h-2.5 rounded-full bg-slate-200 overflow-hidden"><div class="h-full bg-emerald-500" style="width:${Math.max(0,Math.min(100,p||0))}%"></div></div>`;
-    }
-
-    function cardHTML(p){
-      return `
-      <article class="rounded-xl2 bg-white border border-slate-200 shadow-soft overflow-hidden flex flex-col">
-        <div class="thumb border-b border-slate-200">${p.portada?`<img loading="lazy" decoding="async" src="${p.portada}" alt="Portada ${p.titulo}">`:`<div class='text-slate-400 text-sm'>Sin imagen</div>`}</div>
-        <div class="p-5 flex-1 flex flex-col">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-xs px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200">${p.area}</span>
-            ${estadoBadge(p.estado)}
-          </div>
-          <h4 class="mt-2 font-semibold text-slateInk">${p.titulo}</h4>
-          <p class="mt-1 text-sm text-slate-600 line-clamp-3">${p.resumen}</p>
-          <div class="mt-3 text-[13px] text-slate-600">
-            <div><span class="font-medium">PI:</span> ${p.lider}</div>
-            <div><span class="font-medium">Periodo:</span> ${p.anioIni}–${p.anioFin}</div>
-          </div>
-          ${p.estado!=='Finalizado'?progressBar(p.progreso):''}
-          <div class="mt-4 flex items-center gap-2">
-            <button class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm" data-open="${p.id}">Ver ficha</button>
-            ${p.links?.github?`<a href="${p.links.github}" target="_blank" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">GitHub</a>`:''}
-          </div>
-        </div>
-      </article>`
-    }
-
-    function applyFilters(){
-      const txt = q.value.trim().toLowerCase();
-      const a = selArea.value; const e = selEstado.value; const an = selAnio.value;
-      const out = PROYECTOS.filter(p=>{
-        const mTxt = !txt || [p.titulo,p.resumen,p.lider,(p.tags||[]).join(' ')].join(' ').toLowerCase().includes(txt);
-        const mArea = !a || p.area===a;
-        const mEstado = !e || p.estado===e;
-        const mAnio = !an || p.anioIni==an || p.anioFin==an;
-        return mTxt && mArea && mEstado && mAnio;
-      }).sort((x,y)=> (y.anioFin - x.anioFin) || x.titulo.localeCompare(y.titulo));
-
-      grid.innerHTML = out.map(cardHTML).join('');
-      empty.classList.toggle('hidden', out.length>0);
-      updateKPIs(out);
-      drawCharts(out);
-    }
-
-    function updateKPIs(list){
-      const total = list.length;
-      const curso = list.filter(p=>p.estado==='En curso').length;
-      const fin = list.filter(p=>p.estado==='Finalizado').length;
-      const pres = list.reduce((s,p)=> s + (p.presupuesto||0), 0);
-      document.getElementById('kpi-total').textContent = total;
-      document.getElementById('kpi-curso').textContent = curso;
-      document.getElementById('kpi-fin').textContent = fin;
-      document.getElementById('kpi-pres').textContent = '$' + pres.toLocaleString('en-US');
-    }
-
-    // ===== Gráficos de resumen =====
-    function drawCharts(list){
-      if(!window.Plotly) return;
-      const byArea = {};
-      const byEstado = {};
-      list.forEach(p=>{
-        byArea[p.area] = (byArea[p.area]||0) + (p.presupuesto||0);
-        byEstado[p.estado] = (byEstado[p.estado]||0) + 1;
-      });
-      const aNames = Object.keys(byArea); const aVals = Object.values(byArea);
-      Plotly.react('chart-area', [{type:'bar', x:aNames, y:aVals, hovertemplate:'%{x}: $%{y:,}<extra></extra>'}], {margin:{t:24,b:60,l:40,r:20}, xaxis:{tickangle:-20}, yaxis:{title:'$'}, plot_bgcolor:'#fff', paper_bgcolor:'#fff'}, {displayModeBar:false, responsive:true});
-      const eNames = Object.keys(byEstado); const eVals = Object.values(byEstado);
-      Plotly.react('chart-estado', [{type:'pie', labels:eNames, values:eVals, hole:.45}], {margin:{t:24,b:24,l:24,r:24}, plot_bgcolor:'#fff', paper_bgcolor:'#fff'}, {displayModeBar:false, responsive:true});
-    }
-
-    // ===== Export JSON (vista filtrada) =====
-    document.getElementById('btn-export').addEventListener('click', ()=>{
-      const txt = q.value.trim().toLowerCase();
-      const a = selArea.value; const e = selEstado.value; const an = selAnio.value;
-      const out = PROYECTOS.filter(p=>{
-        const mTxt = !txt || [p.titulo,p.resumen,p.lider,(p.tags||[]).join(' ')].join(' ').toLowerCase().includes(txt);
-        const mArea = !a || p.area===a; const mEstado = !e || p.estado===e; const mAnio = !an || p.anioIni==an || p.anioFin==an; return mTxt && mArea && mEstado && mAnio;
-      });
-      const blob = new Blob([JSON.stringify(out,null,2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const aEl = document.createElement('a'); aEl.href=url; aEl.download='proyectos_filtrados.json'; aEl.click(); URL.revokeObjectURL(url);
-    });
-
-    document.getElementById('btn-clear').addEventListener('click', ()=>{ q.value=''; selArea.value=''; selEstado.value=''; selAnio.value=''; applyFilters(); });
-    q.addEventListener('input', applyFilters); selArea.addEventListener('change', applyFilters); selEstado.addEventListener('change', applyFilters); selAnio.addEventListener('change', applyFilters);
-
-    // ===== Drawer (ficha) =====
-    const drawer = document.getElementById('drawer');
-    const drawerBg = document.getElementById('drawer-bg');
-    const drawerPanel = drawer.querySelector('aside');
-    const btnClose = document.getElementById('drawer-close');
-
-    function openDrawer(p){
-      drawer.classList.add('open');
-      requestAnimationFrame(()=>{
-        drawerBg.style.opacity = '1';
-        drawerPanel.style.transform = 'translateX(0)';
-      });
-      document.body.style.overflow='hidden';
-      // Contenido
-      document.getElementById('drawer-area').textContent = p.area + ' • ' + p.estado;
-      document.getElementById('drawer-title').textContent = p.titulo;
-      document.getElementById('drawer-meta').textContent = `${p.lider} — ${p.institucion} — ${p.anioIni}–${p.anioFin}`;
-      document.getElementById('drawer-resumen').textContent = p.resumen;
-      // listas
-      const UL = (id, arr) => { const el=document.getElementById(id); el.innerHTML=''; (arr||[]).forEach(t=>{ const li=document.createElement('li'); li.textContent = (t.texto||t); if(t.fecha){ li.innerHTML = `<span class='text-slate-500 text-xs mr-1'>${new Date(t.fecha).toLocaleDateString('es-BO',{month:'short',day:'2-digit'})}</span> ${t.texto}`; } el.appendChild(li); }); };
-      UL('drawer-objs', p.objetivos);
-      UL('drawer-equipo', p.equipo);
-      UL('drawer-avances', p.avances);
-      UL('drawer-entregables', p.entregables);
-      // links
-      const linksWrap = document.querySelector('#drawer-links > div');
-      linksWrap.innerHTML='';
-      const links = [];
-      if(p.links?.github){ links.push(`<a class='px-3 py-1.5 rounded-lg border border-slate-300 text-sm' target='_blank' href='${p.links.github}'>GitHub</a>`); }
-      if(p.links?.pdf){ links.push(`<a class='px-3 py-1.5 rounded-lg border border-slate-300 text-sm' target='_blank' href='${p.links.pdf}'>PDF</a>`); }
-      document.getElementById('drawer-links').classList.toggle('hidden', links.length===0);
-      linksWrap.innerHTML = links.join('');
-
-      // Pie chart de rubros
-      if(window.Plotly){
-        const labels = Object.keys(p.rubros||{}); const values = Object.values(p.rubros||{});
-        Plotly.react('drawer-pie', [{type:'pie', labels, values, hole:.45, textinfo:'label+percent'}], {margin:{t:10,b:10,l:10,r:10}}, {displayModeBar:false, responsive:true});
-      } else {
-        document.getElementById('drawer-pie').innerHTML = '<div class="text-slate-500 text-sm">Cargando gráfico…</div>';
-      }
-    }
-
-    function closeDrawer(){
-      drawerBg.style.opacity = '0';
-      drawerPanel.style.transform = 'translateX(100%)';
-      setTimeout(()=>{ drawer.classList.remove('open'); document.body.style.overflow=''; }, 180);
-    }
-
-    btnClose.addEventListener('click', closeDrawer);
-    drawerBg.addEventListener('click', closeDrawer);
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
-
-    // Delegación para abrir
-    grid.addEventListener('click', (e)=>{
-      const btn = e.target.closest('[data-open]');
-      if(!btn) return;
-      const id = btn.getAttribute('data-open');
-      const p = PROYECTOS.find(x=>x.id===id);
-      if(p) openDrawer(p);
-    });
-
-    // Render inicial
-    applyFilters();
   </script>
+
 </body>
 </html>
