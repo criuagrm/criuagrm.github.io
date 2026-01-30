@@ -1,11 +1,9 @@
----
----
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Repositorio de Datos — LABAP • CIRCPyCS</title>
+  <title>Datasets — Repositorio de Datos • CIRCPyCS</title>
   <meta name="description" content="Repositorio de datos abiertos: elecciones, geografía y política en Bolivia." />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,7 +14,6 @@
           fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"], mono: ["Fira Code", "monospace"] },
           colors: {
             'academic-slate': '#1e293b', 
-            'harvard-crimson': '#A51C30',
           }
         }
       }
@@ -27,42 +24,52 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
-    /* Estilo "Elite" limpio */
     .data-card { transition: all 0.2s ease; border: 1px solid #f1f5f9; }
     .data-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06); }
     .format-badge { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 4px; letter-spacing: 0.05em; }
-    
-    /* Scrollbar para el bloque de código */
     .code-block::-webkit-scrollbar { height: 6px; width: 6px; }
     .code-block::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    section[id] { scroll-margin-top: 100px; }
   </style>
 </head>
 <body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
 
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
+  <!-- Header Unificado -->
   <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-      <a href="../index.html" class="flex items-center gap-3 group">
+      <a href="index.html" class="flex items-center gap-3 group">
         <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
           <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
-          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP Dataverse</h1>
+          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS</h1>
         </div>
       </a>
+      
       <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-
-        <a href="../index.html" class="hover:text-black transition">Inicio</a>
+        <a href="dashboard.html" class="hover:text-black transition">Dashboard</a>
+        <a href="datasets.html" class="text-black font-bold border-b-2 border-black pb-1">Datasets</a>
+        <a href="proyectos.html" class="hover:text-black transition">Proyectos</a>
+        <a href="software.html" class="hover:text-black transition">Software</a>
+        <a href="index.html" class="hover:text-black transition">Inicio</a>
       </nav>
+      
       <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
     </div>
+    
     <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
         <div class="grid gap-3 text-sm">
-            <a href="../index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
+             <a href="dashboard.html" class="block py-2">Dashboard</a>
+            <a href="datasets.html" class="block py-2 font-bold">Datasets</a>
+            <a href="proyectos.html" class="block py-2">Proyectos</a>
+            <a href="software.html" class="block py-2">Software</a>
+            <a href="index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
         </div>
     </div>
   </header>
 
+  <!-- Hero Section -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-b border-slate-100">
     <div class="max-w-4xl">
         <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Repositorio de datos abiertos</span>
@@ -70,271 +77,305 @@
             Datos Abiertos para la Investigación Política.
         </h2>
         <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
-            Colección oficial de microdatos, archivos geoespaciales y series históricas. Incluye diccionarios de variables, scripts de extracción y estándares de interoperabilidad.
+            Colección oficial de microdatos, archivos geoespaciales y series históricas bajo estándares de interoperabilidad científica del CIRCPyCS.
         </p>
     </div>
   </div>
 
+  <!-- Barra de Filtros y Búsqueda -->
   <div class="sticky top-[73px] z-30 bg-white/95 border-b border-slate-200 backdrop-blur shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
             <div class="relative w-full sm:w-96">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                <input type="text" id="dataSearch" placeholder="Buscar dataset (ej: Python, Shapefile, 2026)..." 
+                <input type="text" id="dataSearch" placeholder="Buscar dataset (ej: Geografía, 1987, Candidatos)..." 
                     class="w-full pl-8 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm focus:ring-1 focus:ring-slate-400 focus:border-slate-400 outline-none transition placeholder:text-slate-400 font-sans">
             </div>
             <div class="flex gap-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest overflow-x-auto whitespace-nowrap">
                 <button class="hover:text-black transition" onclick="filterData('all')">Todos</button>
                 <button class="hover:text-emerald-600 transition" onclick="filterData('geo')">Geoespacial</button>
                 <button class="hover:text-blue-600 transition" onclick="filterData('tabular')">Tabular</button>
-                <button class="hover:text-purple-600 transition" onclick="filterData('code')">Scripts & Docs</button>
+                <button class="hover:text-purple-600 transition" onclick="filterData('hist')">Históricos</button>
             </div>
         </div>
     </div>
   </div>
 
+  <!-- Galería de Datasets -->
   <main class="bg-slate-50 min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="datasetGrid">
 
-        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-geo" data-search="limites geograficos santa cruz shapefile geojson mapa">
+        <!-- 1. Límite Departamental SCZ -->
+        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-geo" data-search="limite departamental santa cruz json geografia">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 rounded bg-emerald-50 flex items-center justify-center text-emerald-600 text-lg border border-emerald-100"><i class="fa-solid fa-map-location-dot"></i></div>
-                <span class="format-badge bg-emerald-50 text-emerald-700 border-emerald-100">GeoJSON</span>
+                <div class="w-10 h-10 rounded bg-emerald-50 flex items-center justify-center text-emerald-600 text-lg border border-emerald-100"><i class="fa-solid fa-earth-americas"></i></div>
+                <span class="format-badge bg-emerald-50 text-emerald-700 border-emerald-100">JSON</span>
             </div>
-            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Límites Geográficos SCZ</h3>
-            <div class="text-xs text-slate-400 mb-3 font-medium">CIRCPyCS Data Team • Geospatial</div>
+            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Límite Departamental SCZ</h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">CIRCPyCS Data Team • Cartografía</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
-                Archivo vectorial oficial con la delimitación de municipios y provincias. Incluye códigos INE y metadatos topológicos para mapeo en R/QGIS.
+                Contorno oficial del departamento de Santa Cruz en formato JSON. Ideal para visualizaciones de alto nivel y capas base de mapas.
             </p>
             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                <span class="text-xs text-slate-400 font-medium">2.4 MB</span>
-                <button onclick="openModal('download', 'Límites Geográficos SCZ', 'datasets/limites_scz.json', 'CIRCPyCS (2025). Límites SCZ [Data set].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                <span class="text-xs text-slate-400 font-medium">Geo-Data</span>
+                <button onclick="openModal('download', 'Límite Departamental SCZ', 'https://drive.google.com/file/d/1I912YEOtqE6Ddj0B7ssEMuo6z71Eq6vF/view?usp=sharing', 'CIRCPyCS (2025). Límite Departamental Santa Cruz [JSON].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
                     Acceder <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
-        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-tabular" data-search="candidatos elecciones 2026 autonomicas lista csv">
+        <!-- 2. Municipios de Santa Cruz -->
+        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-geo" data-search="municipios santa cruz json division politica">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 rounded bg-sky-50 flex items-center justify-center text-sky-600 text-lg border border-sky-100"><i class="fa-solid fa-users-viewfinder"></i></div>
+                <div class="w-10 h-10 rounded bg-emerald-50 flex items-center justify-center text-emerald-600 text-lg border border-emerald-100"><i class="fa-solid fa-map"></i></div>
+                <span class="format-badge bg-emerald-50 text-emerald-700 border-emerald-100">JSON</span>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Municipios de Santa Cruz</h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">CIRCPyCS Data Team • Cartografía</div>
+            <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
+                División política municipal completa del departamento de Santa Cruz. Incluye polígonos y nombres oficiales de los municipios.
+            </p>
+            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
+                <span class="text-xs text-slate-400 font-medium">Geo-Data</span>
+                <button onclick="openModal('download', 'Municipios de Santa Cruz', 'https://drive.google.com/file/d/12vxnDQ-aLB6E9SUrUendj71oKQDX_pit/view?usp=sharing', 'CIRCPyCS (2025). Municipios del Departamento de Santa Cruz [JSON].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                    Acceder <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. Candidatos Habilitados OEP -->
+        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-tabular" data-search="candidatos habilitados alcaldias gobernacion oep csv">
+            <div class="flex justify-between items-start mb-4">
+                <div class="w-10 h-10 rounded bg-sky-50 flex items-center justify-center text-sky-600 text-lg border border-sky-100"><i class="fa-solid fa-id-card"></i></div>
                 <span class="format-badge bg-sky-50 text-sky-700 border-sky-100">CSV</span>
             </div>
-            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Candidatos Habilitados 2026</h3>
-            <div class="text-xs text-slate-400 mb-3 font-medium">OEP / CIRCPyCS • Elections</div>
+            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Candidatos Habilitados OEP 2026</h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">OEP / CIRCPyCS • Elecciones</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
-                Base de datos tabular estructurada con la lista de candidatos a Gobernación, Asamblea y Alcaldías. Variables: Partido, Cargo, Estado.
+                Nómina oficial de candidatos habilitados para alcaldías y gobernación procesada por el Órgano Electoral Plurinacional.
             </p>
             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                <span class="text-xs text-slate-400 font-medium">UTF-8</span>
-                <button onclick="openModal('download', 'Nómina de Candidatos 2026', 'datasets/candidatos_2026.csv', 'OEP/CIRCPyCS (2026). Candidatos Habilitados [Data set].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                <span class="text-xs text-slate-400 font-medium">Tabular</span>
+                <button onclick="openModal('download', 'Candidatos Habilitados OEP', 'https://drive.google.com/file/d/11AzQy5ZlSHc8k6iwgAEN2oEpyHcrobRB/view?usp=sharing', 'OEP (2025). Candidatos habilitados para alcaldías y gobernación [CSV].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
                     Acceder <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
-        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-tabular" data-search="historico elecciones municipales santa cruz resultados 1987">
+        <!-- 4. Histórico Departamental (Gobernación) -->
+        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-hist" data-search="historico 2010 2015 2021 gobernacion asambleistas json">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 rounded bg-amber-50 flex items-center justify-center text-amber-600 text-lg border border-amber-100"><i class="fa-solid fa-folder-open"></i></div>
-                <span class="format-badge bg-amber-50 text-amber-700 border-amber-100">Folder</span>
+                <div class="w-10 h-10 rounded bg-purple-50 flex items-center justify-center text-purple-600 text-lg border border-purple-100"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <span class="format-badge bg-purple-50 text-purple-700 border-purple-100">JSON</span>
             </div>
-            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Resultados Históricos SCZ (1987-2026)</h3>
-            <div class="text-xs text-slate-400 mb-3 font-medium">LABAP Research • Time Series</div>
+            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Histórico Gobernación (2010-2021)</h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">CIRCPyCS • Series Históricas</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
-                Compendio de series temporales de votación por municipio. Carpeta comprimida con archivos anuales para análisis longitudinal.
+                Resultados históricos de elecciones para Gobernador y Asambleístas de las gestiones 2010, 2015 y 2021.
             </p>
             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                <span class="text-xs text-slate-400 font-medium">Restringido</span>
-                <button onclick="openModal('restricted', 'Resultados Históricos SCZ', '#', '')" class="text-xs font-bold text-amber-700 hover:text-amber-900 transition flex items-center gap-1">
-                    Solicitar <i class="fa-solid fa-lock"></i>
+                <span class="text-xs text-slate-400 font-medium">Series</span>
+                <button onclick="openModal('download', 'Histórico Gobernación', 'https://drive.google.com/file/d/186UHYH-2WIotCcu2-j5TZSYo_J_E8tXo/view?usp=sharing', 'CIRCPyCS (2025). Histórico Gobernación y Asambleístas 2010-2021 [JSON].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                    Acceder <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
-        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-code" data-search="python script api codigo descargar pandas">
+        <!-- 5. Histórico Municipal SCZ -->
+        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-hist" data-search="historico 1987 2021 elecciones municipales santa cruz json">
             <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-600 text-lg border border-slate-200"><i class="fa-brands fa-python"></i></div>
-                <span class="format-badge bg-slate-100 text-slate-700 border-slate-200">Python</span>
+                <div class="w-10 h-10 rounded bg-purple-50 flex items-center justify-center text-purple-600 text-lg border border-purple-100"><i class="fa-solid fa-landmark"></i></div>
+                <span class="format-badge bg-purple-50 text-purple-700 border-purple-100">JSON</span>
             </div>
-            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">LABAP Data Access Script</h3>
-            <div class="text-xs text-slate-400 mb-3 font-medium">Dev Tools • API Wrapper</div>
+            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Histórico Municipales SCZ (1987-2021)</h3>
+            <div class="text-xs text-slate-400 mb-3 font-medium">CIRCPyCS • Series Históricas</div>
             <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
-                Script en Python para descarga automatizada de datasets usando la librería Pandas. Ideal para reproducibilidad científica y pipelines de datos.
+                Compendio completo de resultados de elecciones municipales en el departamento de Santa Cruz desde 1987 hasta 2021.
             </p>
             <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                <span class="text-xs text-slate-400 font-medium">.py</span>
-                <button onclick="openModal('code', 'Script de Descarga Python', '', '')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
-                    Ver Código <i class="fa-solid fa-code"></i>
+                <span class="text-xs text-slate-400 font-medium">Series</span>
+                <button onclick="openModal('download', 'Histórico Municipales SCZ', 'https://drive.google.com/file/d/1aYMtbAmxdl7OkkUi4OcxAYLe9iRzgoLN/view?usp=sharing', 'CIRCPyCS (2025). Histórico Elecciones Municipales SCZ 1987-2021 [JSON].')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
+                    Acceder <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
 
-        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-code" data-search="diccionario variables codebook pdf metodologia">
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 rounded bg-indigo-50 flex items-center justify-center text-indigo-600 text-lg border border-indigo-100"><i class="fa-solid fa-book"></i></div>
-                <span class="format-badge bg-indigo-50 text-indigo-700 border-indigo-100">PDF</span>
-            </div>
-            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Diccionario de Variables Electorales</h3>
-            <div class="text-xs text-slate-400 mb-3 font-medium">Documentation • Codebook</div>
-            <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
-                Documentación técnica de los datasets. Definición de variables, códigos de partidos, estructura de las tablas y notas metodológicas.
-            </p>
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                <span class="text-xs text-slate-400 font-medium">1.2 MB</span>
-                <button onclick="openModal('download', 'Diccionario de Variables', 'docs/codebook_v1.pdf', 'LABAP (2025). Codebook V1.')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
-                    Leer <i class="fa-solid fa-file-pdf"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="data-card bg-white p-6 rounded-lg flex flex-col h-full type-tabular" data-search="nacional bolivia municipios general 339">
-            <div class="flex justify-between items-start mb-4">
-                <div class="w-10 h-10 rounded bg-rose-50 flex items-center justify-center text-rose-600 text-lg border border-rose-100"><i class="fa-solid fa-flag"></i></div>
-                <span class="format-badge bg-rose-50 text-rose-700 border-rose-100">National</span>
-            </div>
-            <h3 class="font-serif font-bold text-lg text-slate-900 mb-2 leading-tight">Consolidado Nacional: Municipales</h3>
-            <div class="text-xs text-slate-400 mb-3 font-medium">OEP • National Data</div>
-            <p class="text-sm text-slate-600 mb-6 flex-grow font-light leading-relaxed">
-                Agregado de resultados de los 339 municipios del país. Distribución de votos válidos, blancos y nulos por sigla política.
-            </p>
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
-                <span class="text-xs text-slate-400 font-medium">ZIP</span>
-                <button onclick="openModal('download', 'Consolidado Nacional Bolivia', '#', 'OEP (2025). National Dataset.')" class="text-xs font-bold text-blue-700 hover:text-blue-900 transition flex items-center gap-1">
-                    Descargar <i class="fa-solid fa-download"></i>
-                </button>
-            </div>
-        </div>
-
-      </div> </div>
+      </div>
+    </div>
   </main>
 
+  <!-- Modal -->
   <div id="dataModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
     <div class="flex min-h-full items-center justify-center p-4">
       <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all w-full max-w-2xl border border-slate-200">
-        
         <div class="bg-white px-6 py-4 border-b border-slate-100 flex justify-between items-center">
             <h3 class="text-lg font-serif font-bold text-slate-900" id="modalTitle">Título del Dataset</h3>
             <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-
-        <div class="px-6 py-6" id="modalBody">
-            </div>
-
+        <div class="px-6 py-6" id="modalBody"></div>
         <div class="bg-slate-50 px-6 py-4 flex justify-end gap-3 border-t border-slate-100" id="modalFooter">
             <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-200 transition">Cancelar</button>
-            <a href="#" id="modalActionBtn" class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-sm">Descargar</a>
+            <a href="#" id="modalActionBtn" target="_blank" class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-sm">Abrir en Google Drive</a>
         </div>
       </div>
     </div>
   </div>
 
-  {% include footer.html %}
+  <!-- Footer CALCADO del original -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Columna 1 -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+
+        <!-- Columna 2 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 3 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna 4 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            
+            <!-- YouTube -->
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+
+            <!-- Instagram -->
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+            </a>
+
+            <!-- X -->
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+            </a>
+            
+            <!-- GitHub -->
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    // --- LÓGICA DEL BUSCADOR ---
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('dataSearch');
-        const cards = document.querySelectorAll('.data-card');
-        
-        searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            cards.forEach(card => {
-                const keywords = card.getAttribute('data-search') || '';
-                const title = card.querySelector('h3').innerText.toLowerCase();
-                if (keywords.includes(term) || title.includes(term)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
+    // Año dinámico para el footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
 
-        // Toggle Menú Móvil
-        document.getElementById('btn-open').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+    // Buscador interactivo
+    document.getElementById('dataSearch').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.data-card').forEach(card => {
+            const searchStr = (card.getAttribute('data-search') || '') + card.querySelector('h3').innerText.toLowerCase();
+            card.style.display = searchStr.includes(term) ? 'flex' : 'none';
         });
     });
 
+    // Menú móvil
+    document.getElementById('btn-open').addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Filtros de categoría
     function filterData(type) {
-        const cards = document.querySelectorAll('.data-card');
-        cards.forEach(card => {
-            if (type === 'all') {
-                card.style.display = 'flex';
-            } else if (card.classList.contains('type-' + type)) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
-            }
+        document.querySelectorAll('.data-card').forEach(card => {
+            card.style.display = (type === 'all' || card.classList.contains('type-' + type)) ? 'flex' : 'none';
         });
     }
 
-    // --- LÓGICA DEL MODAL ---
+    // Lógica del Modal
     function openModal(type, title, link, citation) {
         const modal = document.getElementById('dataModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const actionBtn = document.getElementById('modalActionBtn');
-        const modalFooter = document.getElementById('modalFooter');
-
-        modalTitle.textContent = title;
+        const body = document.getElementById('modalBody');
+        const btn = document.getElementById('modalActionBtn');
+        document.getElementById('modalTitle').textContent = title;
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Bloquear scroll
+        document.body.style.overflow = 'hidden';
+        btn.style.display = 'inline-flex';
+        btn.href = link;
 
-        // Reset
-        actionBtn.style.display = 'inline-flex';
-        actionBtn.href = link;
-        
         if (type === 'download') {
-            modalBody.innerHTML = `
+            body.innerHTML = `
                 <div class="space-y-4">
-                    <p class="text-sm text-slate-600">Al descargar este conjunto de datos, aceptas citar la fuente en cualquier publicación derivada.</p>
+                    <p class="text-sm text-slate-600">Al acceder a este conjunto de datos, aceptas citar la fuente en tu investigación o publicación:</p>
                     <div class="bg-slate-50 p-4 rounded border border-slate-200">
                         <p class="text-xs text-slate-500 font-bold uppercase mb-2">Cita Sugerida (APA)</p>
                         <p class="text-sm font-mono text-slate-800 bg-white p-2 rounded border border-slate-100 select-all">${citation}</p>
                     </div>
-                </div>
-            `;
-            actionBtn.textContent = 'Aceptar y Descargar';
-            actionBtn.classList.remove('bg-amber-600', 'bg-slate-600');
-            actionBtn.classList.add('bg-blue-600');
-        
-        } else if (type === 'code') {
-            modalBody.innerHTML = `
-                <p class="text-sm text-slate-600 mb-3">Copia este script para integrar los datos directamente en tu notebook de Jupyter o script de análisis.</p>
-                <div class="bg-slate-900 rounded-lg p-4 overflow-x-auto code-block">
-                    <pre class="text-xs font-mono text-emerald-400">
-import pandas as pd
-import requests
-
-# URL del repositorio LABAP
-url = "https://cir.uagrm.edu.bo/labap/datasets/data.json"
-
-# Cargar datos
-try:
-    df = pd.read_json(url)
-    print(f"Dataset cargado: {df.shape[0]} filas.")
-    print(df.head())
-except Exception as e:
-    print(f"Error: {e}")
-                    </pre>
-                </div>
-            `;
-            actionBtn.style.display = 'none'; // No hay botón de acción, solo copiar
-        
-        } else if (type === 'restricted') {
-            modalBody.innerHTML = `
-                <div class="text-center py-4">
-                    <div class="inline-flex w-12 h-12 bg-amber-50 rounded-full items-center justify-center text-amber-600 mb-4 text-xl"><i class="fa-solid fa-lock"></i></div>
-                    <h4 class="text-lg font-bold text-slate-900">Acceso Restringido</h4>
-                    <p class="text-sm text-slate-600 mt-2 max-w-sm mx-auto">Este dataset contiene información sensible o preliminar. Debes solicitar autorización al coordinador del laboratorio.</p>
-                </div>
-            `;
-            actionBtn.textContent = 'Contactar Coordinador';
-            actionBtn.href = "mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo?subject=Solicitud Acceso Datos: " + title;
-            actionBtn.classList.remove('bg-blue-600');
-            actionBtn.classList.add('bg-amber-600', 'hover:bg-amber-700');
+                </div>`;
+            btn.textContent = 'Abrir en Google Drive';
         }
     }
 
@@ -342,12 +383,6 @@ except Exception as e:
         document.getElementById('dataModal').classList.add('hidden');
         document.body.style.overflow = '';
     }
-
-    // Cerrar con ESC
-    document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape') closeModal();
-    });
   </script>
-
 </body>
 </html>
