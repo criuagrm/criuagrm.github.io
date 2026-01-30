@@ -6,7 +6,6 @@
   <title>Monitor Estructural — LEPC</title>
   <meta name="description" content="Tablero de indicadores estructurales y simulaciones de crisis de la economía política boliviana." />
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -18,8 +17,8 @@
             mono: ["Fira Code", "monospace"]
           },
           colors: {
-            'paper-bg': '#f4f1ea',      
-            'ink-dark': '#2d3748',      
+            'paper-bg': '#f4f1ea',       
+            'ink-dark': '#2d3748',       
             'accent-red': '#9b2c2c',    
             'accent-teal': '#2c7a7b',
             'accent-gold': '#d69e2e',
@@ -30,12 +29,10 @@
       }
     }
   </script>
-  
-  <!-- Fonts & Icons -->
+   
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-  
-  <!-- Plotly (Librería de Gráficos) -->
+   
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 
   <style>
@@ -76,18 +73,17 @@
 </head>
 <body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
 
-  <!-- Top Bar -->
   <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
     Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS)
   </div>
 
-  <!-- Header -->
   <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
       <a href="index.html" class="flex flex-col leading-none group">
         <span class="font-serif font-black text-2xl text-stone-900 group-hover:text-accent-red transition">L.E.P.C.</span>
         <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500">Monitor Estructural</span>
       </a>
+      
       <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
         <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
         <a href="#" class="hover:text-accent-red transition">Proyectos</a>
@@ -95,14 +91,26 @@
         <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
         <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
       </nav>
-      <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
+
+      <button id="mobile-menu-btn" class="md:hidden text-stone-900 text-xl p-2 hover:bg-stone-200 rounded transition">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t border-stone-200 bg-[#f4f1ea]">
+      <nav class="flex flex-col p-6 gap-4 text-sm font-bold text-stone-600 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
+        <a href="#" class="hover:text-accent-red transition">Proyectos</a>
+        <a href="monitor.html" class="text-accent-red">Monitor</a>
+        <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
+        <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
+      </nav>
     </div>
   </header>
 
   <main class="flex-grow py-12 px-6">
     <div class="max-w-6xl mx-auto">
 
-        <!-- Intro Section -->
         <div class="mb-12 border-b border-stone-300 pb-8">
              <span class="text-accent-red font-bold text-xs uppercase tracking-widest mb-2 block">Dashboard Económico</span>
             <h1 class="font-serif font-black text-4xl sm:text-5xl text-stone-900 mb-4">
@@ -113,7 +121,6 @@
             </p>
         </div>
 
-        <!-- KPI Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
             <div class="kpi-card p-6 border-t-stone-400">
                 <div class="flex justify-between items-start mb-2">
@@ -152,10 +159,9 @@
             </div>
         </div>
 
-        <!-- Section 1: Macro Context -->
         <div class="mb-16">
             <div class="bg-white p-8 shadow-sm border border-stone-200">
-                <div class="flex justify-between items-end mb-6">
+                <div class="flex justify-between items-end mb-6 flex-wrap gap-4">
                     <div>
                         <h3 class="font-serif text-2xl italic text-stone-900">Distribución Funcional del Ingreso</h3>
                         <p class="text-sm text-stone-500 mt-1 font-light">
@@ -168,9 +174,8 @@
             </div>
         </div>
 
-        <!-- Section 2: Crisis Simulator (Macro) -->
         <div class="section-divider">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
                 <div>
                     <span class="text-accent-navy font-bold text-xs uppercase tracking-widest mb-2 block">
                         <i class="fa-solid fa-robot mr-2"></i>Modelo Macro-Estocástico
@@ -183,13 +188,12 @@
                         Evaluación de 29 estrategias de política económica bajo incertidumbre y restricciones estructurales (2025-2035).
                     </p>
                 </div>
-                <a href="https://arxiv.org/abs/2510.16537" target="_blank" class="mt-4 md:mt-0 text-xs font-bold uppercase tracking-widest text-accent-navy hover:bg-accent-navy hover:text-white border border-accent-navy px-4 py-2 transition">
+                <a href="https://arxiv.org/abs/2510.16537" target="_blank" class="text-xs font-bold uppercase tracking-widest text-accent-navy hover:bg-accent-navy hover:text-white border border-accent-navy px-4 py-2 transition whitespace-nowrap">
                     Ver Documento Técnico
                 </a>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
-                <!-- Chart: Trade-offs -->
                 <div class="bg-white p-6 shadow-lg border-t-4 border-accent-navy relative group">
                     <div class="absolute top-4 right-4 text-stone-300 group-hover:text-accent-navy transition">
                         <i class="fa-solid fa-arrows-to-dot fa-lg"></i>
@@ -204,7 +208,6 @@
                     </div>
                 </div>
 
-                <!-- Chart: Ranking -->
                 <div class="bg-white p-6 shadow-lg border-t-4 border-accent-gold relative group">
                     <div class="absolute top-4 right-4 text-stone-300 group-hover:text-accent-gold transition">
                          <i class="fa-solid fa-arrow-down-wide-short fa-lg"></i>
@@ -221,9 +224,8 @@
             </div>
         </div>
 
-        <!-- Section 3: SIMPOL (Micro) - NUEVA SECCIÓN -->
         <div class="section-divider">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
                 <div>
                     <span class="text-simpol-blue font-bold text-xs uppercase tracking-widest mb-2 block">
                         <i class="fa-solid fa-microchip mr-2"></i>Micro-Fundamentos Heterogéneos
@@ -245,7 +247,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Chart: Consumption Policy (HJB Output) -->
                 <div class="bg-white p-6 shadow-md border border-stone-200">
                     <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">1. Política Óptima (HJB)</h3>
                     <p class="text-xs text-stone-500 mb-4 font-mono">
@@ -257,7 +258,6 @@
                     </p>
                 </div>
 
-                <!-- Chart: Wealth Distribution (FPK Output) -->
                 <div class="bg-white p-6 shadow-md border border-stone-200">
                     <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">2. Distribución Estacionaria (FPK)</h3>
                     <p class="text-xs text-stone-500 mb-4 font-mono">
@@ -274,10 +274,9 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
+       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
         
         <div>
@@ -292,7 +291,7 @@
             © <span id="year"></span> Todos los derechos reservados.
           </p>
         </div>
-  
+   
         <div>
           <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
           <ul class="space-y-2 text-sm">
@@ -303,7 +302,7 @@
             <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
           </ul>
         </div>
-  
+   
         <div>
           <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
           <ul class="space-y-3 text-sm">
@@ -317,7 +316,7 @@
             </li>
           </ul>
         </div>
-  
+   
         <div>
           <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
           <div class="grid gap-3">
@@ -334,21 +333,21 @@
               </div>
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
             </a>
-  
+   
              <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
               <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
-                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
               </div>
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
             </a>
-  
+   
             <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
               <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
               </div>
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
             </a>
-            
+             
              <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
               <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -357,9 +356,9 @@
             </a>
           </div>
         </div>
-  
+   
       </div>
-      
+       
       <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
         <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
         <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
@@ -372,8 +371,19 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Año Dinámico
         const yearEl = document.getElementById('year');
         if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+        // Lógica del Menú Hamburguesa
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
 
         if (typeof Plotly === 'undefined') {
             return;
