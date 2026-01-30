@@ -1,7 +1,5 @@
----
----
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,228 +24,207 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
   <style>
-    .researcher-card { transition: all 0.3s ease; }
-    .researcher-card:hover { transform: translateY(-2px); }
-    .role-badge { font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid #e2e8f0; color: #475569; background: #f8fafc; }
+    .researcher-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid #f1f5f9; }
+    .researcher-card:hover { transform: translateY(-2px); border-color: #e2e8f0; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); }
+    section[id] { scroll-margin-top: 100px; }
   </style>
 </head>
 <body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
 
   <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
+  <!-- Header Unificado -->
   <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-      <a href="../index.html" class="flex items-center gap-3 group">
+      <a href="index.html" class="flex items-center gap-3 group">
         <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
         <div class="leading-tight">
           <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
-          <h1 class="font-serif font-bold text-lg text-slate-900">LABAP People</h1>
+          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS</h1>
         </div>
       </a>
+      
       <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-        <a href="index.html" class="hover:text-black transition">Dashboard</a>
-        <a href="proyectos.html" class="hover:text-black transition">Investigación</a>
-        <a href="software.html" class="hover:text-black transition">Toolkit</a>
-        <a href="data.html" class="hover:text-black transition">Datos</a>
-        <a href="#" class="text-black font-bold border-b-2 border-black pb-1">Equipo</a>
-        <a href="../index.html" class="hover:text-black transition">Inicio</a>
+        <a href="dashboard.html" class="hover:text-black transition">Dashboard</a>
+        <a href="datasets.html" class="hover:text-black transition">Datasets</a>
+        <a href="proyectos.html" class="hover:text-black transition">Proyectos</a>
+        <a href="software.html" class="hover:text-black transition">Software</a>
+        <a href="index.html" class="hover:text-black transition">Inicio</a>
       </nav>
+      
       <button id="btn-open" class="md:hidden text-slate-600"><i class="fa-solid fa-bars"></i></button>
+    </div>
+    
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
+        <div class="grid gap-3 text-sm">
+             <a href="dashboard.html" class="block py-2">Dashboard</a>
+            <a href="datasets.html" class="block py-2">Datasets</a>
+            <a href="proyectos.html" class="block py-2">Proyectos</a>
+            <a href="software.html" class="block py-2">Software</a>
+            <a href="index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
+        </div>
     </div>
   </header>
 
+  <!-- Hero Section Actualizada -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-slate-100">
     <div class="max-w-3xl">
-        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Faculty & Fellows</span>
+        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Comunidad Académica</span>
         <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
-            Comunidad Académica.
+            Investigadores y Fellows.
         </h2>
         <p class="text-lg text-slate-600 font-light leading-relaxed">
-            El LABAP reúne a politólogos, científicos de datos y sociólogos dedicados al estudio riguroso de la democracia boliviana. Nuestro equipo combina experiencia en métodos cuantitativos, teoría política y análisis espacial.
+            El LABAP reúne a un equipo multidisciplinar dedicado al estudio riguroso de la democracia boliviana, combinando experiencia en métodos cuantitativos, teoría política y análisis de datos.
         </p>
-    </div>
-  </div>
-
-  <div class="sticky top-[73px] z-30 bg-white/95 border-b border-slate-200 backdrop-blur shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div class="flex gap-6 text-[11px] font-bold text-slate-500 uppercase tracking-widest overflow-x-auto whitespace-nowrap">
-            <button class="hover:text-black text-black transition" onclick="filterRole('all')">Todos</button>
-            <button class="hover:text-blue-600 transition" onclick="filterRole('faculty')">Investigadores Asociados</button>
-            <button class="hover:text-emerald-600 transition" onclick="filterRole('fellow')">Estudiantes / Fellows</button>
-        </div>
     </div>
   </div>
 
   <main class="bg-slate-50 min-h-screen py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       
-      <section id="faculty-grid">
-        <h3 class="font-serif text-2xl font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">Investigadores Principales</h3>
+      <!-- Sección de Investigadores -->
+      <section id="investigadores">
+        <div class="flex items-center justify-between mb-10 pb-4 border-b border-slate-200">
+            <h3 class="font-serif text-2xl font-bold text-slate-900">Investigadores</h3>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">LABAP • Facultad de Ciencias Jurídicas</span>
+        </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-
-            <div class="researcher-card bg-white p-8 rounded-xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 role-faculty">
-                <div class="flex-shrink-0">
-                    <img src="https://ui-avatars.com/api/?name=Daniel+Hurtado&size=128&background=0f172a&color=fff" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-inner">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Maria Angelica Suarez -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-emerald-600 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Maria Angelica Suarez</h4>
                 </div>
-                <div>
-                    <h4 class="font-serif text-xl font-bold text-slate-900 mb-1">Daniel Hurtado Justiniano</h4>
-                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Investigador Asociado</p>
-                    <p class="text-sm text-slate-600 font-light leading-relaxed mb-4">
-                        Especialista en modelado computacional y simulación política. Su trabajo integra R, Python y sistemas complejos (NetLogo) para analizar comportamiento electoral y dinámicas institucionales.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 font-medium">
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Simulación</span>
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Data Science</span>
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">GIS</span>
-                    </div>
-                    <div class="mt-4 flex gap-4 text-slate-400">
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-orcid"></i></a>
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-google-scholar"></i></a>
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-solid fa-envelope"></i></a>
-                    </div>
-                </div>
+                <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest mb-3">Investigadora Principal</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Dirección estratégica y coordinación científica. Especialista en comportamiento electoral y democracia.</p>
             </div>
 
-            <div class="researcher-card bg-white p-8 rounded-xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 role-faculty">
-                <div class="flex-shrink-0">
-                    <img src="https://ui-avatars.com/api/?name=Jose+Peralta&size=128&background=0f172a&color=fff" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-inner">
+            <!-- Luis Andia -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-sky-600 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Luis Andia</h4>
                 </div>
-                <div>
-                    <h4 class="font-serif text-xl font-bold text-slate-900 mb-1">José Orlando Peralta</h4>
-                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Investigador Asociado</p>
-                    <p class="text-sm text-slate-600 font-light leading-relaxed mb-4">
-                        Politólogo enfocado en análisis institucional comparado y economía política. Investiga la calidad de la democracia, gobernanza regional y procesos de reforma del Estado.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 font-medium">
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Instituciones</span>
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Política Comparada</span>
-                    </div>
-                    <div class="mt-4 flex gap-4 text-slate-400">
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-orcid"></i></a>
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-twitter"></i></a>
-                    </div>
-                </div>
+                <p class="text-[10px] font-bold text-sky-700 uppercase tracking-widest mb-3">Investigador Senior</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Análisis político estratégico de alto nivel y prospectiva institucional boliviana.</p>
             </div>
 
-            <div class="researcher-card bg-white p-8 rounded-xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 role-faculty">
-                <div class="flex-shrink-0">
-                    <img src="https://ui-avatars.com/api/?name=Carlos+Escobar&size=128&background=0f172a&color=fff" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-inner">
+            <!-- Daniel Hurtado -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Daniel Hurtado Justiniano</h4>
                 </div>
-                <div>
-                    <h4 class="font-serif text-xl font-bold text-slate-900 mb-1">Carlos Jr Escobar</h4>
-                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Investigador Asociado</p>
-                    <p class="text-sm text-slate-600 font-light leading-relaxed mb-4">
-                        Experto en Network Science y análisis de grafos políticos. Utiliza Python y Gephi para mapear estructuras de poder, élites y coaliciones en el sistema político boliviano.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 font-medium">
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">SNA</span>
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Python</span>
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Elites</span>
-                    </div>
-                    <div class="mt-4 flex gap-4 text-slate-400">
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-github"></i></a>
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-solid fa-envelope"></i></a>
-                    </div>
-                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigador Asociado</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Modelado computacional, simulación de sistemas complejos y ciencia de datos política.</p>
             </div>
 
-            <div class="researcher-card bg-white p-8 rounded-xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 role-faculty">
-                <div class="flex-shrink-0">
-                    <img src="https://ui-avatars.com/api/?name=Yessenia+Pedraza&size=128&background=0f172a&color=fff" class="w-24 h-24 rounded-full object-cover border-2 border-slate-100 shadow-inner">
+            <!-- Jose Orlando -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">José Orlando Peralta</h4>
                 </div>
-                <div>
-                    <h4 class="font-serif text-xl font-bold text-slate-900 mb-1">Yessenia Pedraza Surano</h4>
-                    <p class="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-3">Investigadora Asociada</p>
-                    <p class="text-sm text-slate-600 font-light leading-relaxed mb-4">
-                        Analista cuantitativa especializada en procesamiento de datos electorales y estudios de opinión pública. Aplica técnicas estadísticas para entender tendencias de voto y participación.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-xs text-slate-500 font-medium">
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Electoral</span>
-                        <span class="bg-slate-50 px-2 py-1 rounded border border-slate-100">Estadística</span>
-                    </div>
-                    <div class="mt-4 flex gap-4 text-slate-400">
-                        <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-linkedin"></i></a>
-                    </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigador Asociado</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Análisis institucional comparado, calidad de la democracia y gobernanza regional.</p>
+            </div>
+
+            <!-- Carlos Escobar -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Carlos Jr. Escobar</h4>
                 </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigador Asociado</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Network Science y análisis de grafos en estructuras de poder político.</p>
+            </div>
+
+            <!-- Yessenia Pedraza -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Yessenia Pedraza Surano</h4>
+                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigadora Asociada</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Analista cuantitativa especializada en procesamiento de microdatos y opinión pública.</p>
+            </div>
+
+            <!-- Natalia Banzer -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Natalia Banzer</h4>
+                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigadora Asociada</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Seguimiento de coyuntura política y análisis cualitativo de actores regionales.</p>
+            </div>
+
+            <!-- Josue Perez -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Josué Pérez Yslas</h4>
+                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigador Asociado</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Especialista en administración pública e investigación de procesos institucionales.</p>
+            </div>
+
+            <!-- Tito Daza -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Tito Daza Cazón</h4>
+                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigador Asociado</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Experticia en sistemas electorales, geografía política y normativa electoral.</p>
+            </div>
+
+            <!-- Aneth Flores -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Aneth Flores Romero</h4>
+                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigadora Asociada</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Investigación en cultura política, género y participación ciudadana.</p>
+            </div>
+
+            <!-- Maicol Acosta -->
+            <div class="researcher-card bg-white p-6 rounded-lg flex flex-col">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-1.5 h-5 bg-slate-300 rounded-full"></div>
+                    <h4 class="font-serif font-bold text-slate-900 text-lg leading-tight">Maicol Acosta</h4>
+                </div>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Investigador Asociado</p>
+                <p class="text-xs text-slate-600 font-light leading-relaxed">Análisis de indicadores de desarrollo y visualización de datos de coyuntura.</p>
             </div>
 
         </div>
       </section>
 
-      <section id="fellows-grid">
-        <h3 class="font-serif text-2xl font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">Research Fellows & Estudiantes</h3>
+      <!-- Sección de Estudiantes -->
+      <section id="fellows">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
+            <h3 class="font-serif text-2xl font-bold text-slate-900">Investigadores en Formación</h3>
+        </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E1</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 01</h5>
-                <p class="text-xs text-slate-500 mt-1">Ciencia Política</p>
-                <span class="role-badge mt-2 inline-block">Análisis</span>
+            <div class="bg-white p-5 rounded-lg border border-slate-100 hover:shadow-sm transition">
+                <h5 class="font-bold text-sm text-slate-900">Mariano Ramos Claure</h5>
+                <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Estudiante Investigador Avanzado</p>
             </div>
 
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E2</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 02</h5>
-                <p class="text-xs text-slate-500 mt-1">Derecho</p>
-                <span class="role-badge mt-2 inline-block">Legislación</span>
+            <div class="bg-white p-5 rounded-lg border border-slate-100 hover:shadow-sm transition">
+                <h5 class="font-bold text-sm text-slate-900">Yhelsi Torrico Mendoza</h5>
+                <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Estudiante Investigadora</p>
             </div>
 
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E3</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 03</h5>
-                <p class="text-xs text-slate-500 mt-1">Ciencia Política</p>
-                <span class="role-badge mt-2 inline-block">Sistemas</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E4</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 04</h5>
-                <p class="text-xs text-slate-500 mt-1">Sociología</p>
-                <span class="role-badge mt-2 inline-block">Cualitativo</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E5</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 05</h5>
-                <p class="text-xs text-slate-500 mt-1">Economía</p>
-                <span class="role-badge mt-2 inline-block">Datos</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E6</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 06</h5>
-                <p class="text-xs text-slate-500 mt-1">Ciencia Política</p>
-                <span class="role-badge mt-2 inline-block">Género</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E7</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 07</h5>
-                <p class="text-xs text-slate-500 mt-1">Relaciones Int.</p>
-                <span class="role-badge mt-2 inline-block">Geopolítica</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E8</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 08</h5>
-                <p class="text-xs text-slate-500 mt-1">Ciencia Política</p>
-                <span class="role-badge mt-2 inline-block">Campañas</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E9</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 09</h5>
-                <p class="text-xs text-slate-500 mt-1">Gestión Pública</p>
-                <span class="role-badge mt-2 inline-block">Innovación</span>
-            </div>
-
-            <div class="bg-white p-4 rounded-lg border border-slate-100 hover:shadow-md transition text-center role-fellow">
-                <div class="w-12 h-12 rounded-full bg-slate-100 mx-auto mb-3 flex items-center justify-center text-slate-400 font-bold text-lg">E10</div>
-                <h5 class="font-bold text-sm text-slate-900">Estudiante 10</h5>
-                <p class="text-xs text-slate-500 mt-1">Derecho</p>
-                <span class="role-badge mt-2 inline-block">Constitucional</span>
+            <div class="bg-white p-5 rounded-lg border border-slate-100 hover:shadow-sm transition">
+                <h5 class="font-bold text-sm text-slate-900">Jorge Pinto Salvatierra</h5>
+                <p class="text-[10px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Estudiante Investigador</p>
             </div>
 
         </div>
@@ -256,33 +233,110 @@
     </div>
   </main>
 
-  {% include footer.html %}
+  <!-- Footer CALCADO del original -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Columna 1 -->
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+
+        <!-- Columna 2 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna 3 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna 4 -->
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+            </a>
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+            </a>
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
+              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    function filterRole(role) {
-        // Toggle de clases de botones para estado activo (visual simple)
-        // ... (se puede añadir lógica visual aquí)
+    // Año dinámico
+    if(document.getElementById('year')) document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Lógica de filtrado
-        const facultySection = document.getElementById('faculty-grid');
-        const fellowsSection = document.getElementById('fellows-grid');
-
-        if (role === 'all') {
-            facultySection.style.display = 'block';
-            fellowsSection.style.display = 'block';
-        } else if (role === 'faculty') {
-            facultySection.style.display = 'block';
-            fellowsSection.style.display = 'none';
-        } else if (role === 'fellow') {
-            facultySection.style.display = 'none';
-            fellowsSection.style.display = 'block';
-        }
-    }
-
-    // Menú móvil simple
+    // Menú móvil
     const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
     btnOpen.addEventListener('click', () => {
-        alert('Navegación móvil simplificada habilitada.');
+        mobileMenu.classList.toggle('hidden');
     });
   </script>
 
