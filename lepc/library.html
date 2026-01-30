@@ -84,17 +84,18 @@
       
       <!-- Mobile Menu Button -->
       <button id="mobile-menu-btn" class="md:hidden text-stone-900 text-xl focus:outline-none">
-        <i class="fa-solid fa-bars"></i>
+        <i id="mobile-menu-icon" class="fa-solid fa-bars"></i>
       </button>
     </div>
 
     <!-- Mobile Nav (Hidden by default) -->
-    <div id="mobile-menu" class="hidden md:hidden bg-paper-bg border-t border-stone-200 shadow-lg absolute w-full z-50">
-        <nav class="flex flex-col p-6 gap-4 text-sm font-bold text-stone-600 uppercase tracking-wide">
-            <a href="index.html" class="hover:text-accent-red">Inicio</a>
-            <a href="monitor.html" class="hover:text-accent-red">Monitor</a>
-            <a href="analysis.html" class="hover:text-accent-red">Análisis</a>
-            <a href="library.html" class="text-accent-red">Biblioteca</a>
+    <div id="mobile-menu" class="hidden md:hidden bg-paper-bg border-t border-stone-200 shadow-lg absolute w-full z-50 left-0">
+        <nav class="flex flex-col p-6 gap-4 text-sm font-bold text-stone-600 uppercase tracking-wide text-center">
+            <a href="index.html" class="hover:text-accent-red py-2 border-b border-stone-100">Inicio</a>
+            <a href="#" class="hover:text-accent-red py-2 border-b border-stone-100">Proyectos</a>
+            <a href="monitor.html" class="hover:text-accent-red py-2 border-b border-stone-100">Monitor</a>
+            <a href="analysis.html" class="hover:text-accent-red py-2 border-b border-stone-100">Análisis</a>
+            <a href="library.html" class="text-accent-red py-2">Biblioteca</a>
         </nav>
     </div>
   </header>
@@ -233,7 +234,7 @@
                 <span class="text-xs font-serif text-stone-400 italic">Open Book Publishers • 2022</span>
             </div>
             <h3 class="font-serif text-2xl font-bold text-stone-900 leading-tight mb-3 group-hover:text-red-900 transition">
-                Allocation, Distribution, and Policy
+                Microeconomics: Competition, Conflict, and Coordination
             </h3>
             <p class="text-stone-600 font-light mb-4 leading-relaxed text-sm">
                 La microeconomía se ha transformado en las últimas décadas por el uso creciente de la teoría de juegos, la economía del comportamiento, el modelado evolutivo y la atención a la información asimétrica. Esta obra ofrece un enfoque basado en problemas para entender la distribución del ingreso, la competencia limitada y temas de política pública como el cambio climático.
@@ -340,13 +341,29 @@
   </footer>
 
   <script>
-    // Mobile Menu Toggle
+    // Año dinámico para el footer (script auto-contenido)
+    const yearEl = document.getElementById('year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // Mobile Menu Toggle Logic
     const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
 
-    btn.addEventListener('click', () => {
-        menu.classList.toggle('hidden');
-    });
+    if (btn && menu && icon) {
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            
+            // Toggle icon classes for better feedback
+            if (menu.classList.contains('hidden')) {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            }
+        });
+    }
 
     // Buscador
     const searchInput = document.getElementById('libSearch');
@@ -366,8 +383,8 @@
         });
     }
 
-    searchInput.addEventListener('input', filterItems);
-    filterSelect.addEventListener('change', filterItems);
+    if(searchInput) searchInput.addEventListener('input', filterItems);
+    if(filterSelect) filterSelect.addEventListener('change', filterItems);
 
     // Modal
     function openModal(type, citation) {
@@ -382,9 +399,6 @@
     }
     
     document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
-    
-    // Año footer
-    if(document.getElementById('year')) document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
 </body>
