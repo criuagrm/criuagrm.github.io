@@ -1,19 +1,68 @@
----
----
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Análisis Heterodoxo — LEPC</title>
+  <meta name="description" content="Investigación crítica y metaanálisis sobre economía política y constitucional en Bolivia." />
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = { theme: { extend: { fontFamily: { sans: ["Lato"], serif: ["Playfair Display"] }, colors: { 'paper-bg': '#f4f1ea', 'ink-dark': '#2d3748', 'accent-red': '#9b2c2c', 'accent-gold': '#d69e2e' } } } }
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Lato", "sans-serif"], 
+            serif: ["Playfair Display", "serif"],
+            mono: ["Fira Code", "monospace"]
+          },
+          colors: {
+            'paper-bg': '#f4f1ea',      
+            'ink-dark': '#2d3748',      
+            'accent-red': '#9b2c2c',    
+            'accent-teal': '#2c7a7b',
+            'accent-gold': '#d69e2e',
+            'accent-navy': '#1a365d'
+          }
+        }
+      }
+    }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-</head>
-<body class="bg-paper-bg text-ink-dark font-sans">
 
+  <style>
+    body { background-color: #f4f1ea; }
+    
+    /* Estilos para el desplegable de Abstract */
+    details > summary {
+      list-style: none;
+      cursor: pointer;
+    }
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+    details[open] summary ~ * {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-5px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- Top Bar -->
+  <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
+    Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS)
+  </div>
+
+  <!-- Header -->
   <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
       <a href="index.html" class="flex flex-col leading-none group">
@@ -22,80 +71,256 @@
       </a>
       <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
         <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
+        <a href="#" class="hover:text-accent-red transition">Proyectos</a>
         <a href="monitor.html" class="hover:text-accent-red transition">Monitor</a>
-        <a href="#" class="text-accent-red border-b-2 border-accent-red">Análisis</a>
+        <a href="analysis.html" class="text-accent-red border-b-2 border-accent-red">Análisis</a>
         <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
       </nav>
       <button class="md:hidden text-stone-900"><i class="fa-solid fa-bars"></i></button>
     </div>
   </header>
 
-  <div class="max-w-4xl mx-auto px-6 py-16">
-    
-    <div class="mb-12 text-center">
-        <h1 class="font-serif text-4xl font-bold text-stone-900 mb-4">Investigación & Metaanálisis</h1>
-        <p class="text-lg text-stone-600 font-light italic">Deconstruyendo los mitos neoclásicos en la interpretación constitucional boliviana.</p>
-        <div class="w-16 h-1 bg-stone-800 mx-auto mt-6"></div>
+  <main class="flex-grow">
+    <!-- Contenido Principal -->
+    <div class="max-w-4xl mx-auto px-6 py-16">
+      
+      <div class="mb-16 text-center">
+          <span class="text-accent-navy font-bold text-xs uppercase tracking-widest mb-3 block">Serie de Documentos de Trabajo</span>
+          <h1 class="font-serif font-black text-4xl sm:text-5xl text-stone-900 mb-6">Investigación & Metaanálisis</h1>
+          <p class="text-lg text-stone-600 font-light italic max-w-2xl mx-auto">"Consolidando la evidencia empírica para el debate de políticas públicas."</p>
+          <div class="w-16 h-1 bg-accent-red mx-auto mt-8"></div>
+      </div>
+
+      <div class="space-y-12">
+
+          <!-- Artículo 1: Austeridad (arXiv:2510.10449) -->
+          <article class="group bg-white p-8 shadow-sm border border-stone-200 hover:shadow-md transition duration-300">
+              <div class="flex justify-between items-start mb-4">
+                  <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500">
+                      <span class="text-accent-red bg-red-50 px-2 py-1 rounded-sm">Economía Política</span>
+                      <span>•</span>
+                      <span>Working Paper #28</span>
+                  </div>
+                  <span class="text-[10px] bg-stone-100 text-stone-500 px-2 py-1 rounded border border-stone-200 font-mono">Preprint</span>
+              </div>
+              
+              <h2 class="font-serif text-2xl font-bold text-stone-900 mb-4 leading-tight">
+                  <a href="https://arxiv.org/abs/2510.10449" target="_blank" class="group-hover:text-accent-red transition">
+                      ¿Austeridad en Crisis? Una Revisión Narrativa de sus Efectos Económicos y Sociales
+                  </a>
+              </h2>
+
+              <details class="group/details mb-6">
+                  <summary class="text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-800 transition flex items-center gap-2 select-none">
+                      <i class="fa-solid fa-chevron-right text-[10px] group-open/details:rotate-90 transition-transform"></i>
+                      Ver Resumen Ejecutivo
+                  </summary>
+                  <div class="pt-4 pl-4 border-l-2 border-stone-100 mt-2">
+                      <p class="text-stone-700 leading-relaxed font-light text-sm italic mb-3">
+                          La crisis financiera global de 2008 marcó el inicio de una década dominada por políticas de austeridad fiscal en gran parte del mundo desarrollado. Este documento presenta una revisión narrativa cualitativa de una extensa colección de literatura académica para sintetizar la evidencia sobre los efectos multifacéticos de la austeridad. Siguiendo un enfoque temático inspirado en las directrices PRISMA, se examinan las consecuencias económicas, sociales y políticas. El análisis revela un consenso mayoritario sobre los efectos recesivos de la austeridad (multiplicadores fiscales negativos que exacerban la contracción del PIB), el aumento de la desigualdad, impactos negativos en la salud pública y el debilitamiento de las redes de seguridad social. Políticamente, la evidencia vincula la austeridad con la erosión de la confianza en las instituciones y el auge del populismo.
+                      </p>
+                      <div class="flex flex-wrap gap-2">
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#Austeridad</span>
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#MultiplicadoresFiscales</span>
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#Populismo</span>
+                      </div>
+                  </div>
+              </details>
+
+              <div class="flex items-center gap-4 pt-4 border-t border-stone-100">
+                  <a href="https://arxiv.org/abs/2510.10449" target="_blank" class="text-xs font-bold uppercase tracking-widest text-stone-900 hover:underline">
+                      <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Ver Documento
+                  </a>
+              </div>
+          </article>
+
+          <!-- Artículo 2: FMI (arXiv:2511.08617) -->
+          <article class="group bg-white p-8 shadow-sm border border-stone-200 hover:shadow-md transition duration-300">
+              <div class="flex justify-between items-start mb-4">
+                  <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500">
+                      <span class="text-accent-teal bg-teal-50 px-2 py-1 rounded-sm">Desarrollo Internacional</span>
+                      <span>•</span>
+                      <span>Working Paper #29</span>
+                  </div>
+                  <span class="text-[10px] bg-stone-100 text-stone-500 px-2 py-1 rounded border border-stone-200 font-mono">Preprint</span>
+              </div>
+
+              <h2 class="font-serif text-2xl font-bold text-stone-900 mb-4 leading-tight">
+                  <a href="https://ui.adsabs.harvard.edu/abs/2025arXiv251108617A/abstract" target="_blank" class="group-hover:text-accent-teal transition">
+                      Efectos Sociales de los Programas del FMI: Una Revisión Sistemática
+                  </a>
+              </h2>
+
+              <details class="group/details mb-6">
+                  <summary class="text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-800 transition flex items-center gap-2 select-none">
+                      <i class="fa-solid fa-chevron-right text-[10px] group-open/details:rotate-90 transition-transform"></i>
+                      Ver Resumen Ejecutivo
+                  </summary>
+                  <div class="pt-4 pl-4 border-l-2 border-stone-100 mt-2">
+                      <p class="text-stone-700 leading-relaxed font-light text-sm italic mb-3">
+                          Esta revisión sistemática con síntesis narrativa examina los impactos sociales de los programas del FMI. Incluyendo 53 estudios empíricos bajo directrices PRISMA, evaluamos el riesgo de sesgo y la endogeneidad. Encontramos que una minoría de estudios reporta efectos no adversos. En contraste, un gran cuerpo de trabajo utilizando diseños cuasi-experimentales robustos vincula la condicionalidad del FMI a una mayor desigualdad de ingresos, peores resultados de salud (notablemente tuberculosis y mortalidad infantil) y el crecimiento de la economía informal. La mejor evidencia disponible indica que los programas centrados en austeridad imponen costos sociales significativos, sugiriendo la necesidad de rediseñar la condicionalidad para proteger el gasto social.
+                      </p>
+                      <div class="flex flex-wrap gap-2">
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#FMI</span>
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#SaludPública</span>
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#EconomíaInformal</span>
+                      </div>
+                  </div>
+              </details>
+
+              <div class="flex items-center gap-4 pt-4 border-t border-stone-100">
+                  <a href="https://ui.adsabs.harvard.edu/abs/2025arXiv251108617A/abstract" target="_blank" class="text-xs font-bold uppercase tracking-widest text-stone-900 hover:underline">
+                      <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Ver Documento
+                  </a>
+              </div>
+          </article>
+
+          <!-- Artículo 3: Carbon Pricing (arXiv:2512.06887) -->
+          <article class="group bg-white p-8 shadow-sm border border-stone-200 hover:shadow-md transition duration-300">
+              <div class="flex justify-between items-start mb-4">
+                  <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500">
+                      <span class="text-accent-gold bg-yellow-50 px-2 py-1 rounded-sm">Economía Ambiental</span>
+                      <span>•</span>
+                      <span>Working Paper #30</span>
+                  </div>
+                  <span class="text-[10px] bg-stone-100 text-stone-500 px-2 py-1 rounded border border-stone-200 font-mono">Preprint</span>
+              </div>
+
+              <h2 class="font-serif text-2xl font-bold text-stone-900 mb-4 leading-tight">
+                  <a href="https://arxiv.org/abs/2512.06887" target="_blank" class="group-hover:text-accent-gold transition">
+                      Efectividad de los Precios del Carbono y Compensaciones: Una "Umbrella Review"
+                  </a>
+              </h2>
+
+              <details class="group/details mb-6">
+                  <summary class="text-xs font-bold uppercase tracking-widest text-stone-500 hover:text-stone-800 transition flex items-center gap-2 select-none">
+                      <i class="fa-solid fa-chevron-right text-[10px] group-open/details:rotate-90 transition-transform"></i>
+                      Ver Resumen Ejecutivo
+                  </summary>
+                  <div class="pt-4 pl-4 border-l-2 border-stone-100 mt-2">
+                      <p class="text-stone-700 leading-relaxed font-light text-sm italic mb-3">
+                          La creciente urgencia de la crisis climática ha impulsado diversos instrumentos de política (impuestos al carbono, ETS, mercados voluntarios). Este documento presenta una "umbrella review" de la evidencia empírica, sintetizando hallazgos de revisiones sistemáticas y meta-análisis (metodología PRISMA/AMSTAR-2). Los resultados indican que los impuestos al carbono y ETS han demostrado una efectividad moderada en la reducción de emisiones, aunque limitada por problemas de diseño. Por el contrario, los mercados de compensación (especialmente VCM y REDD+) enfrentan críticas sistémicas sobre su integridad (adicionalidad, fugas, doble conteo), llevando a una sobreestimación generalizada de su impacto. Se concluye que los mecanismos voluntarios actuales no representan una solución climática fiable sin una reforma fundamental.
+                      </p>
+                      <div class="flex flex-wrap gap-2">
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#CambioClimático</span>
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#MercadosVoluntarios</span>
+                          <span class="text-[10px] font-mono bg-stone-50 text-stone-500 px-2 py-1 border border-stone-200">#IntegridadClimática</span>
+                      </div>
+                  </div>
+              </details>
+
+              <div class="flex items-center gap-4 pt-4 border-t border-stone-100">
+                  <a href="https://arxiv.org/abs/2512.06887" target="_blank" class="text-xs font-bold uppercase tracking-widest text-stone-900 hover:underline">
+                      <i class="fa-solid fa-arrow-up-right-from-square mr-1"></i> Ver Documento
+                  </a>
+              </div>
+          </article>
+
+      </div>
     </div>
+  </main>
 
-    <div class="space-y-16">
-
-        <article class="group">
-            <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">
-                <span class="text-accent-red">Economía Institucional</span>
-                <span>•</span>
-                <span>Working Paper #24</span>
-            </div>
-            <h2 class="font-serif text-2xl font-bold text-stone-900 mb-4 group-hover:text-accent-red cursor-pointer transition">
-                Instituciones Extractivas y la "Maldición" Constitucional
-            </h2>
-            <p class="text-stone-700 leading-relaxed mb-4 font-light">
-                Un metaanálisis de 50 estudios sobre la Ley de Hidrocarburos y la Constitución. Argumentamos que la centralización de la renta no es un error técnico, sino una característica de diseño para el mantenimiento de coaliciones políticas clientelares y la reproducción de la dependencia.
-            </p>
-            <div class="flex items-center gap-6 pt-4 border-t border-stone-300">
-                <a href="#" class="text-sm font-bold text-stone-900 hover:underline">Leer Abstract</a>
-                <a href="#" class="text-sm text-stone-500 hover:text-accent-red uppercase tracking-wide font-bold"><i class="fa-solid fa-file-pdf mr-1"></i> PDF</a>
-            </div>
-        </article>
-
-        <article class="group">
-            <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">
-                <span class="text-accent-teal">Post-Keynesianismo</span>
-                <span>•</span>
-                <span>En Revisión</span>
-            </div>
-            <h2 class="font-serif text-2xl font-bold text-stone-900 mb-4 group-hover:text-accent-teal cursor-pointer transition">
-                Dinero Endógeno y Restricción Externa en Bolivia
-            </h2>
-            <p class="text-stone-700 leading-relaxed mb-4 font-light">
-                Desafiando la visión monetarista de la inflación. Análisis de balance de pagos y cómo la estructura productiva desequilibrada (no la emisión monetaria per se) define los límites del crecimiento. Crítica a la austeridad constitucionalizada.
-            </p>
-            <div class="flex items-center gap-6 pt-4 border-t border-stone-300">
-                <a href="#" class="text-sm font-bold text-stone-900 hover:underline">Ver Datos</a>
-                <a href="#" class="text-sm text-stone-500 hover:text-accent-teal uppercase tracking-wide font-bold"><i class="fa-solid fa-download mr-1"></i> Borrador</a>
-            </div>
-        </article>
-
-        <article class="group">
-            <div class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">
-                <span class="text-accent-gold">Law & Political Economy</span>
-                <span>•</span>
-                <span>Publicado</span>
-            </div>
-            <h2 class="font-serif text-2xl font-bold text-stone-900 mb-4 group-hover:text-accent-gold cursor-pointer transition">
-                La Propiedad Privada como Relación Social de Poder
-            </h2>
-            <p class="text-stone-700 leading-relaxed mb-4 font-light">
-                Más allá de la "seguridad jurídica" abstracta. Análisis empírico sobre cómo la titulación de tierras en el Oriente ha servido para consolidar élites agrarias rentistas en lugar de democratizar el capital productivo.
-            </p>
-            <div class="flex items-center gap-6 pt-4 border-t border-stone-300">
-                <a href="#" class="text-sm font-bold text-stone-900 hover:underline">Leer Artículo</a>
-            </div>
-        </article>
-
+  <!-- Footer -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+  
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+  
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+  
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+  
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+            </a>
+  
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+            </a>
+            
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+            </a>
+          </div>
+        </div>
+  
+      </div>
+      
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        </div>
+      </div>
     </div>
-  </div>
+  </footer>
 
-  {% include footer.html %}
+  <script>
+    // Año dinámico para el footer (script auto-contenido)
+    const yearEl = document.getElementById('year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+  </script>
+
 </body>
 </html>
