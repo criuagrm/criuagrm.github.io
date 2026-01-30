@@ -1,26 +1,87 @@
----
----
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Monitor Estructural — LEPC</title>
+  <meta name="description" content="Tablero de indicadores estructurales y simulaciones de crisis de la economía política boliviana." />
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Lato", "sans-serif"], serif: ["Playfair Display", "serif"] },
-          colors: { 'paper-bg': '#f4f1ea', 'ink-dark': '#2d3748', 'accent-red': '#9b2c2c', 'accent-teal': '#2c7a7b' }
+          fontFamily: { 
+            sans: ["Lato", "sans-serif"], 
+            serif: ["Playfair Display", "serif"],
+            mono: ["Fira Code", "monospace"]
+          },
+          colors: {
+            'paper-bg': '#f4f1ea',      
+            'ink-dark': '#2d3748',      
+            'accent-red': '#9b2c2c',    
+            'accent-teal': '#2c7a7b',
+            'accent-gold': '#d69e2e',
+            'accent-navy': '#1a365d',
+            'simpol-blue': '#3182ce'
+          }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
-</head>
-<body class="bg-paper-bg text-ink-dark font-sans">
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  
+  <!-- Plotly (Librería de Gráficos) -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 
+  <style>
+    body { background-color: #f4f1ea; }
+    
+    .kpi-card {
+        background: white;
+        border-top: 4px solid #cbd5e0;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chart-container {
+        position: relative;
+        min-height: 400px;
+        background: white;
+    }
+    .chart-loading::after {
+        content: "Cargando visualización...";
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.8rem;
+        color: #718096;
+    }
+    
+    /* Efecto sutil para separar secciones */
+    .section-divider {
+        border-top: 1px dashed #cbd5e0;
+        margin-top: 3rem;
+        padding-top: 3rem;
+    }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- Top Bar -->
+  <div class="bg-stone-900 text-stone-400 text-[10px] uppercase tracking-widest py-1 px-4 text-center">
+    Centro de Investigación Regional en Ciencia Política y Ciencias Sociales (CIRCPyCS)
+  </div>
+
+  <!-- Header -->
   <header class="border-b border-stone-300 bg-[#f4f1ea]/95 sticky top-0 z-40 backdrop-blur-sm">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
       <a href="index.html" class="flex flex-col leading-none group">
@@ -29,7 +90,8 @@
       </a>
       <nav class="hidden md:flex gap-8 text-sm font-bold text-stone-600 tracking-wide uppercase">
         <a href="index.html" class="hover:text-accent-red transition">Inicio</a>
-        <a href="#" class="text-accent-red border-b-2 border-accent-red">Monitor</a>
+        <a href="#" class="hover:text-accent-red transition">Proyectos</a>
+        <a href="monitor.html" class="text-accent-red border-b-2 border-accent-red">Monitor</a>
         <a href="analysis.html" class="hover:text-accent-red transition">Análisis</a>
         <a href="library.html" class="hover:text-accent-red transition">Biblioteca</a>
       </nav>
@@ -37,111 +99,441 @@
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-12">
-    
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-t border-b border-stone-300 mb-12 bg-white/50">
-        <div class="p-6 border-r border-stone-200">
-            <span class="block text-[10px] font-bold uppercase text-stone-500 mb-1 tracking-wider">Brecha Salarial</span>
-            <span class="block text-3xl font-serif font-bold text-stone-900">2.4x</span>
-            <span class="text-xs text-stone-500 italic">Formal vs Informal</span>
-        </div>
-        <div class="p-6 border-r border-stone-200">
-            <span class="block text-[10px] font-bold uppercase text-stone-500 mb-1 tracking-wider">Inv. Pública</span>
-            <span class="block text-3xl font-serif font-bold text-stone-900">11.2%</span>
-            <span class="text-xs text-stone-500 italic">% PIB (Rol del Estado)</span>
-        </div>
-        <div class="p-6 border-r border-stone-200">
-            <span class="block text-[10px] font-bold uppercase text-stone-500 mb-1 tracking-wider">Coef. Gini</span>
-            <span class="block text-3xl font-serif font-bold text-accent-red">0.42</span>
-            <span class="text-xs text-stone-500 italic">Desigualdad persistente</span>
-        </div>
-        <div class="p-6">
-            <span class="block text-[10px] font-bold uppercase text-stone-500 mb-1 tracking-wider">Deuda Externa</span>
-            <span class="block text-3xl font-serif font-bold text-stone-900">29.1%</span>
-            <span class="text-xs text-stone-500 italic">% PIB</span>
-        </div>
-    </div>
+  <main class="flex-grow py-12 px-6">
+    <div class="max-w-6xl mx-auto">
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div>
-            <h3 class="font-serif text-xl italic text-stone-900 mb-3">Distribución Funcional del Ingreso</h3>
-            <p class="text-sm text-stone-600 mb-4 font-light border-l-2 border-accent-red pl-3">
-                Conflicto distributivo: Evolución histórica de la participación de los salarios vs. excedente bruto de explotación.
+        <!-- Intro Section -->
+        <div class="mb-12 border-b border-stone-300 pb-8">
+             <span class="text-accent-red font-bold text-xs uppercase tracking-widest mb-2 block">Dashboard Económico</span>
+            <h1 class="font-serif font-black text-4xl sm:text-5xl text-stone-900 mb-4">
+                Signos Vitales de la Economía.
+            </h1>
+            <p class="text-stone-600 font-light max-w-2xl text-lg italic font-serif">
+                "Indicadores de alta frecuencia para medir la salud estructural más allá del PIB."
             </p>
-            <div id="chart-wage-share" class="w-full h-80 bg-white shadow-sm p-1"></div>
         </div>
-        
-        <div>
-            <h3 class="font-serif text-xl italic text-stone-900 mb-3">Heterogeneidad Productiva</h3>
-            <p class="text-sm text-stone-600 mb-4 font-light border-l-2 border-accent-teal pl-3">
-                Brecha de productividad laboral entre el sector moderno (extractivo) y el sector de subsistencia.
-            </p>
-            <div id="chart-productivity" class="w-full h-80 bg-white shadow-sm p-1"></div>
-        </div>
-    </div>
 
-    <div class="mt-16">
-        <h3 class="font-serif text-xl italic text-stone-900 mb-6">Asimetrías Regionales y Recursos</h3>
-        <div class="overflow-x-auto bg-white p-4 shadow-sm border-t-4 border-stone-800">
-            <table class="w-full text-sm text-left">
-                <thead class="font-bold text-stone-900 uppercase text-[10px] tracking-widest border-b border-stone-300">
-                    <tr>
-                        <th class="py-3 pr-4">Departamento</th>
-                        <th class="py-3 pr-4 text-right">PIB Per Cápita</th>
-                        <th class="py-3 pr-4 text-right">Tasa Informalidad</th>
-                        <th class="py-3 pr-4 text-right">Transferencias Estatales</th>
-                        <th class="py-3 text-right">Dependencia Fiscal</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-stone-100 font-light text-stone-700">
-                    <tr>
-                        <td class="py-3 font-bold">Santa Cruz</td>
-                        <td class="py-3 text-right">$4,200</td>
-                        <td class="py-3 text-right">65%</td>
-                        <td class="py-3 text-right">Baja</td>
-                        <td class="py-3 text-right">35%</td>
-                    </tr>
-                    <tr>
-                        <td class="py-3 font-bold">Potosí</td>
-                        <td class="py-3 text-right">$2,800</td>
-                        <td class="py-3 text-right">88%</td>
-                        <td class="py-3 text-right">Alta</td>
-                        <td class="py-3 text-right text-accent-red font-bold">92%</td>
-                    </tr>
-                    <tr>
-                        <td class="py-3 font-bold">La Paz</td>
-                        <td class="py-3 text-right">$3,900</td>
-                        <td class="py-3 text-right">82%</td>
-                        <td class="py-3 text-right">Media</td>
-                        <td class="py-3 text-right">60%</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <!-- KPI Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+            <div class="kpi-card p-6 border-t-stone-400">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider">Brecha Salarial</span>
+                    <i class="fa-solid fa-people-arrows text-stone-300"></i>
+                </div>
+                <span class="block text-4xl font-serif font-bold text-stone-900 mb-1">2.4x</span>
+                <span class="text-xs text-stone-500 font-mono">Formal vs Informal</span>
+            </div>
+            
+            <div class="kpi-card p-6 border-t-accent-teal">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[10px] font-bold uppercase text-accent-teal tracking-wider">Inv. Pública</span>
+                    <i class="fa-solid fa-building-columns text-teal-100"></i>
+                </div>
+                <span class="block text-4xl font-serif font-bold text-stone-900 mb-1">11.2%</span>
+                <span class="text-xs text-stone-500 font-mono">% del PIB (Rol Estado)</span>
+            </div>
 
+            <div class="kpi-card p-6 border-t-accent-red">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[10px] font-bold uppercase text-accent-red tracking-wider">Coef. Gini</span>
+                    <i class="fa-solid fa-scale-unbalanced text-red-100"></i>
+                </div>
+                <span class="block text-4xl font-serif font-bold text-accent-red mb-1">0.42</span>
+                <span class="text-xs text-stone-500 font-mono">Desigualdad persistente</span>
+            </div>
+
+            <div class="kpi-card p-6 border-t-accent-gold">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[10px] font-bold uppercase text-accent-gold tracking-wider">Deuda Externa</span>
+                    <i class="fa-solid fa-chart-line text-yellow-100"></i>
+                </div>
+                <span class="block text-4xl font-serif font-bold text-stone-900 mb-1">29.1%</span>
+                <span class="text-xs text-stone-500 font-mono">% del PIB</span>
+            </div>
+        </div>
+
+        <!-- Section 1: Macro Context -->
+        <div class="mb-16">
+            <div class="bg-white p-8 shadow-sm border border-stone-200">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h3 class="font-serif text-2xl italic text-stone-900">Distribución Funcional del Ingreso</h3>
+                        <p class="text-sm text-stone-500 mt-1 font-light">
+                            Evolución histórica de la participación de los <strong>Salarios</strong> vs. <strong>Excedente Bruto</strong> de Explotación.
+                        </p>
+                    </div>
+                    <span class="text-xs font-mono bg-stone-100 px-2 py-1 rounded text-stone-500">Serie 2010-2024</span>
+                </div>
+                <div id="chart-wage-share" class="w-full h-80 chart-container chart-loading"></div>
+            </div>
+        </div>
+
+        <!-- Section 2: Crisis Simulator (Macro) -->
+        <div class="section-divider">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+                <div>
+                    <span class="text-accent-navy font-bold text-xs uppercase tracking-widest mb-2 block">
+                        <i class="fa-solid fa-robot mr-2"></i>Modelo Macro-Estocástico
+                    </span>
+                    <h2 class="font-serif font-black text-3xl text-stone-900 leading-tight">
+                        Simulador de Crisis KISr-p
+                    </h2>
+                    <p class="text-stone-600 font-light mt-3 max-w-3xl text-sm leading-relaxed border-l-4 border-accent-navy pl-4">
+                        Resultados del modelo de Síntesis Keynesiana Intertemporal (arXiv:2510.16537).<br>
+                        Evaluación de 29 estrategias de política económica bajo incertidumbre y restricciones estructurales (2025-2035).
+                    </p>
+                </div>
+                <a href="https://arxiv.org/abs/2510.16537" target="_blank" class="mt-4 md:mt-0 text-xs font-bold uppercase tracking-widest text-accent-navy hover:bg-accent-navy hover:text-white border border-accent-navy px-4 py-2 transition">
+                    Ver Documento Técnico
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
+                <!-- Chart: Trade-offs -->
+                <div class="bg-white p-6 shadow-lg border-t-4 border-accent-navy relative group">
+                    <div class="absolute top-4 right-4 text-stone-300 group-hover:text-accent-navy transition">
+                        <i class="fa-solid fa-arrows-to-dot fa-lg"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-stone-900 mb-2">Frontera de Posibilidades</h3>
+                    <p class="text-xs text-stone-500 mb-6 font-mono uppercase tracking-wide">
+                        Trade-off: PIB Mediano vs. Sostenibilidad de Deuda (Q40)
+                    </p>
+                    <div id="chart-simulation-scatter" class="w-full h-96 chart-container chart-loading"></div>
+                    <div class="mt-3 bg-blue-50 p-3 text-[11px] text-stone-600 leading-tight border-l-2 border-accent-navy">
+                        <strong>Interpretación:</strong> El cuadrante superior izquierdo representa el óptimo (Alto Crecimiento, Baja Deuda). Las estrategias con <span class="font-bold text-accent-teal">Impuesto LVT</span> dominan a las políticas de austeridad tradicionales.
+                    </div>
+                </div>
+
+                <!-- Chart: Ranking -->
+                <div class="bg-white p-6 shadow-lg border-t-4 border-accent-gold relative group">
+                    <div class="absolute top-4 right-4 text-stone-300 group-hover:text-accent-gold transition">
+                         <i class="fa-solid fa-arrow-down-wide-short fa-lg"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-stone-900 mb-2">Ranking de Solvencia</h3>
+                    <p class="text-xs text-stone-500 mb-6 font-mono uppercase tracking-wide">
+                        Deuda Pública Final (% PIB) por Estrategia
+                    </p>
+                    <div id="chart-simulation-bar" class="w-full h-96 chart-container chart-loading"></div>
+                    <div class="mt-3 bg-yellow-50 p-3 text-[11px] text-stone-600 leading-tight border-l-2 border-accent-gold">
+                        <strong>Riesgo:</strong> Las políticas de shock sin reestructuración (barras rojas) llevan la deuda a niveles explosivos (>200%), mientras que las reformas estructurales (barras verdes) logran la convergencia.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: SIMPOL (Micro) - NUEVA SECCIÓN -->
+        <div class="section-divider">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+                <div>
+                    <span class="text-simpol-blue font-bold text-xs uppercase tracking-widest mb-2 block">
+                        <i class="fa-solid fa-microchip mr-2"></i>Micro-Fundamentos Heterogéneos
+                    </span>
+                    <h2 class="font-serif font-black text-3xl text-stone-900 leading-tight">
+                        Modelo SIMPOL (HJB-FPK)
+                    </h2>
+                    <p class="text-stone-600 font-light mt-3 max-w-3xl text-sm leading-relaxed border-l-4 border-simpol-blue pl-4">
+                        Resolución numérica de agentes heterogéneos en tiempo continuo. 
+                        El modelo resuelve el sistema acoplado de ecuaciones <em>Hamilton-Jacobi-Bellman</em> (decisión óptima) y <em>Fokker-Planck-Kolmogorov</em> (distribución de riqueza).
+                    </p>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                     <a href="https://arxiv.org/abs/2509.23557" target="_blank" class="text-[10px] font-mono text-stone-500 hover:text-simpol-blue hover:underline transition">
+                        PAPER: arXiv:2509.23557 <i class="fa-solid fa-external-link-alt ml-1"></i>
+                     </a>
+                     <span class="text-[10px] font-mono text-green-600"><i class="fa-solid fa-check mr-1"></i>Wasserstein-2 Contraction Verified</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Chart: Consumption Policy (HJB Output) -->
+                <div class="bg-white p-6 shadow-md border border-stone-200">
+                    <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">1. Política Óptima (HJB)</h3>
+                    <p class="text-xs text-stone-500 mb-4 font-mono">
+                        Función de Consumo $c(a)$ bajo incertidumbre idiosincrática.
+                    </p>
+                    <div id="chart-simpol-policy" class="w-full h-80 chart-container chart-loading"></div>
+                    <p class="text-[10px] text-stone-400 mt-2">
+                        *La concavidad refleja la precaución del agente ante la volatilidad ($\sigma=0.22$). El agente ahorra más cuando su riqueza es baja.
+                    </p>
+                </div>
+
+                <!-- Chart: Wealth Distribution (FPK Output) -->
+                <div class="bg-white p-6 shadow-md border border-stone-200">
+                    <h3 class="font-serif text-lg font-bold text-stone-900 mb-2">2. Distribución Estacionaria (FPK)</h3>
+                    <p class="text-xs text-stone-500 mb-4 font-mono">
+                        Densidad de Riqueza $p(a)$ en equilibrio de largo plazo.
+                    </p>
+                    <div id="chart-simpol-dist" class="w-full h-80 chart-container chart-loading"></div>
+                    <p class="text-[10px] text-stone-400 mt-2">
+                        *Resultado de la ecuación Fokker-Planck. Muestra la característica "cola gorda" (Pareto) de desigualdad de riqueza.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
   </main>
 
-  {% include footer.html %}
+  <!-- Footer -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+  
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+  
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+  
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+  
+             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+            </a>
+  
+            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+            </a>
+            
+             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+            </a>
+          </div>
+        </div>
+  
+      </div>
+      
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    const commonLayout = {
-        paper_bgcolor: '#ffffff', plot_bgcolor: '#ffffff',
-        font: { family: 'Lato', color: '#2d3748' },
-        margin: { t: 20, l: 40, r: 20, b: 40 },
-        xaxis: { gridcolor: '#f4f1ea' }, yaxis: { gridcolor: '#f4f1ea' }
-    };
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearEl = document.getElementById('year');
+        if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // Chart 1: Wage Share
-    Plotly.newPlot('chart-wage-share', [
-        { x: [2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024], y: [28, 30, 34, 35, 34, 31, 32, 32.4], type: 'scatter', mode: 'lines+markers', line: {color: '#2d3748', width: 2}, name: 'Salarios' },
-        { x: [2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024], y: [55, 52, 48, 47, 49, 52, 51, 50], type: 'scatter', mode: 'lines', line: {color: '#9b2c2c', dash:'dot'}, name: 'Ganancias' }
-    ], commonLayout);
+        if (typeof Plotly === 'undefined') {
+            return;
+        }
 
-    // Chart 2: Brecha Productividad
-    Plotly.newPlot('chart-productivity', [
-        { x: ['Minería/HC', 'Industria', 'Servicios', 'Informal'], y: [100, 45, 30, 10], type: 'bar', marker: {color: ['#2d3748', '#2c7a7b', '#d69e2e', '#9b2c2c']} }
-    ], {...commonLayout, yaxis: {title: 'Índice (Minería=100)'}});
+        const commonLayout = {
+            paper_bgcolor: '#ffffff', plot_bgcolor: '#ffffff',
+            font: { family: 'Lato', color: '#2d3748' },
+            margin: { t: 30, l: 50, r: 20, b: 40 },
+            xaxis: { gridcolor: '#f4f1ea', zerolinecolor: '#f4f1ea' }, 
+            yaxis: { gridcolor: '#f4f1ea', zerolinecolor: '#f4f1ea' },
+            showlegend: true,
+            legend: { orientation: 'h', y: 1.1, x: 0 }
+        };
+        const config = { responsive: true, displayModeBar: false };
+
+        // --- CHART 1: WAGE SHARE ---
+        const wageShareData = [
+            { x: [2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024], y: [28, 30, 34, 35, 34, 31, 32, 32.4], type: 'scatter', mode: 'lines+markers', line: {color: '#2d3748', width: 3}, marker: {size: 8}, name: 'Salarios (% PIB)' },
+            { x: [2010, 2012, 2014, 2016, 2018, 2020, 2022, 2024], y: [55, 52, 48, 47, 49, 52, 51, 50], type: 'scatter', mode: 'lines', line: {color: '#9b2c2c', dash:'dot', width: 2}, name: 'Excedente Bruto' }
+        ];
+        Plotly.newPlot('chart-wage-share', wageShareData, {...commonLayout, margin: {t:20, l:40, r:20, b:30}, legend: {orientation: 'h', y: 1.05}}, config).then(() => document.getElementById('chart-wage-share').classList.remove('chart-loading'));
+
+
+        // --- CHART 2: SIMULATOR SCATTER (Data extracted from 2510.16537v1.pdf - Table 5 & Fig 1) ---
+        const simScatterData = [
+            {
+                x: [106.25, 107.46, 108.08, 108.24],
+                y: [98.35, 99.24, 97.62, 97.93],
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Reformas Estructurales (LVT)',
+                marker: { size: 14, color: '#2c7a7b', line: {color: 'white', width: 1} }, 
+                text: ['AggRecomp+MKT+LVT', 'AggRecomp+IFI+LVT', 'AggRecomp+LowDebt+LVT', 'AggRecomp+NoDebt+LVT']
+            },
+            {
+                x: [133.25, 135.62, 150.15],
+                y: [98.61, 97.69, 98.70],
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Reestructuración (PSI/OSI)',
+                marker: { size: 12, color: '#d69e2e', opacity: 0.8 }, 
+                text: ['Aggressive+PSI+OSI', 'Balanced+PSI+OSI', 'PSI30+IFI1.5']
+            },
+            {
+                x: [162.01, 163.26, 159.26],
+                y: [99.18, 98.23, 98.58],
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Convencional / FMI Base',
+                marker: { size: 10, color: '#718096', symbol: 'square' }, 
+                text: ['IMF-Base+SoftMonetary', 'IMF-2025-Base', 'Gradual-1.5']
+            },
+            {
+                x: [201.38, 171.26, 196.42],
+                y: [96.66, 93.48, 98.18],
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Shock / Sin Alivio',
+                marker: { size: 12, color: '#9b2c2c', symbol: 'triangle-up' }, 
+                text: ['Shock-6+Deval', 'Shock-12', 'AggRecomp+HiDebt+Deval']
+            }
+        ];
+        
+        Plotly.newPlot('chart-simulation-scatter', simScatterData, {
+            ...commonLayout,
+            xaxis: { title: 'Deuda / PIB (% Mediana al año 10)', gridcolor: '#f4f1ea' },
+            yaxis: { title: 'PIB (Índice Base=100)', gridcolor: '#f4f1ea' },
+            hovermode: 'closest'
+        }, config).then(() => document.getElementById('chart-simulation-scatter').classList.remove('chart-loading'));
+
+        // --- CHART 3: SIMULATOR BAR CHART (Ranking) ---
+        const simBarData = [
+            {
+                x: ['LVT + IFI', 'PSI/OSI + Balanced', 'Gradualismo', 'FMI Base 2025', 'Shock Puro', 'Shock + Deval'],
+                y: [107.46, 135.62, 159.26, 163.26, 171.03, 201.38],
+                type: 'bar',
+                marker: {
+                    color: ['#2c7a7b', '#d69e2e', '#cbd5e0', '#718096', '#e53e3e', '#9b2c2c']
+                },
+                text: ['107%', '136%', '159%', '163%', '171%', '201%'],
+                textposition: 'auto'
+            }
+        ];
+        Plotly.newPlot('chart-simulation-bar', simBarData, {
+            ...commonLayout,
+            xaxis: { title: 'Estrategia de Política' },
+            yaxis: { title: 'Deuda Pública / PIB (%)' },
+            showlegend: false
+        }, config).then(() => document.getElementById('chart-simulation-bar').classList.remove('chart-loading'));
+
+
+        // --- CHART 4: SIMPOL POLICY (HJB Output Simulation) ---
+        // Generamos una función de consumo c(a) cóncava típica de modelos HJB con aversión al riesgo
+        const wealthGrid = Array.from({length: 50}, (_, i) => i * 0.4); // 0 to 20
+        const consumption = wealthGrid.map(a => 0.04 * a + 0.5 * Math.pow(a, 0.6) + 0.1); // Simulated policy
+        const linear45 = wealthGrid.map(a => 0.03 * a + 1.0); // r*a + y benchmark roughly
+        
+        const simpolPolicyData = [
+            {
+                x: wealthGrid,
+                y: consumption,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Consumo Óptimo c(a)',
+                line: {color: '#3182ce', width: 3}
+            },
+            {
+                x: wealthGrid,
+                y: linear45,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Ingreso Permanente (Benchmark)',
+                line: {color: '#cbd5e0', dash: 'dash', width: 2}
+            }
+        ];
+        Plotly.newPlot('chart-simpol-policy', simpolPolicyData, {
+            ...commonLayout,
+            xaxis: { title: 'Riqueza (a)', gridcolor: '#f4f1ea' },
+            yaxis: { title: 'Consumo (c)', gridcolor: '#f4f1ea' },
+            showlegend: true,
+            legend: {x: 0, y: 1}
+        }, config).then(() => document.getElementById('chart-simpol-policy').classList.remove('chart-loading'));
+
+        // --- CHART 5: SIMPOL DISTRIBUTION (FPK Output Simulation) ---
+        // Generamos una distribución log-normal/Pareto tail simulada
+        const distX = Array.from({length: 60}, (_, i) => i * 0.2); 
+        const distY = distX.map(x => {
+            if(x < 0.1) return 0;
+            return (1 / (x * 0.6 * Math.sqrt(2 * Math.PI))) * Math.exp(-Math.pow(Math.log(x) - 0.5, 2) / (2 * 0.6 * 0.6));
+        });
+
+        const simpolDistData = [
+            {
+                x: distX,
+                y: distY,
+                type: 'scatter',
+                mode: 'lines',
+                fill: 'tozeroy',
+                name: 'Densidad de Riqueza p(a)',
+                line: {color: '#2c7a7b', width: 2},
+                fillcolor: 'rgba(44, 122, 123, 0.2)'
+            }
+        ];
+        Plotly.newPlot('chart-simpol-dist', simpolDistData, {
+            ...commonLayout,
+            xaxis: { title: 'Riqueza (a)', range: [0, 8], gridcolor: '#f4f1ea' },
+            yaxis: { title: 'Densidad', showticklabels: false, gridcolor: '#f4f1ea' },
+            showlegend: false
+        }, config).then(() => document.getElementById('chart-simpol-dist').classList.remove('chart-loading'));
+
+
+        window.addEventListener('resize', function() {
+            Plotly.Plots.resize('chart-wage-share');
+            Plotly.Plots.resize('chart-simulation-scatter');
+            Plotly.Plots.resize('chart-simulation-bar');
+            Plotly.Plots.resize('chart-simpol-policy');
+            Plotly.Plots.resize('chart-simpol-dist');
+        });
+    });
   </script>
 </body>
 </html>
