@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Esquema: Cambridge Handbook of Environmental Sociology Vol. 1</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cambridge-blue: #003e7e; /* Azul Cambridge oficial aprox */
+    --accent-red: #c0392b;     /* Rojo para conflicto/crimen */
+    --earth: #795548;          /* Marrón para materialismo */
+    --theory: #8e44ad;         /* Morado Teoría */
+    --justice: #d35400;        /* Naranja Justicia */
+    --bg-paper: #f9f7f1;       /* Blanco hueso */
+    --text-main: #2c3e50;
+    --border-color: #bdc3c7;
+  }
+
+  body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-paper);
+    color: var(--text-main);
+    overflow: hidden;
+  }
+
+  /* --- RED VISUALIZACIÓN --- */
+  #network {
+    width: 100%; height: 100vh;
+    background: radial-gradient(circle at center, #ffffff 0%, #f2f0e6 100%);
+  }
+
+  /* --- BOTONERA --- */
+  .controls {
+    position: absolute;
+    top: 20px; left: 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 220px;
+  }
+
+  .filter-btn {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    color: var(--text-main);
+  }
+  
+  .filter-btn:before {
+    content: ''; display: inline-block;
+    width: 12px; height: 12px; margin-right: 10px;
+    border-radius: 50%; background: #ccc;
+  }
+
+  .filter-btn:hover { transform: translateX(3px); background: #fff; }
+  .filter-btn.active { color: white; border: none; }
+  
+  /* Colores Activos */
+  .btn-all.active { background: var(--text-main); }
+  .btn-theory.active { background: var(--theory); }
+  .btn-theory:before { background: var(--theory); }
+  
+  .btn-mat.active { background: var(--earth); }
+  .btn-mat:before { background: var(--earth); }
+  
+  .btn-gov.active { background: var(--cambridge-blue); }
+  .btn-gov:before { background: var(--cambridge-blue); }
+
+  /* Botón Especial: Justicia Crítica */
+  .btn-cej { border-left: 4px solid var(--justice); }
+  .btn-cej.active { background: var(--justice); border-left: none; }
+  .btn-cej:before { background: var(--justice); }
+
+  /* --- PANEL LATERAL --- */
+  .sidebar {
+    position: absolute;
+    right: 0; top: 0;
+    width: 500px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    border-left: 5px solid var(--cambridge-blue);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    background: var(--cambridge-blue);
+    color: #fff;
+    padding: 30px;
+    position: relative;
+  }
+
+  .book-title {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .book-meta {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    opacity: 0.8;
+    line-height: 1.5;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 35px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  /* Estilos de Texto del Nodo */
+  h2.article-title {
+    font-family: 'Crimson Text', serif;
+    color: var(--cambridge-blue);
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 5px;
+    line-height: 1.1;
+  }
+
+  .author-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #7f8c8d;
+    margin-bottom: 25px;
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+
+  .section-heading {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .concept-box {
+    background: #f4f6f7;
+    border-left: 4px solid var(--cambridge-blue);
+    padding: 15px 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: #444;
+    font-family: 'Crimson Text', serif;
+    font-size: 1.1rem;
+  }
+
+  .citation-ref {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    color: #95a5a6;
+    margin-top: 8px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: none; border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .close-btn:hover { color: #fff; }
+
+  .footer-credit {
+    padding: 15px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #aaa;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+  }
+
+  /* Responsive Mobile */
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: 80vh; top: auto; bottom: 0; transform: translateY(100%); border-left: none; border-top: 5px solid var(--cambridge-blue); }
+    .sidebar.open { transform: translateY(0); }
+    .controls { width: auto; right: 20px; }
+    .book-title { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="network"></div>
+
+<div class="controls">
+  <button class="filter-btn btn-all active" onclick="filterNetwork('all', this)">Vista General</button>
+  <button class="filter-btn btn-theory" onclick="filterNetwork('theory', this)">Teoría: Materialismos</button>
+  <button class="filter-btn btn-gov" onclick="filterNetwork('governance', this)">Gobernanza y Estado</button>
+  <button class="filter-btn btn-mat" onclick="filterNetwork('economy', this)">Economía Política</button>
+  <button class="filter-btn btn-cej" onclick="filterNetwork('justice', this)">⚖️ Justicia Ambiental Crítica</button>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">×</button>
+  <div class="sidebar-header">
+    <div class="book-title">The Cambridge Handbook of<br>Environmental Sociology</div>
+    <div class="book-meta">Volumen 1 (2021)<br>Eds: Legun, Keller, Carolan & Bell<br>Cambridge University Press</div>
+  </div>
+  <div class="sidebar-content" id="node-content">
+    <div style="text-align: center; margin-top: 50%; opacity: 0.5;">
+      <p>Seleccione un nodo para ver el análisis detallado del capítulo.</p>
+    </div>
+  </div>
+  <div class="footer-credit">
+    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
+  </div>
+</div>
+
+<script>
+/* --- BASE DE DATOS DE CONTENIDOS (Extractos y Traducciones del PDF) --- */
+const db = {
+  // --- NODO CENTRAL ---
+  0: {
+    title: "Cambridge Handbook of Environmental Sociology",
+    author: "Volumen 1: Conceptualización",
+    content: `
+      <div class="section-heading">Visión General</div>
+      <p>Este manual de dos volúmenes busca redefinir la sociología ambiental no como una subdisciplina cerrada, sino como una "conversación cuidadosa y comprometida" sobre la intersección entre sociedad y medio ambiente. A diferencia de manuales anteriores centrados en EE.UU., este volumen adopta una perspectiva explícitamente global, poscolonial y materialista.</p>
+      <div class="concept-box">
+        "El desafío central es superar el 'excepcionalismo humano' que ha dominado la sociología clásica, reconociendo que lo social siempre está incrustado en lo biofísico."
+        <span class="citation-ref">Introducción (p. 2)</span>
+      </div>
+      <p>El Volumen 1 se centra en los marcos teóricos: desde la revisión de los clásicos (Marx, Weber, Du Bois) hasta las nuevas teorías sobre materialismo, economía política y justicia crítica.</p>
+    `
+  },
+
+  // --- GRUPO: TEORÍA (THEORY) ---
+  1: {
+    title: "Teoría Sociológica Clásica",
+    author: "Hannah Holleman (Cap. 1)",
+    content: `
+      <div class="section-heading">Más allá del 'Excepcionalismo'</div>
+      <p>Durante décadas, se acusó a los padres fundadores de la sociología (Marx, Weber, Durkheim) de ignorar la naturaleza ("excepcionalismo humano"). Holleman argumenta que esto es falso: es una distorsión creada por la sociología estadounidense de la Guerra Fría (especialmente Talcott Parsons) que "saneó" a los clásicos.</p>
+      <div class="section-heading">Raíces Profundas</div>
+      <p>Marx analizó la "fractura metabólica" del suelo; Weber estudió el sistema de "Raubbau" (economía de rapiña); y W.E.B. Du Bois vinculó el colonialismo con la degradación ambiental global. Recuperar estas raíces es vital para una sociología post-excepcionalista.</p>
+    `
+  },
+  2: {
+    title: "Materialismo Corpóreo",
+    author: "Ariel Salleh (Cap. 3)",
+    content: `
+      <div class="section-heading">Humanos como Naturaleza Encarnada</div>
+      <p>Ariel Salleh propone una ruptura radical: pasar del "materialismo histórico" al "materialismo corpóreo". Critica tanto al realismo objetivo (naturaleza externa) como al constructivismo (naturaleza como discurso). Propone que los humanos somos <em>naturaleza-en-forma-corpórea</em>.</p>
+      <div class="section-heading">La Clase Meta-Industrial</div>
+      <p>Salleh introduce el concepto de <strong>Clase Meta-Industrial</strong>: trabajadores cuyo trabajo es regenerativo y mantiene la base metabólica de la sociedad (madres, campesinos, indígenas). A diferencia del trabajo industrial lineal, su trabajo sigue la lógica cíclica de la naturaleza. El capitalismo tiene una "deuda corpórea" masiva con esta clase no remunerada.</p>
+      <div class="concept-box">
+        "El sistema de intercambio global no puede existir sin las madres que paren la fuerza laboral, los campesinos que cultivan la comida y los indígenas que cuidan los ríos."
+        <span class="citation-ref">Ariel Salleh (p. 55)</span>
+      </div>
+    `
+  },
+  3: {
+    title: "Sociología de lo Bueno",
+    author: "Michael M. Bell (Cap. 4)",
+    content: `
+      <div class="section-heading">El Triángulo Antiguo</div>
+      <p>Bell explora cómo nuestras ideas de "lo Bueno" (moralidad) se separaron de la política. En las sociedades burguesas, idealizamos la Naturaleza y lo Divino como reinos "puros" porque están separados de las maquinaciones humanas. Esto crea una "política no-política": usamos la naturaleza para justificar el poder pretendiendo que estamos libres de intereses.</p>
+    `
+  },
+
+  // --- GRUPO: JUSTICIA AMBIENTAL CRÍTICA (SPECIAL CLUSTER) ---
+  100: {
+    title: "Justicia Ambiental Crítica (CEJ)",
+    author: "David N. Pellow (Cap. 24)",
+    content: `
+      <div class="section-heading">Una Nueva Generación de Estudios</div>
+      <p>David Pellow argumenta que la "primera generación" de estudios de Justicia Ambiental (EJ) se centró demasiado en la distribución desigual de toxinas y en la reforma legal dentro del estado. La CEJ (Critical Environmental Justice) cuestiona si el Estado puede alguna vez impartir justicia, dado que el Estado moderno se fundó sobre la violencia racial y colonial.</p>
+      <p>Pellow propone un marco de <strong>Cuatro Pilares</strong> para radicalizar el campo y conectar las luchas locales con sistemas globales de poder.</p>
+    `
+  },
+  101: {
+    title: "Pilar 1: Interseccionalidad",
+    author: "Más allá de Raza/Clase",
+    content: `
+      <p>La injusticia ambiental no ocurre solo por una categoría (raza o clase). La CEJ exige ver cómo múltiples formas de poder se entrelazan: racismo, patriarcado, capitalismo, heteronormatividad y especismo (dominación sobre no-humanos). No podemos liberar a los humanos si seguimos explotando la tierra como un recurso inerte.</p>
+    `
+  },
+  102: {
+    title: "Pilar 2: Escala Múltiple",
+    author: "De lo Molecular a lo Global",
+    content: `
+      <p>Los estudios tradicionales suelen centrarse en la escala comunitaria. La CEJ conecta escalas. Por ejemplo, el cuerpo de un trabajador (micro) absorbe toxinas debido a flujos globales de capital (macro). El caso de Palestina muestra cómo un muro local (micro) está financiado por una industria militar global (macro).</p>
+    `
+  },
+  103: {
+    title: "Pilar 3: Antiestatismo",
+    author: "El Estado no es el Salvador",
+    content: `
+      <p>La mayoría de los movimientos buscan mejores leyes. Pellow advierte que el Estado es, históricamente, un motor de desigualdad racial y ecológica. Buscar justicia a través del Estado es paradójico. La CEJ explora futuros anarquistas o de autonomía comunitaria donde las comunidades se autogobiernan sin depender de la benevolencia estatal.</p>
+    `
+  },
+  104: {
+    title: "Pilar 4: Indispensabilidad",
+    author: "Contra la Lógica de lo Prescindible",
+    content: `
+      <p>El capitalismo requiere zonas de sacrificio y poblaciones "prescindibles" (expendable). La CEJ propone una ética de <strong>Indispensabilidad</strong>: nadie y ningún ecosistema es "sobrante". Esto desafía la lógica de las cárceles, los vertederos y las fronteras militarizadas.</p>
+      <div class="concept-box">
+        "Debemos confrontar la lógica de la prescindibilidad que considera a ciertas poblaciones y tierras como desechables."
+        <span class="citation-ref">Pellow (p. 408)</span>
+      </div>
+    `
+  },
+  105: {
+    title: "Caso de Estudio: Palestina/Israel",
+    author: "Aplicación de la CEJ",
+    content: `
+      <div class="section-heading">Un Conflicto Socio-Ambiental</div>
+      <p>Pellow utiliza este conflicto para ilustrar la CEJ. No es solo un conflicto religioso, sino ambiental (tierra/agua). </p>
+      <ul>
+        <li><strong>Escala:</strong> El muro de separación bloquea el movimiento de animales y humanos (micro) y está ligado al comercio global de armas (macro).</li>
+        <li><strong>Estado:</strong> El Estado de Israel, como estado colonial de asentamiento, utiliza leyes de propiedad (como la Ley de Ausentes de 1950) para desposeer ambientalmente a los palestinos.</li>
+        <li><strong>Indispensabilidad:</strong> La resistencia conjunta de grupos judíos y palestinos demuestra una ética de solidaridad frente a la lógica de eliminación.</li>
+      </ul>
+    `
+  },
+
+  // --- GRUPO: ECONOMÍA (ECONOMY) ---
+  6: {
+    title: "Mundos Materiales",
+    author: "Longo & York (Cap. 6)",
+    content: `
+      <div class="section-heading">Realismo Crítico</div>
+      <p>Este capítulo defiende un enfoque materialista frente al constructivismo extremo. Existe un mundo biofísico real que el capitalismo altera.</p>
+      <div class="section-heading">La Cinta de Producción (Treadmill)</div>
+      <p>Se revisa la teoría clásica de Schnaiberg: el capitalismo es una "cinta de correr de producción" que requiere crecimiento infinito. Longo y York añaden la "Fractura Metabólica" de Marx: el capitalismo rompe los ciclos naturales de regeneración del suelo y los océanos, creando crisis irreparables.</p>
+    `
+  },
+  7: {
+    title: "La Alternativa Ecosocialista",
+    author: "Michael Löwy (Cap. 9)",
+    content: `
+      <div class="section-heading">Decrecimiento y Socialismo</div>
+      <p>Löwy argumenta que el "capitalismo verde" es un oxímoron. La lógica del lucro es incompatible con el equilibrio ecológico. Propone el <strong>Ecosocialismo</strong>: una planificación democrática de la economía que prioriza el "valor de uso" sobre el "valor de cambio". Esto implica un decrecimiento necesario en el Norte Global para permitir el desarrollo digno en el Sur.</p>
+    `
+  },
+
+  // --- GRUPO: GOBERNANZA (GOVERNANCE) ---
+  20: {
+    title: "Crimen Verde y la Cinta de Producción",
+    author: "Long, Lynch & Stretesky (Cap. 20)",
+    content: `
+      <div class="section-heading">Criminología Verde</div>
+      <p>La criminología tradicional ignora los daños ambientales. Los autores definen el "Crimen Verde" no solo como violar la ley, sino como causar daño ecológico sistémico. Argumentan que el crimen ambiental no es una aberración, sino una consecuencia lógica de la <em>Treadmill of Production</em> (Cinta de Producción). Las corporaciones cometen crímenes (contaminación) racionalmente para reducir costos y acelerar la acumulación.</p>
+    `
+  },
+  15: {
+    title: "Espacio Exterior",
+    author: "James S. Ormrod (Cap. 15)",
+    content: `
+      <div class="section-heading">El Nuevo Medio Ambiente</div>
+      <p>Un tema novedoso en este manual. Ormrod analiza el espacio exterior como la nueva frontera de la imaginación ambiental y la acumulación capitalista. Critica el "Sueño Libertario" de empresarios como Elon Musk o Jeff Bezos, que ven el espacio como una utopía libre de regulaciones estatales para escapar de una Tierra agotada.</p>
+    `
+  }
+};
+
+/* --- CONFIGURACIÓN DE VIS.JS --- */
+const nodes = new vis.DataSet([
+  // Centro
+  { id: 0, label: "CAMBRIDGE\nHANDBOOK\nEnv Soc Vol.1", shape: "box", color: "#003e7e", font: {color:"white", size:22, face:"Crimson Text"} },
+
+  // GRUPO 1: TEORÍA (Morado)
+  { id: 1, label: "Teoría Clásica\n(Holleman)", group: "theory", value: 20 },
+  { id: 2, label: "Materialismo\nCorpóreo (Salleh)", group: "theory", value: 25, shape: "hexagon" }, // Nodo destacado
+  { id: 3, label: "Sociología de\nlo Bueno (Bell)", group: "theory", value: 15 },
+
+  // GRUPO 2: ECONOMÍA (Marrón/Tierra)
+  { id: 6, label: "Mundos\nMateriales", group: "economy", value: 20 },
+  { id: 7, label: "Alternativa\nEcosocialista", group: "economy", value: 20 },
+
+  // GRUPO 3: GOBERNANZA (Azul)
+  { id: 20, label: "Crimen Verde\n(ToP)", group: "governance", value: 20 },
+  { id: 15, label: "Espacio\nExterior", group: "governance", value: 15 },
+
+  // GRUPO ESPECIAL: JUSTICIA CRÍTICA (Naranja/Rojo)
+  { id: 100, label: "JUSTICIA\nAMBIENTAL\nCRÍTICA", group: "justice", value: 30, shape: "star", font: {size: 18} },
+  { id: 101, label: "Pilar 1:\nInterseccionalidad", group: "justice", value: 10 },
+  { id: 102, label: "Pilar 2:\nEscala Múltiple", group: "justice", value: 10 },
+  { id: 103, label: "Pilar 3:\nAntiestatismo", group: "justice", value: 10 },
+  { id: 104, label: "Pilar 4:\nIndispensabilidad", group: "justice", value: 10 },
+  { id: 105, label: "Caso: Israel/\nPalestina", group: "justice", value: 15, color: "#c0392b", font: {color:"white"} } // Nodo conflicto
+]);
+
+const edges = new vis.DataSet([
+  // Ramas principales
+  { from: 0, to: 1, width: 3 },
+  { from: 0, to: 6, width: 3 },
+  { from: 0, to: 20, width: 3 },
+  { from: 0, to: 100, width: 4, color: "#d35400" }, // Rama destacada Justicia
+
+  // Conexiones Teoría
+  { from: 1, to: 2 }, { from: 1, to: 3 },
+  // Conexiones Economía
+  { from: 6, to: 7 },
+  // Conexiones Gobernanza
+  { from: 20, to: 15 },
+
+  // Cluster Justicia Crítica
+  { from: 100, to: 101 }, { from: 100, to: 102 }, { from: 100, to: 103 }, { from: 100, to: 104 },
+  { from: 102, to: 105, label: "ejemplo", dashes:true }, // Escala -> Israel/Palestina
+  { from: 103, to: 105, label: "critica", dashes:true }, // Antiestatismo -> Estado Israel
+
+  // Conexiones Transversales (Cruciales para mostrar complejidad)
+  { from: 2, to: 7, label: "afinidad", dashes:true, color:{opacity:0.3} }, // Materialismo Corpóreo <-> Ecosocialismo
+  { from: 20, to: 6, label: "base teórica", dashes:true }, // Crimen Verde usa Mundos Materiales (ToP)
+  { from: 101, to: 2, label: "incluye", dashes:true } // Interseccionalidad incluye género/clase
+]);
+
+/* --- LÓGICA DE VISUALIZACIÓN --- */
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    font: { face: 'Lato', color: '#2c3e50' },
+    borderWidth: 2,
+    shadow: true
+  },
+  groups: {
+    theory: { color: { background: '#d7bde2', border: '#8e44ad' } },
+    economy: { color: { background: '#d7ccc8', border: '#795548' } },
+    governance: { color: { background: '#a9cce3', border: '#2980b9' } },
+    justice: { color: { background: '#f5cba7', border: '#d35400' }, font: {face:'Crimson Text', size:16} }
+  },
+  edges: {
+    color: { color: '#bdc3c7', highlight: '#003e7e' },
+    smooth: { type: 'continuous' }
+  },
+  physics: {
+    stabilization: false,
+    barnesHut: { gravitationalConstant: -2500, springLength: 150 }
+  },
+  interaction: { hover: true }
+};
+
+const network = new vis.Network(container, data, options);
+
+/* --- INTERACCIÓN --- */
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = db[nodeId];
+    if (info) {
+      document.getElementById('node-content').innerHTML = `
+        <span class="author-name">${info.author}</span>
+        <h2 class="article-title">${info.title}</h2>
+        ${info.content}
+      `;
+      document.getElementById('sidebar').classList.add('open');
+    }
+  }
+});
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function filterNetwork(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const allIds = nodes.getIds();
+  let targetGroups = [];
+
+  if (type === 'all') {
+    nodes.update(allIds.map(id => ({id: id, hidden: false})));
+    network.fit();
+    return;
+  }
+
+  if (type === 'theory') targetGroups = ['theory'];
+  if (type === 'economy') targetGroups = ['economy'];
+  if (type === 'governance') targetGroups = ['governance'];
+  if (type === 'justice') targetGroups = ['justice'];
+
+  const updates = allIds.map(id => {
+    const node = nodes.get(id);
+    const show = (id === 0) || targetGroups.includes(node.group);
+    return { id: id, hidden: !show };
+  });
+  
+  nodes.update(updates);
+  
+  if(type === 'justice') {
+    network.fit({ nodes: [0, 100, 101, 102, 103, 104, 105], animation: true });
+  } else {
+    network.fit({ animation: true });
+  }
+}
+</script>
+</body>
+</html>
