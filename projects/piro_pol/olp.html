@@ -1,1 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Oxford Handbook of Land Politics (2025)</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Fira+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 
+<style>
+  :root {
+    /* Paleta 'Tierra y Política' */
+    --land-dark: #2e4053;   /* Gris Pizarra (Estado/Autoridad) */
+    --land-green: #27ae60;  /* Verde (Ecología/Agroecología) */
+    --land-brown: #a04000;  /* Terracota (Tierra/Labor) */
+    --land-fire: #c0392b;   /* Rojo (Conflicto/Clima) */
+    --land-gold: #f1c40f;   /* Dorado (Financiarización) */
+    --paper: #f4f6f6;
+    --text: #212f3d;
+  }
+
+  body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    font-family: 'Fira Sans', sans-serif;
+    background-color: var(--paper);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* --- RED --- */
+  #network {
+    width: 100%; height: 100vh;
+    background: radial-gradient(circle at center, #ffffff 0%, #eaeded 100%);
+  }
+
+  /* --- CONTROLES IZQUIERDA --- */
+  .controls {
+    position: absolute;
+    top: 40px; left: 40px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 260px;
+  }
+
+  .nav-btn {
+    background: white;
+    border: none;
+    border-right: 5px solid #ccc;
+    padding: 15px 20px;
+    font-family: 'Merriweather', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.05);
+    text-align: right;
+    transition: all 0.3s ease;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .nav-btn:hover { transform: translateX(-5px); }
+  .nav-btn.active { background: var(--land-dark); color: white; border-right-color: var(--land-gold); }
+  
+  .nav-btn span {
+    display: block;
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 300;
+    margin-top: 5px;
+    opacity: 0.8;
+    text-transform: uppercase;
+  }
+
+  /* Botón Fuego */
+  .btn-fire { border-right-color: var(--land-fire); color: var(--land-fire); }
+  .btn-fire.active { background: var(--land-fire); color: white; }
+
+  /* --- PANEL DESLIZANTE DERECHA --- */
+  .sidebar {
+    position: absolute;
+    right: 0; top: 0;
+    width: 600px;
+    height: 100vh;
+    background: white;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    border-left: 6px solid var(--land-dark);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    padding: 50px 40px;
+    background: var(--land-dark);
+    color: white;
+    position: relative;
+  }
+
+  .book-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .book-editors {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #444;
+  }
+
+  /* Estilos de Texto Académico */
+  h2.chapter-title {
+    font-family: 'Merriweather', serif;
+    font-size: 2rem;
+    color: var(--land-dark);
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
+  .author-name {
+    font-weight: 600;
+    color: var(--land-brown);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    display: block;
+  }
+
+  .concept-tag {
+    display: inline-block;
+    background: #ecf0f1;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .quote-box {
+    border-left: 4px solid var(--land-gold);
+    background: #fcfbf8;
+    padding: 20px;
+    margin: 30px 0;
+    font-family: 'Merriweather', serif;
+    font-style: italic;
+    color: #5d6d7e;
+  }
+
+  .citation {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    font-family: 'Fira Sans', sans-serif;
+    font-style: normal;
+    margin-top: 10px;
+    color: #999;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: none; border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .close-btn:hover { background: rgba(255,255,255,0.1); }
+
+  .footer {
+    padding: 20px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #aaa;
+    border-top: 1px solid #eee;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: 80vh; top: auto; bottom: 0; transform: translateY(100%); border-left: none; border-top: 6px solid var(--land-dark); }
+    .sidebar.open { transform: translateY(0); }
+    .controls { top: 20px; left: 20px; width: auto; }
+    .nav-btn { text-align: left; border-right: none; border-left: 5px solid #ccc; border-radius: 0 4px 4px 0; padding: 10px 15px; }
+    .nav-btn.active { border-left-color: var(--land-gold); }
+  }
+</style>
+</head>
+<body>
+
+<div id="network"></div>
+
+<div class="controls">
+  <button class="nav-btn active" onclick="filterNetwork('all', this)">
+    Vista General
+    <span>38 Capítulos • Ed. 2025</span>
+  </button>
+  <button class="nav-btn" onclick="filterNetwork('grab', this)">
+    La Gran Apropiación
+    <span>Acaparamiento & Finanzas</span>
+  </button>
+  <button class="nav-btn" onclick="filterNetwork('labor', this)">
+    Trabajo y Reproducción
+    <span>Clase, Género & Migración</span>
+  </button>
+  <button class="nav-btn btn-fire" onclick="filterNetwork('fire', this)">
+    🔥 Tierra Caliente
+    <span>Clima, Conflicto & Ecología</span>
+  </button>
+  <button class="nav-btn" onclick="filterNetwork('state', this)">
+    Estado y Territorio
+    <span>Autoridad & Geopolítica</span>
+  </button>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">✕</button>
+  <div class="sidebar-header">
+    <div class="book-title">The Oxford Handbook of<br>Land Politics</div>
+    <div class="book-editors">Borras Jr. & Franco (Eds.) • Oxford Univ. Press 2025</div>
+  </div>
+  <div class="sidebar-content" id="content-area">
+    <div style="text-align: center; margin-top: 50%; opacity: 0.5;">
+      <p>Seleccione un nodo para explorar el análisis en profundidad.</p>
+    </div>
+  </div>
+  <div class="footer">
+    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
+  </div>
+</div>
+
+<script>
+/* --- BASE DE DATOS DE CONTENIDO (EXTENSA Y DETALLADA) --- */
+const db = {
+  // NODO CENTRAL
+  0: {
+    title: "La Política de la Tierra (Land Politics)",
+    author: "Saturnino M. Borras Jr. & Jennifer C. Franco",
+    tags: "Marco Teórico",
+    content: `
+      <p>Este volumen monumental define la "política de la tierra" no solo como una cuestión de agricultura o reforma agraria, sino como el eje central de la vida social contemporánea. Los editores proponen una redefinición radical: la tierra debe entenderse a través de la <strong>unidad indisoluble de producción y reproducción social</strong>.</p>
+      <p>El libro desafía las visiones sectoriales. La tierra no es solo un activo económico (tierra de cultivo); es territorio, es ecología, es identidad y es el escenario de conflictos geopolíticos. En el contexto del capitalismo global, la tierra se ha convertido en una "frontera" constante de acumulación, sujeta a ciclos de acaparamiento (<em>land grabbing</em>) y resistencia.</p>
+      <div class="quote-box">
+        "¿Quién obtiene qué tierra, cómo, cuánta, por cuánto tiempo y para qué propósitos? [...] La tierra conecta a los ciudadanos con los estados, a las corporaciones con el capital, y es el lugar de la acumulación, extracción y control."
+        <span class="citation">Capítulo 1: Introducción (p. 2)</span>
+      </div>
+    `
+  },
+
+  // --- CLUSTER: LA GRAN APROPIACIÓN (GRAB) ---
+  10: {
+    title: "Ecología Política de la Financiarización",
+    author: "S. Ryan Isakson (Cap. 10)",
+    tags: "Economía Política",
+    content: `
+      <p>Isakson analiza cómo la tierra agrícola se ha transformado en una "clase de activos alternativos" para el capital financiero global. Ya no se trata solo de producir alimentos; se trata de especular con el valor del suelo.</p>
+      <p>Este proceso, conocido como <strong>financiarización</strong>, desvincula la propiedad de la tierra de su uso social. Los fondos de pensiones y las empresas de capital privado adquieren vastas extensiones no para cultivar, sino para capturar rentas futuras, exacerbando la exclusión de los productores locales.</p>
+    `
+  },
+  11: {
+    title: "Política de la Tierra en un Mundo Digital",
+    author: "Alistair Fraser (Cap. 11)",
+    tags: "Tecnología",
+    content: `
+      <p>Fraser introduce un tema novedoso: la intersección entre <em>Land Grab</em> (acaparamiento de tierras) y <em>Data Grab</em> (acaparamiento de datos). La agricultura de precisión y los drones no son tecnologías neutrales; son herramientas de vigilancia que hacen que la tierra sea "legible" para los inversores remotos, facilitando su apropiación y control a distancia.</p>
+    `
+  },
+  12: {
+    title: "Regímenes Alimentarios",
+    author: "Philip McMichael (Cap. 9)",
+    tags: "Historia Global",
+    content: `
+      <p>McMichael, uno de los teóricos más influyentes, sitúa la tierra dentro de los ciclos históricos del capitalismo. Argumenta que estamos en un "Régimen Alimentario Corporativo" en crisis. La tierra se reconfigura para servir a las cadenas de suministro globales (soja, aceite de palma), destruyendo las ecologías locales y la soberanía alimentaria.</p>
+    `
+  },
+
+  // --- CLUSTER: TIERRA CALIENTE / FUEGO (FIRE/CLIMATE) ---
+  // Este es el módulo "forzado" y destacado
+  100: {
+    title: "Fallo de Acceso: Crisis Climática",
+    author: "Jesse Ribot (Cap. 12)",
+    tags: "Clima y Vulnerabilidad",
+    content: `
+      <p>Ribot desmonta la idea de que el cambio climático es un desastre puramente "natural". Argumenta que las crisis (incluidos los incendios forestales y las sequías) son crisis de <strong>acceso</strong>. La vulnerabilidad no cae del cielo; se construye socialmente.</p>
+      <p>Cuando los bosques arden o las cosechas fallan, el desastre real es que las estructuras políticas han despojado a las comunidades de su capacidad de adaptación. El "fuego" aquí es tanto literal (en un mundo que se calienta) como político (la quema de derechos).</p>
+      <div class="quote-box">
+        "El cambio climático se convierte en la excusa perfecta para explicar la miseria, ocultando las causas sociales y políticas de la vulnerabilidad, como el robo de tierras y la exclusión."
+        <span class="citation">Ribot (Cap. 12)</span>
+      </div>
+    `
+  },
+  101: {
+    title: "Conservación y Desposesión",
+    author: "Connor Cavanagh & Tor A. Benjaminsen (Cap. 35)",
+    tags: "Green Grabbing",
+    content: `
+      <p>Este capítulo es crucial para entender la política del fuego y los bosques. Los autores analizan el "Acaparamiento Verde" (<em>Green Grabbing</em>) en África. En nombre de la conservación y la lucha contra el cambio climático, los estados y las ONG expulsan a las poblaciones locales.</p>
+      <p>A menudo, se criminalizan las prácticas tradicionales de quema controlada (swidden) de los pastores y agricultores, etiquetándolas falsamente como "destructivas", para justificar la militarización de los parques naturales. La conservación se convierte en una guerra contra los pobres.</p>
+    `
+  },
+  102: {
+    title: "Ecología-Mundo (World-Ecology)",
+    author: "Raj Patel (Cap. 3)",
+    tags: "Teoría Crítica",
+    content: `
+      <p>Patel utiliza el marco de la "Ecología-Mundo" (siguiendo a Jason Moore) para argumentar que el capitalismo no <em>tiene</em> un régimen ecológico, sino que <em>es</em> un régimen ecológico. La tierra no es un escenario pasivo.</p>
+      <p>El "Fuego" del capitalismo es la combustión incesante de la vida (trabajo y naturaleza) para generar plusvalía. La frontera agrícola avanza quemando bosques para crear "Naturaleza Barata" (Cheap Nature), un proceso insostenible que está alcanzando sus límites planetarios.</p>
+    `
+  },
+  103: {
+    title: "Agroecología",
+    author: "John Vandermeer & Ivette Perfecto (Cap. 16)",
+    tags: "Resistencia Ecológica",
+    content: `
+      <p>Frente a la agricultura industrial que "quema" el suelo con químicos, la agroecología se presenta como una resistencia política y técnica. No es solo un método de cultivo, es una defensa del territorio que enfría el planeta y restaura la matriz ecológica.</p>
+    `
+  },
+
+  // --- CLUSTER: TRABAJO Y REPRODUCCIÓN (LABOR) ---
+  20: {
+    title: "Tierra y Reproducción Social",
+    author: "Ben Cousins (Cap. 18)",
+    tags: "Feminismo / Marxismo",
+    content: `
+      <p>Cousins expande el análisis marxista clásico. La tierra no sirve solo para la producción de mercancías; es vital para la <strong>reproducción social</strong> de la fuerza de trabajo (vivienda, subsistencia, cuidados). Ignorar esto ha llevado a subestimar por qué la gente lucha por tierras marginales o urbanas.</p>
+    `
+  },
+  21: {
+    title: "Agricultura Urbana",
+    author: "Ricardo Jacobs (Cap. 21)",
+    tags: "Ciudad",
+    content: `
+      <p>En el siglo XXI, la cuestión agraria se ha urbanizado. Jacobs muestra cómo los habitantes de los barrios marginales (slums) utilizan la agricultura urbana no como un hobby, sino como una estrategia de supervivencia contra la precariedad salarial. La lucha por la tierra ahora ocurre en las periferias de las megaciudades.</p>
+    `
+  },
+  22: {
+    title: "Movilidad Humana y Tierra",
+    author: "Kei Otsuki & Annelies Zoomers (Cap. 20)",
+    tags: "Migración",
+    content: `
+      <p>Rompen el mito del campesino estático. Analizan el nexo "Tierra-Movilidad": la gente se mueve para acceder a la tierra, o pierde la tierra y se ve forzada a moverse. La migración y la cuestión de la tierra son dos caras de la misma moneda en el capitalismo global.</p>
+    `
+  },
+
+  // --- CLUSTER: ESTADO Y TERRITORIO (STATE) ---
+  30: {
+    title: "Hacer Tierra es Hacer Estado",
+    author: "Nikita Sud (Cap. 24)",
+    tags: "Teoría del Estado",
+    content: `
+      <p>Sud argumenta que el Estado no simplemente "regula" la tierra; el Estado se <strong>constituye</strong> a través de la creación y control de la tierra (territorio). "Land-making is State-making". Desde la India hasta África, la autoridad política se performa mediante la clasificación, titulación y expropiación del suelo.</p>
+    `
+  },
+  31: {
+    title: "Política Étnica y Acaparamiento",
+    author: "Tsegaye Moreda (Cap. 29)",
+    tags: "Identidad",
+    content: `
+      <p>Moreda explora cómo las élites utilizan la etnicidad para facilitar o resistir el acaparamiento de tierras. En Etiopía y otros lugares, el "acaparamiento" a menudo se disfraza de desarrollo regional, exacerbando conflictos étnicos latentes sobre el territorio.</p>
+    `
+  },
+  32: {
+    title: "Geopolítica de la Tierra",
+    author: "Michael B. Dwyer (Cap. 32)",
+    tags: "Relaciones Internacionales",
+    content: `
+      <p>La tierra es un peón en el tablero geopolítico. Dwyer analiza cómo las potencias (como China o EE.UU.) utilizan inversiones en tierras extranjeras no solo para asegurar recursos, sino para proyectar poder e influencia diplomática en el Sur Global.</p>
+    `
+  }
+};
+
+/* --- CONFIGURACIÓN VIS.JS --- */
+const nodes = new vis.DataSet([
+  // Centro
+  { id: 0, label: "OXFORD\nHANDBOOK\nLAND POLITICS", shape: "box", color: "#2e4053", font: {color:"white", size:22, face:"Merriweather"} },
+
+  // CLUSTER: APROPIACIÓN (Dorado/Gris)
+  { id: 10, label: "Financiarización\n(Isakson)", group: "grab", value: 20 },
+  { id: 11, label: "Tierra Digital\n(Fraser)", group: "grab", value: 15 },
+  { id: 12, label: "Regímenes\nAlimentarios", group: "grab", value: 20 },
+
+  // CLUSTER: TIERRA CALIENTE (Rojo/Fuego) - DESTACADO
+  { id: 100, label: "CRISIS CLIMÁTICA\n(Ribot)", group: "fire", value: 25, shape: "hexagon" },
+  { id: 101, label: "Green Grabbing\n(Conservación)", group: "fire", value: 20, shape: "hexagon" },
+  { id: 102, label: "Ecología-Mundo\n(Patel)", group: "fire", value: 20, shape: "hexagon" },
+  { id: 103, label: "Agroecología", group: "fire", value: 15 },
+
+  // CLUSTER: TRABAJO (Terracota)
+  { id: 20, label: "Reproducción\nSocial", group: "labor", value: 20 },
+  { id: 21, label: "Agricultura\nUrbana", group: "labor", value: 15 },
+  { id: 22, label: "Migración\n(Nexus)", group: "labor", value: 15 },
+
+  // CLUSTER: ESTADO (Azul)
+  { id: 30, label: "Hacer Estado\n(Sud)", group: "state", value: 20 },
+  { id: 31, label: "Política\nÉtnica", group: "state", value: 15 },
+  { id: 32, label: "Geopolítica", group: "state", value: 15 }
+]);
+
+const edges = new vis.DataSet([
+  // Conexiones Principales
+  { from: 0, to: 10, width: 3 }, { from: 0, to: 100, width: 4, color: "#c0392b" },
+  { from: 0, to: 20, width: 3 }, { from: 0, to: 30, width: 3 },
+
+  // Conexiones Grab
+  { from: 10, to: 11 }, { from: 10, to: 12 },
+
+  // Conexiones Fire (Clima/Ecología)
+  { from: 100, to: 101, label: "falsa solución", dashes: true }, // Clima -> Green Grabbing
+  { from: 100, to: 102, label: "teoría", dashes: true }, // Clima -> Ecología Mundo
+  { from: 102, to: 103, label: "alternativa" }, // Ecología -> Agroecología
+
+  // Conexiones Labor
+  { from: 20, to: 21 }, { from: 20, to: 22 },
+
+  // Conexiones State
+  { from: 30, to: 31 }, { from: 30, to: 32 },
+
+  // Transversales
+  { from: 101, to: 31, label: "desplazamiento", dashes: true } // Conservación -> Étnico
+]);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    shape: 'dot',
+    font: { face: 'Fira Sans', color: '#333' },
+    borderWidth: 2,
+    shadow: true
+  },
+  groups: {
+    grab: { color: { background: '#f9e79f', border: '#f39c12' } },
+    fire: { color: { background: '#e6b0aa', border: '#c0392b' }, font: {size: 16, face: 'Merriweather'} },
+    labor: { color: { background: '#d7bde2', border: '#8e44ad' } },
+    state: { color: { background: '#a9cce3', border: '#2980b9' } }
+  },
+  edges: {
+    color: { color: '#bdc3c7', highlight: '#2e4053' },
+    smooth: { type: 'continuous' }
+  },
+  physics: {
+    stabilization: false,
+    barnesHut: { gravitationalConstant: -3000, springLength: 150 }
+  },
+  interaction: { hover: true }
+};
+
+const network = new vis.Network(container, data, options);
+
+/* --- LÓGICA DE INTERACCIÓN --- */
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = db[nodeId];
+    if (info) {
+      document.getElementById('content-area').innerHTML = `
+        <span class="concept-tag">${info.tags}</span>
+        <h2 class="chapter-title">${info.title}</h2>
+        <span class="author-name">${info.author}</span>
+        ${info.content}
+      `;
+      document.getElementById('sidebar').classList.add('open');
+    }
+  }
+});
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function filterNetwork(type, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const allIds = nodes.getIds();
+  let targetGroups = [type];
+  
+  if (type === 'all') {
+    nodes.update(allIds.map(id => ({id: id, hidden: false})));
+  } else {
+    // Mostrar nodo central (0) y grupo seleccionado
+    const updates = allIds.map(id => {
+      const node = nodes.get(id);
+      const isVisible = (id === 0) || targetGroups.includes(node.group);
+      return { id: id, hidden: !isVisible };
+    });
+    nodes.update(updates);
+  }
+  
+  if (type === 'fire') {
+    network.fit({ nodes: [0, 100, 101, 102, 103], animation: true });
+  } else {
+    network.fit({ animation: true });
+  }
+}
+</script>
+</body>
+</html>
