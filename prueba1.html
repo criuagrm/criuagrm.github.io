@@ -1,512 +1,546 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Esquema: Manual Oxford de Teoría Política Ambiental</title>
-<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Proyectos de Investigación — CIRCPyCS</title>
+  <meta name="description" content="Portafolio de investigación del CIRCPyCS." />
 
-<style>
-  :root {
-    --primary: #2c3e50;    /* Azul Oxford Oscuro */
-    --accent: #c0392b;     /* Rojo Ladrillo (Fuego) */
-    --leaf: #27ae60;       /* Verde Naturaleza */
-    --history: #d35400;    /* Naranja Historia */
-    --power: #8e44ad;      /* Morado Poder */
-    --gold: #f1c40f;       /* Dorado Detalles */
-    --paper: #fdfbf7;      /* Fondo Papel */
-    --text: #2c3e50;
-  }
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cordis: {
+              blue: '#004494', // Azul Institucional
+              dark: '#0f2c52',
+              light: '#e9eff8',
+              text: '#222222',
+              gray: '#595959'
+            }
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          boxShadow: { 
+            'card': '0 2px 8px rgba(0,0,0,0.06)',
+            'card-hover': '0 10px 30px rgba(0,68,148,0.12)',
+            'popup': '0 10px 40px -10px rgba(0,0,0,0.2)'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
-  body, html {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    font-family: 'Roboto Slab', serif;
-    background-color: var(--paper);
-    color: var(--text);
-    overflow: hidden;
-  }
+  <style>
+    body { background-color: #fcfcfc; }
+    
+    /* Estilos Ficha Técnica Lateral */
+    .fact-sheet { background-color: #f8f9fa; border-left: 4px solid #004494; position: relative; }
+    .label-cordis { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; font-weight: 700; margin-bottom: 4px; }
+    .value-cordis { font-size: 0.95rem; color: #111; margin-bottom: 16px; font-weight: 500; line-height: 1.4; }
+    
+    /* Drawer */
+    .drawer { position: fixed; inset: 0; z-index: 100; display: none; }
+    .drawer.open { display: block; }
+    .drawer-backdrop { background: rgba(15, 44, 82, 0.6); backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s; }
+    .drawer.open .drawer-backdrop { opacity: 1; }
+    .drawer-panel { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .drawer.open .drawer-panel { transform: translateX(0); }
+    
+    .tag-pill { @apply px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 bg-white text-slate-600; }
+    
+    /* Estilos para el contenido inyectado */
+    .section-title { @apply text-sm font-bold text-cordis-dark uppercase tracking-widest border-b border-gray-200 pb-2 mb-3 mt-8; }
+    .rich-text p { @apply mb-3 text-gray-700 leading-relaxed text-sm text-justify; }
+    .rich-text ul { @apply list-disc list-inside mb-4 space-y-2 text-sm text-gray-700; }
+    .rich-text li { @apply pl-1; }
+    .rich-text strong { @apply text-cordis-blue font-semibold; }
 
-  /* --- RED --- */
-  #network {
-    width: 100%; height: 100vh;
-    background: radial-gradient(circle at center, #fffefb 0%, #f0ebd8 100%);
-  }
-
-  /* --- BOTONES DE FILTRO --- */
-  .controls {
-    position: absolute;
-    top: 20px; left: 20px;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .filter-btn {
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Roboto Slab', serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
-    text-align: left;
-    display: flex;
-    align-items: center;
-  }
-  
-  .filter-btn:before {
-    content: ''; display: inline-block;
-    width: 10px; height: 10px; margin-right: 8px;
-    border-radius: 50%; background: #ccc;
-  }
-
-  .filter-btn:hover { transform: translateX(5px); }
-  .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-  
-  /* Colores específicos de botones */
-  .btn-all.active:before { background: #fff; }
-  .btn-hist.active { background: var(--history); border-color: var(--history); }
-  .btn-hist:before { background: var(--history); }
-  
-  .btn-nat.active { background: var(--leaf); border-color: var(--leaf); }
-  .btn-nat:before { background: var(--leaf); }
-  
-  .btn-pow.active { background: var(--power); border-color: var(--power); }
-  .btn-pow:before { background: var(--power); }
-
-  .btn-fire.active { background: var(--accent); border-color: var(--accent); }
-  .btn-fire:before { background: var(--accent); }
-
-  /* --- PANEL LATERAL --- */
-  .sidebar {
-    position: absolute;
-    right: 0; top: 0;
-    width: 450px;
-    height: 100vh;
-    background: #fff;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.15);
-    transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    z-index: 200;
-    border-left: 4px solid var(--primary);
-  }
-
-  .sidebar.open { transform: translateX(0); }
-
-  .sidebar-header {
-    background: var(--primary);
-    color: #fff;
-    padding: 25px;
-    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h2v2H1V1zm4 0h2v2H5V1zm4 0h2v2H9V1zm4 0h2v2h-2V1zm4 0h2v2h-2V1z' fill='%2334495e' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
-  }
-
-  .book-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    line-height: 1.3;
-    border-bottom: 2px solid var(--gold);
-    padding-bottom: 10px;
-    margin-bottom: 5px;
-  }
-
-  .book-meta {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #bdc3c7;
-  }
-
-  .sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 30px;
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: #444;
-  }
-
-  /* Estilos del Contenido del Nodo */
-  h2.node-title {
-    font-family: 'Cinzel', serif;
-    color: var(--primary);
-    font-size: 1.6rem;
-    margin-top: 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-  }
-
-  .node-type {
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #7f8c8d;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .subtitle {
-    font-weight: 700;
-    color: var(--primary);
-    margin-top: 20px;
-    margin-bottom: 5px;
-    display: block;
-  }
-
-  .quote-box {
-    background: #fcf3cf; /* Amarillo pálido Oxford */
-    border-left: 4px solid var(--gold);
-    padding: 15px;
-    margin: 20px 0;
-    font-style: italic;
-    color: #5d4037;
-    position: relative;
-  }
-
-  .quote-box::before {
-    content: "“";
-    font-size: 3rem;
-    position: absolute;
-    top: -10px; left: 5px;
-    opacity: 0.2;
-  }
-
-  .citation {
-    display: block;
-    text-align: right;
-    font-size: 0.7rem;
-    margin-top: 5px;
-    font-style: normal;
-    color: #7f8c8d;
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: none; border: none;
-    color: #fff; font-size: 1.5rem;
-    cursor: pointer;
-  }
-
-  .footer {
-    padding: 10px;
-    text-align: center;
-    font-size: 0.65rem;
-    color: #999;
-    background: #f8f9fa;
-    border-top: 1px solid #eee;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .sidebar { width: 100%; height: 70vh; top: auto; bottom: 0; transform: translateY(100%); border-left: none; border-top: 4px solid var(--primary); }
-    .sidebar.open { transform: translateY(0); }
-    .controls { flex-direction: row; flex-wrap: wrap; top: auto; bottom: 20px; width: 90%; }
-    .filter-btn { font-size: 0.7rem; padding: 5px 10px; flex: 1; }
-  }
-</style>
+    /* Estilos del Popup (Ventana emergente) */
+    .popup-trigger:hover .popup-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) translateX(0);
+    }
+    .popup-content {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+      width: 280px;
+    }
+    /* Flecha del popup */
+    .popup-arrow {
+      position: absolute;
+      top: -6px;
+      right: 12px;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-left: 1px solid #e2e8f0;
+      border-top: 1px solid #e2e8f0;
+      transform: rotate(45deg);
+    }
+  </style>
 </head>
-<body>
+<body class="text-slate-800 font-sans min-h-screen flex flex-col">
 
-<div id="network"></div>
+  <div class="h-1.5 w-full bg-cordis-blue"></div>
 
-<div class="controls">
-  <button class="filter-btn btn-all active" onclick="filterNetwork('all', this)">Ver Todo</button>
-  <button class="filter-btn btn-hist" onclick="filterNetwork('history', this)">Eje I: Tradiciones</button>
-  <button class="filter-btn btn-nat" onclick="filterNetwork('nature', this)">Eje II: Ontología</button>
-  <button class="filter-btn btn-pow" onclick="filterNetwork('power', this)">Eje III: Poder</button>
-  <button class="filter-btn btn-fire" onclick="filterNetwork('fire', this)">🔥 Caso de Estudio: Incendios</button>
-</div>
+  <!-- Header -->
+  <header class="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logo y Título -->
+      <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-auto group-hover:scale-105 transition duration-300" />
+        <div class="leading-tight">
+          <h1 class="text-lg font-bold text-cordis-blue tracking-tight">CIRCPyCS</h1>
+          <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Portal de Proyectos</p>
+        </div>
+      </a>
+      
+      <!-- Navegación Fija (Sin Responsive) -->
+      <nav class="flex gap-6 text-sm font-medium items-center">
+        <a href="https://cir.uagrm.edu.bo/" class="text-gray-600 hover:text-cordis-blue transition flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50">
+          <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
+        </a>
+      </nav>
+      <!-- Se eliminó el botón mobile -->
+    </div>
+  </header>
 
-<div class="sidebar" id="sidebar">
-  <button class="close-btn" onclick="closeSidebar()">×</button>
-  <div class="sidebar-header">
-    <div class="book-title">Manual Oxford de<br>Teoría Política Ambiental</div>
-    <div class="book-meta">Oxford University Press (2016)<br>Gabrielson, Hall, Meyer & Schlosberg</div>
+  <!-- Hero -->
+  <div class="bg-white border-b border-gray-200 py-12 md:py-16 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-50 to-transparent opacity-50"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-cordis-blue text-xs font-bold uppercase tracking-wider mb-4 border border-blue-100">
+          <span class="w-2 h-2 rounded-full bg-cordis-blue"></span> Portafolio 2025-2026
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold text-cordis-dark mb-6 tracking-tight">Proyectos de Investigación Científica</h2>
+        <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
+          Repositorio oficial de proyectos activos del centro. Investigación aplicada en gobernanza ambiental, integridad democrática y desarrollo institucional.
+        </p>
+        
+        <!-- Buscador -->
+        <div class="relative max-w-lg group">
+          <input type="text" id="search-input" placeholder="Filtrar proyectos..." 
+                 class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-cordis-blue focus:border-cordis-blue outline-none shadow-sm transition group-hover:shadow-md">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-gray-400 group-hover:text-cordis-blue transition"></i>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="sidebar-content" id="node-content">
-    <p style="text-align: center; margin-top: 50%; opacity: 0.5;">Seleccione un nodo del esquema para leer el contenido.</p>
-  </div>
-  <div class="footer">
-    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
-  </div>
-</div>
 
-<script>
-/* --- BASE DE DATOS DE CONTENIDOS (TEXTOS COMPLETOS) --- */
-const db = {
-  // --- NODO CENTRAL ---
-  0: {
-    type: "Volumen Central",
-    title: "El Campo de la Teoría Política Ambiental",
-    content: `
-      <span class="subtitle">Definición del Proyecto</span>
-      <p>Este manual no busca canonizar una sola "teoría política ambiental" (EPT), sino mapear un campo de investigación vibrante y plural. La EPT se define aquí como el uso de herramientas teóricas (crítica conceptual, análisis normativo, historia de las ideas) para abordar la crisis ecológica.</p>
-      <span class="subtitle">La Tesis Principal</span>
-      <p>El argumento central del libro es que la crisis ambiental no es solo un problema técnico o científico, sino profundamente <strong>político</strong>. Requiere repensar nuestros conceptos fundacionales: ¿Qué significa "libertad" en un planeta finito? ¿Es posible la "democracia" si solo votan los humanos? ¿Cómo cambia la "justicia" cuando incluimos a generaciones futuras?</p>
-      <div class="quote-box">
-        "La EPT interroga los conceptos políticos tradicionales desde un punto de vista ambiental... reflexionando sobre democracia, libertad, derechos y justicia."
-        <span class="citation">Introducción (p. 4)</span>
+  <!-- Main Grid -->
+  <main class="flex-grow py-12 bg-slate-50/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-center">
+        <div id="projects-container" class="w-full grid gap-8 md:grid-cols-2 lg:max-w-5xl">
+          <!-- JS Inject -->
+        </div>
       </div>
-    `
-  },
+    </div>
+  </main>
 
-  // --- EJE I: TRADICIONES (HISTORY) ---
-  1: {
-    type: "Sección Fundamental",
-    title: "EJE I: Diálogos con la Tradición",
-    content: `
-      <span class="subtitle">¿Por qué leer a los clásicos?</span>
-      <p>Esta sección agrupa los debates sobre cómo la EPT interactúa con la historia del pensamiento político occidental (Platón, Hobbes, Locke). La tesis de esta sección es que no debemos desechar el canon por considerarlo "anti-ecológico", sino releerlo críticamente.</p>
-      <span class="subtitle">Apropiación Crítica</span>
-      <p>Los autores en esta sección (como Harlan Wilson) sugieren un enfoque de "apropiación selectiva". Usamos a Hobbes para entender la necesidad de coerción ante la escasez, o a Mill para imaginar una economía que no crezca perpetuamente. Los textos antiguos sirven como espejos para diagnosticar nuestras fallas actuales.</p>
-    `
-  },
-  11: {
-    type: "Debate Clave",
-    title: "Liberalismo: ¿Amigo o Enemigo?",
-    content: `
-      <span class="subtitle">El Problema de Locke</span>
-      <p>El liberalismo clásico a menudo se culpa de la crisis ecológica debido a su énfasis en la propiedad privada y la acumulación. John Locke veía la naturaleza como un "desperdicio" hasta que el trabajo humano la transformaba en valor.</p>
-      <span class="subtitle">La Solución de Mill</span>
-      <p>Piers Stephens argumenta en esta sección que John Stuart Mill ofrece una alternativa: el "Liberalismo Verde". Mill defendió el <strong>Estado Estacionario</strong>, argumentando que una vez satisfechas las necesidades básicas, el crecimiento material infinito destruye el carácter humano. La naturaleza es necesaria para la soledad, la reflexión y la libertad individual.</p>
-      <div class="quote-box">
-        "El nuevo liberalismo milliano es la variante mejor adaptada para una síntesis con los objetivos y valores ambientalistas."
-        <span class="citation">Piers Stephens (Cap. 4)</span>
+  <!-- Footer -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Footer Top (Columnas) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+          </div>
+          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+          </p>
+          <p class="text-xs text-slate-400">
+            © <span id="year"></span> Todos los derechos reservados.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-envelope w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-location-dot w-5 h-5 text-emerald-600 shrink-0 mt-0.5"></i>
+              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+          <div class="grid gap-3">
+            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <i class="fa-brands fa-facebook-f text-xs"></i>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+                 <i class="fa-brands fa-youtube text-xs"></i>
+              </div>
+              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+            </a>
+          </div>
+        </div>
       </div>
-    `
-  },
-  12: {
-    type: "Perspectiva Crítica",
-    title: "Enfoques No-Occidentales",
-    content: `
-      <span class="subtitle">Contra el "Orientalismo Verde"</span>
-      <p>Farah Godrej advierte sobre el peligro de idealizar las culturas orientales o indígenas como inherentemente "sagradas" o "ecológicas". Esto es otra forma de estereotipo colonial.</p>
-      <span class="subtitle">Materialismo Político</span>
-      <p>En su lugar, propone estudiar prácticas concretas como el <em>Swaraj</em> de Gandhi: no una mística etérea, sino una política material de autosuficiencia, resistencia anticolonial y justicia distributiva.</p>
-    `
-  },
 
-  // --- EJE II: ONTOLOGÍA / NATURALEZA (NATURE) ---
-  2: {
-    type: "Sección Fundamental",
-    title: "EJE II: Repensando la Naturaleza",
-    content: `
-      <span class="subtitle">El Giro Ontológico</span>
-      <p>Esta es quizás la sección más innovadora del manual. Cuestiona la división básica entre "Sujeto Humano" (activo) y "Objeto Natural" (pasivo). La tesis aquí es el <strong>Nuevo Materialismo</strong>: la materia misma tiene agencia.</p>
-      <span class="subtitle">Agencia Distribuida</span>
-      <p>Ya no podemos ver la política como un asunto solo de humanos discutiendo en una habitación. Las tormentas, los virus, el dióxido de carbono y los bosques actúan políticamente: fuerzan decisiones, destruyen infraestructuras y reorganizan sociedades. La naturaleza no es un escenario, es un actor.</p>
-    `
-  },
-  21: {
-    type: "Concepto Teórico",
-    title: "Biopolítica Vegetal",
-    content: `
-      <span class="subtitle">Ceguera hacia las Plantas</span>
-      <p>Catriona Sandilands argumenta que la teoría política sufre de "ceguera vegetal". Vemos a las plantas como decoración inerte. Sin embargo, las plantas tienen inteligencia sensorial y comunitaria.</p>
-      <span class="subtitle">Política Floral</span>
-      <p>Sandilands propone una "biopolítica" que incluya a las plantas como ciudadanas. Analiza cómo la gestión de parques y bosques urbanos no es neutral, sino una forma de disciplinar tanto a la naturaleza como a las personas que la usan.</p>
-    `
-  },
-
-  // --- CASO DE ESTUDIO: FUEGO (FIRE) ---
-  100: {
-    type: "Caso de Estudio: Agencia Material",
-    title: "Incendios Forestales (Wildfire)",
-    content: `
-      <span class="subtitle">El Fuego como Agente Político</span>
-      <p>Basado en el Capítulo 26 de Teena Gabrielson. El fuego forestal es el ejemplo perfecto para entender la "Agencia Material". El fuego no obedece leyes humanas; tiene sus propios comportamientos, apetitos y trayectorias. Al "actuar", el fuego reconfigura fronteras, destruye propiedades y fuerza al Estado a declarar emergencias.</p>
-      <span class="subtitle">La Paradoja de la Supresión</span>
-      <p>Durante un siglo, la política oficial fue la "Supresión Total": apagar todo fuego inmediatamente. Esta política, nacida de la arrogancia humana de querer controlar la naturaleza, creó bosques densos y llenos de combustible muerto. El resultado son los mega-incendios actuales que son imposibles de controlar.</p>
-      <div class="quote-box">
-        "Concebir los incendios estrictamente como procesos físicos los despolitiza... Debemos verlos como ensamblajes de actores humanos y no humanos."
-        <span class="citation">Teena Gabrielson (Cap. 26)</span>
+      <!-- Footer Bottom (Completo) -->
+      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+         <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+         <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+            <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+            <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+         </div>
       </div>
-    `
-  },
-  101: {
-    type: "Análisis de Políticas",
-    title: "La Política de la Ignición",
-    content: `
-      <span class="subtitle">Ensamblajes de Desastre</span>
-      <p>Un incendio no es "natural". Es un evento híbrido creado por una red de actores (ensamblaje): el viento, la sequía, los concejales que permitieron construir casas en el bosque, las aseguradoras, y la vegetación seca.</p>
-      <span class="subtitle">Vulnerabilidad Desigual</span>
-      <p>El análisis de Gabrielson muestra que el fuego revela desigualdades de clase y raza. ¿Qué casas se salvan? ¿Quiénes son los bomberos (a menudo prisioneros en EE.UU. cobrando salarios mínimos)? El fuego ilumina las estructuras de poder invisibles.</p>
-    `
-  },
 
-  // --- EJE III: PODER (POWER) ---
-  3: {
-    type: "Sección Fundamental",
-    title: "EJE III: Estructuras de Poder",
-    content: `
-      <span class="subtitle">La Realpolitik Ambiental</span>
-      <p>Esta sección deja de lado el idealismo para mirar las estructuras duras: el Estado, el Capitalismo y la Burocracia. La pregunta central es: ¿Pueden estas instituciones, diseñadas para la explotación, ser reformadas para la conservación?</p>
-      <span class="subtitle">Gubernamentalidad</span>
-      <p>Se utiliza mucho a Foucault aquí. La política ambiental moderna a menudo no trata de "salvar a la Madre Tierra", sino de <strong>gestionar poblaciones</strong>. Medir el carbono, regular el consumo, controlar la natalidad: todo esto es biopoder.</p>
-    `
-  },
-  31: {
-    type: "Crítica Radical",
-    title: "Gubernamentalidad Verde",
-    content: `
-      <span class="subtitle">Eco-Managerialismo</span>
-      <p>Timothy Luke lanza una crítica feroz. Argumenta que el desarrollo sostenible es a menudo una máscara para el "Eco-Managerialismo": un intento tecnocrático de mantener el sistema capitalista funcionando mediante ajustes menores, sin cuestionar la lógica de crecimiento que causa el problema.</p>
-      <div class="quote-box">
-        "La gubernamentalidad verde lleva el alcance administrativo hacia un eco-managerialismo profundo, gestionando la vida para el mercado."
-        <span class="citation">Timothy Luke (Cap. 30)</span>
-      </div>
-    `
-  },
-  32: {
-    type: "Teoría del Estado",
-    title: "El Estado Verde",
-    content: `
-      <span class="subtitle">¿Necesitamos un Leviatán?</span>
-      <p>Autores como Eckersley y Paterson debaten si el Estado puede volverse "verde". Algunos temen que la emergencia climática justifique un autoritarismo estatal (eco-dictadura). Otros argumentan que solo el Estado tiene el poder suficiente para frenar a las corporaciones multinacionales.</p>
-    `
-  }
-};
+    </div>
+  </footer>
 
-/* --- CONFIGURACIÓN DE LA RED (VIS.JS) --- */
-const nodes = new vis.DataSet([
-  // Centro
-  { id: 0, label: "MANUAL\nOXFORD", shape: "box", color: "#2c3e50", font: {color:"#fff", size:20} },
+  <script>
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+  </script>
 
-  // EJE I: TRADICIONES (Naranja)
-  { id: 1, label: "Eje I:\nTradiciones", group: "history", value: 25 },
-  { id: 11, label: "Liberalismo\n(Locke vs Mill)", group: "history", value: 15 },
-  { id: 12, label: "Enfoques\nNo-Occidentales", group: "history", value: 15 },
-
-  // EJE II: NATURALEZA (Verde)
-  { id: 2, label: "Eje II:\nOntología", group: "nature", value: 25 },
-  { id: 21, label: "Biopolítica\nVegetal", group: "nature", value: 15 },
-  
-  // MODULO FUEGO (Conectado a Naturaleza pero distinto)
-  { id: 100, label: "INCENDIOS\n(Agencia)", group: "fire", value: 20, shape: "hexagon" },
-  { id: 101, label: "Política de\nSupresión", group: "fire", value: 15 },
-
-  // EJE III: PODER (Morado)
-  { id: 3, label: "Eje III:\nPoder", group: "power", value: 25 },
-  { id: 31, label: "Gubernamentalidad\n(Foucault)", group: "power", value: 15 },
-  { id: 32, label: "El Estado\nVerde", group: "power", value: 15 }
-]);
-
-const edges = new vis.DataSet([
-  // Ramas Principales
-  { from: 0, to: 1, width: 3 },
-  { from: 0, to: 2, width: 3 },
-  { from: 0, to: 3, width: 3 },
-
-  // Ramas Historia
-  { from: 1, to: 11 }, { from: 1, to: 12 },
-
-  // Ramas Naturaleza
-  { from: 2, to: 21 },
-  { from: 2, to: 100, label: "caso de estudio", color: {color:"#c0392b"}, dashes:true }, // Conexión temática
-
-  // Ramas Fuego
-  { from: 100, to: 101 },
-
-  // Ramas Poder
-  { from: 3, to: 31 }, { from: 3, to: 32 },
-
-  // Conexiones Cruzadas
-  { from: 100, to: 31, dashes:true, label: "gestión", color: {opacity:0.3} } // Incendios <-> Gestión gubernamental
-]);
-
-const container = document.getElementById('network');
-const data = { nodes: nodes, edges: edges };
-const options = {
-  nodes: {
-    shape: 'dot',
-    font: { face: 'Roboto Slab', color: '#333' },
-    borderWidth: 2,
-    shadow: true
-  },
-  groups: {
-    history: { color: { background: '#d35400', border: '#a04000' } },
-    nature: { color: { background: '#27ae60', border: '#1e8449' } },
-    power: { color: { background: '#8e44ad', border: '#6c3483' } },
-    fire: { color: { background: '#c0392b', border: '#922b21' }, font: { color: '#c0392b', size: 14, face: 'Cinzel' } }
-  },
-  edges: {
-    color: { color: '#bdc3c7', highlight: '#2c3e50' },
-    smooth: { type: 'continuous' }
-  },
-  interaction: { hover: true },
-  physics: {
-    stabilization: false,
-    barnesHut: { gravitationalConstant: -2000, springLength: 120 }
-  }
-};
-
-const network = new vis.Network(container, data, options);
-
-/* --- LÓGICA DE INTERACCIÓN --- */
-network.on("click", function (params) {
-  if (params.nodes.length > 0) {
-    const nodeId = params.nodes[0];
-    const info = db[nodeId];
+  <!-- DRAWER / DETALLE DEL PROYECTO -->
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div class="absolute inset-0 drawer-backdrop" id="drawer-bg"></div>
     
-    if (info) {
-      document.getElementById('node-content').innerHTML = `
-        <span class="node-type">${info.type}</span>
-        <h2 class="node-title">${info.title}</h2>
-        ${info.content}
+    <div class="absolute right-0 top-0 h-full w-full lg:w-[960px] bg-white shadow-2xl drawer-panel overflow-y-auto flex flex-col">
+      
+      <!-- Drawer Header -->
+      <div class="sticky top-0 bg-white/95 backdrop-blur border-b border-gray-200 px-6 py-4 flex items-center justify-between z-30">
+        <div class="flex items-center gap-3">
+           <div class="bg-cordis-blue text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm uppercase tracking-wider">Ficha Técnica</div>
+           <span class="text-sm text-gray-400">|</span>
+           <span id="d-id-header" class="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded">ID: 000</span>
+        </div>
+        <button id="drawer-close" class="text-gray-400 hover:text-cordis-blue hover:bg-blue-50 p-2 rounded-full transition duration-200">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Drawer Body -->
+      <div class="flex-grow p-6 md:p-12">
+        
+        <!-- Project Title Area -->
+        <div class="mb-8 border-b border-gray-100 pb-6">
+          <div id="d-acronym" class="inline-block text-cordis-blue text-sm font-bold mb-3 tracking-wide bg-blue-50 px-3 py-1 rounded-lg">ACRONYM</div>
+          <h2 id="d-title" class="text-2xl md:text-3xl font-bold text-cordis-dark leading-tight mb-4">Título del Proyecto</h2>
+          
+          <div class="flex flex-wrap gap-4 text-sm">
+            <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+              <i class="fa-regular fa-calendar mr-2 text-cordis-blue"></i>
+              <span id="d-dates">Fechas</span>
+            </div>
+            <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+              <i class="fa-solid fa-tag mr-2 text-cordis-blue"></i>
+              <span id="d-program">Programa</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12">
+          
+          <!-- Columna Principal: Contenido Rico -->
+          <div class="flex-1">
+            
+            <div id="d-summary-section">
+              <h3 class="section-title text-cordis-dark mt-0">Resumen Ejecutivo</h3>
+              <div id="d-summary" class="rich-text"></div>
+            </div>
+
+            <div id="d-objectives-section">
+              <h3 class="section-title">Objetivos</h3>
+              <div id="d-objectives" class="rich-text"></div>
+            </div>
+
+            <div id="d-methodology-section">
+              <h3 class="section-title">Metodología</h3>
+              <div id="d-methodology" class="rich-text"></div>
+            </div>
+
+            <div id="d-hypothesis-section">
+              <h3 class="section-title">Hipótesis</h3>
+              <div id="d-hypothesis" class="rich-text"></div>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-gray-100">
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Palabras Clave</h3>
+              <div id="d-tags" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Botones de Acción Secundarios -->
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mt-10 flex flex-wrap gap-4 items-center justify-between">
+               <div class="text-sm text-gray-500 font-medium">Otras opciones:</div>
+               <div class="flex gap-3">
+                 <button onclick="alert('Redirigiendo...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
+                   <i class="fa-regular fa-envelope"></i> Contactar PI
+                 </button>
+               </div>
+            </div>
+          </div>
+
+          <!-- Columna Lateral: FICHA TÉCNICA -->
+          <div class="w-full lg:w-72 flex-shrink-0">
+            <div class="fact-sheet p-6 rounded-r-xl shadow-sm sticky top-24">
+              
+              <!-- TÍTULO CON POP-UP INTEGRADO -->
+              <div class="popup-trigger relative flex items-center justify-between border-b border-gray-200 pb-3 mb-6 cursor-help">
+                 <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-file-contract text-cordis-blue"></i>
+                    Ficha Técnica
+                 </h3>
+                 <i class="fa-regular fa-circle-question text-gray-400 hover:text-cordis-blue transition"></i>
+                 
+                 <!-- Contenido del Pop-up -->
+                 <div class="popup-content absolute right-0 top-10 bg-white border border-gray-200 shadow-popup p-4 rounded-xl text-left pointer-events-none">
+                    <div class="popup-arrow"></div>
+                    <div class="text-xs text-gray-500 leading-relaxed">
+                       <strong class="text-cordis-blue block mb-1">Sobre este documento</strong>
+                       Esta ficha técnica resume los aspectos administrativos oficiales del proyecto según la base de datos de la Dirección de Investigación.
+                    </div>
+                 </div>
+              </div>
+
+              <!-- Contenido de la Ficha -->
+              <div class="label-cordis">Estado</div>
+              <div class="value-cordis">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> En Ejecución
+                </span>
+              </div>
+
+              <div class="label-cordis">Investigador Principal</div>
+              <div id="d-pi" class="value-cordis text-cordis-blue font-semibold border-b border-gray-200 pb-2">---</div>
+
+              <div class="label-cordis mt-3">Periodo</div>
+              <div id="d-period" class="value-cordis text-gray-700">---</div>
+
+              <div class="label-cordis">Institución</div>
+              <div class="value-cordis">
+                <div class="font-semibold text-gray-800">CIRCPyCS - UAGRM</div>
+                <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                  <i class="fa-solid fa-location-dot"></i> Santa Cruz, Bolivia 🇧🇴
+                </div>
+              </div>
+
+              <!-- BOTÓN "VER PROYECTO COMPLETO" -->
+              <div class="mt-8 pt-4 border-t border-gray-200">
+                <a id="d-full-link" href="#" target="_blank" class="flex w-full items-center justify-center gap-2 bg-cordis-blue hover:bg-blue-800 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm">
+                   Ver Proyecto Completo
+                   <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                </a>
+                <p class="text-[10px] text-gray-400 text-center mt-3">
+                  Se abrirá en una nueva pestaña
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== DATA: Proyectos =====
+    const PROJECTS = [
+      {
+        id: "PIRO-GOV-26",
+        acronym: "PIRO-GOV",
+        title: "Gobernanza Ambiental, Políticas Públicas y Justicia Territorial en la Gestión de Incendios Forestales (2010-2025)",
+        start: "Oct 2025",
+        end: "Ene 2027",
+        pi: "MSc. María Angélica Suárez Ribera",
+        program: "Research Action",
+        url: "https://cir.uagrm.edu.bo/proyectos/piro-gov-26",
+        tags: ["Gobernanza Ambiental", "Pueblos Indígenas", "Chiquitanía", "Piro-política"],
+        summary: `
+          <p>La investigación analiza de manera crítica cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana.</p>
+          <p>Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego.</p>
+        `,
+        objectives: `
+          <ul>
+            <li><strong>General:</strong> Analizar la incidencia de las políticas públicas y la gobernanza ambiental en los incendios forestales.</li>
+            <li><strong>Específico 1:</strong> Identificar el marco legal y las políticas que regulan el fuego y el territorio.</li>
+          </ul>
+        `,
+        methodology: `
+          <p>Investigación con enfoque <strong>cualitativo</strong> y diseño analítico-interpretativo. Se implementarán estudios de caso en comunidades afectadas.</p>
+        `,
+        hypothesis: `
+          <p>La proliferación de incendios es resultado de un modelo de gobernanza ambiental subordinado a <strong>intereses extractivistas</strong>.</p>
+        `
+      },
+      {
+        id: "DECAD-EP-25",
+        acronym: "DECAD-EP",
+        title: "La Decadencia o Degeneración del Estado Plurinacional de Bolivia como Modelo de Estado (2009-2024)",
+        start: "Feb 2026",
+        end: "Ene 2027",
+        pi: "MSc. Francisco Mendez Egüez",
+        program: "Research Action",
+        url: "https://cir.uagrm.edu.bo/proyectos/decad-ep-25",
+        tags: ["Estado Plurinacional", "Instituciones Políticas", "Gestión Pública", "Crisis Democrática"],
+        summary: `
+          <p>Investigación sobre las causas estructurales y coyunturales que han determinado la transformación y crisis de implementación del modelo de Estado Plurinacional en Bolivia.</p>
+        `,
+        objectives: `
+          <ul>
+            <li><strong>General:</strong> Analizar las causas estructurales de la transformación y crisis del modelo de Estado Plurinacional.</li>
+          </ul>
+        `,
+        methodology: `
+          <p>Se utiliza el <strong>método histórico-deductivo</strong> para configurar la naturaleza del Estado Plurinacional a partir de teorías políticas relevantes.</p>
+        `,
+        hypothesis: `
+          <p>La decadencia del modelo es resultado de un proceso de <strong>involución institucional</strong> y <strong>captura política</strong>.</p>
+        `
+      }
+    ];
+
+    // ===== RENDERIZADO =====
+    const container = document.getElementById('projects-container');
+
+    PROJECTS.forEach(p => {
+      const card = document.createElement('div');
+      card.className = "group bg-white border border-gray-200 rounded-xl p-0 hover:shadow-card-hover hover:border-blue-200 transition-all duration-300 flex flex-col overflow-hidden h-full";
+      
+      card.innerHTML = `
+        <div class="bg-slate-50/50 border-b border-gray-100 p-6 flex items-start justify-between">
+           <div>
+             <span class="block text-2xl font-bold text-cordis-blue tracking-tight mb-1">${p.acronym}</span>
+             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Research Action</span>
+           </div>
+           <div class="h-10 w-10 bg-white rounded-full flex items-center justify-center shadow-sm text-cordis-blue group-hover:bg-cordis-blue group-hover:text-white transition">
+             <i class="fa-solid fa-flask text-lg"></i>
+           </div>
+        </div>
+        
+        <div class="flex-1 p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+               <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded border border-emerald-100 uppercase tracking-wide">En Curso</span>
+               <span class="text-gray-400 text-xs font-mono">ID: ${p.id}</span>
+            </div>
+            
+            <h3 class="text-lg font-bold text-gray-900 mb-4 leading-snug group-hover:text-cordis-blue transition cursor-pointer trigger-drawer" data-id="${p.id}">
+              ${p.title}
+            </h3>
+            
+            <div class="flex flex-wrap gap-2 mb-6">
+              ${p.tags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
+             <button class="trigger-drawer text-sm font-bold text-cordis-blue hover:text-blue-800 transition flex items-center gap-2" data-id="${p.id}">
+               Ver Ficha Técnica <i class="fa-solid fa-arrow-right"></i>
+             </button>
+             <div class="text-xs text-gray-400 font-medium">
+               ${p.start} - ${p.end}
+             </div>
+          </div>
+        </div>
       `;
-      document.getElementById('sidebar').classList.add('open');
-    }
-  }
-});
-
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-}
-
-function filterNetwork(type, btn) {
-  // Reset botones
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  // Lógica de filtrado
-  const allNodeIds = nodes.getIds();
-  
-  if (type === 'all') {
-    nodes.update(allNodeIds.map(id => ({id: id, hidden: false})));
-    network.fit();
-  } else {
-    // Definir qué grupos mostrar según el botón
-    let targetGroups = [];
-    if (type === 'history') targetGroups = ['history'];
-    if (type === 'nature') targetGroups = ['nature', 'fire']; // Fire es parte de la naturaleza ontológica
-    if (type === 'power') targetGroups = ['power'];
-    if (type === 'fire') targetGroups = ['fire'];
-
-    const updates = allNodeIds.map(id => {
-      const node = nodes.get(id);
-      // Siempre mostrar centro (0) y nodos del grupo objetivo
-      const isVisible = (id === 0) || targetGroups.includes(node.group);
-      return { id: id, hidden: !isVisible };
+      container.appendChild(card);
     });
+
+    // ===== LÓGICA DEL DRAWER =====
+    const drawer = document.getElementById('drawer');
+    const drawerBg = document.getElementById('drawer-bg');
+    const drawerClose = document.getElementById('drawer-close');
+
+    // Referencias DOM
+    const dAcronym = document.getElementById('d-acronym');
+    const dTitle = document.getElementById('d-title');
+    const dDates = document.getElementById('d-dates');
+    const dIdHeader = document.getElementById('d-id-header');
+    const dSummary = document.getElementById('d-summary');
+    const dObjectives = document.getElementById('d-objectives');
+    const dMethodology = document.getElementById('d-methodology');
+    const dHypothesis = document.getElementById('d-hypothesis');
     
-    nodes.update(updates);
-    
-    // Zoom a los nodos visibles
-    if(type === 'fire') {
-      network.fit({ nodes: [0, 100, 101], animation: true });
-    } else {
-      network.fit({ animation: true });
+    // Referencias Ficha Lateral
+    const dPi = document.getElementById('d-pi');
+    const dPeriod = document.getElementById('d-period');
+    const dProgram = document.getElementById('d-program');
+    const dTags = document.getElementById('d-tags');
+    const dFullLink = document.getElementById('d-full-link'); 
+
+    function openDrawer(id) {
+      const p = PROJECTS.find(x => x.id === id);
+      if(!p) return;
+
+      dAcronym.textContent = p.acronym;
+      dTitle.textContent = p.title;
+      dDates.textContent = `${p.start} - ${p.end}`;
+      dProgram.textContent = p.program;
+      dIdHeader.textContent = `ID: ${p.id}`;
+
+      dSummary.innerHTML = p.summary;
+      dObjectives.innerHTML = p.objectives;
+      dMethodology.innerHTML = p.methodology;
+      dHypothesis.innerHTML = p.hypothesis;
+
+      dTags.innerHTML = p.tags.map(t => 
+        `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-cordis-blue border border-blue-100">${t}</span>`
+      ).join('');
+
+      dPi.textContent = p.pi;
+      dPeriod.textContent = `${p.start} - ${p.end}`;
+      
+      // Actualizar enlace del botón
+      dFullLink.href = p.url;
+
+      drawer.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
-  }
-}
-</script>
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.trigger-drawer');
+      if (trigger) {
+        const projectId = trigger.dataset.id;
+        openDrawer(projectId);
+      }
+    });
+
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerBg.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+  </script>
 </body>
 </html>
