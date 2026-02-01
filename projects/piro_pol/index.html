@@ -1,1 +1,526 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>PIRO-GOV: Gobernanza Ambiental — CIRCPyCS</title>
+  <meta name="description" content="Proyecto de investigación sobre Gobernanza Ambiental y Piro-política en la Chiquitanía." />
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cordis: {
+              blue: '#004494', 
+              dark: '#0f2c52',
+              light: '#e9eff8',
+              accent: '#38bdf8', // Un celeste brillante para acentos
+              text: '#1e293b',
+            }
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          backgroundImage: {
+            'subtle-grid': "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwgNjgsIDE0OCwgMC4wNSkiLz48L3N2Zz4=')"
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    body { background-color: #f8fafc; color: #334155; }
+    
+    /* Tipografía */
+    h1, h2, h3 { color: #0f2c52; letter-spacing: -0.025em; }
+    p { margin-bottom: 1.25rem; line-height: 1.8; text-align: justify; color: #475569; }
+    
+    /* Tarjetas Modernas */
+    .modern-card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s ease;
+    }
+    .modern-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+      border-color: #cbd5e1;
+    }
+
+    /* Navegación Lateral Estilizada */
+    .nav-link { 
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem; 
+      margin-bottom: 0.25rem;
+      border-radius: 0.5rem;
+      color: #64748b; 
+      font-size: 0.875rem; 
+      font-weight: 500;
+      transition: all 0.2s; 
+    }
+    .nav-link:hover { color: #004494; background-color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .nav-link.active { 
+      color: #004494; 
+      background-color: white;
+      font-weight: 600; 
+      box-shadow: 0 1px 3px rgba(0,68,148,0.1);
+      border-left: 4px solid #004494;
+    }
+
+    /* Timeline Vertical Mejorada */
+    .timeline-item { position: relative; padding-left: 2.5rem; padding-bottom: 2.5rem; border-left: 2px solid #e2e8f0; }
+    .timeline-item:last-child { border-left: 2px solid transparent; }
+    .timeline-dot { 
+      position: absolute; left: -9px; top: 0; 
+      width: 16px; height: 16px; 
+      border-radius: 50%; background: white; 
+      border: 4px solid #cbd5e1; 
+      transition: all 0.3s;
+    }
+    .timeline-item:hover .timeline-dot { border-color: #004494; transform: scale(1.2); }
+    .timeline-item.active .timeline-dot { border-color: #004494; background: #004494; }
+
+    /* Botones de Esquemas */
+    .scheme-card {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    .scheme-card:hover {
+      border-color: #004494;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(0, 68, 148, 0.15);
+    }
+    .scheme-icon {
+      background: rgba(0, 68, 148, 0.05);
+      color: #004494;
+      transition: all 0.3s;
+    }
+    .scheme-card:hover .scheme-icon {
+      background: #004494;
+      color: white;
+    }
+  </style>
+</head>
+<body class="font-sans flex flex-col min-h-screen bg-subtle-grid">
+
+  <!-- Top Bar -->
+  <div class="bg-cordis-dark text-white/90 py-1.5 text-[10px] md:text-xs text-center font-semibold tracking-widest uppercase shadow-sm z-50 relative">
+    Centro de Investigación Regional en Ciencia Política y Ciencias Sociales
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-auto" />
+        <div class="h-8 w-px bg-gray-200 mx-1 hidden md:block"></div>
+        <div class="leading-tight hidden md:block">
+          <span class="block font-bold text-cordis-blue text-sm tracking-tight">CIRCPyCS</span>
+          <span class="block text-[10px] text-gray-500 font-medium uppercase tracking-wider">Unidad de Investigación</span>
+        </div>
+      </div>
+      
+      <a href="Portafolio_CIRCPyCS.html" class="group flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 text-slate-600 text-xs font-bold hover:bg-cordis-blue hover:text-white transition-all duration-300 border border-slate-200 hover:border-cordis-blue shadow-sm">
+        <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> 
+        <span>Volver al Portafolio</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-white border-b border-slate-200 py-16 md:py-20 overflow-hidden">
+    <!-- Elemento decorativo de fondo -->
+    <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-60"></div>
+    <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-emerald-50 rounded-full blur-3xl opacity-60"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-5xl">
+        <div class="flex flex-wrap items-center gap-3 mb-6 animate-fade-in-up">
+          <span class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-md uppercase tracking-wider border border-slate-200">
+            <i class="fa-solid fa-hashtag text-slate-400 mr-1"></i> ID: PIRO-GOV-26
+          </span>
+          <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-md flex items-center gap-2 border border-emerald-100">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            Proyecto Activo
+          </span>
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-cordis-dark leading-[1.1] mb-8 tracking-tight">
+          Gobernanza Ambiental, Políticas Públicas y Justicia Territorial en la Gestión de <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Incendios Forestales</span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-slate-500 font-light max-w-3xl leading-relaxed border-l-4 border-cordis-blue pl-6">
+          Un análisis crítico de la <strong>piro-política</strong> en la Chiquitanía boliviana y sus efectos en los derechos indígenas (2010-2025).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-12 gap-10">
+    
+    <!-- Sidebar Navegación (Izquierda) -->
+    <aside class="hidden lg:block lg:col-span-3">
+      <div class="sticky top-28 space-y-8">
+        <nav class="space-y-1" id="page-nav">
+          <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Navegación del Estudio</p>
+          <a href="#esquemas" class="nav-link text-emerald-700 bg-emerald-50/50 border border-emerald-100 hover:bg-emerald-100 mb-4">
+            <i class="fa-solid fa-sitemap"></i> Esquemas & Datos
+          </a>
+          <a href="#resumen" class="nav-link active"><i class="fa-regular fa-file-lines w-4"></i> Resumen</a>
+          <a href="#planteamiento" class="nav-link"><i class="fa-solid fa-question w-4"></i> Planteamiento</a>
+          <a href="#objetivos" class="nav-link"><i class="fa-solid fa-bullseye w-4"></i> Objetivos</a>
+          <a href="#metodologia" class="nav-link"><i class="fa-solid fa-microscope w-4"></i> Metodología</a>
+          <a href="#equipo" class="nav-link"><i class="fa-solid fa-users w-4"></i> Equipo</a>
+          <a href="#cronograma" class="nav-link"><i class="fa-regular fa-calendar w-4"></i> Cronograma</a>
+          <a href="#descargas" class="nav-link text-cordis-blue font-bold mt-4"><i class="fa-solid fa-cloud-arrow-down w-4"></i> Descargas</a>
+        </nav>
+
+        <!-- Widget de Contacto -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-lg relative overflow-hidden">
+          <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-5 rounded-full blur-xl"></div>
+          <h4 class="text-sm font-bold mb-2 relative z-10">¿Colaboración Académica?</h4>
+          <p class="text-xs text-slate-300 mb-4 relative z-10">Contacte al equipo de investigación para acceso a datos brutos.</p>
+          <button onclick="alert('Abriendo formulario de contacto...')" class="w-full py-2.5 bg-white text-slate-900 text-xs font-bold rounded-lg hover:bg-slate-100 transition shadow relative z-10">
+            Contactar PI
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Columna Central (Contenido) -->
+    <div class="col-span-1 lg:col-span-6 space-y-10">
+      
+      <!-- NUEVA SECCIÓN: ESQUEMAS BIBLIOGRÁFICOS -->
+      <section id="esquemas" class="scroll-mt-32">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-cordis-dark">
+          <i class="fa-solid fa-layer-group text-emerald-600"></i> Esquemas y Recursos
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Card 1 -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group">
+            <div class="flex items-start justify-between mb-3">
+              <div class="scheme-icon h-10 w-10 rounded-lg flex items-center justify-center text-lg">
+                <i class="fa-solid fa-network-wired"></i>
+              </div>
+              <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-cordis-blue transition"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm mb-1 group-hover:text-cordis-blue transition">Mapa de Actores</h3>
+            <p class="text-xs text-slate-500 mb-0 line-clamp-2">Visualización interactiva de las relaciones de poder entre el Estado y los agroindustriales.</p>
+          </a>
+
+          <!-- Card 2 -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group">
+            <div class="flex items-start justify-between mb-3">
+              <div class="scheme-icon h-10 w-10 rounded-lg flex items-center justify-center text-lg">
+                <i class="fa-solid fa-gavel"></i>
+              </div>
+              <i class="fa-solid fa-arrow-right text-slate-300 group-hover:text-cordis-blue transition"></i>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm mb-1 group-hover:text-cordis-blue transition">Línea de Tiempo Legal</h3>
+            <p class="text-xs text-slate-500 mb-0 line-clamp-2">Cronología del "Paquetazo Incendiario" y leyes aprobadas desde 2010.</p>
+          </a>
+
+          <!-- Card 3 -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group sm:col-span-2">
+            <div class="flex items-center gap-4">
+              <div class="scheme-icon h-12 w-12 rounded-lg flex-shrink-0 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-book-atlas"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-800 text-sm mb-1 group-hover:text-cordis-blue transition">Bibliografía Sistematizada</h3>
+                <p class="text-xs text-slate-500 mb-0">Acceso al gestor bibliográfico Zotero con las 150+ fuentes del proyecto.</p>
+              </div>
+              <div class="ml-auto">
+                 <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded">V 1.2</span>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-slate-200"></div>
+
+      <!-- Resumen -->
+      <section id="resumen" class="modern-card p-8 scroll-mt-32">
+        <h2 class="text-xl font-bold mb-4 text-cordis-dark border-b border-gray-100 pb-3">Resumen Ejecutivo</h2>
+        <div class="text-slate-600 text-sm md:text-base leading-relaxed text-justify space-y-4">
+          <p>
+            La presente investigación aborda la problemática de los incendios forestales en la Chiquitanía no como desastres naturales aislados, sino como fenómenos sociopolíticos resultantes de un modelo específico de gobernanza ambiental. A través del concepto de <strong>piro-política</strong>, se examina cómo el fuego actúa como una herramienta de gestión territorial que, paradójicamente, es habilitada por políticas públicas que priorizan la expansión de la frontera agrícola sobre la conservación.
+          </p>
+          <p class="mb-0">
+            El estudio documenta cómo la normativa vigente interactúa con las prácticas locales, generando escenarios de vulneración sistemática de derechos territoriales indígenas y pérdida irreparable de biodiversidad en el bosque seco chiquitano.
+          </p>
+        </div>
+      </section>
+
+      <!-- Planteamiento -->
+      <section id="planteamiento" class="scroll-mt-32">
+        <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-6 relative overflow-hidden">
+          <div class="absolute -right-6 -top-6 text-amber-100 text-9xl font-serif opacity-50 select-none">?</div>
+          <h3 class="text-xs font-bold text-amber-700 uppercase tracking-widest mb-3 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Planteamiento del Problema
+          </h3>
+          <p class="text-lg md:text-xl font-serif italic text-amber-900 mb-0 relative z-10 leading-relaxed">
+            "¿De qué manera las políticas públicas de tierra y bosque, implementadas entre 2010 y 2025, han configurado un régimen de gobernanza que incentiva el uso del fuego y vulnera la justicia territorial en la Chiquitanía?"
+          </p>
+        </div>
+      </section>
+
+      <!-- Objetivos -->
+      <section id="objetivos" class="modern-card p-8 scroll-mt-32">
+        <h2 class="text-xl font-bold mb-6 text-cordis-dark border-b border-gray-100 pb-3">Objetivos del Estudio</h2>
+        <ul class="space-y-6">
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">1. Analizar el Marco Legal</strong>
+              <span class="text-sm text-gray-500">Sistematizar leyes, decretos y resoluciones administrativas (2010-2025) que regulan el uso del fuego y la tenencia de tierra.</span>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue">
+              <i class="fa-solid fa-network-wired"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">2. Mapear la Gobernanza Multinivel</strong>
+              <span class="text-sm text-gray-500">Identificar competencias y vacíos institucionales entre el Nivel Central, Gobernaciones y Municipios frente a la crisis.</span>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue">
+              <i class="fa-solid fa-users-rays"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">3. Documentar Impactos Locales</strong>
+              <span class="text-sm text-gray-500">Registrar testimonios y datos sobre desplazamiento, pérdida de medios de vida y salud en comunidades indígenas.</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Metodología -->
+      <section id="metodologia" class="scroll-mt-32">
+        <h2 class="text-xl font-bold mb-6 text-cordis-dark">Estrategia Metodológica</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center hover:border-cordis-blue transition group">
+            <i class="fa-solid fa-file-contract text-3xl text-slate-300 mb-3 group-hover:text-cordis-blue transition"></i>
+            <h4 class="font-bold text-sm mb-2 text-slate-800">Documental</h4>
+            <p class="text-xs text-slate-500 mb-0">Revisión de gacetas y planes de uso de suelo.</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center hover:border-cordis-blue transition group">
+            <i class="fa-solid fa-comments text-3xl text-slate-300 mb-3 group-hover:text-cordis-blue transition"></i>
+            <h4 class="font-bold text-sm mb-2 text-slate-800">Cualitativa</h4>
+            <p class="text-xs text-slate-500 mb-0">Entrevistas a caciques y técnicos.</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center hover:border-cordis-blue transition group">
+            <i class="fa-solid fa-map-location-dot text-3xl text-slate-300 mb-3 group-hover:text-cordis-blue transition"></i>
+            <h4 class="font-bold text-sm mb-2 text-slate-800">Territorial</h4>
+            <p class="text-xs text-slate-500 mb-0">Casos en San Ignacio y Concepción.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Equipo -->
+      <section id="equipo" class="modern-card p-8 scroll-mt-32">
+        <h2 class="text-xl font-bold mb-6 text-cordis-dark border-b border-gray-100 pb-3">Equipo de Investigación</h2>
+        
+        <!-- PI -->
+        <div class="flex items-start gap-5 mb-8">
+          <div class="w-20 h-20 bg-cordis-blue rounded-2xl flex-shrink-0 shadow-lg flex items-center justify-center text-white text-2xl font-bold">
+            MS
+          </div>
+          <div>
+            <span class="bg-blue-100 text-cordis-blue text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Investigadora Principal</span>
+            <h3 class="text-lg font-bold text-gray-900 mt-1">MSc. María Angélica Suárez Ribera</h3>
+            <p class="text-sm text-slate-500 mt-1">Politóloga especialista en Gestión Pública y Ecología Política. Coordinadora del área de Medio Ambiente del CIRCPyCS.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gray-100 pt-6">
+           <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-lg">
+             <div class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-400 text-xs shadow-sm"><i class="fa-solid fa-user-tie"></i></div>
+             <div>
+               <div class="text-sm font-bold text-slate-800">Lic. Carlos Méndez</div>
+               <div class="text-xs text-slate-500">Analista Jurídico</div>
+             </div>
+           </div>
+           <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-lg">
+             <div class="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-400 text-xs shadow-sm"><i class="fa-solid fa-user-graduate"></i></div>
+             <div>
+               <div class="text-sm font-bold text-slate-800">Univ. Sofía Torrez</div>
+               <div class="text-xs text-slate-500">Tesista (Sociología)</div>
+             </div>
+           </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Columna Derecha (Datos y Cronograma) -->
+    <div class="col-span-1 lg:col-span-3 space-y-8">
+      
+      <!-- Ficha Rápida -->
+      <div class="modern-card p-6 sticky top-28">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Detalles Técnicos</h3>
+        
+        <div class="space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-regular fa-clock"></i></div>
+            <div>
+              <div class="text-[10px] text-gray-400 font-bold uppercase">Duración</div>
+              <div class="text-sm font-bold text-gray-800">16 Meses</div>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+              <div class="text-[10px] text-gray-400 font-bold uppercase">Área</div>
+              <div class="text-sm font-bold text-gray-800">Medio Ambiente</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-coins"></i></div>
+            <div>
+              <div class="text-[10px] text-gray-400 font-bold uppercase">Fondo</div>
+              <div class="text-sm font-bold text-gray-800">IDH - UAGRM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t border-gray-100">
+           <div class="text-[10px] text-center text-gray-400 mb-2">Progreso General</div>
+           <div class="w-full bg-gray-100 rounded-full h-2">
+             <div class="bg-emerald-500 h-2 rounded-full" style="width: 35%"></div>
+           </div>
+           <div class="text-right text-[10px] font-bold text-emerald-600 mt-1">35% Completado</div>
+        </div>
+      </div>
+
+      <!-- Cronograma -->
+      <div id="cronograma" class="scroll-mt-32 pt-4">
+        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 pl-2 border-l-4 border-cordis-blue">Línea de Tiempo</h3>
+        <div class="pl-2">
+          
+          <div class="timeline-item active">
+            <div class="timeline-dot"></div>
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-cordis-blue bg-blue-50 w-max px-2 py-0.5 rounded mb-1">Oct-Dic 2025</span>
+              <h4 class="text-sm font-bold text-gray-800">Revisión Normativa</h4>
+              <p class="text-xs text-gray-500 mb-0 mt-1">Recopilación y análisis de leyes incendiarias.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-gray-400 bg-gray-100 w-max px-2 py-0.5 rounded mb-1">Ene-Jun 2026</span>
+              <h4 class="text-sm font-bold text-gray-800">Trabajo de Campo</h4>
+              <p class="text-xs text-gray-500 mb-0 mt-1">Entrevistas en San Ignacio y Lomerío.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <span class="text-[10px] font-bold text-gray-400 bg-gray-100 w-max px-2 py-0.5 rounded mb-1">Jul-Oct 2026</span>
+            <h4 class="text-sm font-bold text-gray-800">Sistematización</h4>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <span class="text-[10px] font-bold text-gray-400 bg-gray-100 w-max px-2 py-0.5 rounded mb-1">Nov-Ene 2027</span>
+            <h4 class="text-sm font-bold text-gray-800">Publicación</h4>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Descargas -->
+      <div id="descargas" class="bg-cordis-dark text-white p-6 rounded-2xl shadow-xl relative overflow-hidden group">
+        <!-- Decoración fondo -->
+        <i class="fa-solid fa-file-arrow-down absolute -right-6 -bottom-6 text-8xl text-white opacity-5 group-hover:opacity-10 transition-opacity"></i>
+        
+        <h3 class="text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2 relative z-10">
+          <span class="w-1.5 h-4 bg-orange-500 rounded-full"></span> Documentos
+        </h3>
+        <ul class="space-y-3 relative z-10">
+          <li>
+            <a href="#" class="flex items-center gap-3 p-3 bg-white/10 rounded-lg hover:bg-white/20 transition border border-white/5 hover:border-white/20">
+              <div class="h-8 w-8 rounded bg-red-500/20 text-red-400 flex items-center justify-center text-xs font-bold">PDF</div>
+              <div class="text-xs font-medium leading-tight">Perfil del Proyecto (Resumen Ejecutivo)</div>
+              <i class="fa-solid fa-download text-xs opacity-50 ml-auto"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center gap-3 p-3 bg-white/10 rounded-lg hover:bg-white/20 transition border border-white/5 hover:border-white/20">
+              <div class="h-8 w-8 rounded bg-red-500/20 text-red-400 flex items-center justify-center text-xs font-bold">PDF</div>
+              <div class="text-xs font-medium leading-tight">Policy Brief: Ley 741</div>
+              <i class="fa-solid fa-download text-xs opacity-50 ml-auto"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer Simple -->
+  <footer class="bg-white border-t border-gray-200 py-10 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-8 w-auto mx-auto mb-4 opacity-50 grayscale" />
+      <p class="text-xs text-gray-400">
+        &copy; 2026 CIRCPyCS - UAGRM. Todos los derechos reservados.<br>
+        Santa Cruz de la Sierra, Bolivia.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Script para resaltar menú activo y smooth scroll behavior
+    const sections = document.querySelectorAll('section, div[id="cronograma"], div[id="descargas"]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function activeMenu() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= (sectionTop - 150)) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', activeMenu);
+  </script>
+</body>
+</html>
