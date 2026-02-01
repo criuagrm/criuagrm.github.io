@@ -1,606 +1,534 @@
-<!doctype html>
-<html lang="es" class="scroll-smooth">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Infraestructura Digital — LABAP • CIRCPyCS</title>
-  <meta name="description" content="Toolkit computacional para ciencias sociales. Scripts, algoritmos y software desarrollado por el LABAP." />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Análisis: Oxford Handbook of Environmental Political Theory</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ["Inter", "system-ui", "sans-serif"], serif: ["Merriweather", "serif"] },
-          colors: {
-            'academic-slate': '#1e293b', 
-          }
-        }
-      }
-    }
-  </script>
+<style>
+  :root {
+    --bg-app: #f4f1ea; /* Crema papel antiguo */
+    --sidebar-bg: #ffffff;
+    --text-primary: #2b3a42; /* Gris oscuro/azulado */
+    --accent-color: #556b2f; /* Verde oliva oscuro */
+    --highlight-color: #8fbc8f; /* Verde salvia */
+    --border-color: #dcd6cc;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    margin: 0; padding: 0;
+    height: 100vh;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- BARRA LATERAL (INFO) --- */
+  .sidebar {
+    width: 450px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.05);
+    z-index: 20;
+    position: relative;
+    height: 100vh;
+    transition: margin-left 0.4s ease;
+  }
+
+  .sidebar.closed {
+    margin-left: -450px;
+  }
+
+  .header {
+    padding: 30px 25px;
+    background: #2e4053; /* Azul pizarra oscuro */
+    color: #f4f1ea;
+    border-bottom: 6px solid var(--accent-color);
+    background-image: linear-gradient(to bottom right, #2e4053, #1a252f);
+  }
+
+  .header h1 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+  }
+
+  .header .meta {
+    font-size: 0.8rem;
+    color: #bdc3c7;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .filters {
+    padding: 15px 20px;
+    background: #e8e6e1;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid #999;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #555;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+  }
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px;
+    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmM2YzZjMiLz4KPC9zdmc+');
+  }
+
+  .node-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .info-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 15px;
+    line-height: 1.2;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+
+  .info-body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 25px;
+    text-align: justify;
+  }
+
+  /* Citas académicas */
+  .citation-block {
+    background: #fdf6e3; /* Tono solarizado claro */
+    border-left: 4px solid #b58900;
+    padding: 15px;
+    margin: 20px 0;
+    font-family: var(--font-heading);
+    font-style: italic;
+    color: #5d5d5d;
+    position: relative;
+  }
   
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  .citation-block::before {
+    content: "“";
+    font-size: 3rem;
+    color: #eaddc5;
+    position: absolute;
+    top: -10px;
+    left: 5px;
+    z-index: 0;
+  }
+  
+  .citation-content { position: relative; z-index: 1; }
 
-  <style>
-    .tool-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
-    .tool-card:hover { transform: translateY(-2px); border-color: #cbd5e1; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
-    .tech-badge { font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; text-transform: uppercase; letter-spacing: 0.025em; }
-    section[id] { scroll-margin-top: 100px; }
-    .code-block::-webkit-scrollbar { height: 6px; width: 6px; }
-    .code-block::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-  </style>
+  .source-tag {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    font-style: normal;
+    color: #999;
+    margin-top: 5px;
+  }
+
+  .key-concept-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+  
+  .key-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #888;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .footer {
+    padding: 15px;
+    background: #f4f1ea;
+    font-size: 0.7rem;
+    text-align: center;
+    color: #888;
+    border-top: 1px solid #ddd;
+  }
+
+  /* --- RED / CANVAS --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100vh;
+    background: #f4f1ea; 
+  }
+
+  #network { width: 100%; height: 100%; }
+
+  /* Botones flotantes */
+  .toggle-btn {
+    position: absolute;
+    top: 20px; left: 20px;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    z-index: 100;
+  }
+
+  .legend {
+    position: absolute;
+    bottom: 20px; right: 20px;
+    background: rgba(255,255,255,0.9);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+</style>
 </head>
-<body class="bg-white text-slate-800 font-sans flex flex-col min-h-screen">
+<body>
 
-  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+<div class="sidebar" id="sidebar">
+  <div class="header">
+    <h1>The Oxford Handbook of Environmental Political Theory</h1>
+    <div class="meta">Gabrielson, Hall, Meyer & Schlosberg (Eds.)</div>
+  </div>
 
-  <!-- Header Unificado con Pestaña de Equipo -->
-  <header class="border-b border-slate-200 bg-white sticky top-0 z-40 backdrop-blur-sm bg-white/95">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-9 w-9 object-contain grayscale group-hover:grayscale-0 transition duration-500"/>
-        <div class="leading-tight">
-          <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">UAGRM</p>
-          <h1 class="font-serif font-bold text-lg text-slate-900">CIRCPyCS</h1>
-        </div>
-      </a>
-      
-      <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-        <a href="dashboard.html" class="hover:text-black transition">Dashboard</a>
-        <a href="datasets.html" class="hover:text-black transition">Datasets</a>
-        <a href="proyectos.html" class="hover:text-black transition">Proyectos</a>
-        <a href="software.html" class="text-black font-bold border-b-2 border-black pb-1">Software</a>
-        <a href="people.html" class="hover:text-black transition">Equipo</a>
-        <a href="index.html" class="hover:text-black transition">Inicio</a>
-      </nav>
-      
-      <button id="btn-open" class="md:hidden text-slate-600" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterNetwork('all')">Todo</button>
+    <button class="filter-btn" onclick="filterNetwork('traditions')">Tradiciones</button>
+    <button class="filter-btn" onclick="filterNetwork('nature')">Naturaleza</button>
+    <button class="filter-btn" onclick="filterNetwork('ideals')">Ideales</button>
+    <button class="filter-btn" onclick="filterNetwork('power')">Poder</button>
+  </div>
+
+  <div class="content-area" id="infoPanel">
+    <div style="text-align: center; color: #888; margin-top: 40%;">
+      <h3 style="font-family: var(--font-heading); color: var(--accent-color);">Explorador de Teoría Política Ambiental</h3>
+      <p>Selecciona un nodo para explorar los argumentos clave, citas textuales y conexiones conceptuales del manual.</p>
+      <small>Basado en el análisis del texto original (2016)</small>
     </div>
+  </div>
+
+  <div class="footer">
+    Visualización generada a partir de documentos subidos.
+  </div>
+</div>
+
+<div id="network-wrapper">
+  <button class="toggle-btn" onclick="toggleSidebar()">☰ Menú</button>
+  <div id="network"></div>
+  
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:#d35400"></div> Tradiciones Políticas</div>
+    <div class="legend-item"><div class="dot" style="background:#27ae60"></div> Naturaleza y Sujeto</div>
+    <div class="legend-item"><div class="dot" style="background:#2980b9"></div> Ideales (Justicia/Sostenibilidad)</div>
+    <div class="legend-item"><div class="dot" style="background:#8e44ad"></div> Poder y Cambio</div>
+  </div>
+</div>
+
+<script>
+// --- DATOS DEL MANUAL (Extraídos del PDF) ---
+const bookData = {
+  // NODO CENTRAL
+  0: {
+    type: "Volumen Central",
+    title: "Handbook of Environmental Political Theory",
+    text: "La Teoría Política Ambiental (EPT) se define no como una posición ideológica rígida, sino como un campo de investigación amplio que utiliza herramientas teóricas (crítica conceptual, análisis normativo) para abordar desafíos ecológicos contemporáneos. No es simplemente 'aplicar' teoría política al medio ambiente, sino repensar los conceptos políticos fundamentales (justicia, democracia, libertad) desde una perspectiva ecológica.",
+    [cite_start]quote: "La EPT interroga los conceptos políticos tradicionales desde un punto de vista ambiental... reflexionando sobre democracia, libertad, derechos y justicia[cite: 264].",
+    concept: "Interdisciplinariedad y Normativa"
+  },
+
+  // --- TRADICIONES (PARTE I & II) ---
+  1: {
+    type: "Parte II: Tradiciones",
+    title: "Diálogo con la Tradición Occidental",
+    text: "El manual examina cómo la EPT se apropia y critica el canon occidental. Los textos clásicos de Platón, Hobbes o Locke no se leen como autoridades absolutas, sino como recursos para diagnosticar crisis actuales. Harlan Wilson argumenta que este uso es a menudo 'selectivo e instrumental'.",
+    [cite_start]quote: "El tratamiento de los textos clásicos por parte de la EPT tiende a ser tanto selectivo como instrumental... buscando diagnosticar y criticar el presente[cite: 274].",
+    concept: "Apropiación Crítica"
+  },
+  11: {
+    type: "Capítulo 4",
+    title: "Liberalismo Ambiental",
+    text: "Piers Stephens explora si el liberalismo es compatible con el ecologismo. Aunque el liberalismo clásico (Locke) se asocia con la propiedad y la explotación, Stephens rescata el 'nuevo liberalismo' de John Stuart Mill. Mill es visto como un precursor clave por su defensa del 'estado estacionario' y la valoración del carácter humano a través del contacto con la naturaleza.",
+    [cite_start]quote: "El nuevo liberalismo milliano... es la variante mejor adaptada para una síntesis con los objetivos y valores ambientalistas[cite: 626].",
+    concept: "Liberalismo Verde / Estado Estacionario"
+  },
+  12: {
+    type: "Capítulo 3",
+    title: "Enfoques No-Occidentales",
+    text: "Farah Godrej critica la tendencia 'civilizacional' que esencializa a Oriente como inherentemente ecológico frente a un Occidente destructor. Propone un enfoque 'Neo-Gandhiano': práctico, materialista y político, enfocado en la autosuficiencia (swaraj) y la justicia diaria, en lugar de una reverencia mística abstracta por la naturaleza.",
+    [cite_start]quote: "Un enfoque Neo-Gandhiano... combina la atención a la ética con una crítica explícitamente política y atención a las formas sistémicas de injusticia[cite: 496].",
+    concept: "Neo-Gandhismo / Swaraj"
+  },
+
+  // --- NATURALEZA Y SUJETOS (PARTE III) ---
+  2: {
+    type: "Parte III: Ontología",
+    title: "Repensando la Naturaleza",
+    text: "Esta sección desafía el dualismo humano/naturaleza. Se mueve hacia el 'Nuevo Materialismo' y la teoría del Actor-Red, argumentando que el entorno no es un fondo pasivo, sino una fuerza activa que nos constituye.",
+    [cite_start]quote: "El entorno entra dentro... no simplemente como contexto, sino componiendo y descomponiendo literalmente nuestros cuerpos[cite: 181].",
+    concept: "Trans-corporealidad"
+  },
+  21: {
+    type: "Capítulo 41",
+    title: "Democracia Ecológica y Cosas",
+    text: "Lisa Disch utiliza la Teoría del Actor-Red (Latour) para criticar la idea de que la naturaleza necesita 'representantes humanos' porque es muda. Argumenta que los objetos y 'cosas' (como un incinerador o microbios) son participantes activos (actantes) que configuran la política y crean controversias públicas.",
+    [cite_start]quote: "Cambiar el enfoque de la responsabilidad de los humanos de representar a la naturaleza, a la agencia de las cosas en la representación de los humanos[cite: 626].",
+    concept: "Agencia Material / Actantes"
+  },
+  22: {
+    type: "Capítulo 24",
+    title: "El Meme del Antropoceno",
+    text: "Giovanna Di Chiro analiza críticamente el término 'Antropoceno'. Aunque pretende unificar, a menudo oculta desigualdades bajo un 'nosotros' universal. Señala que muchos movimientos de justicia ambiental rechazan el término por ser tecnocrático y apocalíptico, prefiriendo narrativas de resistencia y 'cuidado del territorio' (country).",
+    [cite_start]quote: "El 'Antropoceno' a menudo funciona como un dispositivo narrativo que... universaliza la agencia humana ocultando las desigualdades del poder[cite: 364].",
+    concept: "Crítica al Antropoceno / Justicia Climática"
+  },
+  23: {
+    type: "Capítulo 15",
+    title: "Biopolítica Vegetal",
+    text: "Catriona Sandilands explora cómo las plantas no son objetos pasivos sino seres con capacidades sensoriales. La EPT debe considerar una 'biopolítica' que incluya la agencia vegetal y cómo las relaciones humano-planta estructuran nuestras comunidades.",
+    [cite_start]quote: "Desafiar la ceguera hacia las plantas (plant blindness) y reconocer sus capacidades distintivas y su participación en la vida política[cite: 228].",
+    concept: "Agencia Vegetal"
+  },
+
+  // --- IDEALES (PARTE IV) ---
+  3: {
+    type: "Parte IV: Fines",
+    title: "Sostenibilidad y Justicia",
+    text: "Se analizan los objetivos normativos. La sostenibilidad no es solo técnica, es política. La justicia se expande más allá de la distribución para incluir el reconocimiento y las capacidades (Schlosberg).",
+    [cite_start]quote: "La sostenibilidad implica gestionar la tasa y escala del cambio... conservando valores y relaciones centrales[cite: 16].",
+    concept: "Justicia Trivalente"
+  },
+  31: {
+    type: "Capítulo 21",
+    title: "Justicia Ambiental y Climática",
+    text: "Steve Vanderheiden examina cómo el cambio climático exacerba las injusticias existentes. Utiliza el marco de la Convención Marco de las Naciones Unidas (UNFCCC) para discutir principios como 'quien contamina paga' y la equidad intergeneracional.",
+    [cite_start]quote: "El cambio climático se espera que concentre muchos de los peores daños en las personas y pueblos más vulnerables del mundo[cite: 322].",
+    concept: "Equidad Global"
+  },
+  32: {
+    type: "Capítulo 19",
+    title: "¿Límites a los Límites?",
+    text: "Andrew Dobson revisita el debate de 'Los Límites del Crecimiento' (1972). Argumenta contra la 'modernización ecológica' que promete crecimiento infinito, sugiriendo que el reconocimiento de límites finitos es esencial para una política realista y justa.",
+    [cite_start]quote: "El crecimiento infinito en un sistema finito es una aspiración imposible... debates sobre decrecimiento y post-crecimiento[cite: 290].",
+    concept: "Límites del Crecimiento"
+  },
+
+  // --- PODER (PARTE V) ---
+  4: {
+    type: "Parte V: Estructuras",
+    title: "Poder y Cambio",
+    text: "Examina cómo las estructuras políticas (Estados, capitalismo, movimientos) restringen o habilitan la acción ambiental. Incluye análisis del 'Estado Verde' y la 'Gubernamentalidad'.",
+    [cite_start]quote: "La EPT no solo pregunta qué debemos hacer... sino cómo las prescripciones normativas se refractan a través de sistemas de poder[cite: 181].",
+    concept: "Poder Estructural"
+  },
+  41: {
+    type: "Capítulo 30",
+    title: "Gubernamentalidad Ambiental",
+    text: "Timothy Luke aplica a Foucault para analizar el 'eco-managerialismo'. Argumenta que gran parte de la política ambiental moderna es una forma de disciplinar a las poblaciones y gestionar recursos para sostener el capitalismo, en lugar de proteger la naturaleza per se.",
+    [cite_start]quote: "Las capacidades de la gubernamentalidad verde llevan el alcance administrativo... más profundo, más rápido y más fuerte hacia el eco-managerialismo[cite: 471].",
+    concept: "Eco-Managerialismo"
+  },
+  42: {
+    type: "Capítulo 36",
+    title: "Ambientalismo de los Pobres",
+    text: "Joan Martinez-Alier contrasta el ambientalismo del Norte (preservacionista) con el 'ecologismo de los pobres' del Sur Global. Este último surge de conflictos distributivos sobre recursos necesarios para la subsistencia, no por estética.",
+    [cite_start]quote: "Conflictos sobre el uso del medio ambiente y quién debería beneficiarse de él... vinculando demandas ambientales con justicia social[cite: 507].",
+    concept: "Ecologismo Popular"
+  },
+  43: {
+    type: "Capítulo 37",
+    title: "Movimientos Indígenas",
+    text: "Kyle Whyte analiza cómo las instituciones deben funcionar como 'convocantes de responsabilidades' (conveners). Basado en la cosmología Anishinaabe, el agua y otros entes son parientes con responsabilidades mutuas, no recursos.",
+    [cite_start]quote: "Las instituciones deben funcionar para convocar parientes y responsabilidades... basadas en la riqueza de los sistemas culturales[cite: 571].",
+    concept: "Instituciones como Convocantes"
+  }
+};
+
+// --- NODOS Y ARISTAS VIS.JS ---
+const nodesArray = [
+  { id: 0, label: "Handbook of\nEPT", size: 40, color: "#2c3e50", font: { color: "white" }, shape: "box" },
+  
+  // GRUPO 1: TRADICIONES (Naranja/Terra Cotta)
+  { id: 1, label: "Tradiciones\nPolíticas", group: "traditions", value: 25 },
+  { id: 11, label: "Liberalismo\n(Mill)", group: "traditions", value: 15 },
+  { id: 12, label: "Enfoques\nNo-Occidentales", group: "traditions", value: 15 },
+
+  // GRUPO 2: NATURALEZA (Verde)
+  { id: 2, label: "Repensando la\nNaturaleza", group: "nature", value: 25 },
+  { id: 21, label: "Agencia de\nlas Cosas", group: "nature", value: 15 },
+  { id: 22, label: "Crítica al\nAntropoceno", group: "nature", value: 15 },
+  { id: 23, label: "Biopolítica\nVegetal", group: "nature", value: 15 },
+
+  // GRUPO 3: IDEALES (Azul)
+  { id: 3, label: "Fines e\nIdeales", group: "ideals", value: 25 },
+  { id: 31, label: "Justicia\nClimática", group: "ideals", value: 15 },
+  { id: 32, label: "Límites del\nCrecimiento", group: "ideals", value: 15 },
+
+  // GRUPO 4: PODER (Morado)
+  { id: 4, label: "Poder y\nCambio", group: "power", value: 25 },
+  { id: 41, label: "Gubernamentalidad\n(Foucault)", group: "power", value: 15 },
+  { id: 42, label: "Ambientalismo\nde los Pobres", group: "power", value: 15 },
+  { id: 43, label: "Instituciones\nIndígenas", group: "power", value: 15 }
+];
+
+const edgesArray = [
+  { from: 0, to: 1 }, { from: 0, to: 2 }, { from: 0, to: 3 }, { from: 0, to: 4 },
+  
+  { from: 1, to: 11 }, { from: 1, to: 12 },
+  { from: 2, to: 21 }, { from: 2, to: 22 }, { from: 2, to: 23 },
+  { from: 3, to: 31 }, { from: 3, to: 32 },
+  { from: 4, to: 41 }, { from: 4, to: 42 }, { from: 4, to: 43 },
+
+  // Conexiones transversales conceptuales
+  { from: 42, to: 31, label: "vincula", dashes: true, color: { opacity: 0.4 } }, // Pobreza -> Justicia
+  { from: 12, to: 42, label: "resuena con", dashes: true, color: { opacity: 0.4 } }, // Gandhi -> Amb. Pobres
+  { from: 21, to: 4, label: "redefine", dashes: true, color: { opacity: 0.4 } }, // Cosas -> Política
+  { from: 22, to: 31, label: "critica", dashes: true, color: { opacity: 0.4 } } // Antropoceno -> Justicia
+];
+
+// --- CONFIGURACIÓN DE VIS.JS ---
+const container = document.getElementById('network');
+const data = { nodes: new vis.DataSet(nodesArray), edges: new vis.DataSet(edgesArray) };
+
+const options = {
+  nodes: {
+    shape: 'dot',
+    font: { face: 'Lato', size: 14, color: '#333', strokeWidth: 3, strokeColor: '#fff' },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    width: 2,
+    color: { color: '#bdc3c7', highlight: '#556b2f' },
+    smooth: { type: 'continuous', roundness: 0 }
+  },
+  groups: {
+    traditions: { color: { background: '#d35400', border: '#a04000' } }, // Naranja tierra
+    nature: { color: { background: '#27ae60', border: '#1e8449' } }, // Verde hoja
+    ideals: { color: { background: '#2980b9', border: '#1f618d' } }, // Azul agua
+    power: { color: { background: '#8e44ad', border: '#6c3483' } } // Morado poder
+  },
+  physics: {
+    stabilization: false,
+    barnesHut: {
+      gravitationalConstant: -3000,
+      centralGravity: 0.3,
+      springLength: 120,
+      springConstant: 0.04
+    }
+  },
+  interaction: { hover: true, tooltipDelay: 200 }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
     
-    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-slate-50 p-4 absolute w-full shadow-lg z-50">
-        <div class="grid gap-3 text-sm">
-            <a href="dashboard.html" class="block py-2">Dashboard</a>
-            <a href="datasets.html" class="block py-2">Datasets</a>
-            <a href="proyectos.html" class="block py-2">Proyectos</a>
-            <a href="software.html" class="block py-2 font-bold">Software</a>
-            <a href="people.html" class="block py-2">Equipo</a>
-            <a href="index.html" class="block py-2 font-bold text-emerald-700">Volver a Inicio</a>
-        </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-b border-slate-100">
-    <div class="max-w-4xl">
-        <span class="text-emerald-700 font-bold tracking-wider text-xs uppercase mb-3 block">Digital Infrastructure</span>
-        <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-900 mb-6 leading-tight">
-            Herramientas Computacionales para el Análisis Político.
-        </h2>
-        <p class="text-lg text-slate-600 font-light leading-relaxed max-w-2xl">
-            Repositorio de algoritmos, scripts de scraping, modelos de procesamiento de lenguaje natural y plataformas de visualización desarrolladas por el LABAP.
-        </p>
-    </div>
-  </div>
-
-  <!-- Barra de Filtros y Búsqueda -->
-  <div class="sticky top-[73px] z-30 bg-white/95 border-b border-slate-200 backdrop-blur shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
-            <div class="relative w-full sm:w-96">
-                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                <input type="text" id="toolSearch" placeholder="Buscar herramienta (ej: Scraping, Python, R)..." 
-                    class="w-full pl-8 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm focus:ring-1 focus:ring-slate-400 focus:border-slate-400 outline-none transition placeholder:text-slate-400 font-sans">
-            </div>
-            <div class="flex gap-4 text-[11px] font-bold text-slate-500 uppercase tracking-widest overflow-x-auto whitespace-nowrap">
-                <button class="hover:text-black transition" onclick="filterType('all')">Todos</button>
-                <button class="hover:text-blue-600 transition" onclick="filterType('scraping')">Data Mining</button>
-                <button class="hover:text-emerald-600 transition" onclick="filterType('analysis')">Análisis / ML</button>
-                <button class="hover:text-purple-600 transition" onclick="filterType('viz')">Visualización</button>
-            </div>
-        </div>
-    </div>
-  </div>
-
-  <!-- Contenido Principal (8 Herramientas) -->
-  <main class="bg-slate-50 min-h-screen py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="toolsGrid">
-
-        <!-- 1. Extractor Municipales -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="municipales nacional oep python scraping descarga extractor">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-city"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Extractor</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Download: Municipales Nacional</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Script en Python para la descarga masiva de resultados electorales municipales a nivel nacional desde el API OEP.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Python</span></div>
-                <button onclick="openToolModal('script_municipales', 'Extractor Municipales Nacional')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- 2. Extractor SCZ -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="santa cruz gobernacion asamblea oep python scraping descarga extractor">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center text-emerald-600"><i class="fa-solid fa-building-columns"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Extractor</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Download: Santa Cruz (Deptal)</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Herramienta optimizada para filtrar y descargar resultados de Gobernación y Asamblea Legislativa de Santa Cruz.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Python</span></div>
-                <button onclick="openToolModal('script_santacruz', 'Extractor Departamental SCZ')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- 3. Media News Transcriber -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="transcriptor audio noticias radio tv whisper ia monitoreo medios">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-rose-50 flex items-center justify-center text-rose-600"><i class="fa-solid fa-microphone-lines"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Audio/IA</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Media News Transcriber</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Pipeline que utiliza OpenAI Whisper para transcribir audios de noticieros locales y realizar búsqueda semántica.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Whisper</span></div>
-                <button onclick="openToolModal('script_transcription', 'Media News Transcriber')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- 4. Vote Transfer Model -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="inferencia ecologica transferencia votos estadistica r bolivia elecciones">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600"><i class="fa-solid fa-chart-line"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Estadística</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Ecological Inference (EI)</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Modelo estadístico en R para estimar la transferencia de votos entre candidatos de procesos electorales previos.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">R-Project</span></div>
-                <button onclick="openToolModal('script_ei', 'Modelo de Inferencia Ecológica')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-         <!-- Herramienta 3: NLP Analyzer (NUEVA) -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="nlp ia discurso programas gobierno texto mineria">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-rose-50 flex items-center justify-center text-rose-600"><i class="fa-solid fa-language"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">NLP / IA</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Policy NLP Parser</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Modelo de procesamiento de lenguaje natural para categorizar promesas de campaña en programas de gobierno (PDF a CSV).
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">PyTorch</span><span class="tech-badge">Transformers</span></div>
-                <button onclick="openToolModal('script_nlp', 'Policy NLP Parser')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- Herramienta 4: Geo-Maker (NUEVA) -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="gis mapas mapas calor geopandas python automatizacion">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-sky-50 flex items-center justify-center text-sky-600"><i class="fa-solid fa-earth-americas"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Cartografía</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Electoral Map-Maker</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Script para generar mapas de calor electorales (Choropleths) automáticamente a partir de datos JSON y Shapefiles departamentales.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">GeoPandas</span><span class="tech-badge">Folium</span></div>
-                <button onclick="openToolModal('script_maps', 'Electoral Map-Maker')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- Herramienta 5: SNA -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="redes networkx gephi grafos sna alianzas">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600"><i class="fa-solid fa-circle-nodes"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">SNA</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2">Political Network Analyzer</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Calculadora de centralidad y detección de comunidades para el análisis de alianzas políticas y grafos de poder corporativo.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">NetworkX</span></div>
-                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">Script <i class="fa-solid fa-arrow-right ml-1"></i></a>
-            </div>
-        </div>
-
-        <!-- Herramienta 6: Simulación -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="elecciones simulador shiny r dash dhondt proyeccion">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-chart-pie"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Simulación</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2">R Shiny Election Sim</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Aplicación interactiva para proyectar escaños parlamentarios según la fórmula D'Hondt con datos bolivianos precargados.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">R</span><span class="tech-badge">Shiny</span></div>
-                <a href="#" class="text-xs font-bold text-blue-700 hover:underline">App <i class="fa-solid fa-arrow-right ml-1"></i></a>
-            </div>
-        </div>
-
-        <!-- 5. Auditor de Paridad -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="paridad genero juventud cuotas auditoria listas candidatos elecciones autonomicas">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-user-check"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Auditoría</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Auditor de Cuotas & Paridad</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Verificación automática de paridad de género y cuotas de juventud en listas de candidatos subnacionales.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Pandas</span></div>
-                <button onclick="openToolModal('script_cuotas', 'Auditor de Cuotas y Paridad')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- 6. Ads Tracker -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-scraping" data-search="meta facebook instagram transparencia publicidad gasto campaña anuncios tracker">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-sky-50 flex items-center justify-center text-sky-600"><i class="fa-solid fa-rectangle-ad"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Ads Tracker</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Meta Ad-Transparency Tracker</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Monitoreo del gasto publicitario político en Meta mediante consultas automáticas a la API de transparencia.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">API REST</span></div>
-                <button onclick="openToolModal('script_ads', 'Meta Ads Transparency Monitor')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- 7. Bot Detector (NUEVA) -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-analysis" data-search="bots twitter x redes sociales comportamiento coordinado astroturfing">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-orange-50 flex items-center justify-center text-orange-600"><i class="fa-solid fa-robot"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">Bot Detection</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">Coordinated Behavior Hunter</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Algoritmo para detectar astroturfing y redes de cuentas coordinadas en X (Twitter) durante procesos electorales.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Graph ML</span></div>
-                <button onclick="openToolModal('script_bots', 'Coordinated Behavior Hunter')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-        <!-- 8. PVT Simulator (NUEVA) -->
-        <div class="tool-card bg-white p-5 rounded-lg flex flex-col h-full type-viz" data-search="conteo rapido pvt trep simulador muestreo estadistica elecciones">
-            <div class="flex justify-between items-start mb-3">
-                <div class="w-8 h-8 rounded bg-indigo-50 flex items-center justify-center text-indigo-600"><i class="fa-solid fa-check-to-slot"></i></div>
-                <span class="text-[10px] uppercase font-bold text-slate-400">PVT</span>
-            </div>
-            <h3 class="font-serif font-bold text-slate-900 mb-2 leading-tight">TREP / PVT Simulator</h3>
-            <p class="text-xs text-slate-600 mb-4 flex-grow leading-relaxed">
-                Herramienta de simulación de conteo rápido basada en muestras representativas para la verificación de resultados oficiales.
-            </p>
-            <div class="flex items-center justify-between mt-auto">
-                <div class="flex gap-1"><span class="tech-badge">Python</span><span class="tech-badge">Stats</span></div>
-                <button onclick="openToolModal('script_pvt', 'TREP / PVT Simulator')" class="text-xs font-bold text-blue-700 hover:underline">Ver Script <i class="fa-solid fa-code ml-1"></i></button>
-            </div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-  <!-- Modal para Scripts -->
-  <div id="toolModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeToolModal()"></div>
-    <div class="flex min-h-full items-center justify-center p-4">
-      <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-2xl transition-all w-full max-w-4xl border border-slate-200">
-        <div class="bg-white px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-            <h3 class="text-lg font-serif font-bold text-slate-900" id="modalTitle">Título del Script</h3>
-            <button onclick="closeToolModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-        </div>
-        <div class="px-6 py-6 overflow-y-auto max-h-[70vh]">
-            <div class="bg-slate-900 rounded-lg p-5 code-block overflow-x-auto">
-                <pre class="text-xs font-mono text-emerald-400" id="modalCode"># Código...</pre>
-            </div>
-        </div>
-        <div class="bg-slate-50 px-6 py-4 flex justify-end gap-3 border-t border-slate-100">
-            <button onclick="closeToolModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-200 transition">Cerrar</button>
-            <button onclick="copyCode()" class="px-4 py-2 rounded-lg text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition shadow-sm">Copiar Código</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer CALCADO del original -->
-  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+    // Abrir sidebar
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar.classList.contains('closed')) toggleSidebar();
+    
+    if (info) {
+      document.getElementById('infoPanel').innerHTML = `
+        <div class="node-type">${info.type}</div>
+        <h2 class="info-title">${info.title}</h2>
+        <div class="info-body">${info.text}</div>
         
-        <!-- Columna 1 -->
-        <div>
-          <div class="flex items-center gap-3 mb-4">
-             <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
-             <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
-          </div>
-          <p class="text-sm text-slate-500 mb-4 leading-relaxed">
-            Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
-          </p>
-          <p class="text-xs text-slate-400">
-            © <span id="year"></span> Todos los derechos reservados.
-          </p>
-        </div>
-
-        <!-- Columna 2 -->
-        <div>
-          <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
-            <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
-            <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
-            <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
-            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
-          </ul>
-        </div>
-
-        <!-- Columna 3 -->
-        <div>
-          <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
-          <ul class="space-y-3 text-sm">
-            <li class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-              <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Columna 4 -->
-        <div>
-          <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
-          <div class="grid gap-3">
-            <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
-              <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
-                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
-              </div>
-              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
-            </a>
-            <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
-              <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
-                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-              </div>
-              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
-            </a>
-             <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
-              <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
-                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-              </div>
-              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
-            </a>
-            <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
-              <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
-                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
-              </div>
-              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
-            </a>
-             <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 transition group">
-              <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
-                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              </div>
-              <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
-            </a>
+        <div class="citation-block">
+          <div class="citation-content">
+            ${info.quote}
           </div>
         </div>
 
-      </div>
-      
-      <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
-        <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
-        <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
-           <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
-           <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+        <div class="key-concept-box">
+          <span class="key-label">Concepto Clave</span>
+          <span style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--accent-color);">
+            ${info.concept}
+          </span>
         </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // --- SCRIPTS ALMACENADOS ---
-    const scripts = {
-        script_municipales: `import requests
-import pandas as pd
-import os
-import json
-from IPython.display import Markdown, display
-
-# 1. Función para listar procesos (Mantenemos tu lógica original)
-def listar_procesos():
-    def parse_categoria(categoria):
-        def parse_level(level, sublevel_key):
-            return [
-                {k: level[k] for k in level.keys() if k != sublevel_key},
-                level[sublevel_key],
-            ]
-        data = []
-        data_categoria, procesos = parse_level(categoria, "proceso_electorals")
-        for proceso in procesos:
-            data_proceso, subprocesos = parse_level(proceso, "sub_procesos")
-            for subproceso in subprocesos:
-                data.append({**data_categoria, **data_proceso, **subproceso})
-        return data
-
-    try:
-        response = requests.get("https://atlaselectoral.oep.org.bo/api/proceso-electoral-menu")
-        resultado = []
-        for categoria in response.json():
-            resultado.extend(parse_categoria(categoria))
-        return pd.DataFrame(resultado)
-    except Exception as e:
-        print(f"Error conectando al API: {e}")
-        return pd.DataFrame()
-
-# 2. Función de descarga optimizada para JSON
-def descargar_resultados_json(subproceso):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0",
+      `;
     }
+  }
+});
 
-    columnas_admin = {
-        "Codigo PAIS": "pais",
-        "Nombre PAIS": "pais_nombre",
-        "Codigo DEPARTAMENTO": "departamento",
-        "Nombre DEPARTAMENTO": "departamento_nombre",
-        "Codigo PROVINCIA": "provincia",
-        "Nombre PROVINCIA": "provincia_nombre",
-        "Codigo MUNICIPIO": "municipio",
-        "Nombre MUNICIPIO": "municipio_nombre",
-        "Codigo CIRCUNSCRIPCION": "circunscripcion",
-        "Nombre CIRCUNSCRIPCION": "circunscripcion_nombre",
-        "Codigo RECINTO": "recinto",
-        "Nombre RECINTO": "recinto_nombre",
-        "Codigo MESA": "mesa",
-        "Nombre MESA": "mesa_nombre",
-    }
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('closed');
+}
 
-    # Preparamos nombres de archivo
-    directorio = "datos_json/" + subproceso["nombre_proceso_electoral"].split()[-1] # Ej: datos_json/2021
-    filename = subproceso["nom_sub_proceso"].lower().replace(" ", "_")
-    os.makedirs(directorio, exist_ok=True)
+function filterNetwork(group) {
+  // Resetear filtros visuales
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
 
-    url = f"https://atlaselectoral.oep.org.bo/descarga/{subproceso['id_sub_proceso']}/votos_totales.csv"
+  if (group === 'all') {
+    data.nodes.update(nodesArray.map(n => ({ id: n.id, hidden: false })));
+  } else {
+    const visibleNodes = nodesArray.filter(n => n.group === group || n.id === 0).map(n => n.id);
+    const hiddenUpdates = nodesArray.map(n => ({ 
+      id: n.id, 
+      hidden: !visibleNodes.includes(n.id) 
+    }));
+    data.nodes.update(hiddenUpdates);
+  }
+  network.fit();
+}
 
-    try:
-        # LEEMOS EL CSV
-        # Importante: 'low_memory=False' ayuda, pero lo ideal es forzar tipos string en códigos
-        # si supiéramos las columnas exactas de antemano. Como varían, lo leemos todo y convertimos después.
-        df = pd.read_csv(url, sep="|", storage_options=headers, low_memory=False)
-
-        # Identificamos columnas administrativas presentes en este archivo
-        admin = [col for col in df.columns if col in columnas_admin.keys()]
-
-        # FORZAMOS STRING en los códigos (Para que '07' no sea 7, y coincida con los mapas)
-        for col in admin:
-            if "Codigo" in col:
-                df[col] = df[col].astype(str).str.replace(r'\.0$', '', regex=True) # Quita .0 si pandas lo leyó como float
-
-        # Transformación a formato "Tidy" (Largo)
-        stacked = df.set_index(admin).stack().reset_index().copy()
-
-        # Renombramos columnas para que sean amigables en el JSON (sin espacios ni mayúsculas)
-        stacked.columns = [columnas_admin[col] for col in admin] + ["partido", "votos"]
-
-        # Limpieza final de votos (a veces vienen como strings con comas)
-        # Asumimos que si falla la conversión es 0 o nulo
-        stacked["votos"] = pd.to_numeric(stacked["votos"], errors='coerce').fillna(0).astype(int)
-
-        # GUARDAR COMO JSON
-        # orient='records' crea una lista de objetos: [{"municipio": "01", "partido": "MAS", "votos": 100}, ...]
-        ruta_json = f"{directorio}/{filename}.json"
-
-        # Usamos indent=None para ahorrar espacio, o indent=2 si quieres leerlo con ojos humanos
-        stacked.to_json(ruta_json, orient="records", force_ascii=False) # force_ascii=False respeta tildes y ñ
-
-        display(Markdown(f"✅ **{subproceso['nom_sub_proceso']}**: Guardado en `{ruta_json}`"))
-
-    except Exception as e:
-        display(Markdown(f"❌ **{subproceso['nom_sub_proceso']}**: ERROR {e}"))
-
-# --- EJECUCIÓN ---
-
-# 1. Obtenemos la lista
-df_procesos = listar_procesos()
-
-# 2. Filtramos (Por ejemplo, solo Municipales para probar)
-# Puedes quitar el filtro .head() si quieres descargar todo de golpe
-subset = df_procesos[df_procesos.nom_agrupacion_proceso == "Elecciones Municipales"]
-
-# 3. Descargamos
-if not subset.empty:
-    print(f"Iniciando descarga de {len(subset)} procesos...")
-    for i, row in subset.iterrows():
-        descargar_resultados_json(row)
-else:
-    print("No se encontraron procesos.")`,
-        script_santacruz: `import requests\n# Filtro específico para Santa Cruz (Gobernación y Asamblea)\n# API Atlas Electoral - Depto 07`,
-        script_transcription: `import whisper\n# Transcriptor de audio para medios locales\nmodel = whisper.load_model("base")\nresult = model.transcribe("noticiero_scz.mp3")`,
-        script_ei: `library(ei)\n# Ecological Inference for Vote Transfer\n# Estimación flujo de votos 2021 -> 2026`,
-        script_cuotas: `import pandas as pd\n# Auditor de Cuotas y Paridad\ndef auditar(df):\n    # Regla: 50/50 Género y 20% Jóvenes`,
-        script_ads: `import requests\n# Meta Ads Tracker\n# Token de acceso a la Graph API requerido`,
-        script_bots: `import networkx as nx\n# Bot Hunter: Detección de comportamiento coordinado\n# Análisis de ráfagas de tiempo y grafos de retuits`,
-        script_pvt: `import numpy as np\n# TREP / PVT Simulator\n# Muestreo estratificado por recinto para conteo rápido`
-    };
-
-    // --- LÓGICA DEL MODAL ---
-    function openToolModal(id, title) {
-        const modal = document.getElementById('toolModal');
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalCode').textContent = scripts[id] || "# Script no disponible";
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeToolModal() {
-        document.getElementById('toolModal').classList.add('hidden');
-        document.body.style.overflow = '';
-    }
-
-    function copyCode() {
-        const code = document.getElementById('modalCode').textContent;
-        const textArea = document.createElement("textarea");
-        textArea.value = code;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        const copyBtn = document.querySelector('#toolModal button:last-child');
-        const originalText = copyBtn.textContent;
-        copyBtn.textContent = "¡Copiado!";
-        setTimeout(() => copyBtn.textContent = originalText, 2000);
-    }
-
-    // --- FILTROS Y BÚSQUEDA ---
-    document.getElementById('toolSearch').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.tool-card').forEach(card => {
-            const searchStr = (card.getAttribute('data-search') || '') + card.querySelector('h3').innerText.toLowerCase();
-            card.style.display = searchStr.includes(term) ? 'flex' : 'none';
-        });
-    });
-
-    function filterType(type) {
-        document.querySelectorAll('.tool-card').forEach(card => {
-            card.style.display = (type === 'all' || card.classList.contains('type-' + type)) ? 'flex' : 'none';
-        });
-    }
-
-    // Año dinámico
-    if(document.getElementById('year')) document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Menú móvil
-    const btnOpen = document.getElementById('btn-open');
-    const mobileMenu = document.getElementById('mobile-menu');
-    btnOpen.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-  </script>
-
+</script>
 </body>
 </html>
