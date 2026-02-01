@@ -3,448 +3,483 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Red: Oxford Handbook of Environmental Political Theory</title>
+<title>Oxford Handbook EPT - Análisis Extendido</title>
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,400&family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --primary-color: #2c3e50;
-    --accent-color: #27ae60; /* Verde EPT */
-    --bg-color: #fcfcfc;
-    --panel-bg: #ffffff;
-    --text-color: #333;
-    --border-color: #e0e0e0;
-    --sidebar-width: 400px;
+    --primary: #1a3c34; /* Verde Oxford profundo */
+    --secondary: #c19a6b; /* Tono papel antiguo/oro */
+    --fire: #e74c3c;    /* Color para incendios */
+    --text: #2c3e50;
+    --bg-panel: #ffffff;
+    --bg-canvas: #f4f4f2;
   }
 
   body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
-    font-family: 'Open Sans', sans-serif;
-    background-color: var(--bg-color);
-    overflow: hidden; /* Evitar scroll en el body, manejarlo en componentes */
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-canvas);
+    overflow: hidden;
   }
 
-  /* --- LAYOUT PRINCIPAL --- */
-  .app-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-  }
-
-  /* --- RED (NETWORK) --- */
+  /* --- UI PRINCIPAL --- */
   #network {
-    flex-grow: 1;
-    height: 100%;
-    background: radial-gradient(circle, #fcfcfc 0%, #ecf0f1 100%);
-    cursor: grab;
-  }
-  #network:active { cursor: grabbing; }
-
-  /* --- BARRA LATERAL (PANEL INFO) --- */
-  .sidebar {
-    width: var(--sidebar-width);
-    background: var(--panel-bg);
-    border-left: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    box-shadow: -2px 0 15px rgba(0,0,0,0.05);
-    z-index: 100;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
+    width: 100%; height: 100vh;
+    background: radial-gradient(circle, #fcfcfc 0%, #e8e8e8 100%);
   }
 
-  .sidebar-header {
-    padding: 20px;
-    background: var(--primary-color);
-    color: white;
-    border-bottom: 4px solid var(--accent-color);
-  }
-
-  .sidebar-header h1 {
-    font-family: 'Merriweather', serif;
-    font-size: 1.1rem;
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .sidebar-header .subtitle {
-    font-size: 0.75rem;
-    opacity: 0.8;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .sidebar-content {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-  }
-
-  /* Estilos del contenido del nodo */
-  .node-category {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--accent-color);
-    text-transform: uppercase;
-    margin-bottom: 5px;
-    display: block;
-  }
-
-  .node-title {
-    font-family: 'Merriweather', serif;
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin: 0 0 15px 0;
-    line-height: 1.2;
-  }
-
-  .node-body {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #444;
-    margin-bottom: 20px;
-  }
-
-  .citation-box {
-    background: #f9f9f9;
-    border-left: 3px solid #bdc3c7;
-    padding: 10px 15px;
-    font-family: 'Merriweather', serif;
-    font-style: italic;
-    color: #555;
-    font-size: 0.9rem;
-    margin-top: 20px;
-  }
-
-  .citation-source {
-    display: block;
-    text-align: right;
-    font-size: 0.75rem;
-    font-family: 'Open Sans', sans-serif;
-    font-style: normal;
-    margin-top: 5px;
-    color: #888;
-  }
-
-  /* --- CONTROLES FLOTANTES --- */
+  /* Botonera de Filtros */
   .controls {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    top: 20px; left: 20px;
     display: flex;
-    gap: 10px;
-    z-index: 50;
+    flex-wrap: wrap;
+    gap: 8px;
+    z-index: 100;
+    max-width: 80%;
   }
 
   .btn {
-    background: white;
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid #ccc;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
     cursor: pointer;
-    font-weight: 600;
-    font-size: 0.8rem;
+    transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: all 0.2s;
   }
-  .btn:hover { background: #f0f0f0; transform: translateY(-1px); }
-  .btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 
-  /* --- RESPONSIVE MOBILE --- */
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+  
+  .btn.active { 
+    background: var(--primary); 
+    color: #fff; 
+    border-color: var(--primary); 
+  }
+
+  /* Botón especial FUEGO */
+  .btn-fire { border-color: var(--fire); color: var(--fire); }
+  .btn-fire.active { background: var(--fire); color: white; }
+
+  /* --- PANEL LATERAL (SIDEBAR) --- */
+  .sidebar {
+    position: absolute;
+    right: 0; top: 0;
+    width: 500px; /* Panel más ancho para lectura cómoda */
+    height: 100vh;
+    background: var(--bg-panel);
+    box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  /* Cabecera del Panel */
+  .panel-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 30px;
+    border-bottom: 5px solid var(--secondary);
+  }
+
+  .oxford-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+
+  .oxford-sub {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 15px;
+  }
+
+  .meta-info {
+    font-size: 0.7rem;
+    color: #aeb6bf;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 10px;
+  }
+
+  /* Contenido del Panel */
+  .panel-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px;
+    line-height: 1.8;
+  }
+
+  .article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+
+  .author-tag {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .subtitle {
+    font-weight: 700;
+    color: #444;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  p { margin-bottom: 15px; text-align: justify; color: #555; }
+
+  /* Estilo de Citas */
+  .quote-block {
+    background: #fdfaf6;
+    border-left: 4px solid var(--secondary);
+    padding: 15px 20px;
+    margin: 20px 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: #333;
+  }
+
+  .citation-ref {
+    display: block;
+    text-align: right;
+    font-size: 0.7rem;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    color: #999;
+    margin-top: 5px;
+  }
+
+  /* Footer del Panel */
+  .panel-footer {
+    padding: 15px;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+    font-size: 0.7rem;
+    text-align: center;
+    color: #888;
+  }
+
+  /* Botón cerrar móvil */
+  .close-btn {
+    position: absolute;
+    top: 15px; right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  /* --- RESPONSIVE --- */
   @media (max-width: 768px) {
-    .app-container {
-      flex-direction: column;
-    }
-
     .sidebar {
       width: 100%;
-      height: 60vh; /* Ocupa 60% de la pantalla cuando está abierto */
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      border-left: none;
-      border-top: 1px solid var(--border-color);
-      transform: translateY(calc(100% - 60px)); /* Solo muestra el header */
+      height: 85vh; /* Hoja deslizante desde abajo */
+      bottom: 0; top: auto;
+      transform: translateY(100%);
+      border-radius: 20px 20px 0 0;
     }
-
-    .sidebar.open {
-      transform: translateY(0);
-    }
-
-    .sidebar-header {
-      cursor: pointer; /* Indicar que se puede tocar */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-    }
-    
-    .sidebar-header::after {
-      content: '▲';
-      font-size: 0.8rem;
-      transition: transform 0.3s;
-    }
-    
-    .sidebar.open .sidebar-header::after {
-      transform: rotate(180deg);
-    }
-
-    #network {
-      height: 100vh; /* Full screen background */
-    }
-
-    .controls {
-      top: 10px;
-      bottom: auto;
-      left: 10px;
-      flex-wrap: wrap;
-    }
+    .sidebar.open { transform: translateY(0); }
+    .controls { top: auto; bottom: 20px; left: 10px; right: 10px; justify-content: center; }
   }
 </style>
 </head>
 <body>
 
-<div class="app-container">
-  <div id="network"></div>
+<div id="network"></div>
 
-  <div class="controls">
-    <button class="btn" onclick="fitNetwork()">Centrar</button>
-    <button class="btn active" onclick="filterNodes('all', this)">Todo</button>
-    <button class="btn" onclick="filterNodes('tradition', this)">Tradiciones</button>
-    <button class="btn" onclick="filterNodes('nature', this)">Naturaleza</button>
-    <button class="btn" onclick="filterNodes('justice', this)">Justicia</button>
-    <button class="btn" onclick="filterNodes('power', this)">Poder</button>
+<div class="controls">
+  <button class="btn active" onclick="filterNodes('all', this)">Vista General</button>
+  <button class="btn" onclick="filterNodes('tradition', this)">Tradiciones (Historia)</button>
+  <button class="btn" onclick="filterNodes('nature', this)">Naturaleza y Agencia</button>
+  <button class="btn" onclick="filterNodes('power', this)">Poder y Gobierno</button>
+  <button class="btn btn-fire" onclick="filterNodes('fire', this)">🔥 Fuego e Incendios</button>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">×</button>
+  
+  <div class="panel-header">
+    <div class="oxford-title">The Oxford Handbook of<br>Environmental Political Theory</div>
+    <div class="oxford-sub">Oxford University Press (2016)</div>
+    <div class="meta-info">Editado por Gabrielson, Hall, Meyer & Schlosberg</div>
   </div>
 
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header" onclick="toggleMobileSidebar()">
-      <div>
-        <h1>Environmental Political Theory</h1>
-        <div class="subtitle">Gabrielson, Hall, Meyer & Schlosberg</div>
-      </div>
+  <div class="panel-content" id="content-body">
+    <div style="text-align: center; margin-top: 50%; color: #aaa;">
+      <p>Seleccione un nodo para desplegar el análisis detallado.</p>
     </div>
-    <div class="sidebar-content" id="infoContent">
-      <div style="text-align: center; color: #999; margin-top: 40px;">
-        <p>Selecciona un nodo para ver el análisis detallado del capítulo.</p>
-        <small>Basado en el <em>Oxford Handbook</em> (2016)</small>
-      </div>
-    </div>
+  </div>
+
+  <div class="panel-footer">
+    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
   </div>
 </div>
 
 <script>
-  // --- DATOS: Nodos y Relaciones extraídos del PDF ---
-  // Colores:
-  const C_TRADITION = '#e67e22'; // Naranja
-  const C_NATURE = '#27ae60';    // Verde
-  const C_JUSTICE = '#2980b9';   // Azul
-  const C_POWER = '#8e44ad';     // Morado
-  const C_ROOT = '#2c3e50';      // Gris Oscuro
+  // --- BASE DE DATOS DE CONTENIDO (TEXTOS COMPLETOS) ---
+  const db = {
+    // NODO CENTRAL
+    0: {
+      type: "Introducción General",
+      title: "El Campo de la Teoría Política Ambiental (EPT)",
+      author: "Editores: Gabrielson, Hall, Meyer & Schlosberg",
+      content: `
+        <div class="subtitle">Definiendo el Campo</div>
+        <p>Este manual define la EPT no como una ideología rígida, sino como un campo de investigación fluido. A diferencia de la ciencia política tradicional, que a menudo ignora el mundo no humano, la EPT utiliza herramientas como la crítica conceptual y el análisis normativo para interrogar cómo los conceptos políticos clásicos (libertad, justicia, democracia) cambian de significado en la era de la crisis ecológica.</p>
+        
+        <div class="subtitle">Más allá del "Cientificismo"</div>
+        <p>Una tesis central del libro es el rechazo al "cientificismo". Aunque la EPT respeta la ciencia climática, rechaza la idea de que los científicos deban ser los únicos árbitros normativos. La política ambiental no puede reducirse a métricas técnicas; requiere un debate de valores sobre qué tipo de mundo queremos habitar.</p>
+        
+        <div class="quote-block">
+          "La EPT interroga los conceptos políticos tradicionales desde un punto de vista ambiental... reflexionando sobre democracia, libertad, derechos y justicia."
+          <span class="citation-ref">[Fuente: Cap. 1, Introducción]</span>
+        </div>
+      `
+    },
 
-  const nodesArray = [
-    { id: 0, label: "Handbook\nEPT", color: C_ROOT, size: 30, shape: 'box', font: {color:'white'} },
+    // --- GRUPO: FUEGO (FIRE) ---
+    // Basado en Capítulo 26: Bodies, Environments, and Agency (Teena Gabrielson)
+    100: {
+      type: "Caso de Estudio: Agencia Material",
+      title: "Incendios Forestales (Wildfire)",
+      author: "Teena Gabrielson (Capítulo 26)",
+      content: `
+        <div class="subtitle">La Vida del Fuego</div>
+        <p>El fuego desafía las categorizaciones políticas tradicionales. Históricamente, nuestro lenguaje le otorga una vitalidad inusual: decimos que el fuego "respira", "consume", "ruge" y "muere". Gabrielson utiliza el incendio forestal (especialmente en el oeste de EE.UU.) para ilustrar cómo la "agencia" (la capacidad de actuar) no es exclusiva de los humanos.</p>
+        
+        <div class="subtitle">De "Acto de Dios" a Gestión Fallida</div>
+        <p>A finales del siglo XIX, los gestores forestales redefinieron el fuego: pasó de ser un "acto de Dios" impredecible a un fenómeno físico que podía ser controlado por la ciencia humana. Se instauró la <strong>política de supresión total</strong>. Esta arrogancia humana (creer que podíamos eliminar la agencia del fuego) llevó a una paradoja desastrosa: décadas de "victorias" apagando incendios acumularon combustible en los bosques, creando las condiciones para los mega-incendios incontrolables del siglo XXI.</p>
 
-    // PARTE II: TRADICIONES (Tradition)
-    { id: 2, label: "Tradiciones\nPolíticas", group: 'tradition', color: C_TRADITION, value: 20 },
-    { id: 21, label: "Historia\nOccidental", group: 'tradition', color: '#d35400', title: "Harlan Wilson", value: 10 },
-    { id: 22, label: "Enfoques\nNo-Occidentales", group: 'tradition', color: '#d35400', title: "Farah Godrej", value: 10 },
-    { id: 23, label: "Liberalismo\nVerde", group: 'tradition', color: '#d35400', title: "Piers Stephens", value: 10 },
+        <div class="quote-block">
+          "Concebir los incendios estrictamente como procesos ecológicos o físicos los despolitiza... Debemos concebirlos como fenómenos discursivo-materiales constituidos por un ensamblaje particular de actores."
+          <span class="citation-ref">[Fuente: Cap. 26, p. 409]</span>
+        </div>
+      `
+    },
+    101: {
+      type: "Concepto Teórico",
+      title: "Ensamblaje de Actores",
+      author: "Ref: Bruno Latour / Jane Bennett",
+      content: `
+        <div class="subtitle">¿Quién causa el incendio?</div>
+        <p>Desde la perspectiva de la EPT, un incendio no es solo una reacción química. Es un evento político causado por un "colectivo" o ensamblaje de actores diversos. No se puede culpar solo a la chispa o al viento.</p>
+        <p>Gabrielson lista los actores que "intra-actúan" para producir el desastre: "los comisionados del condado (que aprueban casas en bosques), el viento, las cuadrillas de convictos (que limpian maleza), las primas de seguros, los modeladores de fuego, el Congreso, la pendiente de la montaña, la lluvia, los desarrolladores inmobiliarios y el fuego mismo".</p>
+        <div class="quote-block">
+          "Tal contabilidad es agotadora, pero promete una mayor apreciación de los colectivos que producen acción en el mundo."
+          <span class="citation-ref">[Fuente: Cap. 26, p. 409]</span>
+        </div>
+      `
+    },
 
-    // PARTE III: REPENSANDO LA NATURALEZA (Nature)
-    { id: 3, label: "Naturaleza y\nSujetos", group: 'nature', color: C_NATURE, value: 20 },
-    { id: 31, label: "Nuevo\nMaterialismo", group: 'nature', color: '#16a085', title: "Samantha Frost / Jane Bennett", value: 10 },
-    { id: 32, label: "Antropoceno\nCrítico", group: 'nature', color: '#16a085', title: "David Schlosberg", value: 10 },
-    { id: 33, label: "Biopolítica\nVegetal", group: 'nature', color: '#16a085', title: "Catriona Sandilands", value: 10 },
-    { id: 34, label: "Teoría del\nActor-Red", group: 'nature', color: '#16a085', title: "Bruno Latour (ref)", value: 8 },
+    // --- GRUPO: TRADICIONES ---
+    21: {
+      type: "Historia de las Ideas",
+      title: "Apropiación Crítica del Canon",
+      author: "Harlan Wilson (Capítulo 2)",
+      content: `
+        <div class="subtitle">Leyendo a los Clásicos en el Antropoceno</div>
+        <p>¿Qué pueden decirnos Platón o Hobbes sobre el cambio climático? Wilson argumenta que la EPT trata los textos clásicos de manera "selectiva e instrumental". No se leen como sagradas escrituras, sino como diagnósticos de por qué llegamos a esta crisis.</p>
+        <div class="subtitle">El Dilema de Hobbes</div>
+        <p>Hobbes es central para entender la "tragedia de los comunes". Su visión de humanos egoístas compitiendo por recursos limitados prefigura los argumentos modernos para un "autoritarismo verde": la idea de que solo un Leviatán (un estado fuerte) puede obligarnos a no destruir el planeta.</p>
+        <div class="quote-block">
+          "El tratamiento de los textos clásicos tiende a ser tanto selectivo como instrumental... buscando diagnosticar y criticar el presente."
+          <span class="citation-ref">[Fuente: Cap. 2, p. 22]</span>
+        </div>
+      `
+    },
+    23: {
+      type: "Liberalismo y Medio Ambiente",
+      title: "¿Puede el Liberalismo ser Verde?",
+      author: "Piers Stephens (Capítulo 4)",
+      content: `
+        <div class="subtitle">Locke vs. Mill</div>
+        <p>El liberalismo clásico de John Locke se asocia con la propiedad privada ilimitada y la transformación de la naturaleza en capital ("subyugar la tierra"). Sin embargo, Stephens rescata a <strong>John Stuart Mill</strong> como el verdadero padre del liberalismo verde.</p>
+        <div class="subtitle">El Estado Estacionario</div>
+        <p>Mill fue el primer economista clásico en argumentar que el crecimiento infinito no era deseable. Propuso el "Estado Estacionario": una economía estable donde el progreso se mide en cultura, moral y libertad, no en acumulación material. Para Mill, la naturaleza virgen es necesaria para el desarrollo del carácter humano, ofreciendo soledad y reflexión lejos de la competencia comercial.</p>
+        <div class="quote-block">
+          "El nuevo liberalismo milliano es la variante mejor adaptada para una síntesis con los objetivos y valores ambientalistas."
+          <span class="citation-ref">[Fuente: Cap. 4, p. 63]</span>
+        </div>
+      `
+    },
 
-    // PARTE IV: IDEALES (Justice/Goals)
-    { id: 4, label: "Fines e\nIdeales", group: 'justice', color: C_JUSTICE, value: 20 },
-    { id: 41, label: "Sostenibilidad", group: 'justice', color: '#2ecc71', title: "Ingolfur Blühdorn", value: 10 },
-    { id: 42, label: "Límites al\nCrecimiento", group: 'justice', color: '#2ecc71', title: "Andrew Dobson", value: 10 },
-    { id: 43, label: "Justicia\nClimática", group: 'justice', color: '#2ecc71', title: "Steve Vanderheiden", value: 10 },
-    { id: 44, label: "Derechos\nHumanos", group: 'justice', color: '#2ecc71', title: "Kerri Woods", value: 10 },
-
-    // PARTE V: PODER (Power)
-    { id: 5, label: "Poder y\nCambio", group: 'power', color: C_POWER, value: 20 },
-    { id: 51, label: "Gubernamentalidad\nAmbiental", group: 'power', color: '#9b59b6', title: "Timothy Luke", value: 10 },
-    { id: 52, label: "El Estado\nVerde", group: 'power', color: '#9b59b6', title: "Matthew Paterson", value: 10 },
-    { id: 53, label: "Movimientos\nIndígenas", group: 'power', color: '#9b59b6', title: "Kyle Whyte", value: 10 },
-    { id: 54, label: "Democracia\nEcológica", group: 'power', color: '#9b59b6', title: "Lisa Disch", value: 10 }
-  ];
-
-  const edgesArray = [
-    { from: 0, to: 2 }, { from: 0, to: 3 }, { from: 0, to: 4 }, { from: 0, to: 5 },
+    // --- GRUPO: PODER ---
+    51: {
+      type: "Poder y Biopolítica",
+      title: "Gubernamentalidad Ambiental",
+      author: "Timothy W. Luke (Capítulo 30)",
+      content: `
+        <div class="subtitle">Eco-Managerialismo</div>
+        <p>Aplicando a Foucault, Luke argumenta que el "medio ambiente" no es algo natural que está ahí fuera, sino un objeto de conocimiento creado por expertos para ser gestionado. La "Gubernamentalidad Verde" no busca salvar la Tierra por amor a la naturaleza, sino gestionar recursos y poblaciones para asegurar la supervivencia del estado y el mercado.</p>
+        <div class="subtitle">Vigilancia del Carbono</div>
+        <p>El monitoreo de la huella de carbono es la forma suprema de biopoder actual. Convierte las actividades diarias de respirar, comer y viajar en métricas administrables ("conducta de la conducta"), desplazando la responsabilidad política a la culpa individual del consumidor.</p>
+        <div class="quote-block">
+          "La gubernamentalidad verde lleva el alcance administrativo... más profundo, más rápido y más fuerte hacia el eco-managerialismo."
+          <span class="citation-ref">[Fuente: Cap. 30, p. 471]</span>
+        </div>
+      `
+    },
     
-    // Ramas Tradiciones
-    { from: 2, to: 21 }, { from: 2, to: 22 }, { from: 2, to: 23 },
-    
-    // Ramas Naturaleza
-    { from: 3, to: 31 }, { from: 3, to: 32 }, { from: 3, to: 33 }, { from: 31, to: 34, dashes: true, label: "influye" },
-
-    // Ramas Justicia
-    { from: 4, to: 41 }, { from: 4, to: 42 }, { from: 4, to: 43 }, { from: 4, to: 44 },
-
-    // Ramas Poder
-    { from: 5, to: 51 }, { from: 5, to: 52 }, { from: 5, to: 53 }, { from: 5, to: 54 },
-
-    // Conexiones transversales (Interdisciplinariedad)
-    { from: 53, to: 22, dashes: true, color: { opacity: 0.3 } }, // Indígena -> No-Occidental
-    { from: 51, to: 31, dashes: true, color: { opacity: 0.3 } }, // Gubernamentalidad -> Materialismo (Foucault)
-    { from: 42, to: 23, dashes: true, color: { opacity: 0.3 } }, // Límites -> Liberalismo (Mill)
-    { from: 32, to: 43, dashes: true, color: { opacity: 0.3 } }  // Antropoceno -> Justicia Climática
-  ];
-
-  // --- BASE DE DATOS DE CONTENIDO (TEXTO COMPLETO) ---
-  const contentData = {
-    0: { cat: "Libro Completo", title: "The Oxford Handbook of EPT", body: "Editado por Gabrielson, Hall, Meyer y Schlosberg. Este volumen define la Teoría Política Ambiental (EPT) no como una ideología rígida, sino como un campo de investigación que utiliza herramientas teóricas (crítica conceptual, análisis normativo) para abordar desafíos ecológicos.", quote: "La EPT interroga los conceptos políticos tradicionales... reflexionando sobre democracia, libertad, derechos y justicia desde un punto de vista ambiental." },
-    
-    // TRADICIONES
-    21: { cat: "Historia del Pensamiento", title: "Apropiación Crítica del Canon", body: "Harlan Wilson argumenta que la EPT trata los textos clásicos (Platón, Hobbes, Locke) de manera 'selectiva e instrumental'. No se leen como autoridades sagradas, sino como recursos para diagnosticar por qué llegamos a esta crisis o para encontrar alternativas olvidadas.", quote: "El tratamiento de los textos clásicos tiende a ser selectivo e instrumental... buscando diagnosticar el presente.", source: "Cap. 2: EPT and History of Western Political Theory" },
-    22: { cat: "Enfoques No-Occidentales", title: "Más allá del 'Buen Salvaje'", body: "Farah Godrej critica la tendencia a romantizar a Oriente como inherentemente ecológico. Propone un enfoque 'Neo-Gandhiano': práctico y político, centrado en la autosuficiencia material (swaraj) y la justicia diaria, en lugar de una reverencia mística abstracta por la naturaleza.", quote: "Un enfoque Neo-Gandhiano combina la ética con una crítica explícitamente política sobre la injusticia sistémica.", source: "Cap. 3: Culture and Difference" },
-    23: { cat: "Liberalismo", title: "¿Puede el Liberalismo ser Verde?", body: "Piers Stephens rescata a John Stuart Mill. A diferencia del liberalismo de Locke (enfocado en propiedad y crecimiento), Mill defendió el 'estado estacionario' y valoró la naturaleza por su impacto en el carácter humano, ofreciendo una vía para un liberalismo sostenible.", quote: "El nuevo liberalismo milliano es la variante mejor adaptada para una síntesis con los valores ambientalistas.", source: "Cap. 4: EPT and the Liberal Tradition" },
-
-    // NATURALEZA
-    31: { cat: "Ontología", title: "Nuevos Materialismos", body: "Samantha Frost desafía el dualismo humano/entorno. Argumenta que el cuerpo humano es poroso y está constituido por el entorno (bacterias, químicos). La agencia no es solo humana; la materia es 'vibrante' y activa.", quote: "El entorno entra dentro... componiendo y descomponiendo literalmente nuestros cuerpos.", source: "Cap. 12: Challenging the Human X Environment Framework" },
-    33: { cat: "Biopolítica", title: "Sensaciones Florales", body: "Catriona Sandilands explora la 'ceguera hacia las plantas' en la teoría política. Propone una biopolítica vegetal que reconozca que las plantas no son decorado pasivo, sino seres con capacidades sensoriales que estructuran nuestras comunidades.", quote: "Desafiar la ceguera hacia las plantas y reconocer su participación activa en la vida política.", source: "Cap. 15: Plant Biopolitics" },
-    34: { cat: "Teoría", title: "Actor-Red (Latour)", body: "Referencia clave en el libro. La idea de que los objetos (microbios, tecnología, leyes) son 'actantes' que modifican el comportamiento social tanto como los humanos. Es fundamental para entender la 'Democracia Ecológica'.", quote: "No existe sociedad separada de la naturaleza; existen colectivos de humanos y no-humanos.", source: "Referencias cruzadas en Parte III" },
-
-    // JUSTICIA
-    42: { cat: "Sostenibilidad", title: "¿Límites a los Límites?", body: "Andrew Dobson revisita el debate de 1972 sobre los límites del crecimiento. Critica la 'modernización ecológica' (la idea de que la tecnología nos salvará sin cambiar el sistema) y defiende que reconocer la finitud del planeta es esencial para la justicia.", quote: "El crecimiento infinito en un sistema finito es una aspiración imposible.", source: "Cap. 19: Are There Limits to Limits?" },
-    43: { cat: "Justicia", title: "Justicia Climática", body: "Steve Vanderheiden analiza cómo el cambio climático no afecta a todos por igual. Examina principios como 'quien contamina paga' y la deuda ecológica que el Norte global tiene con el Sur.", quote: "Se espera que el cambio climático concentre los peores daños en los pueblos más vulnerables.", source: "Cap. 21: Environmental and Climate Justice" },
-
-    // PODER
-    51: { cat: "Foucault / Poder", title: "Gubernamentalidad Ambiental", body: "Timothy Luke aplica a Foucault para criticar el 'eco-managerialismo'. Argumenta que muchas políticas verdes no buscan salvar la Tierra, sino gestionar poblaciones y recursos para mantener el sistema capitalista funcionando (biopoder).", quote: "La gubernamentalidad verde lleva el alcance administrativo hacia un eco-managerialismo profundo.", source: "Cap. 30: Environmental Governmentality" },
-    53: { cat: "Movimientos", title: "Gobernanza Indígena", body: "Kyle Whyte explica que para muchos movimientos indígenas, las instituciones no son solo burocracia, sino formas de 'convocar parientes'. El agua o los bosques son parientes con responsabilidades recíprocas, no recursos a gestionar.", quote: "Las instituciones deben funcionar para convocar parientes y responsabilidades mutuas.", source: "Cap. 37: Indigenous Environmental Movements" },
-    54: { cat: "Democracia", title: "Democracia de las Cosas", body: "Lisa Disch propone una democracia que incluya a los no-humanos, no dándoles voz humana, sino reconociendo cómo los objetos (como un medidor de electricidad o un río contaminado) 'participan' y fuerzan decisiones políticas.", quote: "La democracia ecológica requiere reconocer la co-participación de las cosas.", source: "Cap. 41: Ecological Democracy" }
+    // --- GRUPO: NATURALEZA ---
+    33: {
+      type: "Ontología Política",
+      title: "Biopolítica Vegetal",
+      author: "Catriona Sandilands (Capítulo 15)",
+      content: `
+        <div class="subtitle">Ceguera hacia las Plantas</div>
+        <p>La teoría política sufre de "ceguera vegetal" (plant blindness). Vemos a las plantas como el fondo pasivo de la acción humana. Sandilands desafía esto citando investigaciones sobre la inteligencia y sensibilidad vegetal. Las plantas "intra-actúan" con nosotros.</p>
+        <div class="subtitle">Política Floral</div>
+        <p>Analizando cómo las plantas organizan nuestras ciudades (parques, monocultivos), Sandilands propone una biopolítica que incluya a la vida vegetal no como recurso, sino como constituyente activo de la comunidad política.</p>
+      `
+    }
   };
 
-  // --- INICIALIZACIÓN DE VIS.JS ---
-  const container = document.getElementById('network');
-  
-  // Convertir arrays a DataSet de Vis
-  const nodes = new vis.DataSet(nodesArray);
-  const edges = new vis.DataSet(edgesArray);
+  // --- DATOS DE LA RED (VIS.JS) ---
+  const nodes = new vis.DataSet([
+    { id: 0, label: "Handbook\nEPT", color: "#1a3c34", font: { color: "white", size: 20 }, size: 40, shape: "box" },
+    
+    // GRUPO FUEGO (Destacado)
+    { id: 100, label: "FUEGO\n(Wildfire)", group: "fire", value: 25, shape: "hexagon" },
+    { id: 101, label: "Ensamblaje\nde Actores", group: "fire", value: 15 },
+    { id: 102, label: "Política de\nSupresión", group: "fire", value: 15 },
 
+    // TRADICIONES
+    { id: 21, label: "Historia del\nPensamiento", group: "tradition", value: 20 },
+    { id: 23, label: "Liberalismo\n(Mill vs Locke)", group: "tradition", value: 15 },
+    { id: 24, label: "Enfoques\nNo-Occidentales", group: "tradition", value: 15 },
+
+    // PODER
+    { id: 51, label: "Gubernamentalidad\n(Foucault)", group: "power", value: 20 },
+    { id: 52, label: "Justicia\nClimática", group: "power", value: 15 },
+    
+    // NATURALEZA
+    { id: 33, label: "Biopolítica\nVegetal", group: "nature", value: 15 },
+    { id: 34, label: "Nuevos\nMaterialismos", group: "nature", value: 15 }
+  ]);
+
+  const edges = new vis.DataSet([
+    // Conexiones centrales
+    { from: 0, to: 100, color: "#e74c3c", width: 3 },
+    { from: 0, to: 21 }, { from: 0, to: 51 }, { from: 0, to: 33 },
+
+    // Conexiones Fuego
+    { from: 100, to: 101, label: "compuesto por", font: {align: 'middle'} },
+    { from: 100, to: 102, label: "historia de" },
+    { from: 101, to: 34, dashes: true, label: "teoría" }, // Conexión con materialismo
+
+    // Otras conexiones
+    { from: 21, to: 23 }, { from: 21, to: 24 },
+    { from: 51, to: 52 },
+    { from: 33, to: 34 }
+  ]);
+
+  // --- CONFIGURACIÓN VIS.JS ---
+  const container = document.getElementById('network');
   const data = { nodes: nodes, edges: edges };
-  
   const options = {
     nodes: {
       shape: 'dot',
-      font: { face: 'Open Sans', size: 14, color: '#333', strokeWidth: 3, strokeColor: '#fff' },
+      font: { face: 'Lato', size: 14, color: '#333' },
       borderWidth: 2,
       shadow: true
     },
     edges: {
-      width: 2,
-      color: { color: '#bdc3c7', highlight: '#2c3e50' },
+      width: 1,
+      color: { color: '#bdc3c7', highlight: '#1a3c34' },
       smooth: { type: 'continuous' }
     },
-    physics: {
-      stabilization: false,
-      barnesHut: {
-        gravitationalConstant: -2000,
-        centralGravity: 0.3,
-        springLength: 95
-      }
+    groups: {
+      fire: { color: { background: '#e74c3c', border: '#c0392b' }, font: { color: '#c0392b', face: 'Playfair Display', size: 16 } },
+      tradition: { color: { background: '#f39c12', border: '#d35400' } },
+      power: { color: { background: '#8e44ad', border: '#6c3483' } },
+      nature: { color: { background: '#27ae60', border: '#1e8449' } }
     },
-    interaction: {
-      hover: true,
-      zoomView: true
-    }
+    physics: {
+      forceAtlas2Based: { gravitationalConstant: -100, springLength: 150 },
+      solver: 'forceAtlas2Based'
+    },
+    interaction: { hover: true }
   };
 
   const network = new vis.Network(container, data, options);
 
-  // --- LÓGICA DE INTERACCIÓN ---
-
-  // 1. Click en nodo
+  // --- INTERACCIÓN ---
   network.on("click", function (params) {
     if (params.nodes.length > 0) {
       const nodeId = params.nodes[0];
-      const content = contentData[nodeId];
+      const info = db[nodeId];
       
-      // Si tenemos info detallada, mostrarla
-      if (content) {
-        updateSidebar(content);
-        openSidebar();
+      const sidebar = document.getElementById('sidebar');
+      const contentDiv = document.getElementById('content-body');
+
+      if (info) {
+        contentDiv.innerHTML = `
+          <span class="author-tag">${info.type}</span>
+          <h2 class="article-title">${info.title}</h2>
+          <div style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">${info.author}</div>
+          ${info.content}
+        `;
       } else {
-        // Si es un nodo de agrupación (ej. "Parte II") sin texto específico en la DB
-        const nodeInfo = nodes.get(nodeId);
-        updateSidebar({
-          cat: "Sección del Manual",
-          title: nodeInfo.label.replace('\n', ' '),
-          body: "Esta sección agrupa varios capítulos clave del Handbook. Haz clic en los nodos conectados para ver detalles específicos de los autores.",
-          quote: ""
-        });
-        openSidebar();
+        // Fallback para nodos sin contenido detallado en DB
+        contentDiv.innerHTML = `
+          <h2 class="article-title">Sección del Manual</h2>
+          <p>Explore los nodos conectados para ver detalles específicos de los capítulos y autores.</p>
+        `;
       }
-    }
-  });
-
-  // 2. Funciones del Sidebar
-  function updateSidebar(data) {
-    const html = `
-      <span class="node-category">${data.cat}</span>
-      <h2 class="node-title">${data.title}</h2>
-      <div class="node-body">${data.body}</div>
-      ${data.quote ? `
-        <div class="citation-box">
-          "${data.quote}"
-          <span class="citation-source">${data.source || ''}</span>
-        </div>` : ''}
-    `;
-    document.getElementById('infoContent').innerHTML = html;
-  }
-
-  function openSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    // En desktop no hace nada especial (siempre visible)
-    // En mobile levanta el bottom sheet
-    if (window.innerWidth <= 768) {
+      
       sidebar.classList.add('open');
     }
-  }
-
-  function toggleMobileSidebar() {
-    // Solo funciona en móvil para colapsar/expandir
-    if (window.innerWidth <= 768) {
-      document.getElementById('sidebar').classList.toggle('open');
-    }
-  }
-
-  // 3. Filtros
-  function filterNodes(group, btnElement) {
-    // Actualizar botones
-    document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-    btnElement.classList.add('active');
-
-    if (group === 'all') {
-      nodes.forEach(node => {
-        nodes.update({id: node.id, hidden: false});
-      });
-    } else {
-      nodes.forEach(node => {
-        // Mostrar nodo central (0) y los del grupo seleccionado
-        const isVisible = (node.group === group || node.id === 0);
-        nodes.update({id: node.id, hidden: !isVisible});
-      });
-    }
-    network.fit(); // Re-ajustar zoom
-  }
-
-  function fitNetwork() {
-    network.fit({ animation: { duration: 1000 } });
-  }
-
-  // Ajuste al redimensionar ventana
-  window.addEventListener('resize', () => {
-    network.fit();
   });
 
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  // Filtros
+  function filterNodes(group, btn) {
+    // UI Botones
+    document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (group === 'all') {
+      nodes.forEach(n => nodes.update({id: n.id, hidden: false}));
+    } else {
+      nodes.forEach(n => {
+        const visible = (n.group === group || n.id === 0);
+        nodes.update({id: n.id, hidden: !visible});
+      });
+    }
+    network.fit();
+  }
+
+  // Ajuste inicial para móviles
+  if (window.innerWidth < 768) {
+    options.nodes.font.size = 10;
+    network.setOptions(options);
+  }
 </script>
 </body>
 </html>
