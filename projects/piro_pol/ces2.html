@@ -3,500 +3,524 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Cambridge Handbook Vol. 2: Práctica y Justicia</title>
+<title>Cambridge Handbook Vol. 2: Praxis y Justicia</title>
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --vol2-color: #8e44ad; /* Morado para diferenciar del Vol 1 */
-    --body-color: #d35400; /* Terracota para "Cuerpos" */
-    --nature-color: #27ae60; /* Verde para "Más allá de lo humano" */
-    --fire-color: #c0392b;   /* Rojo intenso para Fuego */
-    --text-dark: #2c3e50;
-    --paper-bg: #fdfbf7;
-    --panel-width: 480px;
+    /* Paleta de Colores - Distintiva para Vol 2 (Morado/Terracota) */
+    --primary: #4a235a;    /* Morado Profundo (Praxis/Cuerpo) */
+    --secondary: #d35400;  /* Terracota (Tierra/Justicia) */
+    --fire: #c0392b;       /* Rojo Fuego */
+    --nature: #27ae60;     /* Verde Nuevos Materialismos */
+    --food: #f39c12;       /* Amarillo Alimentos */
+    --text: #2c3e50;
+    --bg-panel: #ffffff;
+    --bg-canvas: #fdfbf7;  /* Color Papel Crema */
   }
 
   body, html {
     margin: 0; padding: 0;
     width: 100%; height: 100%;
-    font-family: 'Montserrat', sans-serif;
-    background-color: var(--paper-bg);
-    color: var(--text-dark);
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-canvas);
     overflow: hidden;
   }
 
-  /* --- RED --- */
+  /* --- LIENZO DE RED --- */
   #network {
     width: 100%; height: 100vh;
-    background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f4ecdf 100%);
+    background: radial-gradient(circle at center, #fdfbf7 0%, #ece5dd 100%);
   }
 
-  /* --- INTERFAZ --- */
-  .header-overlay {
-    position: absolute;
-    top: 20px; left: 20px;
-    pointer-events: none;
-    z-index: 10;
-  }
-
-  .main-title {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.8rem;
-    color: var(--vol2-color);
-    margin: 0;
-    text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
-    pointer-events: auto;
-  }
-
-  .sub-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #555;
-    background: rgba(255,255,255,0.8);
-    padding: 2px 5px;
-    pointer-events: auto;
-  }
-
-  /* Botonera */
+  /* --- BOTONERA DE FILTROS --- */
   .controls {
     position: absolute;
-    top: 100px; left: 20px;
+    top: 30px; left: 30px;
+    z-index: 100;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    z-index: 100;
+    gap: 10px;
+    width: 250px;
   }
 
-  .nav-btn {
-    background: white;
-    border: none;
-    border-left: 5px solid #ccc;
-    padding: 10px 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 0.85rem;
+  .btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-left: 4px solid var(--primary);
+    padding: 12px 15px;
     cursor: pointer;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
-    transition: transform 0.2s, border-color 0.2s;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
     text-align: left;
-    width: 200px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .nav-btn:hover { transform: translateX(5px); }
-  .nav-btn.active { background: #fff; transform: translateX(10px); }
+  .btn span {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #999;
+    font-weight: 400;
+  }
 
-  .btn-body { border-color: var(--body-color); color: var(--body-color); }
-  .btn-nature { border-color: var(--nature-color); color: var(--nature-color); }
-  .btn-fire { border-color: var(--fire-color); color: var(--fire-color); } 
-  .btn-fire.active { background: var(--fire-color); color: white; }
+  .btn:hover { transform: translateX(5px); background: #fff; }
+  .btn.active { background: var(--primary); color: #fff; border-left-color: var(--secondary); }
+  .btn.active span { color: rgba(255,255,255,0.7); }
 
-  /* --- PANEL LATERAL --- */
+  /* Estilos específicos de botones */
+  .btn-body.active { background: var(--secondary); border-color: var(--secondary); }
+  .btn-nature.active { background: var(--nature); border-color: var(--nature); }
+  .btn-fire { border-left-color: var(--fire); color: var(--fire); }
+  .btn-fire.active { background: var(--fire); color: white; }
+
+  /* --- PANEL LATERAL (SIDEBAR) --- */
   .sidebar {
     position: absolute;
     right: 0; top: 0;
-    width: var(--panel-width);
+    width: 550px; /* Panel ancho para lectura cómoda */
     height: 100vh;
-    background: white;
-    box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+    background: var(--bg-panel);
+    box-shadow: -5px 0 30px rgba(0,0,0,0.15);
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     display: flex;
     flex-direction: column;
     z-index: 200;
-    border-left: 8px solid var(--vol2-color);
+    border-left: 5px solid var(--primary);
   }
 
   .sidebar.open { transform: translateX(0); }
 
+  /* Cabecera del Panel */
   .panel-header {
-    padding: 40px 30px 20px;
-    background: var(--paper-bg);
-    border-bottom: 1px solid #eee;
+    background: var(--primary);
+    color: #fff;
+    padding: 40px 30px;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px);
   }
 
-  .chapter-label {
-    font-size: 0.7rem;
+  .book-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .book-meta {
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: #999;
-    margin-bottom: 10px;
-    display: block;
+    opacity: 0.8;
   }
 
-  h2.panel-title {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.6rem;
-    color: var(--text-dark);
-    margin: 0;
-    line-height: 1.3;
-  }
-
-  .author-meta {
-    font-style: italic;
-    color: var(--vol2-color);
-    margin-top: 10px;
-    font-size: 0.95rem;
-  }
-
+  /* Contenido del Panel */
   .panel-content {
-    padding: 30px;
+    flex-grow: 1;
     overflow-y: auto;
-    flex: 1;
-    font-size: 0.95rem;
+    padding: 40px 30px;
     line-height: 1.8;
     color: #444;
   }
 
-  /* Cajas de Texto */
-  .highlight-box {
-    background: #f0f3f4;
-    padding: 15px;
-    border-radius: 4px;
-    margin: 20px 0;
-    border-left: 3px solid var(--vol2-color);
+  .article-type {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
   }
 
-  .fire-box {
-    background: #fdedec;
-    border-left: 3px solid var(--fire-color);
-    color: #78281f;
+  h2.article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 10px;
+    line-height: 1.1;
   }
 
-  .quote {
-    font-family: 'Libre Baskerville', serif;
+  .author-tag {
+    font-style: italic;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+  }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    display: block;
+  }
+
+  p { margin-bottom: 20px; text-align: justify; }
+
+  /* Cajas de Citas */
+  .quote-block {
+    background: #fdf2e9; /* Tono piel suave */
+    border-left: 4px solid var(--secondary);
+    padding: 20px;
+    margin: 25px 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
     font-size: 1.1rem;
-    color: #333;
-    margin: 20px 0;
-    padding-left: 20px;
-    border-left: 2px solid #ccc;
+    color: #5d4037;
+    position: relative;
+  }
+
+  .citation-ref {
+    display: block;
+    text-align: right;
+    font-size: 0.7rem;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    color: #999;
+    margin-top: 10px;
+    text-transform: uppercase;
   }
 
   .close-btn {
     position: absolute;
     top: 20px; right: 20px;
     background: none; border: none;
-    font-size: 1.5rem; cursor: pointer;
-    color: #aaa;
+    color: white; font-size: 2rem;
+    cursor: pointer; opacity: 0.8;
   }
+  .close-btn:hover { opacity: 1; transform: scale(1.1); }
 
   .footer {
     padding: 15px;
-    text-align: center;
-    font-size: 0.7rem;
-    color: #ccc;
+    background: #f8f9fa;
     border-top: 1px solid #eee;
+    font-size: 0.7rem;
+    text-align: center;
+    color: #aaa;
   }
 
   /* Responsive */
   @media (max-width: 768px) {
-    .sidebar { width: 100%; border-left: none; border-top: 8px solid var(--vol2-color); }
-    .controls { top: auto; bottom: 20px; flex-direction: row; width: 100%; overflow-x: auto; left: 0; padding: 0 10px; }
-    .nav-btn { min-width: 120px; font-size: 0.75rem; padding: 8px; }
+    .sidebar { width: 100%; height: 85vh; top: auto; bottom: 0; transform: translateY(100%); }
+    .sidebar.open { transform: translateY(0); }
+    .controls { width: auto; right: 30px; }
+    .btn span { display: none; }
   }
 </style>
 </head>
 <body>
 
-<div class="header-overlay">
-  <h1 class="main-title">Cambridge Handbook Vol. 2</h1>
-  <div class="sub-title">Práctica, Cuerpos y Movimientos Sociales</div>
-</div>
-
 <div id="network"></div>
 
 <div class="controls">
-  <button class="nav-btn btn-body active" onclick="filterNetwork('all', this)">Vista General</button>
-  <button class="nav-btn btn-body" onclick="filterNetwork('embodied', this)">Sociología del Cuerpo</button>
-  <button class="nav-btn btn-nature" onclick="filterNetwork('nature', this)">Más allá de lo Humano</button>
-  <button class="nav-btn btn-body" onclick="filterNetwork('food', this)">Justicia Alimentaria</button>
-  <button class="nav-btn btn-fire" onclick="filterNetwork('fire', this)">🔥 Rastros del Fuego</button>
+  <button class="btn active" onclick="filterNodes('all', this)">
+    Vista General <span>Todo el volumen</span>
+  </button>
+  <button class="btn btn-body" onclick="filterNodes('embodied', this)">
+    Cuerpos y Género <span>Queer, Raza, Salud</span>
+  </button>
+  <button class="btn btn-nature" onclick="filterNodes('nature', this)">
+    Más allá de lo Humano <span>Plantas & ANT</span>
+  </button>
+  <button class="btn btn-fire" onclick="filterNodes('fire', this)">
+    🔥 Rastros del Fuego <span>Energía y Resistencia</span>
+  </button>
 </div>
 
 <div class="sidebar" id="sidebar">
   <button class="close-btn" onclick="closeSidebar()">×</button>
+  
   <div class="panel-header">
-    <span class="chapter-label" id="p-label">Sección</span>
-    <h2 class="panel-title" id="p-title">Título del Capítulo</h2>
-    <div class="author-meta" id="p-author">Autor(es)</div>
+    <div class="book-title">The Cambridge Handbook of<br>Environmental Sociology</div>
+    <div class="book-meta">Volumen 2: Práctica y Movimientos (2020)<br>Legun, Keller, Carolan & Bell</div>
   </div>
-  <div class="panel-content" id="p-content">
-    Contenido...
+
+  <div class="panel-content" id="content-body">
+    <div style="text-align: center; margin-top: 50%; color: #999;">
+      <p>Seleccione un nodo para desplegar el análisis académico.</p>
+    </div>
   </div>
-  <div class="footer">Elaborado por Maria Angelica Suarez Ribera</div>
+
+  <div class="footer">
+    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
+  </div>
 </div>
 
 <script>
-/* --- DATOS: VOLUMEN 2 (Enfoque Práctico/Social) --- */
-const db = {
-  // NODO CENTRAL
-  0: {
-    label: "VOLUMEN 2:\nPRÁCTICA",
-    title: "Conceptualizando la Práctica",
-    author: "Legun, Keller, Carolan & Bell",
-    content: `
-      <p>Mientras el Volumen 1 se centraba en la teoría, este segundo volumen aborda la <strong>praxis de la sociología ambiental</strong>. Se pregunta cómo las teorías se materializan en cuerpos, alimentos, tecnologías y movimientos sociales.</p>
-      <div class="highlight-box">
-        "El cambio, la aceptación del cambio y la normalización de un cambio continuo significativo es una característica definitoria de nuestra era."
-      </div>
-      <p>El libro desafía las fronteras tradicionales, incluyendo secciones sobre género y sexualidad (cuerpos), ontologías indígenas, y la agencia de plantas y animales, moviéndose más allá del antropocentrismo clásico.</p>
-    `
-  },
+  /* --- BASE DE DATOS DE CONTENIDOS (TEXTOS DESARROLLADOS) --- */
+  const db = {
+    // NODO CENTRAL
+    0: {
+      type: "Introducción al Volumen 2",
+      title: "La Praxis de la Sociología Ambiental",
+      author: "Editores: Katharine Legun, Julie C. Keller et al.",
+      content: `
+        <span class="subtitle">Del Concepto a la Acción</span>
+        <p>A diferencia del Volumen 1, que establecía los fundamentos teóricos (como el materialismo histórico), este Volumen 2 se centra en la <strong>práctica</strong>. ¿Cómo se vive la teoría? Los editores argumentan que la sociología ambiental debe "bajar a tierra" para examinar cómo las desigualdades ecológicas se inscriben en los cuerpos, en los alimentos que comemos y en las formas en que nos organizamos políticamente.</p>
+        <span class="subtitle">Rompiendo Silencios</span>
+        <p>Este volumen es notable por incluir voces que históricamente fueron marginadas en la sociología ambiental clásica: perspectivas queer, indígenas, feministas y de justicia racial. No se trata solo de "proteger la naturaleza", sino de cuestionar qué cuerpos tienen derecho a ocupar esa naturaleza.</p>
+        <div class="quote-block">
+          "El cambio, la aceptación del cambio y la normalización de un cambio continuo significativo es una característica definitoria de nuestra era."
+          <span class="citation-ref">Introducción (p. 2)</span>
+        </div>
+      `
+    },
 
-  // --- CLUSTER: RASTROS DEL FUEGO (FIRE) ---
-  100: {
-    label: "PIROPOLÍTICA\n(Marder)",
-    title: "Filosofía Vegetal y Piropolítica",
-    author: "Michael Marder (Cap. 10)",
-    content: `
-      <div class="fire-box">
-        <strong>Conexión con el Fuego:</strong> Aunque su capítulo se centra en las plantas ("Plants and Philosophy"), la biografía de Marder en este volumen destaca su obra <em>"Pyropolitics: When the World Is Ablaze"</em> (Piropolítica: Cuando el mundo está en llamas).
-      </div>
-      <p>Marder propone que nuestra era no es solo geológica (Antropoceno) sino política y elementalmente definida por el fuego: desde la quema de combustibles fósiles hasta la incineración de la biodiversidad. En su capítulo, argumenta que debemos superar la "ceguera vegetal" para entender cómo la vida (y su quema) estructura nuestra política.</p>
-    `
-  },
-  101: {
-    label: "SOUL FIRE\nFARM",
-    title: "Farming While Black: Soul Fire Farm",
-    author: "Leah Penniman (Ref. en Conclusión y Cap. 5)",
-    content: `
-      <div class="fire-box">
-        <strong>El Fuego del Alma:</strong> El libro destaca el trabajo de <em>Soul Fire Farm</em>, una granja de justicia alimentaria que trabaja para desmantelar el racismo en el sistema alimentario.
-      </div>
-      <p>Mencionado en el contexto de movimientos rurales y queer, <em>Soul Fire</em> representa el fuego como regeneración y resistencia. Frente a la blanquitud del espacio rural (discutida por Julie Keller), Soul Fire Farm utiliza prácticas ancestrales para reclamar la tierra y la soberanía alimentaria para comunidades negras e indígenas.</p>
-    `
-  },
-  102: {
-    label: "FRACKING Y\nSILENCIO",
-    title: "El Silencio es Oro en la Zona de Fracking",
-    author: "Debra J. Davidson (Cap. 19)",
-    content: `
-      <div class="fire-box">
-        <strong>Fuego Fósil:</strong> El fracking es la extracción violenta de gas combustible. Davidson analiza cómo esta industria no solo fractura la roca, sino también la comunidad.
-      </div>
-      <p>Davidson documenta cómo la industria del gas y petróleo suprime la disidencia política. En lugar de un debate público ruidoso, encuentra un "silencio" impuesto socialmente en las comunidades afectadas, donde hablar contra la industria (y su fuego/energía) se ve como una traición a la economía local.</p>
-    `
-  },
+    // --- GRUPO: RASTROS DEL FUEGO (FIRE CLUSTER) ---
+    100: {
+      type: "Filosofía y Energía",
+      title: "Piropolítica: El Mundo en Llamas",
+      author: "Ref: Michael Marder (Cap. 10)",
+      content: `
+        <span class="subtitle">La Ontología del Fuego</span>
+        <p>Aunque el capítulo de Marder en este volumen se titula "Plants and Philosophy", su argumento se basa en su obra mayor sobre la <strong>Piropolítica</strong>. Marder sostiene que nuestra era política se define por la combustión: quemamos combustibles fósiles, quemamos selvas y nos "quemamos" (burnout) a nosotros mismos.</p>
+        <span class="subtitle">Energía sin Consumo</span>
+        <p>Frente a la economía del fuego destructivo (que consume al otro para producir energía), Marder propone aprender de las plantas. Las plantas procesan la energía solar (el fuego del sol) sin destruir la fuente. Una "sociología vegetal" es una alternativa política a la piropolítica del capitalismo fósil.</p>
+        <div class="quote-block">
+          "Necesitamos una política que, como la fotosíntesis, genere vida sin agotar su fuente, contra la lógica de la incineración total."
+          <span class="citation-ref">Michael Marder (Contexto Teórico)</span>
+        </div>
+      `
+    },
+    101: {
+      type: "Justicia Racial y Agraria",
+      title: "Soul Fire Farm: Soberanía Negra",
+      author: "Ref: Conclusión y Cap. 5",
+      content: `
+        <span class="subtitle">Agricultura como Resistencia</span>
+        <p>El libro destaca el trabajo de <strong>Leah Penniman</strong> y <em>Soul Fire Farm</em>. Frente al racismo sistémico que despojó a los afroamericanos de sus tierras (como se detalla en los capítulos sobre justicia alimentaria), esta organización usa el término "Soul Fire" (Fuego del Alma) para describir la reconexión ancestral con la tierra.</p>
+        <span class="subtitle">Desafiando la Blanquitud Rural</span>
+        <p>La sociología rural tradicional a menudo asume que el agricultor es un hombre blanco. Soul Fire Farm desafía esto, demostrando que las prácticas regenerativas (permacultura) tienen raíces indígenas y africanas. El "fuego" aquí no es destrucción, sino el espíritu de resistencia necesario para cultivar en un sistema hostil.</p>
+        <div class="quote-block">
+          "Farming while Black (Cultivar siendo negro) es un acto de desafío político en un país construido sobre la esclavitud agraria."
+          <span class="citation-ref">Ref. Leah Penniman</span>
+        </div>
+      `
+    },
+    102: {
+      type: "Energía Fósil",
+      title: "Fracking: El Silencio en la Zona de Combustión",
+      author: "Debra J. Davidson (Cap. 19)",
+      content: `
+        <span class="subtitle">La Fractura Social</span>
+        <p>Debra Davidson analiza las comunidades que viven sobre yacimientos de gas de esquisto (fracking). El fracking es la extracción violenta de fuego fósil. Lo sorprendente no es el ruido de la maquinaria, sino el <strong>silencio social</strong>.</p>
+        <span class="subtitle">El Silencio es Oro</span>
+        <p>Davidson documenta cómo se impone una "cultura del silencio". Criticar a la industria del gas se ve como una traición a la economía local. Las llamas de los pozos de gas iluminan el cielo, pero la comunidad vive en la oscuridad informativa debido a la dependencia económica y el miedo.</p>
+        <div class="quote-block">
+          "En las zonas de extracción, el silencio no es ausencia de opinión, sino una estrategia de supervivencia impuesta por la hegemonía corporativa."
+          <span class="citation-ref">Debra J. Davidson (Cap. 19)</span>
+        </div>
+      `
+    },
 
-  // --- CLUSTER: CUERPOS (EMBODIED) ---
-  1: {
-    label: "Sociología\nCorpórea",
-    title: "Parte II: Sociología Ambiental Corpórea",
-    author: "Introducción a la Sección",
-    content: `
-      <p>Esta sección es innovadora al traer el <strong>cuerpo</strong> al centro de la sociología ambiental. Ya no es solo "el medio ambiente allá afuera", sino cómo el ambiente entra en nuestros cuerpos (tóxicos) y cómo nuestros cuerpos (género/raza) experimentan el ambiente.</p>
-    `
-  },
-  11: {
-    label: "Ruralidad\nLGBTQ",
-    title: "¿Extraños en la Tierra? Ruralidad Queer",
-    author: "Julie C. Keller (Cap. 5)",
-    content: `
-      <p>Keller desafía la idea de que lo rural es inherentemente conservador y heterosexual. Analiza la "metronormatividad" (la idea de que las personas queer deben migrar a la ciudad para ser libres) y recupera la historia de movimientos rurales LGBTQ que buscan una sostenibilidad queer, conectando la justicia sexual con la justicia de la tierra.</p>
-    `
-  },
-  12: {
-    label: "Masculinidad\nTóxica",
-    title: "Masculinidad y Medio Ambiente",
-    author: "Kathryn Gregory Anderson (Cap. 6)",
-    content: `
-      <p>¿Es la destrucción ambiental un acto de género? Anderson explora cómo ciertas formas de <strong>masculinidad hegemónica industrial</strong> (el hombre que conquista la naturaleza, el leñador, el perforador) son hostiles al ecologismo.</p>
-      <div class="quote">"Las soluciones verdes a menudo se perciben como afeminadas o 'no masculinas', creando barreras culturales para la sostenibilidad."</div>
-    `
-  },
-  13: {
-    label: "Salud y\nToxicidad",
-    title: "Toxicidad, Salud y Ambiente",
-    author: "Carrera & Brown (Cap. 7)",
-    content: `
-      <p>Este capítulo integra la salud pública con la sociología. Analiza cómo las estructuras de poder determinan quién vive en ambientes tóxicos. Critica la medicina convencional por ignorar las causas ambientales del cáncer (como la leucemia, analizada por Manuel Vallée en el Cap. 8) y centrarse solo en la "cura" individual o genética.</p>
-    `
-  },
+    // --- GRUPO: CUERPOS Y GÉNERO (EMBODIED) ---
+    11: {
+      type: "Sociología Queer",
+      title: "¿Extraños en la Tierra? Ruralidad Queer",
+      author: "Julie C. Keller (Cap. 5)",
+      content: `
+        <span class="subtitle">Desafiando la Metronormatividad</span>
+        <p>Julie Keller ataca el concepto de "metronormatividad": la idea errónea de que las personas LGBTQ solo pueden ser libres y felices en las grandes ciudades, y que el campo es inherentemente homofóbico y peligroso. Esta narrativa borra a millones de personas queer que viven, aman y cultivan en zonas rurales.</p>
+        <span class="subtitle">Ecología Queer</span>
+        <p>Keller documenta el surgimiento de "santuarios rurales" y comunidades agrícolas queer. Estos espacios no solo buscan tolerancia, sino que redefinen la relación con la naturaleza, rechazando la explotación heteropatriarcal de la tierra. La sostenibilidad ecológica y la libertad sexual van de la mano.</p>
+        <div class="quote-block">
+          "Debemos superar la narrativa del 'éxodo rural' queer para reconocer las formas vibrantes de resistencia y pertenencia en el campo."
+          <span class="citation-ref">Julie C. Keller (p. 88)</span>
+        </div>
+      `
+    },
+    12: {
+      type: "Género y Medio Ambiente",
+      title: "Masculinidades Industriales",
+      author: "Kathryn Gregory Anderson (Cap. 6)",
+      content: `
+        <span class="subtitle">El Hombre contra la Naturaleza</span>
+        <p>¿Por qué el movimiento ambientalista a menudo se etiqueta como "femenino"? Anderson explora la construcción de la <strong>masculinidad industrial hegemónica</strong>. La identidad de muchos hombres (leñadores, mineros, perforadores) está ligada a la capacidad de dominar y extraer recursos de la naturaleza.</p>
+        <span class="subtitle">La Amenaza Verde</span>
+        <p>Para esta masculinidad, la regulación ambiental no es solo una amenaza económica, sino una amenaza a su identidad de género. Entender esto es crucial para explicar la reacción política (backlash) contra las políticas climáticas en zonas industriales.</p>
+      `
+    },
 
-  // --- CLUSTER: MÁS ALLÁ DE LO HUMANO (NATURE) ---
-  2: {
-    label: "Más allá\nde lo Humano",
-    title: "Parte III: Beyond the Human",
-    author: "Legun, Marder, DeMello",
-    content: `
-      <p>La sociología tradicional se definía por estudiar solo a los humanos. Esta sección rompe esa barrera, incorporando la Teoría del Actor-Red (ANT) y los Nuevos Materialismos.</p>
-    `
-  },
-  21: {
-    label: "Plantas y\nFilosofía",
-    title: "Filosofía de las Plantas",
-    author: "Michael Marder (Cap. 10)",
-    content: `
-      <p>Marder cuestiona la marginación de las plantas en la teoría social. Las plantas no son un fondo pasivo; tienen una forma de "pensar" y ser que es radicalmente diferente a la humana. Una sociología vegetal nos obliga a repensar la agencia, el crecimiento y la pasividad.</p>
-    `
-  },
-  22: {
-    label: "ANT y\nAgencia",
-    title: "Teoría del Actor-Red (ANT)",
-    author: "Katharine Legun & Abbi Virens (Cap. 9)",
-    content: `
-      <p>Analizan cómo la ANT (asociada a Latour) ofrece herramientas para entender cómo los objetos (tecnologías, microbios, semillas) actúan en redes sociales. No hay "sociedad" separada de las cosas que la sostienen.</p>
-    `
-  },
+    // --- GRUPO: MÁS ALLÁ DE LO HUMANO (NATURE) ---
+    21: {
+      type: "Ontología Política",
+      title: "Filosofía de las Plantas",
+      author: "Michael Marder (Cap. 10)",
+      content: `
+        <span class="subtitle">Superando la Ceguera Vegetal</span>
+        <p>La sociología ha sido históricamente "zoocéntrica" (centrada en animales y humanos). Marder argumenta que las plantas son la base de toda vida política, pero las tratamos como mobiliario inerte. Propone reconocer la <strong>agencia vegetal</strong>: las plantas tienen memoria, comunicación y estrategias, aunque no tengan cerebro.</p>
+        <div class="quote-block">
+          "Reconocer a las plantas como seres políticos cambia nuestra comprensión de la comunidad, la frontera y el crecimiento."
+          <span class="citation-ref">Michael Marder (Cap. 10)</span>
+        </div>
+      `
+    },
+    22: {
+      type: "Nuevos Materialismos",
+      title: "Teoría del Actor-Red (ANT)",
+      author: "Katharine Legun & Abbi Virens (Cap. 9)",
+      content: `
+        <span class="subtitle">La Agencia de las Cosas</span>
+        <p>Siguiendo a Bruno Latour, este capítulo explica cómo los objetos no humanos (un tractor, una semilla modificada genéticamente, un algoritmo) son "actores" en la red social. No podemos entender la agricultura moderna solo mirando a los granjeros; debemos mirar cómo las tecnologías dictan el comportamiento humano.</p>
+      `
+    },
 
-  // --- CLUSTER: ALIMENTOS Y JUSTICIA (FOOD) ---
-  3: {
-    label: "Sistemas\nAlimentarios",
-    title: "Parte VI: Alimentos y Agricultura",
-    author: "Carolan, Johnston, Weiler",
-    content: `
-      <p>La comida es el punto donde la naturaleza y la cultura se encuentran más íntimamente. Esta sección analiza desde la biotecnología hasta los movimientos de "foodies".</p>
-    `
-  },
-  31: {
-    label: "Comer el\nFuturo",
-    title: "¿Comer hacia un Futuro Sostenible?",
-    author: "Josée Johnston & Anelyse Weiler (Cap. 23)",
-    content: `
-      <p>Critican la idea de que podemos "comprar" nuestra salida de la crisis ambiental a través del consumo ético (voto con el tenedor). Si bien el consumo consciente es importante, a menudo refuerza desigualdades de clase y raza si no va acompañado de cambios estructurales en el sistema de producción.</p>
-    `
-  },
-  32: {
-    label: "Comercio\nJusto",
-    title: "El Movimiento Global de Comercio Justo",
-    author: "Elizabeth A. Bennett (Cap. 27)",
-    content: `
-      <p>Bennett analiza la evolución del Fair Trade. ¿Para quién es? Originalmente un movimiento radical de solidaridad Norte-Sur, corre el riesgo de ser cooptado por corporaciones que diluyen sus estándares para acceder a nichos de mercado, convirtiendo la justicia en una etiqueta de marketing.</p>
-    `
+    // --- GRUPO: ALIMENTOS (FOOD) ---
+    31: {
+      type: "Sistemas Alimentarios",
+      title: "Consumo Ético: ¿Votar con el Tenedor?",
+      author: "Josée Johnston & Anelyse Weiler (Cap. 23)",
+      content: `
+        <span class="subtitle">Límites del Consumo</span>
+        <p>Johnston y Weiler critican la popular idea de que podemos "comprar" un mundo mejor (consumo ético). Si bien elegir orgánico es bueno, a menudo es una práctica elitista que excluye a la clase trabajadora. La verdadera justicia alimentaria requiere cambios estructurales, no solo individuales.</p>
+      `
+    }
+  };
+
+  /* --- CONFIGURACIÓN DE LA RED (VIS.JS) --- */
+  const nodes = new vis.DataSet([
+    // Centro
+    { id: 0, label: "CAMBRIDGE\nVOL. 2", shape: "box", color: "#4a235a", font: {color:"white", size:22, face:"Playfair Display"} },
+
+    // GRUPO FUEGO (Destacado)
+    { id: 100, label: "Piropolítica\n(Marder)", group: "fire", shape: "hexagon", value: 25 },
+    { id: 101, label: "Soul Fire\nFarm", group: "fire", shape: "hexagon", value: 25 },
+    { id: 102, label: "Fracking\n(Fuego Fósil)", group: "fire", shape: "hexagon", value: 20 },
+
+    // GRUPO CUERPOS
+    { id: 11, label: "Ruralidad\nQueer", group: "embodied", value: 20 },
+    { id: 12, label: "Masculinidad\nIndustrial", group: "embodied", value: 20 },
+    { id: 13, label: "Salud y\nTóxicos", group: "embodied", value: 15 },
+
+    // GRUPO NATURALEZA
+    { id: 21, label: "Filosofía\nVegetal", group: "nature", value: 20 },
+    { id: 22, label: "Actor-Red\n(ANT)", group: "nature", value: 15 },
+
+    // GRUPO ALIMENTOS
+    { id: 31, label: "Consumo\nÉtico", group: "food", value: 15 },
+    { id: 32, label: "Comercio\nJusto", group: "food", value: 15 }
+  ]);
+
+  const edges = new vis.DataSet([
+    // Conexiones Centrales
+    { from: 0, to: 100, color: "#c0392b", width: 3 }, // Fuego directo al centro
+    { from: 0, to: 11, width: 2 },
+    { from: 0, to: 12, width: 2 },
+    { from: 0, to: 21, width: 2 },
+    { from: 0, to: 31, width: 2 },
+
+    // Conexiones Fuego
+    { from: 100, to: 21, dashes: true, label: "teoría" }, // Piropolítica <-> Plantas
+    { from: 101, to: 11, dashes: true, label: "justicia" }, // Soul Fire <-> Queer Rurality
+    { from: 102, to: 12, dashes: true, label: "identidad" }, // Fracking <-> Masculinidad
+
+    // Otras conexiones
+    { from: 11, to: 12 }, { from: 11, to: 13 },
+    { from: 21, to: 22 },
+    { from: 31, to: 32 }
+  ]);
+
+  const container = document.getElementById('network');
+  const data = { nodes: nodes, edges: edges };
+  const options = {
+    nodes: {
+      shape: 'dot',
+      font: { face: 'Lato', color: '#2c3e50', multi: true },
+      borderWidth: 2,
+      shadow: true
+    },
+    groups: {
+      embodied: { color: { background: '#d35400', border: '#a04000' } }, // Terracota
+      nature: { color: { background: '#27ae60', border: '#1e8449' } },   // Verde
+      food: { color: { background: '#f39c12', border: '#d68910' } },     // Amarillo
+      fire: { 
+        color: { background: '#c0392b', border: '#922b21' }, 
+        font: { color: '#c0392b', face: 'Playfair Display', size: 16 } 
+      }
+    },
+    edges: {
+      color: { color: '#bdc3c7', highlight: '#4a235a' },
+      smooth: { type: 'continuous' }
+    },
+    physics: {
+      stabilization: false,
+      barnesHut: { gravitationalConstant: -2500, springLength: 130 }
+    },
+    interaction: { hover: true }
+  };
+
+  const network = new vis.Network(container, data, options);
+
+  /* --- LÓGICA DE INTERACCIÓN --- */
+  network.on("click", function (params) {
+    if (params.nodes.length > 0) {
+      const nodeId = params.nodes[0];
+      const info = db[nodeId];
+      
+      const sidebar = document.getElementById('sidebar');
+      const contentDiv = document.getElementById('content-body');
+
+      if (info) {
+        contentDiv.innerHTML = `
+          <span class="article-type">${info.type}</span>
+          <h2 class="article-title">${info.title}</h2>
+          <div class="author-tag">${info.author}</div>
+          ${info.content}
+        `;
+      } else {
+        contentDiv.innerHTML = `
+          <h2 class="article-title">Capítulo del Manual</h2>
+          <p>Explore los nodos conectados para ver detalles específicos.</p>
+        `;
+      }
+      sidebar.classList.add('open');
+    }
+  });
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
   }
-};
 
-/* --- CONFIGURACIÓN DE VIS.JS --- */
-const nodes = new vis.DataSet([
-  // Centro
-  { id: 0, label: "CAMBRIDGE\nVOL. 2", shape: "circle", color: "#8e44ad", font: {color:"white", size:20, face:"Libre Baskerville"}, size: 50 },
+  // Filtros
+  function filterNodes(group, btn) {
+    document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-  // GRUPO FUEGO (Highlight)
-  { id: 100, label: "Piropolítica\n(Marder)", group: "fire", shape: "star", size: 30 },
-  { id: 101, label: "Soul Fire\nFarm", group: "fire", shape: "star", size: 30 },
-  { id: 102, label: "Fracking\n(Gas/Fuego)", group: "fire", shape: "star", size: 25 },
-
-  // GRUPO CUERPOS
-  { id: 1, label: "Sociología\nCorpórea", group: "embodied", value: 20 },
-  { id: 11, label: "Ruralidad\nQueer", group: "embodied", value: 15 },
-  { id: 12, label: "Masculinidad\nTóxica", group: "embodied", value: 15 },
-  { id: 13, label: "Salud y\nToxicidad", group: "embodied", value: 15 },
-
-  // GRUPO NATURALEZA
-  { id: 2, label: "Más allá\nde lo Humano", group: "nature", value: 20 },
-  { id: 21, label: "Filosofía\nVegetal", group: "nature", value: 15 },
-  { id: 22, label: "ANT y\nAgencia", group: "nature", value: 15 },
-
-  // GRUPO ALIMENTOS
-  { id: 3, label: "Alimentos y\nAgricultura", group: "food", value: 20 },
-  { id: 31, label: "Consumo\nÉtico", group: "food", value: 15 },
-  { id: 32, label: "Comercio\nJusto", group: "food", value: 15 }
-]);
-
-const edges = new vis.DataSet([
-  // Conexiones Centrales
-  { from: 0, to: 1, width: 2 },
-  { from: 0, to: 2, width: 2 },
-  { from: 0, to: 3, width: 2 },
-  
-  // Conexiones Fuego (Derivadas de sus temas originales)
-  { from: 21, to: 100, label: "teoría", color: "#c0392b", dashes: true }, // Plantas -> Piropolítica
-  { from: 3, to: 101, label: "justicia", color: "#c0392b", dashes: true }, // Alimentos -> Soul Fire
-  { from: 0, to: 102, label: "recursos", color: "#c0392b" }, // Centro -> Fracking
-
-  // Ramas Cuerpos
-  { from: 1, to: 11 }, { from: 1, to: 12 }, { from: 1, to: 13 },
-
-  // Ramas Naturaleza
-  { from: 2, to: 21 }, { from: 2, to: 22 },
-
-  // Ramas Alimentos
-  { from: 3, to: 31 }, { from: 3, to: 32 },
-
-  // Conexiones Transversales
-  { from: 12, to: 102, label: "masculinidad industrial", dashes: true }, // Masculinidad -> Fracking
-  { from: 11, to: 101, label: "inclusión rural", dashes: true } // Queer -> Soul Fire Farm
-]);
-
-const container = document.getElementById('network');
-const data = { nodes: nodes, edges: edges };
-const options = {
-  nodes: {
-    font: { face: 'Montserrat', color: '#2c3e50' },
-    borderWidth: 2,
-    shadow: true
-  },
-  groups: {
-    embodied: { color: { background: '#edbb99', border: '#d35400' } },
-    nature: { color: { background: '#abebc6', border: '#27ae60' } },
-    food: { color: { background: '#f9e79f', border: '#f1c40f' } },
-    fire: { color: { background: '#fadbd8', border: '#c0392b' }, font: {size: 16, face: 'Libre Baskerville'} }
-  },
-  edges: {
-    color: { color: '#bdc3c7', highlight: '#8e44ad' },
-    smooth: { type: 'continuous' }
-  },
-  physics: {
-    stabilization: false,
-    barnesHut: { gravitationalConstant: -3000, springLength: 150 }
-  },
-  interaction: { hover: true }
-};
-
-const network = new vis.Network(container, data, options);
-
-/* --- INTERACCIÓN --- */
-network.on("click", function (params) {
-  if (params.nodes.length > 0) {
-    const nodeId = params.nodes[0];
-    const info = db[nodeId];
-    if (info) {
-      document.getElementById('p-label').innerText = info.label.replace('\n', ' ');
-      document.getElementById('p-title').innerText = info.title;
-      document.getElementById('p-author').innerText = info.author;
-      document.getElementById('p-content').innerHTML = info.content;
-      document.getElementById('sidebar').classList.add('open');
+    const allIds = nodes.getIds();
+    
+    if (group === 'all') {
+      nodes.update(allIds.map(id => ({id: id, hidden: false})));
+    } else {
+      let targetGroups = [group];
+      if (group === 'fire') targetGroups = ['fire']; // Solo fuego
+      
+      const updates = allIds.map(id => {
+        const node = nodes.get(id);
+        const isVisible = (id === 0) || targetGroups.includes(node.group);
+        return { id: id, hidden: !isVisible };
+      });
+      nodes.update(updates);
+    }
+    
+    if (group === 'fire') {
+      network.fit({ nodes: [0, 100, 101, 102], animation: true });
+    } else {
+      network.fit({ animation: true });
     }
   }
-});
-
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-}
-
-function filterNetwork(type, btn) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  const allIds = nodes.getIds();
-  let targetGroups = [];
-
-  if (type === 'all') {
-    nodes.update(allIds.map(id => ({id: id, hidden: false})));
-    network.fit();
-    return;
-  }
-
-  if (type === 'embodied') targetGroups = ['embodied'];
-  if (type === 'nature') targetGroups = ['nature'];
-  if (type === 'food') targetGroups = ['food'];
-  if (type === 'fire') targetGroups = ['fire'];
-
-  const updates = allIds.map(id => {
-    const node = nodes.get(id);
-    const show = (id === 0) || targetGroups.includes(node.group);
-    return { id: id, hidden: !show };
-  });
-  
-  nodes.update(updates);
-  
-  if(type === 'fire') {
-    network.fit({ nodes: [0, 100, 101, 102], animation: true });
-  } else {
-    network.fit({ animation: true });
-  }
-}
 </script>
 </body>
 </html>
