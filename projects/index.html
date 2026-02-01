@@ -24,7 +24,8 @@
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
           boxShadow: { 
             'card': '0 2px 8px rgba(0,0,0,0.06)',
-            'card-hover': '0 10px 30px rgba(0,68,148,0.12)' 
+            'card-hover': '0 10px 30px rgba(0,68,148,0.12)',
+            'popup': '0 10px 40px -10px rgba(0,0,0,0.2)'
           }
         }
       }
@@ -37,8 +38,9 @@
 
   <style>
     body { background-color: #fcfcfc; }
-    /* Estilos Ficha Técnica */
-    .fact-sheet { background-color: #f8f9fa; border-left: 4px solid #004494; }
+    
+    /* Estilos Ficha Técnica Lateral */
+    .fact-sheet { background-color: #f8f9fa; border-left: 4px solid #004494; position: relative; }
     .label-cordis { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; font-weight: 700; margin-bottom: 4px; }
     .value-cordis { font-size: 0.95rem; color: #111; margin-bottom: 16px; font-weight: 500; line-height: 1.4; }
     
@@ -52,12 +54,39 @@
     
     .tag-pill { @apply px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 bg-white text-slate-600; }
     
-    /* Estilos para el contenido inyectado en la ficha */
+    /* Estilos para el contenido inyectado */
     .section-title { @apply text-sm font-bold text-cordis-dark uppercase tracking-widest border-b border-gray-200 pb-2 mb-3 mt-8; }
     .rich-text p { @apply mb-3 text-gray-700 leading-relaxed text-sm text-justify; }
     .rich-text ul { @apply list-disc list-inside mb-4 space-y-2 text-sm text-gray-700; }
     .rich-text li { @apply pl-1; }
     .rich-text strong { @apply text-cordis-blue font-semibold; }
+
+    /* Estilos del Popup (Ventana emergente) */
+    .popup-trigger:hover .popup-content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) translateX(0);
+    }
+    .popup-content {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+      width: 280px;
+    }
+    /* Flecha del popup */
+    .popup-arrow {
+      position: absolute;
+      top: -6px;
+      right: 12px;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-left: 1px solid #e2e8f0;
+      border-top: 1px solid #e2e8f0;
+      transform: rotate(45deg);
+    }
   </style>
 </head>
 <body class="text-slate-800 font-sans min-h-screen flex flex-col">
@@ -67,23 +96,22 @@
   <!-- Header -->
   <header class="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logo y Título -->
       <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
         <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-auto group-hover:scale-105 transition duration-300" />
         <div class="leading-tight">
-          <h1 class="text-lg font-bold text-cordis-blue tracking-tight">CIRCPyCS / RESEARCH</h1>
+          <h1 class="text-lg font-bold text-cordis-blue tracking-tight">CIRCPyCS</h1>
           <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Portal de Proyectos</p>
         </div>
       </a>
       
-      <nav class="hidden md:flex gap-6 text-sm font-medium items-center">
+      <!-- Navegación Fija (Sin Responsive) -->
+      <nav class="flex gap-6 text-sm font-medium items-center">
         <a href="https://cir.uagrm.edu.bo/" class="text-gray-600 hover:text-cordis-blue transition flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50">
           <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
         </a>
       </nav>
-
-      <button id="btn-mobile" class="md:hidden text-gray-600 p-2 rounded hover:bg-slate-100">
-        <i class="fa-solid fa-bars text-xl"></i>
-      </button>
+      <!-- Se eliminó el botón mobile -->
     </div>
   </header>
 
@@ -121,7 +149,7 @@
     </div>
   </main>
 
-  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+ <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
@@ -223,7 +251,13 @@
   }
 </script>
 
-  <!-- DRAWER / FICHA TÉCNICA -->
+  <script>
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+  </script>
+
+  <!-- DRAWER / DETALLE DEL PROYECTO -->
   <div id="drawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 drawer-backdrop" id="drawer-bg"></div>
     
@@ -291,28 +325,40 @@
               <div id="d-tags" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <!-- Botones de Acción -->
+            <!-- Botones de Acción Secundarios -->
             <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mt-10 flex flex-wrap gap-4 items-center justify-between">
-               <div class="text-sm text-gray-500 font-medium">Acciones disponibles:</div>
+               <div class="text-sm text-gray-500 font-medium">Otras opciones:</div>
                <div class="flex gap-3">
-                 <button onclick="alert('Redirigiendo al formulario de contacto con el investigador...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
+                 <button onclick="alert('Redirigiendo...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
                    <i class="fa-regular fa-envelope"></i> Contactar PI
-                 </button>
-                 <button onclick="alert('Descargando PDF...')" class="px-5 py-2.5 bg-cordis-blue text-white rounded-xl font-semibold hover:bg-blue-800 transition shadow-sm flex items-center gap-2">
-                   <i class="fa-solid fa-download"></i> Descargar Perfil
                  </button>
                </div>
             </div>
           </div>
 
-          <!-- Columna Lateral: Fact Sheet -->
+          <!-- Columna Lateral: FICHA TÉCNICA -->
           <div class="w-full lg:w-72 flex-shrink-0">
             <div class="fact-sheet p-6 rounded-r-xl shadow-sm sticky top-24">
-              <h3 class="font-bold text-gray-900 mb-6 flex items-center gap-2 border-b border-gray-200 pb-3">
-                <i class="fa-solid fa-circle-info text-cordis-blue"></i>
-                Datos Clave
-              </h3>
+              
+              <!-- TÍTULO CON POP-UP INTEGRADO -->
+              <div class="popup-trigger relative flex items-center justify-between border-b border-gray-200 pb-3 mb-6 cursor-help">
+                 <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-file-contract text-cordis-blue"></i>
+                    Ficha Técnica
+                 </h3>
+                 <i class="fa-regular fa-circle-question text-gray-400 hover:text-cordis-blue transition"></i>
+                 
+                 <!-- Contenido del Pop-up -->
+                 <div class="popup-content absolute right-0 top-10 bg-white border border-gray-200 shadow-popup p-4 rounded-xl text-left pointer-events-none">
+                    <div class="popup-arrow"></div>
+                    <div class="text-xs text-gray-500 leading-relaxed">
+                       <strong class="text-cordis-blue block mb-1">Sobre este documento</strong>
+                       Esta ficha técnica resume los aspectos administrativos oficiales del proyecto según la base de datos de la Dirección de Investigación.
+                    </div>
+                 </div>
+              </div>
 
+              <!-- Contenido de la Ficha -->
               <div class="label-cordis">Estado</div>
               <div class="value-cordis">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">
@@ -333,12 +379,18 @@
                   <i class="fa-solid fa-location-dot"></i> Santa Cruz, Bolivia 🇧🇴
                 </div>
               </div>
-              
-              <div class="mt-8 pt-6 border-t border-gray-200">
-                <p class="text-[10px] text-gray-400 leading-relaxed text-center">
-                  Información gestionada por la Unidad de Investigación. Última validación: Ene 2026.
+
+              <!-- BOTÓN "VER PROYECTO COMPLETO" -->
+              <div class="mt-8 pt-4 border-t border-gray-200">
+                <a id="d-full-link" href="#" target="_blank" class="flex w-full items-center justify-center gap-2 bg-cordis-blue hover:bg-blue-800 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm">
+                   Ver Proyecto Completo
+                   <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                </a>
+                <p class="text-[10px] text-gray-400 text-center mt-3">
+                  Se abrirá en una nueva pestaña
                 </p>
               </div>
+
             </div>
           </div>
 
@@ -348,7 +400,7 @@
   </div>
 
   <script>
-    // ===== DATA: Proyectos Reales (Extraídos de Documentos) =====
+    // ===== DATA: Proyectos =====
     const PROJECTS = [
       {
         id: "PIRO-GOV-26",
@@ -358,26 +410,23 @@
         end: "Ene 2027",
         pi: "MSc. María Angélica Suárez Ribera",
         program: "Research Action",
+        url: "https://cir.uagrm.edu.bo/proyectos/piro-gov-26",
         tags: ["Gobernanza Ambiental", "Pueblos Indígenas", "Chiquitanía", "Piro-política"],
         summary: `
-          <p>La investigación analiza de manera crítica cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana. El estudio parte de la premisa de que los incendios no son meros desastres naturales, sino fenómenos sociopolíticos producidos por decisiones humanas y modelos de desarrollo.</p>
-          <p>Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego, examinando las tensiones entre la normativa formal de protección y las prácticas de expansión agropecuaria.</p>
+          <p>La investigación analiza de manera crítica cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana.</p>
+          <p>Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego.</p>
         `,
         objectives: `
           <ul>
-            <li><strong>General:</strong> Analizar la incidencia de las políticas públicas y la gobernanza ambiental en los incendios forestales y sus efectos en los derechos indígenas.</li>
-            <li><strong>Específico 1:</strong> Identificar el marco legal y las políticas que regulan el fuego y el territorio (2010-2025).</li>
-            <li><strong>Específico 2:</strong> Examinar la articulación multinivel de la gobernanza territorial en la Chiquitanía.</li>
-            <li><strong>Específico 3:</strong> Documentar impactos socio-ecológicos en comunidades indígenas (desplazamiento, pérdida de hábitat).</li>
-            <li><strong>Específico 4:</strong> Analizar respuestas de resistencia y resiliencia indígena frente a la crisis.</li>
+            <li><strong>General:</strong> Analizar la incidencia de las políticas públicas y la gobernanza ambiental en los incendios forestales.</li>
+            <li><strong>Específico 1:</strong> Identificar el marco legal y las políticas que regulan el fuego y el territorio.</li>
           </ul>
         `,
         methodology: `
-          <p>Investigación con enfoque <strong>cualitativo</strong> y diseño analítico-interpretativo. Se implementarán estudios de caso en comunidades afectadas (Lomerío, San Ignacio, Concepción).</p>
-          <p>Las técnicas incluyen: revisión documental de normativas (Ley 741, Ley INRA), entrevistas semiestructuradas a actores clave (líderes indígenas, funcionarios de ABT/Gobernación) y grupos focales para recoger percepciones colectivas sobre el impacto del fuego.</p>
+          <p>Investigación con enfoque <strong>cualitativo</strong> y diseño analítico-interpretativo. Se implementarán estudios de caso en comunidades afectadas.</p>
         `,
         hypothesis: `
-          <p>La proliferación e intensidad de los incendios forestales en la Chiquitanía es resultado de un modelo de gobernanza ambiental subordinado a <strong>intereses extractivistas</strong> que priorizan el desarrollo productivo sobre la protección ambiental y los derechos territoriales indígenas.</p>
+          <p>La proliferación de incendios es resultado de un modelo de gobernanza ambiental subordinado a <strong>intereses extractivistas</strong>.</p>
         `
       },
       {
@@ -388,29 +437,26 @@
         end: "Ene 2027",
         pi: "MSc. Francisco Mendez Egüez",
         program: "Research Action",
+        url: "https://cir.uagrm.edu.bo/proyectos/decad-ep-25",
         tags: ["Estado Plurinacional", "Instituciones Políticas", "Gestión Pública", "Crisis Democrática"],
         summary: `
           <p>Investigación sobre las causas estructurales y coyunturales que han determinado la transformación y crisis de implementación del modelo de Estado Plurinacional en Bolivia.</p>
-          <p>El proyecto sostiene que, tras más de una década de implementación, existe una brecha significativa entre el marco normativo constitucional de 2009 y la operación real del modelo. Se analiza el proceso de <strong>involución institucional</strong> y la captura política que han desviado al Estado de sus principios fundacionales de interculturalidad y complementariedad.</p>
         `,
         objectives: `
           <ul>
             <li><strong>General:</strong> Analizar las causas estructurales de la transformación y crisis del modelo de Estado Plurinacional.</li>
-            <li><strong>Específico 1:</strong> Analizar el marco teórico-normativo y el desarrollo histórico del Estado Plurinacional.</li>
-            <li><strong>Específico 2:</strong> Evaluar el proceso de implementación práctica y las discrepancias con el diseño constitucional.</li>
-            <li><strong>Específico 3:</strong> Identificar factores políticos y sociales (endógenos y exógenos) que incidieron en la degeneración del proyecto.</li>
           </ul>
         `,
         methodology: `
-          <p>Se utiliza el <strong>método histórico-deductivo</strong> para configurar la naturaleza del Estado Plurinacional a partir de teorías políticas relevantes. La técnica principal será el <strong>análisis documental</strong> y el uso de fichas doctrinales para contrastar el modelo teórico ideal con la realidad fáctica de la gestión pública.</p>
+          <p>Se utiliza el <strong>método histórico-deductivo</strong> para configurar la naturaleza del Estado Plurinacional a partir de teorías políticas relevantes.</p>
         `,
         hypothesis: `
-          <p>La decadencia del modelo es resultado de un proceso de <strong>involución institucional</strong> y <strong>captura política</strong>, explicado por tres factores: 1) Recentralización del poder, 2) Persistencia del modelo extractivista rentista, y 3) Cooptación del sujeto político originario, transformando al Estado Plurinacional en un discurso legitimador más que en una práctica democrática.</p>
+          <p>La decadencia del modelo es resultado de un proceso de <strong>involución institucional</strong> y <strong>captura política</strong>.</p>
         `
       }
     ];
 
-    // ===== RENDERIZADO DE TARJETAS =====
+    // ===== RENDERIZADO =====
     const container = document.getElementById('projects-container');
 
     PROJECTS.forEach(p => {
@@ -418,7 +464,6 @@
       card.className = "group bg-white border border-gray-200 rounded-xl p-0 hover:shadow-card-hover hover:border-blue-200 transition-all duration-300 flex flex-col overflow-hidden h-full";
       
       card.innerHTML = `
-        <!-- Header Tarjeta -->
         <div class="bg-slate-50/50 border-b border-gray-100 p-6 flex items-start justify-between">
            <div>
              <span class="block text-2xl font-bold text-cordis-blue tracking-tight mb-1">${p.acronym}</span>
@@ -429,7 +474,6 @@
            </div>
         </div>
         
-        <!-- Contenido -->
         <div class="flex-1 p-6 flex flex-col justify-between">
           <div>
             <div class="flex flex-wrap items-center gap-3 mb-4">
@@ -446,7 +490,6 @@
             </div>
           </div>
 
-          <!-- Barra de Acciones -->
           <div class="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
              <button class="trigger-drawer text-sm font-bold text-cordis-blue hover:text-blue-800 transition flex items-center gap-2" data-id="${p.id}">
                Ver Ficha Técnica <i class="fa-solid fa-arrow-right"></i>
@@ -460,12 +503,12 @@
       container.appendChild(card);
     });
 
-    // ===== LÓGICA DEL DRAWER (MODAL) =====
+    // ===== LÓGICA DEL DRAWER =====
     const drawer = document.getElementById('drawer');
     const drawerBg = document.getElementById('drawer-bg');
     const drawerClose = document.getElementById('drawer-close');
 
-    // Elementos del DOM a actualizar
+    // Referencias DOM
     const dAcronym = document.getElementById('d-acronym');
     const dTitle = document.getElementById('d-title');
     const dDates = document.getElementById('d-dates');
@@ -474,38 +517,38 @@
     const dObjectives = document.getElementById('d-objectives');
     const dMethodology = document.getElementById('d-methodology');
     const dHypothesis = document.getElementById('d-hypothesis');
-    const dId = document.getElementById('d-id');
+    
+    // Referencias Ficha Lateral
     const dPi = document.getElementById('d-pi');
     const dPeriod = document.getElementById('d-period');
     const dProgram = document.getElementById('d-program');
     const dTags = document.getElementById('d-tags');
+    const dFullLink = document.getElementById('d-full-link'); 
 
     function openDrawer(id) {
       const p = PROJECTS.find(x => x.id === id);
       if(!p) return;
 
-      // Header
       dAcronym.textContent = p.acronym;
       dTitle.textContent = p.title;
       dDates.textContent = `${p.start} - ${p.end}`;
       dProgram.textContent = p.program;
       dIdHeader.textContent = `ID: ${p.id}`;
 
-      // Body (Inyección de HTML enriquecido)
       dSummary.innerHTML = p.summary;
       dObjectives.innerHTML = p.objectives;
       dMethodology.innerHTML = p.methodology;
       dHypothesis.innerHTML = p.hypothesis;
 
-      // Tags
       dTags.innerHTML = p.tags.map(t => 
         `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-cordis-blue border border-blue-100">${t}</span>`
       ).join('');
 
-      // Fact Sheet
-      dId.textContent = p.id;
       dPi.textContent = p.pi;
       dPeriod.textContent = `${p.start} - ${p.end}`;
+      
+      // Actualizar enlace del botón
+      dFullLink.href = p.url;
 
       drawer.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -516,12 +559,9 @@
       document.body.style.overflow = '';
     }
 
-    // Event Listeners
     document.addEventListener('click', (e) => {
-      // Importante: .closest() para que funcione al hacer clic en el texto o icono del botón
       const trigger = e.target.closest('.trigger-drawer');
       if (trigger) {
-        // Obtenemos el ID desde el dataset del botón
         const projectId = trigger.dataset.id;
         openDrawer(projectId);
       }
@@ -531,10 +571,6 @@
     drawerBg.addEventListener('click', closeDrawer);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
 
-    // Mobile Menu
-    document.getElementById('btn-mobile').addEventListener('click', () => {
-      alert('Utilice el botón "Volver al Inicio" para navegar.');
-    });
   </script>
 </body>
 </html>
