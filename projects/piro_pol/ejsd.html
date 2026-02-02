@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Cambridge Handbook of Environmental Justice & Sustainable Development</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,700;1,400&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Paleta Jurídica/Institucional */
+    --legal-green: #145a32;   /* Verde Toga/Institucional */
+    --justice-gold: #b7950b;  /* Dorado Balanza */
+    --fire-brick: #a93226;    /* Rojo Ladrillo (Fuego Doméstico) */
+    --theory-blue: #2874a6;   /* Azul Derecho Internacional */
+    --paper: #fcfbf9;
+    --text: #17202a;
+  }
+
+  body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    font-family: 'Work Sans', sans-serif;
+    background-color: var(--paper);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* --- LIENZO RED --- */
+  #network {
+    width: 100%; height: 100vh;
+    background: radial-gradient(circle at center, #ffffff 0%, #f2f3f4 100%);
+  }
+
+  /* --- CONTROLES (IZQUIERDA) --- */
+  .controls {
+    position: absolute;
+    top: 30px; left: 30px;
+    z-index: 100;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nav-btn {
+    background: white;
+    border: 1px solid #dcdcdc;
+    border-left: 5px solid #555;
+    padding: 15px 20px;
+    cursor: pointer;
+    font-family: 'Spectral', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #444;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-btn span {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #999;
+  }
+
+  .nav-btn:hover { transform: translateX(5px); background: #fdfdfd; }
+  .nav-btn.active { background: var(--legal-green); color: white; border-color: var(--legal-green); border-left-color: var(--justice-gold); }
+  .nav-btn.active span { color: rgba(255,255,255,0.7); }
+
+  /* Botón Fuego Específico */
+  .btn-fire { border-left-color: var(--fire-brick); color: var(--fire-brick); }
+  .btn-fire.active { background: var(--fire-brick); border-color: var(--fire-brick); border-left-color: #fff; }
+
+  /* --- PANEL LATERAL (DERECHA) --- */
+  .sidebar {
+    position: absolute;
+    right: 0; top: 0;
+    width: 580px;
+    height: 100vh;
+    background: white;
+    box-shadow: -8px 0 30px rgba(0,0,0,0.12);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    border-left: 6px solid var(--legal-green);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    background: var(--legal-green);
+    color: white;
+    padding: 45px 40px;
+    position: relative;
+    border-bottom: 4px solid var(--justice-gold);
+  }
+
+  .book-title {
+    font-family: 'Spectral', serif;
+    font-size: 1.6rem;
+    line-height: 1.25;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .book-editors {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  /* Tipografía de Contenido */
+  h2.node-heading {
+    font-family: 'Spectral', serif;
+    font-size: 2rem;
+    color: var(--legal-green);
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+
+  .meta-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #f4f6f7;
+    color: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .legal-box {
+    background: #fcfbf5; /* Color pergamino */
+    border-left: 4px solid var(--justice-gold);
+    padding: 20px;
+    margin: 25px 0;
+    font-family: 'Spectral', serif;
+    font-style: italic;
+    color: #4a4a4a;
+    font-size: 1.1rem;
+    position: relative;
+  }
+
+  .fire-highlight {
+    border-left-color: var(--fire-brick);
+    background: #fdedec;
+    color: #78281f;
+  }
+
+  .citation {
+    display: block;
+    text-align: right;
+    font-size: 0.7rem;
+    font-family: 'Work Sans', sans-serif;
+    font-style: normal;
+    color: #999;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: none; border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .close-btn:hover { background: rgba(255,255,255,0.1); }
+
+  .footer {
+    padding: 15px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #aaa;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: 85vh; top: auto; bottom: 0; transform: translateY(100%); border-left: none; border-top: 6px solid var(--legal-green); }
+    .sidebar.open { transform: translateY(0); }
+    .controls { width: auto; right: 30px; }
+    .nav-btn span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="network"></div>
+
+<div class="controls">
+  <button class="nav-btn active" onclick="filterNetwork('all', this)">
+    Vista General <span>Derecho y Justicia</span>
+  </button>
+  <button class="nav-btn" onclick="filterNetwork('framework', this)">
+    Marcos Jurídicos <span>Interseccionalidad</span>
+  </button>
+  <button class="nav-btn btn-fire" onclick="filterNetwork('fire', this)">
+    🔥 Justicia Energética <span>Fuego Doméstico & Residuos</span>
+  </button>
+  <button class="nav-btn" onclick="filterNetwork('rights', this)">
+    Derechos Humanos <span>Procedimiento y Reconocimiento</span>
+  </button>
+  <button class="nav-btn" onclick="filterNetwork('south', this)">
+    Sur Global <span>Colonialismo y Resistencia</span>
+  </button>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">✕</button>
+  <div class="sidebar-header">
+    <div class="book-title">Cambridge Handbook of Environmental Justice and<br>Sustainable Development</div>
+    <div class="book-editors">Atapattu, Gonzalez & Seck (2021)</div>
+  </div>
+  <div class="sidebar-content" id="content-display">
+    <div style="text-align: center; margin-top: 50%; opacity: 0.5;">
+      <p>Seleccione un nodo para explorar el análisis jurídico-político.</p>
+    </div>
+  </div>
+  <div class="footer">
+    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
+  </div>
+</div>
+
+<script>
+/* --- BASE DE DATOS DE CONTENIDOS (Análisis Profundo) --- */
+const db = {
+  // NODO CENTRAL
+  0: {
+    title: "Justicia Ambiental y Desarrollo Sostenible",
+    author: "Editores: Atapattu, Gonzalez & Seck",
+    type: "Introducción",
+    content: `
+      <p>Este manual intenta cerrar la brecha histórica entre dos campos del derecho internacional que a menudo chocan: el <strong>Desarrollo Sostenible</strong> (frecuentemente cooptado por empresas y estados) y la <strong>Justicia Ambiental</strong> (nacida de movimientos de base). Los editores argumentan que no puede haber desarrollo sostenible sin justicia.</p>
+      <p>El libro es pionero en aplicar la <strong>Interseccionalidad</strong> al derecho ambiental internacional: analiza cómo la raza, el género, la indigeneidad y la pobreza se cruzan para crear vulnerabilidades únicas que las leyes neutrales actuales ignoran.</p>
+      <div class="legal-box">
+        "La justicia ambiental no es solo distributiva; es el reconocimiento de las identidades marginadas y la participación política real en las decisiones que afectan la vida."
+        <span class="citation">Introducción</span>
+      </div>
+    `
+  },
+
+  // --- CLUSTER: FUEGO Y JUSTICIA ENERGÉTICA (FIRE) ---
+  100: {
+    title: "El Fuego Doméstico: Pobreza Energética",
+    author: "Ref: Lakshman Guruswamy / Capítulos sobre África",
+    type: "Justicia de Género",
+    content: `
+      <p>Encontré un rastro crucial del "fuego" en el análisis de la <strong>Pobreza Energética</strong> y las mujeres en el Sur Global. Millones de mujeres cocinan con fuego abierto (biomasa, leña, estiércol) dentro de sus hogares.</p>
+      <p>El libro enmarca esto no como un problema técnico, sino de <strong>Justicia Ambiental y Derechos Humanos</strong>. La contaminación del aire interior (el humo de este fuego) mata a más personas que la malaria. La falta de acceso a "energía limpia" es una forma de violencia estructural contra las mujeres, atrapándolas en un ciclo de recolección de leña y enfermedad pulmonar.</p>
+      <div class="legal-box fire-highlight">
+        "El derecho a cocinar sin morir: La justicia energética exige la transición del fuego de biomasa a tecnologías limpias como un imperativo de derechos humanos."
+        <span class="citation">Justicia Energética y Género</span>
+      </div>
+    `
+  },
+  101: {
+    title: "Incineración y Colonialismo de Residuos",
+    author: "Ref: Comercio de Residuos",
+    type: "Fuego Tóxico",
+    content: `
+      <p>El otro "fuego" presente es la incineración de residuos electrónicos y plásticos. El manual analiza el comercio transfronterizo de desechos: el Norte Global envía su basura al Sur para ser "reciclada", lo que a menudo significa ser quemada en hogueras tóxicas a cielo abierto.</p>
+      <p>Esto se conceptualiza como <strong>Colonialismo de Residuos</strong>. Las comunidades pobres respiran las dioxinas del consumo del Norte. La justicia aquí exige la prohibición de la exportación de residuos (Enmienda de Basilea) y la responsabilidad extendida del productor.</p>
+    `
+  },
+  102: {
+    title: "Cambio Climático: El Planeta en Llamas",
+    author: "Sumudu Atapattu",
+    type: "Derechos Humanos",
+    content: `
+      <p>Atapattu argumenta que el cambio climático viola los derechos humanos fundamentales (vida, salud, vivienda). Analiza los litigios climáticos donde las víctimas de incendios forestales, sequías e inundaciones demandan a los estados y corporaciones.</p>
+      <p>El argumento central es la <strong>Responsabilidad Diferenciada</strong>: quienes prendieron el fuego (países industrializados) deben pagar por los daños en los países que ahora arden sin haber contribuido al problema.</p>
+    `
+  },
+
+  // --- CLUSTER: MARCOS JURÍDICOS (FRAMEWORK) ---
+  10: {
+    title: "Interseccionalidad en el Derecho",
+    author: "Carmen G. Gonzalez",
+    type: "Epistemología",
+    content: `
+      <p>Gonzalez es una de las voces más potentes en introducir la teoría crítica de la raza en el derecho ambiental. Argumenta que las leyes "daltónicas" (que ignoran la raza) perpetúan el racismo ambiental. La justicia requiere leyes que reconozcan explícitamente cómo el colonialismo histórico sigue estructurando quién tiene acceso a la tierra limpia.</p>
+    `
+  },
+  11: {
+    title: "Justicia Norte-Sur",
+    author: "Perspectiva TWAIL",
+    type: "Geopolítica",
+    content: `
+      <p>El manual utiliza el enfoque TWAIL (Third World Approaches to International Law). Critica que el "Desarrollo Sostenible" a menudo se usa para imponer estándares occidentales al Sur, restringiendo su desarrollo mientras el Norte sigue consumiendo excesivamente. La verdadera justicia requiere reparaciones ecológicas y transferencia de tecnología.</p>
+    `
+  },
+
+  // --- CLUSTER: DERECHOS Y PROCEDIMIENTO (RIGHTS) ---
+  20: {
+    title: "Derechos de la Naturaleza",
+    author: "Jurisprudencia de la Tierra",
+    type: "Innovación Legal",
+    content: `
+      <p>El libro explora el giro biocéntrico: reconocer personalidad jurídica a ríos y ecosistemas (como en Ecuador, Nueva Zelanda o Colombia). Esto desafía la base del derecho occidental, donde la naturaleza es propiedad. Si la naturaleza tiene derechos, la quema de un bosque no es solo pérdida de recursos, es un asesinato.</p>
+    `
+  },
+  21: {
+    title: "Justicia Procedimental",
+    author: "Convenio de Aarhus / Escazú",
+    type: "Participación",
+    content: `
+      <p>No basta con un ambiente sano; se necesita justicia en el proceso. Esto incluye el derecho a la información, a la participación en la toma de decisiones y al acceso a la justicia. El Acuerdo de Escazú en Latinoamérica se destaca como el primer tratado que protege explícitamente a los <strong>defensores ambientales</strong>.</p>
+    `
+  },
+
+  // --- CLUSTER: SUR GLOBAL Y RESISTENCIA (SOUTH) ---
+  30: {
+    title: "Pueblos Indígenas",
+    author: "Consentimiento Libre e Informado",
+    type: "Autodeterminación",
+    content: `
+      <p>El manual enfatiza que para los pueblos indígenas, la justicia ambiental es justicia territorial. Analiza el principio de <strong>Consentimiento Libre, Previo e Informado (CLPI)</strong>. A menudo, los proyectos de "energía verde" (represas, parques eólicos) violan estos derechos tanto como los proyectos fósiles, creando un "colonialismo verde".</p>
+    `
+  },
+  31: {
+    title: "Pequeños Estados Insulares (SIDS)",
+    author: "Justicia Existencial",
+    type: "Caso de Estudio",
+    content: `
+      <p>Para las islas del Pacífico y el Caribe, la justicia ambiental es una cuestión de existencia. La subida del nivel del mar amenaza con borrar su territorio y soberanía. El libro discute conceptos legales novedosos como la "migración con dignidad" y la apatridia climática.</p>
+    `
+  }
+};
+
+/* --- CONFIGURACIÓN VIS.JS --- */
+const nodes = new vis.DataSet([
+  // Centro
+  { id: 0, label: "CAMBRIDGE\nHANDBOOK\nEnv Justice & Law", shape: "box", color: "#145a32", font: {color:"white", size:22, face:"Spectral"} },
+
+  // GRUPO FUEGO (Destacado)
+  { id: 100, label: "Fuego Doméstico\n(Energía)", group: "fire", shape: "hexagon", value: 25 },
+  { id: 101, label: "Incineración\n(Residuos)", group: "fire", shape: "hexagon", value: 20 },
+  { id: 102, label: "Cambio\nClimático", group: "fire", shape: "hexagon", value: 20 },
+
+  // GRUPO MARCOS (Framework)
+  { id: 10, label: "Interseccionalidad\n(Gonzalez)", group: "framework", value: 20 },
+  { id: 11, label: "Justicia\nNorte-Sur", group: "framework", value: 15 },
+
+  // GRUPO DERECHOS (Rights)
+  { id: 20, label: "Derechos de\nla Naturaleza", group: "rights", value: 20 },
+  { id: 21, label: "Justicia\nProcedimental", group: "rights", value: 15 },
+
+  // GRUPO SUR (South)
+  { id: 30, label: "Indígenas\n(CLPI)", group: "south", value: 20 },
+  { id: 31, label: "Islas (SIDS)\n& Soberanía", group: "south", value: 15 }
+]);
+
+const edges = new vis.DataSet([
+  // Conexiones Centro
+  { from: 0, to: 10, width: 3 }, { from: 0, to: 20, width: 3 }, { from: 0, to: 30, width: 3 },
+  { from: 0, to: 100, width: 4, color: "#a93226" }, // Conexión Fuerte a Fuego
+
+  // Conexiones Fuego
+  { from: 100, to: 10, dashes: true, label: "género" }, // Fuego doméstico es tema de género
+  { from: 101, to: 11, dashes: true, label: "colonialismo" }, // Residuos Norte->Sur
+  { from: 102, to: 31, dashes: true, label: "impacto" }, // Clima afecta a Islas
+
+  // Conexiones Marcos
+  { from: 10, to: 30 }, // Interseccionalidad e Indígenas
+
+  // Conexiones Derechos
+  { from: 20, to: 30 }, // Derechos Naturaleza y Cosmovisión Indígena
+  { from: 21, to: 0 }
+]);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    shape: 'dot',
+    font: { face: 'Work Sans', color: '#333' },
+    borderWidth: 2,
+    shadow: true
+  },
+  groups: {
+    framework: { color: { background: '#a9cce3', border: '#2980b9' } },
+    rights: { color: { background: '#f9e79f', border: '#b7950b' } },
+    south: { color: { background: '#d2b4de', border: '#884ea0' } },
+    fire: { 
+      color: { background: '#fadbd8', border: '#a93226' }, 
+      font: { size: 16, face: 'Spectral', color: '#78281f' } 
+    }
+  },
+  edges: {
+    color: { color: '#bdc3c7', highlight: '#145a32' },
+    smooth: { type: 'continuous' }
+  },
+  physics: {
+    stabilization: false,
+    barnesHut: { gravitationalConstant: -3000, springLength: 150 }
+  },
+  interaction: { hover: true }
+};
+
+const network = new vis.Network(container, data, options);
+
+/* --- INTERACCIÓN --- */
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = db[nodeId];
+    
+    if (info) {
+      document.getElementById('content-display').innerHTML = `
+        <span class="meta-tag">${info.type}</span>
+        <h2 class="node-heading">${info.title}</h2>
+        <div style="margin-bottom:20px; color:#7f8c8d; font-weight:600;">${info.author}</div>
+        ${info.content}
+      `;
+      document.getElementById('sidebar').classList.add('open');
+    }
+  }
+});
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function filterNetwork(type, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const allIds = nodes.getIds();
+  let targetGroups = [type];
+  
+  if (type === 'all') {
+    nodes.update(allIds.map(id => ({id: id, hidden: false})));
+  } else {
+    const updates = allIds.map(id => {
+      const node = nodes.get(id);
+      const isVisible = (id === 0) || targetGroups.includes(node.group);
+      return { id: id, hidden: !isVisible };
+    });
+    nodes.update(updates);
+  }
+  
+  if (type === 'fire') {
+    network.fit({ nodes: [0, 100, 101, 102], animation: true });
+  } else {
+    network.fit({ animation: true });
+  }
+}
+</script>
+</body>
+</html>
