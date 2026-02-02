@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Routledge Handbook of Political Ecology (2015)</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Estilo Routledge: Rojo Institucional y Gris Sobrio */
+    --routledge-red: #8a1538;  /* Color clásico de portadas Routledge */
+    --routledge-dark: #2c3e50;
+    --ecology-green: #2ecc71;
+    --water-blue: #3498db;
+    --fire-orange: #d35400;
+    --theory-grey: #7f8c8d;
+    --paper-bg: #fdfdfd;
+  }
+
+  body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: var(--paper-bg);
+    color: #333;
+    overflow: hidden;
+  }
+
+  /* --- RED VISUAL --- */
+  #network {
+    width: 100%; height: 100vh;
+    background: radial-gradient(circle at top left, #ffffff 0%, #f4f4f4 100%);
+  }
+
+  /* --- INTERFAZ IZQUIERDA (CONTROLES) --- */
+  .controls-panel {
+    position: absolute;
+    top: 30px; left: 30px;
+    z-index: 100;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header-brand {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--routledge-red);
+    margin-bottom: 10px;
+    border-bottom: 3px solid #333;
+    padding-bottom: 5px;
+  }
+
+  .filter-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-left: 5px solid #999;
+    padding: 12px 15px;
+    cursor: pointer;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: left;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .filter-btn:hover { transform: translateX(5px); background: #fafafa; }
+  .filter-btn.active { background: var(--routledge-red); color: white; border-left-color: #333; border-color: var(--routledge-red); }
+  
+  /* Botones específicos */
+  .btn-fire { border-left-color: var(--fire-orange); color: var(--fire-orange); }
+  .btn-fire.active { background: var(--fire-orange); color: white; }
+
+  .icon { font-size: 1.1rem; }
+
+  /* --- PANEL LATERAL DERECHA (CONTENIDO) --- */
+  .sidebar {
+    position: absolute;
+    right: 0; top: 0;
+    width: 550px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    border-left: 6px solid var(--routledge-red);
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    background: var(--routledge-red);
+    color: white;
+    padding: 40px 35px;
+    position: relative;
+  }
+
+  .book-title {
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .book-editors {
+    font-size: 0.85rem;
+    font-weight: 300;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+  }
+
+  .content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 35px;
+    line-height: 1.7;
+    color: #444;
+  }
+
+  /* Títulos y Texto */
+  h2.entry-title {
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.8rem;
+    color: var(--routledge-red);
+    margin-top: 0;
+    margin-bottom: 5px;
+    line-height: 1.1;
+  }
+
+  .entry-meta {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+
+  .concept-highlight {
+    font-weight: 600;
+    color: #333;
+    background: #fdf2e9;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+
+  .academic-quote {
+    background: #f9f9f9;
+    border-left: 4px solid var(--routledge-red);
+    padding: 20px;
+    margin: 25px 0;
+    font-style: italic;
+    font-family: 'Source Sans Pro', serif;
+    color: #555;
+    font-size: 1.05rem;
+  }
+
+  .citation-source {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 10px;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: rgba(0,0,0,0.2);
+    border: none;
+    color: white;
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .close-btn:hover { background: rgba(0,0,0,0.4); }
+
+  .footer {
+    padding: 15px;
+    background: #f4f4f4;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: 85vh; top: auto; bottom: 0; transform: translateY(100%); border-left: none; border-top: 6px solid var(--routledge-red); }
+    .sidebar.open { transform: translateY(0); }
+    .controls-panel { top: 20px; left: 10px; right: 10px; width: auto; }
+    .header-brand { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="network"></div>
+
+<div class="controls-panel">
+  <div class="header-brand">Routledge Handbook<br>Political Ecology</div>
+  
+  <button class="filter-btn active" onclick="filterNetwork('all', this)">
+    Vista General <span class="icon">◉</span>
+  </button>
+  <button class="filter-btn" onclick="filterNetwork('roots', this)">
+    Epistemologías <span class="icon">⚡</span>
+  </button>
+  <button class="filter-btn" onclick="filterNetwork('nature', this)">
+    Naturaleza Construida <span class="icon">💧</span>
+  </button>
+  <button class="filter-btn btn-fire" onclick="filterNetwork('fire', this)">
+    🔥 Política del Fuego <span class="icon">🔥</span>
+  </button>
+  <button class="filter-btn" onclick="filterNetwork('justice', this)">
+    Justicia y Gobernanza <span class="icon">⚖️</span>
+  </button>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="closeSidebar()">✕</button>
+  <div class="sidebar-header">
+    <div class="book-title">The Routledge Handbook of<br>Political Ecology</div>
+    <div class="book-editors">Eds: Tom Perreault, Gavin Bridge & James McCarthy (2015)</div>
+  </div>
+  <div class="content-scroll" id="sidebar-content">
+    <div style="text-align: center; margin-top: 50%; opacity: 0.5;">
+      <p>Seleccione un nodo para ver el desarrollo académico.</p>
+    </div>
+  </div>
+  <div class="footer">
+    Elaborado por <strong>Maria Angelica Suarez Ribera</strong>
+  </div>
+</div>
+
+<script>
+/* --- BASE DE DATOS DETALLADA (DB) --- */
+const db = {
+  // NODO CENTRAL
+  0: {
+    type: "Introducción al Campo",
+    title: "Ecología Política: Una Comunidad de Práctica",
+    author: "Perreault, Bridge & McCarthy",
+    content: `
+      <p>Este manual define la Ecología Política (PE) no como una disciplina unificada, sino como una "comunidad de práctica" diversa. El hilo conductor es la premisa de que <strong>las condiciones ambientales no son naturales, sino producidas</strong> a través de relaciones de poder político y económico.</p>
+      <p>El libro traza la evolución del campo desde sus orígenes en la geografía radical y el marxismo agrario (años 70/80) hasta su actual compromiso con el post-estructuralismo, la teoría decolonial y los nuevos materialismos. Rompe con la idea de una "naturaleza apolítica" que puede ser gestionada solo por expertos técnicos.</p>
+      <div class="academic-quote">
+        "La ecología política pregunta quién gana y quién pierde con el cambio ambiental, y cómo el poder moldea nuestra comprensión misma de la naturaleza."
+        <span class="citation-source">Capítulo 1: Introducción</span>
+      </div>
+    `
+  },
+
+  // --- CLUSTER: RASTROS DEL FUEGO (FIRE/DISASTER) ---
+  100: {
+    type: "Construcción Social del Desastre",
+    title: "La Producción de Riesgos y Desastres",
+    author: "Timothy W. Collins (Cap. 23)",
+    content: `
+      <p>Collins ataca la noción de "Desastre Natural". Argumenta que eventos como los <strong>incendios forestales</strong> o las inundaciones solo se convierten en desastres debido a la vulnerabilidad social producida por el capitalismo. El fuego es un agente biofísico, pero el desastre es político.</p>
+      <p>Analiza cómo la marginación empuja a los pobres a zonas propensas al fuego o inundación, mientras que las élites aseguran protección estatal. La Ecología Política del desastre revela que la "resiliencia" a menudo significa que los pobres deben absorber los shocks del sistema.</p>
+      <div class="academic-quote">
+        "Los desastres no son accidentes; son la materialización de desigualdades históricas. Etiquetarlos como 'naturales' es una estrategia política para absolver al Estado de responsabilidad."
+        <span class="citation-source">Timothy Collins (Cap. 23)</span>
+      </div>
+    `
+  },
+  101: {
+    type: "Criminalización del Fuego",
+    title: "Deforestación y Gestión Forestal",
+    author: "Ref: Christian Kull / S. Hecht (Cap. 20)",
+    content: `
+      <p>Aunque el capítulo trata sobre bosques, la Ecología Política tiene una larga tradición (representada por autores como Christian Kull) de analizar el <strong>odio estatal al fuego</strong>. Los estados coloniales y modernos han criminalizado históricamente la agricultura de roza y quema (swidden) practicada por campesinos, viéndola como "primitiva" y "destructiva".</p>
+      <p>El manual discute cómo la supresión del fuego no es una medida ecológica neutral, sino una forma de control territorial para sedentarizar a poblaciones móviles y transformar bosques complejos en plantaciones maderables legibles para el mercado.</p>
+    `
+  },
+  102: {
+    type: "Combustión Global",
+    title: "Cambio Climático y Gobernanza",
+    author: "Diana Liverman (Cap. 24)",
+    content: `
+      <p>El "Fuego" definitivo de nuestra era es la combustión de carbono. Liverman analiza cómo la gobernanza climática ha sido capturada por soluciones de mercado (bonos de carbono, REDD+). En lugar de apagar el fuego de la producción industrial, creamos mercados para comercializar la atmósfera.</p>
+      <p>Critica cómo el discurso del "Antropoceno" a veces oculta las responsabilidades diferenciadas: no es toda la humanidad la que quema el planeta, sino un sistema económico específico y una clase consumidora global.</p>
+    `
+  },
+
+  // --- CLUSTER: EPISTEMOLOGÍAS (ROOTS) ---
+  1: {
+    type: "Fundamentos Teóricos",
+    title: "Degradación de la Tierra y Sociedad",
+    author: "Ref: Piers Blaikie & Harold Brookfield",
+    content: `
+      <p>Este es el texto fundacional (1987) que definió el campo. Introdujo la <strong>"Cadena de Explicación"</strong>: para entender por qué un campesino erosiona su suelo, no basta culpar su ignorancia. Debemos mirar la renta que paga, los precios globales y la presión del Estado. La degradación ambiental es el resultado de la marginalización social.</p>
+    `
+  },
+  2: {
+    type: "Marxismo Ecológico",
+    title: "Economía Política de la Naturaleza",
+    author: "Michael Watts (Cap. 3)",
+    content: `
+      <p>Watts explora cómo el marxismo provee las herramientas para entender la "fractura metabólica". La naturaleza no es externa a la economía; es internalizada y mercantilizada. La crisis ecológica es una crisis de acumulación de capital.</p>
+    `
+  },
+
+  // --- CLUSTER: NATURALEZA CONSTRUIDA (NATURE) ---
+  20: {
+    type: "Materialidad",
+    title: "El Ciclo Hidrosocial",
+    author: "Erik Swyngedouw (Cap. 15)",
+    content: `
+      <p>Swyngedouw revoluciona el estudio del agua. No existe el "ciclo hidrológico" (H2O natural), sino el <strong>"ciclo hidrosocial"</strong>. El agua fluye hacia el poder. En ciudades como Guayaquil o Johannesburgo, la falta de agua en los barrios pobres no es escasez física, sino una decisión política materializada en tuberías y medidores.</p>
+      <div class="academic-quote">
+        "El agua es un híbrido 'socionatural'. La ciudad y la naturaleza no están separadas; la ciudad es naturaleza metabolizada."
+        <span class="citation-source">Erik Swyngedouw</span>
+      </div>
+    `
+  },
+  21: {
+    type: "Tecnociencia",
+    title: "Bioprospección y Genética",
+    author: "Jack Kloppenburg (Ref: Cap. 27)",
+    content: `
+      <p>Analiza cómo la biodiversidad se convierte en "oro verde". Las empresas farmacéuticas y agrícolas se apropian del conocimiento indígena sobre plantas y semillas, lo patentan y lo revenden. Es una forma de "acumulación por desposesión" molecular.</p>
+    `
+  },
+
+  // --- CLUSTER: JUSTICIA Y GOBERNANZA (JUSTICE) ---
+  30: {
+    type: "Foucault y el Ambiente",
+    title: "Gubernamentalidad Ambiental (Eco-Governmentality)",
+    author: "Arun Agrawal (Cap. 8)",
+    content: `
+      <p>Aplicando a Foucault, Agrawal muestra cómo la conservación moderna no funciona solo mediante multas, sino creando <strong>"sujetos ambientales"</strong>. Se entrena a los aldeanos para que se vigilen a sí mismos y a sus vecinos en nombre del medio ambiente. El poder se vuelve difuso y mental.</p>
+    `
+  },
+  31: {
+    type: "Justicia Ambiental",
+    title: "Racismo Ambiental y Desigualdad",
+    author: "Laura Pulido (Cap. 12)",
+    content: `
+      <p>Pulido argumenta que el racismo ambiental no es solo un acto intencional de situar un vertedero en un barrio negro. Es estructural. La devaluación histórica de las vidas no blancas (vía colonialismo y esclavitud) hace que ciertos lugares sean "hundibles" para el capital tóxico. La geografía urbana es una geografía racial.</p>
+    `
+  }
+};
+
+/* --- CONFIGURACIÓN VIS.JS --- */
+const nodes = new vis.DataSet([
+  // Centro
+  { id: 0, label: "ROUTLEDGE\nHANDBOOK\nPolitical Ecology", shape: "box", color: "#8a1538", font: {color:"white", size:22, face:"Roboto Slab"} },
+
+  // GRUPO FUEGO (Destacado)
+  { id: 100, label: "Desastres\nPolíticos (Collins)", group: "fire", shape: "hexagon", value: 25 },
+  { id: 101, label: "Criminalización\ndel Fuego", group: "fire", shape: "hexagon", value: 20 },
+  { id: 102, label: "Combustión\nGlobal", group: "fire", shape: "hexagon", value: 20 },
+
+  // GRUPO EPISTEMOLOGÍAS (Roots)
+  { id: 1, label: "Cadena de\nExplicación", group: "roots", value: 20 },
+  { id: 2, label: "Marxismo\nEcológico", group: "roots", value: 20 },
+
+  // GRUPO NATURALEZA (Nature)
+  { id: 20, label: "Ciclo\nHidrosocial", group: "nature", value: 20 },
+  { id: 21, label: "Bioprospección", group: "nature", value: 15 },
+  { id: 22, label: "Producción de\nNaturaleza (Smith)", group: "nature", value: 15 },
+
+  // GRUPO JUSTICIA (Justice)
+  { id: 30, label: "Eco-Gobernanza\n(Foucault)", group: "justice", value: 20 },
+  { id: 31, label: "Racismo\nAmbiental", group: "justice", value: 20 },
+  { id: 32, label: "Bienes\nComunes", group: "justice", value: 15 }
+]);
+
+const edges = new vis.DataSet([
+  // Conexiones Centro
+  { from: 0, to: 1, width: 3 }, { from: 0, to: 20, width: 3 }, { from: 0, to: 30, width: 3 },
+  { from: 0, to: 100, width: 4, color: "#d35400" }, // Fuerte conexión a Desastres
+
+  // Conexiones Fuego
+  { from: 100, to: 31, dashes: true, label: "vulnerabilidad" }, // Desastres afectan a marginados
+  { from: 101, to: 30, dashes: true, label: "control estatal" }, // Supresión de fuego como gobernanza
+  { from: 102, to: 2, dashes: true, label: "capital" }, // Clima y Marxismo
+
+  // Conexiones Raíces
+  { from: 1, to: 2 }, 
+  
+  // Conexiones Naturaleza
+  { from: 20, to: 22 },
+  { from: 21, to: 2 },
+
+  // Conexiones Justicia
+  { from: 30, to: 32 }
+]);
+
+const container = document.getElementById('network');
+const data = { nodes: nodes, edges: edges };
+const options = {
+  nodes: {
+    shape: 'dot',
+    font: { face: 'Source Sans Pro', color: '#333' },
+    borderWidth: 2,
+    shadow: true
+  },
+  groups: {
+    roots: { color: { background: '#bdc3c7', border: '#7f8c8d' } },
+    nature: { color: { background: '#aed6f1', border: '#3498db' } },
+    justice: { color: { background: '#d7bde2', border: '#8e44ad' } },
+    fire: { 
+      color: { background: '#edbb99', border: '#d35400' }, 
+      font: { size: 16, face: 'Roboto Slab', color: '#d35400' } 
+    }
+  },
+  edges: {
+    color: { color: '#bdc3c7', highlight: '#8a1538' },
+    smooth: { type: 'continuous' }
+  },
+  physics: {
+    stabilization: false,
+    barnesHut: { gravitationalConstant: -2800, springLength: 140 }
+  },
+  interaction: { hover: true }
+};
+
+const network = new vis.Network(container, data, options);
+
+/* --- LÓGICA DE INTERACCIÓN --- */
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = db[nodeId];
+    
+    if (info) {
+      document.getElementById('sidebar-content').innerHTML = `
+        <span class="entry-meta">${info.type}</span>
+        <h2 class="entry-title">${info.title}</h2>
+        <div style="margin-bottom:20px; color:#666; font-style:italic;">${info.author}</div>
+        ${info.content}
+      `;
+      document.getElementById('sidebar').classList.add('open');
+    }
+  }
+});
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function filterNetwork(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const allIds = nodes.getIds();
+  let targetGroups = [type];
+  
+  if (type === 'all') {
+    nodes.update(allIds.map(id => ({id: id, hidden: false})));
+  } else {
+    // Mostrar nodo central y el grupo
+    const updates = allIds.map(id => {
+      const node = nodes.get(id);
+      const isVisible = (id === 0) || targetGroups.includes(node.group);
+      return { id: id, hidden: !isVisible };
+    });
+    nodes.update(updates);
+  }
+  
+  if (type === 'fire') {
+    network.fit({ nodes: [0, 100, 101, 102], animation: true });
+  } else {
+    network.fit({ animation: true });
+  }
+}
+</script>
+</body>
+</html>
