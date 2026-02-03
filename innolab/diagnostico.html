@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diagnóstico Conductual — UAGRM</title>
+  <meta name="description" content="Herramienta de triaje para identificar barreras de comportamiento en servicios públicos." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Outfit", "sans-serif"], 
+            display: ["Space Grotesk", "sans-serif"] 
+          },
+          colors: {
+            'innolab-dark': '#0f172a',
+            'innolab-primary': '#4f46e5', 
+            'innolab-accent': '#10b981',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+   
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    .glass-card { 
+        background: rgba(255, 255, 255, 0.9); 
+        backdrop-filter: blur(12px); 
+        border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .text-gradient {
+        background: linear-gradient(to right, #4f46e5, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    /* Clases para estados seleccionados */
+    .option-card.selected {
+        border-color: #4f46e5;
+        background-color: #eef2ff;
+        transform: scale(1.02);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans selection:bg-indigo-100 selection:text-indigo-900">
+
+  <nav class="fixed top-4 left-0 right-0 z-50 px-4">
+    <div class="max-w-5xl mx-auto glass-card rounded-full shadow-lg px-6 py-3 flex justify-between items-center">
+        <a href="index.html" class="flex items-center gap-2 group">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center text-white font-bold font-display text-sm">Be</div>
+            <span class="font-display font-bold text-slate-800 tracking-tight">Behavioral <span class="font-normal text-slate-500">Unit</span></span>
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+            <a href="index.html" class="hover:text-indigo-600 transition">Inicio</a>
+            <a href="#" class="text-indigo-600 font-bold">Diagnóstico</a>
+            <a href="intervenciones.html" class="hover:text-indigo-600 transition">Intervenciones</a>
+            <a href="evidencia.html" class="hover:text-indigo-600 transition">Evidencia (RCTs)</a>
+        </div>
+        <a href="toolkit.html" class="px-4 py-1.5 rounded-full bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition">
+            Toolkit Aplicado
+        </a>
+    </div>
+  </nav>
+
+  <section class="pt-32 pb-12 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+        <h1 class="font-display font-bold text-4xl md:text-5xl text-slate-900 mb-4">
+            Triaje <span class="text-gradient">Conductual</span>
+        </h1>
+        <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+            La mayoría de las políticas fallan por un mal diagnóstico. Utiliza esta herramienta rápida basada en el modelo <strong>COM-B</strong> para identificar si tu problema es de Motivación, Capacidad u Oportunidad.
+        </p>
+    </div>
+  </section>
+
+  <section class="pb-20 px-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden relative">
+        
+        <div class="h-2 bg-slate-100 w-full">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 w-[10%] transition-all duration-500"></div>
+        </div>
+
+        <div class="p-8 md:p-12 min-h-[500px] flex flex-col justify-center">
+            
+            <div id="step-1" class="step-container animate-fade-in">
+                <span class="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2 block">Paso 1 de 3</span>
+                <h2 class="text-3xl font-display font-bold text-slate-900 mb-8">¿Cuál es el comportamiento que observas?</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="selectOption(1, 'apatia')" class="option-card group text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-2xl mb-3">😴</div>
+                        <h3 class="font-bold text-slate-800 mb-1">Apatía / Inacción</h3>
+                        <p class="text-sm text-slate-500">El ciudadano sabe qué hacer, pero lo pospone indefinidamente o no le interesa.</p>
+                    </button>
+
+                    <button onclick="selectOption(1, 'error')" class="option-card group text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-2xl mb-3">🤯</div>
+                        <h3 class="font-bold text-slate-800 mb-1">Error / Confusión</h3>
+                        <p class="text-sm text-slate-500">El ciudadano intenta cumplir, pero se equivoca en el formulario o abandona a la mitad.</p>
+                    </button>
+
+                    <button onclick="selectOption(1, 'desconfianza')" class="option-card group text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-2xl mb-3">🤨</div>
+                        <h3 class="font-bold text-slate-800 mb-1">Desconfianza</h3>
+                        <p class="text-sm text-slate-500">Creen que el sistema es injusto o que "nadie más lo hace".</p>
+                    </button>
+
+                    <button onclick="selectOption(1, 'olvido')" class="option-card group text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-2xl mb-3">⏰</div>
+                        <h3 class="font-bold text-slate-800 mb-1">Olvido</h3>
+                        <p class="text-sm text-slate-500">Tienen la intención de hacerlo, pero se les pasa la fecha límite.</p>
+                    </button>
+                </div>
+            </div>
+
+            <div id="step-2" class="step-container hidden opacity-0">
+                <span class="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2 block">Paso 2 de 3</span>
+                <h2 class="text-3xl font-display font-bold text-slate-900 mb-8">¿Cómo es el entorno de decisión?</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="selectOption(2, 'digital')" class="option-card text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-indigo-600 text-xl mb-3"><i class="fa-solid fa-laptop-code"></i></div>
+                        <h3 class="font-bold text-slate-800">100% Digital</h3>
+                        <p class="text-sm text-slate-500 mt-2">Web, App o WhatsApp.</p>
+                    </button>
+                    
+                    <button onclick="selectOption(2, 'fisico')" class="option-card text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-indigo-600 text-xl mb-3"><i class="fa-solid fa-building-columns"></i></div>
+                        <h3 class="font-bold text-slate-800">Físico / Ventanilla</h3>
+                        <p class="text-sm text-slate-500 mt-2">Presencial con funcionarios.</p>
+                    </button>
+                    
+                    <button onclick="selectOption(2, 'hibrido')" class="option-card text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-indigo-300 hover:shadow-md transition bg-slate-50">
+                        <div class="text-indigo-600 text-xl mb-3"><i class="fa-solid fa-print"></i></div>
+                        <h3 class="font-bold text-slate-800">Híbrido</h3>
+                        <p class="text-sm text-slate-500 mt-2">Descargar, imprimir y llevar.</p>
+                    </button>
+                </div>
+
+                <div class="mt-8 flex gap-3">
+                    <button onclick="resetDiagnosis()" class="text-slate-400 hover:text-slate-600 text-sm font-medium">← Volver a empezar</button>
+                </div>
+            </div>
+
+            <div id="result-screen" class="hidden opacity-0 text-center">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 text-4xl mb-6 shadow-inner">
+                    <i id="result-icon" class="fa-solid fa-check"></i>
+                </div>
+                
+                <h2 class="text-3xl font-display font-bold text-slate-900 mb-2">Diagnóstico Preliminar</h2>
+                <h3 id="result-title" class="text-xl font-bold text-indigo-600 mb-6">Problema de Sludge (Fricción)</h3>
+                
+                <div class="bg-slate-50 p-6 rounded-2xl text-left border border-slate-200 mb-8 max-w-2xl mx-auto">
+                    <h4 class="font-bold text-slate-900 mb-2"><i class="fa-solid fa-stethoscope text-indigo-500 mr-2"></i>Análisis:</h4>
+                    <p id="result-desc" class="text-slate-600 mb-4">El usuario tiene la intención, pero el costo cognitivo es muy alto.</p>
+                    
+                    <h4 class="font-bold text-slate-900 mb-2"><i class="fa-solid fa-prescription text-emerald-500 mr-2"></i>Recomendación (Intervención):</h4>
+                    <ul id="result-list" class="list-disc list-inside text-slate-600 space-y-1">
+                        <li>Simplificación Radical.</li>
+                        <li>Pre-llenado de formularios (Defaults).</li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://wa.me/591XXXXXXXX" target="_blank" class="px-8 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition">
+                        Agendar Diagnóstico Profundo
+                    </a>
+                    <a href="toolkit.html" class="px-8 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-bold hover:border-indigo-300 transition">
+                        Descargar Guía de Diseño
+                    </a>
+                </div>
+                 <div class="mt-6">
+                    <button onclick="resetDiagnosis()" class="text-slate-400 hover:text-slate-600 text-sm underline">Realizar otro diagnóstico</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white border-t border-slate-100">
+      <div class="max-w-6xl mx-auto px-6">
+          <div class="text-center mb-12">
+              <h2 class="font-display text-2xl font-bold text-slate-900">Nuestro Marco de Referencia</h2>
+              <p class="text-slate-500">No adivinamos. Usamos modelos validados científicamente.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="text-center">
+                  <div class="text-indigo-100 font-display font-bold text-6xl mb-2">C</div>
+                  <h3 class="font-bold text-slate-800">Capability (Capacidad)</h3>
+                  <p class="text-sm text-slate-500">¿El usuario sabe cómo hacerlo? ¿Tiene la capacidad física y mental para procesar la información?</p>
+              </div>
+              <div class="text-center">
+                  <div class="text-indigo-100 font-display font-bold text-6xl mb-2">O</div>
+                  <h3 class="font-bold text-slate-800">Opportunity (Oportunidad)</h3>
+                  <p class="text-sm text-slate-500">¿El entorno físico o social lo permite? ¿Hay barreras burocráticas (Sludge)?</p>
+              </div>
+              <div class="text-center">
+                  <div class="text-indigo-100 font-display font-bold text-6xl mb-2">M</div>
+                  <h3 class="font-bold text-slate-800">Motivation (Motivación)</h3>
+                  <p class="text-sm text-slate-500">¿Quiere hacerlo? ¿Lo hace por hábito o necesita un análisis reflexivo?</p>
+              </div>
+          </div>
+      </div>
+  </section>
+
+<footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-sm">© <span id="year"></span> Behavioral Unit — UAGRM</p>
+  </div>
+</footer>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+<script>
+    let diagnosisState = {
+        symptom: null,
+        context: null
+    };
+
+    function selectOption(step, value) {
+        // Guardar valor
+        if (step === 1) diagnosisState.symptom = value;
+        if (step === 2) diagnosisState.context = value;
+
+        // UI Feedback (Selección visual)
+        // (Simplificado para este demo: Avanzar directamente)
+
+        // Avanzar
+        if (step === 1) {
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            document.getElementById('step-2').classList.remove('opacity-0');
+            document.getElementById('step-2').classList.add('animate-fade-in');
+            document.getElementById('progress-bar').style.width = '66%';
+        } else if (step === 2) {
+            document.getElementById('step-2').classList.add('hidden');
+            showResult();
+            document.getElementById('progress-bar').style.width = '100%';
+        }
+    }
+
+    function showResult() {
+        const screen = document.getElementById('result-screen');
+        const title = document.getElementById('result-title');
+        const desc = document.getElementById('result-desc');
+        const list = document.getElementById('result-list');
+        const icon = document.getElementById('result-icon');
+
+        screen.classList.remove('hidden');
+        screen.classList.remove('opacity-0');
+        screen.classList.add('animate-fade-in');
+
+        // Lógica de diagnóstico simple (Reglas de negocio)
+        // 1. SLUDGE (Error + Fisico/Hibrido)
+        if (diagnosisState.symptom === 'error' || diagnosisState.context === 'hibrido') {
+            title.textContent = "Barrera de Fricción (Sludge)";
+            desc.textContent = "El problema no es de voluntad, es de diseño. El proceso es cognitivamente costoso y genera errores.";
+            icon.className = "fa-solid fa-triangle-exclamation";
+            list.innerHTML = `
+                <li>Realizar una <strong>Auditoría de Sludge</strong>.</li>
+                <li>Eliminar pasos redundantes.</li>
+                <li>Usar lenguaje llano (Plain Language).</li>
+            `;
+        } 
+        // 2. INERCIA (Olvido / Apatía)
+        else if (diagnosisState.symptom === 'olvido' || diagnosisState.symptom === 'apatia') {
+            title.textContent = "Barrera de Atención (Salience)";
+            desc.textContent = "La gente quiere cumplir (o no le importa mucho), pero la vida cotidiana los distrae. El tema no es 'Saliente'.";
+            icon.className = "fa-solid fa-bell";
+            list.innerHTML = `
+                <li>Enviar recordatorios SMS/WhatsApp (Reminders).</li>
+                <li>Simplificar el 'Call to Action'.</li>
+                <li>Usar normas sociales ("9 de cada 10 vecinos ya pagaron").</li>
+            `;
+        }
+        // 3. DESCONFIANZA
+        else if (diagnosisState.symptom === 'desconfianza') {
+            title.textContent = "Barrera de Normas Sociales";
+            desc.textContent = "Existe una creencia compartida de que el sistema es injusto o ineficiente. Es un problema de percepción.";
+            icon.className = "fa-solid fa-users-slash";
+            list.innerHTML = `
+                <li>Visibilizar la reciprocidad (mostrar obras).</li>
+                <li>Transparencia radical en el proceso.</li>
+                <li>Usar mensajeros confiables (líderes barriales).</li>
+            `;
+        }
+        // Default
+        else {
+            title.textContent = "Complejidad Cognitiva";
+            desc.textContent = "Es probable que haya una mezcla de factores. Se requiere observación de campo.";
+            list.innerHTML = `<li>Agendar observación etnográfica.</li><li>Revisar arquitectura de la decisión.</li>`;
+        }
+    }
+
+    function resetDiagnosis() {
+        diagnosisState = { symptom: null, context: null };
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('step-2').classList.add('hidden');
+        
+        const step1 = document.getElementById('step-1');
+        step1.classList.remove('hidden');
+        step1.classList.remove('opacity-0'); // Asegurar visibilidad
+        
+        document.getElementById('progress-bar').style.width = '10%';
+    }
+</script>
+
+</body>
+</html>
