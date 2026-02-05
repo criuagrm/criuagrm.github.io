@@ -43,6 +43,22 @@
     .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
     .modal-exit { opacity: 1; transform: scale(1); }
     .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 200ms, transform 200ms; }
+
+    /* Estilo para links del dropdown de municipios */
+    .mun-link {
+        display: block;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        color: #475569; /* Slate 600 */
+        border-radius: 6px;
+        transition: background-color 0.2s, color 0.2s;
+        text-decoration: none;
+    }
+    .mun-link:hover {
+        background-color: #f3e8ff; /* Purple 100 */
+        color: #7e22ce; /* Purple 700 */
+        font-weight: 600;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
@@ -161,7 +177,7 @@
         <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/calendario_electoral/" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
             <div class="flex flex-col items-center">
               <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 mx-auto">
-                 <i data-lucide="calendar-days" class="h-7 w-7"></i>
+                  <i data-lucide="calendar-days" class="h-7 w-7"></i>
               </div>
               <h3 class="text-lg font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">Calendario Electoral</h3>
               <p class="mt-3 text-sm leading-relaxed text-slate-600">
@@ -218,128 +234,111 @@
           </div>
         </a>
 
-       <div class="relative flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 transition-all duration-300 hover:shadow-lg text-center">
-    
-    <div class="flex flex-col items-center pointer-events-none mb-6">
-        <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50 text-purple-600 mx-auto">
-            <i data-lucide="scale" class="h-7 w-7"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900">Comparador de Planes</h3>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600">
-            Contrastación técnica de propuestas. Elige el nivel de gobierno:
-        </p>
-    </div>
-
-    <div class="flex flex-col gap-3 relative z-10">
-        
-        <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/gobernacion/" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-slate-50 text-slate-700 font-bold hover:bg-purple-600 hover:text-white transition-all group border border-slate-200 hover:border-purple-600">
-            <div class="flex items-center gap-3">
-                <i data-lucide="landmark" class="h-5 w-5 text-slate-400 group-hover:text-white"></i>
-                <span>Gobernación</span>
+        <div class="relative flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 transition-all duration-300 hover:shadow-lg text-center">
+            
+            <div class="flex flex-col items-center pointer-events-none mb-6">
+                <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50 text-purple-600 mx-auto">
+                    <i data-lucide="scale" class="h-7 w-7"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Comparador de Planes</h3>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600">
+                    Contrastación técnica de propuestas. Elige el nivel de gobierno:
+                </p>
             </div>
-            <i data-lucide="arrow-right" class="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1"></i>
-        </a>
 
-        <div class="relative">
-            <button onclick="toggleMunicipios()" id="btn-mun" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 transition-colors border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="map-pin" class="h-5 w-5 text-purple-600"></i>
-                    <span>Municipios</span>
-                </div>
-                <i data-lucide="chevron-down" class="h-4 w-4 text-slate-400 transition-transform duration-200" id="icon-mun-chevron"></i>
-            </button>
-
-            <div id="menu-mun" class="hidden absolute left-0 right-0 mt-2 w-full origin-top rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 z-50 animate-fade-in-up text-left">
+            <div class="flex flex-col gap-3 relative z-10">
                 
-                <div class="p-2 border-b border-slate-100 bg-slate-50 rounded-t-xl">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2">Selecciona un municipio:</span>
-                </div>
+                <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/gobernacion/" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-slate-50 text-slate-700 font-bold hover:bg-purple-600 hover:text-white transition-all group border border-slate-200 hover:border-purple-600">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="landmark" class="h-5 w-5 text-slate-400 group-hover:text-white"></i>
+                        <span>Gobernación</span>
+                    </div>
+                    <i data-lucide="arrow-right" class="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1"></i>
+                </a>
 
-                <div class="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent p-1">
-                    
-                    <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/pg_scz_mun/" class="block px-4 py-2.5 text-sm font-bold text-purple-700 bg-purple-50 rounded-lg mb-1 hover:bg-purple-100">
-                        Santa Cruz de la Sierra
-                    </a>
+                <div class="relative">
+                    <button onclick="toggleMunicipios()" id="btn-mun" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 transition-colors border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="map-pin" class="h-5 w-5 text-purple-600"></i>
+                            <span>Municipios</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-slate-400 transition-transform duration-200" id="icon-mun-chevron"></i>
+                    </button>
 
-                    <div class="grid grid-cols-1 gap-0.5">
-                        <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/pg_guarayos_mun/" class="mun-link">Ascensión de Guarayos</a>
-                        <a href="#" class="mun-link">Boyuibe</a>
-                        <a href="#" class="mun-link">Buena Vista</a>
-                        <a href="#" class="mun-link">Cabezas</a>
-                        <a href="#" class="mun-link">Camiri</a>
-                        <a href="#" class="mun-link">Charagua</a>
-                        <a href="#" class="mun-link">Colpa Bélgica</a>
-                        <a href="#" class="mun-link">Comarapa</a>
-                        <a href="#" class="mun-link">Concepción</a>
-                        <a href="#" class="mun-link">Cotoca</a>
-                        <a href="#" class="mun-link">Cuatro Cañadas</a>
-                        <a href="#" class="mun-link">Cuevo</a>
-                        <a href="#" class="mun-link">El Carmen Rivero Tórrez</a>
-                        <a href="#" class="mun-link">El Puente</a>
-                        <a href="#" class="mun-link">El Torno</a>
-                        <a href="#" class="mun-link">El Trigal</a>
-                        <a href="#" class="mun-link">Fernández Alonso</a>
-                        <a href="#" class="mun-link">General Saavedra</a>
-                        <a href="#" class="mun-link">Gutiérrez</a>
-                        <a href="#" class="mun-link">La Guardia</a>
-                        <a href="#" class="mun-link">Lagunillas</a>
-                        <a href="#" class="mun-link">Mairana</a>
-                        <a href="#" class="mun-link">Mineros</a>
-                        <a href="#" class="mun-link">Montero</a>
-                        <a href="#" class="mun-link">Moro Moro</a>
-                        <a href="#" class="mun-link">Okinawa I</a>
-                        <a href="#" class="mun-link">Pailón</a>
-                        <a href="#" class="mun-link">Pampagrande</a>
-                        <a href="#" class="mun-link">Porongo</a>
-                        <a href="#" class="mun-link">Portachuelo</a>
-                        <a href="#" class="mun-link">Postrervalle</a>
-                        <a href="#" class="mun-link">Pucará</a>
-                        <a href="#" class="mun-link">Puerto Quijarro</a>
-                        <a href="#" class="mun-link">Puerto Suárez</a>
-                        <a href="#" class="mun-link">Quirusillas</a>
-                        <a href="#" class="mun-link">Roboré</a>
-                        <a href="#" class="mun-link">Saipina</a>
-                        <a href="#" class="mun-link">Samaipata</a>
-                        <a href="#" class="mun-link">San Antonio de Lomerío</a>
-                        <a href="#" class="mun-link">San Carlos</a>
-                        <a href="#" class="mun-link">San Ignacio de Velasco</a>
-                        <a href="#" class="mun-link">San Javier</a>
-                        <a href="#" class="mun-link">San José de Chiquitos</a>
-                        <a href="#" class="mun-link">San Juan de Yapacaní</a>
-                        <a href="#" class="mun-link">San Julián</a>
-                        <a href="#" class="mun-link">San Matías</a>
-                        <a href="#" class="mun-link">San Miguel de Velasco</a>
-                        <a href="#" class="mun-link">San Pedro</a>
-                        <a href="#" class="mun-link">San Rafael</a>
-                        <a href="#" class="mun-link">San Ramón</a>
-                        <a href="#" class="mun-link">Santa Rosa del Sara</a>
-                        <a href="#" class="mun-link">Urubichá</a>
-                        <a href="#" class="mun-link">Vallegrande</a>
-                        <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/pg_warnes_mun/" class="mun-link">Warnes</a>
-                        <a href="#" class="mun-link">Yapacaní</a>
+                    <div id="menu-mun" class="hidden absolute left-0 right-0 mt-2 w-full origin-top rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 z-50 animate-fade-in-up text-left">
+                        
+                        <div class="p-2 border-b border-slate-100 bg-slate-50 rounded-t-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2">Selecciona un municipio:</span>
+                        </div>
+
+                        <div class="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent p-1">
+                            
+                            <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/pg_scz_mun/" class="block px-4 py-2.5 text-sm font-bold text-purple-700 bg-purple-50 rounded-lg mb-1 hover:bg-purple-100">
+                                Santa Cruz de la Sierra
+                            </a>
+
+                            <div class="grid grid-cols-1 gap-0.5">
+                                <a href="#" class="mun-link">Ascensión de Guarayos</a>
+                                <a href="#" class="mun-link">Boyuibe</a>
+                                <a href="#" class="mun-link">Buena Vista</a>
+                                <a href="#" class="mun-link">Cabezas</a>
+                                <a href="#" class="mun-link">Camiri</a>
+                                <a href="#" class="mun-link">Carmen Rivero Tórrez</a>
+                                <a href="#" class="mun-link">Charagua</a>
+                                <a href="#" class="mun-link">Colpa Bélgica</a>
+                                <a href="#" class="mun-link">Comarapa</a>
+                                <a href="#" class="mun-link">Concepción</a>
+                                <a href="#" class="mun-link">Cotoca</a>
+                                <a href="#" class="mun-link">Cuatro Cañadas</a>
+                                <a href="#" class="mun-link">Cuevo</a>
+                                <a href="#" class="mun-link">El Puente</a>
+                                <a href="#" class="mun-link">El Torno</a>
+                                <a href="#" class="mun-link">El Trigal</a>
+                                <a href="#" class="mun-link">Fernández Alonso</a>
+                                <a href="#" class="mun-link">General Saavedra</a>
+                                <a href="#" class="mun-link">Gutiérrez</a>
+                                <a href="#" class="mun-link">La Guardia</a>
+                                <a href="#" class="mun-link">Lagunillas</a>
+                                <a href="#" class="mun-link">Mairana</a>
+                                <a href="#" class="mun-link">Mineros</a>
+                                <a href="#" class="mun-link">Montero</a>
+                                <a href="#" class="mun-link">Moro Moro</a>
+                                <a href="#" class="mun-link">Okinawa I</a>
+                                <a href="#" class="mun-link">Pailón</a>
+                                <a href="#" class="mun-link">Pampagrande</a>
+                                <a href="#" class="mun-link">Porongo</a>
+                                <a href="#" class="mun-link">Portachuelo</a>
+                                <a href="#" class="mun-link">Postrervalle</a>
+                                <a href="#" class="mun-link">Pucará</a>
+                                <a href="#" class="mun-link">Puerto Quijarro</a>
+                                <a href="#" class="mun-link">Puerto Suárez</a>
+                                <a href="#" class="mun-link">Quirusillas</a>
+                                <a href="#" class="mun-link">Roboré</a>
+                                <a href="#" class="mun-link">Saipina</a>
+                                <a href="#" class="mun-link">Samaipata</a>
+                                <a href="#" class="mun-link">San Antonio de Lomerío</a>
+                                <a href="#" class="mun-link">San Carlos</a>
+                                <a href="#" class="mun-link">San Ignacio de Velasco</a>
+                                <a href="#" class="mun-link">San Javier</a>
+                                <a href="#" class="mun-link">San José de Chiquitos</a>
+                                <a href="#" class="mun-link">San Juan de Yapacaní</a>
+                                <a href="#" class="mun-link">San Julián</a>
+                                <a href="#" class="mun-link">San Matías</a>
+                                <a href="#" class="mun-link">San Miguel de Velasco</a>
+                                <a href="#" class="mun-link">San Pedro</a>
+                                <a href="#" class="mun-link">San Rafael</a>
+                                <a href="#" class="mun-link">San Ramón</a>
+                                <a href="#" class="mun-link">Santa Rosa del Sara</a>
+                                <a href="#" class="mun-link">Urubichá</a>
+                                <a href="#" class="mun-link">Vallegrande</a>
+                                <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/programas/pg_warnes_mun/" class="mun-link">Warnes</a>
+                                <a href="#" class="mun-link">Yapacaní</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<style>
-    /* Estilo reutilizable para los links del dropdown */
-    .mun-link {
-        display: block;
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        color: #475569;
-        border-radius: 6px;
-        transition: background-color 0.2s, color 0.2s;
-    }
-    .mun-link:hover {
-        background-color: #f8fafc;
-        color: #7e22ce; /* Purple-700 */
-        font-weight: 500;
-    }
-</style>
 
         <a href="https://cir.uagrm.edu.bo/elecciones_autonomicas_2026/entrevistas/" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
             <div class="flex flex-col items-center">
@@ -566,9 +565,8 @@
             });
         }
     });
-  </script>
 
-  // Lógica para el dropdown de Municipios
+    // Lógica para el dropdown de Municipios
     function toggleMunicipios() {
         const menu = document.getElementById('menu-mun');
         const icon = document.getElementById('icon-mun-chevron');
@@ -591,11 +589,15 @@
     window.addEventListener('click', function(e) {
         const menu = document.getElementById('menu-mun');
         const btn = document.getElementById('btn-mun');
-        if (!btn.contains(e.target) && !menu.contains(e.target)) {
-            menu.classList.add('hidden');
-            document.getElementById('icon-mun-chevron').style.transform = 'rotate(0deg)';
-            btn.classList.remove('ring-2', 'ring-purple-100');
+        // Check if menu exists (defensive programming)
+        if (menu && btn) {
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+                document.getElementById('icon-mun-chevron').style.transform = 'rotate(0deg)';
+                btn.classList.remove('ring-2', 'ring-purple-100');
+            }
         }
     });
+  </script>
 </body>
 </html>
