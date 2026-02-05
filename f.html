@@ -15,6 +15,9 @@
             --dark: #2c3e50;
             --purple: #9b59b6;
             --orange: #e67e22;
+            --teal: #16a085;
+            --indigo: #3f51b5;
+            --maroon: #c0392b;
         }
 
         * {
@@ -71,10 +74,10 @@
             background: white;
             border: 2px solid var(--accent);
             color: var(--accent);
-            padding: 20px;
-            margin: 10px 0;
+            padding: 15px; /* Ajustado ligeramente para acomodar más botones */
+            margin: 8px 0;
             border-radius: 8px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
@@ -87,6 +90,9 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
         }
+
+        /* Estilos específicos para nuevos botones para diferenciarlos visualmente si se desea, 
+           pero mantenemos la consistencia de clase .theme-btn */
 
         /* Pantalla de Quiz */
         .quiz-screen {
@@ -253,7 +259,7 @@
             
             .theme-btn {
                 font-size: 1.1rem;
-                padding: 18px;
+                padding: 14px;
             }
             
             .quiz-screen {
@@ -276,9 +282,9 @@
             }
             
             .theme-btn { 
-                font-size: 1rem; 
-                padding: 16px 12px;
-                margin: 8px 0;
+                font-size: 0.95rem; 
+                padding: 12px 10px;
+                margin: 6px 0;
                 white-space: normal;
                 word-wrap: break-word;
             }
@@ -333,8 +339,8 @@
             }
             
             .theme-btn {
-                font-size: 0.95rem;
-                padding: 14px 10px;
+                font-size: 0.9rem;
+                padding: 10px 8px;
             }
             
             .quiz-screen {
@@ -420,6 +426,18 @@
         <button class="theme-btn" onclick="startQuiz(4)">
             Tema 4: Filosofía
         </button>
+        
+        <button class="theme-btn" onclick="startQuiz(5)">
+            Tema 6: El ser humano en Latinoamérica
+        </button>
+
+        <button class="theme-btn" onclick="startQuiz(6)">
+            Tema 7: Ética y Moral
+        </button>
+
+        <button class="theme-btn" onclick="startQuiz(7)">
+            Tema 8: Filosofía Política y Justicia
+        </button>
     </div>
 
     <div id="quiz-area" class="quiz-screen">
@@ -451,7 +469,7 @@
 
 <script>
     /* =========================================
-       BANCO DE PREGUNTAS (FIEL AL ORIGINAL)
+       BANCO DE PREGUNTAS
        ========================================= */
     
     // TEMA 1: PROYECTOS DE TRANSFORMACIÓN SOCIAL, PRODUCTIVA Y COMUNITARIA
@@ -590,6 +608,108 @@
         { q: "La corriente que analiza cómo el lenguaje construye significado se llama:", options: ["Filosofía del lenguaje", "Filosofía de la mente", "Fenomenología", "Positivismo"], a: 0 }
     ];
 
+    // TEMA 6: El ser humano y su contexto histórico en Latinoamérica
+    const bancoTema6 = [
+        { q: "En las sociedades prehispánicas, la identidad del ser humano se construía principalmente a partir de:", options: ["La acumulación de bienes", "La pertenencia comunitaria", "El poder político individual", "La competencia económica"], a: 1 },
+        { q: "Para los pueblos andinos, el ser humano era considerado:", options: ["Dueño absoluto de la naturaleza", "Un ente separado del entorno natural", "Parte viva de la Pachamama", "Superior a los demás seres"], a: 2 },
+        { q: "El valor del individuo en las culturas originarias se medía por:", options: ["Su riqueza material", "Su capacidad de liderazgo militar", "Su contribución al bien común", "Su nivel educativo formal"], a: 2 },
+        { q: "El principio del ayni se puede definir como:", options: ["Trabajo obligatorio impuesto por el Estado", "Ayuda mutua y recíproca", "Comercio comunitario", "Castigo colectivo"], a: 1 },
+        { q: "La minka se caracterizaba por:", options: ["Ser un trabajo individual remunerado", "Beneficiar únicamente al Estado", "Trabajo colectivo obligatorio para la comunidad", "Actividad religiosa exclusiva"], a: 2 },
+        { q: "Una característica central de la cosmovisión indígena prehispánica es:", options: ["El individualismo", "La visión cíclica del tiempo", "El progreso lineal", "La dominación tecnológica"], a: 1 },
+        { q: "El choque cultural durante la colonización se produjo principalmente por:", options: ["Diferencias climáticas", "Conflictos comerciales", "Visiones opuestas sobre el ser humano y la sociedad", "Falta de comunicación lingüística únicamente"], a: 2 },
+        { q: "Durante la colonización, los pueblos indígenas fueron considerados por muchos europeos como:", options: ["Ciudadanos con derechos", "Socios económicos", "Culturalmente superiores", "Seres inferiores"], a: 3 },
+        { q: "La esclavización de africanos implicó:", options: ["Integración social plena", "Reconocimiento cultural", "Deshumanización y mercantilización", "Igualdad jurídica"], a: 2 },
+        { q: "El racismo estructural colonial se organizó jerárquicamente colocando en la cima a:", options: ["Indígenas", "Afrodescendientes", "Mestizos", "Blancos europeos"], a: 3 },
+        { q: "Una consecuencia demográfica directa de la colonización fue:", options: ["Crecimiento acelerado de pueblos originarios", "Migración indígena a Europa", "Disminución masiva de la población indígena", "Eliminación del mestizaje"], a: 2 },
+        { q: "El mestizaje latinoamericano debe entenderse como un proceso:", options: ["Exclusivamente racial", "Biológico y cultural", "Limitado al siglo XIX", "Sin impacto identitario"], a: 1 },
+        { q: "Los criollos eran:", options: ["Indígenas puros", "Afrodescendientes esclavizados", "Hijos de europeos nacidos en América", "Mestizos rurales"], a: 2 },
+        { q: "Durante las independencias surge la noción del ser humano como:", options: ["Súbdito del rey", "Ciudadano", "Siervo colonial", "Enemigo del Estado"], a: 1 },
+        { q: "Una contradicción clave del proceso independentista fue:", options: ["La eliminación total de privilegios", "La inclusión plena indígena", "El mantenimiento del poder de las élites criollas", "La abolición inmediata del racismo"], a: 2 },
+        { q: "La identidad latinoamericana se construye, entre otros elementos, a partir de:", options: ["Un solo grupo étnico", "El rechazo total del pasado", "El mestizaje y valores comunitarios", "La homogeneidad cultural"], a: 2 },
+        { q: "La urbanización del siglo XX provocó:", options: ["Desaparición de las desigualdades", "Creación de culturas híbridas urbanas", "Retorno masivo al campo", "Eliminación de identidades indígenas"], a: 1 },
+        { q: "El ingreso de las mujeres al trabajo formal en el siglo XX significó:", options: ["Retroceso social", "Mayor exclusión", "Transformaciones en roles sociales", "Pérdida de derechos"], a: 2 },
+        { q: "Los movimientos indígenas del siglo XX exigían principalmente:", options: ["Aislamiento cultural", "Reconocimiento, tierra y derechos", "Migración obligatoria", "Eliminación del Estado"], a: 1 },
+        { q: "En el siglo XXI, la plurinacionalidad implica:", options: ["Fragmentación del Estado", "Negación de identidades", "Reconocimiento de múltiples naciones", "Supresión cultural"], a: 2 },
+        { q: "Uno de los mayores desafíos actuales del ser humano latinoamericano es:", options: ["Exceso de empleo", "Desigualdad social", "Abundancia educativa", "Estabilidad política permanente"], a: 1 },
+        { q: "La pérdida de lenguas originarias implica:", options: ["Mayor diversidad cultural", "Fortalecimiento identitario", "Empobrecimiento cultural", "Desarrollo tecnológico"], a: 2 },
+        { q: "La resiliencia latinoamericana se manifiesta en:", options: ["Pasividad social", "Capacidad de adaptación ante crisis", "Rechazo del cambio", "Aislamiento cultural"], a: 1 },
+        { q: "La Filosofía de la Liberación critica principalmente:", options: ["La cultura indígena", "La dominación eurocéntrica", "El mestizaje", "Los movimientos sociales"], a: 1 },
+        { q: "Enrique Dussel propone comprender al ser humano desde:", options: ["Modelos europeos clásicos", "La realidad latinoamericana", "El positivismo económico", "La neutralidad histórica"], a: 1 },
+        { q: "Los aportes afrodescendientes se evidencian fuertemente en:", options: ["La arquitectura colonial", "La música y espiritualidad", "La burocracia estatal", "El sistema jurídico"], a: 1 },
+        { q: "El pensamiento indígena concibe el tiempo como:", options: ["Lineal y progresivo", "Caótico", "Cíclico", "Inexistente"], a: 2 },
+        { q: "Una característica general del ser humano latinoamericano es ser:", options: ["Individualista", "Comunitario", "Aislado", "Apolítico"], a: 1 },
+        { q: "La creatividad latinoamericana se expresa principalmente a través de:", options: ["La copia cultural", "El silencio social", "Manifestaciones artísticas y culturales", "La homogeneización"], a: 2 },
+        { q: "El ser humano latinoamericano actual se caracteriza por ser:", options: ["Homogéneo y estático", "Pasivo ante la historia", "Plural, complejo y resistente", "Ajeno a su pasado"], a: 2 }
+    ];
+
+    // TEMA 7: Ética y Moral: Principios y Debates Filosóficos
+    const bancoTema7 = [
+        { q: "La ética se diferencia de la moral porque:", options: ["Se basa exclusivamente en emociones", "Analiza racionalmente el fundamento de las normas", "Depende de la religión dominante", "Sustituye a las normas sociales"], a: 1 },
+        { q: "Cuando la ética cuestiona si una ley es justa, está cumpliendo la función de:", options: ["Regulación jurídica", "Control social", "Conservación cultural", "Evaluación crítica de normas"], a: 3 },
+        { q: "El carácter universal de la ética se refiere a:", options: ["La uniformidad cultural", "Su aplicación solo académica", "La búsqueda de principios válidos para todo ser humano", "Su imposición global"], a: 2 },
+        { q: "La moral se considera “afectiva” porque:", options: ["Produce reacciones como culpa o aprobación", "Carece de reglas", "Es universal", "Es puramente racional"], a: 0 },
+        { q: "El ejemplo del trabajo infantil demuestra que la moral:", options: ["Carece de normas", "Es irracional", "Es inmutable", "Varía según el contexto cultural"], a: 3 },
+        { q: "Decir que “la ética orienta la acción humana racionalmente” implica que:", options: ["Sustituye a la ley", "Depende de la costumbre", "Obliga sin cuestionamiento", "Fundamenta las decisiones en la razón"], a: 3 },
+        { q: "La afirmación “la ética es teoría y la moral es práctica” significa que:", options: ["Ambas son opuestas", "La ética reflexiona sobre lo que la moral aplica", "La moral no puede analizarse", "La ética no influye en la vida diaria"], a: 1 },
+        { q: "El principio de autonomía se viola cuando:", options: ["Se asume responsabilidad", "Una persona decide libremente", "Se actúa por presión o manipulación", "Se actúa por convicción racional"], a: 2 },
+        { q: "En Kant, tratar al ser humano como “fin en sí mismo” implica:", options: ["Subordinarlo al bien común", "Evaluar acciones por consecuencias", "Priorizar la utilidad social", "Respetar su dignidad intrínseca"], a: 3 },
+        { q: "El principio de beneficencia se diferencia del de no maleficencia porque:", options: ["Ambos son idénticos", "Uno busca hacer el bien y el otro evitar el daño", "Solo se aplica en medicina", "Uno es jurídico y el otro moral"], a: 1 },
+        { q: "Una política pública que evita daños pero no promueve bienestar cumple:", options: ["No maleficencia principalmente", "Autonomía exclusivamente", "Beneficencia únicamente", "Solidaridad social"], a: 0 },
+        { q: "La justicia ética no se limita a la igualdad formal porque también incluye:", options: ["Neutralidad moral", "Obediencia legal", "Distribución equitativa de recursos", "Competencia social"], a: 2 },
+        { q: "Según Rawls, una sociedad justa debe:", options: ["Priorizar la eficiencia económica", "Eliminar toda desigualdad", "Garantizar derechos básicos iguales", "Favorecer a la mayoría"], a: 2 },
+        { q: "Hans Jonas amplía la ética tradicional al enfatizar:", options: ["Las consecuencias a largo plazo", "La moral individual", "El pasado histórico", "La costumbre social"], a: 0 },
+        { q: "La ética de la responsabilidad se vuelve clave frente a:", options: ["Normas familiares", "Tradiciones religiosas", "Reglas escolares", "Avances tecnológicos y ambientales"], a: 3 },
+        { q: "La solidaridad ética supone que:", options: ["La ética es opcional", "Vivimos interconectados", "El individuo es autosuficiente", "La moral es privada"], a: 1 },
+        { q: "Para Aristóteles, la felicidad humana se alcanza mediante:", options: ["El consenso social", "El placer", "El cumplimiento del deber", "El cultivo de virtudes"], a: 3 },
+        { q: "El estoicismo considera moralmente valioso:", options: ["Buscar placer", "Transformar la sociedad", "Aceptar racionalmente lo inevitable", "Evitar toda emoción"], a: 2 },
+        { q: "La ética cristiana se distingue por:", options: ["El contractualismo", "Su relativismo moral", "El amor al prójimo como eje moral", "Su énfasis en la utilidad"], a: 2 },
+        { q: "El criterio central del deontologismo kantiano es:", options: ["El consenso social", "La consecuencia", "La felicidad", "El deber universalizable"], a: 3 },
+        { q: "El utilitarismo podría justificar una acción injusta si:", options: ["Produce mayor felicidad colectiva", "Viola la ley", "Falta intención moral", "Es tradicional"], a: 0 },
+        { q: "El contractualismo moral sostiene que:", options: ["La ética es individual", "Las normas nacen del acuerdo racional", "La moral es innata", "Las normas son naturales"], a: 1 },
+        { q: "La ética del diálogo presupone:", options: ["Igualdad y racionalidad comunicativa", "Tradición cultural", "Autoridad jerárquica", "Desigualdad entre participantes"], a: 0 },
+        { q: "La ética de la liberación critica principalmente:", options: ["La ética cristiana", "El eurocentrismo y la exclusión", "La razón filosófica", "La moral comunitaria"], a: 1 },
+        { q: "Un aporte central de Dussel es:", options: ["Eliminar la ética universal", "Defender el mercado global", "Priorizar a los excluidos", "Rechazar la justicia"], a: 2 },
+        { q: "La ética ecológica cuestiona:", options: ["La justicia ambiental", "El dominio ilimitado sobre la naturaleza", "La responsabilidad social", "La dignidad humana"], a: 1 },
+        { q: "Los derechos de la Madre Tierra implican:", options: ["Negación del desarrollo", "Uso irrestricto de recursos", "Centralidad del crecimiento económico", "Reconocimiento ético de la naturaleza"], a: 3 },
+        { q: "El relativismo moral plantea el problema de:", options: ["La rigidez ética", "El exceso de normas", "La ausencia de valores universales", "La imposición cultural"], a: 2 },
+        { q: "La bioética surge como respuesta a:", options: ["Costumbres religiosas", "Tradiciones culturales", "Avances científicos y dilemas vitales", "Conflictos políticos"], a: 2 },
+        { q: "La ética es condición de posibilidad de la vida social porque:", options: ["Regula racionalmente la convivencia", "Elimina conflictos", "Sustituye a la ley", "Uniforma culturas"], a: 0 }
+    ];
+
+    // TEMA 8: La Filosofía Política y la Justicia
+    const bancoTema8 = [
+        { q: "La filosofía política se distingue de otras ramas de la filosofía porque:", options: ["Analiza únicamente la conducta individual", "Describe el funcionamiento técnico de los gobiernos", "Reflexiona críticamente sobre el poder y su legitimidad", "Se limita al estudio histórico de los Estados"], a: 2 },
+        { q: "Una pregunta central de la filosofía política es:", options: ["¿Cómo se origina el conocimiento científico?", "¿Qué sistema político es más eficiente económicamente?", "¿Bajo qué condiciones el poder político es legítimo?", "¿Cómo se desarrolla la moral individual?"], a: 2 },
+        { q: "La justicia social, según el enfoque filosófico, busca principalmente:", options: ["Garantizar la obediencia a la ley", "Asegurar condiciones dignas para todas las personas", "Uniformar las condiciones económicas", "Eliminar toda forma de desigualdad"], a: 1 },
+        { q: "La justicia social no propone una igualdad absoluta porque:", options: ["Considera legítima toda desigualdad", "Reconoce que las leyes son suficientes", "Prioriza la libertad económica", "Reconoce que las personas parten de condiciones distintas"], a: 3 },
+        { q: "La filosofía política evalúa los sistemas políticos desde un punto de vista:", options: ["Técnico-administrativo", "Económico-productivo", "Ético y normativo", "Estadístico"], a: 0 },
+        { q: "El concepto de bien común en la filosofía política se relaciona con:", options: ["El interés de la mayoría", "El beneficio del Estado", "El equilibrio entre derechos individuales y colectivos", "La eliminación de los conflictos sociales"], a: 2 },
+        { q: "La relación entre libertad individual y poder político implica:", options: ["La supremacía absoluta del individuo", "La intervención ilimitada del Estado", "Un equilibrio regulado por la justicia y la ley", "La subordinación total del ciudadano"], a: 2 },
+        { q: "La justicia social adquiere especial relevancia en la actualidad debido a:", options: ["El exceso de derechos individuales", "El aumento de las desigualdades estructurales", "La desaparición del Estado moderno", "El debilitamiento del pensamiento filosófico"], a: 1 },
+        { q: "Una sociedad es injusta desde la perspectiva de los derechos humanos cuando:", options: ["Existe diversidad cultural", "Hay diferencias económicas", "Se limita el consumo", "No se garantizan derechos fundamentales"], a: 0 },
+        { q: "Para Platón, la justicia social se fundamenta en:", options: ["La igualdad política", "La armonía y el orden social", "La voluntad de la mayoría", "La propiedad colectiva"], a: 1 },
+        { q: "La idea central de justicia en Aristóteles se expresa como:", options: ["Igualdad absoluta entre ciudadanos", "Cumplimiento estricto de la ley", "Dar a cada quien lo que le corresponde", "Satisfacción de las necesidades básicas"], a: 2 },
+        { q: "La justicia distributiva aristotélica se caracteriza por:", options: ["Corregir daños individuales", "Repartir bienes de manera proporcional", "Eliminar privilegios sociales", "Garantizar derechos naturales"], a: 1 },
+        { q: "La justicia correctiva tiene como finalidad principal:", options: ["Redistribuir la riqueza", "Garantizar igualdad política", "Mantener el orden económico", "Restablecer el equilibrio ante una injusticia"], a: 3 },
+        { q: "Hobbes justifica la existencia del Estado porque:", options: ["Promueve la igualdad social", "Garantiza los derechos naturales", "Evita el conflicto permanente entre individuos", "Representa la voluntad general"], a: 2 },
+        { q: "Para Hobbes, la justicia surge cuando:", options: ["Existe igualdad económica", "Los individuos obedecen las leyes establecidas", "Se eliminan los conflictos sociales", "El poder se distribuye equitativamente"], a: 1 },
+        { q: "John Locke sostuvo que la función principal del Estado es:", options: ["Controlar la economía", "Garantizar la igualdad material", "Proteger los derechos naturales", "Representar la voluntad colectiva"], a: 0 },
+        { q: "Los derechos naturales en Locke se caracterizan por ser:", options: ["Otorgados por el Estado", "Históricamente construidos", "Universales e inherentes al ser humano", "Dependientes de la cultura"], a: 2 },
+        { q: "Rousseau consideró injusta a la sociedad cuando:", options: ["El poder se concentra en el pueblo", "Predomina la voluntad general", "Existen leyes escritas", "El poder responde a intereses particulares"], a: 3 },
+        { q: "La crítica central de Rousseau a la desigualdad es que:", options: ["Viola la voluntad general", "Reduce la productividad", "Elimina la libertad económica", "Debilita la autoridad política"], a: 0 },
+        { q: "Karl Marx interpretó la injusticia social como resultado de:", options: ["La falta de moral individual", "El incumplimiento de la ley", "La estructura económica capitalista", "La ausencia del Estado"], a: 2 },
+        { q: "El objetivo de la sociedad propuesta por Marx es:", options: ["La igualdad jurídica", "La democracia representativa", "La eliminación de la propiedad privada", "La supresión de las clases sociales"], a: 3 },
+        { q: "John Rawls define una sociedad justa como aquella que:", options: ["Garantiza igualdad económica", "Maximiza la felicidad colectiva", "Protege libertades básicas e igualdad de oportunidades", "Elimina el mercado"], a: 2 },
+        { q: "El principio de diferencia de Rawls sostiene que:", options: ["Toda desigualdad es injusta", "La desigualdad es inevitable", "Las desigualdades deben beneficiar a los menos favorecidos", "El mérito justifica toda desigualdad"], a: 2 },
+        { q: "Amartya Sen critica las teorías de justicia centradas solo en:", options: ["La libertad", "El desarrollo económico", "Los derechos humanos", "La distribución de bienes"], a: 3 },
+        { q: "Para Sen, la justicia social debe evaluarse a partir de:", options: ["El nivel de ingresos", "El crecimiento del Estado", "Las capacidades reales de las personas", "La igualdad legal"], a: 0 },
+        { q: "La justicia social propone la equidad porque:", options: ["Elimina la libertad individual", "Reconoce desigualdades estructurales previas", "Sustituye la igualdad jurídica", "Prioriza el interés del Estado"], a: 1 },
+        { q: "La justicia social va más allá del cumplimiento de la ley porque:", options: ["Rechaza el sistema jurídico", "Se basa solo en la moral", "Prioriza la tradición cultural", "Analiza la distribución real del poder y los recursos"], a: 2 },
+        { q: "Una política pública inspirada en la justicia social debería:", options: ["Tratar a todos exactamente igual", "Favorecer solo el crecimiento económico", "Proteger especialmente a los sectores vulnerables", "Limitar la intervención estatal"], a: 3 },
+        { q: "La filosofía política es esencial para la democracia porque:", options: ["Legitima cualquier forma de poder", "Fomenta ciudadanos críticos y responsables", "Sustituye a las instituciones políticas", "Elimina los conflictos sociales"], a: 2 },
+        { q: "Desde la filosofía política contemporánea, una sociedad justa se define mejor como aquella que:", options: ["Garantiza igualdad absoluta de resultados", "Promueve el bien común respetando derechos y diversidad", "Asegura obediencia a la autoridad", "Reduce al mínimo la intervención estatal"], a: 1 }
+    ];
+
     /* =========================================
        LÓGICA DE LA APP
        ========================================= */
@@ -635,6 +755,21 @@
                 fullBank = bancoTema4;
                 themeName = "Tema 4: Filosofía";
                 badgeColor = "var(--orange)";
+                break;
+            case 5:
+                fullBank = bancoTema6;
+                themeName = "Tema 6: Ser Humano LatAm";
+                badgeColor = "var(--teal)";
+                break;
+            case 6:
+                fullBank = bancoTema7;
+                themeName = "Tema 7: Ética y Moral";
+                badgeColor = "var(--indigo)";
+                break;
+            case 7:
+                fullBank = bancoTema8;
+                themeName = "Tema 8: Filosofía Política";
+                badgeColor = "var(--maroon)";
                 break;
             default:
                 fullBank = bancoTema1;
