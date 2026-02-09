@@ -18,6 +18,8 @@
             --teal: #16a085;
             --indigo: #3f51b5;
             --maroon: #c0392b;
+            --gold: #f1c40f;
+            --midnight: #192a56;
         }
 
         * {
@@ -44,7 +46,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 500px;
+            min-height: 600px; /* Aumentado un poco para acomodar más botones */
         }
 
         /* Pantalla de Menú */
@@ -70,18 +72,27 @@
             font-size: 1rem;
         }
 
+        .buttons-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dos columnas en escritorio */
+            gap: 10px;
+        }
+
         .theme-btn {
             background: white;
             border: 2px solid var(--accent);
             color: var(--accent);
-            padding: 15px; /* Ajustado ligeramente para acomodar más botones */
-            margin: 8px 0;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
 
         .theme-btn:hover {
@@ -90,9 +101,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
         }
-
-        /* Estilos específicos para nuevos botones para diferenciarlos visualmente si se desea, 
-           pero mantenemos la consistencia de clase .theme-btn */
 
         /* Pantalla de Quiz */
         .quiz-screen {
@@ -250,16 +258,20 @@
         /* Tablets y pantallas medianas */
         @media (max-width: 768px) {
             .container {
-                width: 92%;
+                width: 95%;
             }
             
+            .buttons-container {
+                grid-template-columns: 1fr; /* Una columna en móvil */
+            }
+
             .menu-screen {
-                padding: 30px;
+                padding: 30px 20px;
             }
             
             .theme-btn {
-                font-size: 1.1rem;
-                padding: 14px;
+                font-size: 1rem;
+                padding: 12px;
             }
             
             .quiz-screen {
@@ -271,134 +283,16 @@
             }
         }
 
-        /* Móviles */
-        @media (max-width: 600px) {
-            .menu-screen { 
-                padding: 25px 20px; 
-            }
-            
-            .menu-screen h1 {
-                font-size: 1.5rem;
-            }
-            
-            .theme-btn { 
-                font-size: 0.95rem; 
-                padding: 12px 10px;
-                margin: 6px 0;
-                white-space: normal;
-                word-wrap: break-word;
-            }
-            
-            .score-circle { 
-                width: 120px; 
-                height: 120px; 
-                font-size: 2.5rem; 
-            }
-            
-            .quiz-screen {
-                padding: 20px;
-            }
-            
-            .question-text {
-                font-size: 1.1rem;
-                margin-bottom: 20px;
-            }
-            
-            .option-btn {
-                padding: 12px 15px;
-                font-size: 0.95rem;
-            }
-            
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .actions {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 250px;
-            }
-        }
-
         /* Móviles pequeños */
         @media (max-width: 400px) {
             .container {
-                width: 95%;
                 margin: 10px;
-                min-height: auto;
-            }
-            
-            .menu-screen {
-                padding: 20px 15px;
-            }
-            
-            .theme-btn {
-                font-size: 0.9rem;
-                padding: 10px 8px;
-            }
-            
-            .quiz-screen {
-                padding: 15px;
-            }
-            
-            .question-text {
-                font-size: 1rem;
-            }
-            
-            .option-btn {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-            
-            .badge, #progress, #timer {
-                font-size: 0.85rem;
-                padding: 4px 8px;
             }
             
             .score-circle {
-                width: 100px;
-                height: 100px;
-                font-size: 2rem;
-            }
-        }
-
-        /* Modo landscape en móviles */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                max-height: 90vh;
-                overflow-y: auto;
-                margin: 5px;
-            }
-            
-            .menu-screen {
-                padding: 15px;
-            }
-            
-            .theme-btn {
-                padding: 10px;
-                margin: 5px 0;
-            }
-        }
-
-        /* Prevenir zoom en inputs en iOS */
-        @media (max-width: 768px) {
-            .option-btn:active {
-                transform: scale(0.98);
-            }
-        }
-
-        /* Asegurar que los botones sean táctiles adecuadamente */
-        @media (hover: none) and (pointer: coarse) {
-            .option-btn {
-                min-height: 44px;
-                display: flex;
-                align-items: center;
+                width: 120px;
+                height: 120px;
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -408,36 +302,46 @@
 <div class="container">
     
     <div id="menu-area" class="menu-screen">
-        <h1>Filosofía y Antropología</h1>
+        <h1>Banco de Preguntas</h1>
         <p>Selecciona un tema para iniciar el cuestionario (10 preguntas aleatorias)</p>
         
-        <button class="theme-btn" onclick="startQuiz(1)">
-            Tema 1: Proyectos de Transformación
-        </button>
-        
-        <button class="theme-btn" onclick="startQuiz(2)">
-            Tema 2: Introducción a la Antropología
-        </button>
-        
-        <button class="theme-btn" onclick="startQuiz(3)">
-            Tema 3: Problemáticas Antropología Contemporánea
-        </button>
-        
-        <button class="theme-btn" onclick="startQuiz(4)">
-            Tema 4: Filosofía
-        </button>
-        
-        <button class="theme-btn" onclick="startQuiz(5)">
-            Tema 6: El ser humano en Latinoamérica
-        </button>
+        <div class="buttons-container">
+            <button class="theme-btn" onclick="startQuiz(1)">
+                Tema 1: Proyectos de Transformación
+            </button>
+            
+            <button class="theme-btn" onclick="startQuiz(2)">
+                Tema 2: Introducción a la Antropología
+            </button>
+            
+            <button class="theme-btn" onclick="startQuiz(3)">
+                Tema 3: Problemáticas Antropología
+            </button>
+            
+            <button class="theme-btn" onclick="startQuiz(4)">
+                Tema 4: Filosofía General
+            </button>
+            
+            <button class="theme-btn" onclick="startQuiz(5)">
+                Tema 6: El ser humano en LatAm
+            </button>
 
-        <button class="theme-btn" onclick="startQuiz(6)">
-            Tema 7: Ética y Moral
-        </button>
+            <button class="theme-btn" onclick="startQuiz(6)">
+                Tema 7: Ética y Moral
+            </button>
 
-        <button class="theme-btn" onclick="startQuiz(7)">
-            Tema 8: Filosofía Política y Justicia
-        </button>
+            <button class="theme-btn" onclick="startQuiz(7)">
+                Tema 8: Filosofía Política
+            </button>
+
+            <button class="theme-btn" onclick="startQuiz(8)">
+                Tema 9: Democracia y Contrato Social
+            </button>
+
+            <button class="theme-btn" onclick="startQuiz(9)">
+                Tema 10: Filosofía del Derecho
+            </button>
+        </div>
     </div>
 
     <div id="quiz-area" class="quiz-screen">
@@ -506,7 +410,7 @@
         { q: "Un proyecto de transformación exitoso se caracteriza por:", options: ["Cambios sostenibles y autogestionados", "Baja participación social", "Control exclusivo de actores externos", "Beneficios limitados en el tiempo"], a: 0 }
     ];
 
-    // TEMA 2: INTRODUCCIÓN A LA ANTROPOLOGÍA Y ANTROPOLOGÍA FILOSÓFICA
+    // TEMA 2: INTRODUCCIÓN A LA ANTROPOLOGÍA
     const bancoTema2 = [
         { q: "La antropología estudia al ser humano de manera integral porque:", options: ["Se centra solo en su dimensión biológica", "Analiza únicamente su conducta social", "Considera sus dimensiones biológica, social, cultural, histórica y simbólica", "Se limita a la reflexión filosófica"], a: 2 },
         { q: "El principal objetivo de la antropología es:", options: ["Clasificar culturas superiores e inferiores", "Comprender cómo los seres humanos construyen sociedades y significan su mundo", "Explicar únicamente la evolución biológica", "Sustituir a la sociología y la historia"], a: 1 },
@@ -710,6 +614,74 @@
         { q: "Desde la filosofía política contemporánea, una sociedad justa se define mejor como aquella que:", options: ["Garantiza igualdad absoluta de resultados", "Promueve el bien común respetando derechos y diversidad", "Asegura obediencia a la autoridad", "Reduce al mínimo la intervención estatal"], a: 1 }
     ];
 
+    // TEMA 9: Democracia, Participación Ciudadana y Contrato Social
+    const bancoTema9 = [
+        { q: "Desde la filosofía política, la democracia se legitima porque el poder político:", options: ["Se hereda por tradición", "Se concentra en el Estado", "Surge del consentimiento del pueblo", "Proviene de la autoridad moral"], a: 2 },
+        { q: "La democracia, entendida como cultura política, implica principalmente:", options: ["Elecciones frecuentes", "Obediencia a la autoridad", "Diálogo, pluralismo y deliberación", "Neutralidad ideológica"], a: 2 },
+        { q: "La soberanía popular significa que las decisiones políticas:", options: ["Son tomadas por expertos", "Responden a la voluntad ciudadana", "Dependen del poder económico", "Se subordinan a la tradición"], a: 1 },
+        { q: "La democracia representativa se fundamenta en:", options: ["La participación directa constante", "El control militar del poder", "La elección libre de representantes", "La eliminación de partidos políticos"], a: 2 },
+        { q: "La democracia participativa se caracteriza por:", options: ["Sustituir al Estado", "Reducir el rol ciudadano", "Eliminar la representación política", "Ampliar los mecanismos de intervención ciudadana"], a: 3 },
+        { q: "Un ejemplo contemporáneo de democracia directa es:", options: ["El parlamento", "El referendo", "El gabinete ministerial", "El poder judicial"], a: 1 },
+        { q: "La participación ciudadana NO incluye:", options: ["Control social", "Organización comunitaria", "Defensa de derechos", "Concentración autoritaria del poder"], a: 3 },
+        { q: "La participación ciudadana fortalece la democracia porque:", options: ["Genera decisiones más inclusivas", "Elimina el conflicto social", "Debilita al Estado", "Reduce la pluralidad política"], a: 0 },
+        { q: "El contrato social explica el origen del Estado como resultado de:", options: ["Un mandato religioso", "Una imposición histórica", "Un pacto implícito entre individuos", "Una herencia cultural"], a: 2 },
+        { q: "Según la teoría del contrato social, las personas aceptan las leyes para:", options: ["Obtener privilegios", "Evitar la vida política", "Garantizar seguridad y convivencia", "Asegurar la supremacía del gobernante"], a: 2 },
+        { q: "Para Thomas Hobbes, el estado de naturaleza se caracteriza por:", options: ["Cooperación social", "Libertad equilibrada", "Igualdad política", "Conflicto permanente"], a: 3 },
+        { q: "Hobbes justifica la existencia de un poder fuerte con el fin de:", options: ["Defender la soberanía popular", "Garantizar el orden y la paz", "Promover la democracia directa", "Asegurar la igualdad social"], a: 1 },
+        { q: "Para John Locke, el contrato social tiene como finalidad principal:", options: ["Proteger los derechos naturales", "Consolidar el absolutismo", "Eliminar la propiedad privada", "Fortalecer el poder militar"], a: 0 },
+        { q: "Según Locke, si un gobierno viola los derechos del pueblo:", options: ["Debe ser obedecido", "Debe fortalecerse", "Puede ser legítimamente reemplazado", "Debe eliminarse el Estado"], a: 2 },
+        { q: "Jean-Jacques Rousseau fundamenta la democracia en:", options: ["La autoridad del Estado", "La voluntad general", "La tradición política", "El poder económico"], a: 1 },
+        { q: "La voluntad general representa:", options: ["La suma de intereses individuales", "La opinión de la mayoría gobernante", "El interés común de la sociedad", "La ley natural"], a: 2 },
+        { q: "La democracia se opone al autoritarismo porque:", options: ["Centraliza el poder", "Limita y controla la autoridad", "Elimina las instituciones", "Reduce la participación política"], a: 1 },
+        { q: "La rendición de cuentas exige que las autoridades:", options: ["Gobiernen sin control", "Respondan solo ante el poder judicial", "Justifiquen públicamente sus acciones", "Actúen únicamente en elecciones"], a: 2 },
+        { q: "Cuando el Estado incumple el contrato social, la ciudadanía puede:", options: ["Renunciar a la vida política", "Exigir cambios por vías democráticas", "Justificar el autoritarismo", "Abandonar las normas jurídicas"], a: 1 },
+        { q: "La relación entre democracia y contrato social se basa en:", options: ["La obediencia forzada", "La tradición histórica", "El consentimiento ciudadano", "El control militar"], a: 2 },
+        { q: "Un derecho fundamental en democracia es:", options: ["La libertad de expresión", "La obediencia absoluta", "La exclusión política", "La imposición ideológica"], a: 0 },
+        { q: "Un deber ciudadano en democracia consiste en:", options: ["Controlar todos los poderes del Estado", "Participar de forma responsable", "Gobernar sin normas", "Imponer ideas personales"], a: 1 },
+        { q: "La convivencia pacífica en democracia se logra mediante:", options: ["La represión", "La imposición estatal", "El respeto a normas comunes", "La eliminación del conflicto"], a: 2 },
+        { q: "Entre los principales desafíos actuales de la democracia se encuentra:", options: ["El exceso de participación", "La falta de elecciones", "La desigualdad y la corrupción", "La ausencia de leyes"], a: 2 },
+        { q: "Una ciudadanía informada contribuye a:", options: ["Debilitar la institucionalidad", "Reducir la participación", "Fortalecer las instituciones democráticas", "Eliminar la política"], a: 2 },
+        { q: "Concebir la democracia como forma de vida implica:", options: ["Solo participación electoral", "Compromiso ético y social permanente", "Neutralidad ciudadana", "Autoridad incuestionable"], a: 1 },
+        { q: "La exclusión social afecta negativamente a la democracia porque:", options: ["Limita la participación política", "Aumenta la estabilidad estatal", "Reduce el conflicto social", "Fortalece el poder central"], a: 0 },
+        { q: "El control social permite:", options: ["Concentrar el poder", "Eliminar instituciones", "Fiscalizar la acción del Estado", "Reducir derechos ciudadanos"], a: 2 },
+        { q: "El bien común en democracia se construye mediante:", options: ["Imposición de mayorías", "Autoridad absoluta", "Diálogo y consenso", "Intereses privados"], a: 2 },
+        { q: "La reflexión filosófica sobre la democracia busca:", options: ["Justificar el autoritarismo", "Eliminar la política", "Comprender y mejorar la vida política", "Sustituir la ley por la moral"], a: 2 }
+    ];
+
+    // TEMA 10: Filosofía del Derecho en la Vida Cotidiana
+    const bancoTema10 = [
+        { q: "La filosofía del derecho se diferencia del derecho positivo porque:", options: ["Aplica sanciones legales", "Estudia procedimientos judiciales", "Analiza críticamente el fundamento del derecho", "Solo estudia códigos legales"], a: 2 },
+        { q: "Una norma puede ser legal pero injusta cuando:", options: ["Es aprobada democráticamente", "No respeta derechos humanos fundamentales", "Es aplicada por tribunales", "Está escrita en la Constitución"], a: 1 },
+        { q: "La legitimidad de una ley depende principalmente de:", options: ["Su antigüedad histórica", "La cantidad de sanciones que impone", "La voluntad de los jueces", "Su aceptación ética y social"], a: 3 },
+        { q: "La filosofía del derecho busca principalmente:", options: ["Aplicar sanciones penales", "Analizar la justicia y el sentido del derecho", "Memorizar leyes vigentes", "Elaborar contratos legales"], a: 1 },
+        { q: "La convivencia social requiere normas porque:", options: ["Eliminan la libertad individual", "Permiten el control absoluto del Estado", "Organizan la interacción entre libertades individuales", "Evitan el desarrollo social"], a: 2 },
+        { q: "Cuando una sociedad modifica leyes injustas demuestra que el derecho es:", options: ["Inmutable", "Natural y eterno", "Exclusivo del poder político", "Una construcción humana cambiante"], a: 3 },
+        { q: "La relación entre derecho y moral implica que:", options: ["Son exactamente lo mismo", "El derecho siempre ignora la moral", "El derecho idealmente se inspira en valores morales", "La moral depende del Estado"], a: 2 },
+        { q: "El derecho en la vida cotidiana se evidencia cuando:", options: ["Solo participamos en procesos judiciales", "Solo firmamos contratos complejos", "Solo votamos en elecciones", "Realizamos actos cotidianos regulados por normas"], a: 3 },
+        { q: "La filosofía del derecho promueve el pensamiento crítico porque:", options: ["Obliga a obedecer sin cuestionar", "Analiza la justicia de las normas", "Elimina la moral", "Solo estudia jurisprudencia"], a: 1 },
+        { q: "El derecho busca principalmente:", options: ["Garantizar el bien común", "Beneficiar a grupos específicos", "Limitar totalmente la libertad", "Evitar la organización social"], a: 0 },
+        { q: "La responsabilidad jurídica se diferencia de la moral porque:", options: ["Solo la moral tiene consecuencias", "La jurídica implica sanciones legales formales", "La moral depende del Estado", "La jurídica es voluntaria"], a: 1 },
+        { q: "Una sociedad democrática requiere ciudadanos que:", options: ["Obedezcan sin analizar", "Deleguen todo al Estado", "Participen críticamente en el sistema jurídico", "Eviten cuestionar leyes"], a: 2 },
+        { q: "El concepto de justicia en filosofía del derecho se relaciona con:", options: ["Poder económico", "Igualdad y dignidad humana", "Tradición únicamente", "Autoridad política"], a: 1 },
+        { q: "El derecho limita conductas individuales para:", options: ["Eliminar autonomía", "Controlar pensamientos", "Favorecer solo al Estado", "Proteger derechos colectivos"], a: 3 },
+        { q: "La función preventiva del derecho implica:", options: ["Evitar conductas dañinas antes de que ocurran", "Solo castigar después del daño", "Ignorar la moral social", "Limitar la educación social"], a: 0 },
+        { q: "La filosofía del derecho analiza el origen del Estado porque:", options: ["Quiere reemplazarlo", "Busca entender la legitimidad del poder", "Solo estudia historia", "Niega la autoridad política"], a: 1 },
+        { q: "Cuando una ley respeta derechos humanos se considera:", options: ["Tradicional", "Natural", "Legítima y justa", "Obligatoria solo parcialmente"], a: 2 },
+        { q: "La relación entre libertad individual y normas jurídicas implica:", options: ["Desaparición de la libertad", "Equilibrio entre libertades", "Dominio total del Estado", "Eliminación del orden social"], a: 1 },
+        { q: "La filosofía del derecho es importante hoy porque:", options: ["Elimina conflictos sociales", "Permite analizar problemas sociales complejos", "Sustituye el sistema judicial", "Reduce la participación ciudadana"], a: 1 },
+        { q: "La diferencia entre legalidad y legitimidad radica en:", options: ["El origen histórico", "La autoridad del juez", "La aprobación constitucional", "La justicia ética de la norma"], a: 3 },
+        { q: "El derecho es esencial para la convivencia porque:", options: ["Evita toda libertad", "Garantiza orden y protección de derechos", "Elimina diversidad social", "Sustituye la moral individual"], a: 1 },
+        { q: "La participación ciudadana en el derecho implica:", options: ["Solo votar", "Solo obedecer normas", "Analizar, cuestionar y mejorar leyes", "Delegar decisiones totalmente"], a: 2 },
+        { q: "Una ley injusta debe:", options: ["Ser obedecida siempre sin crítica", "Ignorarse completamente", "Modificarse mediante mecanismos democráticos", "Aplicarse selectivamente"], a: 2 },
+        { q: "El derecho positivo se caracteriza por:", options: ["Ser exclusivamente moral", "Estudiar leyes vigentes", "Analizar valores universales", "Basarse solo en costumbres"], a: 1 },
+        { q: "La ética aporta al derecho:", options: ["Sanciones", "Procedimientos judiciales", "Valores que orientan normas justas", "Reglamentos administrativos"], a: 2 },
+        { q: "La filosofía del derecho fomenta:", options: ["Obediencia automática", "Pensamiento crítico ciudadano", "Dependencia del Estado", "Eliminación del debate social"], a: 1 },
+        { q: "El derecho protege la dignidad humana cuando:", options: ["Aplica sanciones arbitrarias", "Limita derechos fundamentales", "Garantiza igualdad ante la ley", "Favorece grupos privilegiados"], a: 2 },
+        { q: "La existencia de normas jurídicas demuestra que:", options: ["La sociedad necesita organización", "La libertad debe eliminarse", "La moral es innecesaria", "El Estado controla toda conducta"], a: 0 },
+        { q: "La justicia social en el derecho implica:", options: ["Igualdad formal sin análisis social", "Distribución equitativa de derechos y oportunidades", "Eliminación de normas", "Prioridad del poder económico"], a: 1 },
+        { q: "El objetivo final del derecho desde la filosofía jurídica es:", options: ["Control social absoluto", "Protección del poder político", "Mantener tradiciones únicamente", "Garantizar justicia, dignidad y convivencia social"], a: 3 }
+    ];
+
     /* =========================================
        LÓGICA DE LA APP
        ========================================= */
@@ -771,6 +743,20 @@
                 themeName = "Tema 8: Filosofía Política";
                 badgeColor = "var(--maroon)";
                 break;
+            // NUEVOS CASOS
+            case 8:
+                fullBank = bancoTema9;
+                themeName = "Tema 9: Democracia";
+                badgeColor = "var(--gold)"; 
+                // Ajuste de color de texto para contraste con dorado
+                topicBadge.style.color = "#333"; 
+                break;
+            case 9:
+                fullBank = bancoTema10;
+                themeName = "Tema 10: Fil. Derecho";
+                badgeColor = "var(--midnight)";
+                break;
+
             default:
                 fullBank = bancoTema1;
                 themeName = "Tema 1";
@@ -779,9 +765,9 @@
         
         topicBadge.innerText = themeName;
         topicBadge.style.background = badgeColor;
+        if(themeId !== 8) topicBadge.style.color = "white"; // Resetear color texto si no es gold
 
-        // Seleccionar 10 preguntas aleatorias del banco de 30
-        // Clonamos para no afectar el original
+        // Seleccionar 10 preguntas aleatorias del banco
         let shuffled = [...fullBank].sort(() => 0.5 - Math.random());
         currentQuestions = shuffled.slice(0, 10);
 
