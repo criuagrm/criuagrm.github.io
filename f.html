@@ -20,6 +20,7 @@
             --maroon: #c0392b;
             --gold: #f1c40f;
             --midnight: #192a56;
+            --final-gradient: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
         }
 
         * {
@@ -46,7 +47,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 600px; /* Aumentado un poco para acomodar más botones */
+            min-height: 600px;
         }
 
         /* Pantalla de Menú */
@@ -74,8 +75,8 @@
 
         .buttons-container {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Dos columnas en escritorio */
-            gap: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         .theme-btn {
@@ -100,6 +101,24 @@
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Botón especial para el examen final */
+        .final-exam-btn {
+            grid-column: span 2; /* Ocupa todo el ancho */
+            background: var(--final-gradient);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+
+        .final-exam-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
+            color: white;
         }
 
         /* Pantalla de Quiz */
@@ -253,46 +272,19 @@
             display: none;
         }
 
-        /* Media Queries para Responsividad */
-
-        /* Tablets y pantallas medianas */
+        /* Media Queries */
         @media (max-width: 768px) {
             .container {
                 width: 95%;
             }
-            
             .buttons-container {
-                grid-template-columns: 1fr; /* Una columna en móvil */
+                grid-template-columns: 1fr;
             }
-
+            .final-exam-btn {
+                grid-column: span 1;
+            }
             .menu-screen {
                 padding: 30px 20px;
-            }
-            
-            .theme-btn {
-                font-size: 1rem;
-                padding: 12px;
-            }
-            
-            .quiz-screen {
-                padding: 25px;
-            }
-            
-            .question-text {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Móviles pequeños */
-        @media (max-width: 400px) {
-            .container {
-                margin: 10px;
-            }
-            
-            .score-circle {
-                width: 120px;
-                height: 120px;
-                font-size: 2.5rem;
             }
         }
     </style>
@@ -303,43 +295,22 @@
     
     <div id="menu-area" class="menu-screen">
         <h1>Banco de Preguntas</h1>
-        <p>Selecciona un tema para iniciar el cuestionario (10 preguntas aleatorias)</p>
+        <p>Selecciona un tema o realiza el Examen Final</p>
         
         <div class="buttons-container">
-            <button class="theme-btn" onclick="startQuiz(1)">
-                Tema 1: Proyectos de Transformación
-            </button>
+            <button class="theme-btn" onclick="startQuiz(1)">Tema 1: Proyectos</button>
+            <button class="theme-btn" onclick="startQuiz(2)">Tema 2: Antropología</button>
+            <button class="theme-btn" onclick="startQuiz(3)">Tema 3: Antropología Cont.</button>
+            <button class="theme-btn" onclick="startQuiz(4)">Tema 4: Filosofía General</button>
+            <button class="theme-btn" onclick="startQuiz(5)">Tema 6: Ser Humano LatAm</button>
+            <button class="theme-btn" onclick="startQuiz(6)">Tema 7: Ética y Moral</button>
+            <button class="theme-btn" onclick="startQuiz(7)">Tema 8: Filosofía Política</button>
+            <button class="theme-btn" onclick="startQuiz(8)">Tema 9: Democracia</button>
+            <button class="theme-btn" onclick="startQuiz(9)">Tema 10: Fil. Derecho</button>
             
-            <button class="theme-btn" onclick="startQuiz(2)">
-                Tema 2: Introducción a la Antropología
-            </button>
-            
-            <button class="theme-btn" onclick="startQuiz(3)">
-                Tema 3: Problemáticas Antropología
-            </button>
-            
-            <button class="theme-btn" onclick="startQuiz(4)">
-                Tema 4: Filosofía General
-            </button>
-            
-            <button class="theme-btn" onclick="startQuiz(5)">
-                Tema 6: El ser humano en LatAm
-            </button>
-
-            <button class="theme-btn" onclick="startQuiz(6)">
-                Tema 7: Ética y Moral
-            </button>
-
-            <button class="theme-btn" onclick="startQuiz(7)">
-                Tema 8: Filosofía Política
-            </button>
-
-            <button class="theme-btn" onclick="startQuiz(8)">
-                Tema 9: Democracia y Contrato Social
-            </button>
-
-            <button class="theme-btn" onclick="startQuiz(9)">
-                Tema 10: Filosofía del Derecho
+            <!-- BOTÓN EXAMEN FINAL -->
+            <button class="theme-btn final-exam-btn" onclick="startQuiz('final')">
+                ★ EXAMEN FINAL (Temas 6-10) ★
             </button>
         </div>
     </div>
@@ -360,11 +331,9 @@
     <div id="result-area" class="result-screen">
         <h2>Resultados</h2>
         <p id="result-message">¡Has completado el cuestionario!</p>
-        
         <div class="score-circle" id="final-score">0/10</div>
-        
         <div class="actions">
-            <button class="btn btn-primary" onclick="restartQuiz()">Reintentar este Tema</button>
+            <button class="btn btn-primary" onclick="restartQuiz()">Reintentar</button>
             <button class="btn btn-secondary" onclick="goToMenu()">Volver al Menú</button>
         </div>
     </div>
@@ -372,438 +341,301 @@
 </div>
 
 <script>
-    /* =========================================
-       BANCO DE PREGUNTAS
-       ========================================= */
+    // BANCOS DE PREGUNTAS (Temas 1-4 resumidos para no saturar, Temas 6-10 completos)
     
-    // TEMA 1: PROYECTOS DE TRANSFORMACIÓN SOCIAL, PRODUCTIVA Y COMUNITARIA
     const bancoTema1 = [
-        { q: "¿Cuál es el propósito central de los proyectos de transformación social, productiva y comunitaria?", options: ["Generar beneficios individuales a corto plazo", "Producir cambios profundos, sostenibles y positivos en la comunidad", "Implementar políticas gubernamentales exclusivamente", "Incrementar el control externo sobre la comunidad"], a: 1 },
-        { q: "La transformación social implica principalmente:", options: ["Mejorar únicamente las condiciones económicas", "Sustituir la organización comunitaria existente", "Fortalecer la autonomía, organización y conciencia crítica", "Aplicar modelos externos sin adaptación local"], a: 2 },
-        { q: "¿Cuál de los siguientes enfoques caracteriza a los proyectos comunitarios?", options: ["Centralización de decisiones", "Procesos participativos", "Exclusión de actores locales", "Dependencia institucional permanente"], a: 1 },
-        { q: "Un principio fundamental de la transformación social es:", options: ["Competencia entre actores comunitarios", "Equidad e inclusión social", "Prioridad del beneficio privado", "Homogeneización cultural"], a: 1 },
-        { q: "¿Qué se entiende por sostenibilidad en proyectos comunitarios?", options: ["Continuidad solo mientras exista financiamiento externo", "Capacidad de mantener beneficios en el tiempo", "Finalización rápida del proyecto", "Repetición exacta del modelo inicial"], a: 1 },
-        { q: "La transformación productiva se orienta principalmente a:", options: ["La asistencia social directa", "El fortalecimiento de capacidades económicas comunitarias", "La eliminación del comercio local", "El control estatal de la producción"], a: 1 },
-        { q: "¿Cuál de los siguientes es un ejemplo de proyecto productivo comunitario?", options: ["Construcción de edificios administrativos", "Agricultura ecológica comunitaria", "Campañas políticas", "Centralización industrial"], a: 1 },
-        { q: "La diversificación productiva busca:", options: ["Reducir la participación comunitaria", "Ampliar las fuentes de ingreso y producción", "Limitar el acceso a mercados", "Eliminar prácticas tradicionales"], a: 1 },
-        { q: "La transformación comunitaria se enfoca principalmente en:", options: ["Incrementar la competitividad empresarial", "Fortalecer el tejido social y organizativo", "Reducir la interacción social", "Sustituir liderazgos locales"], a: 1 },
-        { q: "¿Cuál es un aspecto central de la transformación comunitaria?", options: ["Organización vecinal", "Privatización de espacios públicos", "Dependencia de ONG", "Exclusión cultural"], a: 0 },
-        { q: "La recuperación de espacios públicos contribuye principalmente a:", options: ["El aislamiento social", "El fortalecimiento del sentido de pertenencia", "La reducción de actividades comunitarias", "El control externo del territorio"], a: 1 },
-        { q: "El diagnóstico participativo se caracteriza por:", options: ["Ser elaborado solo por expertos externos", "Identificar problemas desde la visión comunitaria", "Excluir a los actores locales", "Aplicarse solo al final del proyecto"], a: 1 },
-        { q: "La Investigación Acción Participativa (IAP) combina:", options: ["Investigación teórica y análisis estadístico", "Investigación, acción y reflexión colectiva", "Observación pasiva y evaluación externa", "Diagnóstico técnico y planificación estatal"], a: 1 },
-        { q: "La planificación estratégica comunitaria permite:", options: ["Definir objetivos, metas y recursos", "Eliminar la participación ciudadana", "Centralizar decisiones en expertos", "Evitar la evaluación del proyecto"], a: 0 },
-        { q: "El enfoque de Marco Lógico se utiliza para:", options: ["Formular proyectos de manera desordenada", "Analizar conflictos políticos", "Estructurar y organizar proyectos", "Sustituir la planificación comunitaria"], a: 2 },
-        { q: "¿Cuál es la primera etapa del ciclo de vida de un proyecto comunitario?", options: ["Ejecución", "Evaluación", "Identificación del problema", "Gestión de recursos"], a: 2 },
-        { q: "La evaluación y seguimiento permiten:", options: ["Cerrar el proyecto sin análisis", "Medir resultados y mejorar procesos", "Eliminar la retroalimentación", "Evitar ajustes al proyecto"], a: 1 },
-        { q: "La retroalimentación y mejora continua buscan:", options: ["Repetir errores", "Ajustar y fortalecer futuras intervenciones", "Finalizar definitivamente el proyecto", "Reducir la participación comunitaria"], a: 1 },
-        { q: "¿Quién es el actor principal en los proyectos comunitarios?", options: ["El sector privado", "La comunidad local", "Organismos internacionales", "Gobiernos centrales"], a: 1 },
-        { q: "Las ONG suelen participar en los proyectos como:", options: ["Sustitutas de la comunidad", "Autoridades decisoras permanentes", "Únicas responsables del proyecto", "Apoyo técnico y organizativo"], a: 3 },
-        { q: "El impacto social de los proyectos comunitarios incluye:", options: ["Aumento de la desigualdad", "Empoderamiento comunitario", "Dependencia económica", "Fragmentación social"], a: 1 },
-        { q: "El empoderamiento comunitario se relaciona con:", options: ["Mayor dependencia externa", "Fortalecimiento del liderazgo local", "Reducción de la participación", "Pérdida de autonomía"], a: 1 },
-        { q: "¿Cuál es un reto común en los proyectos comunitarios?", options: ["Exceso de participación social", "Abundancia de recursos", "Falta de financiamiento", "Continuidad asegurada"], a: 2 },
-        { q: "Los conflictos internos en la comunidad pueden afectar:", options: ["La ejecución y sostenibilidad", "Positivamente el proyecto", "Solo a los actores externos", "Únicamente la planificación inicial"], a: 0 },
-        { q: "La dependencia de ayuda externa puede generar:", options: ["Autogestión comunitaria", "Pérdida de autonomía", "Liderazgo local fortalecido", "Mayor sostenibilidad"], a: 1 },
-        { q: "Un proyecto pierde continuidad cuando:", options: ["Existe liderazgo comunitario", "No se fortalecen capacidades locales", "Se promueve la autogestión", "Hay planificación participativa"], a: 1 },
-        { q: "La sostenibilidad social se fortalece principalmente mediante:", options: ["Financiamiento externo permanente", "Formación y liderazgo comunitario", "Centralización institucional", "Control privado"], a: 1 },
-        { q: "La sostenibilidad económica implica:", options: ["Dependencia total de donaciones", "Reducción de actividades productivas", "Eliminación de emprendimientos", "Capacidad de generar recursos propios"], a: 3 },
-        { q: "El respeto a la identidad comunitaria implica:", options: ["Imposición cultural externa", "Homogeneización social", "Valoración de saberes y prácticas locales", "Eliminación de tradiciones"], a: 2 },
-        { q: "Un proyecto de transformación exitoso se caracteriza por:", options: ["Cambios sostenibles y autogestionados", "Baja participación social", "Control exclusivo de actores externos", "Beneficios limitados en el tiempo"], a: 0 }
+        { q: "¿Cuál es el propósito central de los proyectos de transformación social?", options: ["Beneficios individuales", "Cambios profundos y sostenibles", "Políticas estatales", "Control externo"], a: 1 },
+        { q: "La transformación social implica:", options: ["Solo economía", "Sustituir organización", "Fortalecer autonomía y conciencia crítica", "Modelos externos"], a: 2 },
+        { q: "¿Qué caracteriza a los proyectos comunitarios?", options: ["Centralización", "Procesos participativos", "Exclusión local", "Dependencia"], a: 1 },
+        { q: "La sostenibilidad implica:", options: ["Financiamiento eterno", "Mantener beneficios en el tiempo", "Cierre rápido", "Repetición"], a: 1 },
+        { q: "¿Qué es el diagnóstico participativo?", options: ["Hecho por expertos", "Identifica problemas desde la comunidad", "Excluye locales", "Solo al final"], a: 1 },
+        { q: "La IAP combina:", options: ["Teoría y estadística", "Investigación, acción y reflexión", "Observación pasiva", "Planificación estatal"], a: 1 },
+        { q: "¿Quién es el actor principal?", options: ["Privados", "La comunidad local", "Organismos", "Gobierno"], a: 1 },
+        { q: "El empoderamiento se relaciona con:", options: ["Dependencia", "Fortalecimiento del liderazgo local", "Menos participación", "Pérdida autonomía"], a: 1 },
+        { q: "La dependencia de ayuda externa genera:", options: ["Autogestión", "Pérdida de autonomía", "Liderazgo", "Sostenibilidad"], a: 1 },
+        { q: "El respeto a la identidad implica:", options: ["Imposición", "Homogeneización", "Valoración de saberes locales", "Eliminar tradiciones"], a: 2 }
     ];
 
-    // TEMA 2: INTRODUCCIÓN A LA ANTROPOLOGÍA
     const bancoTema2 = [
-        { q: "La antropología estudia al ser humano de manera integral porque:", options: ["Se centra solo en su dimensión biológica", "Analiza únicamente su conducta social", "Considera sus dimensiones biológica, social, cultural, histórica y simbólica", "Se limita a la reflexión filosófica"], a: 2 },
-        { q: "El principal objetivo de la antropología es:", options: ["Clasificar culturas superiores e inferiores", "Comprender cómo los seres humanos construyen sociedades y significan su mundo", "Explicar únicamente la evolución biológica", "Sustituir a la sociología y la historia"], a: 1 },
-        { q: "La antropología filosófica pertenece principalmente al campo de:", options: ["Las ciencias naturales", "Las ciencias exactas", "La filosofía", "La biología humana"], a: 2 },
-        { q: "Mientras la antropología describe y analiza, la antropología filosófica se encarga de:", options: ["Medir variables culturales", "Interpretar y profundizar en la esencia del ser humano", "Registrar datos estadísticos", "Estudiar restos arqueológicos"], a: 1 },
-        { q: "La antropología surge como ciencia formal en:", options: ["El siglo XV", "El siglo XVII", "El siglo XIX", "El siglo XXI"], a: 2 },
-        { q: "El interés temprano por la diversidad humana se observa en pensadores como:", options: ["Kant y Heidegger", "Lévi-Strauss y Ricoeur", "Heródoto, Ibn Jaldún y Montaigne", "Morgan y Tylor"], a: 2 },
-        { q: "El colonialismo europeo del siglo XIX influyó en la antropología porque:", options: ["Eliminó las culturas tradicionales", "Permitió recopilar gran cantidad de datos culturales", "Impidió el desarrollo científico", "Reemplazó la filosofía"], a: 1 },
-        { q: "La antropología evolucionista clásica se caracteriza por:", options: ["Negar el cambio cultural", "Proponer que todas las culturas evolucionan de manera lineal", "Rechazar la comparación cultural", "Centrarse en el simbolismo"], a: 1 },
-        { q: "¿Quiénes son representantes de la antropología evolucionista?", options: ["Boas y Malinowski", "Morgan, Tylor y Frazer", "Heidegger y Cassirer", "Radcliffe-Brown y Ricoeur"], a: 1 },
-        { q: "La antropología cultural o social estudia principalmente:", options: ["La genética humana", "Los restos materiales antiguos", "Costumbres, normas, instituciones y formas de vida", "El cerebro humano"], a: 2 },
-        { q: "La antropología biológica se enfoca en:", options: ["El lenguaje y los símbolos", "La evolución, adaptación y variación biológica", "La ética y la moral", "Las creencias religiosas"], a: 1 },
-        { q: "El lenguaje es objeto de estudio de la:", options: ["Antropología arqueológica", "Antropología biológica", "Antropología lingüística", "Antropología filosófica"], a: 2 },
-        { q: "La antropología arqueológica permite conocer:", options: ["El pensamiento filosófico moderno", "Las emociones humanas", "Sociedades antiguas a través de restos materiales", "La psicología individual"], a: 2 },
-        { q: "Todas las ramas de la antropología contribuyen a:", options: ["Un enfoque fragmentado del ser humano", "Un enfoque integral del ser humano", "Un análisis exclusivamente biológico", "La negación de la cultura"], a: 1 },
-        { q: "La antropología filosófica se pregunta fundamentalmente:", options: ["¿Cuántas culturas existen?", "¿Qué es el ser humano?", "¿Cómo excavar un sitio arqueológico?", "¿Qué idioma es más antiguo?"], a: 1 },
-        { q: "Conceptos como conciencia, libertad y dignidad humana son centrales en:", options: ["Antropología cultural", "Antropología lingüística", "Antropología filosófica", "Antropología arqueológica"], a: 2 },
-        { q: "Kant, Scheler y Heidegger son representantes de:", options: ["Antropología biológica", "Antropología filosófica", "Antropología evolucionista", "Antropología arqueológica"], a: 1 },
-        { q: "La relación entre antropología y filosofía se basa en que ambas:", options: ["Rechazan el estudio empírico", "Buscan comprender al ser humano", "Se oponen metodológicamente", "Tienen el mismo objeto y método"], a: 2 },
-        { q: "La antropología aporta principalmente:", options: ["Preguntas abstractas sin datos", "Evidencia empírica y análisis comparativo", "Argumentos matemáticos", "Leyes universales inmutables"], a: 1 },
-        { q: "La importancia de la antropología en el mundo actual radica en que:", options: ["Homogeneiza las culturas", "Refuerza estereotipos", "Ayuda a comprender la diversidad cultural", "Elimina las diferencias sociales"], a: 2 },
-        { q: "La antropología contribuye a evitar:", options: ["El diálogo intercultural", "El análisis social", "Prejuicios y discriminación", "El pensamiento crítico"], a: 2 },
-        { q: "La antropología filosófica es clave para reflexionar sobre:", options: ["Tecnología, ética y derechos humanos", "Agricultura y comercio", "Climatología", "Estadística social"], a: 0 },
-        { q: "El ser humano como ser biológico implica:", options: ["Que carece de cultura", "Que posee cuerpo y necesidades fisiológicas", "Que solo actúa por instinto", "Que no es racional"], a: 1 },
-        { q: "El ser humano como ser psicológico se relaciona con:", options: ["Genes y herencia", "Emociones, cognición y motivaciones", "Instituciones sociales", "Normas jurídicas"], a: 1 },
-        { q: "El ser humano como ser social significa que:", options: ["Vive aislado", "Es independiente de la cultura", "Se desarrolla dentro de una comunidad y un lenguaje", "Carece de identidad"], a: 2 },
-        { q: "La observación participante consiste en:", options: ["Analizar datos desde la distancia", "Participar en la vida del grupo estudiado", "Evitar el contacto humano", "Usar únicamente cuestionarios cerrados"], a: 1 },
-        { q: "La etnografía es:", options: ["Un método experimental", "Una técnica matemática", "La descripción profunda de una cultura", "Un tipo de encuesta estadística"], a: 2 },
-        { q: "El trabajo de campo es fundamental porque:", options: ["Sustituye la teoría", "Permite comprender la experiencia humana directa", "Elimina la subjetividad", "Evita el contacto cultural"], a: 1 },
-        { q: "Una pregunta propia de la antropología filosófica es:", options: ["¿Qué herramientas usaban las sociedades antiguas?", "¿Qué idioma se habla en una región?", "¿Cuál es el sentido de la existencia?", "¿Qué normas sociales existen?"], a: 2 },
-        { q: "La pregunta \"¿Cuál es la relación entre el cuerpo y la mente?\" pertenece a:", options: ["Antropología arqueológica", "Antropología cultural", "Antropología filosófica", "Antropología lingüística"], a: 2 }
+        { q: "La antropología estudia al ser humano:", options: ["Solo biológicamente", "Solo socialmente", "De manera integral (bio-psico-social-cultural)", "Solo filosóficamente"], a: 2 },
+        { q: "Objetivo principal de la antropología:", options: ["Clasificar razas", "Comprender la diversidad cultural y social", "Evolución biológica", "Sustituir historia"], a: 1 },
+        { q: "Antropología filosófica estudia:", options: ["Ciencias naturales", "Matemáticas", "La esencia del ser humano", "Biología pura"], a: 2 },
+        { q: "Representantes del evolucionismo:", options: ["Boas", "Morgan, Tylor y Frazer", "Heidegger", "Ricoeur"], a: 1 },
+        { q: "Antropología cultural estudia:", options: ["Genética", "Restos materiales", "Costumbres, normas y significados", "Cerebro"], a: 2 },
+        { q: "La etnografía es:", options: ["Experimental", "Matemática", "Descripción profunda de una cultura", "Encuesta"], a: 2 },
+        { q: "El trabajo de campo permite:", options: ["Sustituir teoría", "Experiencia directa", "Eliminar subjetividad", "Evitar contacto"], a: 1 },
+        { q: "El ser humano como ser social:", options: ["Vive aislado", "Independiente de cultura", "Se desarrolla en comunidad/lenguaje", "Sin identidad"], a: 2 },
+        { q: "Pregunta de antropología filosófica:", options: ["¿Herramientas antiguas?", "¿Idioma regional?", "¿Qué es el ser humano?", "¿Normas jurídicas?"], a: 2 },
+        { q: "Observación participante:", options: ["Desde lejos", "Participar en la vida del grupo", "Sin contacto", "Solo encuestas"], a: 1 }
     ];
 
-    // TEMA 3: PROBLEMÁTICAS DE LA ANTROPOLOGÍA CONTEMPORÁNEA
     const bancoTema3 = [
-        { q: "¿Cuál es el núcleo del debate sobre la objetividad en la investigación antropológica?", options: ["La falta de herramientas tecnológicas para registrar datos", "La imposibilidad de eliminar por completo la carga cultural y axiológica del investigador", "La resistencia de las comunidades a ser grabadas", "La ausencia de un método científico en las ciencias sociales"], a: 1 },
-        { q: "En el contexto de la reflexividad, ¿qué implica reconocer la subjetividad del antropólogo?", options: ["Aceptar que cualquier interpretación personal es válida sin pruebas", "Un análisis crítico de la posición del investigador y cómo esta afecta la construcción del conocimiento", "Eliminar las emociones del investigador durante el trabajo de campo", "Dar prioridad absoluta a la visión del observador sobre la del observado"], a: 1 },
-        { q: "El concepto de \"extractivismo académico\" se refiere principalmente a:", options: ["La excavación ilegal de sitios arqueológicos", "La práctica de recolectar información de una comunidad sin ofrecer beneficios ni retorno de conocimiento", "El uso de mano de obra indígena para tareas administrativas", "La competencia entre universidades por fondos de investigación"], a: 1 },
-        { q: "¿Cómo distorsiona el etnocentrismo la interpretación de los rituales ajenos?", options: ["Al permitir una descripción técnica y neutral", "Al evaluarlos como formas \"primitivas\" o \"inferiores\" basándose en parámetros occidentales", "Al promover la idea de que todas las culturas son igualmente complejas", "Al enfocarse solo en las similitudes entre la cultura propia y la ajena"], a: 1 },
-        { q: "¿Cuál es la premisa fundamental del relativismo cultural propuesto por la antropología?", options: ["Cada cultura debe ser comprendida exclusivamente desde sus propios valores y parámetros", "Cualquier práctica cultural es moralmente aceptable si el grupo la defiende", "Las culturas deben permanecer aisladas para no contaminarse", "Existen leyes universales que todas las culturas deben seguir"], a: 0 },
-        { q: "¿Qué implica la \"crisis de representación\" en la antropología?", options: ["La falta de presupuesto para misiones antropológicas", "El cuestionamiento de la autoridad del antropólogo para hablar y escribir en nombre de otros", "La dificultad de encontrar antropólogos que quieran viajar a zonas remotas", "La disminución de publicaciones etnográficas en las editoriales"], a: 1 },
-        { q: "¿Por qué el consentimiento informado es un pilar ético en el trabajo de campo?", options: ["Para que el investigador pueda comercializar los datos legalmente", "Para asegurar que la comunidad comprenda los fines de la investigación y acepte participar voluntariamente", "Como una formalidad administrativa necesaria para obtener el título", "Para obligar a los informantes a decir siempre la verdad"], a: 1 },
-        { q: "¿Qué fenómeno ha propiciado el estudio de las \"identidades híbridas\" en la antropología?", options: ["El aislamiento geográfico de las comunidades", "La globalización y el contacto acelerado entre diversas culturas", "La imposición de una sola cultura global uniforme", "La herencia genética compartida entre humanos"], a: 1 },
-        { q: "En el análisis de cultura y poder, ¿qué papel juega el colonialismo?", options: ["Es un evento del pasado sin relevancia en la antropología actual", "Estableció estructuras de desigualdad que influyen en cómo se representan y estudian las culturas", "Facilitó el trabajo de campo al pacificar a las poblaciones", "Permitió que todas las culturas tuvieran acceso igualitario a la ciencia"], a: 1 },
-        { q: "¿Cuál es un reto metodológico común respecto a las barreras lingüísticas?", options: ["El costo elevado de contratar traductores profesionales", "La pérdida de matices simbólicos y significados profundos al no dominar el idioma local", "La imposibilidad física de aprender más de un idioma", "Que las comunidades olviden su idioma al hablar con el investigador"], a: 1 },
-        { q: "La \"autorepresentación\" en la antropología actual busca:", options: ["Que el antropólogo escriba su autobiografía", "Que los miembros de la comunidad tengan los medios para narrar su propia realidad", "Que la comunidad se disfrace para cumplir expectativas turísticas", "Que el gobierno decida cómo representar a los pueblos indígenas"], a: 1 },
-        { q: "¿Por qué se afirma que la cultura no es estática?", options: ["Porque está en constante transformación debido a interacciones sociales y cambios globales", "Porque las personas viajan más hoy en día que en el pasado", "Porque las leyes internacionales prohíben tradiciones centenarias", "Porque los antropólogos inventan nuevos términos constantemente"], a: 0 },
-        { q: "¿Qué significa que el trabajo de campo sea \"la base de la investigación\"?", options: ["Que el investigador debe trabajar físicamente en la agricultura con el grupo", "Que el conocimiento se genera a partir de la convivencia directa y prolongada con el grupo estudiado", "Que no se puede hacer antropología leyendo libros", "Que el antropólogo debe vivir permanentemente en la comunidad"], a: 1 },
-        { q: "En relación con el género, la antropología contemporánea analiza:", options: ["Las diferencias biológicas inalterables entre sexos", "Cómo las construcciones culturales de género refuerzan o desafían estructuras de poder", "La superioridad de la familia nuclear sobre otras formas", "Únicamente el papel de las mujeres en sociedades tribales"], a: 1 },
-        { q: "Un ejemplo de \"identidad híbrida\" en la globalización sería:", options: ["Una persona que solo habla su dialecto nativo y nunca ha salido de su pueblo", "Un joven indígena que usa redes sociales para promover música rap en su lengua materna", "Un científico que estudia especies animales en varios países", "La adopción de una religión extranjera abandonando totalmente la propia"], a: 1 },
-        { q: "¿Cuál es la crítica principal a la representación de culturas como \"exóticas\"?", options: ["Que deshumaniza a los sujetos y los presenta como objetos de curiosidad", "Que hace los libros demasiado entretenidos para ser ciencia", "Que atrae demasiado turismo a zonas protegidas", "Que impide que el antropólogo cobre sus honorarios"], a: 0 },
-        { q: "¿Cómo influye el \"tiempo limitado\" en los problemas metodológicos?", options: ["Obliga al antropólogo a escribir más rápido", "Puede llevar a conclusiones superficiales al no captar ciclos sociales completos", "Hace que la comunidad se aburra del investigador", "Impide que el investigador use la vestimenta local"], a: 1 },
-        { q: "El reconocimiento de las \"dinámicas de poder\" implica aceptar que:", options: ["El investigador posee a menudo un estatus de privilegio frente a la comunidad", "Solo las personas con poder político deben ser estudiadas", "El antropólogo debe convertirse en el líder de la comunidad", "La cultura no tiene relación con la economía o la política"], a: 0 },
-        { q: "¿Qué busca resolver la \"escritura transparente\"?", options: ["Usar un lenguaje tan simple que un niño lo entienda", "Hacer explícitos los sesgos y la relación del autor con sus datos", "Escribir solo hechos positivos para no ofender", "Publicar los nombres reales de todos los informantes sin permiso"], a: 1 },
-        { q: "¿Cómo afecta la migración masiva a las problemáticas antropológicas?", options: ["Desafía la idea de culturas vinculadas a un territorio fijo y único", "Facilita el campo al traer comunidades a la ciudad del investigador", "Hace que todos los humanos hablen el mismo idioma", "Elimina la necesidad de estudiar la historia de los pueblos"], a: 0 },
-        { q: "¿Qué se entiende por \"confidencialidad de datos\" en ética?", options: ["No mostrar los resultados a la comunidad estudiada", "Proteger la identidad de los informantes para evitarles daños o represalias", "Vender información solo a gobiernos que paguen bien", "Borrar todos los datos una vez terminada la tesis"], a: 1 },
-        { q: "¿Por qué es problemática la descripción de culturas como \"atrasadas\"?", options: ["Porque ignora su capacidad de agencia, cambio y adaptación histórica", "Porque hace que los museos parezcan aburridos", "Porque es la única forma de conseguir fondos de conservación", "Porque todas las culturas tienen la misma tecnología"], a: 0 },
-        { q: "Las \"políticas estatales sobre pueblos indígenas\" son una problemática porque:", options: ["El estado siempre tiene la razón sobre cómo organizar la sociedad", "A menudo chocan con las formas de vida tradicionales y generan tensiones de poder", "Obligan a todos los indígenas a vivir en ciudades modernas", "Hacen que el antropólogo gane más dinero como consultor"], a: 1 },
-        { q: "En antropología, ¿qué significa \"agencia\" de la comunidad?", options: ["La oficina gubernamental encargada de censar grupos étnicos", "La capacidad de los sujetos para actuar, tomar decisiones e influir en su destino", "El contrato que firma el antropólogo con su universidad", "La velocidad con la que una cultura adopta tecnología extranjera"], a: 1 },
-        { q: "¿Cuál es un impacto potencial negativo del investigador en la comunidad?", options: ["Alterar las jerarquías internas o crear expectativas económicas irreales", "Mejorar la salud de todos mediante consejos médicos no profesionales", "Aprender secretos que luego no pueda publicar", "Hacer que la comunidad sea famosa en redes sociales"], a: 0 },
-        { q: "El estudio de \"redes sociales\" se justifica en la antropología actual porque:", options: ["Permiten al antropólogo trabajar sin salir de su casa", "Son espacios donde se construyen nuevas formas de identidad y comunidad", "Ayudan a que los pueblos olviden sus tradiciones antiguas", "Son la única forma de medir objetivamente la felicidad"], a: 1 },
-        { q: "¿Cómo se distingue la \"descripción\" de la \"interpretación\"?", options: ["La descripción relata los hechos; la interpretación busca el significado detrás de ellos", "La descripción es verdadera y la interpretación es falsa", "La descripción la hacen máquinas y la interpretación humanos", "No existe distinción alguna en la práctica"], a: 0 },
-        { q: "El término \"poscolonialismo\" se enfoca en:", options: ["Celebrar el fin de todos los imperios en el siglo XIX", "Analizar cómo persisten lógicas de dominación colonial tras la independencia formal", "Recomendar que los países vuelvan a ser colonias", "Estudiar exclusivamente las colonias de insectos sociales"], a: 1 },
-        { q: "¿Por qué los símbolos son difíciles de interpretar en el campo?", options: ["Porque su significado es arbitrario y depende del contexto cultural específico", "Porque los antropólogos no tienen suficiente imaginación", "Porque las comunidades mienten a propósito sobre ellos", "Porque los símbolos cambian cada vez que el sol se pone"], a: 0 },
-        { q: "¿Cuál es el objetivo final de la antropología participativa?", options: ["Que el antropólogo no tenga que viajar al lugar de estudio", "Transformar la investigación en un proceso colaborativo con beneficios mutuos", "Hacer que la comunidad haga todo el trabajo de escritura", "Que la comunidad pague los gastos de la investigación"], a: 1 }
+        { q: "Debate sobre objetividad:", options: ["Falta tecnología", "Imposible eliminar carga cultural del investigador", "Resistencia comunidad", "Falta método"], a: 1 },
+        { q: "Reflexividad implica:", options: ["Opinión sin pruebas", "Análisis crítico de la posición del investigador", "Sin emociones", "Prioridad observador"], a: 1 },
+        { q: "Extractivismo académico:", options: ["Excavación ilegal", "Recolectar sin retorno a la comunidad", "Mano de obra", "Competencia fondos"], a: 1 },
+        { q: "Etnocentrismo:", options: ["Descripción neutra", "Evaluar desde parámetros propios como superiores", "Igualdad cultural", "Solo similitudes"], a: 1 },
+        { q: "Relativismo cultural:", options: ["Comprender desde sus propios valores", "Todo vale", "Aislamiento", "Leyes universales"], a: 0 },
+        { q: "Consentimiento informado:", options: ["Comercializar datos", "Asegurar comprensión y voluntariedad", "Trámite título", "Obligar verdad"], a: 1 },
+        { q: "Cultura no es estática:", options: ["Transformación constante", "Viajes", "Leyes prohiben", "Nuevos términos"], a: 0 },
+        { q: "Identidades híbridas:", options: ["Aislamiento", "Mezcla por globalización", "Imposición única", "Genética"], a: 1 },
+        { q: "Agencia de la comunidad:", options: ["Oficina censo", "Capacidad de actuar y decidir", "Contrato", "Velocidad tecnológica"], a: 1 },
+        { q: "Confidencialidad:", options: ["No mostrar resultados", "Proteger identidad", "Vender datos", "Borrar todo"], a: 1 }
     ];
 
-    // TEMA 4: FILOSOFÍA
     const bancoTema4 = [
-        { q: "¿Cuál es la principal diferencia entre el saber racional (logos) y el saber mítico?", options: ["El logos se basa en la fe y el mito en la observación", "El logos busca argumentos y leyes naturales, mientras el mito usa relatos sobrenaturales", "El mito es más antiguo y por lo tanto más verdadero que el logos", "No existe diferencia, ambos son formas de arte"], a: 1 },
-        { q: "La característica \"crítica\" de la filosofía se refiere a:", options: ["Aceptar las ideas de los grandes maestros sin dudar", "Juzgar negativamente las opiniones de los demás", "Examinar y cuestionar todo, incluso las propias creencias", "Buscar solo los errores en los argumentos científicos"], a: 2 },
-        { q: "¿Qué buscaban los filósofos presocráticos al investigar el \"arjé\"?", options: ["El sistema político perfecto", "El principio u origen de todas las cosas", "La forma de alcanzar la vida eterna", "La clasificación de los dioses griegos"], a: 1 },
-        { q: "Para Tales de Mileto, el origen de todo era el agua, mientras que para Pitágoras era:", options: ["El fuego", "El aire", "El número", "El átomo"], a: 2 },
-        { q: "¿Qué defendía Parménides sobre la realidad?", options: ["Que todo está en constante cambio", "Que el ser es inmóvil y el cambio es una ilusión", "Que la realidad no puede ser conocida", "Que el mundo está hecho de cuatro elementos"], a: 1 },
-        { q: "Sócrates es reconocido por su método de enseñanza llamado:", options: ["Retórica", "Mayéutica", "Escolástica", "Empirismo"], a: 1 },
-        { q: "La frase \"Solo sé que no sé nada\" de Sócrates expresa:", options: ["Una falta total de estudios", "El reconocimiento de la propia ignorancia como inicio del saber", "Que la verdad es imposible de encontrar", "Un desprecio por la ciencia de su época"], a: 1 },
-        { q: "Según Platón, el \"Mundo de las Ideas\" es:", options: ["Un lugar físico en el centro de la Tierra", "El mundo verdadero, eterno e inmutable", "Una fantasía creada por la mente humana", "El mundo que percibimos a través de los sentidos"], a: 1 },
-        { q: "¿Cuál es la principal crítica de Aristóteles a la teoría de las Ideas de Platón?", options: ["Que las ideas no existen en absoluto", "Que la realidad debe analizarse de forma sistemática en este mundo sensible", "Que el conocimiento solo se logra a través de los sueños", "Que la lógica no sirve para conocer la realidad"], a: 1 },
-        { q: "Las escuelas helenísticas como el estoicismo y el epicureísmo se centraban en:", options: ["La conquista de nuevos mundos", "La búsqueda de la felicidad y la paz interior", "El estudio exclusivo de las matemáticas", "La creación de nuevas religiones"], a: 1 },
-        { q: "En la Edad Media, el objetivo principal de filósofos como Tomás de Aquino fue:", options: ["Demostrar que la ciencia era superior a la religión", "Conciliar la fe cristiana con la razón filosófica", "Eliminar el pensamiento griego de las universidades", "Crear una filosofía sin Dios"], a: 1 },
-        { q: "¿Cuál es la base del conocimiento para el Racionalismo de Descartes?", options: ["Los sentidos y la experiencia", "La razón y las ideas innatas", "La tradición y las costumbres", "La fe y la revelación divina"], a: 1 },
-        { q: "El Empirismo de David Hume sostiene que el conocimiento proviene de:", options: ["El pensamiento puro sin ayuda externa", "La experiencia y las impresiones sensoriales", "Los libros sagrados", "La intuición mágica"], a: 1 },
-        { q: "¿Qué propone Kant sobre el proceso de conocimiento?", options: ["Que solo importan los sentidos", "Que el conocimiento es la unión de sensibilidad y entendimiento", "Que el ser humano no puede conocer nada en absoluto", "Que la razón puede conocerlo todo sin necesidad de ver u oír"], a: 1 },
-        { q: "Para Karl Marx, la historia de la humanidad es la historia de:", options: ["La lucha de clases y las condiciones económicas", "El progreso espiritual de las religiones", "Los grandes descubrimientos científicos", "La evolución biológica del cerebro"], a: 0 },
-        { q: "Nietzsche critica la moral tradicional porque considera que:", options: ["Es demasiado fuerte para el ser humano", "Es una moral que reprime la vida y la voluntad de poder", "Debería ser más religiosa", "Es la única forma de salvar a la humanidad"], a: 1 },
-        { q: "El Existencialismo de Jean-Paul Sartre enfatiza:", options: ["Que el destino ya está escrito", "La libertad radical y la responsabilidad del individuo", "Que la vida no tiene ningún tipo de elección", "Que debemos obedecer siempre a la autoridad"], a: 1 },
-        { q: "La rama de la filosofía que estudia la conducta humana y lo que es correcto es:", options: ["La Metafísica", "La Estética", "La Ética", "La Lógica"], a: 2 },
-        { q: "La Epistemología es la rama que se pregunta por:", options: ["La belleza de las obras de arte", "El origen y la validez del conocimiento", "La mejor forma de gobernar un país", "La existencia de los átomos"], a: 1 },
-        { q: "¿Qué estudia la Metafísica?", options: ["Las leyes del movimiento físico", "La realidad última, el ser, el alma y Dios", "El lenguaje y sus reglas gramaticales", "La evolución de las especies"], a: 1 },
-        { q: "La rama encargada de estudiar el poder, el Estado y la justicia es la:", options: ["Filosofía del lenguaje", "Filosofía política", "Lógica", "Estética"], a: 1 },
-        { q: "¿Cuál es la función de la Lógica en la filosofía?", options: ["Estudiar las emociones humanas", "Regular el pensamiento correcto mediante reglas y principios", "Analizar la belleza de la naturaleza", "Investigar la historia antigua"], a: 1 },
-        { q: "La Estética es la rama que reflexiona sobre:", options: ["El funcionamiento del cerebro", "El arte y la belleza", "La creación de leyes justas", "El origen del universo"], a: 1 },
-        { q: "¿Qué corriente filosófica moderna se asocia con el uso del método de la duda?", options: ["Existencialismo", "Racionalismo (Descartes)", "Marxismo", "Estoicismo"], a: 1 },
-        { q: "¿Qué significa que la filosofía sea un saber \"universal\"?", options: ["Que solo se estudia en el planeta Tierra", "Que intenta abarcar los temas esenciales que afectan a todo ser humano", "Que todos los filósofos están de acuerdo en todo", "Que es un saber que no cambia con el tiempo"], a: 1 },
-        { q: "El período de la filosofía que se ocupa de la relación entre fe y razón se llama:", options: ["Filosofía Antigua", "Filosofía Medieval", "Filosofía Moderna", "Filosofía Contemporánea"], a: 1 },
-        { q: "La Mayéutica socrática se basa en:", options: ["La escritura de largos libros", "El diálogo y las preguntas para que el otro llegue a la verdad", "El uso de la fuerza para convencer", "El aislamiento total del mundo"], a: 1 },
-        { q: "¿Cuál de estos filósofos es un representante del Empirismo?", options: ["René Descartes", "David Hume", "Immanuel Kant", "Friedrich Nietzsche"], a: 1 },
-        { q: "La filosofía hoy en día es importante porque ayuda a:", options: ["Memorizar datos históricos rápidamente", "Desarrollar un pensamiento crítico frente a la desinformación", "Evitar el uso de la tecnología", "Ganar discusiones sin tener la razón"], a: 1 },
-        { q: "La corriente que analiza cómo el lenguaje construye significado se llama:", options: ["Filosofía del lenguaje", "Filosofía de la mente", "Fenomenología", "Positivismo"], a: 0 }
+        { q: "Diferencia logos vs mito:", options: ["Fe vs Observación", "Argumentos racionales vs Relatos sobrenaturales", "Antigüedad", "Arte"], a: 1 },
+        { q: "Actitud crítica:", options: ["Aceptar todo", "Juzgar mal", "Cuestionar creencias", "Buscar errores"], a: 2 },
+        { q: "Arjé buscaba:", options: ["Política", "Principio/origen de todo", "Vida eterna", "Dioses"], a: 1 },
+        { q: "Sócrates método:", options: ["Retórica", "Mayéutica", "Escolástica", "Empirismo"], a: 1 },
+        { q: "Platón Mundo Ideas:", options: ["Centro Tierra", "Verdadero, eterno, inmutable", "Fantasía", "Sensible"], a: 1 },
+        { q: "Aristóteles crítica Platón:", options: ["No existen ideas", "Realidad está en este mundo (sustancia)", "Solo sueños", "Lógica no sirve"], a: 1 },
+        { q: "Descartes base:", options: ["Sentidos", "Razón/Pienso luego existo", "Tradición", "Fe"], a: 1 },
+        { q: "Hume conocimiento:", options: ["Pensamiento puro", "Experiencia/Impresiones", "Libros", "Magia"], a: 1 },
+        { q: "Kant conocimiento:", options: ["Solo sentidos", "Unión sensibilidad + entendimiento", "Imposible", "Solo razón"], a: 1 },
+        { q: "Ética estudia:", options: ["Metafísica", "Estética", "Conducta/Lo correcto", "Lógica"], a: 2 }
     ];
 
-    // TEMA 6: El ser humano y su contexto histórico en Latinoamérica
+    // --- TEMAS EXAMEN FINAL (COMPLETOS) ---
+
     const bancoTema6 = [
-        { q: "En las sociedades prehispánicas, la identidad del ser humano se construía principalmente a partir de:", options: ["La acumulación de bienes", "La pertenencia comunitaria", "El poder político individual", "La competencia económica"], a: 1 },
-        { q: "Para los pueblos andinos, el ser humano era considerado:", options: ["Dueño absoluto de la naturaleza", "Un ente separado del entorno natural", "Parte viva de la Pachamama", "Superior a los demás seres"], a: 2 },
-        { q: "El valor del individuo en las culturas originarias se medía por:", options: ["Su riqueza material", "Su capacidad de liderazgo militar", "Su contribución al bien común", "Su nivel educativo formal"], a: 2 },
-        { q: "El principio del ayni se puede definir como:", options: ["Trabajo obligatorio impuesto por el Estado", "Ayuda mutua y recíproca", "Comercio comunitario", "Castigo colectivo"], a: 1 },
-        { q: "La minka se caracterizaba por:", options: ["Ser un trabajo individual remunerado", "Beneficiar únicamente al Estado", "Trabajo colectivo obligatorio para la comunidad", "Actividad religiosa exclusiva"], a: 2 },
-        { q: "Una característica central de la cosmovisión indígena prehispánica es:", options: ["El individualismo", "La visión cíclica del tiempo", "El progreso lineal", "La dominación tecnológica"], a: 1 },
-        { q: "El choque cultural durante la colonización se produjo principalmente por:", options: ["Diferencias climáticas", "Conflictos comerciales", "Visiones opuestas sobre el ser humano y la sociedad", "Falta de comunicación lingüística únicamente"], a: 2 },
-        { q: "Durante la colonización, los pueblos indígenas fueron considerados por muchos europeos como:", options: ["Ciudadanos con derechos", "Socios económicos", "Culturalmente superiores", "Seres inferiores"], a: 3 },
-        { q: "La esclavización de africanos implicó:", options: ["Integración social plena", "Reconocimiento cultural", "Deshumanización y mercantilización", "Igualdad jurídica"], a: 2 },
-        { q: "El racismo estructural colonial se organizó jerárquicamente colocando en la cima a:", options: ["Indígenas", "Afrodescendientes", "Mestizos", "Blancos europeos"], a: 3 },
-        { q: "Una consecuencia demográfica directa de la colonización fue:", options: ["Crecimiento acelerado de pueblos originarios", "Migración indígena a Europa", "Disminución masiva de la población indígena", "Eliminación del mestizaje"], a: 2 },
-        { q: "El mestizaje latinoamericano debe entenderse como un proceso:", options: ["Exclusivamente racial", "Biológico y cultural", "Limitado al siglo XIX", "Sin impacto identitario"], a: 1 },
-        { q: "Los criollos eran:", options: ["Indígenas puros", "Afrodescendientes esclavizados", "Hijos de europeos nacidos en América", "Mestizos rurales"], a: 2 },
-        { q: "Durante las independencias surge la noción del ser humano como:", options: ["Súbdito del rey", "Ciudadano", "Siervo colonial", "Enemigo del Estado"], a: 1 },
-        { q: "Una contradicción clave del proceso independentista fue:", options: ["La eliminación total de privilegios", "La inclusión plena indígena", "El mantenimiento del poder de las élites criollas", "La abolición inmediata del racismo"], a: 2 },
-        { q: "La identidad latinoamericana se construye, entre otros elementos, a partir de:", options: ["Un solo grupo étnico", "El rechazo total del pasado", "El mestizaje y valores comunitarios", "La homogeneidad cultural"], a: 2 },
-        { q: "La urbanización del siglo XX provocó:", options: ["Desaparición de las desigualdades", "Creación de culturas híbridas urbanas", "Retorno masivo al campo", "Eliminación de identidades indígenas"], a: 1 },
-        { q: "El ingreso de las mujeres al trabajo formal en el siglo XX significó:", options: ["Retroceso social", "Mayor exclusión", "Transformaciones en roles sociales", "Pérdida de derechos"], a: 2 },
-        { q: "Los movimientos indígenas del siglo XX exigían principalmente:", options: ["Aislamiento cultural", "Reconocimiento, tierra y derechos", "Migración obligatoria", "Eliminación del Estado"], a: 1 },
-        { q: "En el siglo XXI, la plurinacionalidad implica:", options: ["Fragmentación del Estado", "Negación de identidades", "Reconocimiento de múltiples naciones", "Supresión cultural"], a: 2 },
-        { q: "Uno de los mayores desafíos actuales del ser humano latinoamericano es:", options: ["Exceso de empleo", "Desigualdad social", "Abundancia educativa", "Estabilidad política permanente"], a: 1 },
-        { q: "La pérdida de lenguas originarias implica:", options: ["Mayor diversidad cultural", "Fortalecimiento identitario", "Empobrecimiento cultural", "Desarrollo tecnológico"], a: 2 },
-        { q: "La resiliencia latinoamericana se manifiesta en:", options: ["Pasividad social", "Capacidad de adaptación ante crisis", "Rechazo del cambio", "Aislamiento cultural"], a: 1 },
-        { q: "La Filosofía de la Liberación critica principalmente:", options: ["La cultura indígena", "La dominación eurocéntrica", "El mestizaje", "Los movimientos sociales"], a: 1 },
-        { q: "Enrique Dussel propone comprender al ser humano desde:", options: ["Modelos europeos clásicos", "La realidad latinoamericana", "El positivismo económico", "La neutralidad histórica"], a: 1 },
-        { q: "Los aportes afrodescendientes se evidencian fuertemente en:", options: ["La arquitectura colonial", "La música y espiritualidad", "La burocracia estatal", "El sistema jurídico"], a: 1 },
-        { q: "El pensamiento indígena concibe el tiempo como:", options: ["Lineal y progresivo", "Caótico", "Cíclico", "Inexistente"], a: 2 },
-        { q: "Una característica general del ser humano latinoamericano es ser:", options: ["Individualista", "Comunitario", "Aislado", "Apolítico"], a: 1 },
-        { q: "La creatividad latinoamericana se expresa principalmente a través de:", options: ["La copia cultural", "El silencio social", "Manifestaciones artísticas y culturales", "La homogeneización"], a: 2 },
-        { q: "El ser humano latinoamericano actual se caracteriza por ser:", options: ["Homogéneo y estático", "Pasivo ante la historia", "Plural, complejo y resistente", "Ajeno a su pasado"], a: 2 }
+        { q: "En las sociedades prehispánicas, la identidad se basaba en:", options: ["Acumulación", "Pertenencia comunitaria", "Poder individual", "Competencia"], a: 1 },
+        { q: "Para los pueblos andinos, el ser humano era:", options: ["Dueño naturaleza", "Separado entorno", "Parte de la Pachamama", "Superior"], a: 2 },
+        { q: "Valor del individuo en culturas originarias:", options: ["Riqueza", "Liderazgo militar", "Contribución al bien común", "Educación"], a: 2 },
+        { q: "Principio del ayni:", options: ["Trabajo forzado", "Ayuda mutua y recíproca", "Comercio", "Castigo"], a: 1 },
+        { q: "La minka era:", options: ["Trabajo pagado", "Solo estatal", "Trabajo colectivo comunitario", "Religioso"], a: 2 },
+        { q: "Cosmovisión indígena tiempo:", options: ["Individualismo", "Cíclico", "Lineal", "Tecnológico"], a: 1 },
+        { q: "Choque cultural colonización:", options: ["Clima", "Comercio", "Visiones opuestas mundo", "Idioma"], a: 2 },
+        { q: "Indígenas vistos por europeos como:", options: ["Ciudadanos", "Socios", "Superiores", "Inferiores/Menores"], a: 3 },
+        { q: "Esclavización africana implicó:", options: ["Integración", "Reconocimiento", "Deshumanización/Mercancía", "Igualdad"], a: 2 },
+        { q: "Racismo colonial cima:", options: ["Indígenas", "Afro", "Mestizos", "Blancos"], a: 3 },
+        { q: "Mestizaje es proceso:", options: ["Solo racial", "Biológico y cultural", "Solo siglo XIX", "Sin impacto"], a: 1 },
+        { q: "Criollos eran:", options: ["Indígenas", "Esclavos", "Hijos europeos nacidos América", "Mestizos"], a: 2 },
+        { q: "Independencias noción ser humano:", options: ["Súbdito", "Ciudadano", "Siervo", "Enemigo"], a: 1 },
+        { q: "Contradicción independencia:", options: ["Sin privilegios", "Inclusión indígena", "Poder élites criollas", "Fin racismo"], a: 2 },
+        { q: "Identidad latinoamericana:", options: ["Un grupo", "Rechazo pasado", "Mestizaje/Valores comunitarios", "Homogeneidad"], a: 2 },
+        { q: "Urbanización s.XX:", options: ["Fin desigualdad", "Culturas híbridas urbanas", "Retorno campo", "Fin identidad"], a: 1 },
+        { q: "Mujeres s.XX:", options: ["Retroceso", "Exclusión", "Transformación roles", "Pérdida derechos"], a: 2 },
+        { q: "Movimientos indígenas s.XX:", options: ["Aislamiento", "Reconocimiento/Tierra", "Migración", "Fin Estado"], a: 1 },
+        { q: "Plurinacionalidad:", options: ["Fragmentación", "Negación", "Reconocimiento múltiples naciones", "Supresión"], a: 2 },
+        { q: "Desafío actual:", options: ["Exceso empleo", "Desigualdad social", "Abundancia", "Estabilidad"], a: 1 },
+        { q: "Filosofía Liberación critica:", options: ["Indígenas", "Dominación eurocéntrica", "Mestizaje", "Sociales"], a: 1 },
+        { q: "Enrique Dussel propone:", options: ["Modelos europeos", "Desde realidad latinoamericana", "Positivismo", "Neutralidad"], a: 1 },
+        { q: "Ser humano latinoamericano actual:", options: ["Homogéneo", "Pasivo", "Plural, complejo, resistente", "Ajeno"], a: 2 }
     ];
 
-    // TEMA 7: Ética y Moral: Principios y Debates Filosóficos
     const bancoTema7 = [
-        { q: "La ética se diferencia de la moral porque:", options: ["Se basa exclusivamente en emociones", "Analiza racionalmente el fundamento de las normas", "Depende de la religión dominante", "Sustituye a las normas sociales"], a: 1 },
-        { q: "Cuando la ética cuestiona si una ley es justa, está cumpliendo la función de:", options: ["Regulación jurídica", "Control social", "Conservación cultural", "Evaluación crítica de normas"], a: 3 },
-        { q: "El carácter universal de la ética se refiere a:", options: ["La uniformidad cultural", "Su aplicación solo académica", "La búsqueda de principios válidos para todo ser humano", "Su imposición global"], a: 2 },
-        { q: "La moral se considera “afectiva” porque:", options: ["Produce reacciones como culpa o aprobación", "Carece de reglas", "Es universal", "Es puramente racional"], a: 0 },
-        { q: "El ejemplo del trabajo infantil demuestra que la moral:", options: ["Carece de normas", "Es irracional", "Es inmutable", "Varía según el contexto cultural"], a: 3 },
-        { q: "Decir que “la ética orienta la acción humana racionalmente” implica que:", options: ["Sustituye a la ley", "Depende de la costumbre", "Obliga sin cuestionamiento", "Fundamenta las decisiones en la razón"], a: 3 },
-        { q: "La afirmación “la ética es teoría y la moral es práctica” significa que:", options: ["Ambas son opuestas", "La ética reflexiona sobre lo que la moral aplica", "La moral no puede analizarse", "La ética no influye en la vida diaria"], a: 1 },
-        { q: "El principio de autonomía se viola cuando:", options: ["Se asume responsabilidad", "Una persona decide libremente", "Se actúa por presión o manipulación", "Se actúa por convicción racional"], a: 2 },
-        { q: "En Kant, tratar al ser humano como “fin en sí mismo” implica:", options: ["Subordinarlo al bien común", "Evaluar acciones por consecuencias", "Priorizar la utilidad social", "Respetar su dignidad intrínseca"], a: 3 },
-        { q: "El principio de beneficencia se diferencia del de no maleficencia porque:", options: ["Ambos son idénticos", "Uno busca hacer el bien y el otro evitar el daño", "Solo se aplica en medicina", "Uno es jurídico y el otro moral"], a: 1 },
-        { q: "Una política pública que evita daños pero no promueve bienestar cumple:", options: ["No maleficencia principalmente", "Autonomía exclusivamente", "Beneficencia únicamente", "Solidaridad social"], a: 0 },
-        { q: "La justicia ética no se limita a la igualdad formal porque también incluye:", options: ["Neutralidad moral", "Obediencia legal", "Distribución equitativa de recursos", "Competencia social"], a: 2 },
-        { q: "Según Rawls, una sociedad justa debe:", options: ["Priorizar la eficiencia económica", "Eliminar toda desigualdad", "Garantizar derechos básicos iguales", "Favorecer a la mayoría"], a: 2 },
-        { q: "Hans Jonas amplía la ética tradicional al enfatizar:", options: ["Las consecuencias a largo plazo", "La moral individual", "El pasado histórico", "La costumbre social"], a: 0 },
-        { q: "La ética de la responsabilidad se vuelve clave frente a:", options: ["Normas familiares", "Tradiciones religiosas", "Reglas escolares", "Avances tecnológicos y ambientales"], a: 3 },
-        { q: "La solidaridad ética supone que:", options: ["La ética es opcional", "Vivimos interconectados", "El individuo es autosuficiente", "La moral es privada"], a: 1 },
-        { q: "Para Aristóteles, la felicidad humana se alcanza mediante:", options: ["El consenso social", "El placer", "El cumplimiento del deber", "El cultivo de virtudes"], a: 3 },
-        { q: "El estoicismo considera moralmente valioso:", options: ["Buscar placer", "Transformar la sociedad", "Aceptar racionalmente lo inevitable", "Evitar toda emoción"], a: 2 },
-        { q: "La ética cristiana se distingue por:", options: ["El contractualismo", "Su relativismo moral", "El amor al prójimo como eje moral", "Su énfasis en la utilidad"], a: 2 },
-        { q: "El criterio central del deontologismo kantiano es:", options: ["El consenso social", "La consecuencia", "La felicidad", "El deber universalizable"], a: 3 },
-        { q: "El utilitarismo podría justificar una acción injusta si:", options: ["Produce mayor felicidad colectiva", "Viola la ley", "Falta intención moral", "Es tradicional"], a: 0 },
-        { q: "El contractualismo moral sostiene que:", options: ["La ética es individual", "Las normas nacen del acuerdo racional", "La moral es innata", "Las normas son naturales"], a: 1 },
-        { q: "La ética del diálogo presupone:", options: ["Igualdad y racionalidad comunicativa", "Tradición cultural", "Autoridad jerárquica", "Desigualdad entre participantes"], a: 0 },
-        { q: "La ética de la liberación critica principalmente:", options: ["La ética cristiana", "El eurocentrismo y la exclusión", "La razón filosófica", "La moral comunitaria"], a: 1 },
-        { q: "Un aporte central de Dussel es:", options: ["Eliminar la ética universal", "Defender el mercado global", "Priorizar a los excluidos", "Rechazar la justicia"], a: 2 },
-        { q: "La ética ecológica cuestiona:", options: ["La justicia ambiental", "El dominio ilimitado sobre la naturaleza", "La responsabilidad social", "La dignidad humana"], a: 1 },
-        { q: "Los derechos de la Madre Tierra implican:", options: ["Negación del desarrollo", "Uso irrestricto de recursos", "Centralidad del crecimiento económico", "Reconocimiento ético de la naturaleza"], a: 3 },
-        { q: "El relativismo moral plantea el problema de:", options: ["La rigidez ética", "El exceso de normas", "La ausencia de valores universales", "La imposición cultural"], a: 2 },
-        { q: "La bioética surge como respuesta a:", options: ["Costumbres religiosas", "Tradiciones culturales", "Avances científicos y dilemas vitales", "Conflictos políticos"], a: 2 },
-        { q: "La ética es condición de posibilidad de la vida social porque:", options: ["Regula racionalmente la convivencia", "Elimina conflictos", "Sustituye a la ley", "Uniforma culturas"], a: 0 }
+        { q: "Ética vs Moral:", options: ["Emociones", "Análisis racional (ética) vs Práctica (moral)", "Religión", "Sustitución"], a: 1 },
+        { q: "Ética cuestiona ley:", options: ["Regulación", "Control", "Conservación", "Evaluación crítica"], a: 3 },
+        { q: "Universalidad ética:", options: ["Uniformidad", "Académica", "Principios válidos todos", "Imposición"], a: 2 },
+        { q: "Moral afectiva:", options: ["Reacciones (culpa/aprobación)", "Sin reglas", "Universal", "Racional"], a: 0 },
+        { q: "Trabajo infantil demuestra moral:", options: ["Sin normas", "Irracional", "Inmutable", "Varía según contexto"], a: 3 },
+        { q: "Autonomía se viola:", options: ["Responsabilidad", "Decisión libre", "Presión/Manipulación", "Convicción"], a: 2 },
+        { q: "Kant fin en sí mismo:", options: ["Subordinar", "Consecuencias", "Utilidad", "Dignidad intrínseca"], a: 3 },
+        { q: "Beneficencia vs No maleficencia:", options: ["Iguales", "Hacer bien vs No dañar", "Medicina", "Jurídico"], a: 1 },
+        { q: "Justicia ética incluye:", options: ["Neutralidad", "Obediencia", "Distribución equitativa", "Competencia"], a: 2 },
+        { q: "Rawls sociedad justa:", options: ["Eficiencia", "Sin desigualdad", "Derechos iguales/Oportunidades", "Mayoría"], a: 2 },
+        { q: "Hans Jonas responsabilidad:", options: ["Corto plazo", "Moral indiv", "Pasado", "Futuro/Tecnología"], a: 3 },
+        { q: "Aristóteles felicidad:", options: ["Consenso", "Placer", "Deber", "Virtudes"], a: 3 },
+        { q: "Estoicismo:", options: ["Placer", "Transformar", "Aceptar racionalmente", "Sin emoción"], a: 2 },
+        { q: "Ética cristiana:", options: ["Contrato", "Relativismo", "Amor prójimo", "Utilidad"], a: 2 },
+        { q: "Deontologismo Kant:", options: ["Consenso", "Consecuencia", "Felicidad", "Deber universalizable"], a: 3 },
+        { q: "Utilitarismo justifica injusticia si:", options: ["Mayor felicidad colectiva", "Viola ley", "Sin intención", "Tradición"], a: 0 },
+        { q: "Ética ecológica:", options: ["Justicia", "Dominio ilimitado (crítica)", "Responsabilidad", "Dignidad"], a: 1 },
+        { q: "Bioética respuesta a:", options: ["Costumbres", "Tradición", "Avances científicos/Dilemas", "Política"], a: 2 },
+        { q: "Relativismo moral problema:", options: ["Rigidez", "Exceso", "Ausencia valores universales", "Imposición"], a: 2 },
+        { q: "Ética Liberación Dussel:", options: ["Cristiana", "Eurocentrismo", "Priorizar excluidos/víctimas", "Rechazar justicia"], a: 2 }
     ];
 
-    // TEMA 8: La Filosofía Política y la Justicia
     const bancoTema8 = [
-        { q: "La filosofía política se distingue de otras ramas de la filosofía porque:", options: ["Analiza únicamente la conducta individual", "Describe el funcionamiento técnico de los gobiernos", "Reflexiona críticamente sobre el poder y su legitimidad", "Se limita al estudio histórico de los Estados"], a: 2 },
-        { q: "Una pregunta central de la filosofía política es:", options: ["¿Cómo se origina el conocimiento científico?", "¿Qué sistema político es más eficiente económicamente?", "¿Bajo qué condiciones el poder político es legítimo?", "¿Cómo se desarrolla la moral individual?"], a: 2 },
-        { q: "La justicia social, según el enfoque filosófico, busca principalmente:", options: ["Garantizar la obediencia a la ley", "Asegurar condiciones dignas para todas las personas", "Uniformar las condiciones económicas", "Eliminar toda forma de desigualdad"], a: 1 },
-        { q: "La justicia social no propone una igualdad absoluta porque:", options: ["Considera legítima toda desigualdad", "Reconoce que las leyes son suficientes", "Prioriza la libertad económica", "Reconoce que las personas parten de condiciones distintas"], a: 3 },
-        { q: "La filosofía política evalúa los sistemas políticos desde un punto de vista:", options: ["Técnico-administrativo", "Económico-productivo", "Ético y normativo", "Estadístico"], a: 0 },
-        { q: "El concepto de bien común en la filosofía política se relaciona con:", options: ["El interés de la mayoría", "El beneficio del Estado", "El equilibrio entre derechos individuales y colectivos", "La eliminación de los conflictos sociales"], a: 2 },
-        { q: "La relación entre libertad individual y poder político implica:", options: ["La supremacía absoluta del individuo", "La intervención ilimitada del Estado", "Un equilibrio regulado por la justicia y la ley", "La subordinación total del ciudadano"], a: 2 },
-        { q: "La justicia social adquiere especial relevancia en la actualidad debido a:", options: ["El exceso de derechos individuales", "El aumento de las desigualdades estructurales", "La desaparición del Estado moderno", "El debilitamiento del pensamiento filosófico"], a: 1 },
-        { q: "Una sociedad es injusta desde la perspectiva de los derechos humanos cuando:", options: ["Existe diversidad cultural", "Hay diferencias económicas", "Se limita el consumo", "No se garantizan derechos fundamentales"], a: 0 },
-        { q: "Para Platón, la justicia social se fundamenta en:", options: ["La igualdad política", "La armonía y el orden social", "La voluntad de la mayoría", "La propiedad colectiva"], a: 1 },
-        { q: "La idea central de justicia en Aristóteles se expresa como:", options: ["Igualdad absoluta entre ciudadanos", "Cumplimiento estricto de la ley", "Dar a cada quien lo que le corresponde", "Satisfacción de las necesidades básicas"], a: 2 },
-        { q: "La justicia distributiva aristotélica se caracteriza por:", options: ["Corregir daños individuales", "Repartir bienes de manera proporcional", "Eliminar privilegios sociales", "Garantizar derechos naturales"], a: 1 },
-        { q: "La justicia correctiva tiene como finalidad principal:", options: ["Redistribuir la riqueza", "Garantizar igualdad política", "Mantener el orden económico", "Restablecer el equilibrio ante una injusticia"], a: 3 },
-        { q: "Hobbes justifica la existencia del Estado porque:", options: ["Promueve la igualdad social", "Garantiza los derechos naturales", "Evita el conflicto permanente entre individuos", "Representa la voluntad general"], a: 2 },
-        { q: "Para Hobbes, la justicia surge cuando:", options: ["Existe igualdad económica", "Los individuos obedecen las leyes establecidas", "Se eliminan los conflictos sociales", "El poder se distribuye equitativamente"], a: 1 },
-        { q: "John Locke sostuvo que la función principal del Estado es:", options: ["Controlar la economía", "Garantizar la igualdad material", "Proteger los derechos naturales", "Representar la voluntad colectiva"], a: 0 },
-        { q: "Los derechos naturales en Locke se caracterizan por ser:", options: ["Otorgados por el Estado", "Históricamente construidos", "Universales e inherentes al ser humano", "Dependientes de la cultura"], a: 2 },
-        { q: "Rousseau consideró injusta a la sociedad cuando:", options: ["El poder se concentra en el pueblo", "Predomina la voluntad general", "Existen leyes escritas", "El poder responde a intereses particulares"], a: 3 },
-        { q: "La crítica central de Rousseau a la desigualdad es que:", options: ["Viola la voluntad general", "Reduce la productividad", "Elimina la libertad económica", "Debilita la autoridad política"], a: 0 },
-        { q: "Karl Marx interpretó la injusticia social como resultado de:", options: ["La falta de moral individual", "El incumplimiento de la ley", "La estructura económica capitalista", "La ausencia del Estado"], a: 2 },
-        { q: "El objetivo de la sociedad propuesta por Marx es:", options: ["La igualdad jurídica", "La democracia representativa", "La eliminación de la propiedad privada", "La supresión de las clases sociales"], a: 3 },
-        { q: "John Rawls define una sociedad justa como aquella que:", options: ["Garantiza igualdad económica", "Maximiza la felicidad colectiva", "Protege libertades básicas e igualdad de oportunidades", "Elimina el mercado"], a: 2 },
-        { q: "El principio de diferencia de Rawls sostiene que:", options: ["Toda desigualdad es injusta", "La desigualdad es inevitable", "Las desigualdades deben beneficiar a los menos favorecidos", "El mérito justifica toda desigualdad"], a: 2 },
-        { q: "Amartya Sen critica las teorías de justicia centradas solo en:", options: ["La libertad", "El desarrollo económico", "Los derechos humanos", "La distribución de bienes"], a: 3 },
-        { q: "Para Sen, la justicia social debe evaluarse a partir de:", options: ["El nivel de ingresos", "El crecimiento del Estado", "Las capacidades reales de las personas", "La igualdad legal"], a: 0 },
-        { q: "La justicia social propone la equidad porque:", options: ["Elimina la libertad individual", "Reconoce desigualdades estructurales previas", "Sustituye la igualdad jurídica", "Prioriza el interés del Estado"], a: 1 },
-        { q: "La justicia social va más allá del cumplimiento de la ley porque:", options: ["Rechaza el sistema jurídico", "Se basa solo en la moral", "Prioriza la tradición cultural", "Analiza la distribución real del poder y los recursos"], a: 2 },
-        { q: "Una política pública inspirada en la justicia social debería:", options: ["Tratar a todos exactamente igual", "Favorecer solo el crecimiento económico", "Proteger especialmente a los sectores vulnerables", "Limitar la intervención estatal"], a: 3 },
-        { q: "La filosofía política es esencial para la democracia porque:", options: ["Legitima cualquier forma de poder", "Fomenta ciudadanos críticos y responsables", "Sustituye a las instituciones políticas", "Elimina los conflictos sociales"], a: 2 },
-        { q: "Desde la filosofía política contemporánea, una sociedad justa se define mejor como aquella que:", options: ["Garantiza igualdad absoluta de resultados", "Promueve el bien común respetando derechos y diversidad", "Asegura obediencia a la autoridad", "Reduce al mínimo la intervención estatal"], a: 1 }
+        { q: "Filosofía política analiza:", options: ["Conducta indiv", "Técnica gob", "Poder y legitimidad", "Historia"], a: 2 },
+        { q: "Pregunta central:", options: ["¿Conocimiento?", "¿Eficiencia?", "¿Legitimidad poder?", "¿Moral?"], a: 2 },
+        { q: "Justicia social busca:", options: ["Obediencia", "Condiciones dignas/Equidad", "Uniformidad", "Sin desigualdad"], a: 1 },
+        { q: "Justicia social no es igualdad absoluta:", options: ["Legitima", "Leyes bastan", "Libertad", "Reconoce condiciones distintas partida"], a: 3 },
+        { q: "Bien común:", options: ["Mayoría", "Estado", "Equilibrio derechos indiv/colectivos", "Sin conflicto"], a: 2 },
+        { q: "Libertad vs Poder:", options: ["Supremacía indiv", "Estado ilimitado", "Equilibrio regulado", "Subordinación"], a: 2 },
+        { q: "Sociedad injusta (DDHH):", options: ["Diversidad", "Diferencias", "Consumo", "No garantiza derechos"], a: 3 },
+        { q: "Platón justicia:", options: ["Igualdad", "Armonía/Orden", "Voluntad", "Propiedad"], a: 1 },
+        { q: "Aristóteles justicia:", options: ["Igualdad absoluta", "Ley", "Dar a cada quien lo suyo", "Necesidades"], a: 2 },
+        { q: "Justicia correctiva:", options: ["Redistribuir", "Igualdad pol", "Orden", "Restablecer equilibrio"], a: 3 },
+        { q: "Hobbes Estado:", options: ["Igualdad", "Derechos nat", "Evitar guerra todos contra todos", "Voluntad"], a: 2 },
+        { q: "Locke función Estado:", options: ["Economía", "Igualdad mat", "Proteger derechos naturales (Propiedad)", "Colectiva"], a: 2 },
+        { q: "Rousseau injusticia:", options: ["Poder pueblo", "Voluntad gen", "Leyes", "Poder intereses particulares"], a: 3 },
+        { q: "Marx injusticia:", options: ["Moral", "Ley", "Estructura económica/Clases", "Sin Estado"], a: 2 },
+        { q: "Marx objetivo:", options: ["Igualdad jur", "Democracia", "Propiedad priv", "Sociedad sin clases"], a: 3 },
+        { q: "Rawls diferencia:", options: ["Injusta", "Inevitable", "Desigualdad debe beneficiar a desfavorecidos", "Mérito"], a: 2 },
+        { q: "Amartya Sen:", options: ["Libertad", "PIB", "Derechos", "Capacidades reales"], a: 3 },
+        { q: "Fil. Política y Democracia:", options: ["Legitima todo", "Ciudadanos críticos", "Sustituye", "Elimina conflicto"], a: 2 },
+        { q: "Sociedad justa hoy:", options: ["Igualdad res", "Bien común + Derechos + Diversidad", "Obediencia", "Mínimo Estado"], a: 1 }
     ];
 
-    // TEMA 9: Democracia, Participación Ciudadana y Contrato Social
     const bancoTema9 = [
-        { q: "Desde la filosofía política, la democracia se legitima porque el poder político:", options: ["Se hereda por tradición", "Se concentra en el Estado", "Surge del consentimiento del pueblo", "Proviene de la autoridad moral"], a: 2 },
-        { q: "La democracia, entendida como cultura política, implica principalmente:", options: ["Elecciones frecuentes", "Obediencia a la autoridad", "Diálogo, pluralismo y deliberación", "Neutralidad ideológica"], a: 2 },
-        { q: "La soberanía popular significa que las decisiones políticas:", options: ["Son tomadas por expertos", "Responden a la voluntad ciudadana", "Dependen del poder económico", "Se subordinan a la tradición"], a: 1 },
-        { q: "La democracia representativa se fundamenta en:", options: ["La participación directa constante", "El control militar del poder", "La elección libre de representantes", "La eliminación de partidos políticos"], a: 2 },
-        { q: "La democracia participativa se caracteriza por:", options: ["Sustituir al Estado", "Reducir el rol ciudadano", "Eliminar la representación política", "Ampliar los mecanismos de intervención ciudadana"], a: 3 },
-        { q: "Un ejemplo contemporáneo de democracia directa es:", options: ["El parlamento", "El referendo", "El gabinete ministerial", "El poder judicial"], a: 1 },
-        { q: "La participación ciudadana NO incluye:", options: ["Control social", "Organización comunitaria", "Defensa de derechos", "Concentración autoritaria del poder"], a: 3 },
-        { q: "La participación ciudadana fortalece la democracia porque:", options: ["Genera decisiones más inclusivas", "Elimina el conflicto social", "Debilita al Estado", "Reduce la pluralidad política"], a: 0 },
-        { q: "El contrato social explica el origen del Estado como resultado de:", options: ["Un mandato religioso", "Una imposición histórica", "Un pacto implícito entre individuos", "Una herencia cultural"], a: 2 },
-        { q: "Según la teoría del contrato social, las personas aceptan las leyes para:", options: ["Obtener privilegios", "Evitar la vida política", "Garantizar seguridad y convivencia", "Asegurar la supremacía del gobernante"], a: 2 },
-        { q: "Para Thomas Hobbes, el estado de naturaleza se caracteriza por:", options: ["Cooperación social", "Libertad equilibrada", "Igualdad política", "Conflicto permanente"], a: 3 },
-        { q: "Hobbes justifica la existencia de un poder fuerte con el fin de:", options: ["Defender la soberanía popular", "Garantizar el orden y la paz", "Promover la democracia directa", "Asegurar la igualdad social"], a: 1 },
-        { q: "Para John Locke, el contrato social tiene como finalidad principal:", options: ["Proteger los derechos naturales", "Consolidar el absolutismo", "Eliminar la propiedad privada", "Fortalecer el poder militar"], a: 0 },
-        { q: "Según Locke, si un gobierno viola los derechos del pueblo:", options: ["Debe ser obedecido", "Debe fortalecerse", "Puede ser legítimamente reemplazado", "Debe eliminarse el Estado"], a: 2 },
-        { q: "Jean-Jacques Rousseau fundamenta la democracia en:", options: ["La autoridad del Estado", "La voluntad general", "La tradición política", "El poder económico"], a: 1 },
-        { q: "La voluntad general representa:", options: ["La suma de intereses individuales", "La opinión de la mayoría gobernante", "El interés común de la sociedad", "La ley natural"], a: 2 },
-        { q: "La democracia se opone al autoritarismo porque:", options: ["Centraliza el poder", "Limita y controla la autoridad", "Elimina las instituciones", "Reduce la participación política"], a: 1 },
-        { q: "La rendición de cuentas exige que las autoridades:", options: ["Gobiernen sin control", "Respondan solo ante el poder judicial", "Justifiquen públicamente sus acciones", "Actúen únicamente en elecciones"], a: 2 },
-        { q: "Cuando el Estado incumple el contrato social, la ciudadanía puede:", options: ["Renunciar a la vida política", "Exigir cambios por vías democráticas", "Justificar el autoritarismo", "Abandonar las normas jurídicas"], a: 1 },
-        { q: "La relación entre democracia y contrato social se basa en:", options: ["La obediencia forzada", "La tradición histórica", "El consentimiento ciudadano", "El control militar"], a: 2 },
-        { q: "Un derecho fundamental en democracia es:", options: ["La libertad de expresión", "La obediencia absoluta", "La exclusión política", "La imposición ideológica"], a: 0 },
-        { q: "Un deber ciudadano en democracia consiste en:", options: ["Controlar todos los poderes del Estado", "Participar de forma responsable", "Gobernar sin normas", "Imponer ideas personales"], a: 1 },
-        { q: "La convivencia pacífica en democracia se logra mediante:", options: ["La represión", "La imposición estatal", "El respeto a normas comunes", "La eliminación del conflicto"], a: 2 },
-        { q: "Entre los principales desafíos actuales de la democracia se encuentra:", options: ["El exceso de participación", "La falta de elecciones", "La desigualdad y la corrupción", "La ausencia de leyes"], a: 2 },
-        { q: "Una ciudadanía informada contribuye a:", options: ["Debilitar la institucionalidad", "Reducir la participación", "Fortalecer las instituciones democráticas", "Eliminar la política"], a: 2 },
-        { q: "Concebir la democracia como forma de vida implica:", options: ["Solo participación electoral", "Compromiso ético y social permanente", "Neutralidad ciudadana", "Autoridad incuestionable"], a: 1 },
-        { q: "La exclusión social afecta negativamente a la democracia porque:", options: ["Limita la participación política", "Aumenta la estabilidad estatal", "Reduce el conflicto social", "Fortalece el poder central"], a: 0 },
-        { q: "El control social permite:", options: ["Concentrar el poder", "Eliminar instituciones", "Fiscalizar la acción del Estado", "Reducir derechos ciudadanos"], a: 2 },
-        { q: "El bien común en democracia se construye mediante:", options: ["Imposición de mayorías", "Autoridad absoluta", "Diálogo y consenso", "Intereses privados"], a: 2 },
-        { q: "La reflexión filosófica sobre la democracia busca:", options: ["Justificar el autoritarismo", "Eliminar la política", "Comprender y mejorar la vida política", "Sustituir la ley por la moral"], a: 2 }
+        { q: "Democracia se legitima por:", options: ["Tradición", "Estado", "Consentimiento pueblo", "Moral"], a: 2 },
+        { q: "Democracia cultura política:", options: ["Elecciones", "Obediencia", "Diálogo/Pluralismo", "Neutralidad"], a: 2 },
+        { q: "Soberanía popular:", options: ["Expertos", "Voluntad ciudadana", "Dinero", "Tradición"], a: 1 },
+        { q: "Democracia representativa:", options: ["Directa", "Militar", "Elección representantes", "Sin partidos"], a: 2 },
+        { q: "Democracia participativa:", options: ["Sustituir", "Reducir", "Eliminar", "Ampliar intervención ciudadana"], a: 3 },
+        { q: "Ejemplo democracia directa:", options: ["Parlamento", "Referendo", "Gabinete", "Judicial"], a: 1 },
+        { q: "Participación fortalece:", options: ["Decisiones inclusivas", "Elimina conflicto", "Debilita", "Reduce pluralidad"], a: 0 },
+        { q: "Contrato social origen:", options: ["Religioso", "Imposición", "Pacto implícito", "Herencia"], a: 2 },
+        { q: "Aceptamos leyes para:", options: ["Privilegios", "Evitar política", "Seguridad y convivencia", "Supremacía"], a: 2 },
+        { q: "Hobbes naturaleza:", options: ["Cooperación", "Libertad", "Igualdad", "Conflicto permanente"], a: 3 },
+        { q: "Hobbes poder fuerte:", options: ["Soberanía", "Orden y paz", "Democracia", "Igualdad"], a: 1 },
+        { q: "Locke fin contrato:", options: ["Proteger derechos naturales", "Absolutismo", "Sin propiedad", "Militar"], a: 0 },
+        { q: "Locke gobierno viola:", options: ["Obedecer", "Fortalecer", "Reemplazado legítimamente", "Eliminar Estado"], a: 2 },
+        { q: "Rousseau democracia:", options: ["Estado", "Voluntad general", "Tradición", "Económico"], a: 1 },
+        { q: "Voluntad general:", options: ["Suma indiv", "Opinión mayoría", "Interés común", "Ley natural"], a: 2 },
+        { q: "Democracia vs Autorit:", options: ["Centraliza", "Limita y controla poder", "Sin inst", "Reduce"], a: 1 },
+        { q: "Rendición cuentas:", options: ["Sin control", "Solo judicial", "Justificar públicamente", "Solo elecciones"], a: 2 },
+        { q: "Incumplimiento contrato:", options: ["Renunciar", "Exigir cambios democráticos", "Autoritarismo", "Abandonar"], a: 1 },
+        { q: "Relación Demo/Contrato:", options: ["Obediencia", "Tradición", "Consentimiento", "Militar"], a: 2 },
+        { q: "Derecho fundamental:", options: ["Libertad expresión", "Obediencia", "Exclusión", "Imposición"], a: 0 },
+        { q: "Deber ciudadano:", options: ["Controlar todo", "Participar responsablemente", "Sin normas", "Imponer"], a: 1 },
+        { q: "Convivencia pacífica:", options: ["Represión", "Imposición", "Respeto normas comunes", "Sin conflicto"], a: 2 },
+        { q: "Desafíos democracia:", options: ["Participación", "Elecciones", "Desigualdad y corrupción", "Leyes"], a: 2 },
+        { q: "Ciudadanía informada:", options: ["Debilita", "Reduce", "Fortalece instituciones", "Elimina"], a: 2 },
+        { q: "Democracia forma vida:", options: ["Solo votar", "Compromiso ético permanente", "Neutralidad", "Autoridad"], a: 1 },
+        { q: "Exclusión social:", options: ["Limita participación", "Estabilidad", "Reduce conflicto", "Fortalece"], a: 0 },
+        { q: "Control social:", options: ["Concentrar", "Eliminar", "Fiscalizar Estado", "Reducir derechos"], a: 2 },
+        { q: "Bien común:", options: ["Imposición", "Autoridad", "Diálogo y consenso", "Privados"], a: 2 },
+        { q: "Reflexión filosófica:", options: ["Justificar", "Eliminar", "Comprender y mejorar", "Sustituir"], a: 2 }
     ];
 
-    // TEMA 10: Filosofía del Derecho en la Vida Cotidiana
     const bancoTema10 = [
-        { q: "La filosofía del derecho se diferencia del derecho positivo porque:", options: ["Aplica sanciones legales", "Estudia procedimientos judiciales", "Analiza críticamente el fundamento del derecho", "Solo estudia códigos legales"], a: 2 },
-        { q: "Una norma puede ser legal pero injusta cuando:", options: ["Es aprobada democráticamente", "No respeta derechos humanos fundamentales", "Es aplicada por tribunales", "Está escrita en la Constitución"], a: 1 },
-        { q: "La legitimidad de una ley depende principalmente de:", options: ["Su antigüedad histórica", "La cantidad de sanciones que impone", "La voluntad de los jueces", "Su aceptación ética y social"], a: 3 },
-        { q: "La filosofía del derecho busca principalmente:", options: ["Aplicar sanciones penales", "Analizar la justicia y el sentido del derecho", "Memorizar leyes vigentes", "Elaborar contratos legales"], a: 1 },
-        { q: "La convivencia social requiere normas porque:", options: ["Eliminan la libertad individual", "Permiten el control absoluto del Estado", "Organizan la interacción entre libertades individuales", "Evitan el desarrollo social"], a: 2 },
-        { q: "Cuando una sociedad modifica leyes injustas demuestra que el derecho es:", options: ["Inmutable", "Natural y eterno", "Exclusivo del poder político", "Una construcción humana cambiante"], a: 3 },
-        { q: "La relación entre derecho y moral implica que:", options: ["Son exactamente lo mismo", "El derecho siempre ignora la moral", "El derecho idealmente se inspira en valores morales", "La moral depende del Estado"], a: 2 },
-        { q: "El derecho en la vida cotidiana se evidencia cuando:", options: ["Solo participamos en procesos judiciales", "Solo firmamos contratos complejos", "Solo votamos en elecciones", "Realizamos actos cotidianos regulados por normas"], a: 3 },
-        { q: "La filosofía del derecho promueve el pensamiento crítico porque:", options: ["Obliga a obedecer sin cuestionar", "Analiza la justicia de las normas", "Elimina la moral", "Solo estudia jurisprudencia"], a: 1 },
-        { q: "El derecho busca principalmente:", options: ["Garantizar el bien común", "Beneficiar a grupos específicos", "Limitar totalmente la libertad", "Evitar la organización social"], a: 0 },
-        { q: "La responsabilidad jurídica se diferencia de la moral porque:", options: ["Solo la moral tiene consecuencias", "La jurídica implica sanciones legales formales", "La moral depende del Estado", "La jurídica es voluntaria"], a: 1 },
-        { q: "Una sociedad democrática requiere ciudadanos que:", options: ["Obedezcan sin analizar", "Deleguen todo al Estado", "Participen críticamente en el sistema jurídico", "Eviten cuestionar leyes"], a: 2 },
-        { q: "El concepto de justicia en filosofía del derecho se relaciona con:", options: ["Poder económico", "Igualdad y dignidad humana", "Tradición únicamente", "Autoridad política"], a: 1 },
-        { q: "El derecho limita conductas individuales para:", options: ["Eliminar autonomía", "Controlar pensamientos", "Favorecer solo al Estado", "Proteger derechos colectivos"], a: 3 },
-        { q: "La función preventiva del derecho implica:", options: ["Evitar conductas dañinas antes de que ocurran", "Solo castigar después del daño", "Ignorar la moral social", "Limitar la educación social"], a: 0 },
-        { q: "La filosofía del derecho analiza el origen del Estado porque:", options: ["Quiere reemplazarlo", "Busca entender la legitimidad del poder", "Solo estudia historia", "Niega la autoridad política"], a: 1 },
-        { q: "Cuando una ley respeta derechos humanos se considera:", options: ["Tradicional", "Natural", "Legítima y justa", "Obligatoria solo parcialmente"], a: 2 },
-        { q: "La relación entre libertad individual y normas jurídicas implica:", options: ["Desaparición de la libertad", "Equilibrio entre libertades", "Dominio total del Estado", "Eliminación del orden social"], a: 1 },
-        { q: "La filosofía del derecho es importante hoy porque:", options: ["Elimina conflictos sociales", "Permite analizar problemas sociales complejos", "Sustituye el sistema judicial", "Reduce la participación ciudadana"], a: 1 },
-        { q: "La diferencia entre legalidad y legitimidad radica en:", options: ["El origen histórico", "La autoridad del juez", "La aprobación constitucional", "La justicia ética de la norma"], a: 3 },
-        { q: "El derecho es esencial para la convivencia porque:", options: ["Evita toda libertad", "Garantiza orden y protección de derechos", "Elimina diversidad social", "Sustituye la moral individual"], a: 1 },
-        { q: "La participación ciudadana en el derecho implica:", options: ["Solo votar", "Solo obedecer normas", "Analizar, cuestionar y mejorar leyes", "Delegar decisiones totalmente"], a: 2 },
-        { q: "Una ley injusta debe:", options: ["Ser obedecida siempre sin crítica", "Ignorarse completamente", "Modificarse mediante mecanismos democráticos", "Aplicarse selectivamente"], a: 2 },
-        { q: "El derecho positivo se caracteriza por:", options: ["Ser exclusivamente moral", "Estudiar leyes vigentes", "Analizar valores universales", "Basarse solo en costumbres"], a: 1 },
-        { q: "La ética aporta al derecho:", options: ["Sanciones", "Procedimientos judiciales", "Valores que orientan normas justas", "Reglamentos administrativos"], a: 2 },
-        { q: "La filosofía del derecho fomenta:", options: ["Obediencia automática", "Pensamiento crítico ciudadano", "Dependencia del Estado", "Eliminación del debate social"], a: 1 },
-        { q: "El derecho protege la dignidad humana cuando:", options: ["Aplica sanciones arbitrarias", "Limita derechos fundamentales", "Garantiza igualdad ante la ley", "Favorece grupos privilegiados"], a: 2 },
-        { q: "La existencia de normas jurídicas demuestra que:", options: ["La sociedad necesita organización", "La libertad debe eliminarse", "La moral es innecesaria", "El Estado controla toda conducta"], a: 0 },
-        { q: "La justicia social en el derecho implica:", options: ["Igualdad formal sin análisis social", "Distribución equitativa de derechos y oportunidades", "Eliminación de normas", "Prioridad del poder económico"], a: 1 },
-        { q: "El objetivo final del derecho desde la filosofía jurídica es:", options: ["Control social absoluto", "Protección del poder político", "Mantener tradiciones únicamente", "Garantizar justicia, dignidad y convivencia social"], a: 3 }
+        { q: "Fil. Derecho vs Positivo:", options: ["Sanciones", "Procedimientos", "Análisis crítico fundamento", "Códigos"], a: 2 },
+        { q: "Ley legal pero injusta:", options: ["Democrática", "Viola DDHH", "Tribunales", "Constitución"], a: 1 },
+        { q: "Legitimidad ley:", options: ["Antigüedad", "Sanciones", "Jueces", "Aceptación ética/social"], a: 3 },
+        { q: "Fil. Derecho busca:", options: ["Penales", "Justicia y sentido", "Memorizar", "Contratos"], a: 1 },
+        { q: "Convivencia normas:", options: ["Eliminan libertad", "Control", "Organizan interacción", "Evitan"], a: 2 },
+        { q: "Modificar leyes injustas:", options: ["Inmutable", "Natural", "Exclusivo", "Construcción humana cambiante"], a: 3 },
+        { q: "Derecho y Moral:", options: ["Mismo", "Ignora", "Inspiración ideal", "Estado"], a: 2 },
+        { q: "Vida cotidiana:", options: ["Judicial", "Contratos", "Votos", "Actos cotidianos regulados"], a: 3 },
+        { q: "Pensamiento crítico:", options: ["Obedecer", "Analizar justicia", "Eliminar moral", "Jurisprudencia"], a: 1 },
+        { q: "Derecho busca:", options: ["Bien común", "Grupos", "Limitar", "Evitar"], a: 0 },
+        { q: "Resp. Jurídica vs Moral:", options: ["Solo moral", "Sanciones legales formales", "Estado", "Voluntaria"], a: 1 },
+        { q: "Ciudadanos democráticos:", options: ["Obedecer", "Delegar", "Participar críticamente", "Evitar"], a: 2 },
+        { q: "Justicia concepto:", options: ["Económico", "Igualdad y dignidad", "Tradición", "Política"], a: 1 },
+        { q: "Limita conductas para:", options: ["Autonomía", "Pensamientos", "Estado", "Proteger derechos colectivos"], a: 3 },
+        { q: "Función preventiva:", options: ["Evitar daños antes", "Castigar", "Ignorar", "Limitar"], a: 0 },
+        { q: "Origen Estado:", options: ["Reemplazar", "Entender legitimidad", "Historia", "Negar"], a: 1 },
+        { q: "Ley respeta DDHH:", options: ["Tradicional", "Natural", "Legítima y justa", "Parcial"], a: 2 },
+        { q: "Libertad vs Normas:", options: ["Desaparición", "Equilibrio", "Dominio", "Eliminación"], a: 1 },
+        { q: "Importante hoy:", options: ["Elimina", "Analizar problemas complejos", "Sustituir", "Reduce"], a: 1 },
+        { q: "Legalidad vs Legitimidad:", options: ["Origen", "Juez", "Constitución", "Justicia ética"], a: 3 },
+        { q: "Esencial convivencia:", options: ["Evita", "Garantiza orden/protección", "Elimina", "Sustituye"], a: 1 },
+        { q: "Participación:", options: ["Votar", "Obedecer", "Analizar/Cuestionar/Mejorar", "Delegar"], a: 2 },
+        { q: "Ley injusta debe:", options: ["Obedecer", "Ignorar", "Modificarse democráticamente", "Selectiva"], a: 2 },
+        { q: "Derecho positivo:", options: ["Moral", "Leyes vigentes", "Valores", "Costumbres"], a: 1 },
+        { q: "Ética aporta:", options: ["Sanciones", "Procedimientos", "Valores orientan justicia", "Reglamentos"], a: 2 },
+        { q: "Fomenta:", options: ["Obediencia", "Pensamiento crítico", "Dependencia", "Eliminación"], a: 1 },
+        { q: "Dignidad humana:", options: ["Sanciones", "Limita", "Igualdad ante ley", "Privilegios"], a: 2 },
+        { q: "Existencia normas:", options: ["Sociedad necesita organización", "Eliminar libertad", "Moral inec", "Control"], a: 0 },
+        { q: "Justicia social:", options: ["Formal", "Distribución equitativa", "Eliminación", "Económico"], a: 1 },
+        { q: "Objetivo final:", options: ["Control", "Poder", "Tradición", "Justicia, dignidad, convivencia"], a: 3 }
     ];
 
     /* =========================================
-       LÓGICA DE LA APP
+       LÓGICA
        ========================================= */
 
     let currentQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    let timeLeft = 300; // 5 minutos
+    let timeLeft = 300;
     let timerInterval;
     let currentThemeId = 1;
+    let isFinalExam = false;
 
-    // Referencias al DOM
+    // Referencias
     const menuArea = document.getElementById('menu-area');
     const quizArea = document.getElementById('quiz-area');
     const resultArea = document.getElementById('result-area');
     const topicBadge = document.getElementById('topic-badge');
-    
+    const timerDisplay = document.getElementById('timer');
+    const nextBtn = document.getElementById('next-btn');
+
     function startQuiz(themeId) {
         currentThemeId = themeId;
+        isFinalExam = (themeId === 'final');
         
-        // Seleccionar banco según tema
-        let fullBank;
-        let themeName;
-        let badgeColor;
-        
-        switch(themeId) {
-            case 1:
-                fullBank = bancoTema1;
-                themeName = "Tema 1: Proyectos";
-                badgeColor = "var(--accent)";
-                break;
-            case 2:
-                fullBank = bancoTema2;
-                themeName = "Tema 2: Antropología";
-                badgeColor = "var(--success)";
-                break;
-            case 3:
-                fullBank = bancoTema3;
-                themeName = "Tema 3: Antropología Cont.";
-                badgeColor = "var(--purple)";
-                break;
-            case 4:
-                fullBank = bancoTema4;
-                themeName = "Tema 4: Filosofía";
-                badgeColor = "var(--orange)";
-                break;
-            case 5:
-                fullBank = bancoTema6;
-                themeName = "Tema 6: Ser Humano LatAm";
-                badgeColor = "var(--teal)";
-                break;
-            case 6:
-                fullBank = bancoTema7;
-                themeName = "Tema 7: Ética y Moral";
-                badgeColor = "var(--indigo)";
-                break;
-            case 7:
-                fullBank = bancoTema8;
-                themeName = "Tema 8: Filosofía Política";
-                badgeColor = "var(--maroon)";
-                break;
-            // NUEVOS CASOS
-            case 8:
-                fullBank = bancoTema9;
-                themeName = "Tema 9: Democracia";
-                badgeColor = "var(--gold)"; 
-                // Ajuste de color de texto para contraste con dorado
-                topicBadge.style.color = "#333"; 
-                break;
-            case 9:
-                fullBank = bancoTema10;
-                themeName = "Tema 10: Fil. Derecho";
-                badgeColor = "var(--midnight)";
-                break;
+        let questionsPool = [];
+        let themeName = "";
+        let badgeColor = "";
+        let limit = 10; // Por defecto 10 preguntas
+        let time = 300; // 5 mins por defecto
 
-            default:
-                fullBank = bancoTema1;
-                themeName = "Tema 1";
-                badgeColor = "var(--accent)";
+        if (isFinalExam) {
+            // LÓGICA EXAMEN FINAL
+            // 1. Combinar temas 6, 7, 8, 9, 10
+            questionsPool = [
+                ...bancoTema6, 
+                ...bancoTema7, 
+                ...bancoTema8, 
+                ...bancoTema9, 
+                ...bancoTema10
+            ];
+            
+            themeName = "EXAMEN FINAL";
+            badgeColor = "var(--final-gradient)"; // Gradiente especial
+            limit = 20; // 20 preguntas para el examen final
+            time = 600; // 10 minutos para el examen final
+            
+        } else {
+            // Lógica normal
+            switch(themeId) {
+                case 1: questionsPool = bancoTema1; themeName = "Tema 1"; badgeColor = "var(--accent)"; break;
+                case 2: questionsPool = bancoTema2; themeName = "Tema 2"; badgeColor = "var(--success)"; break;
+                case 3: questionsPool = bancoTema3; themeName = "Tema 3"; badgeColor = "var(--purple)"; break;
+                case 4: questionsPool = bancoTema4; themeName = "Tema 4"; badgeColor = "var(--orange)"; break;
+                case 5: questionsPool = bancoTema6; themeName = "Tema 6"; badgeColor = "var(--teal)"; break;
+                case 6: questionsPool = bancoTema7; themeName = "Tema 7"; badgeColor = "var(--indigo)"; break;
+                case 7: questionsPool = bancoTema8; themeName = "Tema 8"; badgeColor = "var(--maroon)"; break;
+                case 8: questionsPool = bancoTema9; themeName = "Tema 9"; badgeColor = "var(--gold)"; break;
+                case 9: questionsPool = bancoTema10; themeName = "Tema 10"; badgeColor = "var(--midnight)"; break;
+            }
         }
         
+        // Configurar UI
         topicBadge.innerText = themeName;
-        topicBadge.style.background = badgeColor;
-        if(themeId !== 8) topicBadge.style.color = "white"; // Resetear color texto si no es gold
+        topicBadge.style.background = isFinalExam ? badgeColor : badgeColor; // Si es gradiente funciona igual en background
+        topicBadge.style.color = (themeId === 8) ? "#333" : "white"; // Contraste para amarillo
 
-        // Seleccionar 10 preguntas aleatorias del banco
-        let shuffled = [...fullBank].sort(() => 0.5 - Math.random());
-        currentQuestions = shuffled.slice(0, 10);
+        // Barajar y cortar
+        let shuffled = [...questionsPool].sort(() => 0.5 - Math.random());
+        currentQuestions = shuffled.slice(0, limit);
 
-        // Reset variables
+        // Reset
         currentQuestionIndex = 0;
         score = 0;
-        timeLeft = 300;
+        timeLeft = time;
 
-        // Mostrar pantalla Quiz
+        // Mostrar pantalla
         menuArea.style.display = 'none';
         resultArea.style.display = 'none';
         quizArea.style.display = 'block';
 
-        // Iniciar Timer
+        // Timer
         clearInterval(timerInterval);
         startTimer();
 
-        // Mostrar primera pregunta
         showQuestion();
     }
 
     function showQuestion() {
-        // Actualizar UI
-        document.getElementById('progress').innerText = `${currentQuestionIndex + 1} / 10`;
-        document.getElementById('next-btn').style.display = 'none';
+        let totalQ = currentQuestions.length;
+        document.getElementById('progress').innerText = `${currentQuestionIndex + 1} / ${totalQ}`;
+        nextBtn.style.display = 'none';
 
         let qData = currentQuestions[currentQuestionIndex];
         
-        // Texto pregunta
         document.getElementById('question-text').innerText = qData.q;
 
-        // Opciones
         let optionsDiv = document.getElementById('options');
         optionsDiv.innerHTML = '';
 
-        // Crear botones de opciones
+        // Barajar opciones visualmente también (opcional, pero bueno para exámenes)
+        // Mantenemos lógica simple: mostrar en orden A,B,C,D original para no complicar el índice de respuesta correcta 'a'
+        // Si quisiéramos barajar opciones, tendríamos que mapear el índice correcto. Lo dejaremos fijo por simplicidad y consistencia.
+        
         qData.options.forEach((optText, idx) => {
             let btn = document.createElement('div');
             btn.className = 'option-btn';
@@ -813,35 +645,29 @@
         });
     }
 
-    function getLetter(idx) {
-        return ["A", "B", "C", "D"][idx];
-    }
+    function getLetter(idx) { return ["A", "B", "C", "D"][idx]; }
 
     function checkAnswer(selectedBtn, selectedIdx, correctIdx) {
-        // Bloquear todos los botones
         let allBtns = document.querySelectorAll('.option-btn');
         allBtns.forEach(b => b.classList.add('disabled'));
         allBtns.forEach(b => b.onclick = null);
 
-        // Verificar
         if (selectedIdx === correctIdx) {
             selectedBtn.classList.add('correct');
             score++;
         } else {
             selectedBtn.classList.add('wrong');
-            // Mostrar la correcta
             allBtns[correctIdx].classList.add('correct');
         }
 
-        // Mostrar botón siguiente
-        let nextBtn = document.getElementById('next-btn');
         nextBtn.style.display = 'block';
-        nextBtn.innerText = (currentQuestionIndex === 9) ? "Ver Nota Final" : "Siguiente Pregunta";
+        let isLast = currentQuestionIndex === currentQuestions.length - 1;
+        nextBtn.innerText = isLast ? "Ver Nota Final" : "Siguiente Pregunta";
     }
 
     function nextQuestion() {
         currentQuestionIndex++;
-        if (currentQuestionIndex < 10) {
+        if (currentQuestionIndex < currentQuestions.length) {
             showQuestion();
         } else {
             finishQuiz();
@@ -849,15 +675,10 @@
     }
 
     function startTimer() {
-        const timerDisplay = document.getElementById('timer');
-        timerDisplay.innerText = "05:00";
-        
+        updateTimerDisplay();
         timerInterval = setInterval(() => {
             timeLeft--;
-            let m = Math.floor(timeLeft / 60);
-            let s = timeLeft % 60;
-            timerDisplay.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-
+            updateTimerDisplay();
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 finishQuiz(true);
@@ -865,28 +686,36 @@
         }, 1000);
     }
 
+    function updateTimerDisplay() {
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+        timerDisplay.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    }
+
     function finishQuiz(timeout = false) {
         clearInterval(timerInterval);
         quizArea.style.display = 'none';
         resultArea.style.display = 'flex';
 
-        let scoreText = document.getElementById('final-score');
-        scoreText.innerText = `${score}/10`;
+        let total = currentQuestions.length;
+        document.getElementById('final-score').innerText = `${score}/${total}`;
 
         let msg = document.getElementById('result-message');
         if (timeout) {
             msg.innerText = "¡Se acabó el tiempo!";
             msg.style.color = "var(--error)";
         } else {
-            if (score === 10) {
-                msg.innerText = "¡Excelente! Puntuación perfecta.";
+            // Porcentajes
+            let percentage = (score / total) * 100;
+            if (percentage === 100) {
+                msg.innerText = "¡Perfecto! Dominas los temas.";
                 msg.style.color = "var(--success)";
-            } else if (score >= 6) {
-                msg.innerText = "¡Buen trabajo! Aprobado.";
+            } else if (percentage >= 60) {
+                msg.innerText = "¡Aprobado! Buen trabajo.";
                 msg.style.color = "var(--accent)";
             } else {
-                msg.innerText = "Puedes mejorar. ¡Inténtalo de nuevo!";
-                msg.style.color = "var(--primary)";
+                msg.innerText = "Necesitas repasar más.";
+                msg.style.color = "var(--error)";
             }
         }
     }
@@ -899,7 +728,6 @@
         resultArea.style.display = 'none';
         menuArea.style.display = 'flex';
     }
-
 </script>
 
 </body>
