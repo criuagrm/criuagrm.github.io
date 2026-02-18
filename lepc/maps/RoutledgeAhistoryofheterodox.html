@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: Historia de la Economía Heterodoxa - Frederic Lee</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f8f9fa;
+    --sidebar-bg: #ffffff;
+    --text-primary: #000000; /* Negro puro solicitado */
+    --text-secondary: #333333;
+    --accent-color: #1a1a1a; /* Acento sobrio y elegante */
+    --border-color: #e5e5e5;
+    --highlight-bg: #f0f0f0;
+    --sidebar-width: 480px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- ESTRUCTURA PRINCIPAL --- */
+  #app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    position: relative;
+  }
+
+  /* --- BARRA LATERAL (CONTENIDO) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.03);
+    z-index: 30;
+    transition: transform 0.3s ease;
+    position: relative;
+    height: 100%;
+  }
+
+  .sidebar-header {
+    padding: 24px 30px;
+    background: #ffffff;
+    border-bottom: 2px solid var(--text-primary);
+    flex-shrink: 0;
+  }
+
+  .sidebar-header h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  .sidebar-header .meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* --- FILTROS DE NAVEGACIÓN --- */
+  .navigation-filters {
+    padding: 15px 30px;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-group { 
+    display: flex; 
+    gap: 10px; 
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid #999;
+    padding: 6px 14px;
+    border-radius: 2px; /* Bordes más rectos, más académico */
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+  }
+  
+  .filter-btn:hover, .filter-btn.active { 
+    background: var(--text-primary); 
+    color: #fff; 
+    border-color: var(--text-primary);
+  }
+
+  /* --- ÁREA DE CONTENIDO --- */
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px;
+    scroll-behavior: smooth;
+  }
+
+  .info-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #666;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    display: inline-block;
+    padding-bottom: 3px;
+  }
+
+  .info-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 25px;
+    line-height: 1.1;
+  }
+
+  /* TARJETAS DE MECANISMOS */
+  .mechanism-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-left: 4px solid var(--text-primary);
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .mechanism-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    display: block;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
+  }
+
+  .mechanism-body {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #111;
+  }
+  
+  /* CAJA DE EVIDENCIA */
+  .evidence-box {
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+  
+  .evidence-label { 
+    color: #000; 
+    font-weight: 700; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .evidence-content {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #222;
+  }
+
+  .source-ref {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #555;
+    font-family: 'Inter', sans-serif;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+
+  .footer {
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    text-align: center;
+    color: #444;
+    flex-shrink: 0;
+  }
+
+  /* --- VISUALIZACIÓN DE RED --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    background-color: #f0f0f0;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    outline: none;
+  }
+
+  /* BOTONES FLOTANTES */
+  .control-panel {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    z-index: 20;
+  }
+
+  .fab-btn {
+    background: #fff;
+    border: 1px solid #999;
+    color: #000;
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 1.2rem;
+    transition: transform 0.1s;
+  }
+  .fab-btn:active { transform: scale(0.95); }
+
+  .toggle-menu {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 2px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 40;
+    display: none;
+    border: none;
+  }
+
+  /* --- RESPONSIVE DESIGN --- */
+  @media (max-width: 1000px) {
+    .sidebar {
+      position: absolute;
+      width: 100%;
+      height: 65%;
+      bottom: 0;
+      top: auto;
+      border-right: none;
+      border-top: 2px solid var(--text-primary);
+      transform: translateY(0);
+    }
+    
+    .sidebar.closed {
+      transform: translateY(100%);
+    }
+
+    .toggle-menu {
+      display: block;
+    }
+    
+    #network-wrapper {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    
+    .control-panel {
+      bottom: 68%; /* Mover controles arriba del panel */
+    }
+  }
+
+  /* Scrollbar Minimalista */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #888; }
+  ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+</style>
+</head>
+<body>
+
+<div id="app-container">
+  
+  <!-- BOTÓN MÓVIL/TABLET -->
+  <button class="toggle-menu" onclick="toggleMobilePanel()">
+    Explorar Análisis
+  </button>
+
+  <!-- PANEL DE INFORMACIÓN -->
+  <div class="sidebar closed" id="sidebar">
+    <div class="sidebar-header">
+      <h1>A History of Heterodox Economics</h1>
+      <div class="meta">Frederic Lee | Routledge (2009)</div>
+    </div>
+
+    <div class="navigation-filters">
+      <div class="filter-group">
+        <button class="filter-btn" onclick="filterGraph('all')">Panorama</button>
+        <button class="filter-btn" onclick="filterGraph('usa')">EE.UU. (Part I)</button>
+        <button class="filter-btn" onclick="filterGraph('uk')">Reino Unido (Part II)</button>
+        <button class="filter-btn" onclick="filterGraph('global')">Comunidad (Part III)</button>
+      </div>
+    </div>
+
+    <div class="content-area" id="infoPanel">
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #666; text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 15px; color: #000;">✒</div>
+        <p style="font-family: 'Crimson Pro', serif; font-size: 1.3rem; color: #000;">Seleccione un nodo en la red</p>
+        <p style="font-size: 0.9rem; margin-top: 10px; max-width: 80%;">Descubra los mecanismos micro, meso y macro que explican la supresión y resiliencia de la economía heterodoxa.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+    </div>
+  </div>
+
+  <!-- VISUALIZACIÓN DE RED -->
+  <div id="network-wrapper">
+    <div id="network"></div>
+    <div class="control-panel">
+      <button class="fab-btn" onclick="network.fit({animation:true})" title="Centrar Mapa">⌖</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// --- BASE DE DATOS ANALÍTICA DETALLADA ---
+const bookData = {
+  1: {
+    cat: "CAPÍTULO 1: INTRODUCCIÓN",
+    title: "Historias Comunitarias y la Tesis de Continuidad",
+    mech: [
+      {
+        level: "MICRO (Agencia Individual)",
+        desc: "El economista 'blasfemo': Aquel que rechaza la teoría neoclásica no parcialmente (herejía), sino totalmente, usando herramientas y lenguajes diferentes, enfrentándose a sanciones sociales y profesionales."
+      },
+      {
+        level: "MESO (Estructuras Comunitarias)",
+        desc: "Sistemas Sociales de Trabajo: La ciencia no es solo ideas, es una comunidad organizada. La heterodoxia requiere redes, revistas y conferencias propias para sobrevivir a la falta de dependencia funcional con la corriente principal."
+      },
+      {
+        level: "MACRO (Doctrina Dominante)",
+        desc: "Tesis de Continuidad-Pluralismo (Falsa): La narrativa dominante niega la existencia histórica de una economía heterodoxa, argumentando que solo ha existido una evolución continua del pensamiento neoclásico, invisibilizando las alternativas."
+      }
+    ],
+    evid: "Análisis de libros de texto (1900-2002): La Tabla 1.1 muestra cómo 29 herramientas centrales (escasez, utilidad marginal) se han mantenido constantes, demostrando una continuidad doctrinal neoclásica que excluye activamente alternativas.",
+    ref: "Lee, F. (2009). pp. 1-20. Referencias: Tabla 1.1, Apéndice A.1."
+  },
+  
+  // --- PARTE I: ESTADOS UNIDOS ---
+  2: {
+    cat: "CAPÍTULO 2 (EE.UU.)",
+    title: "Paisaje en Disputa y Dominación (1900-1970)",
+    mech: [
+      { level: "MICRO", desc: "El 'Pacto con el Diablo': Economistas académicos intercambiaron libertad intelectual y defensa social por respetabilidad científica y seguridad laboral, aceptando la teoría neoclásica como única verdad objetiva." },
+      { level: "MESO", desc: "Homogeneización Departamental: Presión institucional para contratar solo neoclásicos 'modernos'. Departamentos pluralistas fueron purgados o cerrados (ej. Brookings Graduate School)." },
+      { level: "MACRO", desc: "Simbiosis Estado-Academia: El surgimiento de la economía neoclásica fue financiado por intereses empresariales y estatales para contrarrestar el socialismo y el radicalismo (Caso Haymarket, 1886)." }
+    ],
+    evid: "Datos de doctorados (1904-1940): Menos del 10% de las instituciones exponían a estudiantes a ideas heréticas. Para 1940, menos del 5% de profesores eran críticos. La controversia de precios administrados de Means fue neutralizada.",
+    ref: "Lee, F. (2009). pp. 23-49. Tablas 2.1, 2.2."
+  },
+
+  3: {
+    cat: "CAPÍTULO 3 (EE.UU.)",
+    title: "Economía Radical en la Posguerra (1945-70)",
+    mech: [
+      { level: "MICRO", desc: "Autocensura y Miedo: Bajo el Macartismo, profesores evitaban temas marxistas o keynesianos 'izquierdistas' para evitar despidos, listas negras o suicidio profesional (o físico)." },
+      { level: "MESO", desc: "Redes Subterráneas: Ante el cierre de universidades, el conocimiento marxista sobrevivió en escuelas de partidos (Jefferson School) y revistas como 'Monthly Review' y 'Science & Society'." },
+      { level: "MACRO", desc: "Represión Política Directa: El Estado (FBI, comités del Congreso) colaboró con administradores universitarios para purgar a economistas radicales, rompiendo la continuidad generacional de la heterodoxia." }
+    ],
+    evid: "Colapso de escuelas obreras: Para 1957, ninguna de las escuelas del Partido Comunista (con 12,000 estudiantes en 1947) sobrevivía. Surgimiento de URPE en 1968 como respuesta sin memoria histórica.",
+    ref: "Lee, F. (2009). pp. 50-65. Referencia a Apéndice A.7, A.9."
+  },
+
+  4: {
+    cat: "CAPÍTULO 4 (EE.UU.)",
+    title: "Paisaje en Disputa (1965-80)",
+    mech: [
+      { level: "MICRO", desc: "Acoso Intelectual: Estudiantes graduados interesados en heterodoxia enfrentaban burlas ('vete a sociología'), negación de becas y bloqueo de tesis." },
+      { level: "MESO", desc: "El Ranking como Arma: Uso de rankings basados en revistas 'Diamond List' (neoclásicas) para deslegitimar departamentos pluralistas (ej. caso Notre Dame) y negar tenencia." },
+      { level: "MACRO", desc: "Contraataque Neoclásico: Ante el surgimiento de la Nueva Izquierda, la profesión endureció los estándares matemáticos y teóricos para excluir discursos alternativos." }
+    ],
+    evid: "Discriminación en contratación: De 58 departamentos en el RAE 1992, solo 11 contrataron heterodoxos. Casos específicos de negación de tenencia en Harvard (Bowles, Gintis) y Yale.",
+    ref: "Lee, F. (2009). pp. 66-77. Tablas 4.1, 4.2."
+  },
+
+  5: {
+    cat: "CAPÍTULO 5 (EE.UU.)",
+    title: "Historia de la Economía Post Keynesiana (1971-95)",
+    mech: [
+      { level: "MICRO", desc: "Liderazgo Intelectual: El rol de Eichner, Davidson y Weintraub en crear una identidad colectiva, pasando de críticos aislados a constructores de paradigmas." },
+      { level: "MESO", desc: "Construcción Institucional: Creación del 'Journal of Post Keynesian Economics' (JPKE) y conferencias anuales para crear dependencia de investigación interna." },
+      { level: "MACRO", desc: "Pluralismo Estratégico: Alianza con institucionalistas (AFEE) y radicales (URPE) para ganar espacio en conferencias (ASSA), logrando masa crítica." }
+    ],
+    evid: "Crecimiento de la red: De 20 economistas activos en 1971 a 85 en 1995. El JPKE alcanzó solvencia financiera rápidamente, asegurando la infraestructura de la comunidad.",
+    ref: "Lee, F. (2009). pp. 78-96. Tabla 5.1 (Red social PK)."
+  },
+
+  // --- PARTE II: REINO UNIDO ---
+  6: {
+    cat: "CAPÍTULO 6 (UK)",
+    title: "Paisaje en Disputa Británico (1900-70)",
+    mech: [
+      { level: "MICRO", desc: "Demanda de 'Conocimiento Útil': Trabajadores rechazando la teoría neoclásica (Marshall) por considerarla apologética y exigiendo economía marxista para la lucha sindical." },
+      { level: "MESO", desc: "Guerra Institucional Educativa: La WEA (apoyada por el Estado) promoviendo el marginalismo vs. el Movimiento de Educación Obrera Independiente (NCLC/CLC) enseñando marxismo." },
+      { level: "MACRO", desc: "Hegemonía de Marshall: Consolidación de la economía neoclásica en Cambridge y Oxford, marginando la historia económica y el marxismo como 'no científicos'." }
+    ],
+    evid: "Declive del marxismo académico: Para 1940, la enseñanza de Marx había desaparecido casi totalmente de las universidades, relegada a grupos de autoestudio obrero.",
+    ref: "Lee, F. (2009). pp. 99-125. Apéndice A.13, A.14."
+  },
+
+  7: {
+    cat: "CAPÍTULO 7 (UK)",
+    title: "Economía Heterodoxa en Gran Bretaña (1970-96)",
+    mech: [
+      { level: "MICRO", desc: "Activismo Estudiantil: Estudiantes en Cambridge y otras universidades exigiendo reformas curriculares y criticando la irrelevancia de la teoría neoclásica." },
+      { level: "MESO", desc: "Conferencia de Economistas Socialistas (CSE): Creación de un espacio seguro para el debate, aunque fracturado internamente por disputas Sraffianos vs. Marxistas." },
+      { level: "MACRO", desc: "Expansión de Politécnicos: La creación de nuevas universidades permitió la contratación de economistas radicales excluidos de las instituciones de élite." }
+    ],
+    evid: "Redes Sociales: Identificación de una red central de 26 economistas marxistas-heterodoxos y luego 63 post-keynesianos activos construyendo instituciones alternativas.",
+    ref: "Lee, F. (2009). pp. 126-152. Tablas 7.1, 7.2, 7.3."
+  },
+
+  8: {
+    cat: "CAPÍTULO 8 (UK)",
+    title: "El Impacto del RAE (1989-96)",
+    mech: [
+      { level: "MICRO", desc: "Autocensura Académica: Economistas individuales cambiando sus temas de investigación hacia el 'mainstream' para asegurar su empleabilidad." },
+      { level: "MESO", desc: "Captura Institucional: La Royal Economic Society (RES) controló la selección de paneles del RAE, asegurando evaluadores neoclásicos hostiles a la heterodoxia." },
+      { level: "MACRO", desc: "Mecanismo de Financiación Estatal: El RAE vinculó la financiación departamental a publicaciones en revistas 'Diamond List' (neoclásicas), forzando la homogeneización." }
+    ],
+    evid: "Sesgo en Paneles: Miembros del panel RAE 1992 publicaban casi exclusivamente en revistas mainstream y desconocían la literatura heterodoxa, juzgándola como inferior.",
+    ref: "Lee, F. (2009). pp. 153-171. Tablas 8.1, 8.2."
+  },
+
+  9: {
+    cat: "CAPÍTULO 9 (UK)",
+    title: "RAE y Dominación Mainstream (2000-03)",
+    mech: [
+      { level: "MICRO", desc: "Bullying Institucional: Heterodoxos tratados como 'anti-economistas', negación de promociones y eliminación de cursos de historia del pensamiento." },
+      { level: "MESO", desc: "Limpieza Departamental: Departamentos 'rankeados' (5*) dejaron de contratar heterodoxos explícitamente para mantener su estatus financiero." },
+      { level: "MACRO", desc: "Estandarización Curricular (QAA): Agencias de calidad (QAA) imponiendo benchmarks curriculares puramente neoclásicos, eliminando el pluralismo de la enseñanza." }
+    ],
+    evid: "Datos de contratación (2000-03): Ningún departamento 5* contrató heterodoxos. El 60% de las universidades no tenían economistas heterodoxos en su plantilla.",
+    ref: "Lee, F. (2009). pp. 172-186. Tablas 9.5, 9.6, 9.7."
+  },
+
+  // --- PARTE III: SIGLO XXI ---
+  10: {
+    cat: "CAPÍTULO 10",
+    title: "Emergencia de la Comunidad Heterodoxa (1990-2006)",
+    mech: [
+      { level: "MICRO", desc: "Identidad Compartida: Adopción del término 'Economía Heterodoxa' como identificador paraguas positivo, superando etiquetas fragmentadas (radical, institucional, etc.)." },
+      { level: "MESO", desc: "Integración Profesional: Aumento de la membresía cruzada en asociaciones (AFEE, URPE, ASE) y creación de la AHE en UK para unificar esfuerzos." },
+      { level: "MACRO", desc: "Globalización: Formación de una comunidad internacional visible a través de boletines (Heterodox Economics Newsletter) y conferencias mundiales." }
+    ],
+    evid: "Datos de membresía: En 2006, casi el 30% de los economistas heterodoxos en EE.UU. pertenecían a dos o más asociaciones, indicando una fuerte cohesión comunitaria.",
+    ref: "Lee, F. (2009). pp. 189-206. Tablas 10.1, 10.5."
+  },
+
+  11: {
+    cat: "CAPÍTULO 11",
+    title: "Ranking de Revistas y Departamentos Heterodoxos",
+    mech: [
+      { level: "MICRO", desc: "Citas como Conversación: Evaluar revistas no por factor de impacto general, sino por 'dependencia de investigación' (cuánto se citan entre sí los heterodoxos)." },
+      { level: "MESO", desc: "Evaluación Multidimensional: Ranking de departamentos basado en producción de conocimiento heterodoxo, enseñanza pluralista y ambiente de trabajo seguro." },
+      { level: "MACRO", desc: "Contra-Hegemonía Métrica: Desarrollar métricas propias para legitimar la calidad científica heterodoxa frente a los estándares sesgados del mainstream (Diamond List)." }
+    ],
+    evid: "Experimento de Ranking: Identificación de departamentos líderes (ej. SOAS, UMass Amherst) que contribuyen realmente a la reproducción de la comunidad heterodoxa.",
+    ref: "Lee, F. (2009). pp. 207-226. Tablas 11.2, 11.3, 11.7."
+  }
+};
+
+// --- CONFIGURACIÓN DE VIS.JS ---
+const nodesArray = [
+  // NÚCLEO
+  { id: 1, label: "INTRODUCCIÓN\nHistoria Comunitaria", group: 'core', shape: 'box', font: {size: 22, color: 'white'}, color: '#000000', margin: 15 },
+  
+  // PARTE I: USA
+  { id: 2, label: "EE.UU. 1900-70\nDominación", group: 'usa', shape: 'dot', size: 25 },
+  { id: 3, label: "EE.UU. 1945-70\nRadicales & Macartismo", group: 'usa', shape: 'dot', size: 20 },
+  { id: 4, label: "EE.UU. 1965-80\nContestación", group: 'usa', shape: 'dot', size: 20 },
+  { id: 5, label: "EE.UU. 1971-95\nPost Keynesianos", group: 'usa', shape: 'dot', size: 20 },
+  
+  // PARTE II: UK
+  { id: 6, label: "UK 1900-70\nClase Obrera vs. WEA", group: 'uk', shape: 'diamond', size: 25 },
+  { id: 7, label: "UK 1970-96\nCSE & PKSG", group: 'uk', shape: 'diamond', size: 20 },
+  { id: 8, label: "UK 1989-96\nImpacto RAE", group: 'uk', shape: 'diamond', size: 20 },
+  { id: 9, label: "UK 2000-03\nLimpieza Institucional", group: 'uk', shape: 'diamond', size: 20 },
+  
+  // PARTE III: FUTURO
+  { id: 10, label: "Emergencia 1990-2006\nComunidad Global", group: 'future', shape: 'hexagon', size: 30 },
+  { id: 11, label: "Metodología\nde Ranking Propio", group: 'future', shape: 'hexagon', size: 30 }
+];
+
+const edgesArray = [
+  // Flujo Histórico General
+  { from: 1, to: 2, width: 2 },
+  { from: 1, to: 6, width: 2 },
+  
+  // Flujo USA
+  { from: 2, to: 3, label: "represión", arrows: "to" },
+  { from: 3, to: 4, label: "reacción", arrows: "to" },
+  { from: 4, to: 5, label: "organización", arrows: "to" },
+  { from: 5, to: 10, label: "integración", arrows: "to" },
+  
+  // Flujo UK
+  { from: 6, to: 7, label: "resurgimiento", arrows: "to" },
+  { from: 7, to: 8, label: "ataque estatal", arrows: "to" },
+  { from: 8, to: 9, label: "consolidación", arrows: "to" },
+  { from: 9, to: 10, label: "respuesta", arrows: "to" },
+  
+  // Conexiones Temáticas
+  { from: 2, to: 6, label: "paralelismo", dashes: true },
+  { from: 8, to: 11, label: "necesidad de métricas", arrows: "to", color: {color:'#000'} },
+  { from: 4, to: 8, label: "rankings como armas", dashes: true },
+  { from: 10, to: 11, label: "futuro", arrows: "to" }
+];
+
+const container = document.getElementById('network');
+const data = {
+  nodes: new vis.DataSet(nodesArray),
+  edges: new vis.DataSet(edgesArray)
+};
+
+const options = {
+  nodes: {
+    borderWidth: 2,
+    shadow: true,
+    font: { face: 'Inter', color: '#111', multi: true },
+    color: { border: '#222', background: '#fff' }
+  },
+  edges: {
+    width: 1.5,
+    color: { color: '#666' },
+    smooth: { type: 'cubicBezier', roundness: 0.4 },
+    font: { align: 'middle', size: 11, background: 'rgba(255,255,255,0.8)', color: '#000' }
+  },
+  groups: {
+    core: { color: { background: '#000', border: '#000' }, font: { color: '#fff' } },
+    usa: { color: { background: '#ffffff', border: '#000' } }, /* Blanco/Negro */
+    uk: { color: { background: '#e0e0e0', border: '#000' } },  /* Gris claro */
+    future: { color: { background: '#333', border: '#000' }, font: { color: '#fff' } } /* Gris oscuro */
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 180,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 150 }
+  },
+  interaction: {
+    hover: true,
+    zoomView: true,
+    dragNodes: true
+  }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERFAZ ---
+
+// Función para filtrar nodos
+function filterGraph(type) {
+  const allNodes = nodesArray.map(n => n.id);
+  let showNodes = [];
+  
+  // Reset estilos botones
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if (type === 'all') {
+    showNodes = allNodes;
+  } else if (type === 'usa') {
+    showNodes = [1, 2, 3, 4, 5, 10];
+  } else if (type === 'uk') {
+    showNodes = [1, 6, 7, 8, 9, 10];
+  } else if (type === 'global') {
+    showNodes = [1, 5, 7, 10, 11];
+  }
+
+  const updateArray = nodesArray.map(n => {
+    return { id: n.id, hidden: !showNodes.includes(n.id) };
+  });
+  data.nodes.update(updateArray);
+  
+  if(type !== 'all') network.fit();
+}
+
+// Click en nodo
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    if (info) {
+      renderInfo(info);
+      openSidebar();
+    }
+  }
+});
+
+function renderInfo(info) {
+  const panel = document.getElementById('infoPanel');
+  
+  let mechanicsHTML = info.mech.map(m => `
+    <div class="mechanism-card">
+      <span class="mechanism-title">${m.level}</span>
+      <div class="mechanism-body">${m.desc}</div>
+    </div>
+  `).join('');
+
+  panel.innerHTML = `
+    <div class="info-category">${info.cat}</div>
+    <h2 class="info-title">${info.title}</h2>
+    
+    ${mechanicsHTML}
+    
+    <div class="evidence-box">
+      <div class="evidence-label">Evidencia & Datos Clave</div>
+      <div class="evidence-content">${info.evid}</div>
+    </div>
+    
+    <div class="source-ref">
+      <strong>Fuente:</strong> ${info.ref}
+    </div>
+    
+    <div style="height: 60px;"></div>
+  `;
+}
+
+// Control del Sidebar
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.querySelector('.toggle-menu');
+
+function openSidebar() {
+  sidebar.classList.remove('closed');
+  if (window.innerWidth <= 1000) {
+    toggleBtn.innerText = "Cerrar Panel";
+  }
+}
+
+function toggleMobilePanel() {
+  sidebar.classList.toggle('closed');
+  if (sidebar.classList.contains('closed')) {
+    toggleBtn.innerText = "Explorar Análisis";
+  } else {
+    toggleBtn.innerText = "Cerrar Panel";
+  }
+}
+
+// Inicialización
+window.onload = function() {
+  // En móvil cerrar sidebar al inicio
+  if (window.innerWidth <= 1000) {
+    sidebar.classList.add('closed');
+  } else {
+    // Escritorio: mostrar Intro
+    renderInfo(bookData[1]);
+    sidebar.classList.remove('closed');
+  }
+  
+  // Activar filtro 'Panorama' visualmente
+  document.querySelector('.filter-btn').classList.add('active');
+};
+
+</script>
+</body>
+</html>

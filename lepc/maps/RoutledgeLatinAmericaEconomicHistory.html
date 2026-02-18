@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: Historia Económica de América Latina</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f8f9fa;
+    --sidebar-bg: #ffffff;
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --accent-color: #8B0000; /* Rojo oscuro académico/elegante */
+    --border-color: #dee2e6;
+    --sidebar-width: 480px;
+    --card-bg: #fdfdfd;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- LAYOUT RESPONSIVE --- */
+  #app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    position: relative;
+  }
+
+  /* --- BARRA LATERAL (INFO) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+    z-index: 30;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+  }
+
+  .sidebar-header {
+    padding: 25px 30px;
+    background: #1c1c1c;
+    color: #fff;
+    border-bottom: 3px solid var(--accent-color);
+    flex-shrink: 0;
+  }
+
+  .sidebar-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .sidebar-header .meta {
+    font-size: 0.8rem;
+    color: #adb5bd;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
+
+  .navigation-filters {
+    padding: 15px 20px;
+    background: #f1f3f5;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-group { 
+    display: flex; 
+    gap: 10px; 
+    padding-bottom: 5px;
+  }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #ced4da;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    flex-shrink: 0;
+    font-family: 'Lato', sans-serif;
+  }
+  
+  .filter-btn:hover, .filter-btn.active { 
+    background: var(--text-primary); 
+    color: #fff; 
+    border-color: var(--text-primary);
+  }
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px;
+    scroll-behavior: smooth;
+  }
+
+  /* ESTILOS DE CONTENIDO */
+  .info-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--accent-color);
+    display: inline-block;
+    padding-bottom: 3px;
+  }
+
+  .info-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 25px;
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  .mechanism-card {
+    background: var(--card-bg);
+    border-left: 4px solid #343a40;
+    padding: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+
+  .mechanism-title {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 8px;
+    display: block;
+    letter-spacing: 0.5px;
+  }
+
+  .mechanism-body {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #212529;
+    text-align: justify;
+  }
+  
+  .evidence-box {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 20px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    position: relative;
+  }
+  
+  .evidence-label { 
+    color: #495057; 
+    font-weight: 900; 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .source-ref {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #868e96;
+    font-style: italic;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .footer {
+    padding: 15px;
+    background: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    text-align: center;
+    color: #495057;
+    flex-shrink: 0;
+    font-weight: 600;
+  }
+
+  /* --- ÁREA DE RED --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    background-color: #e9ecef;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    outline: none;
+  }
+
+  /* CONTROLES FLOTANTES */
+  .control-panel {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+
+  .fab-btn {
+    background: #212529;
+    border: none;
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-size: 1.2rem;
+    color: white;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .fab-btn:hover { background: #000; transform: scale(1.05); }
+
+  .toggle-menu {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #212529;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 40;
+    display: none; /* Se activa en móvil */
+    border: none;
+  }
+
+  /* --- MEDIA QUERIES (Mobile/Tablet) --- */
+  @media (max-width: 1024px) {
+    .sidebar {
+      position: absolute;
+      width: 100%;
+      height: 65%; /* Panel inferior en móvil */
+      bottom: 0;
+      top: auto;
+      border-right: none;
+      border-top: 1px solid var(--border-color);
+      transform: translateY(0);
+    }
+    
+    .sidebar.closed {
+      transform: translateY(100%);
+    }
+
+    .toggle-menu {
+      display: block;
+    }
+    
+    #network-wrapper {
+      height: 100%; 
+      position: absolute;
+      top: 0; left: 0; width: 100%;
+    }
+    
+    .control-panel {
+      bottom: 68%; /* Ajustar arriba del panel inferior */
+    }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #adb5bd; }
+  ::-webkit-scrollbar-thumb:hover { background: #868e96; }
+
+</style>
+</head>
+<body>
+
+<div id="app-container">
+  
+  <!-- BOTÓN MÓVIL -->
+  <button class="toggle-menu" onclick="toggleMobilePanel()">
+    Explorar Capítulos
+  </button>
+
+  <!-- BARRA LATERAL / PANEL INFERIOR -->
+  <div class="sidebar closed" id="sidebar">
+    <div class="sidebar-header">
+      <h1>Latin American Economic History</h1>
+      <div class="meta">Molly C. Ball (2025) | Routledge</div>
+    </div>
+
+    <div class="navigation-filters">
+      <div class="filter-group">
+        <button class="filter-btn" onclick="filterGraph('all')">Panorama Completo</button>
+        <button class="filter-btn" onclick="filterGraph('foundation')">1800-1930</button>
+        <button class="filter-btn" onclick="filterGraph('modern')">1930-2022</button>
+      </div>
+    </div>
+
+    <div class="content-area" id="infoPanel">
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #adb5bd; text-align: center;">
+        <div style="font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 10px; color: #dee2e6;">§</div>
+        <p style="font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #495057;">Seleccione un nodo en el mapa<br>para desplegar el análisis.</p>
+        <p style="font-size: 0.8rem; margin-top: 20px;">Análisis estructural de mecanismos económicos<br>y evidencia histórica.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+    </div>
+  </div>
+
+  <!-- RED VISUAL -->
+  <div id="network-wrapper">
+    <div id="network"></div>
+    <div class="control-panel">
+      <button class="fab-btn" onclick="network.fit({animation:true})" title="Centrar Vista">✜</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// --- BASE DE DATOS ESTRUCTURAL ---
+const bookData = {
+  1: {
+    cat: "CAPÍTULO 1",
+    title: "Crecimiento vs. Desarrollo",
+    mech: [
+      {
+        level: "MICRO (Individuo/Hogar)",
+        desc: "El impacto de la volatilidad económica en la vida cotidiana se ilustra a través de la película 'Los Olvidados' (1950). El crecimiento del PIB no garantiza mejoras en la calidad de vida individual (ej. nutrición, educación)."
+      },
+      {
+        level: "MESO (Instituciones/Mercados)",
+        desc: "Diversificación productiva limitada. La región depende excesivamente de pocos productos (commodities), lo que genera 'enfermedad holandesa' y alta volatilidad en los términos de intercambio."
+      },
+      {
+        level: "MACRO (Estructura/Región)",
+        desc: "Crecimiento sin Desarrollo: Aunque el PIB per cápita aumentó diez veces desde la independencia, la desigualdad (Coeficiente de Gini) sigue siendo la más alta del mundo. Brecha creciente con Occidente y Asia Oriental."
+      }
+    ],
+    evid: "Dato: En 1820, el PIB per cápita de LatAm era la mitad del de Occidente; para 2008, la brecha se había ampliado significativamente. La desigualdad aumentó consistentemente entre 1870 y 1960.",
+    ref: "Ball, M. C. (2025). pp. 1-20. Referencia a Bértola & Ocampo (2012)."
+  },
+  
+  2: {
+    cat: "CAPÍTULO 2",
+    title: "Nuevas Naciones (Independencia–1870)",
+    mech: [
+      {
+        level: "MICRO",
+        desc: "La carga de la deuda soberana recae sobre el ciudadano común a través de impuestos regresivos e inflación (ej. Haití pagando indemnización a Francia). Falta de educación pública para las masas."
+      },
+      {
+        level: "MESO",
+        desc: "Inversión pública sesgada hacia la infraestructura de exportación (ferrocarriles como el de Güines en Cuba, 1837) en lugar de capital humano. Inestabilidad política (caudillismo) frena el desarrollo de mercados de crédito."
+      },
+      {
+        level: "MACRO",
+        desc: "La 'Trampa de la Deuda' temprana. El acuerdo de Haití en 1825 (150 millones de francos) y los defaults generalizados en la década de 1820 limitaron la capacidad fiscal de los estados nacientes."
+      }
+    ],
+    evid: "Caso: Haití destinó hasta el 60% de su presupuesto a deuda y ejército, dejando casi nada para desarrollo. Cuba construyó el primer ferrocarril (1837) antes que España, impulsado por el azúcar y la esclavitud.",
+    ref: "Ball, M. C. (2025). pp. 21-37."
+  },
+  
+  3: {
+    cat: "CAPÍTULO 3",
+    title: "Crecimiento Guiado por Exportaciones I (1870–1930)",
+    mech: [
+      {
+        level: "MICRO",
+        desc: "Transición laboral: De la esclavitud al trabajo asalariado y la inmigración masiva (italianos a Argentina/Brasil). Las familias inmigrantes usaron redes sociales para navegar mercados laborales, pero enfrentaron discriminación."
+      },
+      {
+        level: "MESO",
+        desc: "Crisis Bancarias y Capital: La Crisis Baring (1890) demuestra la fragilidad de los sistemas financieros emergentes. Desarrollo de mercados de capitales que benefician a élites pero excluyen a la mayoría."
+      },
+      {
+        level: "MACRO",
+        desc: "Integración Global y Volatilidad: La región se especializa en materias primas (café, trigo, nitratos). El crecimiento poblacional y la inversión extranjera (británica) impulsan el PIB pero aumentan la dependencia."
+      }
+    ],
+    evid: "Dato: Argentina recibió la tasa de inmigración más alta de América (30% de la población era nacida en el extranjero antes de la WWI). Ley Rio Branco (1871) en Brasil como paso gradual hacia la abolición.",
+    ref: "Ball, M. C. (2025). pp. 38-51."
+  },
+  
+  4: {
+    cat: "CAPÍTULO 4",
+    title: "Crecimiento Guiado por Exportaciones II (1870–1930)",
+    mech: [
+      {
+        level: "MICRO",
+        desc: "Explotación Laboral: El crecimiento exportador no se tradujo en mejores salarios reales para los trabajadores rurales (ej. United Fruit Co.). Surgimiento de huelgas urbanas por condiciones de vida (Lima 1919)."
+      },
+      {
+        level: "MESO",
+        desc: "Enclaves Económicos: Empresas como la United Fruit Company operan como estados dentro del estado, controlando infraestructura (ferrocarriles, correos) y reprimiendo la organización laboral."
+      },
+      {
+        level: "MACRO",
+        desc: "Intervencionismo de EE.UU.: Desplazamiento del capital británico por el estadounidense. Ocupaciones militares y control de aduanas en el Caribe y Centroamérica para asegurar pagos de deuda."
+      }
+    ],
+    evid: "Caso: La Masacre de las Bananeras en Colombia (1928). En México, el 97% de la población rural no tenía tierras en 1910, detonando la Revolución Mexicana.",
+    ref: "Ball, M. C. (2025). pp. 52-68."
+  },
+  
+  5: {
+    cat: "CAPÍTULO 5",
+    title: "Crecimiento Guiado por el Estado (1930–1980)",
+    mech: [
+      {
+        level: "MICRO",
+        desc: "Urbanización acelerada: Migración masiva del campo a la ciudad buscando servicios y empleo industrial. Surgimiento de la informalidad urbana como estrategia de supervivencia."
+      },
+      {
+        level: "MESO",
+        desc: "Industrialización por Sustitución de Importaciones (ISI): Creación de Empresas Estatales (SOEs) como PEMEX (1938) para reducir dependencia externa. La CEPAL promueve políticas estructuralistas."
+      },
+      {
+        level: "MACRO",
+        desc: "Guerra Fría y Polarización: La Revolución Cubana (1959) como punto de inflexión. Estados Unidos responde con la Alianza para el Progreso y apoyo a dictaduras para frenar el comunismo."
+      }
+    ],
+    evid: "Dato: Entre 1950 y 1980, la región creció al 2.7% anual per cápita ('Edad de Oro'), pero con represión política. Brasil y México lideraron el crecimiento industrial mediante proteccionismo.",
+    ref: "Ball, M. C. (2025). pp. 69-97."
+  },
+
+  6: {
+    cat: "CAPÍTULO 6",
+    title: "El Retorno del Mercado (1980–2008)",
+    mech: [
+      {
+        level: "MICRO",
+        desc: "Impacto del Ajuste: La 'Década Perdida' (años 80) trajo hiperinflación y desempleo. Las familias recurrieron a la migración (remesas) y al empleo informal para sobrevivir a la austeridad."
+      },
+      {
+        level: "MESO",
+        desc: "Privatizaciones y Reformas: Venta de empresas estatales (ej. Telmex a Carlos Slim). El Consenso de Washington impuso disciplina fiscal y liberalización comercial (TLCAN/NAFTA 1994)."
+      },
+      {
+        level: "MACRO",
+        desc: "Crisis de Deuda Externa: El shock Volcker (1979) elevó tasas de interés, provocando el default de México (1982) y el contagio regional. Reestructuración de deuda vía Plan Brady."
+      }
+    ],
+    evid: "Dato: La pobreza extrema aumentó un 37% en los 80s. El sector informal creció hasta representar el 42% de la fuerza laboral en 1990. Crisis del Tequila (1994) y Corralito Argentino (2001).",
+    ref: "Ball, M. C. (2025). pp. 98-118."
+  },
+
+  7: {
+    cat: "CAPÍTULO 7",
+    title: "Historia Reciente (2008–2022)",
+    mech: [
+      {
+        level: "MICRO",
+        desc: "Redes de Seguridad Social: Programas de Transferencias Monetarias Condicionadas (ej. Bolsa Família) redujeron la pobreza extrema y empoderaron a mujeres jefas de hogar."
+      },
+      {
+        level: "MESO",
+        desc: "Políticas Contracíclicas: Bancos centrales autónomos y reservas internacionales permitieron mitigar el impacto de la crisis de 2008, a diferencia de crisis anteriores."
+      },
+      {
+        level: "MACRO",
+        desc: "Choques Externos del Siglo XXI: Resiliencia ante la crisis de 2008 pero vulnerabilidad ante COVID-19 (-7% PIB). Dependencia renovada de commodities (Boom de las materias primas y China)."
+      }
+    ],
+    evid: "Evidencia: Pobreza cayó del 44% (2002) al 28% (2014). Sin embargo, COVID-19 causó retrocesos masivos. Venezuela sufrió colapso económico (-45% PIB) y migración masiva.",
+    ref: "Ball, M. C. (2025). pp. 119-140."
+  }
+};
+
+// --- CONFIGURACIÓN DE VIS.JS ---
+const nodesArray = [
+  // NODO CENTRAL
+  { id: 0, label: "HISTORIA\nECONÓMICA\nLATAM", group: 'core', shape: 'box', font: {size: 24, color: 'white', face: 'Playfair Display'}, color: '#1c1c1c', margin: 15 },
+  
+  // CAPÍTULOS
+  { id: 1, label: "1. Crecimiento\nvs Desarrollo", group: 'chap', shape: 'circle', margin: 10 },
+  { id: 2, label: "2. Nuevas\nNaciones\n(Indep-1870)", group: 'chap', shape: 'circle', margin: 10 },
+  { id: 3, label: "3. Export-Led\n(Labor/Capital)", group: 'chap', shape: 'circle', margin: 10 },
+  { id: 4, label: "4. Export-Led\n(Tierra/Hegemonía)", group: 'chap', shape: 'circle', margin: 10 },
+  { id: 5, label: "5. State-Led\nGrowth (ISI)", group: 'chap', shape: 'circle', margin: 10 },
+  { id: 6, label: "6. Retorno del\nMercado (Neolib)", group: 'chap', shape: 'circle', margin: 10 },
+  { id: 7, label: "7. Historia\nReciente (S.XXI)", group: 'chap', shape: 'circle', margin: 10 },
+
+  // TEMAS TRANSVERSALES (NODOS CONECTORES)
+  { id: 10, label: "Desigualdad\nEstructural", group: 'theme', shape: 'text' },
+  { id: 11, label: "Volatilidad\nCommodities", group: 'theme', shape: 'text' },
+  { id: 12, label: "Rol del\nEstado", group: 'theme', shape: 'text' },
+  { id: 13, label: "Deuda\nExterna", group: 'theme', shape: 'text' }
+];
+
+const edgesArray = [
+  // Conexiones al núcleo
+  { from: 0, to: 1, length: 180 },
+  { from: 0, to: 2, length: 180 },
+  { from: 0, to: 3, length: 180 },
+  { from: 0, to: 4, length: 180 },
+  { from: 0, to: 5, length: 180 },
+  { from: 0, to: 6, length: 180 },
+  { from: 0, to: 7, length: 180 },
+
+  // Flujo Cronológico
+  { from: 2, to: 3, arrows: "to", label: "Estabilidad relativa", font: {align: 'middle'} },
+  { from: 3, to: 4, dashes: true, label: "Mismo periodo" },
+  { from: 4, to: 5, arrows: "to", label: "Crisis 1929 -> ISI" },
+  { from: 5, to: 6, arrows: "to", label: "Crisis Deuda -> Ajuste" },
+  { from: 6, to: 7, arrows: "to", label: "Reacción Social" },
+
+  // Conexiones Temáticas
+  { from: 10, to: 1, dashes: true, color: '#adb5bd' }, // Desigualdad en cap 1
+  { from: 10, to: 4, dashes: true, color: '#adb5bd' }, // Tierra en cap 4
+  { from: 10, to: 7, dashes: true, color: '#adb5bd' }, // CCTs en cap 7
+  
+  { from: 11, to: 3, dashes: true, color: '#adb5bd' }, // Commodities cap 3
+  { from: 11, to: 5, dashes: true, color: '#adb5bd' }, // Prebisch/ISI cap 5
+  
+  { from: 13, to: 2, dashes: true, color: '#adb5bd' }, // Deuda Haití
+  { from: 13, to: 6, dashes: true, color: '#adb5bd' }, // Década Perdida
+  
+  { from: 12, to: 5, dashes: true, color: '#adb5bd' }, // Estado fuerte
+  { from: 12, to: 6, dashes: true, color: '#adb5bd' }  // Estado mínimo
+];
+
+const container = document.getElementById('network');
+const data = {
+  nodes: new vis.DataSet(nodesArray),
+  edges: new vis.DataSet(edgesArray)
+};
+
+const options = {
+  nodes: {
+    borderWidth: 1,
+    shadow: true,
+    font: { face: 'Lato', color: '#212529', size: 14 },
+    color: { border: '#343a40', background: '#ffffff' }
+  },
+  edges: {
+    width: 1,
+    color: { color: '#ced4da' },
+    smooth: { type: 'continuous' },
+    font: { align: 'middle', size: 10, background: 'rgba(255,255,255,0.8)' }
+  },
+  groups: {
+    core: { 
+      color: { background: '#212529', border: '#000' }, 
+      font: { color: '#fff' },
+      shadow: { color: 'rgba(0,0,0,0.3)', size: 10 }
+    },
+    chap: { 
+      color: { background: '#fff', border: '#8B0000' },
+      font: { multi: 'html', bold: { color: '#8B0000' } } 
+    },
+    theme: {
+      font: { size: 12, color: '#6c757d', face: 'Lato' },
+      shape: 'text'
+    }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 200,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 200 }
+  },
+  interaction: {
+    hover: true,
+    zoomView: true
+  }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERFAZ ---
+
+function filterGraph(type) {
+  const allNodes = nodesArray.map(n => n.id);
+  let showNodes = [];
+  
+  if (type === 'all') {
+    showNodes = allNodes;
+  } else if (type === 'foundation') {
+    showNodes = [0, 1, 2, 3, 4, 10, 13]; // Early history
+  } else if (type === 'modern') {
+    showNodes = [0, 5, 6, 7, 11, 12]; // Modern history
+  }
+
+  const updateArray = nodesArray.map(n => {
+    return { id: n.id, hidden: !showNodes.includes(n.id) };
+  });
+  data.nodes.update(updateArray);
+  
+  if(type !== 'all') network.fit();
+}
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    if (info) {
+      renderInfo(info);
+      openSidebar();
+    }
+  }
+});
+
+function renderInfo(info) {
+  const panel = document.getElementById('infoPanel');
+  
+  let mechanicsHTML = info.mech.map(m => `
+    <div class="mechanism-card">
+      <span class="mechanism-title">${m.level}</span>
+      <div class="mechanism-body">${m.desc}</div>
+    </div>
+  `).join('');
+
+  panel.innerHTML = `
+    <div class="info-category">${info.cat}</div>
+    <h2 class="info-title">${info.title}</h2>
+    
+    ${mechanicsHTML}
+    
+    <div class="evidence-box">
+      <span class="evidence-label">Evidencia Empírica & Datos Clave</span>
+      ${info.evid}
+    </div>
+    
+    <div class="source-ref">
+      Fuente: ${info.ref}
+    </div>
+    
+    <div style="height: 60px;"></div>
+  `;
+}
+
+// Control del Sidebar (Móvil y Escritorio)
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.querySelector('.toggle-menu');
+
+function openSidebar() {
+  sidebar.classList.remove('closed');
+  if (window.innerWidth <= 1024) {
+    toggleBtn.innerText = "Cerrar Panel";
+  }
+}
+
+function toggleMobilePanel() {
+  sidebar.classList.toggle('closed');
+  if (sidebar.classList.contains('closed')) {
+    toggleBtn.innerText = "Explorar Capítulos";
+  } else {
+    toggleBtn.innerText = "Cerrar Panel";
+  }
+}
+
+// Ajuste inicial
+window.onload = function() {
+  if (window.innerWidth <= 1024) {
+    sidebar.classList.add('closed');
+  } else {
+    // En escritorio, mostrar intro del cap 1
+    renderInfo(bookData[1]);
+    sidebar.classList.remove('closed');
+  }
+};
+
+</script>
+</body>
+</html>

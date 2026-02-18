@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: Routledge Handbook of Heterodox Economics</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-body: #f8f9fa;
+    --sidebar-bg: #ffffff;
+    --text-main: #000000;
+    --text-muted: #404040;
+    --border-color: #d1d5db;
+    --accent-color: #8b0000; /* Rojo oscuro académico */
+    --highlight-bg: #f3f4f6;
+    --sidebar-width: 480px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    overflow: hidden;
+  }
+
+  /* --- LAYOUT PRINCIPAL --- */
+  #main-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    position: relative;
+  }
+
+  /* --- PANEL DE INFORMACIÓN (SIDEBAR) --- */
+  .info-panel {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+    height: 100%;
+    transition: transform 0.3s ease;
+  }
+
+  .header {
+    padding: 25px;
+    background: #1a1a1a;
+    color: #fff;
+    border-bottom: 4px solid var(--accent-color);
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.4rem;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .header .subtitle {
+    font-size: 0.8rem;
+    color: #d4d4d4;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .filters {
+    padding: 15px 25px;
+    border-bottom: 1px solid var(--border-color);
+    background: #fff;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid #404040;
+    color: #404040;
+    padding: 6px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  .content-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px;
+  }
+
+  /* ESTILOS DE TEXTO EN EL PANEL */
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--accent-color);
+    display: inline-block;
+  }
+
+  .chapter-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.8rem;
+    color: #000;
+    margin-top: 0;
+    margin-bottom: 25px;
+    line-height: 1.1;
+  }
+
+  .analysis-block {
+    margin-bottom: 30px;
+  }
+
+  .level-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #000;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-left: 3px solid #000;
+  }
+
+  .level-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #202020;
+    margin: 0 0 15px 0;
+    padding-left: 5px;
+  }
+
+  .evidence-container {
+    border: 1px solid #000;
+    padding: 15px;
+    background-color: #fff;
+    margin-top: 20px;
+  }
+
+  .evidence-title {
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+    text-decoration: underline;
+  }
+
+  .evidence-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .citation {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #555;
+    font-style: italic;
+    text-align: right;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+
+  .footer-credit {
+    padding: 15px;
+    background: #f3f4f6;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    text-align: center;
+    color: #404040;
+    flex-shrink: 0;
+  }
+
+  /* --- VISUALIZACIÓN DE RED --- */
+  #network-container {
+    flex-grow: 1;
+    position: relative;
+    background: #e5e5e5;
+  }
+
+  #network {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* --- CONTROLES MÓVILES --- */
+  .mobile-toggle {
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 950px) {
+    .info-panel {
+      position: absolute;
+      width: 100%;
+      height: 60%;
+      bottom: 0;
+      left: 0;
+      border-right: none;
+      border-top: 2px solid #000;
+      transform: translateY(0);
+    }
+
+    .info-panel.hidden {
+      transform: translateY(100%);
+    }
+
+    .mobile-toggle {
+      display: block;
+    }
+
+    #network-container {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #fff; }
+  ::-webkit-scrollbar-thumb { background: #888; }
+  ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+</style>
+</head>
+<body>
+
+<div id="main-layout">
+  
+  <button class="mobile-toggle" onclick="togglePanel()">Mostrar/Ocultar Panel</button>
+
+  <div class="info-panel" id="sidePanel">
+    <div class="header">
+      <h1>The Routledge Handbook of Heterodox Economics</h1>
+      <div class="subtitle">Editado por Jo, Chester & D’Ippoliti (2018)</div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterNodes('all')">Todo</button>
+      <button class="filter-btn" onclick="filterNodes('theory')">Teoría</button>
+      <button class="filter-btn" onclick="filterNodes('micro')">Micro/Inst.</button>
+      <button class="filter-btn" onclick="filterNodes('macro')">Macro/Din.</button>
+      <button class="filter-btn" onclick="filterNodes('policy')">Política</button>
+    </div>
+
+    <div class="content-scroll" id="contentArea">
+      <div style="height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: #666;">
+        <div>
+          <p style="font-family: 'Crimson Pro', serif; font-size: 1.2rem;">Haga clic en un nodo de la red<br>para ver el análisis estructural.</p>
+          <p style="font-size: 0.8rem; margin-top: 15px;">Análisis basado en los mecanismos generativos<br>y evidencia empírica del texto.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-credit">
+      Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+    </div>
+  </div>
+
+  <div id="network-container">
+    <div id="network"></div>
+  </div>
+
+</div>
+
+<script>
+// --- DATOS DEL MANUAL (Extracción detallada) ---
+const bookData = {
+  1: {
+    section: "INTRODUCCIÓN",
+    title: "La Heterodoxia como Sistema Abierto",
+    mechanisms: [
+      { level: "MICRO", text: "El agente no es un átomo aislado, sino un sujeto socialmente constituido cuyas preferencias y acciones dependen del contexto histórico e institucional." },
+      { level: "MESO", text: "Las instituciones actúan como el nexo entre agencia y estructura, proporcionando estabilidad (reglas) pero permitiendo cambio evolutivo." },
+      { level: "MACRO", text: "La economía se define como un 'proceso de aprovisionamiento social' (social provisioning process), rechazando la definición de asignación de recursos escasos." }
+    ],
+    evidence: "El manual reúne a 44 contribuyentes de 16 países, demostrando que la heterodoxia es un 'cuerpo vivo de conocimiento' con ontología compartida (sistemas abiertos, historia) más allá de la mera crítica al mainstream.",
+    source: "Capítulo 1: Jo, Chester & D’Ippoliti."
+  },
+  2: {
+    section: "FUNDAMENTOS TEÓRICOS",
+    title: "El Proceso de Aprovisionamiento Social",
+    mechanisms: [
+      { level: "MICRO", text: "La actividad económica surge de la necesidad de sustentar la vida, no solo del intercambio de mercado. Incluye trabajo remunerado y no remunerado." },
+      { level: "MESO", text: "Empresas y hogares actúan como 'going concerns' (entidades en marcha) que buscan supervivencia y reproducción social, no solo maximización." },
+      { level: "MACRO", text: "La economía está incrustada (embedded) en sistemas sociales y ecológicos; el excedente social es generado y distribuido mediante relaciones de poder." }
+    ],
+    evidence: "Contraste histórico: Mientras la economía neoclásica aísla el mercado, la heterodoxia retoma la tradición clásica de producción y distribución del excedente social.",
+    source: "Capítulo 2: Jo & Todorova."
+  },
+  3: {
+    section: "FUNDAMENTOS TEÓRICOS",
+    title: "El Enfoque del Excedente Social",
+    mechanisms: [
+      { level: "MICRO", text: "División técnica del trabajo: La interdependencia productiva hace imposible determinar la productividad marginal individual." },
+      { level: "MESO", text: "Conflicto distributivo: La partición del producto neto entre salarios y beneficios es un fenómeno político e institucional, no puramente técnico." },
+      { level: "MACRO", text: "Causalidad Clásica: La inversión determina el ahorro (vía multiplicador) y el crecimiento depende de la reinversión productiva del excedente." }
+    ],
+    evidence: "Referencia a Sraffa (1960) y la controversia del capital: demostración lógica de que la distribución es exógena al sistema de precios.",
+    source: "Capítulo 3: Martins."
+  },
+  4: {
+    section: "TEORÍA MONETARIA",
+    title: "Dinero y Producción Monetaria",
+    mechanisms: [
+      { level: "MICRO", text: "El dinero no es un velo, afecta decisiones reales. Los contratos se denominan en dinero para gestionar la incertidumbre fundamental." },
+      { level: "MESO", text: "Dinero Endógeno: Los bancos crean dinero ex nihilo al otorgar crédito (los préstamos crean depósitos), limitado solo por la solvencia y la demanda." },
+      { level: "MACRO", text: "Teoría Monetaria Moderna (MMT): El Estado, como emisor monopolista de la moneda, no tiene restricción financiera operativa; los impuestos impulsan la demanda de moneda." }
+    ],
+    evidence: "Evidencia histórica (Chartalismo): El dinero surge como unidad de cuenta para deudas con el Estado/Templos, milenios antes del mercado de trueque.",
+    source: "Capítulo 5: Passarella & Cap. 17: Tcherneva."
+  },
+  5: {
+    section: "DEMANDA EFECTIVA",
+    title: "Principio de Demanda Efectiva",
+    mechanisms: [
+      { level: "MICRO", text: "Inversión autónoma: Las decisiones de inversión de las empresas se basan en 'animal spirits' y expectativas a largo plazo, no en ahorros previos." },
+      { level: "MESO", text: "Distribución y Demanda: Una redistribución hacia los salarios suele aumentar la demanda (growth wage-led) debido a la mayor propensión al consumo de los trabajadores." },
+      { level: "MACRO", text: "Paradoja del Ahorro: Intentos individuales de ahorrar más pueden reducir la demanda agregada y, por tanto, el ahorro total realizado." }
+    ],
+    evidence: "Modelos Kaleckianos: Demuestran que el crecimiento impulsado por salarios es empíricamente relevante en la mayoría de economías desarrolladas.",
+    source: "Capítulo 6: Hein."
+  },
+  6: {
+    section: "ANATOMÍA DEL CAPITALISMO",
+    title: "La Empresa de Negocios (Business Enterprise)",
+    mechanisms: [
+      { level: "MICRO", text: "La empresa no es una función de producción, es una organización social jerárquica que administra precios y planea producción." },
+      { level: "MESO", text: "Precios Administrados: Las empresas fijan precios mediante un margen (mark-up) sobre costos para financiar inversiones y dividendos, ignorando el 'vaciamiento' de mercado." },
+      { level: "MACRO", text: "Competencia Real: No es equilibrio perfecto, sino guerra por cuota de mercado, reducción de costos y control tecnológico." }
+    ],
+    evidence: "Evidencia empírica (Means, Lee): Los precios industriales son estables ante cambios de demanda; las empresas ajustan cantidades, no precios.",
+    source: "Capítulo 14: Jo."
+  },
+  7: {
+    section: "ANATOMÍA DEL CAPITALISMO",
+    title: "Estado e Instituciones",
+    mechanisms: [
+      { level: "MICRO", text: "Agencia Interactiva: Los individuos internalizan normas pero tienen capacidad creativa para alterar instituciones." },
+      { level: "MESO", text: "Evolución Institucional: Las instituciones (hábitos de pensamiento codificados) seleccionan comportamientos y evolucionan por 'causalidad acumulativa'." },
+      { level: "MACRO", text: "Rol del Estado: No es un intruso en el mercado, sino su creador y regulador necesario. Puede actuar como empleador de última instancia." }
+    ],
+    evidence: "Análisis Vebleniano: Las instituciones no son eficientes per se, a menudo protegen intereses creados ('sabotaje') sobre el bienestar comunitario.",
+    source: "Capítulo 11: Henry & Cap. 33: Klimina."
+  },
+  8: {
+    section: "DINÁMICA MACRO",
+    title: "Financialización y Crisis",
+    mechanisms: [
+      { level: "MICRO", text: "Maximización del Valor para el Accionista: Las empresas no financieras invierten en activos financieros en lugar de capital productivo." },
+      { level: "MESO", text: "Desconexión Banca-Industria: El sector financiero crece desproporcionadamente, extrayendo rentas del sector real y los hogares (deuda)." },
+      { level: "MACRO", text: "Régimen de Crecimiento Dominado por Finanzas: Crecimiento lento, desigualdad creciente y fragilidad sistémica (Hipótesis de Inestabilidad Financiera de Minsky)." }
+    ],
+    evidence: "Datos (1980-2010): Aumento dramático de la participación del sector financiero en las ganancias totales y estancamiento de la inversión real en EE.UU. y Europa.",
+    source: "Capítulo 28: Dünhaupt."
+  },
+  9: {
+    section: "DINÁMICA MACRO",
+    title: "Comercio y Cadenas Globales",
+    mechanisms: [
+      { level: "MICRO", text: "Ventaja Absoluta: Las empresas compiten por costos unitarios y tecnología, no por ventaja comparativa estática." },
+      { level: "MESO", text: "Cadenas Globales de Valor: Estructuras de gobernanza donde empresas líderes del Norte capturan valor creado por proveedores del Sur." },
+      { level: "MACRO", text: "Desarrollo Desigual: El libre comercio puede reforzar brechas tecnológicas y de ingresos (Ley de Thirlwall: restricción de balanza de pagos)." }
+    ],
+    evidence: "Crítica a H-O-S: La persistencia de déficits comerciales y la falta de convergencia global contradicen las predicciones neoclásicas del comercio.",
+    source: "Capítulo 23: Liang & Cap. 24: Fernández/Brondino."
+  },
+  10: {
+    section: "TRANSFORMACIÓN",
+    title: "Medio Ambiente y Energía",
+    mechanisms: [
+      { level: "MICRO", text: "Consumo Social: Las preferencias son endógenas y socialmente constituidas, impulsando consumo posicional insostenible." },
+      { level: "MESO", text: "Régimen Energético: El capitalismo industrial depende estructuralmente de combustibles fósiles densos; la transición requiere planificación, no solo precios." },
+      { level: "MACRO", text: "Límites Biofísicos (Entropía): La economía es un subsistema abierto de la ecología cerrada. El crecimiento infinito es imposible (Georgescu-Roegen)." }
+    ],
+    evidence: "Datos del Antropoceno: La correlación directa entre crecimiento del PIB global y emisiones de CO2 desafía la hipótesis del desacoplamiento absoluto.",
+    source: "Capítulo 30: Ekeland/Sæther & Cap. 31: Chester."
+  },
+  11: {
+    section: "POLÍTICA Y FUTURO",
+    title: "Pleno Empleo y Bienestar",
+    mechanisms: [
+      { level: "MICRO", text: "Trabajo como derecho humano y base de inclusión social, no solo desutilidad." },
+      { level: "MESO", text: "Garantía de Empleo (Job Guarantee): El Estado actúa como empleador de última instancia, fijando un piso salarial y absorbiendo el desempleo involuntario." },
+      { level: "MACRO", text: "Funcionalidad de las Finanzas: El déficit fiscal no es intrínsecamente malo si moviliza recursos reales ociosos sin inflación." }
+    ],
+    evidence: "Experiencias históricas (New Deal, Plan Jefes en Argentina) demuestran que el Estado puede movilizar trabajo directamente cuando el mercado falla.",
+    source: "Capítulo 35: Marsh et al. & Cap. 36: Cumbers/McMaster."
+  }
+};
+
+// --- CONFIGURACIÓN DE RED (Vis.js) ---
+const nodes = [
+  { id: 1, label: "Heterodoxia\n(Ontología Social)", group: 'core', shape: 'box', color: { background: '#000', border: '#000' }, font: { color: '#fff', size: 20 } },
+  
+  // Nodos Teóricos
+  { id: 2, label: "Aprovisionamiento\nSocial", group: 'theory' },
+  { id: 3, label: "Excedente\nSocial", group: 'theory' },
+  { id: 4, label: "Dinero\nEndógeno/MMT", group: 'theory' },
+  { id: 5, label: "Demanda\nEfectiva", group: 'theory' },
+  
+  // Nodos Institucionales
+  { id: 6, label: "Empresa\n(Going Concern)", group: 'inst' },
+  { id: 7, label: "Estado &\nInstituciones", group: 'inst' },
+  
+  // Nodos Dinámicos
+  { id: 8, label: "Financialización", group: 'macro' },
+  { id: 9, label: "Comercio &\nDesigualdad", group: 'macro' },
+  { id: 10, label: "Ecología &\nEntropía", group: 'macro' },
+  
+  // Política
+  { id: 11, label: "Pleno Empleo\n(Job Guarantee)", group: 'policy' }
+];
+
+const edges = [
+  // Conexiones Nucleares
+  { from: 1, to: 2, arrows: 'to', label: 'define objeto' },
+  { from: 2, to: 3, arrows: 'to' },
+  { from: 2, to: 4, arrows: 'to' },
+  { from: 2, to: 6, arrows: 'to' },
+  
+  // Relaciones Teóricas
+  { from: 5, to: 3, dashes: true, label: 'distribución' },
+  { from: 4, to: 5, arrows: 'to', label: 'monetaria' },
+  
+  // Instituciones a Dinámica
+  { from: 6, to: 5, arrows: 'to', label: 'inversión' },
+  { from: 7, to: 4, arrows: 'to', label: 'soberanía' },
+  
+  // Dinámicas Macro
+  { from: 4, to: 8, arrows: 'to', label: 'crédito' },
+  { from: 6, to: 8, label: 'gestión' },
+  { from: 6, to: 9, label: 'cadenas valor' },
+  
+  // Conflictos / Límites
+  { from: 2, to: 10, label: 'límites' },
+  { from: 8, to: 10, dashes: true, label: 'crisis' },
+  
+  // Política
+  { from: 7, to: 11, arrows: 'to', label: 'política' },
+  { from: 5, to: 11, label: 'absorción' }
+];
+
+const container = document.getElementById('network');
+const data = {
+  nodes: new vis.DataSet(nodes),
+  edges: new vis.DataSet(edges)
+};
+
+const options = {
+  nodes: {
+    shape: 'dot',
+    size: 25,
+    font: { face: 'Inter', size: 14, color: '#333', multi: true },
+    borderWidth: 2,
+    shadow: true
+  },
+  edges: {
+    width: 1.5,
+    color: { color: '#a0a0a0', highlight: '#000' },
+    smooth: { type: 'continuous' },
+    font: { align: 'middle', size: 10, background: 'rgba(255,255,255,0.8)' }
+  },
+  groups: {
+    core: { color: { background: '#000', border: '#000' }, font: { color: '#fff' } },
+    theory: { color: { background: '#fff', border: '#8b0000' }, font: { color: '#8b0000' }, shape: 'diamond' },
+    inst: { color: { background: '#fff', border: '#333' }, shape: 'box' },
+    macro: { color: { background: '#f3f4f6', border: '#555' }, shape: 'hexagon' },
+    policy: { color: { background: '#e5e7eb', border: '#000' }, shape: 'ellipse' }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 150,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 150 }
+  },
+  interaction: {
+    hover: true,
+    zoomView: true
+  }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERACCIÓN ---
+
+// Clic en nodo
+network.on("click", function(params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    showAnalysis(nodeId);
+    if (window.innerWidth <= 950) {
+        document.getElementById('sidePanel').classList.remove('hidden');
+    }
+  }
+});
+
+function showAnalysis(id) {
+  const info = bookData[id];
+  const container = document.getElementById('contentArea');
+  
+  if (!info) return;
+
+  const mechHTML = info.mechanisms.map(m => `
+    <div class="analysis-block">
+      <span class="level-header">${m.level}</span>
+      <p class="level-text">${m.text}</p>
+    </div>
+  `).join('');
+
+  const html = `
+    <div class="section-label">${info.section}</div>
+    <h2 class="chapter-title">${info.title}</h2>
+    
+    ${mechHTML}
+    
+    <div class="evidence-container">
+      <span class="evidence-title">Evidencia & Datos</span>
+      <p class="evidence-text">${info.evidence}</p>
+    </div>
+    
+    <div class="citation">
+      Fuente: ${info.source}
+    </div>
+    <div style="height: 50px"></div>
+  `;
+
+  container.innerHTML = html;
+  container.scrollTop = 0;
+}
+
+// Filtros
+function filterNodes(type) {
+  const allNodes = nodes.map(n => n.id);
+  let visible = [];
+
+  // Actualizar botones
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  if (type === 'all') visible = allNodes;
+  else if (type === 'theory') visible = [1, 2, 3, 4, 5];
+  else if (type === 'micro') visible = [1, 2, 6, 7];
+  else if (type === 'macro') visible = [1, 4, 5, 8, 9, 10];
+  else if (type === 'policy') visible = [1, 7, 10, 11];
+
+  const updateArray = nodes.map(n => ({
+    id: n.id,
+    hidden: !visible.includes(n.id)
+  }));
+  
+  data.nodes.update(updateArray);
+  if(type !== 'all') network.fit();
+}
+
+// Toggle Móvil
+function togglePanel() {
+  document.getElementById('sidePanel').classList.toggle('hidden');
+}
+
+// Inicialización
+window.onload = function() {
+    if (window.innerWidth <= 950) {
+        document.getElementById('sidePanel').classList.add('hidden');
+    } else {
+        showAnalysis(1); // Cargar intro en escritorio
+    }
+};
+
+</script>
+</body>
+</html>

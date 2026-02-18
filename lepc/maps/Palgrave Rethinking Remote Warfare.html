@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Análisis: Rethinking Remote Warfare (2026)</title>
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-app: #f8f9fa; /* Fondo muy claro */
+    --sidebar-bg: #ffffff;
+    --text-primary: #000000; /* Negro puro para máximo contraste */
+    --text-secondary: #333333; /* Gris muy oscuro */
+    --accent-color: #2c3e50; /* Azul oscuro elegante/militar */
+    --highlight-color: #c0392b; /* Rojo sobrio para énfasis */
+    --border-color: #d1d5db;
+    --sidebar-width: 480px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0; padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+
+  /* --- LAYOUT PRINCIPAL --- */
+  #app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    position: relative;
+  }
+
+  /* --- BARRA LATERAL (INFO) --- */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+    z-index: 30;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+  }
+
+  .sidebar-header {
+    padding: 25px 30px;
+    background: #1a1a1a;
+    color: #fff;
+    border-bottom: 4px solid var(--highlight-color);
+    flex-shrink: 0;
+  }
+
+  .sidebar-header h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.4rem;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .sidebar-header .meta {
+    font-size: 0.8rem;
+    color: #d1d5db;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
+
+  .navigation-filters {
+    padding: 15px 25px;
+    background: #f3f4f6;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-group { 
+    display: flex; 
+    gap: 10px; 
+  }
+
+  .filter-btn {
+    background: #fff;
+    border: 1px solid #9ca3af;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .filter-btn:hover, .filter-btn.active { 
+    background: var(--accent-color); 
+    color: #fff; 
+    border-color: var(--accent-color);
+  }
+
+  .content-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px;
+    scroll-behavior: smooth;
+  }
+
+  /* ESTILOS DE CONTENIDO */
+  .info-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--highlight-color);
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--highlight-color);
+    display: inline-block;
+    padding-bottom: 2px;
+  }
+
+  .info-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.9rem;
+    color: var(--text-primary);
+    margin-top: 5px;
+    margin-bottom: 20px;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+
+  .mechanism-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid var(--accent-color);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  }
+
+  .mechanism-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    display: block;
+    letter-spacing: 0.5px;
+  }
+
+  .mechanism-body {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #111;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+  
+  .evidence-box {
+    background: #f8f9fa;
+    border: 1px solid #d1d5db;
+    border-radius: 0;
+    padding: 15px;
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: #222;
+    line-height: 1.5;
+  }
+  
+  .evidence-label { 
+    color: #000; 
+    font-weight: 800; 
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    margin-bottom: 8px;
+    display: block;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+  }
+
+  .source-ref {
+    margin-top: 25px;
+    font-size: 0.8rem;
+    color: #555;
+    font-style: italic;
+    border-top: 1px solid #ddd;
+    padding-top: 12px;
+    font-family: 'Crimson Pro', serif;
+  }
+
+  .footer {
+    padding: 15px;
+    background: #f3f4f6;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    text-align: center;
+    color: #444;
+    flex-shrink: 0;
+  }
+
+  /* --- ÁREA DE RED --- */
+  #network-wrapper {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    background-color: #eef2f6;
+  }
+
+  #network {
+    width: 100%; height: 100%;
+    outline: none;
+  }
+
+  /* CONTROLES FLOTANTES */
+  .control-panel {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+
+  .fab-btn {
+    background: #1a1a1a;
+    border: none;
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-size: 1.2rem;
+    color: white;
+    transition: transform 0.1s, background 0.2s;
+  }
+  .fab-btn:hover { background: var(--highlight-color); }
+  .fab-btn:active { transform: scale(0.95); }
+
+  .toggle-menu {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #1a1a1a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 40;
+    display: none; /* Se activa en móvil */
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* --- MEDIA QUERIES (Mobile/Tablet) --- */
+  @media (max-width: 1024px) {
+    .sidebar {
+      position: absolute;
+      width: 100%;
+      height: 65%; /* Panel inferior en móvil */
+      bottom: 0;
+      top: auto;
+      border-right: none;
+      border-top: 2px solid var(--accent-color);
+      transform: translateY(0);
+    }
+    
+    .sidebar.closed {
+      transform: translateY(100%);
+    }
+
+    .toggle-menu {
+      display: block;
+    }
+    
+    #network-wrapper {
+      height: 100%;
+      position: absolute;
+      top: 0; left: 0; width: 100%;
+    }
+    
+    .control-panel {
+      bottom: 67%; /* Ajustar arriba del panel inferior */
+    }
+  }
+  
+  /* Scrollbar discreto */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #999; border-radius: 0; }
+  ::-webkit-scrollbar-thumb:hover { background: #666; }
+
+</style>
+</head>
+<body>
+
+<div id="app-container">
+  
+  <!-- BOTÓN MÓVIL -->
+  <button class="toggle-menu" onclick="toggleMobilePanel()">
+    Ver Mapa / Análisis
+  </button>
+
+  <!-- BARRA LATERAL / PANEL INFERIOR -->
+  <div class="sidebar closed" id="sidebar">
+    <div class="sidebar-header">
+      <h1>Rethinking Remote Warfare</h1>
+      <div class="meta">AI, Drones, and Future War (2026)</div>
+    </div>
+
+    <div class="navigation-filters">
+      <div class="filter-group">
+        <button class="filter-btn" onclick="filterGraph('all')">Todo</button>
+        <button class="filter-btn" onclick="filterGraph('foundation')">Fundamentos</button>
+        <button class="filter-btn" onclick="filterGraph('strategic')">Estrategia</button>
+        <button class="filter-btn" onclick="filterGraph('cases')">Casos</button>
+      </div>
+    </div>
+
+    <div class="content-area" id="infoPanel">
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #666; text-align: center;">
+        <div style="font-size: 2rem; margin-bottom: 15px; color: var(--accent-color);">■</div>
+        <p style="font-family: 'Crimson Pro', serif; font-size: 1.25rem; color: #000;">Seleccione un nodo en el mapa<br>para desplegar el análisis.</p>
+        <p style="font-size: 0.85rem; margin-top: 20px;">Análisis de mecanismos causales y evidencia empírica.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Análisis Estructural: <strong>Ricardo Alonzo Fernández Salguero</strong>
+    </div>
+  </div>
+
+  <!-- RED VISUAL -->
+  <div id="network-wrapper">
+    <div id="network"></div>
+    <div class="control-panel">
+      <button class="fab-btn" onclick="network.fit({animation:true})" title="Centrar Visión">✛</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// --- BASE DE DATOS ESTRUCTURAL DEL LIBRO ---
+const bookData = {
+  1: {
+    cat: "INTRODUCCIÓN",
+    title: "El Legado de la Guerra Remota",
+    mech: [
+      {
+        level: "MICRO (Individual)",
+        desc: "La percepción de 'invisibilidad' y 'bajo riesgo' por parte de los líderes políticos reduce el costo político interno de iniciar conflictos armados."
+      },
+      {
+        level: "MESO (Operacional)",
+        desc: "Transformación de la guerra remota: De una herramienta de hegemonía contra el terrorismo (EE.UU.) a una capacidad convencional integrada (Ucrania, Azerbaiyán)."
+      },
+      {
+        level: "MACRO (Sistémico)",
+        desc: "Proliferación tecnológica: El fin del monopolio occidental. La guerra remota ya no es 'remota' para el objetivo y es accesible para actores estatales y no estatales."
+      }
+    ],
+    evid: "Contraste entre la 'guerra contra el terror' (foco en asesinatos selectivos) y la guerra en Ucrania (drones integrados en artillería y maniobras convencionales). Hitos: Retoma de Ramadi (2015), Nagorno-Karabaj (2020), Invasión de Ucrania (2022).",
+    ref: "Capítulo 1: James Wesley Hutto & James Patton Rogers. pp. 1-12."
+  },
+  
+  // --- PARTE I: LEY, DEMOCRACIA Y NORMATIVA ---
+  2: {
+    cat: "NORMATIVA Y ÉTICA",
+    title: "Fenómeno y Experiencia: La Erosión del Civil",
+    mech: [
+      { level: "MICRO", desc: "Deshumanización a distancia: La interfaz tecnológica reduce la empatía y facilita la categorización del 'otro' como objetivo legítimo (frames of war)." },
+      { level: "MESO", desc: "Reconfiguración espacio-temporal: La guerra remota disuelve los límites tradicionales del campo de batalla ('battlescape' global), haciendo borrosa la distinción civil/combatiente." },
+      { level: "MACRO", desc: "Biopolítica de la 'vida desnuda': La capacidad soberana de decidir quién vive o muere sin rendición de cuentas, transformando a las poblaciones locales en objetos de gestión de riesgos." }
+    ],
+    evid: "Testimonios de civiles en Pakistán y Yemen que viven bajo el zumbido constante de drones. La falta de transparencia en el conteo de bajas civiles por parte de EE.UU. y sus aliados.",
+    ref: "Capítulo 2: Aditi Gupta. pp. 13-48."
+  },
+  
+  3: {
+    cat: "DERECHO INTERNACIONAL",
+    title: "La Práctica Estatal de los Ataques con Drones",
+    mech: [
+      { level: "MICRO", desc: "Toma de decisiones legales: Los operadores y abogados militares aplican interpretaciones flexibles de 'inminencia' y 'participación directa' en hostilidades." },
+      { level: "MESO", desc: "Contestación Normativa: La práctica estatal (State Practice) de EE.UU. intenta crear nueva costumbre internacional, pero se enfrenta a la resistencia judicial y política de aliados (ej. Alemania, Reino Unido)." },
+      { level: "MACRO", desc: "Resiliencia del Derecho Internacional: A pesar de las violaciones, el marco legal no ha colapsado; los estados buscan justificar sus acciones dentro del derecho, reafirmando su relevancia." }
+    ],
+    evid: "Caso de Alemania restringiendo el uso de la base de Ramstein para ataques de EE.UU. El uso de drones por Turquía, Francia y Reino Unido dentro de marcos de conflicto armado declarado, diferenciándose de la política de asesinatos selectivos globales de la CIA.",
+    ref: "Capítulo 3: Amelie Theussen. pp. 49-82."
+  },
+  
+  4: {
+    cat: "TECNOLOGÍA Y SOCIEDAD",
+    title: "Líneas Borrosas: Convergencia Militar-Civil de IA",
+    mech: [
+      { level: "MICRO", desc: "Sesgo algorítmico: La transferencia de algoritmos militares a la policía civil (y viceversa) incorpora sesgos raciales y sociales en la vigilancia doméstica." },
+      { level: "MESO", desc: "Isomorfismo Institucional: La adopción de tácticas, equipos y lógicas militares por fuerzas policiales (militarización de la policía) bajo la excusa de la eficiencia tecnológica." },
+      { level: "MACRO", desc: "Erosión democrática: La normalización de la vigilancia masiva y predictiva (estilo 'Skynet' o 'Project Maven') amenaza las libertades civiles en democracias liberales." }
+    ],
+    evid: "Uso de drones Predator por la patrulla fronteriza de EE.UU. durante protestas civiles (George Floyd). Transferencia de equipo militar (Programa 1033) a policías locales. Caso de China y la Fusión Militar-Civil.",
+    ref: "Capítulo 4: Shama Ams. pp. 83-104."
+  },
+  
+  // --- PARTE II: COERCIÓN Y COMBATE ---
+  5: {
+    cat: "ESTRATEGIA",
+    title: "¿Pueden los Drones Coaccionar?",
+    mech: [
+      { level: "MICRO", desc: "Cálculo Costo-Beneficio: Los drones aumentan los costos para los terroristas (supervivencia personal), pero fallan en la comunicación de demandas claras." },
+      { level: "MESO", desc: "Paradoja de la Señalización: La naturaleza encubierta y de bajo costo de los drones hace que las amenazas sean menos creíbles en términos de 'escalada' y resolución política." },
+      { level: "MACRO", desc: "Falla de la Coerción: La 'guerra barata' no logra obligar a cambios de comportamiento estratégicos en el enemigo; se convierte en una campaña de castigo sin fin (brute force vs coercion)." }
+    ],
+    evid: "Análisis de la campaña de drones de EE.UU. en Pakistán y Yemen. A pesar de diezmar el liderazgo de Al-Qaeda, no se logró detener la operatividad de los grupos ni su reclutamiento.",
+    ref: "Capítulo 5: Kelly A. Grieco & James Wesley Hutto. pp. 105-140."
+  },
+
+  6: {
+    cat: "CASO DE ESTUDIO",
+    title: "Huella Ligera, Impacto Pesado: Níger",
+    mech: [
+      { level: "MICRO", desc: "Confusión local: La multiplicidad de actores extranjeros genera desconfianza en la población y teorías conspirativas sobre las intenciones occidentales." },
+      { level: "MESO", desc: "Atasco de Seguridad ('Traffic Jam'): La saturación de fuerzas extranjeras (EE.UU., Francia, UE, bases de drones) sin coordinación crea disfunciones y debilita al estado anfitrión." },
+      { level: "MACRO", desc: "Desestabilización Regional: La estrategia de 'huella ligera' occidental resulta en una presencia 'pesada' y desestabilizadora que no aborda las causas raíz del conflicto." }
+    ],
+    evid: "La construcción de la Base Aérea 201 en Agadez. La presencia simultánea y descoordinada de fuerzas de EE.UU., Francia (Barkhane), Italia, Alemania y misiones de la UE en un estado frágil.",
+    ref: "Capítulo 6: James Patton Rogers & Delina Goxho. pp. 141-180."
+  },
+
+  7: {
+    cat: "TECNOLOGÍA",
+    title: "La (Sobre)Promesa de la Guerra Remota y la IA",
+    mech: [
+      { level: "MICRO", desc: "Limitaciones técnicas: La IA actual es frágil ('brittle'); eficaz en entornos controlados pero propensa a fallos catastróficos en la niebla de la guerra real." },
+      { level: "MESO", desc: "Ciclo de Hype Tecnológico: La industria de defensa y los planificadores militares sobreestiman las capacidades a corto plazo de la IA para asegurar financiación." },
+      { level: "MACRO", desc: "Vulnerabilidad Sistémica: La dependencia excesiva en sistemas conectados y automatizados crea nuevas vulnerabilidades a ciberataques y envenenamiento de datos." }
+    ],
+    evid: "Contraste entre la retórica de la 'Tercera Compensación' (Third Offset) de EE.UU. y las realidades de la integración de IA. Dificultades en el reconocimiento automático de objetivos en entornos urbanos complejos.",
+    ref: "Capítulo 7: Ash Rossiter. pp. 181-204."
+  },
+
+  8: {
+    cat: "EVOLUCIÓN MILITAR",
+    title: "Drones All the Way Down: Ucrania",
+    mech: [
+      { level: "MICRO", desc: "Adaptación Táctica: Soldados integrando drones comerciales (DJI) a nivel de pelotón para corrección de artillería y conciencia situacional." },
+      { level: "MESO", desc: "Evolución vs Revolución: La guerra sigue requiriendo armas combinadas (tanques, artillería, infantería); los drones son un multiplicador de fuerza, no un reemplazo total." },
+      { level: "MACRO", desc: "Guerra de Desgaste Transparente: El campo de batalla se vuelve transparente, dificultando la maniobra sorpresa y llevando a un estancamiento tipo Primera Guerra Mundial pero con alta tecnología." }
+    ],
+    evid: "Guerra Ruso-Ucraniana (2022-2025). El fracaso de la 'guerra relámpago' rusa y la transición a una guerra de artillería asistida por drones. La democratización del poder aéreo a través de drones FPV baratos.",
+    ref: "Capítulo 8: Michael John Williams. pp. 205-228."
+  },
+
+  9: {
+    cat: "PSICOLOGÍA Y ÉTICA",
+    title: "No Tan Remoto: La Experiencia del Piloto",
+    mech: [
+      { level: "MICRO", desc: "Intimidad Tele-presente: Los pilotos de drones observan a sus objetivos durante días o semanas, creando una conexión psicológica más fuerte que la de un piloto de caza tradicional." },
+      { level: "MESO", desc: "Estrés y Trauma: Las altas tasas de TEPT y agotamiento en tripulaciones de drones desmienten la narrativa de la 'mentalidad de videojuego'." },
+      { level: "MACRO", desc: "Mito de la Distancia: La distancia física no equivale a distancia moral o psicológica. La guerra remota no es 'indiferente'." }
+    ],
+    evid: "Estudios psicológicos de la Fuerza Aérea de EE.UU. sobre tripulaciones de MQ-9 Reaper. Comparación de las rutinas operativas entre pilotos desplegados (en teatro) y pilotos en 'reachback' (en Nevada).",
+    ref: "Capítulo 9: Jean-Baptiste Jeangène Vilmer. pp. 229-258."
+  },
+
+  10: {
+    cat: "CONCLUSIÓN",
+    title: "¿Se Acabó? Legados y Futuro",
+    mech: [
+      { level: "MICRO", desc: "El fin de lo heroico: La guerra remota cuestiona las nociones tradicionales de valor y riesgo en el combate." },
+      { level: "MESO", desc: "Normalización de la Excepción: Las prácticas de excepción de la guerra contra el terror se han convertido en características permanentes de la política exterior." },
+      { level: "MACRO", desc: "Segunda Era de los Drones: Transición del monopolio occidental a la proliferación global (actores estatales y no estatales). El retorno de la guerra convencional de alta intensidad." }
+    ],
+    evid: "El éxito de los hutíes usando drones contra Arabia Saudita. La adaptación de tecnologías remotas por grupos insurgentes. La irrelevancia de la 'huella ligera' ante conflictos como Ucrania.",
+    ref: "Capítulo 10: Caroline Kennedy-Pipe. pp. 259-265."
+  }
+};
+
+// --- CONFIGURACIÓN DE RED (VIS.JS) ---
+const nodesArray = [
+  // NÚCLEO
+  { id: 1, label: "Rethinking\nRemote Warfare", group: 'core', shape: 'box', font: {size: 22, color: 'white', face: 'Crimson Pro'}, color: '#000000', margin: 15 },
+  
+  // TEMAS PRINCIPALES
+  { id: 2, label: "Erosión del Civil\n(Ética/Normativa)", group: 'theme', shape: 'ellipse' },
+  { id: 3, label: "Derecho Internacional\n(Práctica Estatal)", group: 'theme', shape: 'ellipse' },
+  { id: 4, label: "IA y Democracia\n(Policialización)", group: 'theme', shape: 'ellipse' },
+  { id: 5, label: "Coerción Fallida\n(Límites Estratégicos)", group: 'theme', shape: 'ellipse' },
+  { id: 6, label: "Caso Níger\n(Huella Pesada)", group: 'case', shape: 'box', color: '#fff', border: '#000' },
+  { id: 7, label: "Hype de la IA\n(Límites Tecnológicos)", group: 'theme', shape: 'ellipse' },
+  { id: 8, label: "Caso Ucrania\n(Evolución Militar)", group: 'case', shape: 'box', color: '#fff', border: '#000' },
+  { id: 9, label: "Psicología del Piloto\n(Intimidad Remota)", group: 'theme', shape: 'ellipse' },
+  { id: 10, label: "Legados y Futuro\n(Proliferación)", group: 'theme', shape: 'ellipse' }
+];
+
+const edgesArray = [
+  // Conexiones desde el Núcleo
+  { from: 1, to: 2, label: "impacto humano" },
+  { from: 1, to: 3, label: "legalidad" },
+  { from: 1, to: 4, label: "tecnología dual" },
+  { from: 1, to: 5, label: "estrategia" },
+  { from: 1, to: 6, label: "estudio de caso" },
+  { from: 1, to: 7, label: "tecnología futura" },
+  { from: 1, to: 8, label: "guerra actual" },
+  { from: 1, to: 9, label: "factor humano" },
+  { from: 1, to: 10, label: "conclusión" },
+
+  // Conexiones Temáticas Cruzadas
+  { from: 2, to: 9, label: "experiencia", dashes: true },
+  { from: 3, to: 6, label: "soberanía", dashes: true },
+  { from: 5, to: 8, label: "eficacia", dashes: true },
+  { from: 7, to: 4, label: "automatización", dashes: true },
+  { from: 6, to: 10, label: "inestabilidad", dashes: true },
+  { from: 8, to: 7, label: "realidad vs hype", dashes: true }
+];
+
+const container = document.getElementById('network');
+const data = {
+  nodes: new vis.DataSet(nodesArray),
+  edges: new vis.DataSet(edgesArray)
+};
+
+const options = {
+  nodes: {
+    borderWidth: 1,
+    shadow: true,
+    font: { face: 'Inter', color: '#111', size: 14 },
+    color: { border: '#333', background: '#fff' },
+    shapeProperties: { borderRadius: 4 }
+  },
+  edges: {
+    width: 1,
+    color: { color: '#666', opacity: 0.8 },
+    smooth: { type: 'continuous', roundness: 0 },
+    font: { align: 'middle', size: 10, background: 'rgba(255,255,255,0.8)', color: '#444' },
+    arrows: { to: { enabled: true, scaleFactor: 0.5 } }
+  },
+  groups: {
+    core: { 
+      color: { background: '#000', border: '#000' }, 
+      font: { color: '#fff' },
+      shadow: { color: 'rgba(0,0,0,0.3)', size: 10 } 
+    },
+    theme: { 
+      color: { background: '#ffffff', border: '#2c3e50' },
+      font: { color: '#000' }
+    },
+    case: { 
+      color: { background: '#f2f2f2', border: '#000' },
+      font: { color: '#000', weight: 'bold' },
+      borderWidth: 2
+    }
+  },
+  physics: {
+    enabled: true,
+    solver: 'forceAtlas2Based',
+    forceAtlas2Based: {
+      gravitationalConstant: -100,
+      centralGravity: 0.01,
+      springLength: 200,
+      springConstant: 0.08
+    },
+    stabilization: { iterations: 150 }
+  },
+  interaction: {
+    hover: true,
+    zoomView: true,
+    tooltipDelay: 200
+  }
+};
+
+const network = new vis.Network(container, data, options);
+
+// --- LÓGICA DE INTERFAZ ---
+
+function filterGraph(type) {
+  const allNodes = nodesArray.map(n => n.id);
+  let showNodes = [];
+  
+  if (type === 'all') {
+    showNodes = allNodes;
+  } else if (type === 'foundation') {
+    showNodes = [1, 2, 3, 4, 9]; // Introducción, Derecho, Ética, Psicología
+  } else if (type === 'strategic') {
+    showNodes = [1, 5, 7, 10]; // Coerción, IA, Futuro
+  } else if (type === 'cases') {
+    showNodes = [1, 6, 8]; // Níger, Ucrania
+  }
+
+  // Actualizar visibilidad
+  const updateArray = nodesArray.map(n => {
+    return { id: n.id, hidden: !showNodes.includes(n.id) };
+  });
+  data.nodes.update(updateArray);
+  
+  // Resaltar botón activo
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  if(type !== 'all') network.fit();
+}
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    const info = bookData[nodeId];
+    
+    if (info) {
+      renderInfo(info);
+      openSidebar();
+    }
+  }
+});
+
+function renderInfo(info) {
+  const panel = document.getElementById('infoPanel');
+  
+  let mechanicsHTML = info.mech.map(m => `
+    <div class="mechanism-card">
+      <span class="mechanism-title">${m.level}</span>
+      <div class="mechanism-body">${m.desc}</div>
+    </div>
+  `).join('');
+
+  panel.innerHTML = `
+    <div class="info-category">${info.cat}</div>
+    <h2 class="info-title">${info.title}</h2>
+    
+    ${mechanicsHTML}
+    
+    <div class="evidence-box">
+      <span class="evidence-label">Evidencia Empírica & Datos</span>
+      ${info.evid}
+    </div>
+    
+    <div class="source-ref">
+      Referencia: ${info.ref}
+    </div>
+    
+    <div style="height: 60px;"></div>
+  `;
+}
+
+// Control del Sidebar
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.querySelector('.toggle-menu');
+
+function openSidebar() {
+  sidebar.classList.remove('closed');
+  if (window.innerWidth <= 1024) {
+    toggleBtn.innerText = "Cerrar Panel";
+  }
+}
+
+function toggleMobilePanel() {
+  sidebar.classList.toggle('closed');
+  if (sidebar.classList.contains('closed')) {
+    toggleBtn.innerText = "Ver Análisis";
+  } else {
+    toggleBtn.innerText = "Cerrar Panel";
+  }
+}
+
+// Inicialización
+window.onload = function() {
+  // En pantallas grandes mostrar intro
+  if (window.innerWidth > 1024) {
+    renderInfo(bookData[1]);
+    sidebar.classList.remove('closed');
+  } else {
+    // En móviles ocultar para ver el mapa primero
+    sidebar.classList.add('closed');
+  }
+};
+
+</script>
+</body>
+</html>
