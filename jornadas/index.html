@@ -3,176 +3,265 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CIRCPyCS — Jornadas</title>
-  <meta name="description" content="Jornadas del CIRCPyCS: archivo de jornadas realizadas y próximas ediciones. 2025: Problemas de investigación en Ciencias Sociales (jun–jul). Próxima: Inteligencia artificial para Ciencias Sociales (fecha por confirmar)." />
+  <title>CIRCPyCS — Jornadas Académicas</title>
+  <meta name="description" content="Jornadas del CIRCPyCS: Jornadas de Investigación 2026 e Inteligencia Artificial. Archivo de eventos realizados." />
 
-  <!-- Tailwind -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] }
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
         }
       }
     }
   </script>
+  
+  <!-- Fuentes e Iconos -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  
+  <style>
+    /* Ajuste para scroll suave considerando el header sticky */
+    section[id] { scroll-margin-top: 80px; }
+  </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-800">
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col">
+  
   <!-- Cinta superior -->
-  <div class="h-1 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header / Nav (solo Volver) -->
-  <header class="sticky top-0 z-30 backdrop-blur bg-white/70 border-b border-slate-200">
+  <!-- Header -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-white/90 border-b border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       <a href="#inicio" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain" />
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-9 w-9 rounded-xl object-contain transition-transform group-hover:scale-110" />
         <div class="leading-tight">
-          <p class="text-xs tracking-wide text-slate-500">UAGRM</p>
-          <h1 class="font-bold text-lg">CIRCPyCS</h1>
+          <p class="text-[10px] tracking-wide text-slate-500 uppercase font-semibold">UAGRM</p>
+          <h1 class="font-bold text-lg text-slate-900">CIRCPyCS</h1>
         </div>
       </a>
+      
       <!-- Escritorio -->
-      <nav class="hidden md:flex items-center gap-3 text-sm">
-        <a href="https://criuagrm.github.io/" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 hover:border-sky-600 hover:text-sky-700">
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+        <a href="#proximas" class="hover:text-emerald-700 transition">Próximas Jornadas</a>
+        <a href="#realizadas" class="hover:text-emerald-700 transition">Archivo</a>
+        <a href="https://cir.uagrm.edu.bo.html" class="ml-2 inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:border-emerald-600 hover:text-emerald-700 transition">
           <i class="fa-solid fa-arrow-left"></i>
           Volver
         </a>
       </nav>
+
       <!-- Botón móvil -->
-      <button id="btnMobile" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-700 hover:border-sky-600 hover:text-sky-700" aria-controls="mobileMenu" aria-expanded="false">
+      <button id="btnMobile" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 text-slate-700 hover:border-emerald-600 hover:text-emerald-700 bg-white" aria-controls="mobileMenu" aria-expanded="false">
         <span class="sr-only">Abrir menú</span>
         <i class="fa-solid fa-bars"></i>
       </button>
     </div>
-    <!-- Menú móvil: solo Volver -->
-    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 grid gap-1">
-        <a href="https://criuagrm.github.io/" class="px-3 py-2 rounded-lg hover:bg-slate-50 inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+
+    <!-- Menú móvil -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 bg-white absolute w-full shadow-lg">
+      <div class="px-4 py-4 grid gap-2 text-sm font-medium">
+        <a href="#proximas" class="block px-3 py-2 rounded-lg hover:bg-slate-50">Próximas Jornadas</a>
+        <a href="#realizadas" class="block px-3 py-2 rounded-lg hover:bg-slate-50">Archivo</a>
+        <hr class="border-slate-100 my-1">
+        <a href="https://cir.uagrm.edu.bo.html" class="block px-3 py-2 rounded-lg text-slate-500 hover:bg-slate-50"><i class="fa-solid fa-arrow-left mr-2"></i> Volver al inicio</a>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
-  <section id="inicio" class="relative overflow-hidden">
-    <div class="absolute inset-0 -z-10 opacity-20" aria-hidden="true">
-      <div class="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-emerald-500 blur-3xl"></div>
-      <div class="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-rose-500 blur-3xl"></div>
+  <section id="inicio" class="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24">
+    <!-- Fondos decorativos -->
+    <div class="absolute inset-0 -z-10 opacity-30 pointer-events-none" aria-hidden="true">
+      <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-emerald-200 blur-3xl opacity-50"></div>
+      <div class="absolute top-1/2 -left-24 h-72 w-72 rounded-full bg-sky-200 blur-3xl opacity-50"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
       <div class="text-center lg:text-left">
-        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Jornadas académicas</span>
-        <h2 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight">Jornadas CIRCPyCS</h2>
-        <p class="mt-3 text-slate-600 max-w-prose mx-auto lg:mx-0">Este año realizamos la jornada <b>“Problemas de investigación en Ciencias Sociales”</b> (jun–jul 2025). Próximamente: <b>“Inteligencia artificial para Ciencias Sociales”</b>. Todas nuestras jornadas combinan ponencias, mesas breves y talleres.</p>
-        <div class="mt-5 flex flex-wrap gap-3 justify-center lg:justify-start">
-          <a href="#proxima" class="px-4 py-2 rounded-xl bg-sky-600 text-white font-medium shadow hover:bg-sky-700">Próxima jornada</a>
-          <a href="#programa" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700">Ver programa</a>
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 mb-6">
+           <i class="fa-solid fa-calendar-check"></i> Agenda Académica
+        </span>
+        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
+          Jornadas <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-600">CIRCPyCS 2026</span>
+        </h2>
+        <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+          Espacios de articulación académica para la conformación de equipos, debate metodológico y estrategias de financiamiento en Ciencias Sociales.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+          <a href="#proximas" class="px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition flex items-center gap-2">
+            Ver Próximas Jornadas <i class="fa-solid fa-arrow-down"></i>
+          </a>
         </div>
       </div>
-      <div class="flex justify-center lg:justify-end">
-        <div class="rounded-3xl bg-white shadow-lg border border-slate-200 overflow-hidden max-w-md w-full">
-          <div class="h-40 bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600" aria-hidden="true"></div>
-          <div class="p-6">
-            <h3 class="font-bold text-xl">Edición 2025</h3>
-            <p class="mt-1 text-slate-600 text-sm">La Paz/virtual · Fechas por confirmar · GMT‑4</p>
+      
+      <!-- Card resumen Hero -->
+      <div class="hidden lg:block relative">
+        <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-sky-500 rounded-3xl transform rotate-3 opacity-20"></div>
+        <div class="relative rounded-3xl bg-white shadow-xl border border-slate-100 overflow-hidden">
+          <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+            <h3 class="font-bold text-slate-900">Agenda 2026</h3>
+            <span class="text-xs font-bold px-2 py-1 bg-white border border-slate-200 rounded text-slate-500">Actualizado</span>
+          </div>
+          <div class="divide-y divide-slate-100">
+             <!-- Evento 1: Feb -->
+            <div class="p-5 hover:bg-slate-50 transition cursor-default bg-emerald-50/30">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-emerald-600 uppercase">Febrero</span>
+              </div>
+              <p class="font-semibold text-slate-800">Jornadas de Investigación 2026</p>
+              <p class="text-xs text-slate-500 mt-1">26 y 27 de Febrero</p>
+            </div>
+            <!-- Evento 2: Oct -->
+            <div class="p-5 hover:bg-slate-50 transition cursor-default">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                <span class="text-xs font-bold text-sky-600 uppercase">Octubre</span>
+              </div>
+              <p class="font-semibold text-slate-800">IA para Ciencias Sociales</p>
+              <p class="text-xs text-slate-500 mt-1">Fechas por confirmar</p>
+            </div>
+            <!-- Evento 3: Pasado -->
+            <div class="p-5 hover:bg-slate-50 transition cursor-default grayscale opacity-60">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                <span class="text-xs font-bold text-slate-500 uppercase">Realizado</span>
+              </div>
+              <p class="font-semibold text-slate-800">Problemas de Investigación</p>
+              <p class="text-xs text-slate-500 mt-1">Junio - Julio 2025</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Próxima jornada -->
-  <section id="proxima" class="py-12 bg-white border-t border-slate-200">
+  <!-- PRÓXIMAS JORNADAS -->
+  <section id="proximas" class="py-16 bg-white border-t border-slate-200 scroll-mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-end justify-between gap-3 flex-wrap">
+      
+      <div class="flex items-end justify-between gap-4 flex-wrap mb-10">
         <div>
-          <h3 class="text-2xl font-bold">Próxima jornada</h3>
-          <p class="text-slate-600 mt-1">Convocatoria abierta para ponencias y pósters. Ejes: instituciones, economía política, sociología, urbanismo.</p>
+          <h3 class="text-2xl font-bold text-slate-900">Próximas Jornadas</h3>
+          <p class="text-slate-600 mt-1">Convocatorias abiertas y eventos confirmados para la gestión 2026.</p>
         </div>
-        <div class="flex items-center gap-2 text-xs">
-          <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Híbrido</span>
-          <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">2025</span>
+        <div class="flex gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold ring-1 ring-emerald-200">Abiertas</span>
+          <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-800 text-xs font-bold ring-1 ring-sky-200">Planificadas</span>
         </div>
       </div>
 
-      <div class="mt-8 grid gap-6 lg:grid-cols-3">
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden lg:col-span-2">
-          <div class="h-56 sm:h-72 bg-white flex items-center justify-center p-4 border-b border-slate-200">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="h-full w-auto object-contain"/>
+      <div class="grid gap-8 lg:grid-cols-1">
+        
+        <!-- EVENTO 1: JORNADAS 2026 (FEBRERO) -->
+        <article class="group rounded-2xl border border-emerald-200 bg-white shadow-md hover:shadow-xl transition overflow-hidden flex flex-col md:flex-row relative">
+          
+          <!-- Badge destacado -->
+          <div class="absolute top-4 right-4 z-10">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-sm animate-pulse">
+                <i class="fa-solid fa-fire"></i> Inscripciones Abiertas
+              </span>
           </div>
-          <div class="p-6">
-            <div class="flex flex-wrap items-center gap-2 text-xs">
-              <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200">Jornadas CIRCPyCS</span>
-              <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Fechas por confirmar</span>
+
+          <div class="md:w-1/3 bg-gradient-to-br from-emerald-600 to-teal-700 flex flex-col items-center justify-center p-8 text-white text-center">
+             <div class="mb-4 bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <i class="fa-solid fa-users-gear text-4xl"></i>
+             </div>
+             <h3 class="font-bold text-2xl mb-1">FEBRERO</h3>
+             <p class="text-emerald-100 font-medium text-lg">26 y 27</p>
+             <p class="text-xs text-emerald-200 mt-4 uppercase tracking-wider">Gestión 2026</p>
+          </div>
+
+          <div class="p-6 md:p-8 flex-1 flex flex-col justify-center bg-emerald-50/30">
+            <div class="flex flex-wrap items-center gap-2 text-xs mb-3">
+              <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200 font-semibold">Investigación</span>
+              <span class="px-2.5 py-1 rounded-full bg-white text-slate-600 ring-1 ring-slate-200"><i class="fa-solid fa-location-dot mr-1"></i> Módulo 283 / Virtual</span>
             </div>
-            <h4 class="mt-3 font-semibold text-lg">Jornada: Inteligencia artificial para Ciencias Sociales</h4>
-            <p class="mt-2 text-slate-600">Aplicaciones de IA y ciencia de datos para ciencias sociales: NLP y análisis de texto, redes y grafos, aprendizaje supervisado/no supervisado, ética y replicabilidad. Actividades: keynotes, mesas técnicas y demostraciones prácticas.</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <a href="#programa" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-calendar-days"></i> Ver programa</a>
-              <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo?subject=Envío%20de%20ponencia%20Jornadas%20CIRCPyCS" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:border-emerald-600 hover:text-emerald-700"><i class="fa-solid fa-paper-plane"></i> Enviar propuesta</a>
-              <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-file-lines"></i> Bases (PDF)</a>
-            </div>
-            <div class="mt-4 flex items-center gap-2">
-              <!-- Redes: icono-only -->
-              <a href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 backdrop-blur ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white hover:ring-transparent transition"><i class="fa-brands fa-facebook"></i></a>
-              <a href="#" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 backdrop-blur ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white hover:ring-transparent transition"><i class="fa-brands fa-youtube"></i></a>
-              <a href="#" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X (Twitter)" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 backdrop-blur ring-1 ring-slate-200 text-black hover:bg-black hover:text-white hover:ring-transparent transition"><i class="fa-brands fa-x-twitter"></i></a>
+            <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition">Jornadas de Investigación 2026</h4>
+            <p class="text-slate-800 font-medium text-sm mb-2">Conformación de Equipos, Formulación de Proyectos y Estrategias de Financiamiento.</p>
+            <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+              Espacio para consolidar equipos interdisciplinarios, elaborar perfiles de proyectos con potencial de financiamiento y fortalecer la cultura investigativa en la UAGRM.
+            </p>
+            
+            <div class="flex flex-wrap gap-3 mt-auto">
+              <a href="https://forms.gle/KBoVG1yRtuUx5opi8" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition shadow-md hover:-translate-y-0.5">
+                <i class="fa-solid fa-pen-to-square"></i> Inscribirme Ahora
+              </a>
+              <a href="https://cir.uagrm.edu.bo/jornadas/investigacion_2026.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-slate-300 bg-white hover:border-emerald-600 hover:text-emerald-700 transition">
+                <i class="fa-solid fa-link"></i> Ver Página
+              </a>
             </div>
           </div>
         </article>
 
-        <aside class="rounded-2xl border border-slate-200 bg-slate-50 p-6 h-fit">
-          <h5 class="font-semibold">Fechas clave (IA)*</h5>
-          <ul class="mt-2 text-sm text-slate-600 list-disc pl-5 space-y-1">
-            <li>Lanzamiento de convocatoria: por confirmar</li>
-            <li>Recepción de resúmenes: por confirmar</li>
-            <li>Programa final: por confirmar</li>
-          </ul>
-          <h5 class="mt-5 font-semibold">Público objetivo</h5>
-          <p class="mt-2 text-sm text-slate-600">Investigadores, estudiantes de posgrado y gestores públicos interesados en evidencia y métodos.</p>
-          <p class="mt-3 text-xs text-slate-500">*Actualizaremos esta sección y redes oficiales.</p>
-        </aside>
+        <!-- EVENTO 2: IA (OCTUBRE) -->
+        <article class="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:border-sky-300 transition overflow-hidden flex flex-col md:flex-row">
+          <div class="md:w-1/3 bg-slate-100 flex items-center justify-center p-8 relative overflow-hidden">
+             <!-- Patrón decorativo -->
+             <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-sky-400 to-transparent"></div>
+             <i class="fa-solid fa-robot text-6xl text-sky-200 group-hover:text-sky-400 transition transform group-hover:scale-110 duration-500"></i>
+          </div>
+          <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+            <div class="flex flex-wrap items-center gap-2 text-xs mb-3">
+              <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 ring-1 ring-sky-200 font-semibold">Tecnología y Sociedad</span>
+              <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200"><i class="fa-regular fa-clock mr-1"></i> Octubre 2026</span>
+            </div>
+            <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-sky-700 transition">Inteligencia Artificial para Ciencias Sociales</h4>
+            <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+              Aplicaciones de IA y ciencia de datos: NLP, análisis de redes, ética y replicabilidad. Actividades incluyen keynotes y demostraciones prácticas.
+            </p>
+            <div class="flex flex-wrap gap-3 mt-auto">
+              <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-sky-600 hover:bg-sky-700 transition">
+                <i class="fa-solid fa-link"></i> Ver Página
+              </a>
+              <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo?subject=Interés%20Jornadas%20IA" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm border border-slate-300 hover:border-sky-600 hover:text-sky-700 transition bg-white">
+                <i class="fa-regular fa-bell"></i> Notificarme
+              </a>
+            </div>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
 
-  <!-- Jornadas realizadas -->
-  <section id="realizadas" class="py-12 bg-white border-t border-slate-200">
+  <!-- JORNADAS REALIZADAS (Archivo) -->
+  <section id="realizadas" class="py-12 bg-slate-50 border-t border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-end justify-between gap-3 flex-wrap">
-        <div>
-          <h3 class="text-2xl font-bold">Jornadas realizadas</h3>
-          <p class="text-slate-600 mt-1">Archivo de jornadas culminadas. Pronto subiremos memorias y materiales.</p>
-        </div>
-        <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">2025</span>
+      <div class="flex items-center gap-3 mb-8">
+        <i class="fa-solid fa-box-archive text-slate-400 text-xl"></i>
+        <h3 class="text-2xl font-bold text-slate-800">Archivo de Jornadas</h3>
       </div>
 
-      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden">
-          <div class="bg-white flex items-center justify-center p-4 border-b border-slate-200">
-            <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS" class="w-full h-auto object-contain max-h-56"/>
-          </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
+        <article class="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition overflow-hidden opacity-90 hover:opacity-100">
           <div class="p-6">
-            <div class="flex flex-wrap items-center gap-2 text-xs">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Finalizada</span>
-              <span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200">Jun–Jul 2025</span>
-              <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">Ciencias sociales</span>
+            <div class="flex justify-between items-start mb-4">
+               <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="px-2 py-1 rounded bg-slate-100 text-slate-600 border border-slate-200">Jun–Jul 2025</span>
+                <span class="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">Finalizada</span>
+              </div>
             </div>
-            <h4 class="mt-3 font-semibold text-lg">Problemas de investigación en Ciencias Sociales</h4>
-            <p class="mt-2 text-slate-600">Delimitación de problemas, diseños, estrategias de datos y ética de investigación. Sesiones teórico‑metodológicas con ejercicios aplicados.</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-sky-600 hover:bg-sky-700"><i class="fa-solid fa-file-pdf"></i> Memorias (PDF)</a>
-              <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-regular fa-image"></i> Galería</a>
-            </div>
-            <div class="mt-4 flex items-center gap-2">
-              <a href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition"><i class="fa-brands fa-facebook"></i></a>
-              <a href="#" target="_blank" rel="noopener" aria-label="YouTube" title="YouTube" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
-              <a href="#" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X (Twitter)" class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 bg-white/90 ring-1 ring-slate-200 text-black hover:bg-black hover:text-white transition"><i class="fa-brands fa-x-twitter"></i></a>
+            
+            <h4 class="mt-2 font-bold text-lg text-slate-900">Problemas de investigación en Ciencias Sociales</h4>
+            <p class="mt-2 text-sm text-slate-600">Delimitación de problemas, diseños, estrategias de datos y ética de investigación.</p>
+            
+            <div class="mt-6 pt-4 border-t border-slate-100 flex gap-4 text-sm">
+              <a href="#" class="text-sky-600 hover:underline flex items-center gap-1"><i class="fa-solid fa-file-pdf"></i> Memorias</a>
+              <a href="#" class="text-slate-500 hover:text-sky-600 flex items-center gap-1"><i class="fa-solid fa-image"></i> Galería</a>
             </div>
           </div>
         </article>
@@ -180,146 +269,127 @@
     </div>
   </section>
 
-  <!-- Programa por días -->
-  <section id="programa" class="py-12 bg-white border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-end justify-between gap-3 flex-wrap">
-        <h3 class="text-2xl font-bold">Programa tentativo — IA para Ciencias Sociales</h3>
-        <div class="inline-flex rounded-xl border border-slate-200 overflow-hidden">
-          <button id="btnDia1" class="px-4 py-2 text-sm font-semibold bg-white hover:bg-slate-50" aria-pressed="true">Día 1</button>
-          <button id="btnDia2" class="px-4 py-2 text-sm font-semibold bg-white hover:bg-slate-50 border-l border-slate-200" aria-pressed="false">Día 2</button>
+  <!-- Footer solicitado -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+           <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+           <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+        </div>
+        <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+          Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+        </p>
+        <p class="text-xs text-slate-400">
+          © <span id="year"></span> Todos los derechos reservados.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://cir.uagrm.edu.bo.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+          <li><a href="https://cir.uagrm.edu.bo/services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+          <li><a href="https://cir.uagrm.edu.bo.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+          <li><a href="https://cir.uagrm.edu.bo.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+          <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+        <div class="grid gap-3">
+          <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+          </a>
+          
+          <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+          </a>
+
+           <a href="https://www.instagram.com/centro_de_investigacion_" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+          </a>
+
+          <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+          </a>
+          
+           <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+          </a>
         </div>
       </div>
 
-      <!-- Día 1 -->
-      <div id="dia1" class="mt-8 grid gap-6 lg:grid-cols-2">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6">
-          <h4 class="font-semibold">Mañana</h4>
-          <ul class="mt-4 space-y-3 text-sm text-slate-700">
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">09:00</span><span>Registro y acreditación</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">09:30</span><span>Apertura institucional</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">10:00</span><span><b>Mesa 1 — Instituciones</b>: rendición de cuentas y contrapesos</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">11:30</span><span>Pausa café</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">12:00</span><span>Ponencia invitada</span></li>
-          </ul>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6">
-          <h4 class="font-semibold">Tarde</h4>
-          <ul class="mt-4 space-y-3 text-sm text-slate-700">
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">14:30</span><span><b>Taller</b>: métodos cuantitativos aplicados (R/Python)</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">16:00</span><span><b>Panel</b>: políticas públicas basadas en evidencia</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">17:30</span><span>Cierre del día</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Día 2 -->
-      <div id="dia2" class="mt-8 grid gap-6 lg:grid-cols-2 hidden">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6">
-          <h4 class="font-semibold">Mañana</h4>
-          <ul class="mt-4 space-y-3 text-sm text-slate-700">
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">09:00</span><span>Registro y networking</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">09:30</span><span><b>Mesa 2 — Economía política</b>: reglas fiscales y desempeño</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">11:00</span><span>Pausa café</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">11:30</span><span><b>Pósters</b>: sociología y métodos</span></li>
-          </ul>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-6">
-          <h4 class="font-semibold">Tarde</h4>
-          <ul class="mt-4 space-y-3 text-sm text-slate-700">
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">14:30</span><span><b>Mesa 3 — Urbanismo</b>: movilidad, vivienda y servicios</span></li>
-            <li class="flex items-start gap-3"><span class="w-16 shrink-0 font-semibold text-slate-600">16:00</span><span>Clausura y conclusiones</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="mt-8 flex flex-wrap gap-2">
-        <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700"><i class="fa-solid fa-download"></i> Descargar programa (PDF)</a>
-        <a href="#" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 hover:border-sky-600 hover:text-sky-700"><i class="fa-solid fa-ticket"></i> Inscribirme</a>
+    </div>
+    
+    <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+      <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+         <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+         <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
       </div>
     </div>
-  </section>
+  </div>
+</footer>
 
-  <!-- Proponer ponencia/póster -->
-  <section id="propuestas" class="py-12 bg-slate-50 border-t border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h3 class="text-2xl font-bold">Proponer ponencia o póster</h3>
-      <p class="mt-2 text-slate-600">Evalúa claridad de pregunta, método, datos y potencial de aprendizaje. Adjunta enlace a repositorio si aplica.</p>
-      <form class="mt-6 grid gap-4 sm:grid-cols-2" onsubmit="event.preventDefault(); alert('¡Gracias! Revisaremos tu propuesta.'); this.reset();">
-        <div class="sm:col-span-1">
-          <label class="text-sm font-semibold text-slate-700">Nombre y afiliación</label>
-          <input type="text" required class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" placeholder="Tu nombre, institución" />
-        </div>
-        <div class="sm:col-span-1">
-          <label class="text-sm font-semibold text-slate-700">Correo</label>
-          <input type="email" required class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" placeholder="correo@dominio.com" />
-        </div>
-        <div class="sm:col-span-1">
-          <label class="text-sm font-semibold text-slate-700">Eje temático</label>
-          <select class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
-            <option>Instituciones</option>
-            <option>Economía</option>
-            <option>Sociología</option>
-            <option>Urbanismo</option>
-            <option>Métodos</option>
-          </select>
-        </div>
-        <div class="sm:col-span-1">
-          <label class="text-sm font-semibold text-slate-700">Modalidad</label>
-          <select class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600">
-            <option>Ponencia</option>
-            <option>Póster</option>
-            <option>Mesa breve (3 trabajos)</option>
-          </select>
-        </div>
-        <div class="sm:col-span-2">
-          <label class="text-sm font-semibold text-slate-700">Resumen (máx. 150 palabras)</label>
-          <textarea rows="4" class="mt-1 w-full rounded-xl border-slate-300 focus:ring-sky-600 focus:border-sky-600" placeholder="Pregunta, método, datos y resultados esperados"></textarea>
-        </div>
-        <div class="sm:col-span-2 flex items-center gap-3">
-          <button class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
-          <a href="mailto:cri.cspoliticas.fcjpsri@uagrm.edu.bo?subject=Propuesta%20Jornadas%20CIRCPyCS" class="text-sm text-sky-700 underline">O envía por correo</a>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-white">
-    <div id="contacto" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
-      <h4 class="font-bold text-lg">Contacto</h4>
-      <p class="mt-2 text-slate-600"><i class="fas fa-envelope mr-2"></i>cri.cspoliticas.fcjpsri@uagrm.edu.bo</p>
-      <p class="text-slate-600"><i class="fas fa-phone mr-2"></i>+591 67381294</p>
-      <div class="mt-8 text-sm text-slate-500">
-        <p>© 2025 Centro de Investigación Regional en Ciencia Política y Ciencias Sociales UAGRM (CIRCPyCS). Todos los derechos reservados.</p>
-        <p class="mt-1">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- JS: menú móvil + tabs de programa -->
+  <!-- Scripts -->
   <script>
-    // Menú móvil accesible
+    // Año dinámico para el footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+    
+    // Menú móvil
     const btnMobile = document.getElementById('btnMobile');
     const mobileMenu = document.getElementById('mobileMenu');
-    const closeMenu = () => { mobileMenu?.classList.add('hidden'); btnMobile?.setAttribute('aria-expanded','false'); };
-    btnMobile?.addEventListener('click', () => { const isHidden = mobileMenu.classList.toggle('hidden'); btnMobile.setAttribute('aria-expanded', String(!isHidden)); });
-    mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-    document.addEventListener('click', (e) => { if (!mobileMenu || !btnMobile) return; if (!mobileMenu.classList.contains('hidden')) { if (!mobileMenu.contains(e.target) && !btnMobile.contains(e.target)) closeMenu(); }});
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    
+    if(btnMobile && mobileMenu) {
+      btnMobile.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        const expanded = mobileMenu.classList.contains('hidden') ? 'false' : 'true';
+        btnMobile.setAttribute('aria-expanded', expanded);
+      });
 
-    // Tabs Día 1 / Día 2
-    const btn1 = document.getElementById('btnDia1');
-    const btn2 = document.getElementById('btnDia2');
-    const d1 = document.getElementById('dia1');
-    const d2 = document.getElementById('dia2');
-    function setDay(day){
-      const first = day === 1; d1.classList.toggle('hidden', !first); d2.classList.toggle('hidden', first);
-      btn1.setAttribute('aria-pressed', String(first)); btn2.setAttribute('aria-pressed', String(!first));
-      btn1.classList.toggle('bg-sky-50', first); btn2.classList.toggle('bg-sky-50', !first);
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          btnMobile.setAttribute('aria-expanded', 'false');
+        });
+      });
     }
-    btn1?.addEventListener('click', ()=> setDay(1));
-    btn2?.addEventListener('click', ()=> setDay(2));
   </script>
 </body>
 </html>
