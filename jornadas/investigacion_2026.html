@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Jornadas de Investigación 2026 — CIRCPyCS</title>
+  <meta name="description" content="Jornadas de Investigación: Conformación de equipos, formulación de proyectos y estrategias de financiamiento. Organizado por el Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM." />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { 
+            soft: '0 6px 22px rgba(2,6,23,.08)',
+            card: '0 2px 8px rgba(15, 23, 42, 0.04), 0 10px 30px -4px rgba(15, 23, 42, 0.04)' 
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46', // Emerald personalizado
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    
+    /* Control de iconos del menú móvil mediante CSS y atributo aria-expanded */
+    #btn-open[aria-expanded="true"] #icon-bars { display: none; }
+    #btn-open[aria-expanded="true"] #icon-x { display: block; }
+    #icon-x { display: none; } /* Oculto por defecto */
+
+    #mobile-menu {
+      --header-h: 70px;
+      max-height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+    }
+    
+    /* Timeline styles */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #059669;
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px #d1fae5;
+    }
+  </style>
+  <base target="_blank">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-emerald-200 selection:text-emerald-900">
+
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-white/90 border-b border-slate-200 supports-[backdrop-filter]:bg-white/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      
+      <a href="#inicio" target="_self" class="flex items-center gap-3 min-w-0 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain transition-transform group-hover:scale-105" />
+        <div class="leading-tight truncate">
+          <p class="text-[10px] sm:text-xs tracking-wider uppercase text-slate-500 font-semibold">CIRCPyCS — UAGRM</p>
+          <h1 class="font-bold text-sm sm:text-base md:text-lg leading-tight text-slate-900">
+            Jornadas de Investigación <br class="sm:hidden"> 2026
+          </h1>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#inicio" target="_self" class="hover:text-emerald-700 transition">Inicio</a>
+        <a href="#programa" target="_self" class="hover:text-emerald-700 transition">Programa</a>
+        <a href="#objetivos" target="_self" class="hover:text-emerald-700 transition">Objetivos</a>
+        <a href="#inscripcion" target="_self" class="hover:text-emerald-700 transition">Inscripción</a>
+        <a href="https://cir.uagrm.edu.bo/" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition shadow-sm flex items-center gap-2">
+            <span>Web Principal</span>
+            <i data-lucide="external-link" class="h-4 w-4"></i>
+        </a>
+      </nav>
+
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span class="text-sm font-medium">Menú</span>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <!-- MENÚ MÓVIL -->
+    <nav id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white shadow-soft absolute w-full left-0 z-40 transition-all">
+      <ul class="px-4 py-4 grid gap-2 text-[15px] font-medium text-slate-600">
+        <li><a class="block px-4 py-3 rounded-lg hover:bg-slate-50 hover:text-emerald-700" target="_self" href="#inicio">Inicio</a></li>
+        <li><a class="block px-4 py-3 rounded-lg hover:bg-slate-50 hover:text-emerald-700" target="_self" href="#programa">Programa</a></li>
+        <li><a class="block px-4 py-3 rounded-lg hover:bg-slate-50 hover:text-emerald-700" target="_self" href="#objetivos">Objetivos</a></li>
+        <li><a class="block px-4 py-3 rounded-lg hover:bg-slate-50 hover:text-emerald-700" target="_self" href="#inscripcion">Inscripción</a></li>
+        <li class="border-t border-slate-100 mt-2 pt-2">
+            <a class="block px-4 py-3 rounded-lg text-slate-500 hover:bg-slate-50 flex items-center gap-2" href="https://cir.uagrm.edu.bo/">
+                <i data-lucide="globe" class="h-4 w-4"></i> Web Principal
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="inicio" class="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24">
+    <!-- Fondos decorativos -->
+    <div class="absolute inset-0 -z-10 opacity-30 pointer-events-none" aria-hidden="true">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-emerald-100 blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 h-[400px] w-[400px] rounded-full bg-sky-100 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Badge de fecha -->
+      <div class="flex justify-center mb-8">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider bg-white/80 backdrop-blur-sm text-emerald-800 ring-1 ring-emerald-200 shadow-sm">
+            <i data-lucide="calendar" class="h-4 w-4 text-emerald-600"></i>
+            26 y 27 de Febrero de 2026
+        </div>
+      </div>
+
+      <!-- Título principal -->
+      <div class="text-center max-w-4xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-6">
+            Convocatoria Oficial
+        </span>
+        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
+          Jornadas de <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-700">Investigación 2026</span>
+        </h2>
+        <p class="text-xl sm:text-2xl text-slate-600 font-medium mb-4 max-w-3xl mx-auto">
+          Conformación de Equipos, Formulación de Proyectos y Estrategias de Financiamiento
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 text-sm text-slate-500 mt-6">
+          <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"><i data-lucide="clock" class="h-4 w-4 text-emerald-600"></i> 09:00 - 13:00 hrs</span>
+          <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"><i data-lucide="map-pin" class="h-4 w-4 text-emerald-600"></i> Módulo 283 - UAGRM</span>
+          <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 shadow-sm"><i data-lucide="video" class="h-4 w-4 text-emerald-600"></i> Presencial y Virtual</span>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+        <!-- BOTÓN 1: Lleva a los requisitos primero (Mejor UX para académicos) -->
+        <a href="#inscripcion" target="_self" class="group px-8 py-4 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition shadow-lg shadow-emerald-200 flex items-center justify-center gap-2 hover:-translate-y-0.5">
+            <i data-lucide="edit-3" class="h-5 w-5"></i>
+            <span>Inscribirme Ahora</span>
+            <i data-lucide="arrow-down" class="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity"></i>
+        </a>
+        <a href="#programa" target="_self" class="px-8 py-4 rounded-xl border-2 border-slate-300 bg-white text-slate-700 font-semibold hover:border-emerald-600 hover:text-emerald-700 transition flex items-center justify-center gap-2 hover:-translate-y-0.5">
+            <i data-lucide="list" class="h-5 w-5"></i>
+            <span>Ver Programa</span>
+        </a>
+      </div>
+
+      <!-- Info Cards -->
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        
+        <div class="rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 text-center hover:shadow-lg transition-shadow">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-4">
+              <i data-lucide="users" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-1">Dirigido a</h3>
+          <p class="text-sm text-slate-600">Investigadores, docentes, estudiantes y personal administrativo</p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 text-center hover:shadow-lg transition-shadow">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sky-50 text-sky-600 mb-4">
+              <i data-lucide="award" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-1">Certificación</h3>
+          <p class="text-sm text-slate-600">Certificado de participación para asistentes a ambas jornadas</p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 text-center hover:shadow-lg transition-shadow">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600 mb-4">
+              <i data-lucide="lightbulb" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-1">Metodología</h3>
+          <p class="text-sm text-slate-600">Ponencias, talleres prácticos y mesas de trabajo</p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 text-center hover:shadow-lg transition-shadow">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-orange-600 mb-4">
+              <i data-lucide="target" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-1">Resultados</h3>
+          <p class="text-sm text-slate-600">Equipos conformados y perfiles de proyectos elaborados</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNDAMENTACIÓN -->
+  <section class="py-16 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <div>
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-4">
+              <i data-lucide="book-open" class="h-3 w-3"></i>
+              Fundamentación
+          </span>
+          <h2 class="text-3xl font-bold text-slate-900 mb-6">Fortaleciendo la Investigación Universitaria</h2>
+          <div class="space-y-4 text-slate-600 leading-relaxed text-lg">
+            <p>
+              En el marco del fortalecimiento institucional y con el propósito de consolidar equipos interdisciplinarios orientados a la producción científica y la captación de recursos externos, el <strong>CIRCPyCS</strong> organiza estas Jornadas como espacio académico de articulación, planificación estratégica y generación de proyectos.
+            </p>
+            <p>
+              La actividad busca promover una <strong>cultura investigativa colaborativa</strong>, fortalecer capacidades en formulación de proyectos y publicación científica, así como impulsar la internacionalización académica.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 p-8 text-white shadow-xl shadow-emerald-100">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="h-12 w-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                <i data-lucide="quote" class="h-6 w-6"></i>
+              </div>
+              <span class="font-semibold text-emerald-50 tracking-wide">VISIÓN INSTITUCIONAL</span>
+            </div>
+            <blockquote class="text-lg leading-relaxed mb-8 italic">
+              "El CIRCPyCS reafirma su compromiso con el fortalecimiento de la investigación científica, la articulación interinstitucional y el posicionamiento académico de la UAGRM en el ámbito regional, nacional e internacional."
+            </blockquote>
+            <div class="flex items-center gap-4 pt-6 border-t border-white/20">
+              <div class="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                <i data-lucide="user" class="h-6 w-6"></i>
+              </div>
+              <div>
+                <p class="font-bold text-white">M.Sc. María Angélica Suárez</p>
+                <p class="text-sm text-emerald-100 opacity-90">Directora del CIRCPyCS</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OBJETIVOS -->
+  <section id="objetivos" class="py-16 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-slate-700 ring-1 ring-slate-200 mb-4 shadow-sm">
+              <i data-lucide="crosshair" class="h-3 w-3"></i>
+              Propósito
+          </span>
+           <h2 class="text-3xl font-bold text-slate-900">Objetivos de las Jornadas</h2>
+           <p class="mt-2 text-slate-600">Metas claras para el fortalecimiento de la investigación en la UAGRM</p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        
+        <!-- Objetivo General -->
+        <div class="rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 p-8 text-white shadow-lg">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="h-10 w-10 rounded-xl bg-emerald-500/20 flex items-center justify-center ring-1 ring-emerald-500/50">
+              <i data-lucide="flag" class="h-5 w-5 text-emerald-400"></i>
+            </div>
+            <h3 class="text-xl font-bold">Objetivo General</h3>
+          </div>
+          <p class="leading-relaxed text-slate-300">
+            Conformar equipos de investigación internos y externos alineados a las líneas de investigación del Centro, la Carrera y la UAGRM, capaces de formular proyectos con potencial de financiamiento nacional e internacional y generar producción científica de alto impacto.
+          </p>
+        </div>
+
+        <!-- Objetivos Específicos -->
+        <div class="rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="h-10 w-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+              <i data-lucide="list-checks" class="h-5 w-5"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900">Objetivos Específicos</h3>
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span class="text-slate-600">Socializar las líneas de investigación vigentes</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span class="text-slate-600">Identificar capacidades, intereses y trayectorias investigativas</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span class="text-slate-600">Conformar equipos temáticos con liderazgo definido</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span class="text-slate-600">Elaborar perfiles preliminares de proyectos</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span class="text-slate-600">Identificar fuentes de financiamiento</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="h-5 w-5 text-emerald-500 shrink-0 mt-0.5"></i>
+              <span class="text-slate-600">Capacitar en producción y publicación científica indexada</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMA -->
+  <section id="programa" class="py-16 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-4">
+              <i data-lucide="calendar-days" class="h-3 w-3"></i>
+              Agenda
+          </span>
+           <h2 class="text-3xl font-bold text-slate-900">Estructura de las Jornadas</h2>
+           <p class="mt-2 text-slate-600">Dos días de actividades académicas intensivas</p>
+      </div>
+
+      <!-- Días tabs -->
+      <div class="flex justify-center gap-4 mb-10">
+        <button onclick="showDay(1)" id="tab-dia1" class="px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold transition shadow-md shadow-emerald-200">
+            Día 1 - 26 de Febrero
+        </button>
+        <button onclick="showDay(2)" id="tab-dia2" class="px-6 py-3 rounded-xl bg-slate-100 text-slate-600 font-semibold hover:bg-slate-200 transition">
+            Día 2 - 27 de Febrero
+        </button>
+      </div>
+
+      <!-- Contenido Día 1 -->
+      <div id="content-dia1" class="max-w-3xl mx-auto animate-fadeIn">
+        <div class="space-y-4">
+          
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">09:00</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Actividad de Apertura</h4>
+              <p class="text-sm text-slate-600 mt-1">Palabras de bienvenida y presentación oficial de la metodología de las jornadas.</p>
+              <span class="inline-flex items-center gap-1 mt-2 text-xs text-slate-500 bg-white px-2 py-1 rounded border border-slate-200">
+                <i data-lucide="user" class="h-3 w-3"></i> Dirección CIRCPyCS
+              </span>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">09:30</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Ponencia Magistral</h4>
+              <p class="text-sm text-slate-600 mt-1">"Estrategias de financiamiento para proyectos de investigación en Ciencias Sociales"</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">10:30</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Panel de Experiencias</h4>
+              <p class="text-sm text-slate-600 mt-1">Investigadores invitados comparten experiencias exitosas en adjudicación de fondos concursables.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">11:30</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Taller Práctico</h4>
+              <p class="text-sm text-slate-600 mt-1">"Formulación de Proyectos: Del problema de investigación a la propuesta financiable"</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">12:30</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Cierre del Día 1</h4>
+              <p class="text-sm text-slate-600 mt-1">Asignación de grupos de trabajo preliminares.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Contenido Día 2 (oculto por defecto) -->
+      <div id="content-dia2" class="max-w-3xl mx-auto hidden animate-fadeIn">
+        <div class="space-y-4">
+          
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">09:00</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Recapitulación y Apertura</h4>
+              <p class="text-sm text-slate-600 mt-1">Organización de las mesas de trabajo temáticas.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">09:15</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Taller de Publicación Científica</h4>
+              <p class="text-sm text-slate-600 mt-1">"Cómo publicar en revistas indexadas: normas, ética y estrategias de visibilidad"</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">10:30</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Mesas de Trabajo</h4>
+              <p class="text-sm text-slate-600 mt-1">Trabajo colaborativo por líneas de investigación para conformar equipos y bosquejar perfiles.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">11:45</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Plenaria de Presentación</h4>
+              <p class="text-sm text-slate-600 mt-1">Presentación de equipos formados y compromisos adquiridos (cronograma).</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 hover:bg-emerald-50 transition border border-transparent hover:border-emerald-100">
+            <div class="shrink-0 w-20 text-right">
+              <span class="font-bold text-emerald-600">12:30</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900">Clausura y Entrega de Certificados</h4>
+              <p class="text-sm text-slate-600 mt-1">Palabras de cierre y entrega de certificados a participantes.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RESULTADOS ESPERADOS -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-4">
+              <i data-lucide="trophy" class="h-3 w-3"></i>
+              Resultados
+          </span>
+           <h2 class="text-3xl font-bold text-slate-900">Resultados Esperados</h2>
+           <p class="mt-2 text-slate-600">Al finalizar las Jornadas se prevé:</p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        
+        <div class="group rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 hover:ring-emerald-500 hover:shadow-lg transition duration-300">
+          <div class="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition">
+            <i data-lucide="users-2" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Equipos Conformados</h3>
+          <p class="text-sm text-slate-600">Formación formal de equipos de investigación con liderazgo definido</p>
+        </div>
+
+        <div class="group rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 hover:ring-sky-500 hover:shadow-lg transition duration-300">
+          <div class="h-12 w-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center mb-4 group-hover:bg-sky-600 group-hover:text-white transition">
+            <i data-lucide="file-text" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Perfiles de Proyectos</h3>
+          <p class="text-sm text-slate-600">Elaboración de perfiles preliminares de proyectos de investigación</p>
+        </div>
+
+        <div class="group rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 hover:ring-purple-500 hover:shadow-lg transition duration-300">
+          <div class="h-12 w-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition">
+            <i data-lucide="banknote" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Fuentes de Financiamiento</h3>
+          <p class="text-sm text-slate-600">Identificación de convocatorias y oportunidades de financiamiento</p>
+        </div>
+
+        <div class="group rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 hover:ring-orange-500 hover:shadow-lg transition duration-300">
+          <div class="h-12 w-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-4 group-hover:bg-orange-600 group-hover:text-white transition">
+            <i data-lucide="calendar-clock" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Cronograma Definido</h3>
+          <p class="text-sm text-slate-600">Definición de cronograma de trabajo y seguimiento para cada equipo</p>
+        </div>
+
+        <div class="group rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 hover:ring-pink-500 hover:shadow-lg transition duration-300">
+          <div class="h-12 w-12 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center mb-4 group-hover:bg-pink-600 group-hover:text-white transition">
+            <i data-lucide="network" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Red de Investigadores</h3>
+          <p class="text-sm text-slate-600">Creación de red interna y externa de investigadores colaboradores</p>
+        </div>
+
+        <div class="group rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100 hover:ring-indigo-500 hover:shadow-lg transition duration-300">
+          <div class="h-12 w-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+            <i data-lucide="trending-up" class="h-6 w-6"></i>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-2">Impacto Académico</h3>
+          <p class="text-sm text-slate-600">Contribución al posicionamiento académico de la UAGRM</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INSCRIPCIÓN -->
+  <section id="inscripcion" class="py-16 scroll-mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <div>
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-4">
+              <i data-lucide="edit-3" class="h-3 w-3"></i>
+              Participa
+          </span>
+          <h2 class="text-3xl font-bold text-slate-900 mb-6">Requisitos de Participación</h2>
+          
+          <div class="space-y-4 mb-8">
+            <!-- PASO 1: Indicar línea (Movido aquí) -->
+            <div class="flex items-start gap-4 p-4 rounded-xl bg-white shadow-card ring-1 ring-slate-100">
+              <div class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <span class="font-bold">1</span>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-bold text-slate-900">Indicar línea de investigación</h4>
+                <p class="text-sm text-slate-600 mb-3">Selecciona la línea temática en la que deseas participar.</p>
+                
+                <!-- Botón secundario pequeño -->
+                <a href="https://cir.uagrm.edu.bo/lineas.html" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm font-medium hover:bg-emerald-50 hover:text-emerald-700 transition">
+                  <i data-lucide="git-branch" class="h-4 w-4"></i>
+                  <span>Ver Líneas de Investigación</span>
+                  <i data-lucide="external-link" class="h-3 w-3"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- PASO 2: Completar formulario (Movido aquí) -->
+            <div class="flex items-start gap-4 p-4 rounded-xl bg-white shadow-card ring-1 ring-slate-100">
+              <div class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <span class="font-bold">2</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Completar formulario de inscripción</h4>
+                <p class="text-sm text-slate-600">Es indispensable registrarse antes del evento para la certificación.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 rounded-xl bg-white shadow-card ring-1 ring-slate-100">
+              <div class="h-10 w-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <span class="font-bold">3</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900">Síntesis de experiencia (opcional)</h4>
+                <p class="text-sm text-slate-600">Puedes presentar una breve síntesis de tu trayectoria investigativa.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón "Llenar Formulario" ELIMINADO según solicitud -->
+        </div>
+
+        <div class="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 text-white relative overflow-hidden">
+          <div class="absolute top-0 right-0 -mr-10 -mt-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-2xl"></div>
+          
+          <div class="flex items-center gap-3 mb-6 relative z-10">
+            <div class="h-12 w-12 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md">
+              <i data-lucide="info" class="h-6 w-6"></i>
+            </div>
+            <h3 class="text-xl font-bold">Información Importante</h3>
+          </div>
+          
+          <div class="space-y-5 relative z-10">
+            <div class="flex items-start gap-3">
+              <i data-lucide="calendar" class="h-5 w-5 text-emerald-400 shrink-0 mt-0.5"></i>
+              <div>
+                <p class="font-semibold">Fechas</p>
+                <p class="text-slate-300 text-sm">26 y 27 de Febrero de 2026</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <i data-lucide="clock" class="h-5 w-5 text-emerald-400 shrink-0 mt-0.5"></i>
+              <div>
+                <p class="font-semibold">Horario</p>
+                <p class="text-slate-300 text-sm">09:00 a 13:00 horas</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <i data-lucide="map-pin" class="h-5 w-5 text-emerald-400 shrink-0 mt-0.5"></i>
+              <div>
+                <p class="font-semibold">Lugar</p>
+                <p class="text-slate-300 text-sm">Módulo 283 – UAGRM</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <i data-lucide="video" class="h-5 w-5 text-emerald-400 shrink-0 mt-0.5"></i>
+              <div>
+                <p class="font-semibold">Modalidad</p>
+                <p class="text-slate-300 text-sm">Presencial y Virtual</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <i data-lucide="award" class="h-5 w-5 text-emerald-400 shrink-0 mt-0.5"></i>
+              <div>
+                <p class="font-semibold">Certificación</p>
+                <p class="text-slate-300 text-sm">Se otorgará certificado a quienes asistan a ambas jornadas</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-white/10">
+            <p class="text-sm text-slate-400 flex items-center gap-2">
+              <i data-lucide="mail" class="h-4 w-4"></i>
+              Consultas: cri.cspoliticas.fcjpsri@uagrm.edu.bo
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="py-20 bg-gradient-to-r from-emerald-700 to-teal-800 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">¡Sé parte de la construcción colectiva del conocimiento!</h2>
+      <p class="text-emerald-100 text-lg mb-10 max-w-2xl mx-auto">Invitamos a toda la comunidad universitaria a participar activamente en este proceso de fortalecimiento de la investigación científica.</p>
+      
+      <a href="https://forms.gle/KBoVG1yRtuUx5opi8" target="_blank" class="inline-flex items-center gap-2 px-10 py-5 rounded-xl bg-white text-emerald-800 font-bold text-lg hover:bg-emerald-50 transition shadow-xl hover:shadow-2xl hover:-translate-y-1">
+        <i data-lucide="edit-3" class="h-5 w-5"></i>
+        <span>Inscribirme Ahora</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+           <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
+           <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+        </div>
+        <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+          Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+        </p>
+        <p class="text-xs text-slate-400">
+          © <span id="year"></span> Todos los derechos reservados.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://cir.uagrm.edu.bo" class="hover:text-emerald-600 transition">Inicio</a></li>
+          <li><a href="https://cir.uagrm.edu.bo/services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+          <li><a href="https://cir.uagrm.edu.bo#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+          <li><a href="https://cir.uagrm.edu.bo#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+          <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+        <div class="grid gap-3">
+          <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+          </a>
+          
+          <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+          </a>
+
+           <a href="https://www.instagram.com/centro_de_investigacion_" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+          </a>
+
+          <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+          </a>
+          
+           <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+      <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+         <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+         <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script>
+    // Año dinámico para el footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    // Inicializar iconos Lucide
+    lucide.createIcons();
+    
+    // Lógica del menú móvil
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    btnOpen.addEventListener('click', () => {
+        const isExpanded = btnOpen.getAttribute('aria-expanded') === 'true';
+        btnOpen.setAttribute('aria-expanded', !isExpanded);
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    mobileMenu.addEventListener('click', (e) => {
+        if(e.target.tagName === 'A') { 
+            mobileMenu.classList.add('hidden');
+            btnOpen.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Lógica de tabs del programa
+    function showDay(day) {
+        const tab1 = document.getElementById('tab-dia1');
+        const tab2 = document.getElementById('tab-dia2');
+        const content1 = document.getElementById('content-dia1');
+        const content2 = document.getElementById('content-dia2');
+
+        if (day === 1) {
+            tab1.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            tab1.classList.add('bg-emerald-600', 'text-white');
+            tab2.classList.remove('bg-emerald-600', 'text-white');
+            tab2.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            content1.classList.remove('hidden');
+            content2.classList.add('hidden');
+        } else {
+            tab2.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            tab2.classList.add('bg-emerald-600', 'text-white');
+            tab1.classList.remove('bg-emerald-600', 'text-white');
+            tab1.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            content2.classList.remove('hidden');
+            content1.classList.add('hidden');
+        }
+    }
+  </script>
+</body>
+</html>
