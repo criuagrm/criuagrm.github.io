@@ -3,153 +3,378 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Proyectos de Investigación — CIRCPyCS</title>
-  <meta name="description" content="Portafolio de investigación del CIRCPyCS." />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Monitor de Elecciones Autonómicas 2025 — CIRCPyCS</title>
+  <meta name="description" content="Monitor de las elecciones autonómicas. Atlas, simulador y base de datos. Iniciativa del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM." />
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            cordis: {
-              blue: '#004494', // Azul Institucional
-              dark: '#0f2c52',
-              light: '#e9eff8',
-              text: '#222222',
-              gray: '#595959'
-            }
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
           boxShadow: { 
-            'card': '0 2px 8px rgba(0,0,0,0.06)',
-            'card-hover': '0 10px 30px rgba(0,68,148,0.12)',
-            'popup': '0 10px 40px -10px rgba(0,0,0,0.2)'
+            soft: '0 6px 22px rgba(2,6,23,.08)',
+            card: '0 2px 8px rgba(15, 23, 42, 0.04), 0 10px 30px -4px rgba(15, 23, 42, 0.04)' 
           }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    body { background-color: #fcfcfc; }
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+    #mobile-menu{
+      --header-h: 64px;
+      max-height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+    }
     
-    /* Estilos Ficha Técnica Lateral */
-    .fact-sheet { background-color: #f8f9fa; border-left: 4px solid #004494; position: relative; }
-    .label-cordis { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #666; font-weight: 700; margin-bottom: 4px; }
-    .value-cordis { font-size: 0.95rem; color: #111; margin-bottom: 16px; font-weight: 500; line-height: 1.4; }
-    
-    /* Drawer */
-    .drawer { position: fixed; inset: 0; z-index: 100; display: none; }
-    .drawer.open { display: block; }
-    .drawer-backdrop { background: rgba(15, 44, 82, 0.6); backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s; }
-    .drawer.open .drawer-backdrop { opacity: 1; }
-    .drawer-panel { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-    .drawer.open .drawer-panel { transform: translateX(0); }
-    
-    .tag-pill { @apply px-3 py-1 rounded-full text-xs font-semibold border border-slate-200 bg-white text-slate-600; }
-    
-    /* Estilos para el contenido inyectado */
-    .section-title { @apply text-sm font-bold text-cordis-dark uppercase tracking-widest border-b border-gray-200 pb-2 mb-3 mt-8; }
-    .rich-text p { @apply mb-3 text-gray-700 leading-relaxed text-sm text-justify; }
-    .rich-text ul { @apply list-disc list-inside mb-4 space-y-2 text-sm text-gray-700; }
-    .rich-text li { @apply pl-1; }
-    .rich-text strong { @apply text-cordis-blue font-semibold; }
+    /* Animación del Modal */
+    .modal-enter { opacity: 0; transform: scale(0.95); }
+    .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
+    .modal-exit { opacity: 1; transform: scale(1); }
+    .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 200ms, transform 200ms; }
 
-    /* Estilos del Popup (Ventana emergente) */
-    .popup-trigger:hover .popup-content {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0) translateX(0);
+    /* Estilo para links del dropdown de municipios */
+    .mun-link {
+        display: block;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        color: #475569; /* Slate 600 */
+        border-radius: 6px;
+        transition: background-color 0.2s, color 0.2s;
+        text-decoration: none;
     }
-    .popup-content {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 50;
-      width: 280px;
-    }
-    /* Flecha del popup */
-    .popup-arrow {
-      position: absolute;
-      top: -6px;
-      right: 12px;
-      width: 12px;
-      height: 12px;
-      background: white;
-      border-left: 1px solid #e2e8f0;
-      border-top: 1px solid #e2e8f0;
-      transform: rotate(45deg);
+    .mun-link:hover {
+        background-color: #f3e8ff; /* Purple 100 */
+        color: #7e22ce; /* Purple 700 */
+        font-weight: 600;
     }
   </style>
 </head>
-<body class="text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
 
-  <div class="h-1.5 w-full bg-cordis-blue"></div>
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
 
-  <!-- Header -->
-  <header class="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <!-- Logo y Título -->
-      <a href="https://cir.uagrm.edu.bo/" class="flex items-center gap-3 group">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-auto group-hover:scale-105 transition duration-300" />
-        <div class="leading-tight">
-          <h1 class="text-lg font-bold text-cordis-blue tracking-tight">CIRCPyCS</h1>
-          <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Portal de Proyectos</p>
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      
+      <a href="#inicio" class="flex items-center gap-3 min-w-0 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+        <div class="leading-tight truncate">
+          <p class="text-[10px] sm:text-xs tracking-wider uppercase text-slate-500 font-semibold">CIRCPyCS — UAGRM</p>
+          <h1 class="font-bold text-sm sm:text-base md:text-lg leading-tight text-slate-900">
+            Monitor de Elecciones <br class="sm:hidden"> Autonómicas 2025
+          </h1>
         </div>
       </a>
-      
-      <!-- Navegación Fija (Sin Responsive) -->
-      <nav class="flex gap-6 text-sm font-medium items-center">
-        <a href="https://cir.uagrm.edu.bo/" class="text-gray-600 hover:text-cordis-blue transition flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50">
-          <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#inicio" class="hover:text-emerald-700 transition">Inicio</a>
+        
+        <button onclick="toggleModal('modal-disclaimer')" class="hover:text-emerald-700 transition focus:outline-none">
+            Institucional
+        </button>
+        
+        <a href="https://cir.uagrm.edu.bo/" target="_blank" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition shadow-sm flex items-center gap-2">
+            <span>Web Principal</span>
+            <i data-lucide="external-link" class="h-4 w-4"></i>
         </a>
       </nav>
-      <!-- Se eliminó el botón mobile -->
+
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span class="text-sm font-medium">Menú</span>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
+
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-soft absolute w-full left-0 z-40">
+      <ul class="px-4 py-4 grid gap-2 text-[15px] font-medium text-slate-600">
+        <li><a class="block px-4 py-3 rounded-lg hover:bg-slate-50" href="#inicio">Inicio</a></li>
+        <li>
+            <button onclick="toggleModal('modal-disclaimer'); document.getElementById('btn-open').click();" class="block w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50">
+                Institucional
+            </button>
+        </li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Hero -->
-  <div class="bg-white border-b border-gray-200 py-12 md:py-16 relative overflow-hidden">
-    <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-50 to-transparent opacity-50"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="max-w-4xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-cordis-blue text-xs font-bold uppercase tracking-wider mb-4 border border-blue-100">
-          <span class="w-2 h-2 rounded-full bg-cordis-blue"></span> Portafolio 2025-2026
-        </div>
-        <h2 class="text-3xl md:text-5xl font-bold text-cordis-dark mb-6 tracking-tight">Proyectos de Investigación Científica</h2>
-        <p class="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
-          Repositorio oficial de proyectos activos del centro. Investigación aplicada en gobernanza ambiental, integridad democrática y desarrollo institucional.
+  <section id="inicio" class="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24">
+    <div class="absolute inset-0 -z-10 opacity-30" aria-hidden="true">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-slate-200 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 h-[400px] w-[400px] rounded-full bg-emerald-100 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+      
+      <div class="z-10">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-6">
+            Investigación Aplicada
+        </span>
+        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+          Monitor de Elecciones <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-700">Autonómicas 2025</span>
+        </h2>
+        <p class="mt-6 text-lg text-slate-600 max-w-prose leading-relaxed">
+          Una iniciativa del <strong>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM</strong> para el seguimiento técnico del proceso electoral. Centralizamos datos geográficos, perfiles de candidatos y proyecciones matemáticas en una sola plataforma académica.
         </p>
-        
-        <!-- Buscador -->
-        <div class="relative max-w-lg group">
-          <input type="text" id="search-input" placeholder="Filtrar proyectos..." 
-                 class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-cordis-blue focus:border-cordis-blue outline-none shadow-sm transition group-hover:shadow-md">
-          <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-gray-400 group-hover:text-cordis-blue transition"></i>
+      </div>
+
+      <div class="relative mt-8 lg:mt-0">
+        <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
+          <div class="w-full bg-slate-50">
+            <div class="mx-auto max-w-3xl aspect-[16/9]">
+              <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="h-full w-full object-contain p-2" loading="lazy" />
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <h3 class="font-bold text-lg sm:text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
+            <p class="mt-2 text-slate-600">Acceso abierto en OJS. Preparando el <strong>Número 8</strong> (Diciembre 2026). Envía tus artículos y consulta las normas editoriales.</p>
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+              <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                  <span>Abrir en OJS</span>
+                  <i data-lucide="external-link" class="h-4 w-4"></i>
+              </a>
+              <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                  <span>Ver publicaciones</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="hidden sm:flex absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200 items-center gap-2">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <div><span class="font-semibold">Próximamente:</span> Dic 2026</div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Main Grid -->
-  <main class="flex-grow py-12 bg-slate-50/50">
+    </div>
+  </section>
+
+  <section id="componentes" class="py-16 bg-white border-y border-slate-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col items-center">
-        <div id="projects-container" class="w-full grid gap-8 md:grid-cols-2 lg:max-w-5xl">
-          <!-- JS Inject -->
+      
+      <div class="mb-12 text-center max-w-2xl mx-auto">
+           <h2 class="text-3xl font-bold text-slate-900">Secciones del Monitor</h2>
+           <p class="mt-2 text-slate-600">Seleccione un área para comenzar el análisis.</p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <a href="calendario_electoral.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+            <div class="flex flex-col items-center">
+              <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 mx-auto">
+                  <i data-lucide="calendar-days" class="h-7 w-7"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">Calendario Electoral</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                Cronograma oficial, plazos legales y fechas clave del proceso electoral 2026.
+              </p>
+            </div>
+            <div class="mt-6 flex justify-center items-center text-sm font-semibold text-indigo-600 group-hover:text-indigo-800">
+              Ver fechas <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+        
+        <a href="atlas_electoral.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+          <div class="flex flex-col items-center">
+            <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 mx-auto">
+               <i data-lucide="map" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors">Atlas Electoral</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              Visualización geo-referenciada de resultados históricos por recinto y municipio.
+            </p>
+          </div>
+          <div class="mt-6 flex justify-center items-center text-sm font-semibold text-blue-600 group-hover:text-blue-800">
+            Explorar mapa <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </a>
+
+        <a href="simulador.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+          <div class="flex flex-col items-center">
+            <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 mx-auto">
+               <i data-lucide="calculator" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Simulador de Escaños</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              Motor de cálculo D'Hondt para proyectar la composición de concejos municipales.
+            </p>
+          </div>
+          <div class="mt-6 flex justify-center items-center text-sm font-semibold text-emerald-600 group-hover:text-emerald-800">
+            Proyectar datos <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </a>
+
+        <a href="candidatos.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+          <div class="flex flex-col items-center">
+            <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300 mx-auto">
+               <i data-lucide="users" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-red-700 transition-colors">Base de Candidatos</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              Repositorio de perfiles, trayectorias políticas y afiliaciones.
+            </p>
+          </div>
+          <div class="mt-6 flex justify-center items-center text-sm font-semibold text-red-600 group-hover:text-red-800">
+            Ver perfiles <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </a>
+
+        <div class="relative flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 transition-all duration-300 hover:shadow-lg text-center">
+            
+            <div class="flex flex-col items-center pointer-events-none mb-6">
+                <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50 text-purple-600 mx-auto">
+                    <i data-lucide="scale" class="h-7 w-7"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Comparador de Planes</h3>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600">
+                    Contrastación técnica de propuestas. Elige el nivel de gobierno:
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-3 relative z-10">
+                
+                <a href="programas/gobernacion.html" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-slate-50 text-slate-700 font-bold hover:bg-purple-600 hover:text-white transition-all group border border-slate-200 hover:border-purple-600">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="landmark" class="h-5 w-5 text-slate-400 group-hover:text-white"></i>
+                        <span>Gobernación</span>
+                    </div>
+                    <i data-lucide="arrow-right" class="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1"></i>
+                </a>
+
+                <div class="relative">
+                    <button onclick="toggleMunicipios()" id="btn-mun" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 transition-colors border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="map-pin" class="h-5 w-5 text-purple-600"></i>
+                            <span>Municipios</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-slate-400 transition-transform duration-200" id="icon-mun-chevron"></i>
+                    </button>
+
+                    <div id="menu-mun" class="hidden absolute left-0 right-0 mt-2 w-full origin-top rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 z-50 animate-fade-in-up text-left">
+                        
+                        <div class="p-2 border-b border-slate-100 bg-slate-50 rounded-t-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2">Selecciona un municipio:</span>
+                        </div>
+
+                        <div class="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent p-1">
+                            
+                              <a href="programas/pg_scz_mun.html" class="block px-4 py-2.5 text-sm font-bold text-purple-700 bg-purple-50 rounded-lg mb-1 hover:bg-purple-100">
+                                  Santa Cruz de la Sierra
+                              </a>
+
+                             <div class="grid grid-cols-1 gap-0.5">
+                                <a href="programas/pg_ascension_de_guarayos_mun.html" class="mun-link">Ascensión de Guarayos</a>
+                                <a href="programas/pg_boyuibe_mun.html" class="mun-link">Boyuibe</a>
+                                <a href="programas/pg_buena_vista_mun.html" class="mun-link">Buena Vista</a>
+                                <a href="programas/pg_cabezas_mun.html" class="mun-link">Cabezas</a>
+                                <a href="programas/pg_camiri_mun.html" class="mun-link">Camiri</a>
+                                <a href="programas/pg_carmen_rivero_torrez_mun.html" class="mun-link">Carmen Rivero Tórrez</a>
+                                <a href="programas/pg_charagua_mun.html" class="mun-link">Charagua</a>
+                                <a href="programas/pg_colpa_belgica_mun.html" class="mun-link">Colpa Bélgica</a>
+                                <a href="programas/pg_comarapa_mun.html" class="mun-link">Comarapa</a>
+                                <a href="programas/pg_concepcion_mun.html" class="mun-link">Concepción</a>
+                                <a href="programas/pg_cotoca_mun.html" class="mun-link">Cotoca</a>
+                                <a href="programas/pg_cuatro_canadas_mun.html" class="mun-link">Cuatro Cañadas</a>
+                                <a href="programas/pg_cuevo_mun.html" class="mun-link">Cuevo</a>
+                                <a href="programas/pg_el_puente_mun.html" class="mun-link">El Puente</a>
+                                <a href="programas/pg_el_torno_mun.html" class="mun-link">El Torno</a>
+                                <a href="programas/pg_el_trigal_mun.html" class="mun-link">El Trigal</a>
+                                <a href="programas/pg_fernandez_alonso_mun.html" class="mun-link">Fernández Alonso</a>
+                                <a href="programas/pg_general_saavedra_mun.html" class="mun-link">General Saavedra</a>
+                                <a href="programas/pg_gutierrez_mun.html" class="mun-link">Gutiérrez</a>
+                                <a href="programas/pg_la_guardia_mun.html" class="mun-link">La Guardia</a>
+                                <a href="programas/pg_lagunillas_mun.html" class="mun-link">Lagunillas</a>
+                                <a href="programas/pg_mairana_mun.html" class="mun-link">Mairana</a>
+                                <a href="programas/pg_mineros_mun.html" class="mun-link">Mineros</a>
+                                <a href="programas/pg_montero_mun.html" class="mun-link">Montero</a>
+                                <a href="programas/pg_moro_moro_mun.html" class="mun-link">Moro Moro</a>
+                                <a href="programas/pg_okinawa_mun.html" class="mun-link">Okinawa I</a>
+                                <a href="programas/pg_pailon_mun.html" class="mun-link">Pailón</a>
+                                <a href="programas/pg_pampagrande_mun.html" class="mun-link">Pampagrande</a>
+                                <a href="programas/pg_porongo_mun.html" class="mun-link">Porongo</a>
+                                <a href="programas/pg_portachuelo_mun.html" class="mun-link">Portachuelo</a>
+                                <a href="programas/pg_postrervalle_mun.html" class="mun-link">Postrervalle</a>
+                                <a href="programas/pg_pucara_mun.html" class="mun-link">Pucará</a>
+                                <a href="programas/pg_puerto_quijarro_mun.html" class="mun-link">Puerto Quijarro</a>
+                                <a href="programas/pg_puerto_suarez_mun.html" class="mun-link">Puerto Suárez</a>
+                                <a href="programas/pg_quirusillas_mun.html" class="mun-link">Quirusillas</a>
+                                <a href="programas/pg_robore_mun.html" class="mun-link">Roboré</a>
+                                <a href="programas/pg_saipina_mun.html" class="mun-link">Saipina</a>
+                                <a href="programas/pg_samaipata_mun.html" class="mun-link">Samaipata</a>
+                                <a href="programas/pg_san_antonio_de_lomerio_mun.html" class="mun-link">San Antonio de Lomerío</a>
+                                <a href="programas/pg_san_carlos_mun.html" class="mun-link">San Carlos</a>
+                                <a href="programas/pg_san_ignacio_de_velasco_mun.html" class="mun-link">San Ignacio de Velasco</a>
+                                <a href="programas/pg_san_javier_mun.html" class="mun-link">San Javier</a>
+                                <a href="programas/pg_san_jose_de_chiquitos_mun.html" class="mun-link">San José de Chiquitos</a>
+                                <a href="programas/pg_san_juan_de_yapacani_mun.html" class="mun-link">San Juan de Yapacaní</a>
+                                <a href="programas/pg_san_julian_mun.html" class="mun-link">San Julián</a>
+                                <a href="programas/pg_san_matias_mun.html" class="mun-link">San Matías</a>
+                                <a href="programas/pg_san_miguel_de_velasco_mun.html" class="mun-link">San Miguel de Velasco</a>
+                                <a href="programas/pg_san_pedro_mun.html" class="mun-link">San Pedro</a>
+                                <a href="programas/pg_san_rafael_mun.html" class="mun-link">San Rafael</a>
+                                <a href="programas/pg_san_ramon_mun.html" class="mun-link">San Ramón</a>
+                                <a href="programas/pg_santa_rosa_del_sara_mun.html" class="mun-link">Santa Rosa del Sara</a>
+                                <a href="programas/pg_urubicha_mun.html" class="mun-link">Urubichá</a>
+                                <a href="programas/pg_vallegrande_mun.html" class="mun-link">Vallegrande</a>
+                                <a href="programas/pg_warnes_mun.html" class="mun-link">Warnes</a>
+                                <a href="programas/pg_yapacani_mun.html" class="mun-link">Yapacaní</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <a href="entrevistas.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+            <div class="flex flex-col items-center">
+              <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors duration-300 mx-auto">
+                  <i data-lucide="video" class="h-7 w-7"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-orange-700 transition-colors">Entrevistas</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                Ciclo de entrevistas y conversatorios con los principales actores del proceso.
+              </p>
+            </div>
+            <div class="mt-6 flex justify-center items-center text-sm font-semibold text-orange-600 group-hover:text-orange-800">
+              Ver videos <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+
+        <a href="podcast.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+            <div class="flex flex-col items-center">
+              <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-50 text-pink-600 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300 mx-auto">
+                  <i data-lucide="headphones" class="h-7 w-7"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-pink-700 transition-colors">Podcast Electoral</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                Análisis semanal y coyuntura política en formato sonoro. Discusión a profundidad.
+              </p>
+            </div>
+            <div class="mt-6 flex justify-center items-center text-sm font-semibold text-pink-600 group-hover:text-pink-800">
+              Escuchar <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+
       </div>
     </div>
-  </main>
+  </section>
 
- <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
@@ -171,9 +396,9 @@
         <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
         <ul class="space-y-2 text-sm">
           <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
-          <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
-          <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
-          <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+          <li><a href="https://cir.uagrm.edu.bo/services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+          <li><a href="#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+          <li><a href="#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
           <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
         </ul>
       </div>
@@ -251,326 +476,128 @@
   }
 </script>
 
-  <script>
-    if(document.getElementById('year')) {
-      document.getElementById('year').textContent = new Date().getFullYear();
-    }
-  </script>
+  <div id="modal-disclaimer" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-disclaimer')"></div>
 
-  <!-- DRAWER / DETALLE DEL PROYECTO -->
-  <div id="drawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 drawer-backdrop" id="drawer-bg"></div>
-    
-    <div class="absolute right-0 top-0 h-full w-full lg:w-[960px] bg-white shadow-2xl drawer-panel overflow-y-auto flex flex-col">
-      
-      <!-- Drawer Header -->
-      <div class="sticky top-0 bg-white/95 backdrop-blur border-b border-gray-200 px-6 py-4 flex items-center justify-between z-30">
-        <div class="flex items-center gap-3">
-           <div class="bg-cordis-blue text-white text-[10px] font-bold px-2.5 py-1 rounded shadow-sm uppercase tracking-wider">Ficha Técnica</div>
-           <span class="text-sm text-gray-400">|</span>
-           <span id="d-id-header" class="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-1 rounded">ID: 000</span>
-        </div>
-        <button id="drawer-close" class="text-gray-400 hover:text-cordis-blue hover:bg-blue-50 p-2 rounded-full transition duration-200">
-          <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
-      </div>
-
-      <!-- Drawer Body -->
-      <div class="flex-grow p-6 md:p-12">
+    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+      <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200">
         
-        <!-- Project Title Area -->
-        <div class="mb-8 border-b border-gray-100 pb-6">
-          <div id="d-acronym" class="inline-block text-cordis-blue text-sm font-bold mb-3 tracking-wide bg-blue-50 px-3 py-1 rounded-lg">ACRONYM</div>
-          <h2 id="d-title" class="text-2xl md:text-3xl font-bold text-cordis-dark leading-tight mb-4">Título del Proyecto</h2>
-          
-          <div class="flex flex-wrap gap-4 text-sm">
-            <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-              <i class="fa-regular fa-calendar mr-2 text-cordis-blue"></i>
-              <span id="d-dates">Fechas</span>
-            </div>
-            <div class="flex items-center text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-              <i class="fa-solid fa-tag mr-2 text-cordis-blue"></i>
-              <span id="d-program">Programa</span>
-            </div>
-          </div>
+        <div class="bg-slate-50 px-4 py-3 sm:px-6 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-base font-semibold leading-6 text-slate-900 flex items-center gap-2" id="modal-title">
+                <i data-lucide="shield-alert" class="h-5 w-5 text-amber-600"></i>
+                Descargo Institucional
+            </h3>
+            <button onclick="toggleModal('modal-disclaimer')" class="text-slate-400 hover:text-slate-500 transition">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-12">
-          
-          <!-- Columna Principal: Contenido Rico -->
-          <div class="flex-1">
-            
-            <div id="d-summary-section">
-              <h3 class="section-title text-cordis-dark mt-0">Resumen Ejecutivo</h3>
-              <div id="d-summary" class="rich-text"></div>
-            </div>
-
-            <div id="d-objectives-section">
-              <h3 class="section-title">Objetivos</h3>
-              <div id="d-objectives" class="rich-text"></div>
-            </div>
-
-            <div id="d-methodology-section">
-              <h3 class="section-title">Metodología</h3>
-              <div id="d-methodology" class="rich-text"></div>
-            </div>
-
-            <div id="d-hypothesis-section">
-              <h3 class="section-title">Hipótesis</h3>
-              <div id="d-hypothesis" class="rich-text"></div>
-            </div>
-
-            <div class="mt-8 pt-4 border-t border-gray-100">
-              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Palabras Clave</h3>
-              <div id="d-tags" class="flex flex-wrap gap-2"></div>
-            </div>
-
-            <!-- Botones de Acción Secundarios -->
-            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mt-10 flex flex-wrap gap-4 items-center justify-between">
-               <div class="text-sm text-gray-500 font-medium">Otras opciones:</div>
-               <div class="flex gap-3">
-                 <button onclick="alert('Redirigiendo...')" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-cordis-blue hover:text-cordis-blue transition shadow-sm flex items-center gap-2">
-                   <i class="fa-regular fa-envelope"></i> Contactar PI
-                 </button>
-               </div>
-            </div>
-          </div>
-
-          <!-- Columna Lateral: FICHA TÉCNICA -->
-          <div class="w-full lg:w-72 flex-shrink-0">
-            <div class="fact-sheet p-6 rounded-r-xl shadow-sm sticky top-24">
-              
-              <!-- TÍTULO CON POP-UP INTEGRADO -->
-              <div class="popup-trigger relative flex items-center justify-between border-b border-gray-200 pb-3 mb-6 cursor-help">
-                 <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                    <i class="fa-solid fa-file-contract text-cordis-blue"></i>
-                    Ficha Técnica
-                 </h3>
-                 <i class="fa-regular fa-circle-question text-gray-400 hover:text-cordis-blue transition"></i>
-                 
-                 <!-- Contenido del Pop-up -->
-                 <div class="popup-content absolute right-0 top-10 bg-white border border-gray-200 shadow-popup p-4 rounded-xl text-left pointer-events-none">
-                    <div class="popup-arrow"></div>
-                    <div class="text-xs text-gray-500 leading-relaxed">
-                       <strong class="text-cordis-blue block mb-1">Sobre este documento</strong>
-                       Esta ficha técnica resume los aspectos administrativos oficiales del proyecto según la base de datos de la Dirección de Investigación.
-                    </div>
-                 </div>
-              </div>
-
-              <!-- Contenido de la Ficha -->
-              <div class="label-cordis">Estado</div>
-              <div class="value-cordis">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> En Ejecución
-                </span>
-              </div>
-
-              <div class="label-cordis">Investigador Principal</div>
-              <div id="d-pi" class="value-cordis text-cordis-blue font-semibold border-b border-gray-200 pb-2">---</div>
-
-              <div class="label-cordis mt-3">Periodo</div>
-              <div id="d-period" class="value-cordis text-gray-700">---</div>
-
-              <div class="label-cordis">Institución</div>
-              <div class="value-cordis">
-                <div class="font-semibold text-gray-800">CIRCPyCS - UAGRM</div>
-                <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                  <i class="fa-solid fa-location-dot"></i> Santa Cruz, Bolivia 🇧🇴
-                </div>
-              </div>
-
-              <!-- BOTÓN "VER PROYECTO COMPLETO" -->
-              <div class="mt-8 pt-4 border-t border-gray-200">
-                <a id="d-full-link" href="#" target="_blank" class="flex w-full items-center justify-center gap-2 bg-cordis-blue hover:bg-blue-800 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm">
-                   Ver Proyecto Completo
-                   <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
-                </a>
-                <p class="text-[10px] text-gray-400 text-center mt-3">
-                  Se abrirá en una nueva pestaña
+        <div class="px-4 py-5 sm:p-6">
+            <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                <p>
+                    <strong>1. Fuentes de Datos:</strong> Los datos electorales y geográficos presentados en esta plataforma provienen de fuentes públicas oficiales del Órgano Electoral Plurinacional (OEP) y del trabajo de sistematización académica del Centro.
                 </p>
-              </div>
-
+                <p>
+                    <strong>2. Naturaleza de las Simulaciones:</strong> El módulo "Simulador de Escaños" es una herramienta matemática basada en el sistema D'Hondt. Las proyecciones generadas son escenarios hipotéticos y <strong>no constituyen resultados oficiales</strong> ni tendencias de voto validadas por la corte electoral.
+                </p>
+                <p>
+                    <strong>3. Opiniones:</strong> Las opiniones, entrevistas y análisis vertidos en los módulos cualitativos son responsabilidad exclusiva de sus autores y no necesariamente reflejan la postura institucional oficial de la UAGRM o del CIRCPyCS.
+                </p>
             </div>
-          </div>
+        </div>
 
+        <div class="bg-slate-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" class="inline-flex w-full justify-center rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 sm:ml-3 sm:w-auto" onclick="toggleModal('modal-disclaimer')">
+            Entendido
+          </button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ===== DATA: Proyectos =====
-    const PROJECTS = [
-      {
-        id: "PIRO-GOV-26",
-        acronym: "PIRO-GOV",
-        title: "Gobernanza Ambiental, Políticas Públicas y Justicia Territorial en la Gestión de Incendios Forestales (2010-2025)",
-        start: "Oct 2025",
-        end: "Ene 2027",
-        pi: "MSc. María Angélica Suárez Ribera",
-        program: "Research Action",
-        url: "https://cir.uagrm.edu.bo/proyectos/piro-gov-26",
-        tags: ["Gobernanza Ambiental", "Pueblos Indígenas", "Chiquitanía", "Piro-política"],
-        summary: `
-          <p>La investigación analiza de manera crítica cómo las políticas públicas y el modelo de gobernanza ambiental han incidido en la proliferación e impactos de los incendios forestales en la Chiquitanía boliviana.</p>
-          <p>Se utiliza el marco de la <strong>Piro-política</strong> para analizar cómo el Estado gestiona el territorio a través del fuego.</p>
-        `,
-        objectives: `
-          <ul>
-            <li><strong>General:</strong> Analizar la incidencia de las políticas públicas y la gobernanza ambiental en los incendios forestales.</li>
-            <li><strong>Específico 1:</strong> Identificar el marco legal y las políticas que regulan el fuego y el territorio.</li>
-          </ul>
-        `,
-        methodology: `
-          <p>Investigación con enfoque <strong>cualitativo</strong> y diseño analítico-interpretativo. Se implementarán estudios de caso en comunidades afectadas.</p>
-        `,
-        hypothesis: `
-          <p>La proliferación de incendios es resultado de un modelo de gobernanza ambiental subordinado a <strong>intereses extractivistas</strong>.</p>
-        `
-      },
-      {
-        id: "DECAD-EP-25",
-        acronym: "DECAD-EP",
-        title: "La Decadencia o Degeneración del Estado Plurinacional de Bolivia como Modelo de Estado (2009-2024)",
-        start: "Feb 2026",
-        end: "Ene 2027",
-        pi: "MSc. Francisco Mendez Egüez",
-        program: "Research Action",
-        url: "https://cir.uagrm.edu.bo/proyectos/decad-ep-25",
-        tags: ["Estado Plurinacional", "Instituciones Políticas", "Gestión Pública", "Crisis Democrática"],
-        summary: `
-          <p>Investigación sobre las causas estructurales y coyunturales que han determinado la transformación y crisis de implementación del modelo de Estado Plurinacional en Bolivia.</p>
-        `,
-        objectives: `
-          <ul>
-            <li><strong>General:</strong> Analizar las causas estructurales de la transformación y crisis del modelo de Estado Plurinacional.</li>
-          </ul>
-        `,
-        methodology: `
-          <p>Se utiliza el <strong>método histórico-deductivo</strong> para configurar la naturaleza del Estado Plurinacional a partir de teorías políticas relevantes.</p>
-        `,
-        hypothesis: `
-          <p>La decadencia del modelo es resultado de un proceso de <strong>involución institucional</strong> y <strong>captura política</strong>.</p>
-        `
-      }
-    ];
-
-    // ===== RENDERIZADO =====
-    const container = document.getElementById('projects-container');
-
-    PROJECTS.forEach(p => {
-      const card = document.createElement('div');
-      card.className = "group bg-white border border-gray-200 rounded-xl p-0 hover:shadow-card-hover hover:border-blue-200 transition-all duration-300 flex flex-col overflow-hidden h-full";
-      
-      card.innerHTML = `
-        <div class="bg-slate-50/50 border-b border-gray-100 p-6 flex items-start justify-between">
-           <div>
-             <span class="block text-2xl font-bold text-cordis-blue tracking-tight mb-1">${p.acronym}</span>
-             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Research Action</span>
-           </div>
-           <div class="h-10 w-10 bg-white rounded-full flex items-center justify-center shadow-sm text-cordis-blue group-hover:bg-cordis-blue group-hover:text-white transition">
-             <i class="fa-solid fa-flask text-lg"></i>
-           </div>
-        </div>
-        
-        <div class="flex-1 p-6 flex flex-col justify-between">
-          <div>
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-               <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded border border-emerald-100 uppercase tracking-wide">En Curso</span>
-               <span class="text-gray-400 text-xs font-mono">ID: ${p.id}</span>
-            </div>
-            
-            <h3 class="text-lg font-bold text-gray-900 mb-4 leading-snug group-hover:text-cordis-blue transition cursor-pointer trigger-drawer" data-id="${p.id}">
-              ${p.title}
-            </h3>
-            
-            <div class="flex flex-wrap gap-2 mb-6">
-              ${p.tags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('')}
-            </div>
-          </div>
-
-          <div class="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
-             <button class="trigger-drawer text-sm font-bold text-cordis-blue hover:text-blue-800 transition flex items-center gap-2" data-id="${p.id}">
-               Ver Ficha Técnica <i class="fa-solid fa-arrow-right"></i>
-             </button>
-             <div class="text-xs text-gray-400 font-medium">
-               ${p.start} - ${p.end}
-             </div>
-          </div>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-
-    // ===== LÓGICA DEL DRAWER =====
-    const drawer = document.getElementById('drawer');
-    const drawerBg = document.getElementById('drawer-bg');
-    const drawerClose = document.getElementById('drawer-close');
-
-    // Referencias DOM
-    const dAcronym = document.getElementById('d-acronym');
-    const dTitle = document.getElementById('d-title');
-    const dDates = document.getElementById('d-dates');
-    const dIdHeader = document.getElementById('d-id-header');
-    const dSummary = document.getElementById('d-summary');
-    const dObjectives = document.getElementById('d-objectives');
-    const dMethodology = document.getElementById('d-methodology');
-    const dHypothesis = document.getElementById('d-hypothesis');
+    lucide.createIcons();
     
-    // Referencias Ficha Lateral
-    const dPi = document.getElementById('d-pi');
-    const dPeriod = document.getElementById('d-period');
-    const dProgram = document.getElementById('d-program');
-    const dTags = document.getElementById('d-tags');
-    const dFullLink = document.getElementById('d-full-link'); 
-
-    function openDrawer(id) {
-      const p = PROJECTS.find(x => x.id === id);
-      if(!p) return;
-
-      dAcronym.textContent = p.acronym;
-      dTitle.textContent = p.title;
-      dDates.textContent = `${p.start} - ${p.end}`;
-      dProgram.textContent = p.program;
-      dIdHeader.textContent = `ID: ${p.id}`;
-
-      dSummary.innerHTML = p.summary;
-      dObjectives.innerHTML = p.objectives;
-      dMethodology.innerHTML = p.methodology;
-      dHypothesis.innerHTML = p.hypothesis;
-
-      dTags.innerHTML = p.tags.map(t => 
-        `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-cordis-blue border border-blue-100">${t}</span>`
-      ).join('');
-
-      dPi.textContent = p.pi;
-      dPeriod.textContent = `${p.start} - ${p.end}`;
-      
-      // Actualizar enlace del botón
-      dFullLink.href = p.url;
-
-      drawer.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeDrawer() {
-      drawer.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('click', (e) => {
-      const trigger = e.target.closest('.trigger-drawer');
-      if (trigger) {
-        const projectId = trigger.dataset.id;
-        openDrawer(projectId);
-      }
+    // NOTA: El año del footer se maneja automáticamente en el archivo footer.html incluido
+    
+    // Lógica del menú móvil
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    btnOpen.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        mobileMenu.classList.toggle('hidden');
+        btnOpen.setAttribute('aria-expanded', isHidden);
     });
 
-    drawerClose.addEventListener('click', closeDrawer);
-    drawerBg.addEventListener('click', closeDrawer);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+    mobileMenu.addEventListener('click', (e) => {
+        if(e.target.tagName === 'A' && !e.target.onclick) { 
+            mobileMenu.classList.add('hidden');
+            btnOpen.setAttribute('aria-expanded', 'false');
+        }
+    });
 
+    // Lógica del Modal
+    function toggleModal(modalID){
+        const modal = document.getElementById(modalID);
+        const isHidden = modal.classList.contains('hidden');
+        
+        if (isHidden) {
+            modal.classList.remove('hidden');
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        } else {
+            modal.classList.add('hidden');
+            // Enable body scroll
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(event){
+        if(event.key === "Escape"){
+            const modals = document.querySelectorAll('[role="dialog"]');
+            modals.forEach(modal => {
+                if(!modal.classList.contains('hidden')){
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    });
+
+    // Lógica para el dropdown de Municipios
+    function toggleMunicipios() {
+        const menu = document.getElementById('menu-mun');
+        const icon = document.getElementById('icon-mun-chevron');
+        const btn = document.getElementById('btn-mun');
+        
+        const isHidden = menu.classList.contains('hidden');
+        
+        if (isHidden) {
+            menu.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)';
+            btn.classList.add('ring-2', 'ring-purple-100'); 
+        } else {
+            menu.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
+            btn.classList.remove('ring-2', 'ring-purple-100');
+        }
+    }
+
+    // Cerrar al hacer click fuera
+    window.addEventListener('click', function(e) {
+        const menu = document.getElementById('menu-mun');
+        const btn = document.getElementById('btn-mun');
+        // Check if menu exists (defensive programming)
+        if (menu && btn) {
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+                document.getElementById('icon-mun-chevron').style.transform = 'rotate(0deg)';
+                btn.classList.remove('ring-2', 'ring-purple-100');
+            }
+        }
+    });
   </script>
 </body>
 </html>
