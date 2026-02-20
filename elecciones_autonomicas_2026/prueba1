@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Monitor de Elecciones Autonómicas 2025 — CIRCPyCS</title>
+  <meta name="description" content="Monitor de las elecciones autonómicas. Atlas, simulador y base de datos. Iniciativa del Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter","ui-sans-serif","system-ui","Segoe UI","Roboto","Helvetica Neue","Arial"] },
+          boxShadow: { 
+            soft: '0 6px 22px rgba(2,6,23,.08)',
+            card: '0 2px 8px rgba(15, 23, 42, 0.04), 0 10px 30px -4px rgba(15, 23, 42, 0.04)' 
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    section[id] { scroll-margin-top: 96px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    #btn-open[aria-expanded="true"] #icon-bars{ display:none; }
+    #btn-open[aria-expanded="true"] #icon-x{ display:block; }
+    #mobile-menu{
+      --header-h: 64px;
+      max-height: calc(100vh - var(--header-h));
+      overflow-y: auto;
+    }
+    
+    /* Animación del Modal */
+    .modal-enter { opacity: 0; transform: scale(0.95); }
+    .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
+    .modal-exit { opacity: 1; transform: scale(1); }
+    .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 200ms, transform 200ms; }
+
+    /* Estilo para links del dropdown de municipios */
+    .mun-link {
+        display: block;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        color: #475569; /* Slate 600 */
+        border-radius: 6px;
+        transition: background-color 0.2s, color 0.2s;
+        text-decoration: none;
+    }
+    .mun-link:hover {
+        background-color: #f3e8ff; /* Purple 100 */
+        color: #7e22ce; /* Purple 700 */
+        font-weight: 600;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans">
+
+  <div class="h-1.5 w-full bg-gradient-to-r from-emerald-600 via-sky-600 to-rose-600"></div>
+
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-white/80 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      
+      <a href="#inicio" class="flex items-center gap-3 min-w-0 group">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+        <div class="leading-tight truncate">
+          <p class="text-[10px] sm:text-xs tracking-wider uppercase text-slate-500 font-semibold">CIRCPyCS — UAGRM</p>
+          <h1 class="font-bold text-sm sm:text-base md:text-lg leading-tight text-slate-900">
+            Monitor de Elecciones <br class="sm:hidden"> Autonómicas 2025
+          </h1>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <a href="#inicio" class="hover:text-emerald-700 transition">Inicio</a>
+        
+        <button onclick="toggleModal('modal-disclaimer')" class="hover:text-emerald-700 transition focus:outline-none">
+            Institucional
+        </button>
+        
+        <a href="https://cir.uagrm.edu.bo/" target="_blank" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition shadow-sm flex items-center gap-2">
+            <span>Web Principal</span>
+            <i data-lucide="external-link" class="h-4 w-4"></i>
+        </a>
+      </nav>
+
+      <button id="btn-open" class="md:hidden inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span class="text-sm font-medium">Menú</span>
+        <svg id="icon-bars" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg id="icon-x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-slate-200 bg-white shadow-soft absolute w-full left-0 z-40">
+      <ul class="px-4 py-4 grid gap-2 text-[15px] font-medium text-slate-600">
+        <li><a class="block px-4 py-3 rounded-lg hover:bg-slate-50" href="#inicio">Inicio</a></li>
+        <li>
+            <button onclick="toggleModal('modal-disclaimer'); document.getElementById('btn-open').click();" class="block w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50">
+                Institucional
+            </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="inicio" class="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24">
+    <div class="absolute inset-0 -z-10 opacity-30" aria-hidden="true">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 h-[500px] w-[500px] rounded-full bg-slate-200 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 h-[400px] w-[400px] rounded-full bg-emerald-100 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+      
+      <div class="z-10">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 ring-1 ring-slate-200 mb-6">
+            Investigación Aplicada
+        </span>
+        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+          Monitor de Elecciones <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-700">Autonómicas 2025</span>
+        </h2>
+        <p class="mt-6 text-lg text-slate-600 max-w-prose leading-relaxed">
+          Una iniciativa del <strong>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM</strong> para el seguimiento técnico del proceso electoral. Centralizamos datos geográficos, perfiles de candidatos y proyecciones matemáticas en una sola plataforma académica.
+        </p>
+      </div>
+
+      <div class="relative mt-8 lg:mt-0">
+        <div class="rounded-3xl bg-white shadow-soft border border-slate-200 overflow-hidden">
+          <div class="w-full bg-slate-50">
+            <div class="mx-auto max-w-3xl aspect-[16/9]">
+              <img src="https://i.imgur.com/boTniYE.png" alt="Portada Revista Conocimiento i Política" class="h-full w-full object-contain p-2" loading="lazy" />
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <h3 class="font-bold text-lg sm:text-xl">Revista <span class="italic">Conocimiento i Política</span> — Nueva Época</h3>
+            <p class="mt-2 text-slate-600">Acceso abierto en OJS. Preparando el <strong>Número 8</strong> (Diciembre 2026). Envía tus artículos y consulta las normas editoriales.</p>
+            <div class="mt-4 flex flex-col sm:flex-row gap-3">
+              <a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" rel="noopener" class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                  <span>Abrir en OJS</span>
+                  <i data-lucide="external-link" class="h-4 w-4"></i>
+              </a>
+              <a href="#publicaciones" class="px-4 py-2 rounded-xl border border-slate-300 font-medium hover:border-emerald-600 hover:text-emerald-700 w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                  <span>Ver publicaciones</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="hidden sm:flex absolute -bottom-4 -right-4 rotate-2 rounded-2xl bg-white px-4 py-2 text-sm shadow border border-slate-200 items-center gap-2">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <div><span class="font-semibold">Próximamente:</span> Dic 2026</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="componentes" class="py-16 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="mb-12 text-center max-w-2xl mx-auto">
+           <h2 class="text-3xl font-bold text-slate-900">Secciones del Monitor</h2>
+           <p class="mt-2 text-slate-600">Seleccione un área para comenzar el análisis.</p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <a href="calendario_electoral.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+            <div class="flex flex-col items-center">
+              <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 mx-auto">
+                  <i data-lucide="calendar-days" class="h-7 w-7"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">Calendario Electoral</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                Cronograma oficial, plazos legales y fechas clave del proceso electoral 2026.
+              </p>
+            </div>
+            <div class="mt-6 flex justify-center items-center text-sm font-semibold text-indigo-600 group-hover:text-indigo-800">
+              Ver fechas <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+        
+        <a href="atlas_electoral.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+          <div class="flex flex-col items-center">
+            <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 mx-auto">
+               <i data-lucide="map" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-700 transition-colors">Atlas Electoral</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              Visualización geo-referenciada de resultados históricos por recinto y municipio.
+            </p>
+          </div>
+          <div class="mt-6 flex justify-center items-center text-sm font-semibold text-blue-600 group-hover:text-blue-800">
+            Explorar mapa <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </a>
+
+        <a href="simulador.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+          <div class="flex flex-col items-center">
+            <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 mx-auto">
+               <i data-lucide="calculator" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Simulador de Escaños</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              Motor de cálculo D'Hondt para proyectar la composición de concejos municipales.
+            </p>
+          </div>
+          <div class="mt-6 flex justify-center items-center text-sm font-semibold text-emerald-600 group-hover:text-emerald-800">
+            Proyectar datos <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </a>
+
+        <a href="candidatos.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+          <div class="flex flex-col items-center">
+            <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300 mx-auto">
+               <i data-lucide="users" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 group-hover:text-red-700 transition-colors">Base de Candidatos</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              Repositorio de perfiles, trayectorias políticas y afiliaciones.
+            </p>
+          </div>
+          <div class="mt-6 flex justify-center items-center text-sm font-semibold text-red-600 group-hover:text-red-800">
+            Ver perfiles <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </a>
+
+        <div class="relative flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 transition-all duration-300 hover:shadow-lg text-center">
+            
+            <div class="flex flex-col items-center pointer-events-none mb-6">
+                <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-50 text-purple-600 mx-auto">
+                    <i data-lucide="scale" class="h-7 w-7"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Comparador de Planes</h3>
+                <p class="mt-2 text-sm leading-relaxed text-slate-600">
+                    Contrastación técnica de propuestas. Elige el nivel de gobierno:
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-3 relative z-10">
+                
+                <a href="programas/gobernacion.html" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-slate-50 text-slate-700 font-bold hover:bg-purple-600 hover:text-white transition-all group border border-slate-200 hover:border-purple-600">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="landmark" class="h-5 w-5 text-slate-400 group-hover:text-white"></i>
+                        <span>Gobernación</span>
+                    </div>
+                    <i data-lucide="arrow-right" class="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1"></i>
+                </a>
+
+                <div class="relative">
+                    <button onclick="toggleMunicipios()" id="btn-mun" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 transition-colors border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="map-pin" class="h-5 w-5 text-purple-600"></i>
+                            <span>Municipios</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="h-4 w-4 text-slate-400 transition-transform duration-200" id="icon-mun-chevron"></i>
+                    </button>
+
+                    <div id="menu-mun" class="hidden absolute left-0 right-0 mt-2 w-full origin-top rounded-xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 z-50 animate-fade-in-up text-left">
+                        
+                        <div class="p-2 border-b border-slate-100 bg-slate-50 rounded-t-xl">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2">Selecciona un municipio:</span>
+                        </div>
+
+                        <div class="max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent p-1">
+                            
+                              <a href="programas/pg_scz_mun.html" class="block px-4 py-2.5 text-sm font-bold text-purple-700 bg-purple-50 rounded-lg mb-1 hover:bg-purple-100">
+                                  Santa Cruz de la Sierra
+                              </a>
+
+                             <div class="grid grid-cols-1 gap-0.5">
+                                <a href="programas/pg_ascension_de_guarayos_mun.html" class="mun-link">Ascensión de Guarayos</a>
+                                <a href="programas/pg_boyuibe_mun.html" class="mun-link">Boyuibe</a>
+                                <a href="programas/pg_buena_vista_mun.html" class="mun-link">Buena Vista</a>
+                                <a href="programas/pg_cabezas_mun.html" class="mun-link">Cabezas</a>
+                                <a href="programas/pg_camiri_mun.html" class="mun-link">Camiri</a>
+                                <a href="programas/pg_carmen_rivero_torrez_mun.html" class="mun-link">Carmen Rivero Tórrez</a>
+                                <a href="programas/pg_charagua_mun.html" class="mun-link">Charagua</a>
+                                <a href="programas/pg_colpa_belgica_mun.html" class="mun-link">Colpa Bélgica</a>
+                                <a href="programas/pg_comarapa_mun.html" class="mun-link">Comarapa</a>
+                                <a href="programas/pg_concepcion_mun.html" class="mun-link">Concepción</a>
+                                <a href="programas/pg_cotoca_mun.html" class="mun-link">Cotoca</a>
+                                <a href="programas/pg_cuatro_canadas_mun.html" class="mun-link">Cuatro Cañadas</a>
+                                <a href="programas/pg_cuevo_mun.html" class="mun-link">Cuevo</a>
+                                <a href="programas/pg_el_puente_mun.html" class="mun-link">El Puente</a>
+                                <a href="programas/pg_el_torno_mun.html" class="mun-link">El Torno</a>
+                                <a href="programas/pg_el_trigal_mun.html" class="mun-link">El Trigal</a>
+                                <a href="programas/pg_fernandez_alonso_mun.html" class="mun-link">Fernández Alonso</a>
+                                <a href="programas/pg_general_saavedra_mun.html" class="mun-link">General Saavedra</a>
+                                <a href="programas/pg_gutierrez_mun.html" class="mun-link">Gutiérrez</a>
+                                <a href="programas/pg_la_guardia_mun.html" class="mun-link">La Guardia</a>
+                                <a href="programas/pg_lagunillas_mun.html" class="mun-link">Lagunillas</a>
+                                <a href="programas/pg_mairana_mun.html" class="mun-link">Mairana</a>
+                                <a href="programas/pg_mineros_mun.html" class="mun-link">Mineros</a>
+                                <a href="programas/pg_montero_mun.html" class="mun-link">Montero</a>
+                                <a href="programas/pg_moro_moro_mun.html" class="mun-link">Moro Moro</a>
+                                <a href="programas/pg_okinawa_mun.html" class="mun-link">Okinawa I</a>
+                                <a href="programas/pg_pailon_mun.html" class="mun-link">Pailón</a>
+                                <a href="programas/pg_pampagrande_mun.html" class="mun-link">Pampagrande</a>
+                                <a href="programas/pg_porongo_mun.html" class="mun-link">Porongo</a>
+                                <a href="programas/pg_portachuelo_mun.html" class="mun-link">Portachuelo</a>
+                                <a href="programas/pg_postrervalle_mun.html" class="mun-link">Postrervalle</a>
+                                <a href="programas/pg_pucara_mun.html" class="mun-link">Pucará</a>
+                                <a href="programas/pg_puerto_quijarro_mun.html" class="mun-link">Puerto Quijarro</a>
+                                <a href="programas/pg_puerto_suarez_mun.html" class="mun-link">Puerto Suárez</a>
+                                <a href="programas/pg_quirusillas_mun.html" class="mun-link">Quirusillas</a>
+                                <a href="programas/pg_robore_mun.html" class="mun-link">Roboré</a>
+                                <a href="programas/pg_saipina_mun.html" class="mun-link">Saipina</a>
+                                <a href="programas/pg_samaipata_mun.html" class="mun-link">Samaipata</a>
+                                <a href="programas/pg_san_antonio_de_lomerio_mun.html" class="mun-link">San Antonio de Lomerío</a>
+                                <a href="programas/pg_san_carlos_mun.html" class="mun-link">San Carlos</a>
+                                <a href="programas/pg_san_ignacio_de_velasco_mun.html" class="mun-link">San Ignacio de Velasco</a>
+                                <a href="programas/pg_san_javier_mun.html" class="mun-link">San Javier</a>
+                                <a href="programas/pg_san_jose_de_chiquitos_mun.html" class="mun-link">San José de Chiquitos</a>
+                                <a href="programas/pg_san_juan_de_yapacani_mun.html" class="mun-link">San Juan de Yapacaní</a>
+                                <a href="programas/pg_san_julian_mun.html" class="mun-link">San Julián</a>
+                                <a href="programas/pg_san_matias_mun.html" class="mun-link">San Matías</a>
+                                <a href="programas/pg_san_miguel_de_velasco_mun.html" class="mun-link">San Miguel de Velasco</a>
+                                <a href="programas/pg_san_pedro_mun.html" class="mun-link">San Pedro</a>
+                                <a href="programas/pg_san_rafael_mun.html" class="mun-link">San Rafael</a>
+                                <a href="programas/pg_san_ramon_mun.html" class="mun-link">San Ramón</a>
+                                <a href="programas/pg_santa_rosa_del_sara_mun.html" class="mun-link">Santa Rosa del Sara</a>
+                                <a href="programas/pg_urubicha_mun.html" class="mun-link">Urubichá</a>
+                                <a href="programas/pg_vallegrande_mun.html" class="mun-link">Vallegrande</a>
+                                <a href="programas/pg_warnes_mun.html" class="mun-link">Warnes</a>
+                                <a href="programas/pg_yapacani_mun.html" class="mun-link">Yapacaní</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="entrevistas.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+            <div class="flex flex-col items-center">
+              <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors duration-300 mx-auto">
+                  <i data-lucide="video" class="h-7 w-7"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-orange-700 transition-colors">Entrevistas</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                Ciclo de entrevistas y conversatorios con los principales actores del proceso.
+              </p>
+            </div>
+            <div class="mt-6 flex justify-center items-center text-sm font-semibold text-orange-600 group-hover:text-orange-800">
+              Ver videos <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+
+        <a href="podcast.html" class="group flex flex-col justify-between rounded-2xl bg-white p-8 shadow-card ring-1 ring-slate-100 hover:ring-slate-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg text-center">
+            <div class="flex flex-col items-center">
+              <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-50 text-pink-600 group-hover:bg-pink-600 group-hover:text-white transition-colors duration-300 mx-auto">
+                  <i data-lucide="headphones" class="h-7 w-7"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-pink-700 transition-colors">Podcast Electoral</h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
+                Análisis semanal y coyuntura política en formato sonoro. Discusión a profundidad.
+              </p>
+            </div>
+            <div class="mt-6 flex justify-center items-center text-sm font-semibold text-pink-600 group-hover:text-pink-800">
+              Escuchar <i data-lucide="arrow-right" class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+           <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+           <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+        </div>
+        <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+          Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+        </p>
+        <p class="text-xs text-slate-400">
+          © <span id="year"></span> Todos los derechos reservados.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+          <li><a href="https://cir.uagrm.edu.bo/services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+          <li><a href="#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+          <li><a href="#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+          <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+        <div class="grid gap-3">
+          <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+          </a>
+          
+          <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+          </a>
+
+           <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+          </a>
+
+          <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+          </a>
+          
+           <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+      <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+         <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+         <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Año dinámico para el footer (script auto-contenido)
+  if(document.getElementById('year')) {
+    document.getElementById('year').textContent = new Date().getFullYear();
+  }
+</script>
+
+  <div id="modal-disclaimer" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="toggleModal('modal-disclaimer')"></div>
+
+    <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+      <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-200">
+        
+        <div class="bg-slate-50 px-4 py-3 sm:px-6 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-base font-semibold leading-6 text-slate-900 flex items-center gap-2" id="modal-title">
+                <i data-lucide="shield-alert" class="h-5 w-5 text-amber-600"></i>
+                Descargo Institucional
+            </h3>
+            <button onclick="toggleModal('modal-disclaimer')" class="text-slate-400 hover:text-slate-500 transition">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+        </div>
+
+        <div class="px-4 py-5 sm:p-6">
+            <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                <p>
+                    <strong>1. Fuentes de Datos:</strong> Los datos electorales y geográficos presentados en esta plataforma provienen de fuentes públicas oficiales del Órgano Electoral Plurinacional (OEP) y del trabajo de sistematización académica del Centro.
+                </p>
+                <p>
+                    <strong>2. Naturaleza de las Simulaciones:</strong> El módulo "Simulador de Escaños" es una herramienta matemática basada en el sistema D'Hondt. Las proyecciones generadas son escenarios hipotéticos y <strong>no constituyen resultados oficiales</strong> ni tendencias de voto validadas por la corte electoral.
+                </p>
+                <p>
+                    <strong>3. Opiniones:</strong> Las opiniones, entrevistas y análisis vertidos en los módulos cualitativos son responsabilidad exclusiva de sus autores y no necesariamente reflejan la postura institucional oficial de la UAGRM o del CIRCPyCS.
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-slate-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button type="button" class="inline-flex w-full justify-center rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 sm:ml-3 sm:w-auto" onclick="toggleModal('modal-disclaimer')">
+            Entendido
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    
+    // NOTA: El año del footer se maneja automáticamente en el archivo footer.html incluido
+    
+    // Lógica del menú móvil
+    const btnOpen = document.getElementById('btn-open');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    btnOpen.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        mobileMenu.classList.toggle('hidden');
+        btnOpen.setAttribute('aria-expanded', isHidden);
+    });
+
+    mobileMenu.addEventListener('click', (e) => {
+        if(e.target.tagName === 'A' && !e.target.onclick) { 
+            mobileMenu.classList.add('hidden');
+            btnOpen.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Lógica del Modal
+    function toggleModal(modalID){
+        const modal = document.getElementById(modalID);
+        const isHidden = modal.classList.contains('hidden');
+        
+        if (isHidden) {
+            modal.classList.remove('hidden');
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        } else {
+            modal.classList.add('hidden');
+            // Enable body scroll
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(event){
+        if(event.key === "Escape"){
+            const modals = document.querySelectorAll('[role="dialog"]');
+            modals.forEach(modal => {
+                if(!modal.classList.contains('hidden')){
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    });
+
+    // Lógica para el dropdown de Municipios
+    function toggleMunicipios() {
+        const menu = document.getElementById('menu-mun');
+        const icon = document.getElementById('icon-mun-chevron');
+        const btn = document.getElementById('btn-mun');
+        
+        const isHidden = menu.classList.contains('hidden');
+        
+        if (isHidden) {
+            menu.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)';
+            btn.classList.add('ring-2', 'ring-purple-100'); 
+        } else {
+            menu.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
+            btn.classList.remove('ring-2', 'ring-purple-100');
+        }
+    }
+
+    // Cerrar al hacer click fuera
+    window.addEventListener('click', function(e) {
+        const menu = document.getElementById('menu-mun');
+        const btn = document.getElementById('btn-mun');
+        // Check if menu exists (defensive programming)
+        if (menu && btn) {
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+                document.getElementById('icon-mun-chevron').style.transform = 'rotate(0deg)';
+                btn.classList.remove('ring-2', 'ring-purple-100');
+            }
+        }
+    });
+  </script>
+</body>
+</html>
