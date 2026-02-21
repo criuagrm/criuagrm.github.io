@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>EDU-TERRITORIAL: Modelo Educativo — CIRCPyCS</title>
+  <meta name="description" content="Proyecto de investigación para el diseño de un modelo educativo territorializado en Santa Cruz." />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cordis: {
+              blue: '#004494', 
+              dark: '#0f2c52',
+              light: '#e9eff8',
+              accent: '#d97706', // Ámbar/Terracota para reflejar la identidad territorial
+              text: '#1e293b',
+            }
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], serif: ['Merriweather', 'serif'] },
+          backgroundImage: {
+            'subtle-grid': "url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwgNjgsIDE0OCwgMC4wNSkiLz48L3N2Zz4=')"
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    body { background-color: #f8fafc; color: #334155; }
+    
+    /* Tipografía */
+    h1, h2, h3 { color: #0f2c52; letter-spacing: -0.025em; }
+    p { margin-bottom: 1.25rem; line-height: 1.7; color: #475569; font-size: 0.95rem; }
+    
+    /* Listas personalizadas */
+    .custom-list { list-style: none; padding-left: 0; margin-bottom: 1.5rem; }
+    .custom-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.75rem; color: #475569; font-size: 0.95rem; }
+    .custom-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #d97706; /* Ámbar */
+      font-weight: bold;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    /* Tarjetas Modernas */
+    .modern-card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s ease;
+    }
+    .modern-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+      border-color: #cbd5e1;
+    }
+
+    /* Navegación Lateral Estilizada */
+    .nav-link { 
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem; 
+      margin-bottom: 0.25rem;
+      border-radius: 0.5rem;
+      color: #64748b; 
+      font-size: 0.875rem; 
+      font-weight: 500;
+      transition: all 0.2s; 
+    }
+    .nav-link:hover { color: #004494; background-color: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .nav-link.active { 
+      color: #004494; 
+      background-color: white;
+      font-weight: 600; 
+      box-shadow: 0 1px 3px rgba(0,68,148,0.1);
+      border-left: 4px solid #004494;
+    }
+
+    /* Timeline Vertical Mejorada */
+    .timeline-item { position: relative; padding-left: 2.5rem; padding-bottom: 2.5rem; border-left: 2px solid #e2e8f0; }
+    .timeline-item:last-child { border-left: 2px solid transparent; }
+    .timeline-dot { 
+      position: absolute; left: -9px; top: 0; 
+      width: 16px; height: 16px; 
+      border-radius: 50%; background: white; 
+      border: 4px solid #cbd5e1; 
+      transition: all 0.3s;
+    }
+    .timeline-item:hover .timeline-dot { border-color: #004494; transform: scale(1.2); }
+    .timeline-item.active .timeline-dot { border-color: #d97706; background: #d97706; }
+
+    /* Botones de Componentes Tácticos */
+    .scheme-card {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .scheme-card:hover {
+      border-color: #d97706;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.15);
+    }
+    .scheme-icon {
+      background: rgba(217, 119, 6, 0.05);
+      color: #d97706;
+      transition: all 0.3s;
+    }
+    .scheme-card:hover .scheme-icon {
+      background: #d97706;
+      color: white;
+    }
+  </style>
+</head>
+<body class="font-sans flex flex-col min-h-screen bg-subtle-grid">
+
+  <!-- Top Bar -->
+  <div class="bg-cordis-dark text-white/90 py-1.5 text-[10px] md:text-xs text-center font-semibold tracking-widest uppercase shadow-sm z-50 relative">
+    Centro de Investigación Regional en Ciencia Política y Ciencias Sociales
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-auto" />
+        <div class="h-8 w-px bg-gray-200 mx-1 hidden md:block"></div>
+        <div class="leading-tight hidden md:block">
+          <span class="block font-bold text-cordis-blue text-sm tracking-tight">CIRCPyCS</span>
+          <span class="block text-[10px] text-gray-500 font-medium uppercase tracking-wider">Unidad de Investigación Académica</span>
+        </div>
+      </div>
+      
+      <a href="Portafolio_CIRCPyCS.html" class="group flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 text-slate-600 text-xs font-bold hover:bg-cordis-blue hover:text-white transition-all duration-300 border border-slate-200 hover:border-cordis-blue shadow-sm">
+        <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> 
+        <span>Volver al Portafolio</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative bg-white border-b border-slate-200 py-16 md:py-20 overflow-hidden">
+    <!-- Elementos decorativos de fondo -->
+    <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-amber-50 rounded-full blur-3xl opacity-70"></div>
+    <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-emerald-50 rounded-full blur-3xl opacity-60"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-5xl">
+        <div class="flex flex-wrap items-center gap-3 mb-6 animate-fade-in-up">
+          <span class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-md uppercase tracking-wider border border-slate-200">
+            <i class="fa-solid fa-hashtag text-slate-400 mr-1"></i> ID: EDU-TERRITORIAL-26
+          </span>
+          <span class="bg-blue-50 text-cordis-blue text-xs font-bold px-3 py-1.5 rounded-md flex items-center gap-2 border border-blue-100">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-cordis-blue"></span>
+            </span>
+            Estudio de Condiciones Previas
+          </span>
+        </div>
+        
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-cordis-dark leading-[1.1] mb-8 tracking-tight">
+          Diseño Teórico de un Modelo Educativo <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-500">Territorializado</span> para Santa Cruz
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-slate-500 font-light max-w-3xl leading-relaxed border-l-4 border-amber-500 pl-6">
+          Investigación estratégica para la integración de la <strong>interculturalidad, ecopedagogía y bienestar emocional</strong> frente a las brechas de implementación de la Ley 070.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 lg:grid-cols-12 gap-10">
+    
+    <!-- Sidebar Navegación (Izquierda) -->
+    <aside class="col-span-1 lg:col-span-3">
+      <div class="lg:sticky lg:top-28 space-y-8">
+        <nav class="space-y-1 hidden lg:block" id="page-nav">
+          <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Arquitectura del Proyecto</p>
+          <a href="#tacticos" class="nav-link text-amber-700 bg-amber-50/50 border border-amber-100 hover:bg-amber-100 mb-4">
+            <i class="fa-solid fa-layer-group"></i> Proyectos Tácticos
+          </a>
+          <a href="#resumen" class="nav-link active"><i class="fa-solid fa-book-open w-4"></i> Contexto y Resumen</a>
+          <a href="#planteamiento" class="nav-link"><i class="fa-solid fa-scale-unbalanced w-4"></i> Planteamiento</a>
+          <a href="#objetivos" class="nav-link"><i class="fa-solid fa-bullseye w-4"></i> Objetivos</a>
+          <a href="#metodologia" class="nav-link"><i class="fa-solid fa-microscope w-4"></i> Metodología</a>
+          <a href="#equipo" class="nav-link"><i class="fa-solid fa-users w-4"></i> Equipo Multidisciplinario</a>
+          <a href="#descargas" class="nav-link text-cordis-blue font-bold mt-4"><i class="fa-solid fa-cloud-arrow-down w-4"></i> Repositorio Abierto</a>
+        </nav>
+
+        <!-- Widget del Visor Espacial -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-lg relative overflow-hidden">
+          <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-5 rounded-full blur-xl"></div>
+          <i class="fa-solid fa-map-location-dot text-3xl text-amber-500 mb-3 relative z-10 opacity-80"></i>
+          <h4 class="text-sm font-bold mb-2 relative z-10">Atlas de Vulnerabilidad Educativa</h4>
+          <p class="text-xs text-slate-300 mb-4 relative z-10">Acceda al visor georreferenciado que cruza datos escolares (abandono/matrícula) con variables del Censo Nacional.</p>
+          <button onclick="alert('Iniciando entorno del visor SIG...')" class="w-full py-2.5 bg-amber-600 text-white text-xs font-bold rounded-lg hover:bg-amber-500 transition shadow relative z-10 flex items-center justify-center gap-2">
+            Explorar Visor <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </button>
+        </div>
+
+        <!-- Widget de Contacto -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-2xl text-white shadow-lg relative overflow-hidden mt-8 hidden lg:block">
+          <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-5 rounded-full blur-xl"></div>
+          <h4 class="text-sm font-bold mb-2 relative z-10">¿Colaboración Académica?</h4>
+          <p class="text-xs text-slate-300 mb-4 relative z-10">Contacte al equipo de investigación para acceso a datos brutos.</p>
+          <a href="https://wa.me/59170000000" target="_blank" class="w-full py-2.5 bg-white text-slate-900 text-xs font-bold rounded-lg hover:bg-slate-100 transition shadow relative z-10 block text-center">
+            Contactar PI
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Columna Central (Contenido) -->
+    <div class="col-span-1 lg:col-span-6 space-y-10">
+      
+      <!-- SECCIÓN: PROYECTOS TÁCTICOS -->
+      <section id="tacticos" class="scroll-mt-32">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3 text-cordis-dark">
+          <i class="fa-solid fa-diagram-project text-amber-600"></i> Frentes Tácticos de Investigación
+        </h2>
+        <p class="text-sm text-slate-500 mb-6 leading-relaxed">Este macroproyecto estratégico se nutre de evidencia empírica generada a través de cuatro investigaciones modulares que abordan la complejidad territorial de forma interconectada.</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Card 1: Atlas (Solo SIG/Cuantitativo) -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group">
+            <div class="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition">
+                <i class="fa-solid fa-map-location-dot text-6xl text-cordis-blue"></i>
+            </div>
+            <div class="flex items-start justify-between mb-3 relative z-10">
+              <div class="scheme-icon h-10 w-10 rounded-lg flex items-center justify-center text-lg bg-blue-50 text-cordis-blue group-hover:bg-cordis-blue group-hover:text-white">
+                <i class="fa-solid fa-map"></i>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Fase 1</span>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm mb-2 group-hover:text-cordis-blue transition relative z-10">Atlas de Vulnerabilidad Educativa y Territorial de Santa Cruz</h3>
+            <p class="text-xs text-slate-500 mb-4 relative z-10 line-clamp-3">Construcción de una línea base geoespacial cruzando datos administrativos (matrícula, aprobación, abandono) con variables del Censo para identificar desigualdades estructurales territoriales.</p>
+            <div class="relative z-10 inline-flex items-center gap-2 text-[10px] font-bold text-cordis-blue bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100 group-hover:bg-cordis-blue group-hover:text-white transition">
+                <span>Ver Visor SIG</span> <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </a>
+
+          <!-- Card 2: Diagnóstico Sociodemográfico (Trabajo de campo) -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group">
+             <div class="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition">
+                <i class="fa-solid fa-heart-pulse text-6xl text-rose-600"></i>
+            </div>
+            <div class="flex items-start justify-between mb-3 relative z-10">
+              <div class="scheme-icon h-10 w-10 rounded-lg flex items-center justify-center text-lg bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white">
+                <i class="fa-solid fa-users-rays"></i>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Fase 2</span>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm mb-2 group-hover:text-rose-700 transition relative z-10">Diagnóstico Sociodemográfico y Emocional</h3>
+            <p class="text-xs text-slate-500 mb-4 relative z-10 line-clamp-3">Trabajo de campo para levantar evidencia empírica sobre la crisis de salud mental, intolerancia a la frustración y el contraste del desarraigo ecológico entre estudiantes urbanos y rurales.</p>
+             <div class="relative z-10 inline-flex items-center gap-2 text-[10px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md border border-rose-100 group-hover:bg-rose-600 group-hover:text-white transition">
+                <span>Ver Datos Primarios</span> <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </a>
+
+          <!-- Card 3: Estudio Antropológico -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group">
+             <div class="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition">
+                <i class="fa-solid fa-leaf text-6xl text-emerald-600"></i>
+            </div>
+            <div class="flex items-start justify-between mb-3 relative z-10">
+              <div class="scheme-icon h-10 w-10 rounded-lg flex items-center justify-center text-lg bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white">
+                <i class="fa-solid fa-seedling"></i>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Fase 3</span>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm mb-2 group-hover:text-emerald-700 transition relative z-10">Estudio Antropológico y Epistemológico de Naciones Indígenas</h3>
+            <p class="text-xs text-slate-500 mb-4 relative z-10 line-clamp-3">Investigación etnográfica profunda para sistematizar las prácticas, saberes, ecología y lenguas de las culturas originarias de tierras bajas (Chiquitana, Ayorea y Guaraya).</p>
+             <div class="relative z-10 inline-flex items-center gap-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition">
+                <span>Ver Etnografías</span> <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </a>
+
+          <!-- Card 4: Gobernanza y Políticas -->
+          <a href="#" class="scheme-card block p-5 rounded-xl cursor-pointer group">
+            <div class="absolute top-0 right-0 p-3 opacity-5 group-hover:opacity-10 transition">
+                <i class="fa-solid fa-landmark text-6xl text-purple-600"></i>
+            </div>
+            <div class="flex items-start justify-between mb-3 relative z-10">
+              <div class="scheme-icon h-10 w-10 rounded-lg flex items-center justify-center text-lg bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white">
+                <i class="fa-solid fa-scale-balanced"></i>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Fase 4</span>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm mb-2 group-hover:text-purple-700 transition relative z-10">Análisis de Gobernanza Autonómica en Educación</h3>
+            <p class="text-xs text-slate-500 mb-4 relative z-10 line-clamp-3">Estudio de ciencia política y viabilidad jurídica sobre las competencias departamentales y municipales para financiar e implementar la nueva propuesta curricular regionalizada.</p>
+             <div class="relative z-10 inline-flex items-center gap-2 text-[10px] font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-100 group-hover:bg-purple-600 group-hover:text-white transition">
+                <span>Ver Análisis Legal</span> <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-slate-200"></div>
+
+      <!-- Resumen y Contexto -->
+      <section id="resumen" class="modern-card p-8 scroll-mt-32">
+        <h2 class="text-xl font-bold mb-4 text-cordis-dark border-b border-gray-100 pb-3">Contexto y Resumen del Macroproyecto</h2>
+        
+        <p>El sistema educativo en el departamento de Santa Cruz atraviesa una profunda crisis de pertinencia territorial. La aplicación práctica de la Ley N.º 070 evidencia un modelo academicista y estandarizado, fuertemente desconectado de la diversidad cultural y las urgencias ecológicas contemporáneas.</p>
+        
+        <p class="font-semibold text-slate-700 mt-4 mb-2">Esta desconexión ha generado impactos sociales críticos:</p>
+        <ul class="custom-list">
+          <li><strong>En centros urbanos:</strong> Pérdida acelerada de empatía con la naturaleza e incremento alarmante en indicadores de ansiedad e intolerancia a la frustración entre estudiantes.</li>
+          <li><strong>En zonas rurales:</strong> Invisibilización sistémica del conocimiento ancestral y las lenguas de las naciones indígenas de tierras bajas.</li>
+        </ul>
+
+        <p class="mb-0 bg-blue-50/50 p-4 rounded-lg border border-blue-100 text-slate-700">
+          En respuesta, el presente macroproyecto diseña los fundamentos teóricos para una <strong>nueva malla curricular territorializada</strong>. El objetivo es proporcionar a los tomadores de decisiones una política pública basada en evidencia empírica, orientada a formar ciudadanos con sólida identidad, conciencia ecológica y autogestión emocional.
+        </p>
+      </section>
+
+      <!-- Planteamiento del Problema -->
+      <section id="planteamiento" class="scroll-mt-32">
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-8 relative overflow-hidden">
+          <div class="absolute -right-6 -top-6 text-amber-100/50 text-9xl font-serif select-none pointer-events-none">¿</div>
+          <h3 class="text-xs font-bold text-amber-700 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Núcleo de la Problematización
+          </h3>
+          
+          <p class="text-lg font-serif italic text-amber-900 mb-4 relative z-10 leading-relaxed text-justify">
+            Ante las severas brechas de implementación de la actual normativa y el alarmante proceso de desarraigo sociocultural en la región, la presente investigación plantea la siguiente interrogante fundamental:
+          </p>
+
+          <div class="relative z-10 bg-white/60 p-5 rounded-lg border border-amber-200/60 shadow-sm">
+            <p class="font-bold text-slate-800 text-lg text-center mb-0 leading-snug">
+              ¿Cómo debe estructurarse teórica, pedagógica y jurídicamente un modelo educativo territorializado para Santa Cruz?
+            </p>
+          </div>
+          
+          <ul class="custom-list mt-5 relative z-10">
+            <li class="text-amber-900">Que logre integrar los saberes indígenas y la ecopedagogía.</li>
+            <li class="text-amber-900">Que responda empíricamente a la crisis de salud mental y desigualdad espacial.</li>
+            <li class="text-amber-900">Que garantice el bienestar y la formación integral del ser humano.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Objetivos -->
+      <section id="objetivos" class="modern-card p-8 scroll-mt-32">
+        <h2 class="text-xl font-bold mb-6 text-cordis-dark border-b border-gray-100 pb-3">Objetivos del Estudio</h2>
+        <p class="mb-6">
+          El propósito general es diagnosticar empíricamente las brechas educativas y territoriales en Santa Cruz, para fundamentar el diseño de una malla curricular contextualizada. Este propósito se operativiza a través de cuatro ejes tácticos:
+        </p>
+        
+        <ul class="space-y-6">
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue">
+              <i class="fa-solid fa-map"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">1. Diagnóstico Geoespacial (Atlas)</strong>
+              <span class="text-sm text-gray-500 block">Cruzar microdatos administrativos de las escuelas con variables censales para mapear los polígonos críticos de desigualdad territorial.</span>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">2. Diagnóstico Socioemocional en Campo</strong>
+              <span class="text-sm text-gray-500 block">Levantar evidencia primaria para evaluar la salud mental, la gestión de la frustración y la desconexión ecológica en entornos urbanos y rurales.</span>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <i class="fa-solid fa-people-arrows"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">3. Recuperación Epistemológica Indígena</strong>
+              <span class="text-sm text-gray-500 block">Sistematizar saberes ancestrales y prácticas vinculadas al territorio de las naciones Chiquitana, Ayorea y Guaraya mediante investigación-acción.</span>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+              <i class="fa-solid fa-landmark"></i>
+            </div>
+            <div>
+              <strong class="block text-gray-900 text-sm md:text-base mb-1">4. Viabilidad y Gobernanza Autonómica</strong>
+              <span class="text-sm text-gray-500 block">Analizar el marco legal subnacional para garantizar mecanismos de financiación en la futura implementación curricular por parte de municipios y la gobernación.</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Metodología -->
+      <section id="metodologia" class="modern-card p-8 scroll-mt-32">
+        <h2 class="text-xl font-bold mb-4 text-cordis-dark border-b border-gray-100 pb-3">Enfoque y Metodología Integral</h2>
+        
+        <p class="mb-5">
+          El macroproyecto abandona las aproximaciones puramente documentales para anclarse en la recolección intensiva de datos primarios en el territorio. Se sustenta en un <strong>diseño de investigación mixto, secuencial e interdisciplinario</strong> estructurado de la siguiente manera:
+        </p>
+
+        <div class="space-y-4">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2 mb-1"><i class="fa-solid fa-chart-pie text-cordis-blue"></i> Estadística Espacial</h4>
+            <p class="text-sm text-slate-600 mb-0">Uso de Sistemas de Información Geográfica (SIG) para intersectar registros escolares de abandono y retención con indicadores censales, creando una línea base cuantitativa inobjetable.</p>
+          </div>
+          
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2 mb-1"><i class="fa-solid fa-clipboard-question text-rose-500"></i> Trabajo de Campo Cuantitativo</h4>
+            <p class="text-sm text-slate-600 mb-0">Aplicación de instrumentos de medición sociológica y encuestas a estudiantes para cuantificar el desarraigo cultural y las afecciones a la salud mental.</p>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2 mb-1"><i class="fa-solid fa-comments text-emerald-500"></i> Etnografía Cualitativa</h4>
+            <p class="text-sm text-slate-600 mb-0">Movilización de investigadores pertenecientes a las naciones indígenas para ejecutar métodos de inmersión profunda y recuperar epistemologías originarias y prácticas comunitarias.</p>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2 mb-1"><i class="fa-solid fa-scale-balanced text-purple-500"></i> Análisis Jurídico Dedudctivo</h4>
+            <p class="text-sm text-slate-600 mb-0">Análisis del marco constitucional y la Ley Marco de Autonomías para identificar las competencias jurídicas precisas que facultan la inversión pública en este modelo educativo.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Equipo -->
+      <section id="equipo" class="scroll-mt-32">
+        <h2 class="text-2xl font-bold mb-6 text-cordis-dark flex items-center gap-2">
+          <i class="fa-solid fa-users text-cordis-blue"></i> Equipo Multidisciplinario
+        </h2>
+        
+        <!-- PI -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-5 mb-6">
+          <img src="https://i.imgur.com/8iwwSTE.jpeg" alt="Dra. Solia Centeno de Baglivo" class="w-20 h-20 rounded-2xl object-cover shadow-lg flex-shrink-0">
+          <div>
+            <span class="bg-blue-100 text-cordis-blue text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide">Coordinación General y PI</span>
+            <h3 class="text-lg font-bold text-gray-900 mt-2">Dra. Solia Centeno de Baglivo</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">Responsable principal de la articulación teórica del macroproyecto y la supervisión metodológica de los equipos cualitativos y de ciencia de datos del CIRCPyCS.</p>
+          </div>
+        </div>
+
+        <!-- Co-Investigadores Académicos -->
+        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 pl-2">Núcleo Académico y Científico</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+           <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
+             <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-500 text-lg"><i class="fa-solid fa-book-open-reader"></i></div>
+             <div>
+               <div class="text-sm font-bold text-slate-800">Lic. Marcial Trigo</div>
+               <div class="text-xs text-slate-500">Ciencias de la Educación</div>
+             </div>
+           </div>
+           <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
+             <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-500 text-lg"><i class="fa-solid fa-users-viewfinder"></i></div>
+             <div>
+               <div class="text-sm font-bold text-slate-800">Lic. Guillermo Dávalos</div>
+               <div class="text-xs text-slate-500">Sociología y Datos Espaciales</div>
+             </div>
+           </div>
+           <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
+             <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-500 text-lg"><i class="fa-solid fa-earth-americas"></i></div>
+             <div>
+               <div class="text-sm font-bold text-slate-800">Lic. César Rosso</div>
+               <div class="text-xs text-slate-500">Antropología e Interculturalidad</div>
+             </div>
+           </div>
+           <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
+             <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-500 text-lg"><i class="fa-solid fa-microscope"></i></div>
+             <div>
+               <div class="text-sm font-bold text-slate-800">Lic. Daniel Hurtado</div>
+               <div class="text-xs text-slate-500">Metodologías de Investigación</div>
+             </div>
+           </div>
+        </div>
+
+        <!-- Investigadores Naciones Indígenas -->
+        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 pl-2">Investigadores de Pueblos Originarios (Fase 3)</h4>
+        <div class="bg-emerald-50/50 border border-emerald-100 p-5 rounded-2xl grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col">
+               <span class="text-[10px] font-bold text-emerald-600 mb-1">CULTURA CHIQUITANA</span>
+               <div class="text-sm font-bold text-slate-800">José Chuvé <span class="text-xs font-normal text-slate-500">(Sociología)</span></div>
+               <div class="text-sm font-bold text-slate-800">Lic. Carmen Garcia Pocoe <span class="text-xs font-normal text-slate-500">(Lingüista Besiro)</span></div>
+            </div>
+            <div class="flex flex-col">
+               <span class="text-[10px] font-bold text-emerald-600 mb-1">CULTURA AYOREA</span>
+               <div class="text-sm font-bold text-slate-800">Rocio Chiqueno <span class="text-xs font-normal text-slate-500">(Educación)</span></div>
+            </div>
+            <div class="flex flex-col md:col-span-2 pt-2 mt-2 border-t border-emerald-100">
+               <span class="text-[10px] font-bold text-emerald-600 mb-1">CULTURA GUARAYA</span>
+               <div class="text-sm font-bold text-slate-800">Ancelmo Urapuca Apirezai <span class="text-xs font-normal text-slate-500">(Gestión Cultural Territorial)</span></div>
+            </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- Columna Derecha (Datos y Cronograma) -->
+    <div class="col-span-1 lg:col-span-3 space-y-8">
+      
+      <!-- Ficha Rápida -->
+      <div class="modern-card p-6">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Parámetros del Estudio</h3>
+        
+        <div class="space-y-5">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue"><i class="fa-regular fa-clock"></i></div>
+            <div>
+              <div class="text-[10px] text-gray-400 font-bold uppercase">Estado</div>
+              <div class="text-sm font-bold text-gray-800">Condiciones Previas</div>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue"><i class="fa-solid fa-users-rays"></i></div>
+            <div>
+              <div class="text-[10px] text-gray-400 font-bold uppercase">Alcance Escolar</div>
+              <div class="text-sm font-bold text-gray-800">3.113 Unidades Educ.</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-cordis-blue"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div>
+              <div class="text-[10px] text-gray-400 font-bold uppercase">Universo Estudiantil</div>
+              <div class="text-sm font-bold text-gray-800">~458,113 Alumnos</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t border-gray-100">
+           <div class="text-[10px] text-center text-gray-400 mb-2">Fase de Diseño del Proyecto</div>
+           <div class="w-full bg-gray-100 rounded-full h-2">
+             <div class="bg-amber-500 h-2 rounded-full relative" style="width: 20%">
+               <span class="absolute right-0 -top-1 w-4 h-4 rounded-full bg-white border-2 border-amber-500 shadow"></span>
+             </div>
+           </div>
+           <div class="text-center text-[10px] font-bold text-amber-600 mt-2">Aprobación DICiT Pendiente</div>
+        </div>
+      </div>
+
+      <!-- Bloque de Financiamiento (Trigger del Pop-up) -->
+      <div class="modern-card border-amber-200 bg-amber-50/50 p-6 relative overflow-hidden group mt-8 text-center shadow-sm hover:shadow-md transition-all">
+        <!-- Elemento Decorativo de Fondo -->
+        <i class="fa-solid fa-hand-holding-dollar absolute -right-4 -bottom-4 text-7xl text-amber-500 opacity-10 group-hover:scale-110 transition-transform duration-500"></i>
+        
+        <h3 class="text-xs font-bold uppercase tracking-widest mb-3 text-amber-700 relative z-10 flex justify-center items-center gap-2">
+          <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span> Financiamiento Institucional
+        </h3>
+        
+        <p class="text-sm text-slate-600 mb-5 relative z-10 leading-relaxed">
+          Transformar la educación exige construir alianzas. Súmate a la viabilización de esta investigación pionera.
+        </p>
+        
+        <button id="open-funding-modal" class="relative z-10 inline-flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-sm font-bold rounded-xl hover:from-amber-700 hover:to-orange-700 transition-all shadow hover:shadow-lg transform hover:-translate-y-0.5">
+          <i class="fa-solid fa-seedling text-amber-200"></i> Apoya este Proyecto
+        </button>
+      </div>
+
+      <!-- Cronograma -->
+      <div id="cronograma" class="scroll-mt-32 pt-8">
+        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 pl-2 border-l-4 border-amber-500">Fases de Ejecución</h3>
+        <div class="pl-2">
+          
+          <div class="timeline-item active">
+            <div class="timeline-dot"></div>
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-amber-700 bg-amber-50 w-max px-2 py-0.5 rounded mb-1 border border-amber-100">Fase 1 (Activa)</span>
+              <h4 class="text-sm font-bold text-gray-800">Atlas Geoespacial</h4>
+              <p class="text-xs text-gray-500 mb-0 mt-1">Cruce de datos y construcción del Visor de Vulnerabilidad Educativa.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-gray-400 bg-gray-100 w-max px-2 py-0.5 rounded mb-1">Fase 2</span>
+              <h4 class="text-sm font-bold text-gray-800">Diagnóstico Emocional</h4>
+              <p class="text-xs text-gray-500 mb-0 mt-1">Trabajo de campo en escuelas urbanas y rurales (salud mental).</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <span class="text-[10px] font-bold text-gray-400 bg-gray-100 w-max px-2 py-0.5 rounded mb-1">Fase 3</span>
+            <h4 class="text-sm font-bold text-gray-800">Inmersión Etnográfica</h4>
+            <p class="text-xs text-gray-500 mb-0 mt-1">Investigación de campo con naciones indígenas de Santa Cruz.</p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <span class="text-[10px] font-bold text-gray-400 bg-gray-100 w-max px-2 py-0.5 rounded mb-1">Fase 4</span>
+            <h4 class="text-sm font-bold text-gray-800">Gobernanza Autonómica</h4>
+            <p class="text-xs text-gray-500 mb-0 mt-1">Sistematización jurídica y metodológica final del modelo.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Descargas -->
+      <div id="descargas" class="bg-cordis-dark text-white p-6 rounded-2xl shadow-xl relative overflow-hidden group">
+        <!-- Decoración fondo -->
+        <i class="fa-solid fa-database absolute -right-6 -bottom-6 text-8xl text-white opacity-5 group-hover:opacity-10 transition-opacity"></i>
+        
+        <h3 class="text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2 relative z-10">
+          <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span> Datos Abiertos
+        </h3>
+        <p class="text-xs text-slate-300 mb-4 relative z-10">Acceso a las bases de datos crudas y matrices metodológicas del proyecto.</p>
+        <ul class="space-y-3 relative z-10">
+          <li>
+            <a href="#" class="flex items-center gap-3 p-3 bg-white/10 rounded-lg hover:bg-white/20 transition border border-white/5 hover:border-white/20">
+              <div class="h-8 w-8 rounded bg-green-500/20 text-green-400 flex items-center justify-center text-xs font-bold"><i class="fa-solid fa-file-excel"></i></div>
+              <div class="text-xs font-medium leading-tight">Dataset: Abandono Escolar x Municipio</div>
+              <i class="fa-solid fa-download text-xs opacity-50 ml-auto"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center gap-3 p-3 bg-white/10 rounded-lg hover:bg-white/20 transition border border-white/5 hover:border-white/20">
+              <div class="h-8 w-8 rounded bg-red-500/20 text-red-400 flex items-center justify-center text-xs font-bold">PDF</div>
+              <div class="text-xs font-medium leading-tight">Documento Base: Proyecto de Investigación (DICiT)</div>
+              <i class="fa-solid fa-download text-xs opacity-50 ml-auto"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- POP-UP MODAL DE FINANCIAMIENTO -->
+  <div id="funding-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Fondo oscuro (Backdrop) -->
+    <div id="funding-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0 cursor-pointer"></div>
+    
+    <!-- Panel de contenido -->
+    <div id="funding-panel" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden transform scale-95 opacity-0 transition-all duration-300 z-10">
+      
+      <!-- Botón cerrar -->
+      <button id="close-funding-modal" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Cabecera del modal -->
+      <div class="px-8 pt-8 pb-5 border-b border-slate-100 bg-slate-50">
+        <div class="flex items-center gap-4">
+           <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl flex-shrink-0 shadow-inner">
+             <i class="fa-solid fa-handshake-angle"></i>
+           </div>
+           <div>
+             <h3 class="text-lg font-bold text-slate-800" id="modal-title">Oportunidad de Alianza</h3>
+             <p class="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Investigación Aplicada</p>
+           </div>
+        </div>
+      </div>
+
+      <!-- Cuerpo del modal -->
+      <div class="p-8">
+        
+        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+          La transformación educativa exige alianzas estratégicas. Buscamos financiamiento y cooperación interinstitucional para asegurar:
+        </p>
+
+        <ul class="custom-list mb-6">
+          <li>El despliegue del <strong>Atlas Espacial</strong> de vulnerabilidad escolar.</li>
+          <li>El <strong>trabajo de campo</strong> socioemocional en 15 municipios.</li>
+          <li>La inmersión etnográfica para rescatar saberes en las <strong>comunidades indígenas</strong>.</li>
+        </ul>
+
+        <p class="text-sm font-semibold text-amber-700 mb-6 bg-amber-50 p-3 rounded-lg border border-amber-100 text-center">
+          Su apoyo lo convertirá en un actor fundamental para redefinir el desarrollo y la identidad de las próximas generaciones.
+        </p>
+
+        <div class="bg-slate-50 rounded-xl p-4 mb-6 flex items-center gap-4 border border-slate-200">
+          <img src="https://i.imgur.com/8iwwSTE.jpeg" alt="Dra. Solia Centeno" class="w-16 h-16 rounded-xl object-cover shadow-sm border border-slate-200 flex-shrink-0">
+          <div>
+            <div class="text-[10px] font-bold tracking-wider text-slate-400 uppercase mb-0.5">Contacto Directo</div>
+            <div class="text-sm font-bold text-slate-800">Dra. Solia Centeno de Baglivo</div>
+            <div class="text-xs text-slate-500">Investigadora Principal (CIRCPyCS)</div>
+          </div>
+        </div>
+
+        <a href="https://wa.me/59170000000?text=Hola%20Dra.%20Solia,%20he%20visto%20el%20proyecto%20EDU-TERRITORIAL%20y%20me%20gustaría%20conversar%20sobre%20posibilidades%20de%20apoyo%20institucional." target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+          <i class="fa-brands fa-whatsapp text-xl"></i> Conversar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white text-slate-600 py-12 border-t border-slate-200 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+           <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo CIRCPyCS" class="h-10 w-10 object-contain" />
+           <span class="font-bold text-lg text-slate-800">CIRCPyCS</span>
+        </div>
+        <p class="text-sm text-slate-500 mb-4 leading-relaxed">
+          Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.
+        </p>
+        <p class="text-xs text-slate-400">
+          © <span id="year"></span> Todos los derechos reservados.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Enlaces Rápidos</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="index.html" class="hover:text-emerald-600 transition">Inicio</a></li>
+          <li><a href="services.html" class="hover:text-emerald-600 transition">Servicios y Asesoría</a></li>
+          <li><a href="index.html#publicaciones" class="hover:text-emerald-600 transition">Publicaciones Recientes</a></li>
+          <li><a href="index.html#eventos" class="hover:text-emerald-600 transition">Agenda de Eventos</a></li>
+          <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica" target="_blank" class="hover:text-emerald-600 transition">Revista Científica</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Contacto</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            <span class="break-all">cri.cspoliticas.fcjpsri@uagrm.edu.bo</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span>Ciudad Universitaria, Módulo 284<br>Santa Cruz de la Sierra, Bolivia</span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-slate-800 font-semibold mb-4">Síguenos</h3>
+        <div class="grid gap-3">
+          <a href="https://www.facebook.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-blue-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Facebook</span>
+          </a>
+          
+          <a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-red-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">YouTube</span>
+          </a>
+
+           <a href="https://www.instagram.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-pink-600 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Instagram</span>
+          </a>
+
+          <a href="https://x.com/circpycs" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-900 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">X (Twitter)</span>
+          </a>
+          
+           <a href="https://github.com/criuagrm" target="_blank" class="flex items-center gap-3 p-2 rounded-lg border border-slate-100 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition group">
+            <div class="bg-white text-slate-800 p-1.5 rounded-full shadow-sm ring-1 ring-slate-200 group-hover:scale-110 transition">
+               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="border-t border-slate-200 pt-8 text-center md:flex md:justify-between md:items-center">
+      <p class="text-xs text-slate-500">Este portal no representa necesariamente la opinión institucional de la UAGRM.</p>
+      <div class="mt-4 md:mt-0 flex gap-4 justify-center md:justify-end">
+         <a href="https://cir.uagrm.edu.bo/privacy.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Privacidad</a>
+         <a href="https://cir.uagrm.edu.bo/terms.html" class="text-xs text-slate-400 hover:text-slate-600 transition">Términos</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script>
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    // Script para resaltar menú activo y smooth scroll behavior
+    const sections = document.querySelectorAll('section, div[id="cronograma"], div[id="descargas"]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function activeMenu() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= (sectionTop - 150)) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', activeMenu);
+
+    // Lógica del Pop-up de Financiamiento
+    const openModalBtn = document.getElementById('open-funding-modal');
+    const closeModalBtn = document.getElementById('close-funding-modal');
+    const modal = document.getElementById('funding-modal');
+    const backdrop = document.getElementById('funding-backdrop');
+    const panel = document.getElementById('funding-panel');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      // Pequeño retraso para que la transición CSS funcione correctamente
+      setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        panel.classList.remove('scale-95', 'opacity-0');
+        panel.classList.add('scale-100', 'opacity-100');
+      }, 10);
+      document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('opacity-100');
+      backdrop.classList.add('opacity-0');
+      panel.classList.remove('scale-100', 'opacity-100');
+      panel.classList.add('scale-95', 'opacity-0');
+      
+      // Esperar a que termine la animación para ocultar el div
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Restaurar scroll
+      }, 300);
+    }
+
+    if(openModalBtn) openModalBtn.addEventListener('click', openModal);
+    if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    if(backdrop) backdrop.addEventListener('click', closeModal);
+  </script>
+</body>
+</html>
