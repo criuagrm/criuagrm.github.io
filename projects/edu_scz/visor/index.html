@@ -1,317 +1,339 @@
-<!doctype html>
-<html lang="es" class="scroll-smooth">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>EDU-TERRITORIAL: Visor de Vulnerabilidad — CIRCPyCS</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            cordis: { blue: '#004494', dark: '#0f2c52', accent: '#d97706' }
-          },
-          fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Merriweather', 'serif'] }
-        }
-      }
-    }
-  </script>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Motor SIG Educativo — CIRCPyCS</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <style>
-    body { background-color: #f8fafc; color: #334155; }
-    h1, h2, h3 { color: #0f2c52; letter-spacing: -0.025em; }
-    .modern-card { background: white; border-radius: 1rem; border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); }
-    
-    /* MODAL DEL MAPA */
-    #visor-modal { position: fixed; inset: 0; z-index: 9999; background: white; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-    #visor-modal.active { opacity: 1; pointer-events: auto; }
-    #visor-header { background: #0f2c52; color: white; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; }
-    #mapa-contenedor { flex-grow: 1; position: relative; width: 100%; height: 100%; }
-    #mapa-edu { width: 100%; height: 100%; background: #e2e8f0; }
-
-    /* PANEL DE CONTROL FLOTANTE (Optimizado para Indicadores) */
-    .map-control-panel { position: absolute; top: 20px; right: 20px; z-index: 1000; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); width: 320px; border: 2px solid #f1f5f9; }
-    .layer-selector { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-weight: 700; color: #0f2c52; outline: none; cursor: pointer; background: #f8fafc; margin-bottom: 15px; }
-    
-    /* LEYENDA */
-    .legend-scale { display: flex; height: 14px; border-radius: 6px; overflow: hidden; margin-top: 15px; border: 1px solid #e2e8f0; }
-    .legend-scale div { flex: 1; }
-    .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; font-weight: 700; margin-top: 6px; text-transform: uppercase;}
-    
-    /* RESULTADOS DEL CLIC */
-    .data-result { background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 8px; margin-top: 20px; display: none; }
-    .data-result h4 { margin: 0 0 8px 0; font-size: 10px; font-weight: 800; text-transform: uppercase; color: #b45309; letter-spacing: 0.5px;}
-    .data-result .main-val { font-size: 28px; font-weight: 800; color: #d97706; line-height: 1; margin-bottom: 5px; }
-    .data-result .sub-val { font-size: 12px; color: #78350f; font-weight: 500;}
-    .data-result .extra-val { font-size: 10px; color: #92400e; margin-top: 8px; border-top: 1px solid #fcd34d; padding-top: 8px;}
-  </style>
-</head>
-<body class="font-sans flex flex-col min-h-screen">
-
-  <div id="visor-modal">
-    <div id="visor-header">
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-microscope text-cordis-accent text-2xl"></i>
-        <div>
-          <h2 class="text-white text-sm font-bold m-0">Visor Analítico: EDU-TERRITORIAL</h2>
-          <p class="text-[10px] text-slate-400 m-0 uppercase tracking-widest">Indicadores Estratégicos a nivel Manzano</p>
-        </div>
-      </div>
-      <button onclick="cerrarVisor()" class="bg-white/10 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2">
-        <i class="fa-solid fa-xmark"></i> Cerrar
-      </button>
-    </div>
-    
-    <div id="mapa-contenedor">
-      <div id="mapa-edu"></div>
-      
-      <div class="map-control-panel">
-        <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-filter text-cordis-blue"></i> Seleccione Indicador de Estudio</h3>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #0f172a; overflow: hidden; }
+        #mapa { width: 100vw; height: 100vh; z-index: 1; }
         
-        <select id="layer-selector" class="layer-selector" onchange="cambiarCapa()">
-          <option value="porcentaje_menor20">1. Presión Demográfica Escolar</option>
-          <option value="educacion_superior">2. Capital Cultural del Entorno</option>
-          <option value="viviendas_tics_internet">3. Índice de Conectividad Digital</option>
-          <option value="dependencia_economica">4. Riesgo Socioeconómico (Dependencia)</option>
-          <option value="poblacion_migrante">5. Nivel de Desarraigo (Migración)</option>
+        /* Tema UI Data Science (Glassmorphism Oscuro) */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* HEADER FLOTANTE */
+        #ui-header {
+            position: absolute; top: 20px; left: 20px; z-index: 1000;
+            padding: 12px 20px; border-radius: 12px;
+            display: flex; align-items: center; gap: 15px;
+        }
+        #ui-header img { height: 40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        
+        /* CONTROL DE CAPAS Y LEYENDA */
+        #ui-controls {
+            position: absolute; top: 20px; right: 20px; z-index: 1000;
+            width: 340px; padding: 20px; border-radius: 16px;
+        }
+        select.ds-select {
+            width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-family: 'Inter'; font-size: 13px; font-weight: 600; border-radius: 8px;
+            outline: none; margin-bottom: 15px; cursor: pointer;
+        }
+        select.ds-select option { background: #0f172a; color: white; }
+
+        /* LEYENDA TÉCNICA */
+        .legend-bar { display: flex; height: 10px; border-radius: 4px; overflow: hidden; margin: 15px 0 5px 0; }
+        .legend-bar div { flex: 1; }
+        .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; font-weight: 600; text-transform: uppercase;}
+
+        /* EXPEDIENTE ANALÍTICO (PANEL IZQUIERDO) */
+        #ui-analytics {
+            position: absolute; top: 90px; left: 20px; z-index: 1000;
+            width: 360px; max-height: calc(100vh - 120px); overflow-y: auto;
+            padding: 24px; border-radius: 16px; transform: translateX(-120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #ui-analytics.active { transform: translateX(0); }
+        
+        /* Barras de datos avanzadas */
+        .metric-group { margin-bottom: 16px; }
+        .metric-header { display: flex; justify-content: space-between; font-size: 11px; color: #cbd5e1; margin-bottom: 6px; font-weight: 500; text-transform: uppercase;}
+        .metric-val { font-weight: 700; color: white; }
+        .metric-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+        .metric-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+
+        .score-box { text-align: center; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .score-value { font-size: 42px; font-weight: 800; line-height: 1; background: linear-gradient(to right, #fbbf24, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* SCROLLBAR CUSTOM */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        /* Loader */
+        .ds-loader { padding: 10px; background: rgba(217, 119, 6, 0.2); color: #fbbf24; border: 1px solid rgba(217, 119, 6, 0.5); text-align: center; font-size: 11px; font-weight: bold; border-radius: 8px; margin-top: 15px;}
+    </style>
+</head>
+<body>
+
+    <div id="ui-header" class="glass-panel">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS">
+        <div>
+            <h1 class="text-[13px] font-bold m-0 tracking-wide text-white">EDU-TERRITORIAL SIG</h1>
+            <p class="text-[9px] text-slate-400 m-0 uppercase tracking-widest font-semibold">Motor de Ciencia de Datos</p>
+        </div>
+    </div>
+
+    <div id="ui-controls" class="glass-panel">
+        <h2 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-blue-400"></i> Modelo de Procesamiento
+        </h2>
+        
+        <select id="layer-selector" class="ds-select" onchange="cambiarCapa()">
+            <option value="irem">🔥 Índice de Riesgo Educativo Multidimensional (IREM)</option>
+            <option value="densidad_joven">👥 Presión Demográfica Escolar (Hab/Ha)</option>
+            <option value="capital_cultural">🎓 Capital Cultural del Hogar</option>
+            <option value="aislamiento_tec">📡 Aislamiento Tecnológico</option>
+            <option value="brecha_genero_edu">⚖️ Brecha de Género Educativa</option>
         </select>
 
-        <div id="leyenda-container">
-          <h4 class="text-xs font-bold text-slate-700 mb-1 leading-tight" id="leyenda-titulo">Interpretación</h4>
-          <p class="text-[10px] text-slate-500 mb-2" id="leyenda-desc">Concentración de población menor de 20 años.</p>
-          
-          <div class="legend-scale" id="leyenda-colores"></div>
-          <div class="legend-labels">
-            <span id="leyenda-min">Bajo</span>
-            <span id="leyenda-max">Alto</span>
-          </div>
+        <div class="pt-3 border-t border-slate-700">
+            <h3 class="text-sm font-bold text-white mb-1" id="leg-title">IREM</h3>
+            <p class="text-[10px] text-slate-400 leading-relaxed mb-0" id="leg-desc">Algoritmo compuesto que evalúa la vulnerabilidad estructural.</p>
+            
+            <div class="legend-bar" id="leg-colors"></div>
+            <div class="legend-labels">
+                <span id="leg-min">Bajo Riesgo</span>
+                <span id="leg-max">Alto Riesgo</span>
+            </div>
         </div>
 
-        <div id="panel-resultados" class="data-result">
-          <h4>Radiografía Específica</h4>
-          <div class="main-val" id="res-principal">--</div>
-          <div class="sub-val" id="res-secundario">--</div>
-          <div class="extra-val" id="res-extra">Población total del manzano: 0</div>
-        </div>
-        
-        <div id="mapa-loading" class="mt-4 text-center text-xs text-amber-600 font-bold hidden bg-amber-50 p-2 rounded">
-          <i class="fa-solid fa-circle-notch fa-spin"></i> Procesando 61,000 polígonos...
-        </div>
-      </div>
+        <div id="loader" class="ds-loader hidden"><i class="fa-solid fa-gear fa-spin"></i> Ejecutando algoritmos espaciales...</div>
     </div>
-  </div>
-  <div class="bg-cordis-dark text-white/90 py-1.5 text-[10px] md:text-xs text-center font-bold tracking-widest uppercase shadow-sm">
-    CIRCPyCS — Universidad Autónoma Gabriel René Moreno
-  </div>
-  <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://i.imgur.com/ldeXZmG.png" alt="Logo" class="h-10 w-auto" />
-        <div class="h-8 w-px bg-gray-200 mx-1"></div>
-        <div class="leading-tight">
-          <span class="block font-bold text-cordis-blue text-sm tracking-tight">CIRCPyCS</span>
-          <span class="block text-[10px] text-gray-500 font-medium uppercase tracking-wider">Investigación</span>
+
+    <div id="ui-analytics" class="glass-panel">
+        <div class="flex justify-between items-start mb-4 border-b border-slate-700 pb-3">
+            <h2 class="text-sm font-bold text-blue-400 uppercase tracking-widest"><i class="fa-solid fa-microscope"></i> Radiografía del Manzano</h2>
+            <button onclick="cerrarPanel()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-      </div>
+
+        <div class="score-box">
+            <div class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Score IREM Obtenido</div>
+            <div class="score-value" id="res-score">00.0</div>
+            <div class="text-xs text-slate-300 mt-1" id="res-score-label">Riesgo Crítico</div>
+        </div>
+
+        <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Vectores Desagregados</h3>
+
+        <div class="metric-group">
+            <div class="metric-header"><span>Presión Demográfica (<20)</span> <span class="metric-val text-emerald-400" id="m-jovenes">0%</span></div>
+            <div class="metric-track"><div class="metric-fill bg-emerald-500" id="b-jovenes"></div></div>
+        </div>
+
+        <div class="metric-group">
+            <div class="metric-header"><span>Capital Cultural (Ed. Sup)</span> <span class="metric-val text-blue-400" id="m-edu">0%</span></div>
+            <div class="metric-track"><div class="metric-fill bg-blue-500" id="b-edu"></div></div>
+        </div>
+
+        <div class="metric-group">
+            <div class="metric-header"><span>Aislamiento Digital</span> <span class="metric-val text-rose-400" id="m-net">0%</span></div>
+            <div class="metric-track"><div class="metric-fill bg-rose-500" id="b-net"></div></div>
+        </div>
+
+        <div class="metric-group">
+            <div class="metric-header"><span>Estrés Económico</span> <span class="metric-val text-amber-400" id="m-dep">0%</span></div>
+            <div class="metric-track"><div class="metric-fill bg-amber-500" id="b-dep"></div></div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-700 grid grid-cols-2 gap-4">
+            <div>
+                <div class="text-[9px] text-slate-400 uppercase">Pob. Total</div>
+                <div class="text-sm font-bold text-white" id="m-pob">0</div>
+            </div>
+            <div>
+                <div class="text-[9px] text-slate-400 uppercase">Desarraigo (Mig.)</div>
+                <div class="text-sm font-bold text-white" id="m-mig">0%</div>
+            </div>
+        </div>
     </div>
-  </header>
 
-  <main class="max-w-4xl mx-auto px-4 py-12 text-center">
-    <span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block">Módulo Geoespacial</span>
-    <h1 class="text-4xl md:text-5xl font-extrabold text-cordis-dark mb-6 tracking-tight">
-      Modelo Educativo Territorializado
-    </h1>
-    <p class="text-lg text-slate-500 mb-10 leading-relaxed">
-      Herramienta analítica para identificar áreas críticas de intervención pedagógica cruzando vulnerabilidad socioeconómica, brecha digital y capital cultural.
-    </p>
-    
-    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-100 max-w-2xl mx-auto">
-      <i class="fa-solid fa-map-location-dot text-6xl text-cordis-accent mb-6"></i>
-      <h3 class="text-xl font-bold text-slate-800 mb-2">Explorador de Datos Censales 2024</h3>
-      <p class="text-sm text-slate-500 mb-8">El visor carga los indicadores estratégicos calculados para cada manzano del departamento, permitiendo una planificación educativa basada en evidencia empírica.</p>
-      
-      <button onclick="abrirVisor()" class="w-full py-4 bg-cordis-blue text-white text-sm font-bold rounded-xl hover:bg-[#003377] transition shadow-md flex items-center justify-center gap-3 transform hover:-translate-y-1">
-        <i class="fa-solid fa-satellite-dish"></i> Iniciar Visor Analítico
-      </button>
-    </div>
-  </main>
+    <div id="mapa"></div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    // ==========================================
-    // CONFIGURACIÓN DE LOS INDICADORES DEL PROYECTO
-    // ==========================================
-    const configIndicadores = {
-      'porcentaje_menor20': { 
-        titulo: 'Presión Demográfica Escolar', 
-        desc: 'Identifica zonas con alta concentración de niños y adolescentes (menores de 20 años).',
-        maximo: 0.50, // 50% es el tope visual
-        formato: 'porcentaje' 
-      },
-      'educacion_superior': { 
-        titulo: 'Capital Cultural del Entorno', 
-        desc: 'Porcentaje de adultos con formación universitaria. Áreas claras indican vulnerabilidad académica.',
-        maximo: 0.40, 
-        formato: 'porcentaje' 
-      },
-      'viviendas_tics_internet': { 
-        titulo: 'Índice de Conectividad Digital', 
-        desc: 'Hogares con acceso a internet. Vital para planificar educación híbrida o a distancia.',
-        maximo: 0.90, 
-        formato: 'porcentaje' 
-      },
-      'dependencia_economica': { 
-        titulo: 'Riesgo Socioeconómico', 
-        desc: 'Carga económica sobre la población ocupada. Índices altos correlacionan con trabajo infantil y abandono escolar.',
-        maximo: 1.5, // 150%
-        formato: 'ratio' 
-      },
-      'poblacion_migrante': { 
-        titulo: 'Nivel de Desarraigo (Migración)', 
-        desc: 'Porcentaje de población no nacida en el municipio. Clave para enfoques de interculturalidad.',
-        maximo: 0.40, 
-        formato: 'porcentaje' 
-      }
-    };
-
-    // Paleta de colores cálida (Amarillo a Terracota)
-    const paleta = ['#fef3c7', '#fde68a', '#fbbf24', '#f59e0b', '#d97706', '#92400e'];
-
-    let map, geojsonLayer, mapaDatos = null, traductor = {};
-    let indicadorActual = 'porcentaje_menor20';
-
-    function abrirVisor() {
-      document.getElementById('visor-modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-      if (!map) initMap();
-      else setTimeout(() => map.invalidateSize(), 100);
-    }
-
-    function cerrarVisor() {
-      document.getElementById('visor-modal').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    function initMap() {
-      map = L.map('mapa-edu', { zoomControl: false }).setView([-17.7833, -63.1821], 12);
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-
-      document.getElementById('mapa-loading').classList.remove('hidden');
-
-      fetch('campos.json')
-        .then(res => res.json())
-        .then(data => {
-            for (let k in data) { traductor[data[k]] = k; }
-            cargarPoligonos();
-        });
-    }
-
-    function cargarPoligonos() {
-      fetch('manzanos.geojson')
-        .then(res => res.json())
-        .then(data => {
-            mapaDatos = data;
-            document.getElementById('mapa-loading').classList.add('hidden');
-            renderizarCapa();
-            actualizarLeyendaUI();
-        });
-    }
-
-    // ALGORITMO DE MAPA DE CALOR INTELIGENTE
-    function getColor(valor) {
-        if(valor === undefined || valor === null) return '#e2e8f0'; // Sin datos
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ==========================================
+        // ALGORITMOS DE DATA SCIENCE (MÉTRICAS COMPUESTAS)
+        // ==========================================
         
-        let cfg = configIndicadores[indicadorActual];
-        
-        // Calculamos qué tan cerca está del valor "máximo" esperado
-        let ratio = valor / cfg.maximo;
-        if(ratio > 1) ratio = 1;
-        if(ratio < 0) ratio = 0;
-        
-        // Asignamos uno de los 6 colores de la paleta
-        let index = Math.floor(ratio * 5.99);
-        return paleta[index];
-    }
-
-    function estiloPoligono(feature) {
-        let d = {};
-        for (let k in feature.properties) { if(traductor[k]) d[traductor[k]] = feature.properties[k]; }
-        
-        // Para dependencia económica, el dato viene como entero (ej. 150 = 150%), lo pasamos a decimal
-        let valorCapa = d[indicadorActual];
-        if (indicadorActual === 'dependencia_economica') valorCapa = valorCapa / 100;
-
-        return {
-            fillColor: getColor(valorCapa),
-            weight: 0.5,
-            opacity: 1,
-            color: 'white',
-            fillOpacity: 0.8
+        // Paletas de color optimizadas para visualización de datos (Hex)
+        const paletas = {
+            riesgo: ['#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15'], // YlOrRd
+            educacion: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'], // Blues
+            demografia: ['#edf8e9', '#bae4b3', '#74c476', '#31a354', '#006d2c'] // Greens
         };
-    }
 
-    function renderizarCapa() {
-        if (geojsonLayer) map.removeLayer(geojsonLayer);
-
-        geojsonLayer = L.geoJSON(mapaDatos, {
-            style: estiloPoligono,
-            onEachFeature: function(feature, layer) {
-                layer.on({
-                    mouseover: function(e) { e.target.setStyle({ weight: 2, color: '#0f2c52', fillOpacity: 1 }); e.target.bringToFront(); },
-                    mouseout: function(e) { geojsonLayer.resetStyle(e.target); },
-                    click: function(e) { mostrarDatosClick(feature.properties); }
-                });
+        const algoritmos = {
+            'irem': {
+                titulo: 'Índice de Riesgo Educativo Multidimensional',
+                desc: 'Combina: Aislamiento Digital + Baja Educación Adulta + Estrés Económico.',
+                maximo: 100, paleta: paletas.riesgo, formato: 'pts',
+                calc: (d) => {
+                    // Cálculo Senior: Normalización y Promedio Ponderado
+                    let falta_net = 1 - (d.viviendas_tics_internet || 0);
+                    let falta_edu = 1 - (d.educacion_superior || 0);
+                    let dep = (d.dependencia_economica || 0) / 100;
+                    let dep_norm = Math.min(dep / 1.5, 1); // Tope estadístico
+                    return ((falta_net + falta_edu + dep_norm) / 3) * 100;
+                }
+            },
+            'densidad_joven': {
+                titulo: 'Presión Demográfica Escolar',
+                desc: 'Cantidad absoluta estimada de menores de 20 años por hectárea.',
+                maximo: 80, paleta: paletas.demografia, formato: 'hab/ha',
+                calc: (d) => {
+                    return (d.personas_por_hectarea || 0) * (d.porcentaje_menor20 || 0);
+                }
+            },
+            'capital_cultural': {
+                titulo: 'Capital Cultural del Hogar',
+                desc: 'Concentración de adultos con estudios universitarios.',
+                maximo: 0.40, paleta: paletas.educacion, formato: '%',
+                calc: (d) => d.educacion_superior || 0
+            },
+            'aislamiento_tec': {
+                titulo: 'Aislamiento Tecnológico',
+                desc: 'Porcentaje de viviendas SIN acceso a internet.',
+                maximo: 1.0, paleta: paletas.riesgo, formato: '%',
+                calc: (d) => 1 - (d.viviendas_tics_internet || 0)
+            },
+            'brecha_genero_edu': {
+                titulo: 'Brecha de Género Educativa',
+                desc: 'Desventaja educativa de la mujer respecto al hombre.',
+                maximo: 0.15, paleta: paletas.riesgo, formato: '%',
+                calc: (d) => Math.max(d.brecha_genero_educacion || 0, 0)
             }
-        }).addTo(map);
-    }
+        };
 
-    function cambiarCapa() {
-        indicadorActual = document.getElementById('layer-selector').value;
-        renderizarCapa();
-        actualizarLeyendaUI();
-        document.getElementById('panel-resultados').style.display = 'none';
-    }
+        let map, geojsonLayer, mapaDatos = null, traductor = {};
+        let algoritmoActual = 'irem';
 
-    function actualizarLeyendaUI() {
-        let cfg = configIndicadores[indicadorActual];
-        document.getElementById('leyenda-titulo').innerText = cfg.titulo;
-        document.getElementById('leyenda-desc').innerText = cfg.desc;
+        // Inicialización
+        const mapaOscuro = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: 'CIRCPyCS DS' });
         
-        let divColores = document.getElementById('leyenda-colores');
-        divColores.innerHTML = '';
-        paleta.forEach(color => { divColores.innerHTML += `<div style="background: ${color}"></div>`; });
+        map = L.map('mapa', { zoomControl: false, layers: [mapaOscuro] }).setView([-17.7833, -63.1821], 12);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        // Actualiza el texto del límite superior
-        let maxDisplay = cfg.formato === 'porcentaje' ? Math.round(cfg.maximo * 100) + '%' : Math.round(cfg.maximo * 100) + '%';
-        document.getElementById('leyenda-max').innerText = "> " + maxDisplay;
-    }
+        document.getElementById('loader').classList.remove('hidden');
 
-    function mostrarDatosClick(p) {
-        let d = {};
-        for (let k in p) { if(traductor[k]) d[traductor[k]] = p[k]; }
+        // Seguridad Chrome Localhost
+        fetch('campos.json')
+            .then(res => { if(!res.ok) throw new Error(); return res.json(); })
+            .then(data => {
+                for (let k in data) traductor[data[k]] = k;
+                fetch('manzanos.geojson')
+                    .then(r => r.json())
+                    .then(geo => {
+                        mapaDatos = geo;
+                        document.getElementById('loader').classList.add('hidden');
+                        renderizarCapa();
+                        actualizarLeyenda();
+                    });
+            })
+            .catch(() => alert("⚠️ Por seguridad, ejecuta el servidor Python (python -m http.server 8000) en esta carpeta."));
 
-        let cfg = configIndicadores[indicadorActual];
-        let valorBruto = d[indicadorActual] || 0;
-        
-        let displayVal = "";
-        if(indicadorActual === 'dependencia_economica') {
-            displayVal = Math.round(valorBruto) + "%";
-        } else {
-            displayVal = Math.round(valorBruto * 100) + "%";
+        // Función de color dinámica
+        function getColor(valor) {
+            if (valor === undefined || isNaN(valor)) return 'transparent';
+            let cfg = algoritmos[algoritmoActual];
+            let ratio = valor / cfg.maximo;
+            ratio = Math.max(0, Math.min(1, ratio));
+            let index = Math.floor(ratio * (cfg.paleta.length - 0.01));
+            return cfg.paleta[index];
         }
 
-        document.getElementById('panel-resultados').style.display = 'block';
-        document.getElementById('res-principal').innerText = displayVal;
-        document.getElementById('res-secundario').innerText = "Nivel de " + cfg.titulo;
-        document.getElementById('res-extra').innerText = "Habitantes en la cuadra: " + Math.round(d.personas || 0);
-    }
-  </script>
+        function estiloPoligono(feature) {
+            let d = {};
+            for (let k in feature.properties) { if(traductor[k]) d[traductor[k]] = feature.properties[k]; }
+            
+            // EJECUCIÓN DEL ALGORITMO SELECCIONADO EN TIEMPO REAL
+            let valorCalculado = algoritmos[algoritmoActual].calc(d);
+
+            return {
+                fillColor: getColor(valorCalculado),
+                weight: 0.5, opacity: 1, color: '#1e293b', fillOpacity: 0.85
+            };
+        }
+
+        function renderizarCapa() {
+            if (geojsonLayer) map.removeLayer(geojsonLayer);
+            geojsonLayer = L.geoJSON(mapaDatos, {
+                style: estiloPoligono,
+                onEachFeature: function(feature, layer) {
+                    layer.on({
+                        mouseover: (e) => { e.target.setStyle({ weight: 2, color: '#fff', fillOpacity: 1 }); e.target.bringToFront(); },
+                        mouseout: (e) => { geojsonLayer.resetStyle(e.target); },
+                        click: (e) => { 
+                            map.flyToBounds(e.target.getBounds(), {padding: [100,100], maxZoom: 16});
+                            procesarExpediente(feature.properties); 
+                        }
+                    });
+                }
+            }).addTo(map);
+        }
+
+        function cambiarCapa() {
+            algoritmoActual = document.getElementById('layer-selector').value;
+            renderizarCapa();
+            actualizarLeyenda();
+            cerrarPanel();
+        }
+
+        function actualizarLeyenda() {
+            let cfg = algoritmos[algoritmoActual];
+            document.getElementById('leg-title').innerText = cfg.titulo;
+            document.getElementById('leg-desc').innerText = cfg.desc;
+            
+            let divColores = document.getElementById('leg-colors');
+            divColores.innerHTML = '';
+            cfg.paleta.forEach(c => divColores.innerHTML += `<div style="background:${c}"></div>`);
+
+            let maxStr = cfg.formato === '%' ? Math.round(cfg.maximo*100)+'%' : cfg.maximo + ' ' + cfg.formato;
+            document.getElementById('leg-max').innerText = "> " + maxStr;
+        }
+
+        function procesarExpediente(p) {
+            let d = {};
+            for (let k in p) { if(traductor[k]) d[traductor[k]] = p[k]; }
+            
+            // Ejecutar IREM para el score principal
+            let scoreIREM = algoritmos['irem'].calc(d);
+            let scoreFmt = isNaN(scoreIREM) ? 0 : scoreIREM.toFixed(1);
+            document.getElementById('res-score').innerText = scoreFmt;
+            
+            let label = scoreIREM > 75 ? 'Riesgo Crítico' : scoreIREM > 50 ? 'Riesgo Alto' : scoreIREM > 25 ? 'Riesgo Moderado' : 'Bajo Riesgo';
+            document.getElementById('res-score-label').innerText = label;
+
+            // Actualizar Barras de Progreso Desagregadas
+            const setBar = (id, val, max = 100) => {
+                let p = Math.round(val || 0);
+                document.getElementById('m-'+id).innerText = p + '%';
+                document.getElementById('b-'+id).style.width = Math.min(p, 100) + '%';
+            };
+
+            setBar('jovenes', (d.porcentaje_menor20 || 0) * 100);
+            setBar('edu', (d.educacion_superior || 0) * 100);
+            setBar('net', (1 - (d.viviendas_tics_internet || 0)) * 100); // Aislamiento
+            setBar('dep', (d.dependencia_economica || 0)); // Ya viene en base 100 (ej 120%)
+
+            document.getElementById('m-pob').innerText = Math.round(d.personas || 0);
+            document.getElementById('m-mig').innerText = Math.round((d.poblacion_migrante || 0) * 100) + '%';
+
+            document.getElementById('ui-analytics').classList.add('active');
+        }
+
+        function cerrarPanel() { document.getElementById('ui-analytics').classList.remove('active'); }
+    </script>
 </body>
 </html>
