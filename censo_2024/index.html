@@ -303,7 +303,7 @@
             document.getElementById('welcome-msg').style.display = 'none';
             document.getElementById('panel-content').style.display = 'block';
             
-            // Función genérica para barras de progreso y textos simples
+            // Función genérica para barras de progreso y textos 
             const up = (id, val, isPerc = true) => {
                 let v = val || 0;
                 let disp = isPerc ? Math.round(v * 100) : Math.round(v);
@@ -315,10 +315,10 @@
                 }
             };
 
-            // 1. MASCULINIDAD (Nuevo Enfoque Visual)
+            // 1. MASCULINIDAD 
             document.getElementById('v-hombres').innerText = Math.round(d.masculinidad || 0);
 
-            // 2. DENSIDAD (Nuevo Enfoque Semáforo)
+            // 2. DENSIDAD 
             let valDens = d.personas_por_hectarea || 0;
             document.getElementById('v-densidad').innerText = Math.round(valDens);
             let badgeDens = document.getElementById('badge-densidad');
@@ -333,11 +333,11 @@
                 badgeDens.innerText = "Baja Densidad";
             }
 
-            // 3. DEPENDENCIA ECONÓMICA (Nuevo Enfoque Ratio)
+            // 3. DEPENDENCIA ECONÓMICA 
             let valDep = d.dependencia_economica || 0;
             document.getElementById('v-dep-ratio').innerText = (valDep / 100).toFixed(1);
 
-            // 4. BRECHAS DE GÉNERO (Widget de Balance)
+            // 4. BRECHAS DE GÉNERO 
             const upBrecha = (id, valorBruto) => {
                 let brechaReal = (valorBruto || 0) * 100;
                 document.getElementById('g-num-' + id).innerText = Math.abs(brechaReal).toFixed(1); 
