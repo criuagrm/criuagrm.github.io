@@ -10,7 +10,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
-        :root { --primary: #004494; --dark: #0f172a; --bg: #f8fafc; --accent: #f59e0b; }
+        :root { 
+            --primary: #004494; 
+            --dark: #0f172a; 
+            --bg: #f8fafc; 
+            --accent: #f59e0b;
+            --success: #22c55e;
+            --danger: #ef4444; 
+        }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg); overflow: hidden; color: var(--dark); }
         #mapa { width: 100vw; height: 100vh; z-index: 1; }
 
@@ -128,7 +135,7 @@
             <i class="fa-solid fa-magnifying-glass"></i>
             <select id="buscador-ciudades" onchange="volarACiudad(this.value)">
                 <option value="">Buscar ciudad...</option>
-                </select>
+            </select>
         </div>
 
         <button class="btn-info" onclick="abrirModal()">
@@ -138,27 +145,53 @@
 
     <div id="side-panel">
         <button class="btn-cerrar" onclick="cerrarPanel()"><i class="fa-solid fa-xmark"></i></button>
-        <div id="welcome-msg"><i class="fa-solid fa-database fa-4x" style="margin-bottom:15px"></i><p>Seleccione un manzano o busque una ciudad para visualizar su perfil sociodemográfico.</p></div>
+        <div id="welcome-msg"><i class="fa-solid fa-database fa-4x" style="margin-bottom:15px"></i><p>Seleccione un manzano o busque una ciudad para visualizar su perfil sociodemográfico completo.</p></div>
 
         <div id="panel-content" class="panel-scroll" style="display: none;">
-            <div class="category-title"><i class="fa-solid fa-users"></i> Demografía</div>
+            
+            <div class="category-title"><i class="fa-solid fa-people-group"></i> Demografía y Estructura</div>
             <div class="data-grid">
-                <div class="data-card"><div class="data-label">Población</div><div class="data-value" id="v-personas">0</div></div>
-                <div class="data-card"><div class="data-label">Densidad</div><div class="data-value" id="v-densidad">0</div></div>
-                <div class="data-card"><div class="data-label">Masculinidad</div><div class="data-value" id="v-masculinidad">0</div></div>
-                <div class="data-card"><div class="data-label">Migrantes</div><div class="data-value" id="v-migrante">0%</div></div>
+                <div class="data-card"><div class="data-label">Población Total</div><div class="data-value" id="v-personas">0</div></div>
+                <div class="data-card"><div class="data-label">Densidad (Hab/Ha)</div><div class="data-value" id="v-densidad">0</div></div>
+                <div class="data-card"><div class="data-label">Índice Masculinidad</div><div class="data-value" id="v-masculinidad">0</div></div>
+                <div class="data-card"><div class="data-label">Pob. Migrante</div><div class="data-value" id="v-migrante">0%</div></div>
+            </div>
+            <div class="data-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="progress-box"><div class="progress-label"><span>Menores 20 años</span> <span id="t-jovenes">0%</span></div><div class="progress-bg"><div id="b-jovenes" class="progress-fill" style="background: var(--success);"></div></div></div>
+                <div class="progress-box"><div class="progress-label"><span>Mayores 60 años</span> <span id="t-ancianos">0%</span></div><div class="progress-bg"><div id="b-ancianos" class="progress-fill" style="background: var(--danger);"></div></div></div>
             </div>
 
             <div class="category-title"><i class="fa-solid fa-graduation-cap"></i> Educación y Salud</div>
-            <div class="progress-box"><div class="progress-label"><span>Educación Superior</span> <span id="t-edu">0%</span></div><div class="progress-bg"><div id="b-edu" class="progress-fill"></div></div></div>
-            <div class="progress-box"><div class="progress-label"><span>Seguro Privado</span> <span id="t-seguro">0%</span></div><div class="progress-bg"><div id="b-seguro" class="progress-fill" style="background:#ec4899"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Educación Superior</span> <span id="t-edu">0%</span></div><div class="progress-bg"><div id="b-edu" class="progress-fill" style="background: #8b5cf6;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Brecha Género Ed.</span> <span id="t-brechaedu">0%</span></div><div class="progress-bg"><div id="b-brechaedu" class="progress-fill" style="background: #a855f7;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Seguro Privado</span> <span id="t-seguro">0%</span></div><div class="progress-bg"><div id="b-seguro" class="progress-fill" style="background: #ec4899;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Brecha Género Seguro</span> <span id="t-brechaseg">0%</span></div><div class="progress-bg"><div id="b-brechaseg" class="progress-fill" style="background: #db2777;"></div></div></div>
 
-            <div class="category-title"><i class="fa-solid fa-house"></i> Vivienda y Servicios</div>
-            <div class="progress-box"><div class="progress-label"><span>Agua</span> <span id="t-agua">0%</span></div><div class="progress-bg"><div id="b-agua" class="progress-fill"></div></div></div>
-            <div class="progress-box"><div class="progress-label"><span>Internet</span> <span id="t-net">0%</span></div><div class="progress-bg"><div id="b-net" class="progress-fill" style="background:#0ea5e9"></div></div></div>
+            <div class="category-title"><i class="fa-solid fa-faucet-drip"></i> Vivienda y Servicios Básicos</div>
+            <div class="data-grid">
+                <div class="data-card"><div class="data-label">Viviendas Desocupadas</div><div class="data-value" id="v-desocupadas">0%</div></div>
+                <div class="data-card"><div class="data-label">Alquiler/Anticrético</div><div class="data-value" id="v-alquiler">0%</div></div>
+            </div>
+            <div class="progress-box"><div class="progress-label"><span>Energía Eléctrica</span> <span id="t-luz">0%</span></div><div class="progress-bg"><div id="b-luz" class="progress-fill" style="background: #eab308;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Agua por Cañería</span> <span id="t-agua">0%</span></div><div class="progress-bg"><div id="b-agua" class="progress-fill"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Alcantarillado</span> <span id="t-cloaca">0%</span></div><div class="progress-bg"><div id="b-cloaca" class="progress-fill"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Gas por Cañería</span> <span id="t-gas">0%</span></div><div class="progress-bg"><div id="b-gas" class="progress-fill" style="background: #f97316;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Acceso a Internet</span> <span id="t-net">0%</span></div><div class="progress-bg"><div id="b-net" class="progress-fill" style="background: #0ea5e9;"></div></div></div>
 
-            <div class="category-title"><i class="fa-solid fa-briefcase"></i> Economía</div>
-            <div class="data-card" style="margin-bottom:15px"><div class="data-label">Dependencia Económica</div><div class="data-value" id="v-dependencia">0%</div></div>
+            <div class="category-title"><i class="fa-solid fa-briefcase"></i> Perfil Laboral y Económico</div>
+            <div class="progress-box"><div class="progress-label"><span>Dependencia Económica</span> <span id="t-dependencia">0%</span></div><div class="progress-bg"><div id="b-dependencia" class="progress-fill" style="background: #64748b;"></div></div></div>
+            <div class="data-grid">
+                <div class="data-card"><div class="data-label">Asalariados (Emp/Obr)</div><div class="data-value" id="v-empleados">0%</div></div>
+                <div class="data-card"><div class="data-label">Cuentapropistas</div><div class="data-value" id="v-cuenta">0%</div></div>
+            </div>
+
+            <div class="category-title"><i class="fa-solid fa-chart-pie"></i> Actividades (Pob. Ocupada)</div>
+            <div class="progress-box"><div class="progress-label"><span>Agricultura / Ganadería</span> <span id="t-agri">0%</span></div><div class="progress-bg"><div id="b-agri" class="progress-fill" style="background: #15803d;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Comercio</span> <span id="t-com">0%</span></div><div class="progress-bg"><div id="b-com" class="progress-fill" style="background: #1d4ed8;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Industria Manufacturera</span> <span id="t-man">0%</span></div><div class="progress-bg"><div id="b-man" class="progress-fill" style="background: #b91c1c;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Construcción</span> <span id="t-cons">0%</span></div><div class="progress-bg"><div id="b-cons" class="progress-fill" style="background: #d97706;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Transporte</span> <span id="t-trans">0%</span></div><div class="progress-bg"><div id="b-trans" class="progress-fill" style="background: #4b5563;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Enseñanza</span> <span id="t-edu2">0%</span></div><div class="progress-bg"><div id="b-edu2" class="progress-fill" style="background: #6d28d9;"></div></div></div>
         </div>
     </div>
 
@@ -166,7 +199,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. CONFIGURACIÓN DEL MAPA Y CAPAS BASE
+        // CONFIGURACIÓN DEL MAPA Y CAPAS BASE
         const mapaClaro = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: 'CIRCPyCS — CartoDB' });
         const mapaSatelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Esri Satellite' });
         const mapaCalles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OpenStreetMap' });
@@ -189,7 +222,7 @@
         let traductor = {};
         let layerActiva = null;
 
-        // 2. DETECTOR DE ERRORES AL CARGAR DATOS
+        // DETECTOR DE ERRORES AL CARGAR DATOS
         fetch('campos.json')
             .then(res => {
                 if(!res.ok) throw new Error("No se pudo cargar campos.json");
@@ -246,6 +279,7 @@
         function mostrarFicha(p) {
             let d = {};
             for (let k in p) { if(traductor[k]) d[traductor[k]] = p[k]; }
+            
             document.getElementById('welcome-msg').style.display = 'none';
             document.getElementById('panel-content').style.display = 'block';
             document.getElementById('side-panel').classList.add('active');
@@ -253,20 +287,50 @@
             const up = (id, val, isPerc = true) => {
                 let v = val || 0;
                 let disp = isPerc ? Math.round(v * 100) : Math.round(v);
+                
                 if(document.getElementById('v-'+id)) document.getElementById('v-'+id).innerText = disp + (isPerc ? "%" : "");
                 if(document.getElementById('t-'+id)) document.getElementById('t-'+id).innerText = disp + "%";
-                if(document.getElementById('b-'+id)) document.getElementById('b-'+id).style.width = Math.min(disp, 100) + "%";
+                
+                let bar = document.getElementById('b-'+id);
+                if(bar) {
+                    let width = isPerc ? Math.min(disp, 100) : 0;
+                    bar.style.width = width + "%";
+                    // Alerta si supera el 100% (ej. Dependencia Económica)
+                    bar.style.boxShadow = disp > 100 ? "0 0 5px var(--danger)" : "none";
+                }
             };
 
+            // Mapeo exhaustivo de TODAS las variables
             up('personas', d.personas, false);
             up('densidad', d.personas_por_hectarea, false);
             up('masculinidad', d.masculinidad, false);
             up('migrante', d.poblacion_migrante);
+            up('jovenes', d.porcentaje_menor20);
+            up('ancianos', d.porcentaje_60omas);
+            
             up('edu', d.educacion_superior);
+            up('brechaedu', d.brecha_genero_educacion);
             up('seguro', d.seguro_privado);
+            up('brechaseg', d.brecha_genero_seguro);
+            
+            up('desocupadas', d.viviendas_desocupadas);
+            up('alquiler', d.viviendas_alquiladas_anticretico);
+            up('luz', d.viviendas_energiaelectrica_serviciopublico);
             up('agua', d.viviendas_agua_cañería);
+            up('cloaca', d.viviendas_desague_alcantarillado);
+            up('gas', d.viviendas_combustible_gascañería);
             up('net', d.viviendas_tics_internet);
+            
             up('dependencia', d.dependencia_economica / 100);
+            up('empleados', d.ocupados_empleados);
+            up('cuenta', d.ocupados_cuentapropistas);
+            
+            up('agri', d.poblacion_agricultura);
+            up('com', d.poblacion_comercio);
+            up('man', d.poblacion_manufactura);
+            up('cons', d.poblacion_construccion);
+            up('trans', d.poblacion_transporte);
+            up('edu2', d.poblacion_enseñanza);
         }
 
         function cerrarPanel() { document.getElementById('side-panel').classList.remove('active'); }
