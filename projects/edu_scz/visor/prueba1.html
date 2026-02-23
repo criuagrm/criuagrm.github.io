@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Visor Educativo — CIRCPyCS</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        :root { 
+            --primary: #004494; 
+            --dark: #0f172a; 
+            --bg: #f8fafc; 
+            --accent: #f59e0b;
+        }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg); overflow: hidden; color: var(--dark); }
+        #mapa { width: 100vw; height: 100vh; z-index: 1; background: #f1f5f9; }
+
+        /* UI MINIMALISTA */
+        .glass-ui {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 12px;
+        }
+
+        /* HEADER */
+        #header {
+            position: absolute; top: 15px; left: 15px; z-index: 1000;
+            padding: 10px 20px; display: flex; align-items: center; gap: 15px;
+            max-width: calc(100vw - 30px);
+        }
+        #header img { height: 35px; }
+        .title-box h1 { margin: 0; font-size: 14px; color: var(--primary); text-transform: uppercase; font-weight: 800; letter-spacing: -0.5px;}
+        .title-box p { margin: 0; font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+
+        /* BUSCADOR INTEGRADO */
+        .search-container { display: flex; align-items: center; background: #f8fafc; border-radius: 8px; padding: 6px 12px; margin-left: 10px; border: 1px solid #e2e8f0; }
+        .search-container i { color: var(--primary); margin-right: 8px; font-size: 13px; }
+        .search-container select { border: none; background: transparent; outline: none; font-family: 'Inter'; font-size: 12px; color: var(--dark); width: 180px; cursor: pointer; font-weight: 500; }
+
+        /* BOTÓN INFO */
+        .btn-info {
+            background: var(--primary); color: white; border: none; padding: 7px 14px;
+            border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: auto;
+        }
+        .btn-info:hover { background: #003377; }
+
+        /* PANEL DE CAPAS (Izquierda) */
+        #ui-controls {
+            position: absolute; top: 80px; left: 15px; z-index: 1000;
+            padding: 20px; width: 320px;
+        }
+        .layer-selector {
+            width: 100%; padding: 10px; background: #f8fafc; border: 1px solid #cbd5e1;
+            color: var(--dark); font-family: 'Inter'; font-size: 12px; font-weight: 600; border-radius: 8px;
+            outline: none; margin-bottom: 15px; cursor: pointer; transition: 0.3s;
+        }
+        .layer-selector:focus { border-color: var(--primary); }
+        
+        .legend-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0 6px 0; }
+        .legend-bar div { flex: 1; }
+        .legend-labels { display: flex; justify-content: space-between; font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+
+        /* EXPEDIENTE ANALÍTICO (Derecha) */
+        #side-panel {
+            position: absolute; right: 15px; top: 15px; width: 380px; height: calc(100vh - 30px);
+            z-index: 1001; display: flex; flex-direction: column; transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #side-panel.active { transform: translateX(0); }
+        
+        .btn-cerrar {
+            position: absolute; top: 15px; right: 15px; background: #f8fafc; border: 1px solid #e2e8f0; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b; transition: 0.2s;
+        }
+        .btn-cerrar:hover { background: #e2e8f0; color: var(--dark); }
+        
+        .panel-scroll { flex-grow: 1; overflow-y: auto; padding: 25px; }
+
+        /* SECCIONES DE DATOS */
+        .section-title { font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin: 25px 0 15px 0; }
+        .section-title:first-child { margin-top: 0; }
+
+        /* SCORE PRINCIPAL */
+        .score-box { text-align: center; padding: 20px; background: #f8fafc; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e2e8f0; }
+        .score-value { font-size: 42px; font-weight: 800; line-height: 1; color: var(--accent); margin-bottom: 5px; }
+
+        /* DATA GRID MINIMALISTA */
+        .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .data-item { background: white; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; }
+        .data-label { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+        .data-val { font-size: 16px; font-weight: 800; color: var(--dark); }
+
+        /* BARRAS LIMPIAS */
+        .bar-group { margin-bottom: 12px; }
+        .bar-header { display: flex; justify-content: space-between; font-size: 11px; color: #475569; margin-bottom: 4px; font-weight: 600; }
+        .bar-val { font-weight: 800; color: var(--dark); }
+        .bar-track { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; background: var(--primary); }
+
+        /* MODAL */
+        #modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
+        .modal-card { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; color: #64748b; cursor: pointer; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+    <div id="modal-overlay">
+        <div class="modal-card glass-ui">
+            <button class="modal-close" onclick="cerrarModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-xl font-bold text-cordis-blue m-0">CIRCPyCS — UAGRM</h2>
+            <p class="text-sm text-slate-500 mt-2 mb-6">Visor Analítico del Proyecto EDU-TERRITORIAL.</p>
+            
+            <h3 class="text-xs font-bold text-slate-800 uppercase border-b pb-1 mb-2">Ingeniería de Datos</h3>
+            <p class="text-xs text-slate-600 mb-4">Datos base: Censo 2024 (INE).<br>Extracción y compresión GeoJSON original por <strong>Mauricio Foronda</strong> (<a href="https://github.com/mauforonda" target="_blank" class="text-blue-500 hover:underline">Ver GitHub</a>).</p>
+
+            <h3 class="text-xs font-bold text-slate-800 uppercase border-b pb-1 mb-2">Ciencia de Datos (CIRCPyCS)</h3>
+            <p class="text-xs text-slate-600">Creación de algoritmos compuestos, optimización espacial e interfaz analítica desarrollada por el Centro de Investigación Regional.</p>
+        </div>
+    </div>
+
+    <div id="header" class="glass-ui">
+        <img src="https://i.imgur.com/ldeXZmG.png" alt="CIRCPyCS">
+        <div class="title-box">
+            <h1>Visor Educativo</h1>
+            <p>Data Science Territorial</p>
+        </div>
+        
+        <div class="search-container">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            <select id="buscador-ciudades" onchange="volarACiudad(this.value)">
+                <option value="">Navegar a un municipio...</option>
+            </select>
+        </div>
+
+        <button class="btn-info" onclick="abrirModal()">
+            <i class="fa-solid fa-circle-info"></i> Info
+        </button>
+    </div>
+
+    <div id="ui-controls" class="glass-ui">
+        <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+            <i class="fa-solid fa-layer-group text-cordis-blue"></i> Capa Analítica
+        </h2>
+        
+        <select id="layer-selector" class="layer-selector" onchange="cambiarCapa()">
+            <optgroup label="Algoritmos Compuestos (Creados)">
+                <option value="irem">🎯 Índice de Riesgo Educativo (IREM)</option>
+                <option value="densidad_joven">👥 Presión Demográfica Escolar</option>
+            </optgroup>
+            <optgroup label="Variables Descriptivas (Censo Puro)">
+                <option value="educacion_superior">🎓 Capital Cultural (Ed. Superior)</option>
+                <option value="brecha_genero_edu">⚖️ Brecha de Género Educativa</option>
+                <option value="aislamiento_tec">📡 Conectividad Digital (Internet)</option>
+            </optgroup>
+        </select>
+
+        <div class="pt-2">
+            <h3 class="text-sm font-bold text-slate-800 mb-0" id="leg-title">IREM</h3>
+            <p class="text-[10px] text-slate-500 mb-1" id="leg-desc">Riesgo multidimensional.</p>
+            
+            <div class="legend-bar" id="leg-colors"></div>
+            <div class="legend-labels">
+                <span id="leg-min">Bajo</span>
+                <span id="leg-max">Alto</span>
+            </div>
+        </div>
+        
+        <div id="loader" class="mt-3 text-center text-[10px] text-amber-600 font-bold bg-amber-50 p-2 rounded border border-amber-100 hidden">
+            <i class="fa-solid fa-circle-notch fa-spin"></i> Renderizando Canvas...
+        </div>
+    </div>
+
+    <div id="side-panel" class="glass-ui">
+        <button class="btn-cerrar" onclick="cerrarPanel()"><i class="fa-solid fa-chevron-right"></i></button>
+        
+        <div class="panel-scroll">
+            <div class="mb-4">
+                <h2 class="text-sm font-bold text-slate-800 m-0 uppercase tracking-wide">Expediente Territorial</h2>
+                <p class="text-[10px] text-slate-500 m-0">Análisis a nivel de Manzano</p>
+            </div>
+
+            <div class="section-title">Indicadores Creados</div>
+            
+            <div class="score-box">
+                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Riesgo Educativo (IREM)</div>
+                <div class="score-value" id="val-irem">00.0</div>
+                <div class="text-[10px] font-bold text-slate-400" id="val-irem-label">Riesgo Moderado</div>
+            </div>
+
+            <div class="data-grid mb-4">
+                <div class="data-item">
+                    <div class="data-label">Presión Escolar</div>
+                    <div class="data-val text-emerald-600"><span id="val-densidad-joven">0</span> <span class="text-[9px] text-slate-400 font-normal">jóvenes/ha</span></div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Aislamiento Digital</div>
+                    <div class="data-val text-rose-600" id="val-aislamiento">0%</div>
+                </div>
+            </div>
+
+            <div class="section-title">Descriptivos Educativos</div>
+            
+            <div class="bar-group">
+                <div class="bar-header"><span>Adultos con Ed. Superior</span> <span class="bar-val" id="t-edu">0%</span></div>
+                <div class="bar-track"><div class="bar-fill bg-blue-500" id="b-edu"></div></div>
+            </div>
+
+            <div class="bar-group">
+                <div class="bar-header"><span>Brecha de Género (Desventaja Mujer)</span> <span class="bar-val text-purple-600" id="t-brecha">0%</span></div>
+                <div class="bar-track"><div class="bar-fill bg-purple-500" id="b-brecha"></div></div>
+            </div>
+            
+            <div class="bar-group">
+                <div class="bar-header"><span>Viviendas con Internet</span> <span class="bar-val text-cyan-600" id="t-net">0%</span></div>
+                <div class="bar-track"><div class="bar-fill bg-cyan-500" id="b-net"></div></div>
+            </div>
+
+            <div class="section-title">Contexto de Vulnerabilidad</div>
+
+            <div class="bar-group">
+                <div class="bar-header"><span>Población Escolar (< 20 años)</span> <span class="bar-val text-emerald-600" id="t-jovenes">0%</span></div>
+                <div class="bar-track"><div class="bar-fill bg-emerald-500" id="b-jovenes"></div></div>
+            </div>
+
+            <div class="bar-group">
+                <div class="bar-header"><span>Desarraigo (Pob. Migrante)</span> <span class="bar-val text-amber-600" id="t-migrante">0%</span></div>
+                <div class="bar-track"><div class="bar-fill bg-amber-500" id="b-migrante"></div></div>
+            </div>
+
+            <div class="data-grid mt-4 pt-4 border-t border-slate-100">
+                <div class="data-item !bg-slate-50 !border-none">
+                    <div class="data-label">Pob. Total</div>
+                    <div class="data-val text-slate-700" id="val-personas">0</div>
+                </div>
+                <div class="data-item !bg-slate-50 !border-none">
+                    <div class="data-label">Dep. Económica</div>
+                    <div class="data-val text-slate-700" id="val-dependencia">0%</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="mapa"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ==========================================
+        // OPTIMIZACIÓN EXTREMA: LECTURA O(1)
+        // ==========================================
+        let mapaCorto = {}; // Diccionario inverso ultrarrápido
+
+        // Obtiene el valor directamente sin bucles (Velocidad x100)
+        const v = (props, nombreLargo) => {
+            let llaveCorta = mapaCorto[nombreLargo];
+            return props[llaveCorta] || 0;
+        };
+
+        // ==========================================
+        // ALGORITMOS DE DATA SCIENCE
+        // ==========================================
+        const paletas = {
+            riesgo: ['#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15'],
+            educacion: ['#eff3ff', '#bdd7e7', '#6baed6', '#3182bd', '#08519c'],
+            demografia: ['#edf8e9', '#bae4b3', '#74c476', '#31a354', '#006d2c']
+        };
+
+        const algoritmos = {
+            'irem': {
+                titulo: 'Índice de Riesgo Multidimensional', desc: 'Riesgo calculado por algoritmos.',
+                max: 100, paleta: paletas.riesgo, fmt: 'pts',
+                calc: (p) => {
+                    let fNet = 1 - v(p, 'viviendas_tics_internet');
+                    let fEdu = 1 - v(p, 'educacion_superior');
+                    let depNorm = Math.min(v(p, 'dependencia_economica') / 150, 1);
+                    return ((fNet + fEdu + depNorm) / 3) * 100;
+                }
+            },
+            'densidad_joven': {
+                titulo: 'Presión Demográfica', desc: 'Jóvenes por hectárea.',
+                max: 60, paleta: paletas.demografia, fmt: 'hab/ha',
+                calc: (p) => v(p, 'personas_por_hectarea') * v(p, 'porcentaje_menor20')
+            },
+            'educacion_superior': {
+                titulo: 'Capital Cultural', desc: 'Adultos con Universidad.',
+                max: 0.40, paleta: paletas.educacion, fmt: '%',
+                calc: (p) => v(p, 'educacion_superior')
+            },
+            'brecha_genero_edu': {
+                titulo: 'Brecha de Género Educativa', desc: 'Desventaja de mujeres.',
+                max: 0.15, paleta: paletas.riesgo, fmt: '%',
+                calc: (p) => Math.max(v(p, 'brecha_genero_educacion'), 0)
+            },
+            'aislamiento_tec': {
+                titulo: 'Conectividad (Internet)', desc: 'Hogares conectados a la red.',
+                max: 0.80, paleta: paletas.educacion, fmt: '%',
+                calc: (p) => v(p, 'viviendas_tics_internet') // Directo descriptivo
+            }
+        };
+
+        let map, geojsonLayer, mapaDatos = null;
+        let algoritmoActual = 'irem';
+
+        // INICIALIZACIÓN CON RENDERIZADO CANVAS (OPTIMIZACIÓN DE RENDIMIENTO)
+        const mapaBase = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: 'CIRCPyCS' });
+        
+        map = L.map('mapa', { 
+            zoomControl: false, 
+            layers: [mapaBase],
+            preferCanvas: true // ¡ESTO ACELERA LEAFLET UN 90%!
+        }).setView([-17.7833, -63.1821], 12);
+        
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        document.getElementById('loader').classList.remove('hidden');
+
+        // Carga y Preparación de Datos
+        fetch('campos.json')
+            .then(res => res.json())
+            .then(data => {
+                // Guardamos el diccionario tal cual {"nombreLargo": "llaveCorta"}
+                mapaCorto = data; 
+                cargarBuscadorCiudades();
+
+                fetch('manzanos.geojson')
+                    .then(r => r.json())
+                    .then(geo => {
+                        mapaDatos = geo;
+                        document.getElementById('loader').classList.add('hidden');
+                        renderizarCapa();
+                        actualizarLeyenda();
+                    });
+            });
+
+        // Buscador
+        function cargarBuscadorCiudades() {
+            fetch('ciudades.json').then(res => res.json()).then(ciudades => {
+                ciudades.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                const sel = document.getElementById('buscador-ciudades');
+                ciudades.forEach(c => {
+                    let opt = document.createElement('option');
+                    opt.value = `${c.y},${c.x}`; opt.textContent = `${c.nombre}`; sel.appendChild(opt);
+                });
+            }).catch(e => console.log(e));
+        }
+
+        function volarACiudad(coords) {
+            if (!coords) return;
+            const [lat, lng] = coords.split(',');
+            map.flyTo([lat, lng], 14, { duration: 1.5 });
+            cerrarPanel(); 
+        }
+
+        // Renderizado
+        function getColor(valor) {
+            if (isNaN(valor)) return 'transparent';
+            let cfg = algoritmos[algoritmoActual];
+            let ratio = Math.max(0, Math.min(1, valor / cfg.max));
+            return cfg.paleta[Math.floor(ratio * (cfg.paleta.length - 0.01))];
+        }
+
+        function estiloPoligono(feature) {
+            return {
+                fillColor: getColor(algoritmos[algoritmoActual].calc(feature.properties)),
+                weight: 0.3, opacity: 1, color: '#ffffff', fillOpacity: 0.8
+            };
+        }
+
+        function renderizarCapa() {
+            if (geojsonLayer) map.removeLayer(geojsonLayer);
+            geojsonLayer = L.geoJSON(mapaDatos, {
+                style: estiloPoligono,
+                onEachFeature: function(feature, layer) {
+                    layer.on({
+                        mouseover: (e) => { e.target.setStyle({ weight: 2, color: '#004494' }); e.target.bringToFront(); },
+                        mouseout: (e) => { geojsonLayer.resetStyle(e.target); },
+                        click: (e) => { 
+                            map.flyToBounds(e.target.getBounds(), {padding: [50,50], maxZoom: 16});
+                            procesarExpediente(feature.properties); 
+                        }
+                    });
+                }
+            }).addTo(map);
+        }
+
+        function cambiarCapa() {
+            algoritmoActual = document.getElementById('layer-selector').value;
+            renderizarCapa();
+            actualizarLeyenda();
+            cerrarPanel();
+        }
+
+        function actualizarLeyenda() {
+            let cfg = algoritmos[algoritmoActual];
+            document.getElementById('leg-title').innerText = cfg.titulo;
+            document.getElementById('leg-desc').innerText = cfg.desc;
+            let divColores = document.getElementById('leg-colors');
+            divColores.innerHTML = '';
+            cfg.paleta.forEach(c => divColores.innerHTML += `<div style="background:${c}"></div>`);
+            document.getElementById('leg-max').innerText = "> " + (cfg.fmt === '%' ? Math.round(cfg.max*100)+'%' : cfg.max + ' ' + cfg.fmt);
+        }
+
+        // Llenar Expediente
+        function procesarExpediente(p) {
+            // INDICADORES CREADOS
+            let scoreIREM = algoritmos['irem'].calc(p);
+            document.getElementById('val-irem').innerText = isNaN(scoreIREM) ? '0' : scoreIREM.toFixed(1);
+            
+            let lbl = document.getElementById('val-irem-label');
+            if(scoreIREM > 75) { lbl.innerText = 'Riesgo Crítico'; lbl.style.color = '#ef4444'; }
+            else if(scoreIREM > 50) { lbl.innerText = 'Riesgo Alto'; lbl.style.color = '#f59e0b'; }
+            else { lbl.innerText = 'Riesgo Moderado/Bajo'; lbl.style.color = '#22c55e'; }
+
+            document.getElementById('val-densidad-joven').innerText = Math.round(algoritmos['densidad_joven'].calc(p));
+            document.getElementById('val-aislamiento').innerText = Math.round((1 - v(p, 'viviendas_tics_internet')) * 100) + '%';
+
+            // DESCRIPTIVOS PUROS
+            const setBar = (id, val) => {
+                let num = Math.round(val || 0);
+                document.getElementById('t-'+id).innerText = num + '%';
+                document.getElementById('b-'+id).style.width = Math.min(num, 100) + '%';
+            };
+
+            setBar('edu', v(p, 'educacion_superior') * 100);
+            setBar('brecha', Math.max(v(p, 'brecha_genero_educacion') * 100, 0));
+            setBar('net', v(p, 'viviendas_tics_internet') * 100);
+            setBar('jovenes', v(p, 'porcentaje_menor20') * 100);
+            setBar('migrante', v(p, 'poblacion_migrante') * 100);
+
+            document.getElementById('val-personas').innerText = Math.round(v(p, 'personas'));
+            document.getElementById('val-dependencia').innerText = Math.round(v(p, 'dependencia_economica')) + '%';
+
+            document.getElementById('side-panel').classList.add('active');
+        }
+
+        function cerrarPanel() { document.getElementById('side-panel').classList.remove('active'); }
+        function abrirModal() { document.getElementById('modal-overlay').style.display = 'flex'; }
+        function cerrarModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+    </script>
+</body>
+</html>
