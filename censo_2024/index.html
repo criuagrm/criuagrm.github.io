@@ -19,8 +19,6 @@
             --danger: #ef4444; 
         }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg); overflow: hidden; color: var(--dark); -webkit-font-smoothing: antialiased; }
-        
-        /* HARDWARE ACCELERATION FOR MAP */
         #mapa { width: 100vw; height: 100vh; z-index: 1; transform: translate3d(0,0,0); }
 
         /* HEADER INSTITUCIONAL MEJORADO */
@@ -36,60 +34,29 @@
         #header-text p { margin: 0; font-size: 10px; color: #64748b; }
 
         /* BUSCADOR DE CIUDADES */
-        .search-container {
-            display: flex; align-items: center; background: #f1f5f9; 
-            border-radius: 8px; padding: 5px 10px; flex-grow: 1; border: 1px solid #e2e8f0;
-        }
+        .search-container { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 5px 10px; flex-grow: 1; border: 1px solid #e2e8f0; }
         .search-container i { color: var(--primary); margin-right: 8px; font-size: 14px; }
-        .search-container select {
-            border: none; background: transparent; outline: none; font-family: 'Inter';
-            font-size: 12px; color: var(--dark); width: 100%; cursor: pointer;
-        }
+        .search-container select { border: none; background: transparent; outline: none; font-family: 'Inter'; font-size: 12px; color: var(--dark); width: 100%; cursor: pointer; }
 
         /* BOTÓN ACERCA DE */
-        .btn-info {
-            background: var(--primary); color: white; border: none; padding: 6px 12px;
-            border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-        }
+        .btn-info { background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
-        /* MODAL (DISCLAIMER) */
-        #modal-overlay {
-            position: fixed; inset: 0;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            z-index: 9999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
-        }
+        /* MODAL */
+        #modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
         #modal-overlay.active { display: flex; opacity: 1; }
-        .modal-card {
-            background: white; width: 90%; max-width: 500px; border-radius: 16px;
-            padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative;
-            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .modal-card { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #modal-overlay.active .modal-card { transform: scale(1); }
-        .modal-close {
-            position: absolute; top: 15px; right: 15px; background: none; border: none;
-            font-size: 20px; color: #64748b; cursor: pointer;
-        }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 20px; color: #64748b; cursor: pointer; }
         .modal-card h2 { margin-top: 0; color: var(--primary); font-size: 20px; }
         .modal-card h3 { font-size: 14px; color: var(--dark); margin-top: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;}
         .modal-card p { font-size: 13px; color: #475569; line-height: 1.6; text-align: justify;}
         .modal-card a { color: var(--accent); text-decoration: none; font-weight: 700; }
 
         /* PANEL LATERAL (GPU Accelerated) */
-        #side-panel {
-            position: absolute; right: 0; top: 0; width: 420px; height: 100vh;
-            background: white; z-index: 1001; box-shadow: -5px 0 25px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; 
-            transform: translateX(100%); 
-            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            will-change: transform; /* Optimización Móvil */
-        }
+        #side-panel { position: absolute; right: 0; top: 0; width: 420px; height: 100vh; background: white; z-index: 1001; box-shadow: -5px 0 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); will-change: transform; }
         #side-panel.active { transform: translateX(0); }
-        .btn-cerrar {
-            position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
+        .btn-cerrar { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* AJUSTES MÓVILES EXTREMOS */
         @media (max-width: 768px) {
             #side-panel { width: 100%; height: 85vh; top: auto; bottom: 0; transform: translateY(100%); border-radius: 24px 24px 0 0; }
             #side-panel.active { transform: translateY(0); }
@@ -104,6 +71,7 @@
         /* ESTILOS DE FICHAS - CLEAN UI */
         .category-title { background: #f1f5f9; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 25px 0 15px 0; display: flex; align-items: center; gap: 8px; }
         .category-title:first-child { margin-top: 0; }
+        
         .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .data-card { background: #fff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; }
         .data-label { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
@@ -114,9 +82,20 @@
         .progress-bg { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; transform: translateZ(0); }
         .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s ease-out; }
 
-        #welcome-msg { padding: 100px 40px; text-align: center; color: #94a3b8; }
+        /* WIDGET: BRECHAS DE GÉNERO */
+        .gap-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .gap-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; }
+        .gap-header { font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }
+        .gap-body { display: flex; align-items: baseline; gap: 6px; }
+        .gap-number { font-size: 18px; font-weight: 800; color: var(--dark); line-height: 1; }
+        .gap-pts { font-size: 10px; color: #94a3b8; font-weight: 600; }
+        .gap-status { display: inline-block; margin-top: 6px; font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 3px 6px; border-radius: 4px; border: 1px solid transparent; width: fit-content;}
         
-        /* LOADER CREADO PARA UX DE CARGA */
+        .status-women-down { background: #fdf2f8; color: #be185d; border-color: #fbcfe8; }
+        .status-men-down { background: #eff6ff; color: #0369a1; border-color: #bae6fd; }
+        .status-equity { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+
+        #welcome-msg { padding: 100px 40px; text-align: center; color: #94a3b8; }
         #global-loader { position: fixed; inset: 0; background: white; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
         .spinner { width: 40px; height: 40px; border: 4px solid #f1f5f9; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -134,15 +113,11 @@
         <div class="modal-card">
             <button class="modal-close" onclick="cerrarModal()"><i class="fa-solid fa-xmark"></i></button>
             <h2>CIRCPyCS — UAGRM</h2>
-            <p>El <strong>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</strong> presenta este Atlas Interactivo como herramienta para la visualización y análisis de los datos del Censo de Población y Vivienda 2024 a nivel de manzano.</p>
-            
+            <p>El <strong>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</strong> presenta este Atlas Interactivo.</p>
             <h3><i class="fa-solid fa-code-branch"></i> Metodología y Fuentes</h3>
-            <p>La fuente primaria de información corresponde al <strong>Instituto Nacional de Estadística (INE)</strong> de Bolivia.</p>
-            <p>El proceso de extracción, limpieza y consolidación de la base de datos cruda a formato GeoJSON comprimido fue diseñado originalmente por el ingeniero de datos <strong>Mauricio Foronda</strong>. Reconocemos su valioso aporte al código abierto. <br>
-            <a href="https://github.com/mauforonda" target="_blank"><i class="fa-brands fa-github"></i> Ver repositorio en GitHub</a></p>
-
+            <p>La fuente primaria de información es el <strong>Instituto Nacional de Estadística (INE)</strong>. El proceso de extracción y consolidación a GeoJSON está basado en el trabajo de <strong>Mauricio Foronda</strong> (<a href="https://github.com/mauforonda" target="_blank">Ver GitHub</a>).</p>
             <h3><i class="fa-solid fa-laptop-code"></i> Procesamiento Analítico</h3>
-            <p>El diseño de la interfaz, la optimización para dispositivos móviles y el motor de despliegue espacial fueron desarrollados por el equipo de investigación del <strong>CIRCPyCS</strong>.</p>
+            <p>El diseño de la interfaz y la optimización espacial fueron desarrollados por el <strong>CIRCPyCS</strong>.</p>
         </div>
     </div>
 
@@ -152,42 +127,69 @@
             <h1>CIRCPyCS</h1>
             <p>Atlas Censo 2024</p>
         </div>
-        
         <div class="search-container">
             <i class="fa-solid fa-magnifying-glass"></i>
             <select id="buscador-ciudades" onchange="volarACiudad(this.value)">
                 <option value="">Buscar ciudad...</option>
             </select>
         </div>
-
-        <button class="btn-info" onclick="abrirModal()">
-            <i class="fa-solid fa-circle-info"></i> Info
-        </button>
+        <button class="btn-info" onclick="abrirModal()"><i class="fa-solid fa-circle-info"></i> Info</button>
     </div>
 
     <div id="side-panel">
         <button class="btn-cerrar" onclick="cerrarPanel()"><i class="fa-solid fa-xmark"></i></button>
-        <div id="welcome-msg"><i class="fa-solid fa-database fa-4x" style="margin-bottom:15px; color:#cbd5e1"></i><p>Seleccione un manzano o busque una ciudad para visualizar su perfil sociodemográfico completo.</p></div>
+        <div id="welcome-msg"><i class="fa-solid fa-database fa-4x" style="margin-bottom:15px; color:#cbd5e1"></i><p>Seleccione un manzano o busque una ciudad para visualizar su perfil sociodemográfico.</p></div>
 
         <div id="panel-content" class="panel-scroll" style="display: none;">
             
             <div class="category-title"><i class="fa-solid fa-people-group"></i> Demografía y Estructura</div>
+            
             <div class="data-grid">
                 <div class="data-card"><div class="data-label">Población Total</div><div class="data-value" id="v-personas">0</div></div>
-                <div class="data-card"><div class="data-label">Densidad (Hab/Ha)</div><div class="data-value" id="v-densidad">0</div></div>
-                <div class="data-card"><div class="data-label">Índice Masculinidad</div><div class="data-value" id="v-masculinidad">0</div></div>
                 <div class="data-card"><div class="data-label">Pob. Migrante</div><div class="data-value" id="v-migrante">0%</div></div>
+                
+                <div class="data-card">
+                    <div class="data-label">Densidad</div>
+                    <div class="data-value"><span id="v-densidad">0</span> <span class="text-[10px] text-slate-500 font-normal">hab/ha</span></div>
+                    <div id="badge-densidad" class="mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit">Baja</div>
+                </div>
             </div>
+
+            <div class="data-card mb-4 bg-slate-50 border-slate-200">
+                <div class="data-label">Proporción de Género</div>
+                <div class="flex items-center gap-2 mt-1.5">
+                    <div class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-bold flex items-center gap-1.5 shadow-sm"><i class="fa-solid fa-mars"></i> <span id="v-hombres">0</span></div>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">hombres por cada</span>
+                    <div class="px-2 py-1 bg-pink-100 text-pink-800 rounded text-sm font-bold flex items-center gap-1.5 shadow-sm"><span id="v-mujeres">100</span> <i class="fa-solid fa-venus"></i></div>
+                </div>
+            </div>
+
             <div class="data-grid" style="grid-template-columns: 1fr 1fr;">
                 <div class="progress-box"><div class="progress-label"><span>Menores 20 años</span> <span id="t-jovenes">0%</span></div><div class="progress-bg"><div id="b-jovenes" class="progress-fill" style="background: var(--success);"></div></div></div>
                 <div class="progress-box"><div class="progress-label"><span>Mayores 60 años</span> <span id="t-ancianos">0%</span></div><div class="progress-bg"><div id="b-ancianos" class="progress-fill" style="background: var(--danger);"></div></div></div>
             </div>
 
             <div class="category-title"><i class="fa-solid fa-graduation-cap"></i> Educación y Salud</div>
-            <div class="progress-box"><div class="progress-label"><span>Educación Superior</span> <span id="t-edu">0%</span></div><div class="progress-bg"><div id="b-edu" class="progress-fill" style="background: #8b5cf6;"></div></div></div>
-            <div class="progress-box"><div class="progress-label"><span>Brecha Género Ed.</span> <span id="t-brechaedu">0%</span></div><div class="progress-bg"><div id="b-brechaedu" class="progress-fill" style="background: #a855f7;"></div></div></div>
-            <div class="progress-box"><div class="progress-label"><span>Seguro Privado</span> <span id="t-seguro">0%</span></div><div class="progress-bg"><div id="b-seguro" class="progress-fill" style="background: #ec4899;"></div></div></div>
-            <div class="progress-box"><div class="progress-label"><span>Brecha Género Seguro</span> <span id="t-brechaseg">0%</span></div><div class="progress-bg"><div id="b-brechaseg" class="progress-fill" style="background: #db2777;"></div></div></div>
+            
+            <div class="progress-box"><div class="progress-label"><span>Población con Ed. Superior</span> <span id="t-edu">0%</span></div><div class="progress-bg"><div id="b-edu" class="progress-fill" style="background: #8b5cf6;"></div></div></div>
+            <div class="progress-box"><div class="progress-label"><span>Población con Seguro Privado</span> <span id="t-seguro">0%</span></div><div class="progress-bg"><div id="b-seguro" class="progress-fill" style="background: #ec4899;"></div></div></div>
+
+            <div class="gap-container">
+                <div class="gap-box">
+                    <div class="gap-header">Brecha: Ed. Superior</div>
+                    <div class="gap-body">
+                        <div class="gap-number" id="g-num-edu">0.0</div><div class="gap-pts">Pts</div>
+                    </div>
+                    <div class="gap-status" id="g-stat-edu">Equidad</div>
+                </div>
+                <div class="gap-box">
+                    <div class="gap-header">Brecha: Seguro Salud</div>
+                    <div class="gap-body">
+                        <div class="gap-number" id="g-num-seg">0.0</div><div class="gap-pts">Pts</div>
+                    </div>
+                    <div class="gap-status" id="g-stat-seg">Equidad</div>
+                </div>
+            </div>
 
             <div class="category-title"><i class="fa-solid fa-faucet-drip"></i> Vivienda y Servicios</div>
             <div class="data-grid">
@@ -201,7 +203,15 @@
             <div class="progress-box"><div class="progress-label"><span>Acceso a Internet</span> <span id="t-net">0%</span></div><div class="progress-bg"><div id="b-net" class="progress-fill" style="background: #0ea5e9;"></div></div></div>
 
             <div class="category-title"><i class="fa-solid fa-briefcase"></i> Perfil Económico</div>
-            <div class="progress-box"><div class="progress-label"><span>Dependencia Económica</span> <span id="t-dependencia">0%</span></div><div class="progress-bg"><div id="b-dependencia" class="progress-fill" style="background: #64748b;"></div></div></div>
+            
+            <div class="data-card mb-3 bg-slate-50 border-slate-200">
+                <div class="data-label">Carga Económica (Dependencia)</div>
+                <div class="flex items-baseline gap-2 mt-1">
+                    <div class="text-xl font-bold text-slate-800" id="v-dep-ratio">0.0</div>
+                    <div class="text-xs text-slate-600 font-medium">dependientes por cada trabajador</div>
+                </div>
+            </div>
+
             <div class="data-grid">
                 <div class="data-card"><div class="data-label">Asalariados (Emp/Obr)</div><div class="data-value" id="v-empleados">0%</div></div>
                 <div class="data-card"><div class="data-label">Cuentapropistas</div><div class="data-value" id="v-cuenta">0%</div></div>
@@ -221,66 +231,43 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // =======================================================
-        // MOTOR DE ALTO RENDIMIENTO PARA MÓVILES (O(1) + CANVAS)
-        // =======================================================
-        
         let traductor = {};
         let geojsonLayer = null;
         let layerActiva = null;
 
-        // 1. Inicialización de Mapa Forzando Canvas y deshabilitando animaciones pesadas en zoom
         const mapaClaro = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { 
-            attribution: 'CIRCPyCS',
-            updateWhenIdle: true, // No carga tiles mientras te mueves (Acelera Panning)
-            keepBuffer: 2
+            attribution: 'CIRCPyCS', updateWhenIdle: true, keepBuffer: 2
         });
 
         const map = L.map('mapa', { 
-            zoomControl: false, 
-            layers: [mapaClaro],
-            preferCanvas: true, // ESENCIAL PARA 60K POLÍGONOS EN MÓVIL
-            zoomAnimation: true,
-            markerZoomAnimation: false
+            zoomControl: false, layers: [mapaClaro], preferCanvas: true, zoomAnimation: true, markerZoomAnimation: false
         }).setView([-17.7833, -63.1821], 12);
-        
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        // 2. Proceso de Carga en Paralelo (Asíncrono real)
         async function inicializarApp() {
             try {
-                // Cargar Diccionario
                 const resCampos = await fetch('campos.json');
-                if(!resCampos.ok) throw new Error("Falta campos.json");
                 const campos = await resCampos.json();
                 for (let k in campos) { traductor[campos[k]] = k; }
 
-                // Cargar Buscador
-                fetch('ciudades.json')
-                    .then(res => res.json())
-                    .then(ciudades => {
-                        ciudades.sort((a, b) => a.nombre.localeCompare(b.nombre));
-                        const select = document.getElementById('buscador-ciudades');
-                        // Usar fragmento de documento para no repintar el DOM 100 veces
-                        let fragment = document.createDocumentFragment();
-                        ciudades.forEach(c => {
-                            let option = document.createElement('option');
-                            option.value = `${c.y},${c.x}`; option.textContent = c.nombre;
-                            fragment.appendChild(option);
-                        });
-                        select.appendChild(fragment);
-                    }).catch(e => console.log("Ciudades omitido"));
+                fetch('ciudades.json').then(res => res.json()).then(ciudades => {
+                    ciudades.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                    const select = document.getElementById('buscador-ciudades');
+                    let fragment = document.createDocumentFragment();
+                    ciudades.forEach(c => {
+                        let option = document.createElement('option');
+                        option.value = `${c.y},${c.x}`; option.textContent = c.nombre;
+                        fragment.appendChild(option);
+                    });
+                    select.appendChild(fragment);
+                }).catch(e => console.log("Ciudades omitido"));
 
-                // Cargar Polígonos Masivos
                 const resGeo = await fetch('manzanos.geojson');
                 const dataGeo = await resGeo.json();
                 
-                // Renderizado Simplificado
                 geojsonLayer = L.geoJSON(dataGeo, {
                     style: { color: '#004494', weight: 0.5, fillOpacity: 0.2, interactive: true },
                     onEachFeature: function (feature, layer) {
-                        // OPTIMIZACIÓN: Removido el evento 'mouseover' que colapsaba la RAM táctil.
-                        // Solo dejamos el clic.
                         layer.on('click', function (e) {
                             L.DomEvent.stopPropagation(e);
                             if(layerActiva) layerActiva.setStyle({weight: 0.5, color: '#004494', fillOpacity: 0.2});
@@ -291,21 +278,17 @@
                     }
                 }).addTo(map);
 
-                // Quitar pantalla de carga
                 const loader = document.getElementById('global-loader');
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 500);
 
             } catch (error) {
-                alert("⚠️ Error: Si ves la pantalla en blanco, debes usar un servidor local (Ej: python -m http.server 8000) por políticas de seguridad del navegador.");
+                alert("⚠️ Error: Ejecute un servidor local.");
                 console.error(error);
             }
         }
-
-        // Ejecutar inicialización
         inicializarApp();
 
-        // 3. Funciones de Interfaz (Buscador y Paneles)
         function volarACiudad(coords) {
             if (!coords) return;
             const [lat, lng] = coords.split(',');
@@ -313,45 +296,73 @@
             cerrarPanel();
         }
 
-        // 4. Mapeo de Datos O(1) con DOM Updating Optimizado
         function mostrarFicha(p) {
             let d = {};
-            // Traducción ultrarrápida
             for (let k in p) { if(traductor[k]) d[traductor[k]] = p[k]; }
             
             document.getElementById('welcome-msg').style.display = 'none';
             document.getElementById('panel-content').style.display = 'block';
             
-            // Función Helper de UI
+            // Función genérica para barras de progreso y textos simples
             const up = (id, val, isPerc = true) => {
                 let v = val || 0;
                 let disp = isPerc ? Math.round(v * 100) : Math.round(v);
-                
-                const elV = document.getElementById('v-'+id);
-                if(elV) elV.innerText = disp + (isPerc ? "%" : "");
-                
-                const elT = document.getElementById('t-'+id);
-                if(elT) elT.innerText = disp + "%";
-                
-                const elB = document.getElementById('b-'+id);
+                if(document.getElementById('v-'+id)) document.getElementById('v-'+id).innerText = disp + (isPerc ? "%" : "");
+                if(document.getElementById('t-'+id)) document.getElementById('t-'+id).innerText = disp + "%";
+                let elB = document.getElementById('b-'+id);
                 if(elB) {
-                    let w = isPerc ? Math.min(disp, 100) : 0;
-                    elB.style.width = w + "%";
-                    if(disp > 100) elB.style.backgroundColor = '#ef4444'; // Alerta visual sutil en la barra
+                    elB.style.width = Math.min(disp, 100) + "%";
                 }
             };
 
-            // Inyección de Variables (Se ejecuta en ~2 milisegundos)
+            // 1. MASCULINIDAD (Nuevo Enfoque Visual)
+            document.getElementById('v-hombres').innerText = Math.round(d.masculinidad || 0);
+
+            // 2. DENSIDAD (Nuevo Enfoque Semáforo)
+            let valDens = d.personas_por_hectarea || 0;
+            document.getElementById('v-densidad').innerText = Math.round(valDens);
+            let badgeDens = document.getElementById('badge-densidad');
+            if (valDens > 100) {
+                badgeDens.className = "mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit bg-red-100 text-red-700";
+                badgeDens.innerText = "Alta Densidad (Hacinamiento)";
+            } else if (valDens > 40) {
+                badgeDens.className = "mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit bg-amber-100 text-amber-700";
+                badgeDens.innerText = "Densidad Media";
+            } else {
+                badgeDens.className = "mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit bg-emerald-100 text-emerald-700";
+                badgeDens.innerText = "Baja Densidad";
+            }
+
+            // 3. DEPENDENCIA ECONÓMICA (Nuevo Enfoque Ratio)
+            let valDep = d.dependencia_economica || 0;
+            document.getElementById('v-dep-ratio').innerText = (valDep / 100).toFixed(1);
+
+            // 4. BRECHAS DE GÉNERO (Widget de Balance)
+            const upBrecha = (id, valorBruto) => {
+                let brechaReal = (valorBruto || 0) * 100;
+                document.getElementById('g-num-' + id).innerText = Math.abs(brechaReal).toFixed(1); 
+                let stat = document.getElementById('g-stat-' + id);
+                if (brechaReal > 1) {
+                    stat.className = "gap-status status-women-down";
+                    stat.innerText = "Desventaja Femenina";
+                } else if (brechaReal < -1) {
+                    stat.className = "gap-status status-men-down";
+                    stat.innerText = "Desventaja Masculina";
+                } else {
+                    stat.className = "gap-status status-equity";
+                    stat.innerText = "Equidad Lograda";
+                }
+            };
+
+            // Mapeo general
             up('personas', d.personas, false);
-            up('densidad', d.personas_por_hectarea, false);
-            up('masculinidad', d.masculinidad, false);
             up('migrante', d.poblacion_migrante);
             up('jovenes', d.porcentaje_menor20);
             up('ancianos', d.porcentaje_60omas);
             up('edu', d.educacion_superior);
-            up('brechaedu', d.brecha_genero_educacion);
             up('seguro', d.seguro_privado);
-            up('brechaseg', d.brecha_genero_seguro);
+            upBrecha('edu', d.brecha_genero_educacion);
+            upBrecha('seg', d.brecha_genero_seguro);
             up('desocupadas', d.viviendas_desocupadas);
             up('alquiler', d.viviendas_alquiladas_anticretico);
             up('luz', d.viviendas_energiaelectrica_serviciopublico);
@@ -359,7 +370,6 @@
             up('cloaca', d.viviendas_desague_alcantarillado);
             up('gas', d.viviendas_combustible_gascañería);
             up('net', d.viviendas_tics_internet);
-            up('dependencia', d.dependencia_economica / 100);
             up('empleados', d.ocupados_empleados);
             up('cuenta', d.ocupados_cuentapropistas);
             up('agri', d.poblacion_agricultura);
@@ -369,22 +379,12 @@
             up('trans', d.poblacion_transporte);
             up('edu2', d.poblacion_enseñanza);
 
-            // Activar Panel
             document.getElementById('side-panel').classList.add('active');
         }
 
-        // Utilidades de Ventanas
-        function cerrarPanel() { 
-            document.getElementById('side-panel').classList.remove('active'); 
-            if(layerActiva) layerActiva.setStyle({weight: 0.5, color: '#004494', fillOpacity: 0.2});
-        }
-        function abrirModal() { 
-            let o = document.getElementById('modal-overlay');
-            o.classList.add('active');
-        }
-        function cerrarModal() { 
-            document.getElementById('modal-overlay').classList.remove('active');
-        }
+        function cerrarPanel() { document.getElementById('side-panel').classList.remove('active'); if(layerActiva) layerActiva.setStyle({weight: 0.5, color: '#004494', fillOpacity: 0.2});}
+        function abrirModal() { document.getElementById('modal-overlay').classList.add('active'); }
+        function cerrarModal() { document.getElementById('modal-overlay').classList.remove('active'); }
     </script>
 </body>
 </html>
