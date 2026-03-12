@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Difusión y Transferencia — IIF-MVB</title>
+  <meta name="description" content="Revista Criterio Académico y Expociencia Facultativa del Instituto Mónica von Borries." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Inter", "sans-serif"], 
+            serif: ["Merriweather", "serif"] 
+          },
+          colors: {
+            'uagrm-blue': '#0033A0',     
+            'uagrm-red': '#E3000F', 
+            'uagrm-light': '#F8F9FA',
+            'ink-dark': '#111827',       
+            'accent-slate': '#475569',
+          }
+        }
+      }
+    }
+  </script>
+   
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    body { background-color: #F8F9FA; overflow-x: hidden; }
+    
+    .card-hover { transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15); }
+    
+    /* Image zoom on hover inside cards */
+    .img-zoom-container { overflow: hidden; }
+    .img-zoom-container img { transition: transform 0.7s ease; }
+    .card-hover:hover .img-zoom-container img { transform: scale(1.08); }
+
+    /* Custom Gradient Text */
+    .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: linear-gradient(to right, #0033A0, #E3000F);
+    }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- TOP BAR -->
+  <div class="bg-uagrm-blue text-white text-[10px] md:text-xs uppercase tracking-widest py-2 px-6 text-center font-semibold tracking-wider relative z-50">
+    Universidad Autónoma "Gabriel René Moreno" — Gestión, Desarrollo e Innovación Científica
+  </div>
+
+  <!-- HEADER -->
+  <header class="border-b border-gray-200 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-4 group">
+        <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto Mónica von Borries" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+        <div class="flex flex-col leading-none hidden sm:flex">
+            <span class="font-serif font-black text-2xl text-uagrm-blue group-hover:text-uagrm-red transition">IIF-MVB</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-1">Instituto "Mónica von Borries"</span>
+        </div>
+      </a>
+      
+      <!-- NAVEGACIÓN DESKTOP -->
+      <nav class="hidden lg:flex gap-6 text-sm font-bold text-gray-700 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-uagrm-red transition pb-1">Inicio</a>
+        <a href="index.html#lineas" class="hover:text-uagrm-blue transition pb-1">Líneas de Inv.</a>
+        <a href="index.html#centros" class="hover:text-uagrm-blue transition pb-1">Centros</a>
+        <a href="proyectos.html" class="hover:text-uagrm-blue transition pb-1">Proyectos</a>
+        <!-- PESTAÑA ACTIVA -->
+        <a href="difusion.html" class="text-uagrm-red border-b-2 border-uagrm-red pb-1">Difusión</a>
+      </nav>
+      
+      <button id="mobile-menu-btn" class="lg:hidden text-uagrm-blue text-2xl p-2"><i id="mobile-menu-icon" class="fa-solid fa-bars"></i></button>
+    </div>
+
+    <!-- MENÚ MÓVIL DESPLEGABLE -->
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50">
+        <nav class="flex flex-col p-6 space-y-4 text-sm font-bold text-gray-700 tracking-wide uppercase text-center">
+            <a href="index.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Inicio</a>
+            <a href="index.html#lineas" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Líneas de Investigación</a>
+            <a href="index.html#centros" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Centros de Investigación</a>
+            <a href="proyectos.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Proyectos Científicos</a>
+            <a href="difusion.html" class="text-uagrm-red block py-2 bg-gray-50 rounded">Revista y Expociencia</a>
+        </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION: DIFUSIÓN -->
+  <section class="bg-white text-ink-dark relative overflow-hidden py-24 border-b border-gray-200">
+    <div class="absolute inset-0 z-0 opacity-5">
+        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=1600" alt="Biblioteca y revistas" class="w-full h-full object-cover">
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div data-aos="fade-right">
+                <span class="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 border border-gray-200 text-gray-600 text-[10px] font-bold uppercase tracking-widest rounded-sm mb-6 shadow-sm">
+                    <i class="fa-solid fa-bullhorn text-uagrm-red"></i> Capítulo V - Reglamento
+                </span>
+                <h1 class="font-serif font-black text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight text-gray-900">
+                    Difusión y <span class="text-gradient">Transferencia Científica</span>
+                </h1>
+                <p class="text-lg text-gray-600 font-light leading-relaxed mb-8">
+                    La investigación no concluye en el laboratorio. Transferimos el conocimiento a la sociedad y a la comunidad académica global mediante nuestra <strong>Revista Criterio Académico</strong> y el evento anual <strong>Expociencia Facultativa</strong>.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#revista" class="px-8 py-4 bg-uagrm-red text-white text-xs font-bold uppercase tracking-widest hover:bg-red-800 transition rounded shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Ir a la Revista
+                    </a>
+                    <a href="#expociencia" class="px-8 py-4 bg-uagrm-blue text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-800 transition rounded shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-people-arrows"></i> Ir a Expociencia
+                    </a>
+                </div>
+            </div>
+            
+            <div class="relative hidden lg:block" data-aos="fade-left">
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600" alt="Programación" class="w-full h-64 object-cover rounded-xl shadow-lg transform translate-y-8">
+                    <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80&w=600" alt="Exposición" class="w-full h-64 object-cover rounded-xl shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 1: REVISTA CRITERIO ACADÉMICO -->
+  <section id="revista" class="py-24 bg-gray-50 border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+          
+          <div class="flex flex-col lg:flex-row gap-16 items-center mb-20">
+              <div class="lg:w-1/3" data-aos="fade-right">
+                  <div class="bg-white p-4 rounded-2xl shadow-xl border-t-8 border-t-uagrm-red transform -rotate-2">
+                      <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=600" alt="Portada Revista" class="w-full h-auto rounded-lg">
+                      <div class="text-center mt-4 pb-2">
+                          <h4 class="font-serif font-bold text-lg">Volumen 12, N° 2</h4>
+                          <p class="text-xs text-gray-500 uppercase tracking-widest mt-1">Diciembre 2025</p>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="lg:w-2/3" data-aos="fade-left">
+                  <div class="flex items-center gap-3 mb-4">
+                      <i class="fa-solid fa-book-journal-whills text-3xl text-uagrm-red"></i>
+                      <h2 class="font-serif text-4xl font-bold text-gray-900">Revista Criterio Académico</h2>
+                  </div>
+                  <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                      Órgano oficial de publicación del Instituto. Nuestra revista está dedicada a la difusión de investigaciones originales, revisiones sistemáticas y ensayos científicos sometidos a estricto arbitraje por pares doble ciego.
+                  </p>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                      <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm flex items-start gap-4">
+                          <div class="w-10 h-10 rounded-full bg-red-50 text-uagrm-red flex items-center justify-center flex-shrink-0">
+                              <i class="fa-solid fa-fingerprint"></i>
+                          </div>
+                          <div>
+                              <h5 class="font-bold text-gray-900 text-sm">Identificador DOI</h5>
+                              <p class="text-xs text-gray-500 mt-1">Todos los artículos cuentan con Digital Object Identifier para asegurar su trazabilidad perpetua.</p>
+                          </div>
+                      </div>
+                      <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm flex items-start gap-4">
+                          <div class="w-10 h-10 rounded-full bg-red-50 text-uagrm-red flex items-center justify-center flex-shrink-0">
+                              <i class="fa-solid fa-users-viewfinder"></i>
+                          </div>
+                          <div>
+                              <h5 class="font-bold text-gray-900 text-sm">Revisión por Pares</h5>
+                              <p class="text-xs text-gray-500 mt-1">Proceso riguroso que garantiza el cumplimiento de normativas éticas y de calidad (CEIBIC).</p>
+                          </div>
+                      </div>
+                      <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm flex items-start gap-4">
+                          <div class="w-10 h-10 rounded-full bg-red-50 text-uagrm-red flex items-center justify-center flex-shrink-0">
+                              <i class="fa-brands fa-orcid"></i>
+                          </div>
+                          <div>
+                              <h5 class="font-bold text-gray-900 text-sm">Filiación ORCID</h5>
+                              <p class="text-xs text-gray-500 mt-1">Exigimos a los autores la vinculación institucional correcta para visibilidad internacional.</p>
+                          </div>
+                      </div>
+                      <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm flex items-start gap-4">
+                          <div class="w-10 h-10 rounded-full bg-red-50 text-uagrm-red flex items-center justify-center flex-shrink-0">
+                              <i class="fa-solid fa-lock-open"></i>
+                          </div>
+                          <div>
+                              <h5 class="font-bold text-gray-900 text-sm">Open Access</h5>
+                              <p class="text-xs text-gray-500 mt-1">Acceso libre y gratuito a todo el contenido a través de nuestro portal OJS.</p>
+                          </div>
+                      </div>
+                  </div>
+
+                  <a href="#" class="inline-block bg-uagrm-red text-white text-sm font-bold uppercase tracking-widest px-8 py-3 rounded-full hover:bg-red-800 transition shadow-md">
+                      Acceder a la Plataforma OJS <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+                  </a>
+              </div>
+          </div>
+
+          <!-- Últimos Artículos -->
+          <div class="mb-8" data-aos="fade-up">
+              <h3 class="font-serif text-2xl font-bold text-gray-900 border-b border-gray-300 pb-3">Últimos Artículos Publicados</h3>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <!-- Articulo 1 -->
+              <article class="card-hover bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="100">
+                  <div class="p-6 flex-grow">
+                      <span class="text-[10px] font-bold text-uagrm-blue uppercase tracking-widest bg-blue-50 px-2 py-1 rounded inline-block mb-3">Ciencias Políticas</span>
+                      <h4 class="font-serif font-bold text-lg text-gray-900 mb-3 hover:text-uagrm-red transition cursor-pointer">Reconfiguración de los poderes subnacionales post-censo.</h4>
+                      <p class="text-sm text-gray-600 mb-4 line-clamp-3">Un análisis de las implicancias fiscales y de representación política en las asambleas legislativas departamentales.</p>
+                      <div class="text-xs font-semibold text-gray-500">Por: Dr. Mario Vargas, et al.</div>
+                  </div>
+                  <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center">
+                      <span class="text-[10px] font-mono text-gray-500">DOI: 10.1234/ca.v12i2.01</span>
+                      <a href="#" class="text-uagrm-red hover:text-red-800"><i class="fa-solid fa-file-pdf text-xl"></i></a>
+                  </div>
+              </article>
+
+              <!-- Articulo 2 -->
+              <article class="card-hover bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="200">
+                  <div class="p-6 flex-grow">
+                      <span class="text-[10px] font-bold text-uagrm-red uppercase tracking-widest bg-red-50 px-2 py-1 rounded inline-block mb-3">Trabajo Social</span>
+                      <h4 class="font-serif font-bold text-lg text-gray-900 mb-3 hover:text-uagrm-red transition cursor-pointer">Economía del cuidado y redes familiares urbanas.</h4>
+                      <p class="text-sm text-gray-600 mb-4 line-clamp-3">Evaluación del impacto no remunerado del cuidado infantil en la empleabilidad femenina en el municipio de Santa Cruz.</p>
+                      <div class="text-xs font-semibold text-gray-500">Por: MSc. Carla Méndez</div>
+                  </div>
+                  <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center">
+                      <span class="text-[10px] font-mono text-gray-500">DOI: 10.1234/ca.v12i2.02</span>
+                      <a href="#" class="text-uagrm-red hover:text-red-800"><i class="fa-solid fa-file-pdf text-xl"></i></a>
+                  </div>
+              </article>
+
+              <!-- Articulo 3 -->
+              <article class="card-hover bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col" data-aos="fade-up" data-aos-delay="300">
+                  <div class="p-6 flex-grow">
+                      <span class="text-[10px] font-bold text-gray-700 uppercase tracking-widest bg-gray-100 px-2 py-1 rounded inline-block mb-3">Ciencias Forenses</span>
+                      <h4 class="font-serif font-bold text-lg text-gray-900 mb-3 hover:text-uagrm-red transition cursor-pointer">Cadena de custodia en evidencias digitales.</h4>
+                      <p class="text-sm text-gray-600 mb-4 line-clamp-3">Revisión de la normativa procesal vigente frente a las nuevas tecnologías de extracción de datos móviles en Bolivia.</p>
+                      <div class="text-xs font-semibold text-gray-500">Por: Lic. Roberto Arteaga</div>
+                  </div>
+                  <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center">
+                      <span class="text-[10px] font-mono text-gray-500">DOI: 10.1234/ca.v12i2.03</span>
+                      <a href="#" class="text-uagrm-red hover:text-red-800"><i class="fa-solid fa-file-pdf text-xl"></i></a>
+                  </div>
+              </article>
+          </div>
+      </div>
+  </section>
+
+  <!-- SECCIÓN 2: EXPOCIENCIA FACULTATIVA -->
+  <section id="expociencia" class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+          
+          <div class="text-center mb-16" data-aos="fade-down">
+              <span class="inline-block px-4 py-1.5 bg-uagrm-blue text-white text-[11px] font-bold uppercase tracking-widest rounded-full mb-4 shadow">
+                  Evento Institucional Anual
+              </span>
+              <h2 class="font-serif text-4xl md:text-5xl font-bold text-uagrm-blue mb-4">Expociencia Facultativa</h2>
+              <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+                  El escenario más grande de la Universidad para la socialización del conocimiento. Aquí los proyectos toman forma y se presentan ante el sector productivo, la sociedad civil y el estado.
+              </p>
+          </div>
+
+          <!-- Galería / Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-20">
+              <!-- Foto Grande -->
+              <div class="md:col-span-8 rounded-2xl overflow-hidden relative shadow-lg h-96 img-zoom-container" data-aos="fade-right">
+                  <img src="https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80&w=1200" alt="Exposición de ciencias" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-8">
+                      <div>
+                          <h3 class="text-white font-serif font-bold text-2xl mb-1">Interacción Social Directa</h3>
+                          <p class="text-gray-300 text-sm">Grupos de investigación defendiendo sus resultados ante jurados expertos.</p>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Stats -->
+              <div class="md:col-span-4 flex flex-col gap-6" data-aos="fade-left">
+                  <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200 flex-grow flex flex-col justify-center text-center shadow-sm">
+                      <i class="fa-solid fa-users-rays text-4xl text-uagrm-blue mb-3"></i>
+                      <div class="text-4xl font-black text-gray-900 mb-1" id="expoCounter1">0</div>
+                      <div class="text-xs uppercase font-bold text-gray-500 tracking-wider">Proyectos Presentados</div>
+                  </div>
+                  <div class="bg-uagrm-blue rounded-2xl p-8 border border-blue-800 flex-grow flex flex-col justify-center text-center shadow-lg text-white">
+                      <i class="fa-solid fa-medal text-4xl text-uagrm-red mb-3"></i>
+                      <div class="text-4xl font-black mb-1" id="expoCounter2">0</div>
+                      <div class="text-xs uppercase font-bold text-blue-200 tracking-wider">Premios a la Excelencia</div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Participantes (Grid) -->
+          <h3 class="font-serif text-2xl font-bold text-gray-900 mb-8 text-center" data-aos="fade-up">¿Quiénes participan en la Expociencia?</h3>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+              <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm card-hover" data-aos="fade-up" data-aos-delay="100">
+                  <div class="w-12 h-12 bg-blue-50 text-uagrm-blue rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                      <i class="fa-solid fa-building-columns"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Centros de Inv.</h4>
+                  <p class="text-xs text-gray-500">Exponen los avances de sus líneas maestras de investigación.</p>
+              </div>
+              <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm card-hover" data-aos="fade-up" data-aos-delay="200">
+                  <div class="w-12 h-12 bg-red-50 text-uagrm-red rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                      <i class="fa-solid fa-layer-group"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Grupos y Sociedades</h4>
+                  <p class="text-xs text-gray-500">Docentes y estudiantes mostrando proyectos conjuntos de impacto.</p>
+              </div>
+              <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm card-hover" data-aos="fade-up" data-aos-delay="300">
+                  <div class="w-12 h-12 bg-blue-50 text-uagrm-blue rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                      <i class="fa-solid fa-graduation-cap"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Tesistas (Post/Pre)</h4>
+                  <p class="text-xs text-gray-500">Defensa pública de tesis seleccionadas por su relevancia social.</p>
+              </div>
+              <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-sm card-hover" data-aos="fade-up" data-aos-delay="400">
+                  <div class="w-12 h-12 bg-red-50 text-uagrm-red rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                      <i class="fa-solid fa-handshake"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Sector Externo</h4>
+                  <p class="text-xs text-gray-500">Invitados especiales de empresas e instituciones públicas como jurados.</p>
+              </div>
+          </div>
+          
+          <div class="mt-16 text-center">
+              <a href="#" class="px-8 py-4 bg-white border-2 border-uagrm-blue text-uagrm-blue text-xs font-bold uppercase tracking-widest rounded-full shadow-sm hover:bg-uagrm-blue hover:text-white transition inline-flex items-center gap-2">
+                  <i class="fa-solid fa-download"></i> Descargar Convocatoria Expociencia 2026
+              </a>
+          </div>
+
+      </div>
+  </section>
+
+  <!-- CALL TO ACTION (CTA) FINAL -->
+  <section class="py-20 bg-ink-dark text-white text-center relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1600')] opacity-10 bg-cover bg-center"></div>
+      <div class="max-w-4xl mx-auto px-6 relative z-10" data-aos="zoom-in">
+          <i class="fa-solid fa-lightbulb text-5xl text-uagrm-red mb-6"></i>
+          <h2 class="font-serif text-3xl md:text-5xl font-bold mb-6">Transforma tu investigación en impacto</h2>
+          <p class="text-gray-400 mb-10 text-lg">Si eres parte de la comunidad universitaria, postula tu proyecto a nuestros centros, publica en nuestra revista o participa en la próxima Expociencia.</p>
+          <div class="flex justify-center gap-4">
+              <a href="index.html#centros" class="px-8 py-3 bg-uagrm-red text-white font-bold uppercase text-xs tracking-widest rounded hover:bg-red-800 transition">Contactar al Instituto</a>
+          </div>
+      </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-ink-dark text-gray-300 py-16 mt-auto border-t-4 border-uagrm-red">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        
+        <!-- Logo y Descripción -->
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+             <div class="bg-white p-2 rounded-lg shadow-md inline-block transform hover:scale-105 transition">
+                 <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto MVB Footer" class="h-10 w-auto object-contain">
+             </div>
+             <span class="font-serif font-black text-2xl text-white tracking-wide">IIF-MVB</span>
+          </div>
+          <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+            Instituto de Investigación Facultativo "Mónica von Borries". Estructurando y sustentando el desarrollo científico de la Universidad Autónoma Gabriel René Moreno.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- Enlaces Rápidos -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Navegación</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="index.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Inicio</a></li>
+            <li><a href="index.html#lineas" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Líneas de Investigación</a></li>
+            <li><a href="index.html#centros" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Centros de Investigación</a></li>
+            <li><a href="proyectos.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Proyectos Activos</a></li>
+            <li><a href="#" class="text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-uagrm-red"></i> Revista y Expociencia</a></li>
+          </ul>
+        </div>
+
+        <!-- Contacto -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Contacto Institucional</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-envelope mt-1 text-uagrm-red"></i>
+              <span class="break-all hover:text-white transition cursor-pointer">instituto.mvb@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-location-dot mt-1 text-uagrm-red"></i>
+              <span>Campus Universitario UAGRM<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-phone mt-1 text-uagrm-red"></i>
+              <span>+591 (3) 333-XXXX</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Autoridades -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Autoridades Universitarias</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="bg-gray-800 p-3 rounded border-l-2 border-uagrm-red">
+                <span class="block font-bold text-gray-200">Marcio Aranda Garcia</span>
+                <span class="text-[10px] text-uagrm-red uppercase tracking-wide font-bold">Director del Instituto</span>
+            </li>
+            <li class="p-3">
+                <span class="block font-bold text-gray-400">MSc. Carlos Martinez Bonilla</span>
+                <span class="text-[10px] text-gray-500 uppercase tracking-wide">Presidente ICU - UAGRM</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      
+      <!-- Bottom Footer -->
+      <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-gray-500 font-medium tracking-widest uppercase text-center md:text-left">
+          Universidad Autónoma "Gabriel René Moreno" <br class="md:hidden">© <span id="year"></span> Todos los derechos reservados.
+        </p>
+        <div class="flex gap-6">
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Reglamento DICIT</a>
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Políticas de Privacidad</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Inicializar Animaciones
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    // Año Footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    // Lógica del Menú Móvil
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        if (menu.classList.contains('hidden')) {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+        } else {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        }
+    });
+
+    // Animación de Contadores Numéricos
+    function animateValue(id, start, end, duration) {
+        if (start === end) return;
+        var range = end - start;
+        var current = start;
+        var increment = end > start? 1 : -1;
+        var stepTime = Math.abs(Math.floor(duration / range));
+        var obj = document.getElementById(id);
+        var timer = setInterval(function() {
+            current += increment;
+            if(obj) { obj.innerHTML = current; }
+            if (current == end) {
+                clearInterval(timer);
+            }
+        }, stepTime);
+    }
+    
+    // Iniciar animaciones al cargar
+    setTimeout(() => {
+        animateValue("expoCounter1", 0, 78, 2500);
+        animateValue("expoCounter2", 0, 12, 2500);
+    }, 500);
+
+  </script>
+</body>
+</html>
