@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Líneas de Investigación — IIF-MVB</title>
+  <meta name="description" content="Líneas directrices, Comité Científico y recursos para investigadores del Instituto Mónica von Borries." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Inter", "sans-serif"], 
+            serif: ["Merriweather", "serif"] 
+          },
+          colors: {
+            'uagrm-blue': '#0033A0',     
+            'uagrm-red': '#E3000F', 
+            'uagrm-light': '#F8F9FA',
+            'ink-dark': '#111827',       
+            'accent-slate': '#475569',
+          }
+        }
+      }
+    }
+  </script>
+   
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    body { background-color: #F8F9FA; overflow-x: hidden; }
+    
+    .card-hover { transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15); }
+    
+    .img-zoom-container { overflow: hidden; }
+    .img-zoom-container img { transition: transform 0.7s ease; }
+    .card-hover:hover .img-zoom-container img { transform: scale(1.08); }
+
+    /* Custom Pattern Background for Header */
+    .bg-pattern {
+        background-image: radial-gradient(#ffffff 1px, transparent 1px);
+        background-size: 20px 20px;
+        background-position: 0 0, 10px 10px;
+    }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- TOP BAR -->
+  <div class="bg-uagrm-blue text-white text-[10px] md:text-xs uppercase tracking-widest py-2 px-6 text-center font-semibold tracking-wider relative z-50">
+    Universidad Autónoma "Gabriel René Moreno" — Gestión, Desarrollo e Innovación Científica
+  </div>
+
+  <!-- HEADER -->
+  <header class="border-b border-gray-200 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-4 group">
+        <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto Mónica von Borries" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+        <div class="flex flex-col leading-none hidden sm:flex">
+            <span class="font-serif font-black text-2xl text-uagrm-blue group-hover:text-uagrm-red transition">IIF-MVB</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-1">Instituto "Mónica von Borries"</span>
+        </div>
+      </a>
+      
+      <!-- NAVEGACIÓN DESKTOP -->
+      <nav class="hidden lg:flex gap-6 text-sm font-bold text-gray-700 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-uagrm-red transition pb-1">Inicio</a>
+        <!-- PESTAÑA ACTIVA -->
+        <a href="lineas.html" class="text-uagrm-red border-b-2 border-uagrm-red pb-1">Líneas de Inv.</a>
+        <a href="centros.html" class="hover:text-uagrm-blue transition pb-1">Centros</a>
+        <a href="proyectos.html" class="hover:text-uagrm-blue transition pb-1">Proyectos</a>
+        <a href="difusion.html" class="hover:text-uagrm-blue transition pb-1">Difusión</a>
+      </nav>
+      
+      <button id="mobile-menu-btn" class="lg:hidden text-uagrm-blue text-2xl p-2"><i id="mobile-menu-icon" class="fa-solid fa-bars"></i></button>
+    </div>
+
+    <!-- MENÚ MÓVIL DESPLEGABLE -->
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50">
+        <nav class="flex flex-col p-6 space-y-4 text-sm font-bold text-gray-700 tracking-wide uppercase text-center">
+            <a href="index.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Inicio</a>
+            <a href="lineas.html" class="text-uagrm-red block py-2 bg-gray-50 rounded">Líneas de Investigación</a>
+            <a href="centros.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Centros de Investigación</a>
+            <a href="proyectos.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Proyectos Científicos</a>
+            <a href="difusion.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Revista y Expociencia</a>
+        </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION: LÍNEAS -->
+  <section class="bg-uagrm-blue text-white relative overflow-hidden py-24 border-b-4 border-uagrm-red">
+    <div class="absolute inset-0 z-0 opacity-10 bg-pattern"></div>
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-uagrm-blue via-uagrm-blue/95 to-transparent"></div>
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1600" alt="Planificación estratégica" class="w-full h-full object-cover opacity-30 mix-blend-overlay">
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="max-w-3xl" data-aos="fade-right">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest rounded-sm mb-6 backdrop-blur-sm shadow-sm">
+                <i class="fa-solid fa-compass"></i> Modelo Académico UAGRM 2050
+            </span>
+            <h1 class="font-serif font-black text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
+                Líneas Directrices y <br><span class="text-blue-300">Rigor Académico</span>
+            </h1>
+            <p class="text-lg text-blue-100 font-light leading-relaxed mb-8">
+                Toda investigación auspiciada por el Instituto debe alinearse a las necesidades sociales y a la transformación digital. Explorá nuestras líneas temáticas oficiales para cada centro, conocé nuestro Comité Ético y descargá los formatos institucionales.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#lineas-matrices" class="px-8 py-3 bg-uagrm-red text-white text-xs font-bold uppercase tracking-widest hover:bg-red-800 transition rounded shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> Ver Líneas Específicas
+                </a>
+                <a href="#recursos" class="px-8 py-3 bg-transparent border border-white text-white text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-uagrm-blue transition rounded shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Recursos y Descargas
+                </a>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- LÍNEAS MATRICES DE INVESTIGACIÓN (ACTUALIZADAS UAGRM 2050) -->
+  <section id="lineas-matrices" class="py-24 bg-gray-50 border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+          <div class="text-center mb-16" data-aos="fade-up">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-2 block">Resolución y Pertinencia Social</span>
+              <h2 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4">Líneas de Investigación Facultativa</h2>
+              <p class="text-gray-600 max-w-4xl mx-auto mt-4 text-base leading-relaxed">
+                  Para la definición de las Líneas de Investigación de los seis centros de la Facultad de Ciencias Jurídicas, Políticas, Sociales y Relaciones Internacionales, se han tomado como base los ejes estratégicos del <strong>Modelo Académico UAGRM 2050</strong>, las Líneas de Investigación UAGRM 2025 y las tendencias globales de transformación digital identificadas en el Plan de Desarrollo Facultativo.
+              </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              
+              <!-- Centro 1: Derecho (CID) -->
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition card-hover flex flex-col gap-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                      <div class="w-14 h-14 bg-blue-50 text-uagrm-blue rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                          <i class="fa-solid fa-scale-balanced"></i>
+                      </div>
+                      <div>
+                          <h3 class="font-bold text-lg text-gray-900 leading-tight">1. Centro de Investigación de Derecho (CID)</h3>
+                      </div>
+                  </div>
+                  <p class="text-sm text-gray-600 italic">Se orienta a la modernización del sistema jurídico frente a la era digital y la protección de derechos fundamentales.</p>
+                  <ul class="space-y-3 text-sm text-gray-600 mt-2">
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Derecho Digital y Ciberseguridad Jurídica:</strong> Regulación de la Inteligencia Artificial, justicia algorítmica, protección de datos personales y validez de la evidencia digital.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Reformas Judiciales y Estado de Derecho:</strong> Análisis de barreras en el acceso a la justicia, pluralismo jurídico coordinado y justicia restaurativa/alternativa.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Litigación y Mediación Internacional:</strong> Arbitraje transnacional y razonamiento probatorio basado en datos en un contexto globalizado.</span></li>
+                  </ul>
+              </div>
+
+              <!-- Centro 2: Ciencia Política (CICPyCS) -->
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition card-hover flex flex-col gap-4" data-aos="fade-up" data-aos-delay="200">
+                  <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                      <div class="w-14 h-14 bg-red-50 text-uagrm-red rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                          <i class="fa-solid fa-landmark"></i>
+                      </div>
+                      <div>
+                          <h3 class="font-bold text-lg text-gray-900 leading-tight">2. Centro de Investigación de Ciencia Política y Cs. Sociales (CICPyCS)</h3>
+                      </div>
+                  </div>
+                  <p class="text-sm text-gray-600 italic">Enfocado en la estabilidad democrática y la eficiencia de la gestión pública mediante tecnologías.</p>
+                  <ul class="space-y-3 text-sm text-gray-600 mt-2">
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Gobernanza Algorítmica y Democracia Digital:</strong> Impacto de la IA en el monitoreo de la opinión pública, automatización de campañas y lucha contra la desinformación.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Fortalecimiento Institucional y Descentralización:</strong> Análisis de sistemas de gobernanza local, federalismo, comportamiento electoral y diseño institucional para el desarrollo sostenible.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Políticas Públicas y Gestión por Resultados:</strong> Evaluación del impacto de las políticas públicas regionales y nacionales mediante el uso de Big Data y análisis predictivo.</span></li>
+                  </ul>
+              </div>
+
+              <!-- Centro 3: Trabajo Social (CITS) -->
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition card-hover flex flex-col gap-4" data-aos="fade-up" data-aos-delay="300">
+                  <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                      <div class="w-14 h-14 bg-blue-50 text-uagrm-blue rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                          <i class="fa-solid fa-people-roof"></i>
+                      </div>
+                      <div>
+                          <h3 class="font-bold text-lg text-gray-900 leading-tight">3. Centro de Investigación de Trabajo Social (CITS)</h3>
+                      </div>
+                  </div>
+                  <p class="text-sm text-gray-600 italic">Busca responder a las nuevas vulnerabilidades sociales y fomentar la justicia social.</p>
+                  <ul class="space-y-3 text-sm text-gray-600 mt-2">
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Intervención Social en Entornos Digitales:</strong> Abordaje de la violencia digital, sociedades en línea y asistencia social remota.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Migración Transnacional y Crisis Humanitarias:</strong> Gestión de conflictos sociales derivados de la migración interna y externa mediada por redes sociales.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Inclusión, Género y Derechos Humanos:</strong> Políticas de protección social para sectores vulnerables, reducción de desigualdades y metodologías contemporáneas de intervención comunitaria.</span></li>
+                  </ul>
+              </div>
+
+              <!-- Centro 4: Relaciones Internacionales (CIRI) -->
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition card-hover flex flex-col gap-4" data-aos="fade-up" data-aos-delay="400">
+                  <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                      <div class="w-14 h-14 bg-red-50 text-uagrm-red rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                          <i class="fa-solid fa-globe"></i>
+                      </div>
+                      <div>
+                          <h3 class="font-bold text-lg text-gray-900 leading-tight">4. Centro de Investigación de Relaciones Internacionales (CIRI)</h3>
+                      </div>
+                  </div>
+                  <p class="text-sm text-gray-600 italic">Orientado a posicionar a Bolivia en el nuevo orden mundial multipolar.</p>
+                  <ul class="space-y-3 text-sm text-gray-600 mt-2">
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Diplomacia Digital y Geopolítica de Datos:</strong> Análisis de ciberconflictos, soberanía tecnológica y el surgimiento de potencias tecnológicas no tradicionales.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Integración Regional y Comercio Internacional:</strong> Negociación en bloques comerciales, derecho internacional ambiental y temas energéticos transfronterizos.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Análisis de Riesgos Globales:</strong> Estudio de crisis sistémicas (climáticas, económicas) y su impacto en la seguridad y estabilidad nacional.</span></li>
+                  </ul>
+              </div>
+              
+              <!-- Centro 5: Pueblos Indígenas (CI-PIOC) -->
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition card-hover flex flex-col gap-4" data-aos="fade-up" data-aos-delay="500">
+                  <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                      <div class="w-14 h-14 bg-blue-50 text-uagrm-blue rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                          <i class="fa-solid fa-seedling"></i>
+                      </div>
+                      <div>
+                          <h3 class="font-bold text-lg text-gray-900 leading-tight">5. Centro de Investigación de Pueblos Indígena Originario Campesinos (CI-PIOC)</h3>
+                      </div>
+                  </div>
+                  <p class="text-sm text-gray-600 italic">Responde al mandato constitucional de revalorizar los saberes ancestrales y su convivencia con la modernidad.</p>
+                  <ul class="space-y-3 text-sm text-gray-600 mt-2">
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Soberanía del Conocimiento y Saberes Ancestrales:</strong> Protección y promoción de las lenguas indígenas, prácticas culturales y cosmovisiones en armonía con la Madre Tierra.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Autonomía Indígena y Territorialidad:</strong> Investigación de la historia territorial, conflictos por recursos naturales y el ejercicio de la justicia indígena.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-blue mt-1"></i> <span><strong class="text-gray-800">Interculturalidad y Gestión de Sistemas de Vida:</strong> Diálogo entre el conocimiento científico moderno y los saberes locales para la seguridad hídrica y alimentaria.</span></li>
+                  </ul>
+              </div>
+              
+              <!-- Centro 6: Criminología (CECRIM) -->
+              <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition card-hover flex flex-col gap-4" data-aos="fade-up" data-aos-delay="600">
+                  <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                      <div class="w-14 h-14 bg-red-50 text-uagrm-red rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                          <i class="fa-solid fa-fingerprint"></i>
+                      </div>
+                      <div>
+                          <h3 class="font-bold text-lg text-gray-900 leading-tight">6. Centro de Estudios Criminológicos (CECRIM)</h3>
+                      </div>
+                  </div>
+                  <p class="text-sm text-gray-600 italic">Unidad técnica especializada para el abordaje integral de la criminalidad en Santa Cruz.</p>
+                  <ul class="space-y-3 text-sm text-gray-600 mt-2">
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Criminología Urbana y Seguridad Ciudadana:</strong> Análisis de patrones delictivos, violencia juvenil y georreferenciación del delito (SIG) en áreas metropolitanas.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Cibercriminología y Delitos de Alta Complejidad:</strong> Investigación sobre ciberdelitos, criminalidad organizada emergente y delitos patrimoniales.</span></li>
+                      <li class="flex items-start gap-2"><i class="fa-solid fa-caret-right text-uagrm-red mt-1"></i> <span><strong class="text-gray-800">Prevención, Reincidencia y Justicia Restaurativa:</strong> Evaluación de factores de riesgo, sistema penitenciario y diseño de políticas criminales basadas en evidencia científica.</span></li>
+                  </ul>
+              </div>
+
+          </div>
+          
+          <!-- Visión y Cierre -->
+          <div class="mt-16 max-w-4xl mx-auto text-center" data-aos="zoom-in">
+              <div class="bg-uagrm-blue text-white p-8 rounded-2xl shadow-xl relative overflow-hidden">
+                  <div class="absolute -right-6 -bottom-6 text-blue-800 opacity-30 text-8xl"><i class="fa-solid fa-microchip"></i></div>
+                  <p class="font-serif text-xl md:text-2xl font-light italic relative z-10">
+                      "Estas líneas permiten que la Facultad pase de ser una <strong class="font-bold underline decoration-uagrm-red decoration-2 underline-offset-4">consumidora</strong> a una <strong class="font-bold underline decoration-uagrm-red decoration-2 underline-offset-4">productora de conocimiento</strong> con soberanía tecnológica."
+                  </p>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- COMITÉ CIENTÍFICO Y ÉTICO (CEIBIC) -->
+  <section class="py-24 bg-white relative overflow-hidden">
+      <!-- Background Element -->
+      <div class="absolute -right-40 top-20 text-gray-50 opacity-50 text-[30rem] pointer-events-none"><i class="fa-solid fa-stamp"></i></div>
+
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              
+              <div data-aos="fade-right">
+                  <h2 class="font-serif text-4xl font-bold text-uagrm-blue mb-6">Comité Científico y de Ética (CEIBIC)</h2>
+                  <p class="text-gray-600 text-lg leading-relaxed mb-6">
+                      El prestigio de nuestro Instituto se sustenta en la rigurosidad. Todos los programas, proyectos y artículos pasan por nuestro Comité Evaluador, que garantiza el impacto metodológico y la observancia de la ética en la investigación.
+                  </p>
+                  
+                  <div class="space-y-6">
+                      <div class="flex gap-4">
+                          <div class="w-12 h-12 rounded-full bg-uagrm-blue text-white flex items-center justify-center flex-shrink-0 text-xl"><i class="fa-solid fa-clipboard-check"></i></div>
+                          <div>
+                              <h4 class="font-bold text-gray-900">Aprobación Metodológica</h4>
+                  <p class="text-sm text-gray-600 mt-1">Revisión ciega de la validez del marco teórico, diseño muestral y métodos de recolección propuestos.</p>
+                          </div>
+                      </div>
+                      <div class="flex gap-4">
+                          <div class="w-12 h-12 rounded-full bg-uagrm-red text-white flex items-center justify-center flex-shrink-0 text-xl"><i class="fa-solid fa-scale-balanced"></i></div>
+                          <div>
+                              <h4 class="font-bold text-gray-900">Aval Ético e Integridad</h4>
+                              <p class="text-sm text-gray-600 mt-1">Supervisión del cumplimiento de consentimientos informados, protección de datos personales (habeas data) y no maleficencia.</p>
+                          </div>
+                      </div>
+                      <div class="flex gap-4">
+                          <div class="w-12 h-12 rounded-full bg-gray-800 text-white flex items-center justify-center flex-shrink-0 text-xl"><i class="fa-solid fa-file-signature"></i></div>
+                          <div>
+                              <h4 class="font-bold text-gray-900">Resolución Oficial</h4>
+                              <p class="text-sm text-gray-600 mt-1">Emisión del dictamen formal (Aprobado / Con Observaciones / Rechazado) necesario para el registro DICIT.</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Tarjeta de Tribunal -->
+              <div class="bg-gray-50 rounded-2xl border border-gray-200 p-8 shadow-xl" data-aos="fade-left">
+                  <div class="flex items-center gap-3 mb-6 border-b border-gray-200 pb-4">
+                      <i class="fa-solid fa-users-gear text-2xl text-uagrm-blue"></i>
+                      <h3 class="font-serif font-bold text-2xl text-gray-900">Miembros del Tribunal</h3>
+                  </div>
+                  <p class="text-sm text-gray-500 mb-6 italic">El CEIBIC Facultativo está compuesto por autoridades académicas y pares evaluadores externos.</p>
+                  
+                  <ul class="space-y-4">
+                      <li class="bg-white p-4 rounded-lg border border-gray-100 flex justify-between items-center shadow-sm">
+                          <div>
+                              <p class="font-bold text-gray-800 text-sm">Director del Instituto</p>
+                              <p class="text-xs text-gray-500">Presidente del Comité</p>
+                          </div>
+                          <span class="bg-blue-50 text-uagrm-blue text-[10px] uppercase font-bold px-2 py-1 rounded">Titular</span>
+                      </li>
+                      <li class="bg-white p-4 rounded-lg border border-gray-100 flex justify-between items-center shadow-sm">
+                          <div>
+                              <p class="font-bold text-gray-800 text-sm">Pares Ciegos (Evaluadores)</p>
+                              <p class="text-xs text-gray-500">Docentes Nacionales/Internacionales</p>
+                          </div>
+                          <span class="bg-gray-100 text-gray-600 text-[10px] uppercase font-bold px-2 py-1 rounded">Ad-hoc</span>
+                      </li>
+                      <li class="bg-white p-4 rounded-lg border border-gray-100 flex justify-between items-center shadow-sm">
+                          <div>
+                              <p class="font-bold text-gray-800 text-sm">Vicedecanato</p>
+                              <p class="text-xs text-gray-500">Supervisión Académica</p>
+                          </div>
+                          <span class="bg-red-50 text-uagrm-red text-[10px] uppercase font-bold px-2 py-1 rounded">Titular</span>
+                      </li>
+                  </ul>
+              </div>
+
+          </div>
+      </div>
+  </section>
+
+  <!-- RECURSOS PARA DESCARGAR -->
+  <section id="recursos" class="py-24 bg-uagrm-light border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+          <div class="text-center mb-16" data-aos="fade-down">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-2 block">Caja de Herramientas</span>
+              <h2 class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4">Recursos para Investigadores</h2>
+              <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
+                  Toda la documentación necesaria para registrar tu proyecto, presentar artículos a la revista o conocer las normativas vigentes en formato PDF y Word.
+              </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              
+              <!-- Recurso 1 -->
+              <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between group hover:border-uagrm-blue hover:shadow-md transition cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                  <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 bg-red-50 text-uagrm-red rounded-lg flex items-center justify-center text-2xl group-hover:bg-uagrm-red group-hover:text-white transition">
+                          <i class="fa-solid fa-file-pdf"></i>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-900 text-sm">Reglamento DICIT 2025</h4>
+                          <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Normativa Oficial (PDF)</p>
+                      </div>
+                  </div>
+                  <i class="fa-solid fa-download text-gray-300 group-hover:text-uagrm-blue transition"></i>
+              </div>
+
+              <!-- Recurso 2 -->
+              <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between group hover:border-uagrm-blue hover:shadow-md transition cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                  <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 bg-blue-50 text-uagrm-blue rounded-lg flex items-center justify-center text-2xl group-hover:bg-uagrm-blue group-hover:text-white transition">
+                          <i class="fa-solid fa-file-word"></i>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-900 text-sm">Plantilla: Perfil de Proyecto</h4>
+                          <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Formato Editable (DOCX)</p>
+                      </div>
+                  </div>
+                  <i class="fa-solid fa-download text-gray-300 group-hover:text-uagrm-blue transition"></i>
+              </div>
+
+              <!-- Recurso 3 -->
+              <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between group hover:border-uagrm-blue hover:shadow-md transition cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                  <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 bg-blue-50 text-uagrm-blue rounded-lg flex items-center justify-center text-2xl group-hover:bg-uagrm-blue group-hover:text-white transition">
+                          <i class="fa-solid fa-file-word"></i>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-900 text-sm">Plantilla: Revista Criterio</h4>
+                          <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Normas APA 7ma (DOCX)</p>
+                      </div>
+                  </div>
+                  <i class="fa-solid fa-download text-gray-300 group-hover:text-uagrm-blue transition"></i>
+              </div>
+
+              <!-- Recurso 4 -->
+              <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between group hover:border-uagrm-blue hover:shadow-md transition cursor-pointer" data-aos="fade-up" data-aos-delay="400">
+                  <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 bg-gray-100 text-gray-600 rounded-lg flex items-center justify-center text-2xl group-hover:bg-gray-600 group-hover:text-white transition">
+                          <i class="fa-solid fa-link"></i>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-900 text-sm">Guía de Registro ORCID</h4>
+                          <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Manual de Filiación (PDF)</p>
+                      </div>
+                  </div>
+                  <i class="fa-solid fa-download text-gray-300 group-hover:text-uagrm-blue transition"></i>
+              </div>
+
+              <!-- Recurso 5 -->
+              <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between group hover:border-uagrm-blue hover:shadow-md transition cursor-pointer" data-aos="fade-up" data-aos-delay="500">
+                  <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 bg-red-50 text-uagrm-red rounded-lg flex items-center justify-center text-2xl group-hover:bg-uagrm-red group-hover:text-white transition">
+                          <i class="fa-solid fa-file-pdf"></i>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-900 text-sm">Reglamento de Centros</h4>
+                          <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Normativa Específica (PDF)</p>
+                      </div>
+                  </div>
+                  <i class="fa-solid fa-download text-gray-300 group-hover:text-uagrm-blue transition"></i>
+              </div>
+              
+              <!-- Recurso 6 -->
+              <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between group hover:border-uagrm-blue hover:shadow-md transition cursor-pointer" data-aos="fade-up" data-aos-delay="600">
+                  <div class="flex items-center gap-4">
+                      <div class="w-12 h-12 bg-gray-100 text-gray-600 rounded-lg flex items-center justify-center text-2xl group-hover:bg-gray-600 group-hover:text-white transition">
+                          <i class="fa-solid fa-folder-open"></i>
+                      </div>
+                      <div>
+                          <h4 class="font-bold text-gray-900 text-sm">Carpeta Institucional Logos</h4>
+                          <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Identidad Visual (.ZIP)</p>
+                      </div>
+                  </div>
+                  <i class="fa-solid fa-download text-gray-300 group-hover:text-uagrm-blue transition"></i>
+              </div>
+
+          </div>
+      </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-ink-dark text-gray-300 py-16 mt-auto border-t-4 border-uagrm-red">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        
+        <!-- Logo y Descripción -->
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+             <div class="bg-white p-2 rounded-lg shadow-md inline-block transform hover:scale-105 transition">
+                 <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto MVB Footer" class="h-10 w-auto object-contain">
+             </div>
+             <span class="font-serif font-black text-2xl text-white tracking-wide">IIF-MVB</span>
+          </div>
+          <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+            Instituto de Investigación Facultativo "Mónica von Borries". Estructurando y sustentando el desarrollo científico de la Universidad Autónoma Gabriel René Moreno.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- Enlaces Rápidos -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Navegación</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="index.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Inicio</a></li>
+            <li><a href="lineas.html" class="text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-uagrm-red"></i> Líneas de Investigación</a></li>
+            <li><a href="centros.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Centros de Investigación</a></li>
+            <li><a href="proyectos.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Proyectos Activos</a></li>
+            <li><a href="difusion.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Revista y Expociencia</a></li>
+          </ul>
+        </div>
+
+        <!-- Contacto -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Contacto Institucional</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-envelope mt-1 text-uagrm-red"></i>
+              <span class="break-all hover:text-white transition cursor-pointer">instituto.mvb@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-location-dot mt-1 text-uagrm-red"></i>
+              <span>Campus Universitario UAGRM<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-phone mt-1 text-uagrm-red"></i>
+              <span>+591 (3) 333-XXXX</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Autoridades -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Autoridades Universitarias</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="bg-gray-800 p-3 rounded border-l-2 border-uagrm-red">
+                <span class="block font-bold text-gray-200">Marcio Aranda Garcia</span>
+                <span class="text-[10px] text-uagrm-red uppercase tracking-wide font-bold">Director del Instituto</span>
+            </li>
+            <li class="p-3">
+                <span class="block font-bold text-gray-400">MSc. Carlos Martinez Bonilla</span>
+                <span class="text-[10px] text-gray-500 uppercase tracking-wide">Presidente ICU - UAGRM</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      
+      <!-- Bottom Footer -->
+      <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-gray-500 font-medium tracking-widest uppercase text-center md:text-left">
+          Universidad Autónoma "Gabriel René Moreno" <br class="md:hidden">© <span id="year"></span> Todos los derechos reservados.
+        </p>
+        <div class="flex gap-6">
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Reglamento DICIT</a>
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Políticas de Privacidad</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Inicializar Animaciones
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    // Año Footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    // Lógica del Menú Móvil
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        if (menu.classList.contains('hidden')) {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+        } else {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        }
+    });
+
+  </script>
+</body>
+</html>
