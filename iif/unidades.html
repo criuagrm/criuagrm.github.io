@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unidades de Investigación — IIF-MVB</title>
+  <meta name="description" content="Centros, Grupos y Sociedades Científicas del Instituto Mónica von Borries." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Inter", "sans-serif"], 
+            serif: ["Merriweather", "serif"] 
+          },
+          colors: {
+            'uagrm-blue': '#0033A0',     
+            'uagrm-red': '#E3000F', 
+            'uagrm-light': '#F8F9FA',
+            'ink-dark': '#111827',       
+            'accent-slate': '#475569',
+          }
+        }
+      }
+    }
+  </script>
+   
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    body { background-color: #F8F9FA; overflow-x: hidden; }
+    
+    .card-hover { transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.15); }
+    
+    /* Image zoom on hover inside cards */
+    .img-zoom-container { overflow: hidden; }
+    .img-zoom-container img { transition: transform 0.7s ease; }
+    .card-hover:hover .img-zoom-container img { transform: scale(1.08); }
+
+    /* Custom Gradient Text */
+    .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-image: linear-gradient(to right, #0033A0, #E3000F);
+    }
+    
+    /* Decoration line */
+    .decoration-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        width: 0;
+        background-color: #E3000F;
+        transition: width 0.3s ease;
+    }
+    .card-hover:hover .decoration-line {
+        width: 100%;
+    }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- TOP BAR -->
+  <div class="bg-uagrm-blue text-white text-[10px] md:text-xs uppercase tracking-widest py-2 px-6 text-center font-semibold tracking-wider relative z-50">
+    Universidad Autónoma "Gabriel René Moreno" — Gestión, Desarrollo e Innovación Científica
+  </div>
+
+  <!-- HEADER -->
+  <header class="border-b border-gray-200 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-4 group">
+        <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto Mónica von Borries" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+        <div class="flex flex-col leading-none hidden sm:flex">
+            <span class="font-serif font-black text-2xl text-uagrm-blue group-hover:text-uagrm-red transition">IIF-MVB</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-1">Instituto "Mónica von Borries"</span>
+        </div>
+      </a>
+      
+      <!-- NAVEGACIÓN DESKTOP -->
+      <nav class="hidden lg:flex gap-6 text-sm font-bold text-gray-700 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-uagrm-red transition pb-1">Inicio</a>
+        <a href="index.html#lineas" class="hover:text-uagrm-blue transition pb-1">Líneas de Inv.</a>
+        <!-- PESTAÑA ACTIVA -->
+        <a href="#" class="text-uagrm-red border-b-2 border-uagrm-red pb-1">Centros</a>
+        <a href="proyectos.html" class="hover:text-uagrm-blue transition pb-1">Proyectos</a>
+        <a href="difusion.html" class="hover:text-uagrm-blue transition pb-1">Difusión</a>
+      </nav>
+      
+      <button id="mobile-menu-btn" class="lg:hidden text-uagrm-blue text-2xl p-2"><i id="mobile-menu-icon" class="fa-solid fa-bars"></i></button>
+    </div>
+
+    <!-- MENÚ MÓVIL DESPLEGABLE -->
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50">
+        <nav class="flex flex-col p-6 space-y-4 text-sm font-bold text-gray-700 tracking-wide uppercase text-center">
+            <a href="index.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Inicio</a>
+            <a href="index.html#lineas" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Líneas de Investigación</a>
+            <a href="#" class="text-uagrm-red block py-2 bg-gray-50 rounded">Centros de Investigación</a>
+            <a href="proyectos.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Proyectos Científicos</a>
+            <a href="difusion.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Revista y Expociencia</a>
+        </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION: CENTROS Y UNIDADES -->
+  <section class="bg-ink-dark text-white relative overflow-hidden py-24 border-b-4 border-uagrm-red">
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?auto=format&fit=crop&q=80&w=1600" alt="Arquitectura universitaria y estudiantes" class="w-full h-full object-cover opacity-20">
+        <div class="absolute inset-0 bg-gradient-to-r from-ink-dark via-ink-dark/95 to-transparent"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="max-w-3xl" data-aos="fade-right">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-uagrm-blue/20 border border-uagrm-blue/50 text-blue-300 text-[10px] font-bold uppercase tracking-widest rounded-sm mb-6 shadow-sm">
+                <i class="fa-solid fa-network-wired"></i> Estructura Organizativa Facultativa
+            </span>
+            <h1 class="font-serif font-black text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
+                Ecosistema de <span class="text-uagrm-red">Unidades Operativas</span>
+            </h1>
+            <p class="text-lg text-gray-300 font-light leading-relaxed mb-8">
+                La investigación no ocurre de forma aislada. Articulamos el talento científico a través de una sólida estructura conformada por <strong>Centros Especializados</strong>, <strong>Grupos de Investigación</strong> y <strong>Sociedades Científicas Estudiantiles</strong>.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#centros" class="px-8 py-3 bg-uagrm-red text-white text-xs font-bold uppercase tracking-widest hover:bg-red-800 transition rounded shadow-lg flex items-center gap-2">
+                    Ver Centros
+                </a>
+                <a href="#grupos" class="px-8 py-3 bg-transparent border border-white text-white text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-ink-dark transition rounded shadow-lg flex items-center gap-2">
+                    Grupos y Sociedades
+                </a>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- JERARQUÍA REGLAMENTARIA -->
+  <section class="py-16 bg-white border-b border-gray-200 relative -mt-8 z-20 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.1)]">
+      <div class="max-w-7xl mx-auto px-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <!-- Instituto -->
+              <div class="text-center p-6" data-aos="fade-up" data-aos-delay="100">
+                  <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl text-gray-800 border border-gray-200 shadow-sm">
+                      <i class="fa-solid fa-sitemap"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Instituto de Investigación</h4>
+                  <p class="text-xs text-gray-500">Unidad gestora y coordinadora principal a nivel de Facultad (Art. 22).</p>
+              </div>
+              <!-- Centros -->
+              <div class="text-center p-6 border-t md:border-t-0 md:border-l border-gray-200 relative" data-aos="fade-up" data-aos-delay="200">
+                  <!-- Flecha conectora (Desktop) -->
+                  <div class="hidden md:block absolute top-1/4 -left-6 text-gray-300 text-xl"><i class="fa-solid fa-chevron-right"></i></div>
+                  
+                  <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl text-uagrm-blue shadow-md border border-blue-100">
+                      <i class="fa-solid fa-building-flag"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Centros de Investigación</h4>
+                  <p class="text-xs text-gray-500">Unidades operativas disciplinarias que evalúan y coordinan proyectos (Art. 26).</p>
+              </div>
+              <!-- Grupos y Sociedades -->
+              <div class="text-center p-6 border-t md:border-t-0 md:border-l border-gray-200 relative" data-aos="fade-up" data-aos-delay="300">
+                  <!-- Flecha conectora (Desktop) -->
+                  <div class="hidden md:block absolute top-1/4 -left-6 text-gray-300 text-xl"><i class="fa-solid fa-chevron-right"></i></div>
+
+                  <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl text-uagrm-red shadow-md border border-red-100">
+                      <i class="fa-solid fa-users-gear"></i>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">Grupos y Sociedades</h4>
+                  <p class="text-xs text-gray-500">Células base conformadas por docentes y estudiantes que ejecutan la investigación (Art. 32 y 37).</p>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- LOS 5 CENTROS DE INVESTIGACIÓN (DETALLADOS) -->
+  <section id="centros" class="py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+          <div class="text-center mb-16" data-aos="fade-down">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-2 block">Núcleos de Especialidad (Art. 26)</span>
+              <h2 class="font-serif text-4xl font-bold text-uagrm-blue mb-4">Nuestros Centros de Investigación</h2>
+              <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-lg">
+                  La Facultad opera a través de cinco centros especializados, orientados en disciplinas específicas para abordar los problemas estructurales de la región.
+              </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              
+              <!-- Centro 1: Regional -->
+              <div class="card-hover bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="h-48 img-zoom-container relative">
+                      <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&q=80&w=800" alt="Política y debate" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-uagrm-blue/90 to-transparent"></div>
+                      <div class="absolute bottom-4 left-6 text-white flex items-center gap-3">
+                          <i class="fa-solid fa-map-location-dot text-2xl"></i>
+                          <h3 class="font-serif font-bold text-xl leading-tight">Centro de Inv.<br>Regional</h3>
+                      </div>
+                  </div>
+                  <div class="p-6 relative pb-12">
+                      <span class="bg-blue-50 text-uagrm-blue text-[9px] font-bold uppercase px-2 py-1 rounded inline-block mb-3">Ciencias Políticas</span>
+                      <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                          Enfocado en el análisis sociopolítico, las dinámicas de poder, geopolítica, políticas públicas y el desarrollo regional en el contexto del Estado Plurinacional.
+                      </p>
+                      <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc list-inside ml-2">
+                          <li>Sistemas Electorales y Democracia</li>
+                          <li>Geopolítica y Recursos Estratégicos</li>
+                          <li>Análisis de Políticas Subnacionales</li>
+                      </ul>
+                      <div class="decoration-line"></div>
+                  </div>
+              </div>
+
+              <!-- Centro 2: Trabajo Social -->
+              <div class="card-hover bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="h-48 img-zoom-container relative">
+                      <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=800" alt="Comunidad y trabajo social" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-uagrm-red/90 to-transparent"></div>
+                      <div class="absolute bottom-4 left-6 text-white flex items-center gap-3">
+                          <i class="fa-solid fa-people-roof text-2xl"></i>
+                          <h3 class="font-serif font-bold text-xl leading-tight">Centro de Inv. en<br>Trabajo Social</h3>
+                      </div>
+                  </div>
+                  <div class="p-6 relative pb-12">
+                      <span class="bg-red-50 text-uagrm-red text-[9px] font-bold uppercase px-2 py-1 rounded inline-block mb-3">Sociedad y Bienestar</span>
+                      <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                          Dedicado a la investigación de vulnerabilidades sociales, estructura familiar, economía del cuidado y el diseño de estrategias de intervención comunitaria.
+                      </p>
+                      <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc list-inside ml-2">
+                          <li>Resiliencia Comunitaria y Pobreza</li>
+                          <li>Violencia de Género y Redes Familiares</li>
+                          <li>Evaluación de Programas Sociales</li>
+                      </ul>
+                      <div class="decoration-line"></div>
+                  </div>
+              </div>
+
+              <!-- Centro 3: Conciliación -->
+              <div class="card-hover bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="h-48 img-zoom-container relative">
+                      <img src="https://images.unsplash.com/photo-1552502135-e6c8d76e737c?auto=format&fit=crop&q=80&w=800" alt="Acuerdo y reunión" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-uagrm-blue/90 to-transparent"></div>
+                      <div class="absolute bottom-4 left-6 text-white flex items-center gap-3">
+                          <i class="fa-solid fa-handshake-angle text-2xl"></i>
+                          <h3 class="font-serif font-bold text-xl leading-tight">Centro de<br>Conciliación</h3>
+                      </div>
+                  </div>
+                  <div class="p-6 relative pb-12">
+                      <span class="bg-blue-50 text-uagrm-blue text-[9px] font-bold uppercase px-2 py-1 rounded inline-block mb-3">Resolución de Conflictos</span>
+                      <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                          Investigación teórica y aplicada en Métodos Alternativos de Resolución de Controversias (MARCs), mediación social y la construcción de una cultura de paz.
+                      </p>
+                      <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc list-inside ml-2">
+                          <li>Mediación Agraria y Territorial</li>
+                          <li>Conciliación Extrajudicial</li>
+                          <li>Psicología del Conflicto Social</li>
+                      </ul>
+                      <div class="decoration-line"></div>
+                  </div>
+              </div>
+
+              <!-- Centro 4: Forense -->
+              <div class="card-hover bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative lg:col-start-1 lg:col-span-1 md:col-span-2 lg:translate-x-1/2" data-aos="zoom-in" data-aos-delay="400">
+                  <div class="h-48 img-zoom-container relative">
+                      <img src="https://images.unsplash.com/photo-1585822765874-9b93563dc7df?auto=format&fit=crop&q=80&w=800" alt="Microscopio e investigación" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-uagrm-red/90 to-transparent"></div>
+                      <div class="absolute bottom-4 left-6 text-white flex items-center gap-3">
+                          <i class="fa-solid fa-microscope text-2xl"></i>
+                          <h3 class="font-serif font-bold text-xl leading-tight">Centro de Inv.<br>Forense</h3>
+                      </div>
+                  </div>
+                  <div class="p-6 relative pb-12">
+                      <span class="bg-red-50 text-uagrm-red text-[9px] font-bold uppercase px-2 py-1 rounded inline-block mb-3">Ciencias Criminológicas</span>
+                      <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                          Innovación técnico-científica aplicada al derecho penal. Desarrolla métodos de perfilación criminal, cadena de custodia y análisis de evidencia digital e informática.
+                      </p>
+                      <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc list-inside ml-2">
+                          <li>Cibercrimen y Evidencia Digital</li>
+                          <li>Perfilación Criminológica Moderna</li>
+                          <li>Medicina Legal y Peritaje Judicial</li>
+                      </ul>
+                      <div class="decoration-line"></div>
+                  </div>
+              </div>
+
+              <!-- Centro 5: Pueblos Indígenas -->
+              <div class="card-hover bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative lg:col-start-2 lg:col-span-1 md:col-span-2 lg:translate-x-1/2" data-aos="zoom-in" data-aos-delay="500">
+                  <div class="h-48 img-zoom-container relative">
+                      <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800" alt="Justicia y balanza" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-uagrm-blue/90 to-transparent"></div>
+                      <div class="absolute bottom-4 left-6 text-white flex items-center gap-3">
+                          <i class="fa-solid fa-feather-pointed text-2xl"></i>
+                          <h3 class="font-serif font-bold text-xl leading-tight">Centro de Inv. de<br>Pueblos Indígenas</h3>
+                      </div>
+                  </div>
+                  <div class="p-6 relative pb-12">
+                      <span class="bg-blue-50 text-uagrm-blue text-[9px] font-bold uppercase px-2 py-1 rounded inline-block mb-3">Derechos e Interculturalidad</span>
+                      <p class="text-sm text-gray-600 leading-relaxed mb-4">
+                          Estudio de los sistemas jurídicos plurales, autonomía indígena, justicia originaria campesina y la preservación de los saberes y derechos territoriales ancestrales.
+                      </p>
+                      <ul class="text-xs text-gray-500 space-y-2 mb-4 list-disc list-inside ml-2">
+                          <li>Pluralismo Jurídico e Interculturalidad</li>
+                          <li>Conflictos por Tierra y Territorio (TIOCs)</li>
+                          <li>Consulta Previa y Medio Ambiente</li>
+                      </ul>
+                      <div class="decoration-line"></div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </section>
+
+  <!-- SECCIÓN GRUPOS Y SOCIEDADES (Las bases de la investigación) -->
+  <section id="grupos" class="py-24 bg-white border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              
+              <!-- Grupos de Investigación -->
+              <div data-aos="fade-right">
+                  <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 text-uagrm-red text-2xl mb-6 shadow-sm border border-red-100">
+                      <i class="fa-solid fa-network-wired"></i>
+                  </div>
+                  <h3 class="font-serif text-3xl font-bold text-gray-900 mb-4">Grupos de Investigación</h3>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-6 block">Artículos 32 al 35 del Reglamento</span>
+                  <p class="text-gray-600 leading-relaxed mb-6">
+                      Son la <strong>célula fundamental</strong> del sistema. Conformados por profesores investigadores, estudiantes y administrativos, los Grupos son los encargados de formular y ejecutar directamente los proyectos aprobados. 
+                  </p>
+                  <ul class="space-y-4 text-sm text-gray-600">
+                      <li class="flex items-start gap-3">
+                          <i class="fa-solid fa-check text-uagrm-red mt-1"></i>
+                          <span>Se adscriben a uno de los Centros de Investigación según su área de afinidad.</span>
+                      </li>
+                      <li class="flex items-start gap-3">
+                          <i class="fa-solid fa-check text-uagrm-red mt-1"></i>
+                          <span>Deben contar con un <strong>Investigador Principal</strong> (Docente) como responsable.</span>
+                      </li>
+                      <li class="flex items-start gap-3">
+                          <i class="fa-solid fa-check text-uagrm-red mt-1"></i>
+                          <span>Evaluados anualmente por su producción científica e impacto.</span>
+                      </li>
+                  </ul>
+                  <div class="mt-8">
+                      <button class="px-6 py-3 border-2 border-gray-200 text-gray-700 text-xs font-bold uppercase rounded-lg hover:border-uagrm-red hover:text-uagrm-red transition shadow-sm">
+                          Directorio de Grupos Registrados
+                      </button>
+                  </div>
+              </div>
+
+              <!-- Sociedades Científicas -->
+              <div class="bg-uagrm-blue rounded-3xl p-10 text-white relative overflow-hidden shadow-2xl" data-aos="fade-left">
+                  <div class="absolute -right-10 -top-10 text-9xl opacity-10"><i class="fa-solid fa-graduation-cap"></i></div>
+                  <div class="relative z-10">
+                      <h3 class="font-serif text-3xl font-bold mb-4">Sociedades Científicas Estudiantiles</h3>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-blue-200 mb-6 block">Artículo 37 del Reglamento</span>
+                      <p class="text-blue-50 leading-relaxed mb-8">
+                          Las Sociedades Científicas (SS.CC.) fomentan el espíritu crítico y la investigación temprana en nuestros estudiantes de pregrado. Coordinan estrechamente con los Centros y organizan actividades propias para la formación continua de los futuros investigadores.
+                      </p>
+                      
+                      <div class="bg-blue-800/50 p-6 rounded-xl border border-blue-700/50 mb-8 backdrop-blur-sm">
+                          <h4 class="font-bold text-sm mb-3 text-blue-100 uppercase tracking-wide">Beneficios de Afiliarse:</h4>
+                          <ul class="space-y-3 text-sm text-blue-50">
+                              <li class="flex items-center gap-3">
+                                  <i class="fa-solid fa-angle-right text-blue-300"></i> Participación preferencial en Expociencia.
+                              </li>
+                              <li class="flex items-center gap-3">
+                                  <i class="fa-solid fa-angle-right text-blue-300"></i> Asesoría de investigadores senior.
+                              </li>
+                              <li class="flex items-center gap-3">
+                                  <i class="fa-solid fa-angle-right text-blue-300"></i> Certificación extracurricular válida (R.A.).
+                              </li>
+                          </ul>
+                      </div>
+
+                      <button class="w-full sm:w-auto px-8 py-4 bg-white text-uagrm-blue text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-gray-100 transition shadow-lg text-center">
+                          Quiero unirme a una SS.CC.
+                      </button>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </section>
+
+  <!-- FOOTER (Constante) -->
+  <footer class="bg-ink-dark text-gray-300 py-16 mt-auto border-t-4 border-uagrm-red">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        
+        <!-- Logo y Descripción -->
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+             <div class="bg-white p-2 rounded-lg shadow-md inline-block transform hover:scale-105 transition">
+                 <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto MVB Footer" class="h-10 w-auto object-contain">
+             </div>
+             <span class="font-serif font-black text-2xl text-white tracking-wide">IIF-MVB</span>
+          </div>
+          <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+            Instituto de Investigación Facultativo "Mónica von Borries". Estructurando y sustentando el desarrollo científico de la Universidad Autónoma Gabriel René Moreno.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- Enlaces Rápidos -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Navegación</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="index.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Inicio</a></li>
+            <li><a href="index.html#lineas" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Líneas de Investigación</a></li>
+            <li><a href="#" class="text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-uagrm-red"></i> Centros de Investigación</a></li>
+            <li><a href="proyectos.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Proyectos Activos</a></li>
+            <li><a href="difusion.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Revista y Expociencia</a></li>
+          </ul>
+        </div>
+
+        <!-- Contacto -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Contacto Institucional</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-envelope mt-1 text-uagrm-red"></i>
+              <span class="break-all hover:text-white transition cursor-pointer">instituto.mvb@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-location-dot mt-1 text-uagrm-red"></i>
+              <span>Campus Universitario UAGRM<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-phone mt-1 text-uagrm-red"></i>
+              <span>+591 (3) 333-XXXX</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Autoridades -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Autoridades Universitarias</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="bg-gray-800 p-3 rounded border-l-2 border-uagrm-red">
+                <span class="block font-bold text-gray-200">Marcio Aranda Garcia</span>
+                <span class="text-[10px] text-uagrm-red uppercase tracking-wide font-bold">Director del Instituto</span>
+            </li>
+            <li class="p-3">
+                <span class="block font-bold text-gray-400">MSc. Carlos Martinez Bonilla</span>
+                <span class="text-[10px] text-gray-500 uppercase tracking-wide">Presidente ICU - UAGRM</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      
+      <!-- Bottom Footer -->
+      <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-gray-500 font-medium tracking-widest uppercase text-center md:text-left">
+          Universidad Autónoma "Gabriel René Moreno" <br class="md:hidden">© <span id="year"></span> Todos los derechos reservados.
+        </p>
+        <div class="flex gap-6">
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Reglamento DICIT</a>
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Políticas de Privacidad</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Inicializar Animaciones
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    // Año Footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    // Lógica del Menú Móvil
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        if (menu.classList.contains('hidden')) {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+        } else {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        }
+    });
+
+  </script>
+</body>
+</html>
