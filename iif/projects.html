@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Proyectos de Investigación — IIF-MVB</title>
+  <meta name="description" content="Banco de Proyectos y Desarrollo Científico del Instituto Mónica von Borries." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { 
+            sans: ["Inter", "sans-serif"], 
+            serif: ["Merriweather", "serif"] 
+          },
+          colors: {
+            'uagrm-blue': '#0033A0',     
+            'uagrm-red': '#E3000F', 
+            'uagrm-light': '#F8F9FA',
+            'ink-dark': '#111827',       
+            'accent-slate': '#475569',
+          }
+        }
+      }
+    }
+  </script>
+   
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    body { background-color: #F8F9FA; overflow-x: hidden; }
+    
+    /* Flowchart Line connecting steps */
+    .flow-line::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -50%;
+        width: 100%;
+        height: 2px;
+        background: url('data:image/svg+xml;utf8,<svg width="100%" height="2" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="1" x2="100%" y2="1" stroke="%23cbd5e1" stroke-width="2" stroke-dasharray="6,6"/></svg>');
+        z-index: 0;
+    }
+    @media (max-width: 768px) {
+        .flow-line::after { display: none; }
+    }
+    
+    .filter-btn.active {
+        background-color: #0033A0;
+        color: white;
+        border-color: #0033A0;
+    }
+
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15); }
+    
+    /* Animación para la alerta personalizada */
+    @keyframes slideInUp {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .toast-alert { animation: slideInUp 0.5s ease-out forwards; }
+  </style>
+</head>
+<body class="text-ink-dark font-sans antialiased flex flex-col min-h-screen">
+
+  <!-- ALERTA PERSONALIZADA SOLICITADA -->
+  <div id="custom-alert" class="toast-alert fixed bottom-6 right-6 bg-red-600 border-l-4 border-black text-white p-5 rounded-lg shadow-2xl z-[9999] flex items-start gap-4 max-w-sm">
+      <i class="fa-solid fa-triangle-exclamation text-3xl mt-1"></i>
+      <div>
+          <h4 class="font-black uppercase tracking-wider text-sm mb-1">Alerta del Sistema</h4>
+          <p class="text-sm font-light">"Estoy fallando arto". Mil disculpas che por enredarme antes. Aquí te entrego la página de proyectos separada y limpia.</p>
+      </div>
+      <button onclick="document.getElementById('custom-alert').style.display='none'" class="text-white hover:text-black transition ml-2">
+          <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="bg-uagrm-blue text-white text-[10px] md:text-xs uppercase tracking-widest py-2 px-6 text-center font-semibold tracking-wider relative z-50">
+    Universidad Autónoma "Gabriel René Moreno" — Gestión, Desarrollo e Innovación Científica
+  </div>
+
+  <!-- HEADER -->
+  <header class="border-b border-gray-200 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-4 group">
+        <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto Mónica von Borries" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+        <div class="flex flex-col leading-none hidden sm:flex">
+            <span class="font-serif font-black text-2xl text-uagrm-blue group-hover:text-uagrm-red transition">IIF-MVB</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mt-1">Instituto "Mónica von Borries"</span>
+        </div>
+      </a>
+      
+      <!-- NAVEGACIÓN DESKTOP (Enlaces apuntan al index) -->
+      <nav class="hidden lg:flex gap-6 text-sm font-bold text-gray-700 tracking-wide uppercase">
+        <a href="index.html" class="hover:text-uagrm-red transition pb-1">Inicio</a>
+        <a href="index.html#lineas" class="hover:text-uagrm-blue transition pb-1">Líneas de Inv.</a>
+        <a href="index.html#centros" class="hover:text-uagrm-blue transition pb-1">Centros</a>
+        <!-- PESTAÑA ACTIVA -->
+        <a href="proyectos.html" class="text-uagrm-red border-b-2 border-uagrm-red pb-1">Proyectos</a>
+        <a href="index.html#difusion" class="hover:text-uagrm-blue transition pb-1">Difusión</a>
+      </nav>
+      
+      <button id="mobile-menu-btn" class="lg:hidden text-uagrm-blue text-2xl p-2"><i id="mobile-menu-icon" class="fa-solid fa-bars"></i></button>
+    </div>
+
+    <!-- MENÚ MÓVIL DESPLEGABLE -->
+    <div id="mobile-menu" class="hidden lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-200 shadow-xl z-50">
+        <nav class="flex flex-col p-6 space-y-4 text-sm font-bold text-gray-700 tracking-wide uppercase text-center">
+            <a href="index.html" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Inicio</a>
+            <a href="index.html#lineas" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Líneas de Investigación</a>
+            <a href="index.html#centros" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Centros de Investigación</a>
+            <a href="proyectos.html" class="text-uagrm-red block py-2 bg-gray-50 rounded">Proyectos Científicos</a>
+            <a href="index.html#difusion" class="hover:text-uagrm-blue hover:bg-gray-50 block py-2 transition rounded">Revista y Expociencia</a>
+        </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION: PROYECTOS -->
+  <section class="bg-ink-dark text-white relative overflow-hidden py-24 border-b-4 border-uagrm-red">
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1600" alt="Investigadores trabajando" class="w-full h-full object-cover opacity-20">
+        <div class="absolute inset-0 bg-gradient-to-r from-ink-dark via-ink-dark/90 to-transparent"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="max-w-3xl" data-aos="fade-right">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-uagrm-red/20 border border-uagrm-red/50 text-uagrm-red text-[10px] font-bold uppercase tracking-widest rounded-sm mb-6 shadow-sm">
+                <i class="fa-solid fa-microscope"></i> Capítulo IV & VII - Reglamento General
+            </span>
+            <h1 class="font-serif font-black text-4xl sm:text-5xl md:text-6xl mb-6 leading-tight">
+                Banco de Proyectos y <br><span class="text-blue-400">Talento Científico</span>
+            </h1>
+            <p class="text-lg text-gray-300 font-light leading-relaxed mb-8">
+                La investigación facultativa es impulsada por profesores, tesistas y estudiantes trabajando articuladamente. Explora el registro oficial de programas y proyectos de investigación en actual ejecución.
+            </p>
+            <div class="flex gap-4">
+                <a href="#directorio" class="px-8 py-4 bg-uagrm-blue text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-600 transition rounded shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass"></i> Explorar Directorio
+                </a>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- MÉTRICAS Y TALENTO HUMANO -->
+  <section class="py-16 bg-gray-50 border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+          
+          <!-- Contadores -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 -mt-28 relative z-20" data-aos="fade-up">
+              <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center transform hover:-translate-y-2 transition duration-300">
+                  <div class="text-4xl font-black text-uagrm-blue mb-1" id="counter1">0</div>
+                  <div class="w-8 h-1 bg-uagrm-blue mx-auto mb-2 rounded"></div>
+                  <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Proyectos Activos</div>
+              </div>
+              <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center transform hover:-translate-y-2 transition duration-300">
+                  <div class="text-4xl font-black text-uagrm-red mb-1" id="counter2">0</div>
+                  <div class="w-8 h-1 bg-uagrm-red mx-auto mb-2 rounded"></div>
+                  <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Profesores Investigadores</div>
+              </div>
+              <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center transform hover:-translate-y-2 transition duration-300">
+                  <div class="text-4xl font-black text-uagrm-blue mb-1" id="counter3">0</div>
+                  <div class="w-8 h-1 bg-uagrm-blue mx-auto mb-2 rounded"></div>
+                  <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Tesistas Adscritos</div>
+              </div>
+              <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center transform hover:-translate-y-2 transition duration-300">
+                  <div class="text-4xl font-black text-uagrm-red mb-1" id="counter4">0</div>
+                  <div class="w-8 h-1 bg-uagrm-red mx-auto mb-2 rounded"></div>
+                  <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Líneas de Investigación</div>
+              </div>
+          </div>
+
+          <!-- Roles Institucionales (Art 63, 68, 69) -->
+          <div class="text-center mb-10" data-aos="fade-in">
+              <h3 class="font-serif text-3xl font-bold text-gray-800">Ecosistema del Investigador</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+              <div class="p-8 border-l-4 border-uagrm-blue bg-white shadow-sm rounded-r-lg hover:shadow-md transition" data-aos="fade-up" data-aos-delay="100">
+                  <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-3 text-lg"><i class="fa-solid fa-user-tie text-uagrm-blue text-3xl"></i> Profesores <br> Investigadores</h4>
+                  <p class="text-sm text-gray-600 leading-relaxed">Líderes de proyectos con probada trayectoria y dedicación exclusiva a la investigación científica y tutorías. Responsables de velar por el rigor de cada fase (Art. 63).</p>
+              </div>
+              <div class="p-8 border-l-4 border-uagrm-red bg-white shadow-sm rounded-r-lg hover:shadow-md transition" data-aos="fade-up" data-aos-delay="200">
+                  <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-3 text-lg"><i class="fa-solid fa-user-graduate text-uagrm-red text-3xl"></i> Tesistas y <br> Posgrado</h4>
+                  <p class="text-sm text-gray-600 leading-relaxed">Desarrollan sus tesis de maestría o doctorado ancladas a las líneas de investigación del Instituto, bajo la dirección de investigadores senior (Art. 68).</p>
+              </div>
+              <div class="p-8 border-l-4 border-uagrm-blue bg-white shadow-sm rounded-r-lg hover:shadow-md transition" data-aos="fade-up" data-aos-delay="300">
+                  <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-3 text-lg"><i class="fa-solid fa-users text-uagrm-blue text-3xl"></i> Estudiantes <br> de Grado</h4>
+                  <p class="text-sm text-gray-600 leading-relaxed">Se integran a los grupos de investigación y sociedades científicas para formarse y desarrollar habilidades prácticas desde etapas tempranas (Art. 69).</p>
+              </div>
+          </div>
+
+          <!-- FLUJOGRAMA: Ciclo de Vida del Proyecto -->
+          <div class="text-center mb-16" data-aos="fade-down">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-2 block">Metodología Institucional</span>
+              <h3 class="font-serif text-3xl font-bold text-gray-800">Ciclo de Vida de los Proyectos</h3>
+              <p class="text-gray-600 max-w-2xl mx-auto mt-4 text-sm">Cada proyecto registrado en nuestro Instituto debe cumplir estrictamente las fases metodológicas que aseguran su validez y posterior transferencia (Art. 51 y 53).</p>
+          </div>
+          
+          <div class="flex flex-col md:flex-row justify-between items-start relative gap-8 md:gap-4 px-4 md:px-0">
+              
+              <div class="relative w-full md:w-1/4 flex flex-col items-center text-center flow-line group" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="w-24 h-24 bg-white rounded-full border-4 border-uagrm-blue flex items-center justify-center mb-4 z-10 relative group-hover:scale-110 group-hover:bg-blue-50 transition shadow-lg text-uagrm-blue">
+                      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">1. Presentación</h4>
+                  <p class="text-xs text-gray-500 px-2 leading-relaxed">El Investigador Principal presenta la propuesta anclada a las líneas vigentes.</p>
+              </div>
+
+              <div class="relative w-full md:w-1/4 flex flex-col items-center text-center flow-line group" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="w-24 h-24 bg-white rounded-full border-4 border-uagrm-red flex items-center justify-center mb-4 z-10 relative group-hover:scale-110 group-hover:bg-red-50 transition shadow-lg text-uagrm-red">
+                      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">2. Evaluación</h4>
+                  <p class="text-xs text-gray-500 px-2 leading-relaxed">El Comité Científico y el Comité de Ética (CEIBIC) aprueban el rigor y viabilidad.</p>
+              </div>
+
+              <div class="relative w-full md:w-1/4 flex flex-col items-center text-center flow-line group" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="w-24 h-24 bg-white rounded-full border-4 border-uagrm-blue flex items-center justify-center mb-4 z-10 relative group-hover:scale-110 group-hover:bg-blue-50 transition shadow-lg text-uagrm-blue">
+                      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">3. Ejecución</h4>
+                  <p class="text-xs text-gray-500 px-2 leading-relaxed">Desarrollo de campo y laboratorio mediante Grupos de Investigación.</p>
+              </div>
+
+              <div class="relative w-full md:w-1/4 flex flex-col items-center text-center group" data-aos="zoom-in" data-aos-delay="400">
+                  <div class="w-24 h-24 bg-uagrm-blue rounded-full border-4 border-uagrm-blue flex items-center justify-center mb-4 z-10 relative group-hover:scale-110 transition shadow-lg text-white">
+                      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12a4 4 0 108 0 4 4 0 00-8 0z"></path></svg>
+                  </div>
+                  <h4 class="font-bold text-gray-900 mb-2">4. Transferencia</h4>
+                  <p class="text-xs text-gray-500 px-2 leading-relaxed">Cierre formal, publicación en Revista Indexada y Expociencia.</p>
+              </div>
+
+          </div>
+      </div>
+  </section>
+
+  <!-- DIRECTORIO DE PROYECTOS (Tarjetas Animadas) -->
+  <section id="directorio" class="py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+          
+          <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 border-b border-gray-200 pb-6" data-aos="fade-up">
+              <div>
+                  <h2 class="font-serif text-3xl font-bold text-gray-900">Directorio Oficial de Proyectos</h2>
+                  <p class="text-gray-500 text-sm mt-2">Listado de estudios con resolución de aprobación del Comité Científico.</p>
+              </div>
+              
+              <!-- Filtros de UI -->
+              <div class="flex flex-wrap gap-2">
+                  <button class="filter-btn active px-5 py-2 rounded-full border border-gray-300 text-[10px] font-bold uppercase tracking-widest transition hover:bg-gray-100">Todos</button>
+                  <button class="filter-btn px-5 py-2 rounded-full border border-gray-300 text-gray-600 text-[10px] font-bold uppercase tracking-widest transition hover:bg-gray-100">Fase de Campo</button>
+                  <button class="filter-btn px-5 py-2 rounded-full border border-gray-300 text-gray-600 text-[10px] font-bold uppercase tracking-widest transition hover:bg-gray-100">Completados</button>
+              </div>
+          </div>
+
+          <!-- Grid de Tarjetas de Proyectos -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              
+              <!-- Proyecto 1: Regional -->
+              <article class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col relative" data-aos="fade-up" data-aos-delay="100">
+                  <div class="h-52 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" alt="" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div class="absolute top-4 left-4 bg-white/95 text-uagrm-blue text-[10px] font-bold px-3 py-1.5 uppercase rounded-full shadow-sm flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Fase 3: Ejecución
+                      </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-grow relative">
+                      <div class="absolute -top-8 right-6 w-16 h-16 bg-white rounded-full border-4 border-gray-50 flex items-center justify-center shadow-lg text-uagrm-blue text-2xl">
+                          <i class="fa-solid fa-earth-americas"></i>
+                      </div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-3 block">Centro de Inv. Regional</span>
+                      <h4 class="font-serif font-bold text-xl text-gray-900 mb-4 leading-snug">Impacto de la Transición Energética en la Geopolítica Regional</h4>
+                      
+                      <div class="flex items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <div class="w-10 h-10 rounded-full bg-uagrm-blue text-white flex items-center justify-center text-xs font-bold">IP</div>
+                          <div>
+                              <p class="text-sm font-bold text-gray-800">Dr. Roberto Siles M.</p>
+                              <p class="text-[10px] uppercase text-gray-500 tracking-wider">Profesor Investigador</p>
+                          </div>
+                      </div>
+                      <p class="text-sm text-gray-600 line-clamp-3 mb-8 flex-grow">Análisis de la reconfiguración del poder político y social en Sudamérica a partir de la explotación de recursos estratégicos litíferos en Bolivia.</p>
+                      
+                      <!-- Barra de progreso -->
+                      <div class="mt-auto">
+                          <div class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-2">
+                              <span>Avance General</span>
+                              <span class="text-uagrm-blue">75%</span>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                              <div class="bg-uagrm-blue h-2 rounded-full" style="width: 75%"></div>
+                          </div>
+                      </div>
+                  </div>
+              </article>
+
+              <!-- Proyecto 2: Trabajo Social -->
+              <article class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col relative" data-aos="fade-up" data-aos-delay="200">
+                  <div class="h-52 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800" alt="" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div class="absolute top-4 left-4 bg-white/95 text-uagrm-red text-[10px] font-bold px-3 py-1.5 uppercase rounded-full shadow-sm flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-yellow-500"></span> Fase 2: Recolección
+                      </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-grow relative">
+                      <div class="absolute -top-8 right-6 w-16 h-16 bg-white rounded-full border-4 border-gray-50 flex items-center justify-center shadow-lg text-uagrm-red text-2xl">
+                          <i class="fa-solid fa-people-roof"></i>
+                      </div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-blue mb-3 block">C.I. Trabajo Social</span>
+                      <h4 class="font-serif font-bold text-xl text-gray-900 mb-4 leading-snug">Estrategias de Resiliencia en Sectores Periurbanos de Santa Cruz</h4>
+                      
+                      <div class="flex items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <div class="w-10 h-10 rounded-full bg-uagrm-red text-white flex items-center justify-center text-xs font-bold">IP</div>
+                          <div>
+                              <p class="text-sm font-bold text-gray-800">MSc. Ana Maria Paz</p>
+                              <p class="text-[10px] uppercase text-gray-500 tracking-wider">Profesora Investigadora</p>
+                          </div>
+                      </div>
+                      <p class="text-sm text-gray-600 line-clamp-3 mb-8 flex-grow">Estudio mixto sobre las redes de apoyo comunitario y la evaluación de políticas sociales efectivas frente a la crisis económica y desempleo estructural.</p>
+                      
+                      <!-- Barra de progreso -->
+                      <div class="mt-auto">
+                          <div class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-2">
+                              <span>Avance General</span>
+                              <span class="text-uagrm-red">40%</span>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                              <div class="bg-uagrm-red h-2 rounded-full" style="width: 40%"></div>
+                          </div>
+                      </div>
+                  </div>
+              </article>
+
+              <!-- Proyecto 3: Pueblos Indígenas -->
+              <article class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col relative" data-aos="fade-up" data-aos-delay="300">
+                  <div class="h-52 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800" alt="" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div class="absolute top-4 left-4 bg-white/95 text-uagrm-blue text-[10px] font-bold px-3 py-1.5 uppercase rounded-full shadow-sm flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-uagrm-blue"></span> Fase 4: Transferencia
+                      </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-grow relative">
+                      <div class="absolute -top-8 right-6 w-16 h-16 bg-white rounded-full border-4 border-gray-50 flex items-center justify-center shadow-lg text-gray-800 text-2xl">
+                          <i class="fa-solid fa-scale-balanced"></i>
+                      </div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-3 block">C.I. Pueblos Indígenas</span>
+                      <h4 class="font-serif font-bold text-xl text-gray-900 mb-4 leading-snug">Pluralismo Jurídico y Justicia Comunitaria en Tierras Bajas</h4>
+                      
+                      <div class="flex items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <div class="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-xs font-bold">IP</div>
+                          <div>
+                              <p class="text-sm font-bold text-gray-800">Dr. Carlos Vaca</p>
+                              <p class="text-[10px] uppercase text-gray-500 tracking-wider">Profesor Investigador</p>
+                          </div>
+                      </div>
+                      <p class="text-sm text-gray-600 line-clamp-3 mb-8 flex-grow">Mapeo sistemático de las tensiones y complementariedades entre la jurisdicción ordinaria y la justicia indígena originaria campesina en Santa Cruz.</p>
+                      
+                      <!-- Barra de progreso -->
+                      <div class="mt-auto">
+                          <div class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-2">
+                              <span>Avance General</span>
+                              <span class="text-gray-800">95%</span>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                              <div class="bg-gray-800 h-2 rounded-full" style="width: 95%"></div>
+                          </div>
+                      </div>
+                  </div>
+              </article>
+              
+              <!-- Proyecto 4: Forense -->
+              <article class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col relative" data-aos="fade-up" data-aos-delay="400">
+                  <div class="h-52 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?auto=format&fit=crop&q=80&w=800" alt="" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div class="absolute top-4 left-4 bg-white/95 text-uagrm-blue text-[10px] font-bold px-3 py-1.5 uppercase rounded-full shadow-sm flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-gray-400"></span> Fase 1: Planificación
+                      </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-grow relative">
+                      <div class="absolute -top-8 right-6 w-16 h-16 bg-white rounded-full border-4 border-gray-50 flex items-center justify-center shadow-lg text-uagrm-blue text-2xl">
+                          <i class="fa-solid fa-fingerprint"></i>
+                      </div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-red mb-3 block">C.I. Forense</span>
+                      <h4 class="font-serif font-bold text-xl text-gray-900 mb-4 leading-snug">Técnicas de Perfilación en Delitos Informáticos</h4>
+                      
+                      <div class="flex items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <div class="w-10 h-10 rounded-full bg-uagrm-blue text-white flex items-center justify-center text-xs font-bold">IA</div>
+                          <div>
+                              <p class="text-sm font-bold text-gray-800">MSc. Daniela Roca</p>
+                              <p class="text-[10px] uppercase text-gray-500 tracking-wider">Investigadora Asociada</p>
+                          </div>
+                      </div>
+                      <p class="text-sm text-gray-600 line-clamp-3 mb-8 flex-grow">Desarrollo de un marco analítico y técnico para la recolección de evidencia digital en fraudes financieros electrónicos en el departamento.</p>
+                      
+                      <!-- Barra de progreso -->
+                      <div class="mt-auto">
+                          <div class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-2">
+                              <span>Avance General</span>
+                              <span class="text-uagrm-blue">15%</span>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                              <div class="bg-uagrm-blue h-2 rounded-full" style="width: 15%"></div>
+                          </div>
+                      </div>
+                  </div>
+              </article>
+
+              <!-- Proyecto 5: Conciliación -->
+              <article class="card-hover bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col relative" data-aos="fade-up" data-aos-delay="500">
+                  <div class="h-52 overflow-hidden relative">
+                      <img src="https://images.unsplash.com/photo-1552502135-e6c8d76e737c?auto=format&fit=crop&q=80&w=800" alt="" class="w-full h-full object-cover">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div class="absolute top-4 left-4 bg-white/95 text-uagrm-red text-[10px] font-bold px-3 py-1.5 uppercase rounded-full shadow-sm flex items-center gap-2">
+                          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Fase 3: Ejecución
+                      </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-grow relative">
+                      <div class="absolute -top-8 right-6 w-16 h-16 bg-white rounded-full border-4 border-gray-50 flex items-center justify-center shadow-lg text-uagrm-red text-2xl">
+                          <i class="fa-solid fa-comments"></i>
+                      </div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-uagrm-blue mb-3 block">Centro de Conciliación</span>
+                      <h4 class="font-serif font-bold text-xl text-gray-900 mb-4 leading-snug">Mediación en Conflictos de Tierras y Agrarios</h4>
+                      
+                      <div class="flex items-center gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <div class="w-10 h-10 rounded-full bg-uagrm-red text-white flex items-center justify-center text-xs font-bold">IP</div>
+                          <div>
+                              <p class="text-sm font-bold text-gray-800">Dr. Fernando Ruiz</p>
+                              <p class="text-[10px] uppercase text-gray-500 tracking-wider">Profesor Investigador</p>
+                          </div>
+                      </div>
+                      <p class="text-sm text-gray-600 line-clamp-3 mb-8 flex-grow">Implementación de mecanismos alternativos para la resolución de conflictos agrarios, mitigando la carga procesal del sistema judicial tradicional.</p>
+                      
+                      <!-- Barra de progreso -->
+                      <div class="mt-auto">
+                          <div class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-2">
+                              <span>Avance General</span>
+                              <span class="text-uagrm-red">60%</span>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2">
+                              <div class="bg-uagrm-red h-2 rounded-full" style="width: 60%"></div>
+                          </div>
+                      </div>
+                  </div>
+              </article>
+              
+          </div>
+          
+          <div class="mt-20 text-center" data-aos="zoom-in">
+              <button class="px-8 py-4 bg-white border-2 border-gray-200 text-gray-800 text-xs font-bold uppercase tracking-widest rounded-full shadow-sm hover:shadow-md hover:border-uagrm-blue hover:text-uagrm-blue transition flex items-center gap-3 mx-auto">
+                  <i class="fa-solid fa-rotate-right"></i> Cargar más proyectos en base de datos
+              </button>
+          </div>
+      </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-ink-dark text-gray-300 py-16 mt-auto border-t-4 border-uagrm-red">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        
+        <!-- Logo y Descripción -->
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+             <div class="bg-white p-2 rounded-lg shadow-md inline-block transform hover:scale-105 transition">
+                 <img src="https://i.imgur.com/YJyBQSZ.png" alt="Logo Instituto MVB Footer" class="h-10 w-auto object-contain">
+             </div>
+             <span class="font-serif font-black text-2xl text-white tracking-wide">IIF-MVB</span>
+          </div>
+          <p class="text-sm text-gray-400 mb-6 leading-relaxed">
+            Instituto de Investigación Facultativo "Mónica von Borries". Estructurando y sustentando el desarrollo científico de la Universidad Autónoma Gabriel René Moreno.
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition bg-gray-800 hover:bg-uagrm-blue p-2 rounded-full h-10 w-10 flex items-center justify-center"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- Enlaces Rápidos -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Navegación</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="index.html" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Inicio</a></li>
+            <li><a href="index.html#lineas" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Líneas de Investigación</a></li>
+            <li><a href="index.html#centros" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Centros de Investigación</a></li>
+            <li><a href="proyectos.html" class="text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-uagrm-red"></i> Proyectos Activos</a></li>
+            <li><a href="index.html#difusion" class="hover:text-uagrm-red transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-xs text-gray-600"></i> Revista y Expociencia</a></li>
+          </ul>
+        </div>
+
+        <!-- Contacto -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Contacto Institucional</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-envelope mt-1 text-uagrm-red"></i>
+              <span class="break-all hover:text-white transition cursor-pointer">instituto.mvb@uagrm.edu.bo</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-location-dot mt-1 text-uagrm-red"></i>
+              <span>Campus Universitario UAGRM<br>Santa Cruz de la Sierra, Bolivia</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-phone mt-1 text-uagrm-red"></i>
+              <span>+591 (3) 333-XXXX</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Autoridades -->
+        <div>
+          <h3 class="text-white font-bold mb-6 uppercase text-xs tracking-widest border-b border-gray-700 pb-2">Autoridades Universitarias</h3>
+          <ul class="space-y-4 text-sm">
+            <li class="bg-gray-800 p-3 rounded border-l-2 border-uagrm-red">
+                <span class="block font-bold text-gray-200">Marcio Aranda Garcia</span>
+                <span class="text-[10px] text-uagrm-red uppercase tracking-wide font-bold">Director del Instituto</span>
+            </li>
+            <li class="p-3">
+                <span class="block font-bold text-gray-400">MSc. Carlos Martinez Bonilla</span>
+                <span class="text-[10px] text-gray-500 uppercase tracking-wide">Presidente ICU - UAGRM</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      
+      <!-- Bottom Footer -->
+      <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs text-gray-500 font-medium tracking-widest uppercase text-center md:text-left">
+          Universidad Autónoma "Gabriel René Moreno" <br class="md:hidden">© <span id="year"></span> Todos los derechos reservados.
+        </p>
+        <div class="flex gap-6">
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Reglamento DICIT</a>
+           <a href="#" class="text-xs text-gray-500 hover:text-white transition">Políticas de Privacidad</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Inicializar Animaciones
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    // Año Footer
+    if(document.getElementById('year')) {
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
+    // Lógica del Menú Móvil
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const icon = document.getElementById('mobile-menu-icon');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        if (menu.classList.contains('hidden')) {
+            icon.classList.remove('fa-xmark');
+            icon.classList.add('fa-bars');
+        } else {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-xmark');
+        }
+    });
+
+    // Interacción de filtros (Visual)
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => {
+                b.classList.remove('active', 'bg-uagrm-blue', 'text-white');
+                b.classList.add('text-gray-600');
+            });
+            btn.classList.add('active', 'bg-uagrm-blue', 'text-white');
+            btn.classList.remove('text-gray-600');
+        });
+    });
+
+    // Animación de Contadores Numéricos
+    function animateValue(id, start, end, duration) {
+        if (start === end) return;
+        var range = end - start;
+        var current = start;
+        var increment = end > start? 1 : -1;
+        var stepTime = Math.abs(Math.floor(duration / range));
+        var obj = document.getElementById(id);
+        var timer = setInterval(function() {
+            current += increment;
+            obj.innerHTML = current;
+            if (current == end) {
+                clearInterval(timer);
+            }
+        }, stepTime);
+    }
+    
+    // Iniciar animaciones al cargar
+    setTimeout(() => {
+        animateValue("counter1", 0, 32, 2000);
+        animateValue("counter2", 0, 45, 2000);
+        animateValue("counter3", 0, 120, 2000);
+        animateValue("counter4", 0, 15, 2000);
+    }, 300);
+
+    // Desvanecer la alerta después de 8 segundos automáticamente
+    setTimeout(() => {
+        const alertBox = document.getElementById('custom-alert');
+        if(alertBox) {
+            alertBox.style.opacity = '0';
+            alertBox.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => alertBox.style.display = 'none', 500);
+        }
+    }, 8000);
+
+  </script>
+</body>
+</html>
