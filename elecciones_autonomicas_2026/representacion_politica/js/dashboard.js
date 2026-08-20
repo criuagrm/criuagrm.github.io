@@ -5,7 +5,7 @@
     dashboard: "representacion_politica/data/dashboard.json",
     department: "representacion_politica/data/departamento.geojson",
     provinces: "representacion_politica/data/provincias.geojson",
-    municipalities: "representacion_politica/data/municipios.geojson",
+    municipalities: "representacion_politica/data/municipios.geojson?v=20260820-migracion-2",
     precincts: "representacion_politica/data/recintos.geojson",
     census: "../censo_2024/manzanos.geojson",
     censusFields: "../censo_2024/campos.json"
