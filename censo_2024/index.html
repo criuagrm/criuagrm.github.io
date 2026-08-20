@@ -98,6 +98,16 @@
         #welcome-msg { padding: 100px 40px; text-align: center; color: #94a3b8; }
         #global-loader { position: fixed; inset: 0; background: white; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
         .spinner { width: 40px; height: 40px; border: 4px solid #f1f5f9; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;}
+        #migration-legend { position: absolute; left: 15px; bottom: 20px; z-index: 999; width: min(330px, calc(100% - 30px)); padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: rgba(255,255,255,0.96); box-shadow: 0 4px 15px rgba(15,23,42,0.12); }
+        #migration-legend strong { display: block; margin-bottom: 7px; color: var(--dark); font-size: 11px; }
+        .migration-scale { height: 9px; display: grid; grid-template-columns: repeat(5,1fr); border-radius: 99px; overflow: hidden; }
+        .migration-scale span:nth-child(1) { background: #d1fae5; }
+        .migration-scale span:nth-child(2) { background: #6ee7b7; }
+        .migration-scale span:nth-child(3) { background: #10b981; }
+        .migration-scale span:nth-child(4) { background: #047857; }
+        .migration-scale span:nth-child(5) { background: #065f46; }
+        .migration-bins { margin: 6px 0 0; color: #64748b; font-size: 9px; line-height: 1.4; }
+        .migration-method { margin: 6px 0 0; color: #475569; font-size: 9px; line-height: 1.4; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -116,6 +126,7 @@
             <p>El <strong>Centro de Investigación Regional en Ciencia Política y Ciencias Sociales</strong> presenta este Atlas Interactivo.</p>
             <h3><i class="fa-solid fa-code-branch"></i> Metodología y Fuentes</h3>
             <p>La fuente primaria de información es el <strong>Instituto Nacional de Estadística (INE)</strong>. El proceso de extracción y consolidación a GeoJSON está basado en el trabajo de <strong>Mauricio Foronda</strong> (<a href="https://github.com/mauforonda" target="_blank">Ver GitHub</a>).</p>
+            <p>El color representa una <strong>estimación de migrantes por manzano</strong>, calculada como población total × proporción migrante. Los manzanos sin indicador migratorio aparecen en gris y no se interpretan como cero.</p>
             <h3><i class="fa-solid fa-laptop-code"></i> Procesamiento Analítico</h3>
             <p>El diseño de la interfaz y la optimización espacial fueron desarrollados por el <strong>CIRCPyCS</strong>.</p>
         </div>
@@ -147,6 +158,7 @@
             <div class="data-grid">
                 <div class="data-card"><div class="data-label">Población Total</div><div class="data-value" id="v-personas">0</div></div>
                 <div class="data-card"><div class="data-label">Pob. Migrante</div><div class="data-value" id="v-migrante">0%</div></div>
+                <div class="data-card"><div class="data-label">Migrantes estimados</div><div class="data-value" id="v-migrante-n">s/d</div></div>
                 
                 <div class="data-card">
                     <div class="data-label">Densidad</div>
@@ -227,6 +239,13 @@
         </div>
     </div>
 
+    <div id="migration-legend" aria-label="Leyenda de migrantes estimados por manzano">
+        <strong>Migrantes estimados por manzano</strong>
+        <div class="migration-scale" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <p class="migration-bins">0–9 · 10–19 · 20–39 · 40–79 · 80 o más · gris: sin dato</p>
+        <p class="migration-method">Estimación visual: población del manzano × proporción migrante. No constituye un total oficial agregable.</p>
+    </div>
+
     <div id="mapa"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -234,6 +253,36 @@
         let traductor = {};
         let geojsonLayer = null;
         let layerActiva = null;
+        const migrationColors = ['#d1fae5', '#6ee7b7', '#10b981', '#047857', '#065f46'];
+
+        function esNumero(valor) {
+            return valor !== null && valor !== '' && Number.isFinite(Number(valor));
+        }
+
+        function migrantesEstimados(propiedades = {}) {
+            if (!esNumero(propiedades.a1) || !esNumero(propiedades.h1)) return null;
+            return Math.round(Number(propiedades.a1) * Number(propiedades.h1));
+        }
+
+        function colorMigracion(valor) {
+            if (!esNumero(valor)) return '#cbd5e1';
+            if (valor <= 9) return migrationColors[0];
+            if (valor <= 19) return migrationColors[1];
+            if (valor <= 39) return migrationColors[2];
+            if (valor <= 79) return migrationColors[3];
+            return migrationColors[4];
+        }
+
+        function estiloManzano(feature) {
+            const estimado = migrantesEstimados(feature.properties);
+            return {
+                color: esNumero(estimado) ? '#ffffff' : '#94a3b8',
+                weight: esNumero(estimado) ? 0.45 : 0.6,
+                fillColor: colorMigracion(estimado),
+                fillOpacity: esNumero(estimado) ? 0.78 : 0.28,
+                interactive: true
+            };
+        }
 
         const mapaClaro = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { 
             attribution: 'CIRCPyCS', updateWhenIdle: true, keepBuffer: 2
@@ -266,11 +315,13 @@
                 const dataGeo = await resGeo.json();
                 
                 geojsonLayer = L.geoJSON(dataGeo, {
-                    style: { color: '#004494', weight: 0.5, fillOpacity: 0.2, interactive: true },
+                    style: estiloManzano,
                     onEachFeature: function (feature, layer) {
+                        const estimado = migrantesEstimados(feature.properties);
+                        layer.bindTooltip(esNumero(estimado) ? `Migrantes estimados: ${estimado.toLocaleString('es-BO')}` : 'Migración: sin dato', { sticky: true });
                         layer.on('click', function (e) {
                             L.DomEvent.stopPropagation(e);
-                            if(layerActiva) layerActiva.setStyle({weight: 0.5, color: '#004494', fillOpacity: 0.2});
+                            if(layerActiva) layerActiva.setStyle(estiloManzano(layerActiva.feature));
                             layer.setStyle({weight: 2, color: '#f59e0b', fillOpacity: 0.5});
                             layerActiva = layer;
                             mostrarFicha(feature.properties);
@@ -305,13 +356,13 @@
             
             // Función genérica para barras de progreso y textos 
             const up = (id, val, isPerc = true) => {
-                let v = val || 0;
-                let disp = isPerc ? Math.round(v * 100) : Math.round(v);
-                if(document.getElementById('v-'+id)) document.getElementById('v-'+id).innerText = disp + (isPerc ? "%" : "");
-                if(document.getElementById('t-'+id)) document.getElementById('t-'+id).innerText = disp + "%";
+                const valido = esNumero(val);
+                let disp = valido ? (isPerc ? Math.round(Number(val) * 100) : Math.round(Number(val))) : null;
+                if(document.getElementById('v-'+id)) document.getElementById('v-'+id).innerText = valido ? disp + (isPerc ? "%" : "") : "s/d";
+                if(document.getElementById('t-'+id)) document.getElementById('t-'+id).innerText = valido ? disp + "%" : "s/d";
                 let elB = document.getElementById('b-'+id);
                 if(elB) {
-                    elB.style.width = Math.min(disp, 100) + "%";
+                    elB.style.width = valido ? Math.min(disp, 100) + "%" : "0%";
                 }
             };
 
@@ -319,13 +370,16 @@
             document.getElementById('v-hombres').innerText = Math.round(d.masculinidad || 0);
 
             // 2. DENSIDAD 
-            let valDens = d.personas_por_hectarea || 0;
-            document.getElementById('v-densidad').innerText = Math.round(valDens);
+            let valDens = esNumero(d.personas_por_hectarea) ? Number(d.personas_por_hectarea) : null;
+            document.getElementById('v-densidad').innerText = esNumero(valDens) ? Math.round(valDens) : "s/d";
             let badgeDens = document.getElementById('badge-densidad');
-            if (valDens > 100) {
+            if (!esNumero(valDens)) {
+                badgeDens.className = "mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit bg-slate-100 text-slate-600";
+                badgeDens.innerText = "Sin dato";
+            } else if (valDens > 60) {
                 badgeDens.className = "mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit bg-red-100 text-red-700";
-                badgeDens.innerText = "Alta Densidad (Hacinamiento)";
-            } else if (valDens > 40) {
+                badgeDens.innerText = "Alta Densidad";
+            } else if (valDens >= 20) {
                 badgeDens.className = "mt-1 text-[9px] font-bold px-2 py-0.5 rounded w-fit bg-amber-100 text-amber-700";
                 badgeDens.innerText = "Densidad Media";
             } else {
@@ -357,6 +411,8 @@
             // Mapeo general
             up('personas', d.personas, false);
             up('migrante', d.poblacion_migrante);
+            const estimadoMigrante = esNumero(d.personas) && esNumero(d.poblacion_migrante) ? Math.round(Number(d.personas) * Number(d.poblacion_migrante)) : null;
+            document.getElementById('v-migrante-n').innerText = esNumero(estimadoMigrante) ? estimadoMigrante.toLocaleString('es-BO') : 's/d';
             up('jovenes', d.porcentaje_menor20);
             up('ancianos', d.porcentaje_60omas);
             up('edu', d.educacion_superior);
@@ -382,7 +438,7 @@
             document.getElementById('side-panel').classList.add('active');
         }
 
-        function cerrarPanel() { document.getElementById('side-panel').classList.remove('active'); if(layerActiva) layerActiva.setStyle({weight: 0.5, color: '#004494', fillOpacity: 0.2});}
+        function cerrarPanel() { document.getElementById('side-panel').classList.remove('active'); if(layerActiva) layerActiva.setStyle(estiloManzano(layerActiva.feature));}
         function abrirModal() { document.getElementById('modal-overlay').classList.add('active'); }
         function cerrarModal() { document.getElementById('modal-overlay').classList.remove('active'); }
     </script>

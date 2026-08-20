@@ -61,6 +61,21 @@ const migrationVoteByName = new Map(
 const migrationByName = new Map(
   migration.municipalities.map((municipality) => [normalized(municipality.municipality), municipality])
 );
+const migrationAliases = new Map(Object.entries({
+  "san ignacio": "san ignacio de velasco",
+  "san miguel": "san miguel de velasco",
+  "san juan": "san juan de yapacani",
+  "san jose": "san jose de chiquitos",
+  "santa rosa": "santa rosa del sara",
+  "aioc charagua iyambae": "charagua",
+  "aioc guarani kereimba iyaambae": "gutierrez",
+  "moromoro": "moro moro",
+  "postrervalle": "postrer valle",
+  "pampagrande": "pampa grande",
+  "general saavedra": "gral saavedra",
+  "el carmen rivero torrez": "carmen rivero torrez",
+  "ascencion de guarayos": "ascension de guarayos"
+}));
 const provinceByName = new Map(
   base.provinces.map((province) => [normalized(province.province), province])
 );
@@ -73,7 +88,7 @@ const municipalityFeatures = municipalitySource.features.map((feature) => {
   const electoral = municipalityByCode.get(code) || {};
   const nameKey = normalized(electoral.municipality || feature.properties.NOM_MUN);
   const migrationVote = migrationVoteByName.get(nameKey) || {};
-  const migrationRecord = migrationByName.get(nameKey) || {};
+  const migrationRecord = migrationByName.get(migrationAliases.get(nameKey) || nameKey) || {};
 
   return {
     type: "Feature",
@@ -91,9 +106,16 @@ const municipalityFeatures = municipalitySource.features.map((feature) => {
       localities_2026: numberOrNull(electoral.localities_2026),
       tables_2026: numberOrNull(electoral.tables_2026),
       registered_population_ratio: numberOrNull(electoral.registered_population_ratio),
+      lifetime_population_2024: numberOrNull(migrationRecord.lifetime_population_2024),
+      lifetime_immigrants: numberOrNull(migrationRecord.lifetime_immigrants),
+      lifetime_emigrants: numberOrNull(migrationRecord.lifetime_emigrants),
+      lifetime_net_migration: numberOrNull(migrationRecord.lifetime_net_migration),
       lifetime_immigrant_share: numberOrNull(
         migrationVote.lifetime_immigrant_share ?? migrationRecord.lifetime_immigrant_share_of_population
       ),
+      recent_population_5plus_2024: numberOrNull(migrationRecord.recent_population_5plus_2024),
+      recent_immigrants_2019_2024: numberOrNull(migrationRecord.recent_immigrants_2019_2024),
+      recent_emigrants_2019_2024: numberOrNull(migrationRecord.recent_emigrants_2019_2024),
       recent_immigrant_share: numberOrNull(
         migrationVote.recent_immigrant_share ?? migrationRecord.recent_immigrant_share_of_population_5plus
       ),
