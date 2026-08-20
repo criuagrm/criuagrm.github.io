@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Representación política de Santa Cruz — CIRCPyCS</title>
+  <meta name="description" content="Mapa-dashboard para explorar población, padrón, migración, recintos y representación territorial en Santa Cruz.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="representacion_politica/css/dashboard.css">
+</head>
+<body>
+  <div class="brand-line" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Volver al Monitor de Elecciones Autonómicas">
+        <img src="representacion_politica/assets/circpycs-brand/logo.png" alt="Logo institucional de la UAGRM">
+        <div>
+          <p class="brand-overline">CIRCPyCS — UAGRM</p>
+          <p class="brand-title"><strong>Representación política de Santa Cruz</strong></p>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a class="header-link" href="index.html">Monitor electoral</a>
+        <a class="header-link" href="#metodologia">Método y fuentes</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema" aria-pressed="false">Tema</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Representación departamental · Datos 2024–2026</p>
+        <h1 id="page-title">Población, padrón y territorio no pesan igual.</h1>
+        <div class="status-row" aria-label="Cobertura del dashboard">
+          <span class="status-chip is-live">Datos conectados</span>
+          <span class="status-chip">15 provincias</span>
+          <span class="status-chip">56 municipios</span>
+          <span class="status-chip">1.138 recintos</span>
+          <span class="status-chip">61.335 manzanos</span>
+        </div>
+      </div>
+      <p class="intro-copy">
+        Explore si el diseño territorial de la Asamblea refleja la concentración metropolitana y cómo la migración y el crecimiento urbano están transformando la geografía electoral del departamento.
+      </p>
+    </section>
+
+    <section class="metric-strip" aria-label="Indicadores principales">
+      <article class="metric is-population">
+        <p class="metric-label">Población metropolitana</p>
+        <p class="metric-value">67,10%</p>
+        <p class="metric-note">Censo 2024 · seis municipios</p>
+      </article>
+      <article class="metric is-register">
+        <p class="metric-label">Padrón metropolitano</p>
+        <p class="metric-value">70,56%</p>
+        <p class="metric-note">Elecciones autonómicas 2026</p>
+      </article>
+      <article class="metric is-gap">
+        <p class="metric-label">Escaños territoriales</p>
+        <p class="metric-value">2 de 15</p>
+        <p class="metric-note">Cota superior: Andrés Ibáñez y Warnes</p>
+      </article>
+      <article class="metric">
+        <p class="metric-label">Disparidad del peso</p>
+        <p class="metric-value">15,6×</p>
+        <p class="metric-note">Electores por escaño territorial</p>
+      </article>
+    </section>
+
+    <section class="tool-shell" aria-label="Mapa-dashboard de representación política">
+      <div class="toolbar">
+        <div class="layer-tabs" aria-label="Capas del mapa">
+          <button class="layer-button" type="button" data-layer="provinces" aria-pressed="true">Provincias</button>
+          <button class="layer-button" type="button" data-layer="municipalities" aria-pressed="false">Municipios</button>
+          <button class="layer-button" type="button" data-layer="precincts" aria-pressed="false">Recintos</button>
+          <button class="layer-button" type="button" data-layer="census" aria-pressed="false">Censo por manzano</button>
+        </div>
+
+        <div>
+          <label class="sr-only" for="metric-select">Indicador cartográfico</label>
+          <select class="control-select" id="metric-select" aria-label="Indicador cartográfico"></select>
+        </div>
+
+        <div>
+          <label class="sr-only" for="geography-search">Buscar territorio o recinto</label>
+          <input class="search-field" id="geography-search" list="geography-options" type="search" placeholder="Buscar provincia, municipio o recinto…" autocomplete="off">
+          <datalist id="geography-options"></datalist>
+        </div>
+
+        <div style="display:flex;gap:6px;">
+          <button class="metro-toggle" id="metro-toggle" type="button" aria-pressed="true">
+            <span class="switch" aria-hidden="true"></span>
+            Área metropolitana
+          </button>
+          <button class="estimated-toggle" id="estimated-toggle" type="button" aria-pressed="true" hidden>
+            <span class="switch" aria-hidden="true"></span>
+            Estimados
+          </button>
+        </div>
+      </div>
+
+      <div class="workspace">
+        <div class="map-stage" id="map-stage">
+          <div id="representation-map" aria-label="Mapa interactivo del departamento de Santa Cruz"></div>
+          <div class="map-overlay map-breadcrumb" id="map-breadcrumb">Santa Cruz / Provincias</div>
+          <div class="map-overlay map-legend" id="map-legend">
+            <p class="legend-title" id="legend-title">Índice de representación</p>
+            <div class="legend-scale" id="legend-scale" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="legend-labels"><span id="legend-min">Menor</span><span id="legend-max">Mayor</span></div>
+          </div>
+          <div class="map-overlay map-status" id="map-status" aria-live="polite">Cargando cartografía…</div>
+          <div class="map-message" id="map-message">
+            <strong id="message-title">Preparando el mapa</strong>
+            <span id="message-copy">Cargando límites e indicadores.</span>
+            <div class="loading-bar"><span id="loading-progress"></span></div>
+          </div>
+        </div>
+
+        <aside class="analysis-panel" aria-label="Lectura del territorio seleccionado">
+          <div class="panel-header">
+            <p class="panel-kicker" id="selection-kicker">Lectura departamental</p>
+            <h2 id="selection-title">Santa Cruz</h2>
+            <p id="selection-subtitle">Seleccione un territorio o recinto en el mapa para ver sus indicadores.</p>
+          </div>
+          <div class="panel-modes" aria-label="Tipo de lectura">
+            <button class="mode-button" type="button" data-mode="evidence" aria-pressed="true">Evidencia</button>
+            <button class="mode-button" type="button" data-mode="hypothesis" aria-pressed="false">Preguntas</button>
+          </div>
+          <div class="panel-content" id="panel-content">
+            <div class="reading">
+              <p class="reading-label">Población departamental</p>
+              <p class="reading-value">3.122.605</p>
+              <p class="reading-copy">Población empadronada por el Censo 2024.</p>
+            </div>
+            <div class="reading">
+              <p class="reading-label">Padrón 2026</p>
+              <p class="reading-value">2.038.004</p>
+              <p class="reading-copy">Personas habilitadas en los 56 municipios.</p>
+            </div>
+            <div class="data-note">Las capas territoriales se cargan según la selección. La capa censal completa se descarga únicamente al activarla.</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="below-grid">
+      <section class="analysis-block" aria-labelledby="scenario-title">
+        <div class="block-heading">
+          <h2 id="scenario-title">Escenarios de representación metropolitana</h2>
+          <p>Los denominadores se mantienen visibles: los escaños territoriales actuales no son directamente equivalentes a los escenarios sobre 23 escaños universales.</p>
+        </div>
+        <div class="scenario-list">
+          <div class="scenario-row"><span class="scenario-name">Territorial actual</span><div class="scenario-track"><div class="scenario-fill" style="width:13.3%"></div></div><span class="scenario-value">2 / 15</span></div>
+          <div class="scenario-row"><span class="scenario-name">Mixto compensatorio</span><div class="scenario-track"><div class="scenario-fill" style="width:43.5%"></div></div><span class="scenario-value">10 / 23</span></div>
+          <div class="scenario-row"><span class="scenario-name">Proporcional a población</span><div class="scenario-track"><div class="scenario-fill" style="width:65.2%"></div></div><span class="scenario-value">15 / 23</span></div>
+          <div class="scenario-row"><span class="scenario-name">Proporcional a padrón</span><div class="scenario-track"><div class="scenario-fill" style="width:69.6%"></div></div><span class="scenario-value">16 / 23</span></div>
+        </div>
+      </section>
+
+      <section class="analysis-block" aria-labelledby="inventory-title">
+        <div class="block-heading">
+          <h2 id="inventory-title">Inventario cartográfico</h2>
+          <p>Cada capa conserva su procedencia y estado metodológico.</p>
+        </div>
+        <div class="layer-inventory">
+          <div class="inventory-item"><strong>Provincias</strong><span>15 geometrías agrupadas</span></div>
+          <div class="inventory-item"><strong>Municipios</strong><span>56 polígonos</span></div>
+          <div class="inventory-item"><strong>Recintos 2026</strong><span>1.138 puntos · 9 estimados</span></div>
+          <div class="inventory-item is-census"><strong>Censo por manzano</strong><span>61.335 polígonos · carga bajo demanda</span></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="evidence-grid">
+      <section class="analysis-block" aria-labelledby="migration-title">
+        <div class="block-heading">
+          <h2 id="migration-title">Migración y cambio del voto municipal</h2>
+          <p>Comparación exploratoria: proporción de inmigrantes de toda la vida y voto por LIBRE en los municipios.</p>
+        </div>
+        <div class="scatter-wrap">
+          <svg id="migration-scatter" viewBox="0 0 620 330" role="img" aria-label="Diagrama de dispersión entre migración y voto municipal"></svg>
+          <div class="scatter-caption">
+            <span class="scatter-key"><span class="scatter-dot is-metro"></span>Municipio metropolitano</span>
+            <span class="scatter-key"><span class="scatter-dot"></span>Resto del departamento</span>
+            <span id="correlation-caption">Correlación municipal: cargando…</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="analysis-block" aria-labelledby="evidence-title">
+        <div class="block-heading">
+          <h2 id="evidence-title">Qué muestran y qué no muestran los datos</h2>
+          <p>Separación explícita entre evidencia, simulación e hipótesis.</p>
+        </div>
+        <div class="evidence-body">
+          <ul class="evidence-list">
+            <li><strong>Hecho observado:</strong> el área metropolitana reúne 67,10% de la población y 70,56% del padrón departamental.</li>
+            <li><strong>Diseño institucional:</strong> Andrés Ibáñez y Warnes representan como máximo dos de los quince escaños territoriales provinciales.</li>
+            <li><strong>Resultado preliminar:</strong> las correlaciones municipales entre migración y voto son débiles; no prueban que una persona migrante vote de una manera determinada.</li>
+            <li><strong>Pregunta pendiente:</strong> el Censo identifica residencia habitual y lugar de nacimiento, pero no resuelve por sí solo la migración estacional ni el lugar efectivo de votación durante todo el año.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <section class="analysis-block methodology" id="metodologia" aria-labelledby="methodology-title">
+      <div class="block-heading">
+        <h2 id="methodology-title">Método, fuentes y límites</h2>
+        <p>Las cifras se publican con su año, unidad territorial y alcance interpretativo.</p>
+      </div>
+      <div class="methodology-grid">
+        <div class="methodology-item">
+          <h3>Censo y migración</h3>
+          <p>INE, Censo de Población y Vivienda 2024. La capa censal reproduce el nivel de manzano disponible en el Atlas del Centro.</p>
+        </div>
+        <div class="methodology-item">
+          <h3>Padrón y recintos</h3>
+          <p>Memoria de Elecciones Autonómicas 2026 y OEP. Nueve recintos usan una referencia estimada y aparecen diferenciados en ámbar.</p>
+        </div>
+        <div class="methodology-item">
+          <h3>Representación</h3>
+          <p>Estatuto Autonómico Departamental y diseño electoral OEP 2026. Los escenarios son simulaciones, no una propuesta normativa cerrada.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <img src="representacion_politica/assets/circpycs-brand/logo.png" alt="Logo institucional de la UAGRM">
+            <strong>CIRCPyCS</strong>
+          </div>
+          <p class="footer-copy">Centro de Investigación Regional en Ciencia Política y Ciencias Sociales de la UAGRM. Generando conocimiento para el desarrollo y la democracia.</p>
+        </div>
+        <div>
+          <h2 class="footer-heading">Enlaces rápidos</h2>
+          <ul class="footer-list">
+            <li><a href="https://cir.uagrm.edu.bo/">Inicio</a></li>
+            <li><a href="https://cir.uagrm.edu.bo/services.html">Servicios y asesoría</a></li>
+            <li><a href="https://cir.uagrm.edu.bo/#publicaciones">Publicaciones recientes</a></li>
+            <li><a href="https://ojs.uagrm.edu.bo/revista-conocimiento-politica">Revista científica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-heading">Contacto</h2>
+          <ul class="footer-list">
+            <li>cri.cspoliticas.fcjpsri@uagrm.edu.bo</li>
+            <li>Ciudad Universitaria, Módulo 284</li>
+            <li>Santa Cruz de la Sierra, Bolivia</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="footer-heading">Síguenos</h2>
+          <ul class="footer-list">
+            <li><a href="https://www.facebook.com/circpycs">Facebook</a></li>
+            <li><a href="https://www.youtube.com/@CENTROREGIONALDEINV.CIENCIASPO">YouTube</a></li>
+            <li><a href="https://www.instagram.com/centro_de_investigacion_">Instagram</a></li>
+            <li><a href="https://x.com/circpycs">X (Twitter)</a></li>
+            <li><a href="https://github.com/criuagrm">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year"></span> Todos los derechos reservados. Este portal no representa necesariamente la opinión institucional de la UAGRM.</span>
+        <span class="legal-links"><a href="https://cir.uagrm.edu.bo/privacy.html">Privacidad</a><a href="https://cir.uagrm.edu.bo/terms.html">Términos</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="representacion_politica/js/dashboard.js"></script>
+</body>
+</html>
