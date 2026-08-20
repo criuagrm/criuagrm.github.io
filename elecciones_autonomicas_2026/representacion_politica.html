@@ -34,8 +34,8 @@
   <main class="page-shell">
     <section class="intro" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">Representación departamental · Datos 2024–2026</p>
-        <h1 id="page-title">Población, padrón y territorio no pesan igual.</h1>
+        <p class="eyebrow">Migración y representación departamental · Datos 2024–2026</p>
+        <h1 id="page-title">Migración, población y representación no pesan igual.</h1>
         <div class="status-row" aria-label="Cobertura del dashboard">
           <span class="status-chip is-live">Datos conectados</span>
           <span class="status-chip">15 provincias</span>
@@ -45,38 +45,38 @@
         </div>
       </div>
       <p class="intro-copy">
-        Explore si el diseño territorial de la Asamblea refleja la concentración metropolitana y cómo la migración y el crecimiento urbano están transformando la geografía electoral del departamento.
+        Explore cuántas personas migrantes residen en cada municipio, qué peso tienen dentro de su población y cómo esa concentración se relaciona con el padrón y el diseño territorial de la Asamblea.
       </p>
     </section>
 
     <section class="metric-strip" aria-label="Indicadores principales">
+      <article class="metric is-register">
+        <p class="metric-label">Migrantes de toda la vida</p>
+        <p class="metric-value">661.007</p>
+        <p class="metric-note">22,22% · escala departamental</p>
+      </article>
+      <article class="metric is-register">
+        <p class="metric-label">Migrantes recientes</p>
+        <p class="metric-value">99.787</p>
+        <p class="metric-note">2019–2024 · población de 5+ años</p>
+      </article>
       <article class="metric is-population">
         <p class="metric-label">Población metropolitana</p>
         <p class="metric-value">67,10%</p>
         <p class="metric-note">Censo 2024 · seis municipios</p>
       </article>
-      <article class="metric is-register">
+      <article class="metric is-gap">
         <p class="metric-label">Padrón metropolitano</p>
         <p class="metric-value">70,56%</p>
         <p class="metric-note">Elecciones autonómicas 2026</p>
-      </article>
-      <article class="metric is-gap">
-        <p class="metric-label">Escaños territoriales</p>
-        <p class="metric-value">2 de 15</p>
-        <p class="metric-note">Cota superior: Andrés Ibáñez y Warnes</p>
-      </article>
-      <article class="metric">
-        <p class="metric-label">Disparidad del peso</p>
-        <p class="metric-value">15,6×</p>
-        <p class="metric-note">Electores por escaño territorial</p>
       </article>
     </section>
 
     <section class="tool-shell" aria-label="Mapa-dashboard de representación política">
       <div class="toolbar">
         <div class="layer-tabs" aria-label="Capas del mapa">
-          <button class="layer-button" type="button" data-layer="provinces" aria-pressed="true">Provincias</button>
-          <button class="layer-button" type="button" data-layer="municipalities" aria-pressed="false">Municipios</button>
+          <button class="layer-button" type="button" data-layer="municipalities" aria-pressed="true">Municipios</button>
+          <button class="layer-button" type="button" data-layer="provinces" aria-pressed="false">Provincias</button>
           <button class="layer-button" type="button" data-layer="precincts" aria-pressed="false">Recintos</button>
           <button class="layer-button" type="button" data-layer="census" aria-pressed="false">Censo por manzano</button>
         </div>
@@ -107,11 +107,12 @@
       <div class="workspace">
         <div class="map-stage" id="map-stage">
           <div id="representation-map" aria-label="Mapa interactivo del departamento de Santa Cruz"></div>
-          <div class="map-overlay map-breadcrumb" id="map-breadcrumb">Santa Cruz / Provincias</div>
+          <div class="map-overlay map-breadcrumb" id="map-breadcrumb">Santa Cruz / Municipios</div>
           <div class="map-overlay map-legend" id="map-legend">
-            <p class="legend-title" id="legend-title">Índice de representación</p>
+            <p class="legend-title" id="legend-title">Migrantes de toda la vida · cantidad</p>
             <div class="legend-scale" id="legend-scale" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
             <div class="legend-labels"><span id="legend-min">Menor</span><span id="legend-max">Mayor</span></div>
+            <p class="legend-note" id="legend-note">≤2.000 · 2.001–4.000 · 4.001–6.000 · 6.001–12.000 · &gt;12.000</p>
           </div>
           <div class="map-overlay map-status" id="map-status" aria-live="polite">Cargando cartografía…</div>
           <div class="map-message" id="map-message">
@@ -133,16 +134,16 @@
           </div>
           <div class="panel-content" id="panel-content">
             <div class="reading">
-              <p class="reading-label">Población departamental</p>
-              <p class="reading-value">3.122.605</p>
-              <p class="reading-copy">Población empadronada por el Censo 2024.</p>
+              <p class="reading-label">Migrantes de toda la vida</p>
+              <p class="reading-value">661.007</p>
+              <p class="reading-copy">22,22% de la población departamental de referencia.</p>
             </div>
             <div class="reading">
-              <p class="reading-label">Padrón 2026</p>
-              <p class="reading-value">2.038.004</p>
-              <p class="reading-copy">Personas habilitadas en los 56 municipios.</p>
+              <p class="reading-label">Migración reciente</p>
+              <p class="reading-value">99.787</p>
+              <p class="reading-copy">Cambio de residencia entre 2019 y 2024.</p>
             </div>
-            <div class="data-note">Las capas territoriales se cargan según la selección. La capa censal completa se descarga únicamente al activarla.</div>
+            <div class="data-note">El mapa municipal inicia con cantidades. El selector permite comparar proporción migrante, población, padrón y voto.</div>
           </div>
         </aside>
       </div>
@@ -199,6 +200,7 @@
         </div>
         <div class="evidence-body">
           <ul class="evidence-list">
+            <li><strong>Magnitud migratoria:</strong> el departamento registra 661.007 migrantes de toda la vida, equivalentes a 22,22% de su población de referencia.</li>
             <li><strong>Hecho observado:</strong> el área metropolitana reúne 67,10% de la población y 70,56% del padrón departamental.</li>
             <li><strong>Diseño institucional:</strong> Andrés Ibáñez y Warnes representan como máximo dos de los quince escaños territoriales provinciales.</li>
             <li><strong>Resultado preliminar:</strong> las correlaciones municipales entre migración y voto son débiles; no prueban que una persona migrante vote de una manera determinada.</li>
@@ -216,7 +218,7 @@
       <div class="methodology-grid">
         <div class="methodology-item">
           <h3>Censo y migración</h3>
-          <p>INE, Censo de Población y Vivienda 2024. La capa censal reproduce el nivel de manzano disponible en el Atlas del Centro.</p>
+          <p>INE, Censo de Población y Vivienda 2024. A escala departamental, migrante identifica a quien nació fuera del departamento; a escala municipal, a quien nació fuera de su municipio actual. La cantidad por manzano es una estimación espacial calculada como población × proporción migrante.</p>
         </div>
         <div class="methodology-item">
           <h3>Padrón y recintos</h3>

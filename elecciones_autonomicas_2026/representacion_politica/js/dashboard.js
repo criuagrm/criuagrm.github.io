@@ -27,10 +27,12 @@
       { key: "population_per_territorial_seat", label: "Habitantes por escaño territorial", kind: "number", palette: "divergent" }
     ],
     municipalities: [
+      { key: "lifetime_immigrants", label: "Migrantes de toda la vida · cantidad", kind: "number", palette: "green", breaks: [2000, 4000, 6000, 12000], binLabels: ["≤2.000", "2.001–4.000", "4.001–6.000", "6.001–12.000", ">12.000"] },
+      { key: "lifetime_immigrant_share", label: "Migrantes / población de referencia", kind: "percent", palette: "green", breaks: [.2, .35, .5, .6], binLabels: ["≤20%", "20–35%", "35–50%", "50–60%", ">60%"] },
+      { key: "recent_immigrants_2019_2024", label: "Migrantes recientes 2019–2024 · cantidad", kind: "number", palette: "green", breaks: [500, 1000, 1500, 4000], binLabels: ["≤500", "501–1.000", "1.001–1.500", "1.501–4.000", ">4.000"] },
+      { key: "recent_immigrant_share", label: "Migración reciente / población de 5+", kind: "percent", palette: "green", breaks: [.04, .07, .1, .14], binLabels: ["≤4%", "4–7%", "7–10%", "10–14%", ">14%"] },
       { key: "population_2024", label: "Población 2024", kind: "number", palette: "blue" },
       { key: "registered_2026", label: "Padrón 2026", kind: "number", palette: "green" },
-      { key: "lifetime_immigrant_share", label: "Inmigración de toda la vida", kind: "percent", palette: "green" },
-      { key: "recent_immigrant_share", label: "Inmigración reciente", kind: "percent", palette: "green" },
       { key: "libre_share", label: "Voto LIBRE · lectura preliminar", kind: "percent", palette: "blue" },
       { key: "participation", label: "Participación electoral", kind: "percent", palette: "blue" }
     ],
@@ -39,9 +41,10 @@
       { key: "tables_2026", label: "Mesas electorales", kind: "number", palette: "green" }
     ],
     census: [
-      { key: "a1", label: "Población del manzano", kind: "number", palette: "blue" },
-      { key: "b1", label: "Densidad · habitantes por hectárea", kind: "number", palette: "blue" },
-      { key: "h1", label: "Población migrante", kind: "percent", palette: "green" },
+      { key: "estimated_migrants", derived: "migrant_count", label: "Migrantes estimados por manzano", kind: "number", palette: "green", breaks: [9, 19, 39, 79], binLabels: ["0–9", "10–19", "20–39", "40–79", "80+"], noData: true },
+      { key: "h1", label: "Migrantes / población del manzano", kind: "percent", palette: "green", breaks: [.2, .35, .5, .65], binLabels: ["≤20%", "20–35%", "35–50%", "50–65%", ">65%"], noData: true },
+      { key: "a1", label: "Población del manzano", kind: "number", palette: "blue", breaks: [19, 39, 75, 139], binLabels: ["0–19", "20–39", "40–75", "76–139", "140+"] },
+      { key: "b1", label: "Densidad · habitantes por hectárea", kind: "number", palette: "blue", breaks: [20, 40, 60, 100], binLabels: ["≤20", "21–40", "41–60", "61–100", ">100"] },
       { key: "g1", label: "Educación superior", kind: "percent", palette: "blue" },
       { key: "b2", label: "Viviendas con internet", kind: "percent", palette: "green" }
     ]
@@ -55,8 +58,8 @@
     mainLayer: null,
     departmentLayer: null,
     metroLayer: null,
-    activeLayer: "provinces",
-    activeMetric: METRICS.provinces[0].key,
+    activeLayer: "municipalities",
+    activeMetric: METRICS.municipalities[0].key,
     breaks: [],
     mode: "evidence",
     selected: null,
@@ -79,7 +82,7 @@
   }
 
   function finite(value) {
-    return Number.isFinite(Number(value));
+    return value !== null && value !== "" && Number.isFinite(Number(value));
   }
 
   function formatNumber(value) {
@@ -106,10 +109,20 @@
     return METRICS[state.activeLayer].find((metric) => metric.key === state.activeMetric) || METRICS[state.activeLayer][0];
   }
 
+  function estimatedMigrantCount(properties = {}) {
+    if (!finite(properties.a1) || !finite(properties.h1)) return null;
+    return Math.round(Number(properties.a1) * Number(properties.h1));
+  }
+
+  function metricValue(feature, metric = currentMetric()) {
+    if (metric?.derived === "migrant_count") return estimatedMigrantCount(feature.properties);
+    return feature.properties?.[metric?.key];
+  }
+
   function cacheElements() {
     [
       "metric-select", "geography-search", "geography-options", "metro-toggle", "estimated-toggle",
-      "map-breadcrumb", "map-status", "map-legend", "legend-title", "legend-scale", "legend-min", "legend-max",
+      "map-breadcrumb", "map-status", "map-legend", "legend-title", "legend-scale", "legend-min", "legend-max", "legend-note",
       "map-message", "message-title", "message-copy", "loading-progress", "selection-kicker", "selection-title",
       "selection-subtitle", "panel-content", "theme-toggle", "migration-scatter", "correlation-caption"
     ].forEach((id) => { elements[id] = document.getElementById(id); });
@@ -188,8 +201,9 @@
   function computeBreaks(featureCollection, metric) {
     if (metric.breaks) return [...metric.breaks];
     const values = featureCollection.features
-      .map((feature) => Number(feature.properties?.[metric.key]))
-      .filter(Number.isFinite)
+      .map((feature) => metricValue(feature, metric))
+      .filter(finite)
+      .map(Number)
       .sort((a, b) => a - b);
     if (!values.length) return [0, 0, 0, 0];
     const quantile = (share) => values[Math.min(values.length - 1, Math.floor((values.length - 1) * share))];
@@ -210,7 +224,7 @@
       color: selected ? "#0f172a" : "#ffffff",
       weight: selected ? 3 : 1.1,
       opacity: .95,
-      fillColor: paletteColor(feature.properties?.[state.activeMetric]),
+      fillColor: paletteColor(metricValue(feature)),
       fillOpacity: .78
     };
   }
@@ -221,8 +235,8 @@
       color: selected ? "#0f172a" : "#ffffff",
       weight: selected ? 2 : .35,
       opacity: .75,
-      fillColor: paletteColor(feature.properties?.[state.activeMetric]),
-      fillOpacity: .72
+      fillColor: paletteColor(metricValue(feature)),
+      fillOpacity: finite(metricValue(feature)) ? .78 : .28
     };
   }
 
@@ -239,8 +253,10 @@
 
   function tooltipMarkup(layerKey, feature) {
     const properties = feature.properties || {};
-    const value = properties[state.activeMetric];
-    return `<strong>${escapeHtml(featureName(layerKey, properties))}</strong><br>${escapeHtml(currentMetric().label)}: ${escapeHtml(formatMetric(value))}`;
+    const metric = currentMetric();
+    const value = metricValue(feature, metric);
+    const suffix = layerKey === "census" && metric.derived ? " (estimación)" : "";
+    return `<strong>${escapeHtml(featureName(layerKey, properties))}</strong><br>${escapeHtml(metric.label)}: ${escapeHtml(formatMetric(value, metric))}${suffix}`;
   }
 
   function bindTerritoryEvents(layerKey, feature, layer) {
@@ -357,11 +373,14 @@
     const metric = currentMetric();
     state.breaks = computeBreaks(featureCollection, metric);
     elements["legend-title"].textContent = metric.label;
-    const values = featureCollection.features.map((feature) => Number(feature.properties?.[metric.key])).filter(Number.isFinite);
+    const values = featureCollection.features.map((feature) => metricValue(feature, metric)).filter(finite).map(Number);
     const minimum = values.length ? Math.min(...values) : 0;
     const maximum = values.length ? Math.max(...values) : 0;
     elements["legend-min"].textContent = formatMetric(minimum, metric);
     elements["legend-max"].textContent = formatMetric(maximum, metric);
+    elements["legend-note"].textContent = metric.binLabels
+      ? `${metric.binLabels.join(" · ")}${metric.noData ? " · gris: sin dato" : ""}`
+      : `${formatMetric(minimum, metric)} a ${formatMetric(maximum, metric)}`;
     const palette = PALETTES[metric.palette] || PALETTES.blue;
     [...elements["legend-scale"].children].forEach((segment, index) => { segment.style.background = palette[index]; });
   }
@@ -403,9 +422,9 @@
 
   function statusMessage(layerKey, data) {
     if (layerKey === "provinces") return `${data.features.length} provincias · indicador: ${currentMetric().label}`;
-    if (layerKey === "municipalities") return `${data.features.length} municipios · área metropolitana delimitada en verde`;
+    if (layerKey === "municipalities") return `${data.features.length} municipios · ${currentMetric().label}`;
     if (layerKey === "precincts") return `${data.features.length} recintos · 9 coordenadas estimadas identificadas en ámbar`;
-    return `${data.features.length} manzanos censales · misma resolución del Atlas Censo 2024`;
+    return `${data.features.length} manzanos · 35.743 con indicador migratorio; gris significa sin dato`;
   }
 
   function updateActiveMetric() {
@@ -423,7 +442,9 @@
     const previous = state.selected;
     state.selected = { layerKey, feature, leafletLayer };
     if (previous?.leafletLayer?.setStyle && previous.feature !== feature) {
-      previous.leafletLayer.setStyle(previous.layerKey === "census" ? censusStyle(previous.feature) : territoryStyle(previous.feature));
+      if (previous.layerKey === "census") previous.leafletLayer.setStyle(censusStyle(previous.feature));
+      else if (previous.layerKey === "precincts") previous.leafletLayer.setStyle(precinctStyle(previous.feature));
+      else previous.leafletLayer.setStyle(territoryStyle(previous.feature));
     }
     if (leafletLayer?.setStyle) leafletLayer.setStyle({ weight: 3, color: "#0f172a" });
     renderSelection();
@@ -440,9 +461,9 @@
     if (state.mode === "hypothesis") renderQuestions();
     else {
       elements["panel-content"].innerHTML = `
-        <div class="reading"><p class="reading-label">Población departamental</p><p class="reading-value">3.122.605</p><p class="reading-copy">Censo 2024.</p></div>
-        <div class="reading"><p class="reading-label">Padrón 2026</p><p class="reading-value">2.038.004</p><p class="reading-copy">Distribuido en 56 municipios y 1.138 recintos.</p></div>
-        <div class="data-note">La selección cambia la ficha sin alterar el indicador cartográfico.</div>`;
+        <div class="reading"><p class="reading-label">Migrantes de toda la vida</p><p class="reading-value">661.007</p><p class="reading-copy">22,22% de la población departamental de referencia. A esta escala, identifica residentes nacidos fuera del departamento.</p></div>
+        <div class="reading"><p class="reading-label">Migración reciente 2019–2024</p><p class="reading-value">99.787</p><p class="reading-copy">3,61% de la población de cinco o más años utilizada por el indicador.</p></div>
+        <div class="data-note">Al seleccionar un municipio, “migrante” identifica a quien nació fuera de su municipio actual. El denominador siempre aparece en la ficha.</div>`;
     }
   }
 
@@ -466,11 +487,16 @@
       <div class="reading"><p class="reading-label">Escenario proporcional</p><p class="reading-value">${formatNumber(properties.strict_proportional_23_population)} de 23</p><p class="reading-copy">Asignación hipotética según población, manteniendo fuera los cinco escaños indígenas.</p></div>`;
     } else if (layerKey === "municipalities") {
       elements["panel-content"].innerHTML = `${detailGrid([
-        ["Población 2024", formatNumber(properties.population_2024)],
-        ["Padrón 2026", formatNumber(properties.registered_2026)],
-        ["Migración de vida", formatPercent(properties.lifetime_immigrant_share)],
-        ["Migración reciente", formatPercent(properties.recent_immigrant_share)]
+        ["Migrantes de vida", formatNumber(properties.lifetime_immigrants)],
+        ["% población de referencia", formatPercent(properties.lifetime_immigrant_share)],
+        ["Población de referencia", formatNumber(properties.lifetime_population_2024)],
+        ["Población total 2024", formatNumber(properties.population_2024)],
+        ["Migrantes recientes", formatNumber(properties.recent_immigrants_2019_2024)],
+        ["% población de 5+", formatPercent(properties.recent_immigrant_share)],
+        ["Saldo reciente", formatNumber(properties.recent_net_migration)],
+        ["Padrón 2026", formatNumber(properties.registered_2026)]
       ])}
+      <div class="data-note">A escala municipal, migrante de toda la vida significa residente nacido fuera del municipio donde vive actualmente. No equivale automáticamente a elector migrante.</div>
       <div class="reading"><p class="reading-label">Infraestructura electoral</p><p class="reading-value">${formatNumber(properties.precincts_2026)} recintos</p><p class="reading-copy">${formatNumber(properties.tables_2026)} mesas en ${formatNumber(properties.localities_2026)} localidades.</p></div>
       <div class="reading"><p class="reading-label">Lectura electoral preliminar</p><p class="reading-value">${formatPercent(properties.libre_share)}</p><p class="reading-copy">Voto por LIBRE en la base utilizada para explorar migración y voto. La asociación municipal no implica causalidad individual.</p></div>`;
     } else if (layerKey === "precincts") {
@@ -484,14 +510,17 @@
       <div class="reading"><p class="reading-label">Localidad</p><p class="reading-value">${escapeHtml(properties.locality || "s/d")}</p><p class="reading-copy">${escapeHtml(properties.municipality)}, provincia ${escapeHtml(properties.province)}.</p></div>
       <div class="${estimated ? "data-warning" : "data-note"}">${estimated ? "Coordenada estimada mediante referencia de comunidad o localidad; no corresponde a un punto oficial exacto del recinto." : "Coordenada oficial o heredada de una fuente electoral verificada."}</div>`;
     } else {
+      const migrantEstimate = estimatedMigrantCount(properties);
+      const hasMigrationIndicator = finite(properties.h1);
       elements["panel-content"].innerHTML = `${detailGrid([
         ["Población", formatNumber(properties.a1)],
         ["Hab./hectárea", formatNumber(properties.b1)],
-        ["Población migrante", formatPercent(properties.h1)],
+        ["Migrantes estimados", formatNumber(migrantEstimate)],
+        ["Proporción migrante", formatPercent(properties.h1)],
         ["Educación superior", formatPercent(properties.g1)]
       ])}
       <div class="reading"><p class="reading-label">Vivienda y conectividad</p><p class="reading-value">${formatPercent(properties.b2)}</p><p class="reading-copy">Viviendas con acceso a internet en el manzano.</p></div>
-      <div class="data-note">Perfil calculado con la misma matriz comprimida utilizada por el Atlas Censo 2024 del Centro.</div>`;
+      <div class="${hasMigrationIndicator ? "data-note" : "data-warning"}">${hasMigrationIndicator ? "La cantidad es una estimación espacial: población del manzano × proporción migrante. No debe agregarse como total oficial municipal." : "Este manzano no tiene indicador h1. Se representa en gris y no se interpreta como cero migrantes."}</div>`;
     }
   }
 
@@ -679,22 +708,26 @@
     bindUiEvents();
     initializeMap();
     document.getElementById("year").textContent = new Date().getFullYear();
-    showMessage("Preparando el mapa", "Cargando límites provinciales e indicadores.", 12);
+    showMessage("Preparando el mapa migratorio", "Cargando municipios, población de referencia e indicadores.", 12);
 
     try {
-      const [dashboard, department, provinces] = await Promise.all([
+      const [dashboard, department, provinces, municipalities] = await Promise.all([
         fetchJson(DATA_PATHS.dashboard),
         fetchJson(DATA_PATHS.department),
-        fetchJson(DATA_PATHS.provinces)
+        fetchJson(DATA_PATHS.provinces),
+        fetchJson(DATA_PATHS.municipalities)
       ]);
       state.dashboard = dashboard;
       state.geojson.department = department;
       state.geojson.provinces = provinces;
+      state.geojson.municipalities = municipalities;
       indexSearchItems("provinces", provinces);
+      indexSearchItems("municipalities", municipalities);
       addDepartmentOutline();
       renderMigrationScatter();
-      await activateLayer("provinces");
-      Promise.allSettled([ensureMunicipalities(), ensurePrecincts()]).then(() => setStatus(statusMessage(state.activeLayer, state.geojson[state.activeLayer])));
+      await ensureMunicipalities();
+      await activateLayer("municipalities");
+      Promise.allSettled([ensurePrecincts()]).then(() => setStatus(statusMessage(state.activeLayer, state.geojson[state.activeLayer])));
     } catch (error) {
       console.error(error);
       showMessage("No se pudo iniciar el dashboard", "Revise la conexión o vuelva a cargar la página.", 100);
